@@ -1,0 +1,103 @@
+<IfModule mod_mime.c>
+  AddType text/javascript js mjs
+</IfModule>
+################################################ - REWRITES - ################################################
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# Redirect uppercase paths to lowercase #
+RewriteCond %{REQUEST_URI} [A-Z]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*?[A-Z].*)$ /${tolower:$1} [R=301,L]
+
+# Redirect to a minified version, if available
+#RewriteCond %{REQUEST_FILENAME} (.*)\.(html|css|js|mjs|xml|rss|svg)$
+#RewriteCond %1.min.%2 -f
+#RewriteRule (.*)\.(html|css|js|mjs|xml|rss|svg)$ $1.min.$2 [L]
+
+# Redirect to gzipped version, if available
+#RewriteCond %{HTTP:Accept-Encoding} .*gzip.*
+#RewriteCond %{REQUEST_FILENAME}.gz -f
+#RewriteRule (.*)\.(html|css|js|xml|rss|svg) $1.$2.gz
+
+# Make js files without extension load as .mjs modules, if they are in a path containing "js/modules/"
+RewriteCond $0 ^js/modules/ [OR]
+RewriteCond %{REQUEST_FILENAME}.mjs -f
+RewriteRule (.*) $1.mjs [L]
+# Or minified:
+#RewriteCond %{REQUEST_FILENAME}.min.mjs -f
+#RewriteRule (.*) $1.min.mjs [L]
+# Make js files without extension load as .mjs modules, if they are in a path containing "js/libs/"
+RewriteCond $0 ^js/libs/ [OR]
+RewriteCond %{REQUEST_FILENAME}.js -f
+RewriteRule (.*) $1.js [L]
+# Or minified:
+#RewriteCond %{REQUEST_FILENAME}.min.mjs -f
+#RewriteRule (.*) $1.min.mjs [L]
+
+#AGGRESSIVE CACHE DISABLING
+RewriteCond ${REQUEST_FILENAME} (.*)\.(js|mjs|css)$
+RewriteCond ${QUERY_STRING} !(?:^|&)caching=(.*)(?:&|$)
+RewriteRule (.*)\.(js|mjs|css) https://%{HTTP_HOST}/$1.$2?caching=%{TIME} [R=302,L]
+</IfModule>
+
+
+<IfModule mod_filter.c>
+	<IfModule mod_deflate.c>
+# Compress HTML, CSS, JavaScript, Text, XML and fonts
+		AddType application/vnd.ms-fontobject .eot
+		AddType font/ttf .ttf
+		AddType font/otf .otf
+		AddType font/x-woff .woff
+		AddType image/svg+xml .svg
+
+		AddOutputFilterByType DEFLATE application/javascript
+		AddOutputFilterByType DEFLATE application/rss+xml
+		AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+		AddOutputFilterByType DEFLATE application/x-font
+		AddOutputFilterByType DEFLATE application/x-font-opentype
+		AddOutputFilterByType DEFLATE application/x-font-otf
+		AddOutputFilterByType DEFLATE application/x-font-truetype
+		AddOutputFilterByType DEFLATE application/x-font-ttf
+		AddOutputFilterByType DEFLATE application/x-font-woff
+		AddOutputFilterByType DEFLATE application/x-javascript
+		AddOutputFilterByType DEFLATE application/xhtml+xml
+		AddOutputFilterByType DEFLATE application/xml
+		AddOutputFilterByType DEFLATE font/opentype
+		AddOutputFilterByType DEFLATE font/otf
+		AddOutputFilterByType DEFLATE font/ttf
+		AddOutputFilterByType DEFLATE font/woff
+		AddOutputFilterByType DEFLATE image/svg+xml
+		AddOutputFilterByType DEFLATE image/x-icon
+		AddOutputFilterByType DEFLATE text/css
+		AddOutputFilterByType DEFLATE text/html
+		AddOutputFilterByType DEFLATE text/javascript
+		AddOutputFilterByType DEFLATE text/plain
+		AddOutputFilterByType DEFLATE text/xml
+
+# Remove browser bugs (only needed for really old browsers)
+		BrowserMatch ^Mozilla/4 gzip-only-text/html
+		BrowserMatch ^Mozilla/4\.0[678] no-gzip
+		BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+		<IfModule mod_headers.c>
+			Header append Vary User-Agent
+		</IfModule>
+	</IfModule>
+</IfModule>
+# BEGIN WordPress
+# De richtlijnen (regels) tussen "BEGIN WordPress" en "END WordPress" worden
+# dynamisch gegenereerd en zouden alleen aangepast mogen worden via WordPress filters.
+# Alle wijzigingen aan de richtlijnen tussen deze markeringen worden overschreven.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress
