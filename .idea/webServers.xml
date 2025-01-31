@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="034c36ed-2de5-4509-97bb-4699b7a77e02" name="servebolt - dev.obesitaskliniek.nl" url="https://dev.obesitaskliniek.nl">
+        <fileTransfer rootFolder="/kunder/obesit_12918/obesit_18673/public/" accessType="SFTP" host="obesit-18673.siv-ams.servebolt.cloud" port="22" sshConfigId="77fdcb19-0fe2-47e7-a23a-0b3eba60f83d" sshConfig="obesit_18673@obesit-18673.siv-ams.servebolt.cloud:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
