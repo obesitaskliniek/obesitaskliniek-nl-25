@@ -1,0 +1,45 @@
+@font-face {
+    font-family: 'Realist';
+    src: url('realist_semilight-webfont.woff2') format('woff2'),
+    url('realist_semilight-webfont.woff') format('woff'),
+    url('realist_semilight-webfont.svg#realistsemilight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}/*
+@font-face {
+    font-family: 'Realist';
+    src: url('realist-webfont.woff2') format('woff2'),
+    url('realist-webfont.woff') format('woff'),
+    url('realist-webfont.svg#realistregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}*/
+@font-face {
+    font-family: 'Realist';
+    src: url('realist_italic-webfont.woff2') format('woff2'),
+         url('realist_italic-webfont.woff') format('woff'),
+         url('realist_italic-webfont.svg#realistitalic') format('svg');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Realist';
+    src: url('realist_medium-webfont.woff2') format('woff2'),
+    url('realist_medium-webfont.woff') format('woff'),
+    url('realist_medium-webfont.svg#realistmedium') format('svg');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Realist';
+    src: url('realist_bold-webfont.woff2') format('woff2'),
+    url('realist_bold-webfont.woff') format('woff'),
+    url('realist_bold-webfont.svg#realistbold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+/*# sourceMappingURL=Realist.css.map */
