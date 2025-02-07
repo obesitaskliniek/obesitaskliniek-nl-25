@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Color tests</title>
+
+    <link rel="stylesheet" href="./base.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="../fonts/Realist/Realist-full.css" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: 'Realist',sans-serif;
+        }
+        div.tests {
+            display: grid;
+            gap: 15px;
+            row-gap: 30px;
+            margin: 15px;
+        }
+        div.tests .testcontainer {
+            display: grid;
+            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            border-top: 1px solid #8888;
+            padding-top: 30px;
+        }
+        div.tests .testcontainer  > * {
+            font-weight: 500;
+            font-size: 19px;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 5px 5px 0 #8882;
+            outline: 1px solid #8883;
+        }
+    </style>
+</head>
+<body>
+
+<div class="tests"></div>
+
+<script type="application/javascript" crossorigin="anonymous">
+
+  const testContainer = document.querySelector('div.tests');
+  const rules = {};
+  Array.from(document.styleSheets).forEach(styleSheet => {
+    if (styleSheet.href && styleSheet.href.startsWith('https://dev.obesitaskliniek.nl/wp-content/themes/nok-2025-v1/css/')) {
+      Array.from(styleSheet.cssRules).forEach(rule => {
+        if (rule.constructor.name === 'CSSStyleRule' && !rule.selectorText.startsWith(':root')) {
+          const key = rule.selectorText.split('-')[0].replace('.', '');
+          if (!rules[key]) {
+            rules[key] = [];
+          }
+          rules[key].push(rule);
+        }
+      });
+    }
+  });
+
+  Object.keys(rules).sort().forEach(key => {
+    const parentClass = `${key}-tests`;
+    let parentNode = document.querySelector(`.${parentClass}`);
+    if (!parentNode) {
+      parentNode = document.createElement('div');
+      parentNode.classList.add(parentClass, 'testcontainer');
+      testContainer.appendChild(parentNode);
+    }
+    rules[key].forEach(rule => {
+      const classname = rule.selectorText;
+      const node = document.createElement('div');
+      node.classList.add(classname.replace(/^\./, ''));
+      node.innerHTML = classname;
+      parentNode.appendChild(node);
+    });
+  });
+
+</script>
+
+</body>
+</html>
