@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <title>Color tests</title>
 
-    <link rel="stylesheet" href="./base.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="../fonts/Realist/Realist-full.css" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./colors.css" crossorigin="anonymous">
     <style>
         body {
-            font-family: 'Realist',sans-serif;
+            line-height: 1.75;
+            font-size: 1.1rem;
+            font-family: "JetBrains Mono", serif;
+            background-color: #fff;
         }
         div.tests {
             display: grid;
@@ -16,61 +21,132 @@
             row-gap: 30px;
             margin: 15px;
         }
-        div.tests .testcontainer {
+        div.tests div[data-stylegroup] {
             display: grid;
             gap: 15px;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            border-top: 1px solid #8888;
-            padding-top: 30px;
         }
-        div.tests .testcontainer  > * {
+        div.tests > div[data-stylegroup]:before {
             font-weight: 500;
-            font-size: 19px;
+            font-size: 1.3rem;
+            content: attr(data-stylegroup); /*chrome 113+ only*/
+            grid-column: 1 / -1;
+            border-bottom: 1px solid #8888;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+        }
+        div.tests div[data-stylegroup] .testcard {
+            color: var(--text-color, var(--contrast-text-color, inherit));
+            background-color: var(--bg-color, #FAFAFA);
+            font-weight: 400;
+            font-size: 1rem;
             padding: 15px;
             border-radius: 5px;
-            box-shadow: 5px 5px 0 #8882;
-            outline: 1px solid #8883;
+            aspect-ratio: 4/3;
+            text-align: start;
+        }
+        div.tests div[data-stylegroup=".nok25-border"] .testcard {
+            border-width: 1px;
+            border-style: solid;
         }
     </style>
 </head>
 <body>
 
-<div class="tests"></div>
+<div class="tests">
+    <p>Structure: .<strong>prefix</strong>-<strong><abbr title="text, bg, etc.">type</abbr></strong>-<strong><abbr title="blue, orange, etc.">color</abbr></strong>(--<strong><abbr title="lighter, darker, etc.">variant</abbr></strong>)</p>
+</div>
 
 <script type="application/javascript" crossorigin="anonymous">
+  function removeFromString(str, itemToRemove) {
+    return ((str.trim() === itemToRemove.trim()) ? '' : str.trim().split(',').map(item => item.trim()).filter(item => item !== itemToRemove.trim()).join(', ')).trim();
+  }
 
-  const testContainer = document.querySelector('div.tests');
+  const testcard = document.querySelector('div.tests');
   const rules = {};
   Array.from(document.styleSheets).forEach(styleSheet => {
-    if (styleSheet.href && styleSheet.href.startsWith('https://dev.obesitaskliniek.nl/wp-content/themes/nok-2025-v1/css/')) {
+    if (styleSheet.href && styleSheet.href.startsWith(window.location.href.split('/').slice(0, -1).join('/'))) {
       Array.from(styleSheet.cssRules).forEach(rule => {
         if (rule.constructor.name === 'CSSStyleRule' && !rule.selectorText.startsWith(':root')) {
-          const key = rule.selectorText.split('-')[0].replace('.', '');
-          if (!rules[key]) {
-            rules[key] = [];
-          }
-          rules[key].push(rule);
+          rule.selectorText.split(',').forEach(selector => {
+            const modifiedSelectorText = selector.includes(':') ? removeFromString(rule.selectorText, selector) : rule.selectorText;
+            if (modifiedSelectorText !== '') {
+              rule.selectorText = modifiedSelectorText;
+              const keys = selector.trim().split(/(?<=[a-z])-(?=[a-z])/).map(k => k.replace('.', ''));
+              let current = rules;
+              keys.forEach((key, index) => {
+                if (!current[key]) {
+                  current[key] = index === keys.length - 1 ? [] : {};
+                }
+                if (index === keys.length - 1) {
+                  current[key].push(rule);
+                } else {
+                  current = current[key];
+                }
+              });
+            }
+          });
         }
       });
     }
   });
+  console.log(rules);
 
+   function createNestedDivs(rules, parentNode, topKey = '') {
+     Object.keys(rules).forEach(key => {
+       const groupDiv = document.createElement('div');
+       groupDiv.setAttribute('data-stylegroup', `.${key}`);
+       groupDiv.classList.add(`${key}-tests`)
+       parentNode.appendChild(groupDiv);
+
+       if (Array.isArray(rules[key])) {
+         // Is a class
+         rules[key].forEach(rule => {
+           const testCard = document.createElement('div');
+           testCard.innerHTML = rule.selectorText;
+           testCard.classList.add('testcard');
+
+           if (topKey === 'nok25-input') {
+             const input = document.createElement('input');
+             input.classList.add(rule.selectorText.replace(/^\./, ''));
+             input.type = 'text';
+             input.value = rule.selectorText;
+             testCard.appendChild(input);
+           } else {
+             testCard.classList.add(rule.selectorText.replace(/^\./, ''));
+           }
+
+           groupDiv.appendChild(testCard);
+
+         });
+       } else {
+         // Recurse
+         createNestedDivs(rules[key], groupDiv, key);
+       }
+     });
+   }
+
+   createNestedDivs(rules, testcard);
+
+    /*
   Object.keys(rules).sort().forEach(key => {
     const parentClass = `${key}-tests`;
     let parentNode = document.querySelector(`.${parentClass}`);
     if (!parentNode) {
       parentNode = document.createElement('div');
-      parentNode.classList.add(parentClass, 'testcontainer');
-      testContainer.appendChild(parentNode);
+      parentNode.classList.add(parentClass, 'testcard');
+      testcard.appendChild(parentNode);
     }
-    rules[key].forEach(rule => {
-      const classname = rule.selectorText;
-      const node = document.createElement('div');
-      node.classList.add(classname.replace(/^\./, ''));
-      node.innerHTML = classname;
-      parentNode.appendChild(node);
+    Object.keys(rules[key]).forEach(subKey => {
+      rules[key][subKey].forEach(rule => {
+        const classname = rule.selectorText;
+        const node = document.createElement('div');
+        node.classList.add(classname.replace(/^\./, ''));
+        node.innerHTML = classname;
+        parentNode.appendChild(node);
+      });
     });
-  });
+  });*/
 
 </script>
 

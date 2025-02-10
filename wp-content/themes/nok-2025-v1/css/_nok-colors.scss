@@ -2,21 +2,31 @@
 @use "sass:color";
 @import "nok-variables";
 
+$white: #FFFFFF;
+$black: #000;
+$color-contrast-dark: #222;
+$color-contrast-light: #FFF;
+$min-contrast-ratio: 4.5;
+
+@import "bs/5.3.3/scss/functions";
+
 $nok-base-colors: (
-    'lightblue':     #00b0e4,
-	'darkblue':      #14477c,
-	'darkerblue':    #001c4d,
-	'darkestblue':   #00132f,
-	'yellow':        #FFC425,
-	'darkyellow':    #eab10d,
-	'paleyellow':    #D5D59D,
-	'green':         #54b085,
-	'greenyellow':   #CCCC33,
-	'greenblue':     #23afbf,
-	'lightgreenblue':#93e1f4,
-	'body_bg':       #F1F5F6,
+    'lightblue':      #00b0e4,
+	'darkblue':       #14477c,
+	'darkerblue':     #001c4d,
+	'darkestblue':    #00132f,
+	'yellow':         #FFC425,
+	'darkyellow':     #eab10d,
+	'paleyellow':     #D5D59D,
+	'green':          #54b085,
+	'greenyellow':    #CCCC33,
+	'greenblue':      #23afbf,
+	'lightgreenblue': #93e1f4,
+    'error':          #d82510,
+	'body_bg':        #F1F5F6,
 );
 
+/* Regular color variables */
 :root {
   @each $color, $value in $nok-base-colors {
     $sub_map: (
@@ -34,28 +44,16 @@ $nok-base-colors: (
   }
 }
 
+/* Dark mode color variables */
 @media (prefers-color-scheme: dark) {
-  // One Dark
   :root {
-    --base00: #282c34;
-    --base01: #353b45;
-    --base02: #3e4451;
-    --base03: #545862;
-    --base04: #565c64;
-    --base05: #abb2bf;
-    --base06: #b6bdca;
-    --base07: #d19a66;
-    --base08: #e06c75;
-    --base09: #d19a66;
-    --base0A: #e5c07b;
-    --base0B: #98c379;
-    --base0C: #56b6c2;
-    --base0D: #61afef;
-    --base0E: #c678dd;
-    --base0F: #be5046;
   }
 }
 
+/**
+ * Color style type definitions
+ * Structure: .prefix-type-color(--variant)
+ */
 @each $color, $value in $nok-base-colors {
   $sub_map: (
       $color : $value,
@@ -63,21 +61,37 @@ $nok-base-colors: (
       $color+'--lighter' :  saturate(lighten($value, 10%), 20%)
   );
   @each $color, $value in $sub_map {
-    .text-#{$color} {
-      color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--local-color-alpha, var(--global-color-alpha, 1)));
+    .#{$prefix}-bg-#{$color} {
+      --bg-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--local-color-alpha, var(--global-color-alpha, 1)));
+      --contrast-text-color: #{color-contrast($value)};
+      background-color: var(--bg-color, inherit);
+      &::selection {
+        background: #{color-contrast($value)};
+        color: var(--bg-color, inherit);
+      }
     }
-    .text-decoration-#{$color} {
-      text-decoration-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--local-color-alpha, var(--global-color-alpha, 1)));
+    .#{$prefix}-text-#{$color} {
+      --text-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--local-color-alpha, var(--global-color-alpha, 1)));
+      color: var(--text-color, var(--contrast-text-color, inherit));
+      &::selection {
+        background: var(--text-color, var(--contrast-text-color, inherit));
+        color: #{color-contrast($value)};
+      }
     }
-    .bg-#{$color} {
-      background-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--local-color-alpha, var(--global-color-alpha, 1)));
+    .#{$prefix}-border-#{$color} {
+      --border-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--local-color-alpha, var(--global-color-alpha, 1)));
+      border-color: var(--border-color, inherit);
     }
-    .border-#{$color} {
-      border-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--local-color-alpha, var(--global-color-alpha, 1)));
-    }
-    .input-#{$color} {
-      accent-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--local-color-alpha, var(--global-color-alpha, 1)));
-      caret-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--local-color-alpha, var(--global-color-alpha, 1)));
+    .#{$prefix}-input-#{$color} {
+      --input-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--local-color-alpha, var(--global-color-alpha, 1)));
+      --text-color: var(--input-color, inherit);
+      accent-color: var(--input-color, inherit);
+      caret-color: var(--input-color, inherit);
+      color: var(--input-color, inherit);
+      &::selection {
+        background: var(--input-color, inherit);
+        color: #{color-contrast($value)};
+      }
     }
   }
 }
