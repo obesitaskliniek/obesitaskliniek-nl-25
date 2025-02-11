@@ -2,10 +2,10 @@
 @use "sass:color";
 @import "nok-variables";
 
-$white: #FFFFFF;
-$black: #000;
+$white: #f3f4f9;
+$black: #222;
 $color-contrast-dark: #222;
-$color-contrast-light: #FFF;
+$color-contrast-light: #f3f4f9;
 $min-contrast-ratio: 4.5;
 
 @import "bs/5.3.3/scss/functions";
@@ -13,9 +13,9 @@ $min-contrast-ratio: 4.5;
 $nok-base-colors: (
     'lightblue':      #00b0e4,
 	'darkblue':       #14477c,
-	'darkerblue':     #001c4d,
+	'darkerblue':     #082355,
 	'darkestblue':    #00132f,
-	'yellow':         #FFC425,
+	'yellow':         #f5d22b,
 	'darkyellow':     #eab10d,
 	'paleyellow':     #D5D59D,
 	'green':          #54b085,
@@ -23,7 +23,21 @@ $nok-base-colors: (
 	'greenblue':      #23afbf,
 	'lightgreenblue': #93e1f4,
     'error':          #d82510,
-	'body_bg':        #F1F5F6,
+    'body':           $white,
+	'white':          $white,
+	'black':          $black,
+);
+
+$nok-contrast-overrides: ();
+
+$nok-dark-colors: map-merge(
+    $nok-base-colors, (
+    'body':           #00132f,
+    )
+);
+
+$nok-dark-contrast-overrides: (
+    'body':           #cdd9ed,
 );
 
 /* Regular color variables */
@@ -31,22 +45,50 @@ $nok-base-colors: (
   @each $color, $value in $nok-base-colors {
     $sub_map: (
         $color : $value,
-        $color+'--darker' :  desaturate(darken($value, 10%), 20%),
-        $color+'--lighter' :  saturate(lighten($value, 10%), 20%)
+        $color+'--darker' :  desaturate(darken($value, 5%), 10%),
+        $color+'--lighter' :  saturate(lighten($value, 5%), 10%)
     );
     @each $color, $value in $sub_map {
-      --#{$prefix}-#{$color} :       #{$value};
-      --#{$prefix}-#{$color}--h :    #{round(color.hue($value))};
-      --#{$prefix}-#{$color}--s :    #{round(color.saturation($value))};
-      --#{$prefix}-#{$color}--l :    #{round(color.lightness($value))};
-      --#{$prefix}-#{$color}--hsl :  var(--#{$prefix}-#{$color}--h) var(--#{$prefix}-#{$color}--s) var(--#{$prefix}-#{$color}--l);
+      --#{$prefix}-#{$color} :          #{$value};
+      --#{$prefix}-#{$color}--h :       #{round(color.hue($value))};
+      --#{$prefix}-#{$color}--s :       #{round(color.saturation($value))};
+      --#{$prefix}-#{$color}--l :       #{round(color.lightness($value))};
+      --#{$prefix}-#{$color}--hsl :     var(--#{$prefix}-#{$color}--h) var(--#{$prefix}-#{$color}--s) var(--#{$prefix}-#{$color}--l);
+      --#{$prefix}-#{$color}--contrast: #{if(map-has-key($nok-contrast-overrides, $color), map.get($nok-contrast-overrides, $color), color-contrast($value))};
+      --#{$prefix}-#{$color}--hover:    #{desaturate(lighten($value, 15%), 10%)};
+      --#{$prefix}-#{$color}--active:   #{desaturate(darken($value, 5%), 10%)};
     }
   }
+  /**
+   * Additional color classes
+   */
+  --#{$prefix}-focus-ring: #{$black};
 }
 
 /* Dark mode color variables */
 @media (prefers-color-scheme: dark) {
   :root {
+    @each $color, $value in $nok-dark-colors {
+      $sub_map: (
+          $color : desaturate(darken($value, 5%), 10%),
+          $color+'--darker' :  desaturate(darken($value, 10%), 15%),
+          $color+'--lighter' :  $value
+      );
+      @each $color, $value in $sub_map {
+        --#{$prefix}-#{$color} :          #{$value};
+        --#{$prefix}-#{$color}--h :       #{round(color.hue($value))};
+        --#{$prefix}-#{$color}--s :       #{round(color.saturation($value))};
+        --#{$prefix}-#{$color}--l :       #{round(color.lightness($value))};
+        --#{$prefix}-#{$color}--hsl :     var(--#{$prefix}-#{$color}--h) var(--#{$prefix}-#{$color}--s) var(--#{$prefix}-#{$color}--l);
+        --#{$prefix}-#{$color}--contrast: #{if(map-has-key($nok-dark-contrast-overrides, $color), map.get($nok-dark-contrast-overrides, $color), color-contrast($value))};
+        --#{$prefix}-#{$color}--hover:    #{desaturate(lighten($value, 15%), 10%)};
+        --#{$prefix}-#{$color}--active:   #{desaturate(darken($value, 5%), 10%)};
+      }
+    }
+    /**
+     * Additional color classes
+     */
+    --#{$prefix}-focus-ring: #{$white};
   }
 }
 
@@ -62,28 +104,43 @@ $nok-base-colors: (
   );
   @each $color, $value in $sub_map {
     .#{$prefix}-bg-#{$color} {
-      --bg-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--local-color-alpha, var(--global-color-alpha, 1)));
-      --contrast-text-color: #{color-contrast($value)};
+      --bg-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+      --bg-color-hsl: var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l);
+      --bg-color--hover: var(--#{$prefix}-#{$color}--hover);
+      --bg-color--active: var(--#{$prefix}-#{$color}--active);
+      --text-color--contrast: var(--#{$prefix}-#{$color}--contrast);
+      --text-color-button: var(--text-color--contrast);
+      --text-color-button--hover: var(--text-color--contrast);
       background-color: var(--bg-color, inherit);
       &::selection {
-        background: #{color-contrast($value)};
+        background: var(--text-color--contrast, inherit);
         color: var(--bg-color, inherit);
       }
     }
     .#{$prefix}-text-#{$color} {
-      --text-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--local-color-alpha, var(--global-color-alpha, 1)));
-      color: var(--text-color, var(--contrast-text-color, inherit));
+      --text-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+      --text-color-hsl: var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l);
+      --text-color--hover: var(--#{$prefix}-#{$color}--hover);
+      --text-color--contrast: var(--#{$prefix}-#{$color}--contrast);
+      color: var(--text-color, var(--text-color--contrast, inherit));
       &::selection {
-        background: var(--text-color, var(--contrast-text-color, inherit));
+        background: var(--text-color, var(--text-color--contrast, inherit));
         color: #{color-contrast($value)};
+      }
+      &--hover {
+        &:hover {
+          --text-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+          color: var(--text-color, var(--text-color--contrast, inherit)) !important;
+        }
       }
     }
     .#{$prefix}-border-#{$color} {
-      --border-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--local-color-alpha, var(--global-color-alpha, 1)));
+      --border-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+      --border-color-hsl: var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l);
       border-color: var(--border-color, inherit);
     }
     .#{$prefix}-input-#{$color} {
-      --input-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--local-color-alpha, var(--global-color-alpha, 1)));
+      --input-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
       --text-color: var(--input-color, inherit);
       accent-color: var(--input-color, inherit);
       caret-color: var(--input-color, inherit);
@@ -95,3 +152,24 @@ $nok-base-colors: (
     }
   }
 }
+
+/**
+ * Additional general color classes
+ */
+.#{$prefix}-text-contrast {
+  color: var(--text-color--contrast, inherit);
+}
+
+/**
+ * Additional media queries
+ */
+@media (prefers-reduced-transparency) {
+  :root {
+    --global-color-alpha: 1 !important;
+  }
+}
+
+/** Notes
+ * Only use local color alpha for alpha adjustments. Global color alpha is an override used only for the media query
+ * 'prefers-reduced-transparency' and should not be overridden manually (as it's the other way round).
+ */

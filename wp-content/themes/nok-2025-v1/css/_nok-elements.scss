@@ -1,0 +1,155 @@
+@use "sass:map";
+@import "nok-variables";
+@import "nok-mixins";
+
+/*
+//BEM example
+
+.opinions-box {
+  margin: 0 0 8px 0;
+  text-align: center;
+
+  &__view-more {
+    text-decoration: underline;
+  }
+
+  &__text-input {
+    border: 1px solid #ccc;
+  }
+
+  &--is-inactive {
+    color: gray;
+  }
+}*/
+
+/**
+ * hyperlink
+ */
+.#{$prefix}-hyperlink:not(.#{$prefix}-button) {
+  color: var(--text-color, var(--text-color--contrast, inherit));
+  --underline-color: var(--text-color, var(--text-color--contrast, inherit));
+  --underline-color--active: var(--text-color--contrast, inherit);
+
+  @include nok-inline-link;
+
+  @at-root p & {
+    color: var(--nok25-lightblue, inherit);
+    --underline-color: var(--nok25-lightblue, inherit);
+    --underline-color--active: var(--nok25-lightblue--contrast, inherit);
+  }
+
+}
+
+/**
+ * button
+ */
+.#{$prefix}-button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0;
+  padding: ($padding-base / 2) $padding-base;
+
+  font-weight: 500;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  text-decoration: none;
+
+  color: var(--text-color, var(--text-color--contrast, inherit));
+  @include nok-border-radius;
+  @include nok-btn-shadow-border;
+  border: 1px solid #8885;
+  outline: 0 none;
+
+  cursor: pointer;
+  user-select: none;
+
+  &:hover, &:focus, &:active, &.active, &:focus-visible {
+    border-color: #8882;
+  }
+
+  &:hover {
+    color: var(--text-color-button--hover, var(--text-color, var(--text-color--contrast, inherit)));
+    background-color: var(--bg-color--hover, inherit);
+  }
+
+  &:focus {
+    outline: 2px solid hsl(var(--bg-color-hsl, 0 0 0) / 0.25);
+  }
+
+  &:focus-visible { // focus state by other input method than mouse
+    @include nok-focus-ring;
+  }
+
+  &:active,
+  &.active {
+    background-color: var(--bg-color--active, inherit);
+  }
+
+  &:disabled,
+  &.disabled {
+    --local-color-alpha: 0.65;
+    opacity: 0.8;
+    color: var(--text-color-button, var(--text-color--contrast, inherit));
+    pointer-events: none;
+  }
+}
+
+/**
+ * square block
+ */
+.#{$prefix}-square-block {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+
+  height: 100%;
+
+  gap: ($padding-base);
+  padding: ($padding-base * 2);
+  @include nok-border-radius--large;
+  line-height: 1.25;
+
+  > * {
+    margin: 0;
+  }
+
+  &__icon {
+    width: 3em;
+    aspect-ratio: 1;
+  }
+
+  &__heading {
+    font-size: 2rem;
+    font-weight: 500;
+  }
+
+  &__text {
+    font-size: 1.1rem;
+    --local-color-alpha: 0.8;
+  }
+
+  &__link {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    justify-content: start;
+    align-items: center;
+    justify-items: start;
+    gap: ($padding-base / 2);
+
+    height: 2rem;
+
+    color: var(--text-color, var(--text-color--contrast, inherit));
+
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 1rem;
+
+    svg {
+      max-height: 100%;
+      width: auto;
+    }
+  }
+}

@@ -1,0 +1,60 @@
+@import "nok-variables";
+
+@mixin nok-font {
+  font-family: "Realist", sans-serif;
+}
+
+@mixin nok-btn-shadow-border {
+  box-shadow: 0 0 0 0 hsla(0 0 0 / 0);
+  &:hover, &:focus {
+    box-shadow: 0 0.4rem 0.1rem -0.3rem hsla(0 0 50 / 0.15);
+  }
+}
+
+@mixin nok-border-radius {
+  border-radius: round(($padding-base / 4) * 10) / 10;
+}
+@mixin nok-border-radius--large {
+  border-radius: round(($padding-base / 2) * 10) / 10;
+}
+
+@mixin nok-focus-ring {
+  outline: 0 none;
+  box-shadow: 0 0 0 2px var(--#{$prefix}-focus-ring, inherit);
+}
+
+@mixin nok-inline-link {
+  --active-color: #000;
+  --hover-transition-time: 0.25s;
+  --underline-height: 0.2em;
+  --gradient: linear-gradient(
+          transparent 0%,
+          transparent calc(50% - var(--underline-height)),
+          var(--underline-color) calc(50% - var(--underline-height)),
+          var(--underline-color) 150%
+  );
+  -webkit-tap-highlight-color: transparent;
+
+  text-decoration: none;
+  padding: calc(2 * var(--underline-height)) 0;
+
+  background-image: var(--gradient);
+  background-size: 100% 200%;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+
+  transition: color 0.25s ease-in-out, transform 0.06s ease-in-out, background-position var(--hover-transition-time) cubic-bezier(0.85, 0, 0.15, 1);
+
+  &:hover {
+    background-position: 0 calc(-1 * var(--underline-height));
+  }
+  &:hover:focus:not(:focus-visible) {
+    color: var(--underline-color--active);
+    background-position: 0 100%;
+  }
+
+  &:focus-visible { // focus state by other input method than mouse
+    @include nok-border-radius;
+    @include nok-focus-ring;
+  }
+}
