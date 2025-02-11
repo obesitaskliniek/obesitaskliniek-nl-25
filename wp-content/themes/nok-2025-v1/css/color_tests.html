@@ -2,56 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Color tests</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./colors.css" crossorigin="anonymous">
-    <style>
-        body {
-            line-height: 1.75;
-            font-size: 1.1rem;
-            font-family: "JetBrains Mono", serif;
-            background-color: #fff;
-        }
-        div.tests {
-            display: grid;
-            gap: 15px;
-            row-gap: 30px;
-            margin: 15px;
-        }
-        div.tests div[data-stylegroup] {
-            display: grid;
-            gap: 15px;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        }
-        div.tests > div[data-stylegroup]:before {
-            font-weight: 500;
-            font-size: 1.3rem;
-            content: attr(data-stylegroup); /*chrome 113+ only*/
-            grid-column: 1 / -1;
-            border-bottom: 1px solid #8888;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-        }
-        div.tests div[data-stylegroup] .testcard {
-            color: var(--text-color, var(--contrast-text-color, inherit));
-            background-color: var(--bg-color, #FAFAFA);
-            font-weight: 400;
-            font-size: 1rem;
-            padding: 15px;
-            border-radius: 5px;
-            aspect-ratio: 4/3;
-            text-align: start;
-        }
-        div.tests div[data-stylegroup=".nok25-border"] .testcard {
-            border-width: 1px;
-            border-style: solid;
-        }
-    </style>
+    <link rel="stylesheet" href="./color_tests.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="./helpers.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="./tests.css" crossorigin="anonymous">
 </head>
-<body>
+<body class="nok25-bg-body nok25-text-contrast">
 
 <div class="tests">
     <p>Structure: .<strong>prefix</strong>-<strong><abbr title="text, bg, etc.">type</abbr></strong>-<strong><abbr title="blue, orange, etc.">color</abbr></strong>(--<strong><abbr title="lighter, darker, etc.">variant</abbr></strong>)</p>
@@ -65,7 +26,10 @@
   const testcard = document.querySelector('div.tests');
   const rules = {};
   Array.from(document.styleSheets).forEach(styleSheet => {
-    if (styleSheet.href && styleSheet.href.startsWith(window.location.href.split('/').slice(0, -1).join('/'))) {
+    if (styleSheet.href && styleSheet.href.startsWith(window.location.href.split('/').slice(0, -1).join('/'))
+      && !styleSheet.href.includes('/helpers.css')
+      && !styleSheet.href.includes('/tests.css')
+    ) {
       Array.from(styleSheet.cssRules).forEach(rule => {
         if (rule.constructor.name === 'CSSStyleRule' && !rule.selectorText.startsWith(':root')) {
           rule.selectorText.split(',').forEach(selector => {
@@ -104,7 +68,7 @@
          rules[key].forEach(rule => {
            const testCard = document.createElement('div');
            testCard.innerHTML = rule.selectorText;
-           testCard.classList.add('testcard');
+           testCard.classList.add('testcard', 'testcard--square');
 
            if (topKey === 'nok25-input') {
              const input = document.createElement('input');
