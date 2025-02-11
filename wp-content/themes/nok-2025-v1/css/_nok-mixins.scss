@@ -27,6 +27,7 @@
   --active-color: #000;
   --hover-transition-time: 0.25s;
   --underline-height: 0.2em;
+  //noinspection CssInvalidFunction
   --gradient: linear-gradient(
           transparent 0%,
           transparent calc(50% - var(--underline-height)),
