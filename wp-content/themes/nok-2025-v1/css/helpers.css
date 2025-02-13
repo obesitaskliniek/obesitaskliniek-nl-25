@@ -1,5 +1,15 @@
+:root {
+  --nok25-default-font-family: Realist, sans-serif;
+  --nok25-padding-base: 1.5rem;
+  --nok25-default-border-radius: 0.4rem;
+  --nok25-default-border-radius--large: 1rem;
+}
+
 .nok25-base-font {
   font-family: "Realist", sans-serif;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  text-rendering: optimizelegibility;
 }
 
 .nok25-stretched-link::after {

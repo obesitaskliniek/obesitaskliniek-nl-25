@@ -48,30 +48,30 @@
   --nok25-darkblue--lighter--contrast: #f3f4f9;
   --nok25-darkblue--lighter--hover: #2279d4;
   --nok25-darkblue--lighter--active: #14477c;
-  --nok25-darkerblue: #082355;
+  --nok25-darkerblue: #00205b;
   --nok25-darkerblue--h: 219deg;
-  --nok25-darkerblue--s: 83%;
+  --nok25-darkerblue--s: 100%;
   --nok25-darkerblue--l: 18%;
   --nok25-darkerblue--hsl: var(--nok25-darkerblue--h) var(--nok25-darkerblue--s) var(--nok25-darkerblue--l);
   --nok25-darkerblue--contrast: #f3f4f9;
-  --nok25-darkerblue--hover: #174292;
-  --nok25-darkerblue--active: #091a3a;
-  --nok25-darkerblue--darker: #091a3a;
+  --nok25-darkerblue--hover: #083d9f;
+  --nok25-darkerblue--active: #03183e;
+  --nok25-darkerblue--darker: #03183e;
   --nok25-darkerblue--darker--h: 219deg;
-  --nok25-darkerblue--darker--s: 73%;
+  --nok25-darkerblue--darker--s: 90%;
   --nok25-darkerblue--darker--l: 13%;
   --nok25-darkerblue--darker--hsl: var(--nok25-darkerblue--darker--h) var(--nok25-darkerblue--darker--s) var(--nok25-darkerblue--darker--l);
   --nok25-darkerblue--darker--contrast: #f3f4f9;
-  --nok25-darkerblue--darker--hover: #1b3a75;
-  --nok25-darkerblue--darker--active: #081122;
-  --nok25-darkerblue--lighter: #042b72;
+  --nok25-darkerblue--darker--hover: #0e3680;
+  --nok25-darkerblue--darker--active: #040f24;
+  --nok25-darkerblue--lighter: #002975;
   --nok25-darkerblue--lighter--h: 219deg;
-  --nok25-darkerblue--lighter--s: 93%;
+  --nok25-darkerblue--lighter--s: 100%;
   --nok25-darkerblue--lighter--l: 23%;
   --nok25-darkerblue--lighter--hsl: var(--nok25-darkerblue--lighter--h) var(--nok25-darkerblue--lighter--s) var(--nok25-darkerblue--lighter--l);
   --nok25-darkerblue--lighter--contrast: #f3f4f9;
-  --nok25-darkerblue--lighter--hover: #1149b2;
-  --nok25-darkerblue--lighter--active: #082355;
+  --nok25-darkerblue--lighter--hover: #0a47b7;
+  --nok25-darkerblue--lighter--active: #052156;
   --nok25-darkestblue: #00132f;
   --nok25-darkestblue--h: 216deg;
   --nok25-darkestblue--s: 100%;
@@ -417,30 +417,30 @@
     --nok25-darkblue--lighter--contrast: #f3f4f9;
     --nok25-darkblue--lighter--hover: #2a6db3;
     --nok25-darkblue--lighter--active: #163b60;
-    --nok25-darkerblue: #091a3a;
+    --nok25-darkerblue: #03183e;
     --nok25-darkerblue--h: 219deg;
-    --nok25-darkerblue--s: 73%;
+    --nok25-darkerblue--s: 90%;
     --nok25-darkerblue--l: 13%;
     --nok25-darkerblue--hsl: var(--nok25-darkerblue--h) var(--nok25-darkerblue--s) var(--nok25-darkerblue--l);
     --nok25-darkerblue--contrast: #f3f4f9;
-    --nok25-darkerblue--hover: #1b3a75;
-    --nok25-darkerblue--active: #081122;
-    --nok25-darkerblue--darker: #071123;
+    --nok25-darkerblue--hover: #0e3680;
+    --nok25-darkerblue--active: #040f24;
+    --nok25-darkerblue--darker: #030f25;
     --nok25-darkerblue--darker--h: 219deg;
-    --nok25-darkerblue--darker--s: 68%;
+    --nok25-darkerblue--darker--s: 85%;
     --nok25-darkerblue--darker--l: 8%;
     --nok25-darkerblue--darker--hsl: var(--nok25-darkerblue--darker--h) var(--nok25-darkerblue--darker--s) var(--nok25-darkerblue--darker--l);
     --nok25-darkerblue--darker--contrast: #f3f4f9;
-    --nok25-darkerblue--darker--hover: #19315d;
-    --nok25-darkerblue--darker--active: #03070d;
-    --nok25-darkerblue--lighter: #082355;
+    --nok25-darkerblue--darker--hover: #0f2d66;
+    --nok25-darkerblue--darker--active: #02060d;
+    --nok25-darkerblue--lighter: #00205b;
     --nok25-darkerblue--lighter--h: 219deg;
-    --nok25-darkerblue--lighter--s: 83%;
+    --nok25-darkerblue--lighter--s: 100%;
     --nok25-darkerblue--lighter--l: 18%;
     --nok25-darkerblue--lighter--hsl: var(--nok25-darkerblue--lighter--h) var(--nok25-darkerblue--lighter--s) var(--nok25-darkerblue--lighter--l);
     --nok25-darkerblue--lighter--contrast: #f3f4f9;
-    --nok25-darkerblue--lighter--hover: #174292;
-    --nok25-darkerblue--lighter--active: #091a3a;
+    --nok25-darkerblue--lighter--hover: #083d9f;
+    --nok25-darkerblue--lighter--active: #03183e;
     --nok25-darkestblue: #010914;
     --nok25-darkestblue--h: 216deg;
     --nok25-darkestblue--s: 90%;
@@ -740,8 +740,8 @@
  * Structure: .prefix-type-color(--variant)
  */
 .nok25-bg-lightblue {
-  --bg-color: hsla(var(--nok25-lightblue--h), var(--nok25-lightblue--s), var(--nok25-lightblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-lightblue--h), var(--nok25-lightblue--s), var(--nok25-lightblue--l);
+  --bg-color: hsla(var(--nok25-lightblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-lightblue--hsl);
   --bg-color--hover: var(--nok25-lightblue--hover);
   --bg-color--active: var(--nok25-lightblue--active);
   --text-color--contrast: var(--nok25-lightblue--contrast);
@@ -759,8 +759,8 @@
 }
 
 .nok25-text-lightblue {
-  --text-color: hsla(var(--nok25-lightblue--h), var(--nok25-lightblue--s), var(--nok25-lightblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-lightblue--h), var(--nok25-lightblue--s), var(--nok25-lightblue--l);
+  --text-color: hsla(var(--nok25-lightblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-lightblue--hsl);
   --text-color--hover: var(--nok25-lightblue--hover);
   --text-color--contrast: var(--nok25-lightblue--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -774,18 +774,18 @@
   color: #222;
 }
 .nok25-text-lightblue--hover:hover {
-  --text-color: hsla(var(--nok25-lightblue--h), var(--nok25-lightblue--s), var(--nok25-lightblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-lightblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-lightblue {
-  --border-color: hsla(var(--nok25-lightblue--h), var(--nok25-lightblue--s), var(--nok25-lightblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-lightblue--h), var(--nok25-lightblue--s), var(--nok25-lightblue--l);
+  --border-color: hsla(var(--nok25-lightblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-lightblue--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-lightblue {
-  --input-color: hsla(var(--nok25-lightblue--h), var(--nok25-lightblue--s), var(--nok25-lightblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-lightblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -801,8 +801,8 @@
 }
 
 .nok25-bg-lightblue--darker {
-  --bg-color: hsla(var(--nok25-lightblue--darker--h), var(--nok25-lightblue--darker--s), var(--nok25-lightblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-lightblue--darker--h), var(--nok25-lightblue--darker--s), var(--nok25-lightblue--darker--l);
+  --bg-color: hsla(var(--nok25-lightblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-lightblue--darker--hsl);
   --bg-color--hover: var(--nok25-lightblue--darker--hover);
   --bg-color--active: var(--nok25-lightblue--darker--active);
   --text-color--contrast: var(--nok25-lightblue--darker--contrast);
@@ -820,8 +820,8 @@
 }
 
 .nok25-text-lightblue--darker {
-  --text-color: hsla(var(--nok25-lightblue--darker--h), var(--nok25-lightblue--darker--s), var(--nok25-lightblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-lightblue--darker--h), var(--nok25-lightblue--darker--s), var(--nok25-lightblue--darker--l);
+  --text-color: hsla(var(--nok25-lightblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-lightblue--darker--hsl);
   --text-color--hover: var(--nok25-lightblue--darker--hover);
   --text-color--contrast: var(--nok25-lightblue--darker--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -835,18 +835,18 @@
   color: #f3f4f9;
 }
 .nok25-text-lightblue--darker--hover:hover {
-  --text-color: hsla(var(--nok25-lightblue--darker--h), var(--nok25-lightblue--darker--s), var(--nok25-lightblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-lightblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-lightblue--darker {
-  --border-color: hsla(var(--nok25-lightblue--darker--h), var(--nok25-lightblue--darker--s), var(--nok25-lightblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-lightblue--darker--h), var(--nok25-lightblue--darker--s), var(--nok25-lightblue--darker--l);
+  --border-color: hsla(var(--nok25-lightblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-lightblue--darker--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-lightblue--darker {
-  --input-color: hsla(var(--nok25-lightblue--darker--h), var(--nok25-lightblue--darker--s), var(--nok25-lightblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-lightblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -862,8 +862,8 @@
 }
 
 .nok25-bg-lightblue--lighter {
-  --bg-color: hsla(var(--nok25-lightblue--lighter--h), var(--nok25-lightblue--lighter--s), var(--nok25-lightblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-lightblue--lighter--h), var(--nok25-lightblue--lighter--s), var(--nok25-lightblue--lighter--l);
+  --bg-color: hsla(var(--nok25-lightblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-lightblue--lighter--hsl);
   --bg-color--hover: var(--nok25-lightblue--lighter--hover);
   --bg-color--active: var(--nok25-lightblue--lighter--active);
   --text-color--contrast: var(--nok25-lightblue--lighter--contrast);
@@ -881,8 +881,8 @@
 }
 
 .nok25-text-lightblue--lighter {
-  --text-color: hsla(var(--nok25-lightblue--lighter--h), var(--nok25-lightblue--lighter--s), var(--nok25-lightblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-lightblue--lighter--h), var(--nok25-lightblue--lighter--s), var(--nok25-lightblue--lighter--l);
+  --text-color: hsla(var(--nok25-lightblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-lightblue--lighter--hsl);
   --text-color--hover: var(--nok25-lightblue--lighter--hover);
   --text-color--contrast: var(--nok25-lightblue--lighter--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -896,18 +896,18 @@
   color: #222;
 }
 .nok25-text-lightblue--lighter--hover:hover {
-  --text-color: hsla(var(--nok25-lightblue--lighter--h), var(--nok25-lightblue--lighter--s), var(--nok25-lightblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-lightblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-lightblue--lighter {
-  --border-color: hsla(var(--nok25-lightblue--lighter--h), var(--nok25-lightblue--lighter--s), var(--nok25-lightblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-lightblue--lighter--h), var(--nok25-lightblue--lighter--s), var(--nok25-lightblue--lighter--l);
+  --border-color: hsla(var(--nok25-lightblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-lightblue--lighter--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-lightblue--lighter {
-  --input-color: hsla(var(--nok25-lightblue--lighter--h), var(--nok25-lightblue--lighter--s), var(--nok25-lightblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-lightblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -923,8 +923,8 @@
 }
 
 .nok25-bg-darkblue {
-  --bg-color: hsla(var(--nok25-darkblue--h), var(--nok25-darkblue--s), var(--nok25-darkblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-darkblue--h), var(--nok25-darkblue--s), var(--nok25-darkblue--l);
+  --bg-color: hsla(var(--nok25-darkblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-darkblue--hsl);
   --bg-color--hover: var(--nok25-darkblue--hover);
   --bg-color--active: var(--nok25-darkblue--active);
   --text-color--contrast: var(--nok25-darkblue--contrast);
@@ -942,8 +942,8 @@
 }
 
 .nok25-text-darkblue {
-  --text-color: hsla(var(--nok25-darkblue--h), var(--nok25-darkblue--s), var(--nok25-darkblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-darkblue--h), var(--nok25-darkblue--s), var(--nok25-darkblue--l);
+  --text-color: hsla(var(--nok25-darkblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-darkblue--hsl);
   --text-color--hover: var(--nok25-darkblue--hover);
   --text-color--contrast: var(--nok25-darkblue--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -957,18 +957,18 @@
   color: #f3f4f9;
 }
 .nok25-text-darkblue--hover:hover {
-  --text-color: hsla(var(--nok25-darkblue--h), var(--nok25-darkblue--s), var(--nok25-darkblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-darkblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-darkblue {
-  --border-color: hsla(var(--nok25-darkblue--h), var(--nok25-darkblue--s), var(--nok25-darkblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-darkblue--h), var(--nok25-darkblue--s), var(--nok25-darkblue--l);
+  --border-color: hsla(var(--nok25-darkblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-darkblue--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-darkblue {
-  --input-color: hsla(var(--nok25-darkblue--h), var(--nok25-darkblue--s), var(--nok25-darkblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-darkblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -984,8 +984,8 @@
 }
 
 .nok25-bg-darkblue--darker {
-  --bg-color: hsla(var(--nok25-darkblue--darker--h), var(--nok25-darkblue--darker--s), var(--nok25-darkblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-darkblue--darker--h), var(--nok25-darkblue--darker--s), var(--nok25-darkblue--darker--l);
+  --bg-color: hsla(var(--nok25-darkblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-darkblue--darker--hsl);
   --bg-color--hover: var(--nok25-darkblue--darker--hover);
   --bg-color--active: var(--nok25-darkblue--darker--active);
   --text-color--contrast: var(--nok25-darkblue--darker--contrast);
@@ -1003,8 +1003,8 @@
 }
 
 .nok25-text-darkblue--darker {
-  --text-color: hsla(var(--nok25-darkblue--darker--h), var(--nok25-darkblue--darker--s), var(--nok25-darkblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-darkblue--darker--h), var(--nok25-darkblue--darker--s), var(--nok25-darkblue--darker--l);
+  --text-color: hsla(var(--nok25-darkblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-darkblue--darker--hsl);
   --text-color--hover: var(--nok25-darkblue--darker--hover);
   --text-color--contrast: var(--nok25-darkblue--darker--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -1018,18 +1018,18 @@
   color: #f3f4f9;
 }
 .nok25-text-darkblue--darker--hover:hover {
-  --text-color: hsla(var(--nok25-darkblue--darker--h), var(--nok25-darkblue--darker--s), var(--nok25-darkblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-darkblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-darkblue--darker {
-  --border-color: hsla(var(--nok25-darkblue--darker--h), var(--nok25-darkblue--darker--s), var(--nok25-darkblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-darkblue--darker--h), var(--nok25-darkblue--darker--s), var(--nok25-darkblue--darker--l);
+  --border-color: hsla(var(--nok25-darkblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-darkblue--darker--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-darkblue--darker {
-  --input-color: hsla(var(--nok25-darkblue--darker--h), var(--nok25-darkblue--darker--s), var(--nok25-darkblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-darkblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -1045,8 +1045,8 @@
 }
 
 .nok25-bg-darkblue--lighter {
-  --bg-color: hsla(var(--nok25-darkblue--lighter--h), var(--nok25-darkblue--lighter--s), var(--nok25-darkblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-darkblue--lighter--h), var(--nok25-darkblue--lighter--s), var(--nok25-darkblue--lighter--l);
+  --bg-color: hsla(var(--nok25-darkblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-darkblue--lighter--hsl);
   --bg-color--hover: var(--nok25-darkblue--lighter--hover);
   --bg-color--active: var(--nok25-darkblue--lighter--active);
   --text-color--contrast: var(--nok25-darkblue--lighter--contrast);
@@ -1064,8 +1064,8 @@
 }
 
 .nok25-text-darkblue--lighter {
-  --text-color: hsla(var(--nok25-darkblue--lighter--h), var(--nok25-darkblue--lighter--s), var(--nok25-darkblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-darkblue--lighter--h), var(--nok25-darkblue--lighter--s), var(--nok25-darkblue--lighter--l);
+  --text-color: hsla(var(--nok25-darkblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-darkblue--lighter--hsl);
   --text-color--hover: var(--nok25-darkblue--lighter--hover);
   --text-color--contrast: var(--nok25-darkblue--lighter--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -1079,18 +1079,18 @@
   color: #f3f4f9;
 }
 .nok25-text-darkblue--lighter--hover:hover {
-  --text-color: hsla(var(--nok25-darkblue--lighter--h), var(--nok25-darkblue--lighter--s), var(--nok25-darkblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-darkblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-darkblue--lighter {
-  --border-color: hsla(var(--nok25-darkblue--lighter--h), var(--nok25-darkblue--lighter--s), var(--nok25-darkblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-darkblue--lighter--h), var(--nok25-darkblue--lighter--s), var(--nok25-darkblue--lighter--l);
+  --border-color: hsla(var(--nok25-darkblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-darkblue--lighter--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-darkblue--lighter {
-  --input-color: hsla(var(--nok25-darkblue--lighter--h), var(--nok25-darkblue--lighter--s), var(--nok25-darkblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-darkblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -1106,8 +1106,8 @@
 }
 
 .nok25-bg-darkerblue {
-  --bg-color: hsla(var(--nok25-darkerblue--h), var(--nok25-darkerblue--s), var(--nok25-darkerblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-darkerblue--h), var(--nok25-darkerblue--s), var(--nok25-darkerblue--l);
+  --bg-color: hsla(var(--nok25-darkerblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-darkerblue--hsl);
   --bg-color--hover: var(--nok25-darkerblue--hover);
   --bg-color--active: var(--nok25-darkerblue--active);
   --text-color--contrast: var(--nok25-darkerblue--contrast);
@@ -1125,8 +1125,8 @@
 }
 
 .nok25-text-darkerblue {
-  --text-color: hsla(var(--nok25-darkerblue--h), var(--nok25-darkerblue--s), var(--nok25-darkerblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-darkerblue--h), var(--nok25-darkerblue--s), var(--nok25-darkerblue--l);
+  --text-color: hsla(var(--nok25-darkerblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-darkerblue--hsl);
   --text-color--hover: var(--nok25-darkerblue--hover);
   --text-color--contrast: var(--nok25-darkerblue--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -1140,18 +1140,18 @@
   color: #f3f4f9;
 }
 .nok25-text-darkerblue--hover:hover {
-  --text-color: hsla(var(--nok25-darkerblue--h), var(--nok25-darkerblue--s), var(--nok25-darkerblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-darkerblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-darkerblue {
-  --border-color: hsla(var(--nok25-darkerblue--h), var(--nok25-darkerblue--s), var(--nok25-darkerblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-darkerblue--h), var(--nok25-darkerblue--s), var(--nok25-darkerblue--l);
+  --border-color: hsla(var(--nok25-darkerblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-darkerblue--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-darkerblue {
-  --input-color: hsla(var(--nok25-darkerblue--h), var(--nok25-darkerblue--s), var(--nok25-darkerblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-darkerblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -1167,8 +1167,8 @@
 }
 
 .nok25-bg-darkerblue--darker {
-  --bg-color: hsla(var(--nok25-darkerblue--darker--h), var(--nok25-darkerblue--darker--s), var(--nok25-darkerblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-darkerblue--darker--h), var(--nok25-darkerblue--darker--s), var(--nok25-darkerblue--darker--l);
+  --bg-color: hsla(var(--nok25-darkerblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-darkerblue--darker--hsl);
   --bg-color--hover: var(--nok25-darkerblue--darker--hover);
   --bg-color--active: var(--nok25-darkerblue--darker--active);
   --text-color--contrast: var(--nok25-darkerblue--darker--contrast);
@@ -1186,8 +1186,8 @@
 }
 
 .nok25-text-darkerblue--darker {
-  --text-color: hsla(var(--nok25-darkerblue--darker--h), var(--nok25-darkerblue--darker--s), var(--nok25-darkerblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-darkerblue--darker--h), var(--nok25-darkerblue--darker--s), var(--nok25-darkerblue--darker--l);
+  --text-color: hsla(var(--nok25-darkerblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-darkerblue--darker--hsl);
   --text-color--hover: var(--nok25-darkerblue--darker--hover);
   --text-color--contrast: var(--nok25-darkerblue--darker--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -1201,18 +1201,18 @@
   color: #f3f4f9;
 }
 .nok25-text-darkerblue--darker--hover:hover {
-  --text-color: hsla(var(--nok25-darkerblue--darker--h), var(--nok25-darkerblue--darker--s), var(--nok25-darkerblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-darkerblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-darkerblue--darker {
-  --border-color: hsla(var(--nok25-darkerblue--darker--h), var(--nok25-darkerblue--darker--s), var(--nok25-darkerblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-darkerblue--darker--h), var(--nok25-darkerblue--darker--s), var(--nok25-darkerblue--darker--l);
+  --border-color: hsla(var(--nok25-darkerblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-darkerblue--darker--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-darkerblue--darker {
-  --input-color: hsla(var(--nok25-darkerblue--darker--h), var(--nok25-darkerblue--darker--s), var(--nok25-darkerblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-darkerblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -1228,8 +1228,8 @@
 }
 
 .nok25-bg-darkerblue--lighter {
-  --bg-color: hsla(var(--nok25-darkerblue--lighter--h), var(--nok25-darkerblue--lighter--s), var(--nok25-darkerblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-darkerblue--lighter--h), var(--nok25-darkerblue--lighter--s), var(--nok25-darkerblue--lighter--l);
+  --bg-color: hsla(var(--nok25-darkerblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-darkerblue--lighter--hsl);
   --bg-color--hover: var(--nok25-darkerblue--lighter--hover);
   --bg-color--active: var(--nok25-darkerblue--lighter--active);
   --text-color--contrast: var(--nok25-darkerblue--lighter--contrast);
@@ -1247,8 +1247,8 @@
 }
 
 .nok25-text-darkerblue--lighter {
-  --text-color: hsla(var(--nok25-darkerblue--lighter--h), var(--nok25-darkerblue--lighter--s), var(--nok25-darkerblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-darkerblue--lighter--h), var(--nok25-darkerblue--lighter--s), var(--nok25-darkerblue--lighter--l);
+  --text-color: hsla(var(--nok25-darkerblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-darkerblue--lighter--hsl);
   --text-color--hover: var(--nok25-darkerblue--lighter--hover);
   --text-color--contrast: var(--nok25-darkerblue--lighter--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -1262,18 +1262,18 @@
   color: #f3f4f9;
 }
 .nok25-text-darkerblue--lighter--hover:hover {
-  --text-color: hsla(var(--nok25-darkerblue--lighter--h), var(--nok25-darkerblue--lighter--s), var(--nok25-darkerblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-darkerblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-darkerblue--lighter {
-  --border-color: hsla(var(--nok25-darkerblue--lighter--h), var(--nok25-darkerblue--lighter--s), var(--nok25-darkerblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-darkerblue--lighter--h), var(--nok25-darkerblue--lighter--s), var(--nok25-darkerblue--lighter--l);
+  --border-color: hsla(var(--nok25-darkerblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-darkerblue--lighter--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-darkerblue--lighter {
-  --input-color: hsla(var(--nok25-darkerblue--lighter--h), var(--nok25-darkerblue--lighter--s), var(--nok25-darkerblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-darkerblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -1289,8 +1289,8 @@
 }
 
 .nok25-bg-darkestblue {
-  --bg-color: hsla(var(--nok25-darkestblue--h), var(--nok25-darkestblue--s), var(--nok25-darkestblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-darkestblue--h), var(--nok25-darkestblue--s), var(--nok25-darkestblue--l);
+  --bg-color: hsla(var(--nok25-darkestblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-darkestblue--hsl);
   --bg-color--hover: var(--nok25-darkestblue--hover);
   --bg-color--active: var(--nok25-darkestblue--active);
   --text-color--contrast: var(--nok25-darkestblue--contrast);
@@ -1308,8 +1308,8 @@
 }
 
 .nok25-text-darkestblue {
-  --text-color: hsla(var(--nok25-darkestblue--h), var(--nok25-darkestblue--s), var(--nok25-darkestblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-darkestblue--h), var(--nok25-darkestblue--s), var(--nok25-darkestblue--l);
+  --text-color: hsla(var(--nok25-darkestblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-darkestblue--hsl);
   --text-color--hover: var(--nok25-darkestblue--hover);
   --text-color--contrast: var(--nok25-darkestblue--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -1323,18 +1323,18 @@
   color: #f3f4f9;
 }
 .nok25-text-darkestblue--hover:hover {
-  --text-color: hsla(var(--nok25-darkestblue--h), var(--nok25-darkestblue--s), var(--nok25-darkestblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-darkestblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-darkestblue {
-  --border-color: hsla(var(--nok25-darkestblue--h), var(--nok25-darkestblue--s), var(--nok25-darkestblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-darkestblue--h), var(--nok25-darkestblue--s), var(--nok25-darkestblue--l);
+  --border-color: hsla(var(--nok25-darkestblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-darkestblue--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-darkestblue {
-  --input-color: hsla(var(--nok25-darkestblue--h), var(--nok25-darkestblue--s), var(--nok25-darkestblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-darkestblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -1350,8 +1350,8 @@
 }
 
 .nok25-bg-darkestblue--darker {
-  --bg-color: hsla(var(--nok25-darkestblue--darker--h), var(--nok25-darkestblue--darker--s), var(--nok25-darkestblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-darkestblue--darker--h), var(--nok25-darkestblue--darker--s), var(--nok25-darkestblue--darker--l);
+  --bg-color: hsla(var(--nok25-darkestblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-darkestblue--darker--hsl);
   --bg-color--hover: var(--nok25-darkestblue--darker--hover);
   --bg-color--active: var(--nok25-darkestblue--darker--active);
   --text-color--contrast: var(--nok25-darkestblue--darker--contrast);
@@ -1369,8 +1369,8 @@
 }
 
 .nok25-text-darkestblue--darker {
-  --text-color: hsla(var(--nok25-darkestblue--darker--h), var(--nok25-darkestblue--darker--s), var(--nok25-darkestblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-darkestblue--darker--h), var(--nok25-darkestblue--darker--s), var(--nok25-darkestblue--darker--l);
+  --text-color: hsla(var(--nok25-darkestblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-darkestblue--darker--hsl);
   --text-color--hover: var(--nok25-darkestblue--darker--hover);
   --text-color--contrast: var(--nok25-darkestblue--darker--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -1384,18 +1384,18 @@
   color: #f3f4f9;
 }
 .nok25-text-darkestblue--darker--hover:hover {
-  --text-color: hsla(var(--nok25-darkestblue--darker--h), var(--nok25-darkestblue--darker--s), var(--nok25-darkestblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-darkestblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-darkestblue--darker {
-  --border-color: hsla(var(--nok25-darkestblue--darker--h), var(--nok25-darkestblue--darker--s), var(--nok25-darkestblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-darkestblue--darker--h), var(--nok25-darkestblue--darker--s), var(--nok25-darkestblue--darker--l);
+  --border-color: hsla(var(--nok25-darkestblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-darkestblue--darker--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-darkestblue--darker {
-  --input-color: hsla(var(--nok25-darkestblue--darker--h), var(--nok25-darkestblue--darker--s), var(--nok25-darkestblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-darkestblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -1411,8 +1411,8 @@
 }
 
 .nok25-bg-darkestblue--lighter {
-  --bg-color: hsla(var(--nok25-darkestblue--lighter--h), var(--nok25-darkestblue--lighter--s), var(--nok25-darkestblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-darkestblue--lighter--h), var(--nok25-darkestblue--lighter--s), var(--nok25-darkestblue--lighter--l);
+  --bg-color: hsla(var(--nok25-darkestblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-darkestblue--lighter--hsl);
   --bg-color--hover: var(--nok25-darkestblue--lighter--hover);
   --bg-color--active: var(--nok25-darkestblue--lighter--active);
   --text-color--contrast: var(--nok25-darkestblue--lighter--contrast);
@@ -1430,8 +1430,8 @@
 }
 
 .nok25-text-darkestblue--lighter {
-  --text-color: hsla(var(--nok25-darkestblue--lighter--h), var(--nok25-darkestblue--lighter--s), var(--nok25-darkestblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-darkestblue--lighter--h), var(--nok25-darkestblue--lighter--s), var(--nok25-darkestblue--lighter--l);
+  --text-color: hsla(var(--nok25-darkestblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-darkestblue--lighter--hsl);
   --text-color--hover: var(--nok25-darkestblue--lighter--hover);
   --text-color--contrast: var(--nok25-darkestblue--lighter--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -1445,18 +1445,18 @@
   color: #f3f4f9;
 }
 .nok25-text-darkestblue--lighter--hover:hover {
-  --text-color: hsla(var(--nok25-darkestblue--lighter--h), var(--nok25-darkestblue--lighter--s), var(--nok25-darkestblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-darkestblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-darkestblue--lighter {
-  --border-color: hsla(var(--nok25-darkestblue--lighter--h), var(--nok25-darkestblue--lighter--s), var(--nok25-darkestblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-darkestblue--lighter--h), var(--nok25-darkestblue--lighter--s), var(--nok25-darkestblue--lighter--l);
+  --border-color: hsla(var(--nok25-darkestblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-darkestblue--lighter--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-darkestblue--lighter {
-  --input-color: hsla(var(--nok25-darkestblue--lighter--h), var(--nok25-darkestblue--lighter--s), var(--nok25-darkestblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-darkestblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -1472,8 +1472,8 @@
 }
 
 .nok25-bg-yellow {
-  --bg-color: hsla(var(--nok25-yellow--h), var(--nok25-yellow--s), var(--nok25-yellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-yellow--h), var(--nok25-yellow--s), var(--nok25-yellow--l);
+  --bg-color: hsla(var(--nok25-yellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-yellow--hsl);
   --bg-color--hover: var(--nok25-yellow--hover);
   --bg-color--active: var(--nok25-yellow--active);
   --text-color--contrast: var(--nok25-yellow--contrast);
@@ -1491,8 +1491,8 @@
 }
 
 .nok25-text-yellow {
-  --text-color: hsla(var(--nok25-yellow--h), var(--nok25-yellow--s), var(--nok25-yellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-yellow--h), var(--nok25-yellow--s), var(--nok25-yellow--l);
+  --text-color: hsla(var(--nok25-yellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-yellow--hsl);
   --text-color--hover: var(--nok25-yellow--hover);
   --text-color--contrast: var(--nok25-yellow--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -1506,18 +1506,18 @@
   color: #222;
 }
 .nok25-text-yellow--hover:hover {
-  --text-color: hsla(var(--nok25-yellow--h), var(--nok25-yellow--s), var(--nok25-yellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-yellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-yellow {
-  --border-color: hsla(var(--nok25-yellow--h), var(--nok25-yellow--s), var(--nok25-yellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-yellow--h), var(--nok25-yellow--s), var(--nok25-yellow--l);
+  --border-color: hsla(var(--nok25-yellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-yellow--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-yellow {
-  --input-color: hsla(var(--nok25-yellow--h), var(--nok25-yellow--s), var(--nok25-yellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-yellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -1533,8 +1533,8 @@
 }
 
 .nok25-bg-yellow--darker {
-  --bg-color: hsla(var(--nok25-yellow--darker--h), var(--nok25-yellow--darker--s), var(--nok25-yellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-yellow--darker--h), var(--nok25-yellow--darker--s), var(--nok25-yellow--darker--l);
+  --bg-color: hsla(var(--nok25-yellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-yellow--darker--hsl);
   --bg-color--hover: var(--nok25-yellow--darker--hover);
   --bg-color--active: var(--nok25-yellow--darker--active);
   --text-color--contrast: var(--nok25-yellow--darker--contrast);
@@ -1552,8 +1552,8 @@
 }
 
 .nok25-text-yellow--darker {
-  --text-color: hsla(var(--nok25-yellow--darker--h), var(--nok25-yellow--darker--s), var(--nok25-yellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-yellow--darker--h), var(--nok25-yellow--darker--s), var(--nok25-yellow--darker--l);
+  --text-color: hsla(var(--nok25-yellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-yellow--darker--hsl);
   --text-color--hover: var(--nok25-yellow--darker--hover);
   --text-color--contrast: var(--nok25-yellow--darker--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -1567,18 +1567,18 @@
   color: #222;
 }
 .nok25-text-yellow--darker--hover:hover {
-  --text-color: hsla(var(--nok25-yellow--darker--h), var(--nok25-yellow--darker--s), var(--nok25-yellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-yellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-yellow--darker {
-  --border-color: hsla(var(--nok25-yellow--darker--h), var(--nok25-yellow--darker--s), var(--nok25-yellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-yellow--darker--h), var(--nok25-yellow--darker--s), var(--nok25-yellow--darker--l);
+  --border-color: hsla(var(--nok25-yellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-yellow--darker--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-yellow--darker {
-  --input-color: hsla(var(--nok25-yellow--darker--h), var(--nok25-yellow--darker--s), var(--nok25-yellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-yellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -1594,8 +1594,8 @@
 }
 
 .nok25-bg-yellow--lighter {
-  --bg-color: hsla(var(--nok25-yellow--lighter--h), var(--nok25-yellow--lighter--s), var(--nok25-yellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-yellow--lighter--h), var(--nok25-yellow--lighter--s), var(--nok25-yellow--lighter--l);
+  --bg-color: hsla(var(--nok25-yellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-yellow--lighter--hsl);
   --bg-color--hover: var(--nok25-yellow--lighter--hover);
   --bg-color--active: var(--nok25-yellow--lighter--active);
   --text-color--contrast: var(--nok25-yellow--lighter--contrast);
@@ -1613,8 +1613,8 @@
 }
 
 .nok25-text-yellow--lighter {
-  --text-color: hsla(var(--nok25-yellow--lighter--h), var(--nok25-yellow--lighter--s), var(--nok25-yellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-yellow--lighter--h), var(--nok25-yellow--lighter--s), var(--nok25-yellow--lighter--l);
+  --text-color: hsla(var(--nok25-yellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-yellow--lighter--hsl);
   --text-color--hover: var(--nok25-yellow--lighter--hover);
   --text-color--contrast: var(--nok25-yellow--lighter--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -1628,18 +1628,18 @@
   color: #222;
 }
 .nok25-text-yellow--lighter--hover:hover {
-  --text-color: hsla(var(--nok25-yellow--lighter--h), var(--nok25-yellow--lighter--s), var(--nok25-yellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-yellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-yellow--lighter {
-  --border-color: hsla(var(--nok25-yellow--lighter--h), var(--nok25-yellow--lighter--s), var(--nok25-yellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-yellow--lighter--h), var(--nok25-yellow--lighter--s), var(--nok25-yellow--lighter--l);
+  --border-color: hsla(var(--nok25-yellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-yellow--lighter--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-yellow--lighter {
-  --input-color: hsla(var(--nok25-yellow--lighter--h), var(--nok25-yellow--lighter--s), var(--nok25-yellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-yellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -1655,8 +1655,8 @@
 }
 
 .nok25-bg-darkyellow {
-  --bg-color: hsla(var(--nok25-darkyellow--h), var(--nok25-darkyellow--s), var(--nok25-darkyellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-darkyellow--h), var(--nok25-darkyellow--s), var(--nok25-darkyellow--l);
+  --bg-color: hsla(var(--nok25-darkyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-darkyellow--hsl);
   --bg-color--hover: var(--nok25-darkyellow--hover);
   --bg-color--active: var(--nok25-darkyellow--active);
   --text-color--contrast: var(--nok25-darkyellow--contrast);
@@ -1674,8 +1674,8 @@
 }
 
 .nok25-text-darkyellow {
-  --text-color: hsla(var(--nok25-darkyellow--h), var(--nok25-darkyellow--s), var(--nok25-darkyellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-darkyellow--h), var(--nok25-darkyellow--s), var(--nok25-darkyellow--l);
+  --text-color: hsla(var(--nok25-darkyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-darkyellow--hsl);
   --text-color--hover: var(--nok25-darkyellow--hover);
   --text-color--contrast: var(--nok25-darkyellow--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -1689,18 +1689,18 @@
   color: #222;
 }
 .nok25-text-darkyellow--hover:hover {
-  --text-color: hsla(var(--nok25-darkyellow--h), var(--nok25-darkyellow--s), var(--nok25-darkyellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-darkyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-darkyellow {
-  --border-color: hsla(var(--nok25-darkyellow--h), var(--nok25-darkyellow--s), var(--nok25-darkyellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-darkyellow--h), var(--nok25-darkyellow--s), var(--nok25-darkyellow--l);
+  --border-color: hsla(var(--nok25-darkyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-darkyellow--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-darkyellow {
-  --input-color: hsla(var(--nok25-darkyellow--h), var(--nok25-darkyellow--s), var(--nok25-darkyellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-darkyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -1716,8 +1716,8 @@
 }
 
 .nok25-bg-darkyellow--darker {
-  --bg-color: hsla(var(--nok25-darkyellow--darker--h), var(--nok25-darkyellow--darker--s), var(--nok25-darkyellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-darkyellow--darker--h), var(--nok25-darkyellow--darker--s), var(--nok25-darkyellow--darker--l);
+  --bg-color: hsla(var(--nok25-darkyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-darkyellow--darker--hsl);
   --bg-color--hover: var(--nok25-darkyellow--darker--hover);
   --bg-color--active: var(--nok25-darkyellow--darker--active);
   --text-color--contrast: var(--nok25-darkyellow--darker--contrast);
@@ -1735,8 +1735,8 @@
 }
 
 .nok25-text-darkyellow--darker {
-  --text-color: hsla(var(--nok25-darkyellow--darker--h), var(--nok25-darkyellow--darker--s), var(--nok25-darkyellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-darkyellow--darker--h), var(--nok25-darkyellow--darker--s), var(--nok25-darkyellow--darker--l);
+  --text-color: hsla(var(--nok25-darkyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-darkyellow--darker--hsl);
   --text-color--hover: var(--nok25-darkyellow--darker--hover);
   --text-color--contrast: var(--nok25-darkyellow--darker--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -1750,18 +1750,18 @@
   color: #222;
 }
 .nok25-text-darkyellow--darker--hover:hover {
-  --text-color: hsla(var(--nok25-darkyellow--darker--h), var(--nok25-darkyellow--darker--s), var(--nok25-darkyellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-darkyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-darkyellow--darker {
-  --border-color: hsla(var(--nok25-darkyellow--darker--h), var(--nok25-darkyellow--darker--s), var(--nok25-darkyellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-darkyellow--darker--h), var(--nok25-darkyellow--darker--s), var(--nok25-darkyellow--darker--l);
+  --border-color: hsla(var(--nok25-darkyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-darkyellow--darker--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-darkyellow--darker {
-  --input-color: hsla(var(--nok25-darkyellow--darker--h), var(--nok25-darkyellow--darker--s), var(--nok25-darkyellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-darkyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -1777,8 +1777,8 @@
 }
 
 .nok25-bg-darkyellow--lighter {
-  --bg-color: hsla(var(--nok25-darkyellow--lighter--h), var(--nok25-darkyellow--lighter--s), var(--nok25-darkyellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-darkyellow--lighter--h), var(--nok25-darkyellow--lighter--s), var(--nok25-darkyellow--lighter--l);
+  --bg-color: hsla(var(--nok25-darkyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-darkyellow--lighter--hsl);
   --bg-color--hover: var(--nok25-darkyellow--lighter--hover);
   --bg-color--active: var(--nok25-darkyellow--lighter--active);
   --text-color--contrast: var(--nok25-darkyellow--lighter--contrast);
@@ -1796,8 +1796,8 @@
 }
 
 .nok25-text-darkyellow--lighter {
-  --text-color: hsla(var(--nok25-darkyellow--lighter--h), var(--nok25-darkyellow--lighter--s), var(--nok25-darkyellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-darkyellow--lighter--h), var(--nok25-darkyellow--lighter--s), var(--nok25-darkyellow--lighter--l);
+  --text-color: hsla(var(--nok25-darkyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-darkyellow--lighter--hsl);
   --text-color--hover: var(--nok25-darkyellow--lighter--hover);
   --text-color--contrast: var(--nok25-darkyellow--lighter--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -1811,18 +1811,18 @@
   color: #222;
 }
 .nok25-text-darkyellow--lighter--hover:hover {
-  --text-color: hsla(var(--nok25-darkyellow--lighter--h), var(--nok25-darkyellow--lighter--s), var(--nok25-darkyellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-darkyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-darkyellow--lighter {
-  --border-color: hsla(var(--nok25-darkyellow--lighter--h), var(--nok25-darkyellow--lighter--s), var(--nok25-darkyellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-darkyellow--lighter--h), var(--nok25-darkyellow--lighter--s), var(--nok25-darkyellow--lighter--l);
+  --border-color: hsla(var(--nok25-darkyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-darkyellow--lighter--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-darkyellow--lighter {
-  --input-color: hsla(var(--nok25-darkyellow--lighter--h), var(--nok25-darkyellow--lighter--s), var(--nok25-darkyellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-darkyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -1838,8 +1838,8 @@
 }
 
 .nok25-bg-paleyellow {
-  --bg-color: hsla(var(--nok25-paleyellow--h), var(--nok25-paleyellow--s), var(--nok25-paleyellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-paleyellow--h), var(--nok25-paleyellow--s), var(--nok25-paleyellow--l);
+  --bg-color: hsla(var(--nok25-paleyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-paleyellow--hsl);
   --bg-color--hover: var(--nok25-paleyellow--hover);
   --bg-color--active: var(--nok25-paleyellow--active);
   --text-color--contrast: var(--nok25-paleyellow--contrast);
@@ -1857,8 +1857,8 @@
 }
 
 .nok25-text-paleyellow {
-  --text-color: hsla(var(--nok25-paleyellow--h), var(--nok25-paleyellow--s), var(--nok25-paleyellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-paleyellow--h), var(--nok25-paleyellow--s), var(--nok25-paleyellow--l);
+  --text-color: hsla(var(--nok25-paleyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-paleyellow--hsl);
   --text-color--hover: var(--nok25-paleyellow--hover);
   --text-color--contrast: var(--nok25-paleyellow--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -1872,18 +1872,18 @@
   color: #222;
 }
 .nok25-text-paleyellow--hover:hover {
-  --text-color: hsla(var(--nok25-paleyellow--h), var(--nok25-paleyellow--s), var(--nok25-paleyellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-paleyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-paleyellow {
-  --border-color: hsla(var(--nok25-paleyellow--h), var(--nok25-paleyellow--s), var(--nok25-paleyellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-paleyellow--h), var(--nok25-paleyellow--s), var(--nok25-paleyellow--l);
+  --border-color: hsla(var(--nok25-paleyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-paleyellow--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-paleyellow {
-  --input-color: hsla(var(--nok25-paleyellow--h), var(--nok25-paleyellow--s), var(--nok25-paleyellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-paleyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -1899,8 +1899,8 @@
 }
 
 .nok25-bg-paleyellow--darker {
-  --bg-color: hsla(var(--nok25-paleyellow--darker--h), var(--nok25-paleyellow--darker--s), var(--nok25-paleyellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-paleyellow--darker--h), var(--nok25-paleyellow--darker--s), var(--nok25-paleyellow--darker--l);
+  --bg-color: hsla(var(--nok25-paleyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-paleyellow--darker--hsl);
   --bg-color--hover: var(--nok25-paleyellow--darker--hover);
   --bg-color--active: var(--nok25-paleyellow--darker--active);
   --text-color--contrast: var(--nok25-paleyellow--darker--contrast);
@@ -1918,8 +1918,8 @@
 }
 
 .nok25-text-paleyellow--darker {
-  --text-color: hsla(var(--nok25-paleyellow--darker--h), var(--nok25-paleyellow--darker--s), var(--nok25-paleyellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-paleyellow--darker--h), var(--nok25-paleyellow--darker--s), var(--nok25-paleyellow--darker--l);
+  --text-color: hsla(var(--nok25-paleyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-paleyellow--darker--hsl);
   --text-color--hover: var(--nok25-paleyellow--darker--hover);
   --text-color--contrast: var(--nok25-paleyellow--darker--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -1933,18 +1933,18 @@
   color: #222;
 }
 .nok25-text-paleyellow--darker--hover:hover {
-  --text-color: hsla(var(--nok25-paleyellow--darker--h), var(--nok25-paleyellow--darker--s), var(--nok25-paleyellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-paleyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-paleyellow--darker {
-  --border-color: hsla(var(--nok25-paleyellow--darker--h), var(--nok25-paleyellow--darker--s), var(--nok25-paleyellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-paleyellow--darker--h), var(--nok25-paleyellow--darker--s), var(--nok25-paleyellow--darker--l);
+  --border-color: hsla(var(--nok25-paleyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-paleyellow--darker--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-paleyellow--darker {
-  --input-color: hsla(var(--nok25-paleyellow--darker--h), var(--nok25-paleyellow--darker--s), var(--nok25-paleyellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-paleyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -1960,8 +1960,8 @@
 }
 
 .nok25-bg-paleyellow--lighter {
-  --bg-color: hsla(var(--nok25-paleyellow--lighter--h), var(--nok25-paleyellow--lighter--s), var(--nok25-paleyellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-paleyellow--lighter--h), var(--nok25-paleyellow--lighter--s), var(--nok25-paleyellow--lighter--l);
+  --bg-color: hsla(var(--nok25-paleyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-paleyellow--lighter--hsl);
   --bg-color--hover: var(--nok25-paleyellow--lighter--hover);
   --bg-color--active: var(--nok25-paleyellow--lighter--active);
   --text-color--contrast: var(--nok25-paleyellow--lighter--contrast);
@@ -1979,8 +1979,8 @@
 }
 
 .nok25-text-paleyellow--lighter {
-  --text-color: hsla(var(--nok25-paleyellow--lighter--h), var(--nok25-paleyellow--lighter--s), var(--nok25-paleyellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-paleyellow--lighter--h), var(--nok25-paleyellow--lighter--s), var(--nok25-paleyellow--lighter--l);
+  --text-color: hsla(var(--nok25-paleyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-paleyellow--lighter--hsl);
   --text-color--hover: var(--nok25-paleyellow--lighter--hover);
   --text-color--contrast: var(--nok25-paleyellow--lighter--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -1994,18 +1994,18 @@
   color: #222;
 }
 .nok25-text-paleyellow--lighter--hover:hover {
-  --text-color: hsla(var(--nok25-paleyellow--lighter--h), var(--nok25-paleyellow--lighter--s), var(--nok25-paleyellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-paleyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-paleyellow--lighter {
-  --border-color: hsla(var(--nok25-paleyellow--lighter--h), var(--nok25-paleyellow--lighter--s), var(--nok25-paleyellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-paleyellow--lighter--h), var(--nok25-paleyellow--lighter--s), var(--nok25-paleyellow--lighter--l);
+  --border-color: hsla(var(--nok25-paleyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-paleyellow--lighter--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-paleyellow--lighter {
-  --input-color: hsla(var(--nok25-paleyellow--lighter--h), var(--nok25-paleyellow--lighter--s), var(--nok25-paleyellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-paleyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -2021,8 +2021,8 @@
 }
 
 .nok25-bg-green {
-  --bg-color: hsla(var(--nok25-green--h), var(--nok25-green--s), var(--nok25-green--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-green--h), var(--nok25-green--s), var(--nok25-green--l);
+  --bg-color: hsla(var(--nok25-green--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-green--hsl);
   --bg-color--hover: var(--nok25-green--hover);
   --bg-color--active: var(--nok25-green--active);
   --text-color--contrast: var(--nok25-green--contrast);
@@ -2040,8 +2040,8 @@
 }
 
 .nok25-text-green {
-  --text-color: hsla(var(--nok25-green--h), var(--nok25-green--s), var(--nok25-green--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-green--h), var(--nok25-green--s), var(--nok25-green--l);
+  --text-color: hsla(var(--nok25-green--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-green--hsl);
   --text-color--hover: var(--nok25-green--hover);
   --text-color--contrast: var(--nok25-green--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -2055,18 +2055,18 @@
   color: #222;
 }
 .nok25-text-green--hover:hover {
-  --text-color: hsla(var(--nok25-green--h), var(--nok25-green--s), var(--nok25-green--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-green--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-green {
-  --border-color: hsla(var(--nok25-green--h), var(--nok25-green--s), var(--nok25-green--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-green--h), var(--nok25-green--s), var(--nok25-green--l);
+  --border-color: hsla(var(--nok25-green--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-green--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-green {
-  --input-color: hsla(var(--nok25-green--h), var(--nok25-green--s), var(--nok25-green--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-green--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -2082,8 +2082,8 @@
 }
 
 .nok25-bg-green--darker {
-  --bg-color: hsla(var(--nok25-green--darker--h), var(--nok25-green--darker--s), var(--nok25-green--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-green--darker--h), var(--nok25-green--darker--s), var(--nok25-green--darker--l);
+  --bg-color: hsla(var(--nok25-green--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-green--darker--hsl);
   --bg-color--hover: var(--nok25-green--darker--hover);
   --bg-color--active: var(--nok25-green--darker--active);
   --text-color--contrast: var(--nok25-green--darker--contrast);
@@ -2101,8 +2101,8 @@
 }
 
 .nok25-text-green--darker {
-  --text-color: hsla(var(--nok25-green--darker--h), var(--nok25-green--darker--s), var(--nok25-green--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-green--darker--h), var(--nok25-green--darker--s), var(--nok25-green--darker--l);
+  --text-color: hsla(var(--nok25-green--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-green--darker--hsl);
   --text-color--hover: var(--nok25-green--darker--hover);
   --text-color--contrast: var(--nok25-green--darker--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -2116,18 +2116,18 @@
   color: #f3f4f9;
 }
 .nok25-text-green--darker--hover:hover {
-  --text-color: hsla(var(--nok25-green--darker--h), var(--nok25-green--darker--s), var(--nok25-green--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-green--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-green--darker {
-  --border-color: hsla(var(--nok25-green--darker--h), var(--nok25-green--darker--s), var(--nok25-green--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-green--darker--h), var(--nok25-green--darker--s), var(--nok25-green--darker--l);
+  --border-color: hsla(var(--nok25-green--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-green--darker--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-green--darker {
-  --input-color: hsla(var(--nok25-green--darker--h), var(--nok25-green--darker--s), var(--nok25-green--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-green--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -2143,8 +2143,8 @@
 }
 
 .nok25-bg-green--lighter {
-  --bg-color: hsla(var(--nok25-green--lighter--h), var(--nok25-green--lighter--s), var(--nok25-green--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-green--lighter--h), var(--nok25-green--lighter--s), var(--nok25-green--lighter--l);
+  --bg-color: hsla(var(--nok25-green--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-green--lighter--hsl);
   --bg-color--hover: var(--nok25-green--lighter--hover);
   --bg-color--active: var(--nok25-green--lighter--active);
   --text-color--contrast: var(--nok25-green--lighter--contrast);
@@ -2162,8 +2162,8 @@
 }
 
 .nok25-text-green--lighter {
-  --text-color: hsla(var(--nok25-green--lighter--h), var(--nok25-green--lighter--s), var(--nok25-green--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-green--lighter--h), var(--nok25-green--lighter--s), var(--nok25-green--lighter--l);
+  --text-color: hsla(var(--nok25-green--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-green--lighter--hsl);
   --text-color--hover: var(--nok25-green--lighter--hover);
   --text-color--contrast: var(--nok25-green--lighter--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -2177,18 +2177,18 @@
   color: #222;
 }
 .nok25-text-green--lighter--hover:hover {
-  --text-color: hsla(var(--nok25-green--lighter--h), var(--nok25-green--lighter--s), var(--nok25-green--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-green--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-green--lighter {
-  --border-color: hsla(var(--nok25-green--lighter--h), var(--nok25-green--lighter--s), var(--nok25-green--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-green--lighter--h), var(--nok25-green--lighter--s), var(--nok25-green--lighter--l);
+  --border-color: hsla(var(--nok25-green--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-green--lighter--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-green--lighter {
-  --input-color: hsla(var(--nok25-green--lighter--h), var(--nok25-green--lighter--s), var(--nok25-green--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-green--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -2204,8 +2204,8 @@
 }
 
 .nok25-bg-greenyellow {
-  --bg-color: hsla(var(--nok25-greenyellow--h), var(--nok25-greenyellow--s), var(--nok25-greenyellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-greenyellow--h), var(--nok25-greenyellow--s), var(--nok25-greenyellow--l);
+  --bg-color: hsla(var(--nok25-greenyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-greenyellow--hsl);
   --bg-color--hover: var(--nok25-greenyellow--hover);
   --bg-color--active: var(--nok25-greenyellow--active);
   --text-color--contrast: var(--nok25-greenyellow--contrast);
@@ -2223,8 +2223,8 @@
 }
 
 .nok25-text-greenyellow {
-  --text-color: hsla(var(--nok25-greenyellow--h), var(--nok25-greenyellow--s), var(--nok25-greenyellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-greenyellow--h), var(--nok25-greenyellow--s), var(--nok25-greenyellow--l);
+  --text-color: hsla(var(--nok25-greenyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-greenyellow--hsl);
   --text-color--hover: var(--nok25-greenyellow--hover);
   --text-color--contrast: var(--nok25-greenyellow--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -2238,18 +2238,18 @@
   color: #222;
 }
 .nok25-text-greenyellow--hover:hover {
-  --text-color: hsla(var(--nok25-greenyellow--h), var(--nok25-greenyellow--s), var(--nok25-greenyellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-greenyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-greenyellow {
-  --border-color: hsla(var(--nok25-greenyellow--h), var(--nok25-greenyellow--s), var(--nok25-greenyellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-greenyellow--h), var(--nok25-greenyellow--s), var(--nok25-greenyellow--l);
+  --border-color: hsla(var(--nok25-greenyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-greenyellow--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-greenyellow {
-  --input-color: hsla(var(--nok25-greenyellow--h), var(--nok25-greenyellow--s), var(--nok25-greenyellow--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-greenyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -2265,8 +2265,8 @@
 }
 
 .nok25-bg-greenyellow--darker {
-  --bg-color: hsla(var(--nok25-greenyellow--darker--h), var(--nok25-greenyellow--darker--s), var(--nok25-greenyellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-greenyellow--darker--h), var(--nok25-greenyellow--darker--s), var(--nok25-greenyellow--darker--l);
+  --bg-color: hsla(var(--nok25-greenyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-greenyellow--darker--hsl);
   --bg-color--hover: var(--nok25-greenyellow--darker--hover);
   --bg-color--active: var(--nok25-greenyellow--darker--active);
   --text-color--contrast: var(--nok25-greenyellow--darker--contrast);
@@ -2284,8 +2284,8 @@
 }
 
 .nok25-text-greenyellow--darker {
-  --text-color: hsla(var(--nok25-greenyellow--darker--h), var(--nok25-greenyellow--darker--s), var(--nok25-greenyellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-greenyellow--darker--h), var(--nok25-greenyellow--darker--s), var(--nok25-greenyellow--darker--l);
+  --text-color: hsla(var(--nok25-greenyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-greenyellow--darker--hsl);
   --text-color--hover: var(--nok25-greenyellow--darker--hover);
   --text-color--contrast: var(--nok25-greenyellow--darker--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -2299,18 +2299,18 @@
   color: #222;
 }
 .nok25-text-greenyellow--darker--hover:hover {
-  --text-color: hsla(var(--nok25-greenyellow--darker--h), var(--nok25-greenyellow--darker--s), var(--nok25-greenyellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-greenyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-greenyellow--darker {
-  --border-color: hsla(var(--nok25-greenyellow--darker--h), var(--nok25-greenyellow--darker--s), var(--nok25-greenyellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-greenyellow--darker--h), var(--nok25-greenyellow--darker--s), var(--nok25-greenyellow--darker--l);
+  --border-color: hsla(var(--nok25-greenyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-greenyellow--darker--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-greenyellow--darker {
-  --input-color: hsla(var(--nok25-greenyellow--darker--h), var(--nok25-greenyellow--darker--s), var(--nok25-greenyellow--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-greenyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -2326,8 +2326,8 @@
 }
 
 .nok25-bg-greenyellow--lighter {
-  --bg-color: hsla(var(--nok25-greenyellow--lighter--h), var(--nok25-greenyellow--lighter--s), var(--nok25-greenyellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-greenyellow--lighter--h), var(--nok25-greenyellow--lighter--s), var(--nok25-greenyellow--lighter--l);
+  --bg-color: hsla(var(--nok25-greenyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-greenyellow--lighter--hsl);
   --bg-color--hover: var(--nok25-greenyellow--lighter--hover);
   --bg-color--active: var(--nok25-greenyellow--lighter--active);
   --text-color--contrast: var(--nok25-greenyellow--lighter--contrast);
@@ -2345,8 +2345,8 @@
 }
 
 .nok25-text-greenyellow--lighter {
-  --text-color: hsla(var(--nok25-greenyellow--lighter--h), var(--nok25-greenyellow--lighter--s), var(--nok25-greenyellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-greenyellow--lighter--h), var(--nok25-greenyellow--lighter--s), var(--nok25-greenyellow--lighter--l);
+  --text-color: hsla(var(--nok25-greenyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-greenyellow--lighter--hsl);
   --text-color--hover: var(--nok25-greenyellow--lighter--hover);
   --text-color--contrast: var(--nok25-greenyellow--lighter--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -2360,18 +2360,18 @@
   color: #222;
 }
 .nok25-text-greenyellow--lighter--hover:hover {
-  --text-color: hsla(var(--nok25-greenyellow--lighter--h), var(--nok25-greenyellow--lighter--s), var(--nok25-greenyellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-greenyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-greenyellow--lighter {
-  --border-color: hsla(var(--nok25-greenyellow--lighter--h), var(--nok25-greenyellow--lighter--s), var(--nok25-greenyellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-greenyellow--lighter--h), var(--nok25-greenyellow--lighter--s), var(--nok25-greenyellow--lighter--l);
+  --border-color: hsla(var(--nok25-greenyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-greenyellow--lighter--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-greenyellow--lighter {
-  --input-color: hsla(var(--nok25-greenyellow--lighter--h), var(--nok25-greenyellow--lighter--s), var(--nok25-greenyellow--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-greenyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -2387,8 +2387,8 @@
 }
 
 .nok25-bg-greenblue {
-  --bg-color: hsla(var(--nok25-greenblue--h), var(--nok25-greenblue--s), var(--nok25-greenblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-greenblue--h), var(--nok25-greenblue--s), var(--nok25-greenblue--l);
+  --bg-color: hsla(var(--nok25-greenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-greenblue--hsl);
   --bg-color--hover: var(--nok25-greenblue--hover);
   --bg-color--active: var(--nok25-greenblue--active);
   --text-color--contrast: var(--nok25-greenblue--contrast);
@@ -2406,8 +2406,8 @@
 }
 
 .nok25-text-greenblue {
-  --text-color: hsla(var(--nok25-greenblue--h), var(--nok25-greenblue--s), var(--nok25-greenblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-greenblue--h), var(--nok25-greenblue--s), var(--nok25-greenblue--l);
+  --text-color: hsla(var(--nok25-greenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-greenblue--hsl);
   --text-color--hover: var(--nok25-greenblue--hover);
   --text-color--contrast: var(--nok25-greenblue--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -2421,18 +2421,18 @@
   color: #222;
 }
 .nok25-text-greenblue--hover:hover {
-  --text-color: hsla(var(--nok25-greenblue--h), var(--nok25-greenblue--s), var(--nok25-greenblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-greenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-greenblue {
-  --border-color: hsla(var(--nok25-greenblue--h), var(--nok25-greenblue--s), var(--nok25-greenblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-greenblue--h), var(--nok25-greenblue--s), var(--nok25-greenblue--l);
+  --border-color: hsla(var(--nok25-greenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-greenblue--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-greenblue {
-  --input-color: hsla(var(--nok25-greenblue--h), var(--nok25-greenblue--s), var(--nok25-greenblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-greenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -2448,8 +2448,8 @@
 }
 
 .nok25-bg-greenblue--darker {
-  --bg-color: hsla(var(--nok25-greenblue--darker--h), var(--nok25-greenblue--darker--s), var(--nok25-greenblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-greenblue--darker--h), var(--nok25-greenblue--darker--s), var(--nok25-greenblue--darker--l);
+  --bg-color: hsla(var(--nok25-greenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-greenblue--darker--hsl);
   --bg-color--hover: var(--nok25-greenblue--darker--hover);
   --bg-color--active: var(--nok25-greenblue--darker--active);
   --text-color--contrast: var(--nok25-greenblue--darker--contrast);
@@ -2467,8 +2467,8 @@
 }
 
 .nok25-text-greenblue--darker {
-  --text-color: hsla(var(--nok25-greenblue--darker--h), var(--nok25-greenblue--darker--s), var(--nok25-greenblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-greenblue--darker--h), var(--nok25-greenblue--darker--s), var(--nok25-greenblue--darker--l);
+  --text-color: hsla(var(--nok25-greenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-greenblue--darker--hsl);
   --text-color--hover: var(--nok25-greenblue--darker--hover);
   --text-color--contrast: var(--nok25-greenblue--darker--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -2482,18 +2482,18 @@
   color: #f3f4f9;
 }
 .nok25-text-greenblue--darker--hover:hover {
-  --text-color: hsla(var(--nok25-greenblue--darker--h), var(--nok25-greenblue--darker--s), var(--nok25-greenblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-greenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-greenblue--darker {
-  --border-color: hsla(var(--nok25-greenblue--darker--h), var(--nok25-greenblue--darker--s), var(--nok25-greenblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-greenblue--darker--h), var(--nok25-greenblue--darker--s), var(--nok25-greenblue--darker--l);
+  --border-color: hsla(var(--nok25-greenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-greenblue--darker--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-greenblue--darker {
-  --input-color: hsla(var(--nok25-greenblue--darker--h), var(--nok25-greenblue--darker--s), var(--nok25-greenblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-greenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -2509,8 +2509,8 @@
 }
 
 .nok25-bg-greenblue--lighter {
-  --bg-color: hsla(var(--nok25-greenblue--lighter--h), var(--nok25-greenblue--lighter--s), var(--nok25-greenblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-greenblue--lighter--h), var(--nok25-greenblue--lighter--s), var(--nok25-greenblue--lighter--l);
+  --bg-color: hsla(var(--nok25-greenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-greenblue--lighter--hsl);
   --bg-color--hover: var(--nok25-greenblue--lighter--hover);
   --bg-color--active: var(--nok25-greenblue--lighter--active);
   --text-color--contrast: var(--nok25-greenblue--lighter--contrast);
@@ -2528,8 +2528,8 @@
 }
 
 .nok25-text-greenblue--lighter {
-  --text-color: hsla(var(--nok25-greenblue--lighter--h), var(--nok25-greenblue--lighter--s), var(--nok25-greenblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-greenblue--lighter--h), var(--nok25-greenblue--lighter--s), var(--nok25-greenblue--lighter--l);
+  --text-color: hsla(var(--nok25-greenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-greenblue--lighter--hsl);
   --text-color--hover: var(--nok25-greenblue--lighter--hover);
   --text-color--contrast: var(--nok25-greenblue--lighter--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -2543,18 +2543,18 @@
   color: #222;
 }
 .nok25-text-greenblue--lighter--hover:hover {
-  --text-color: hsla(var(--nok25-greenblue--lighter--h), var(--nok25-greenblue--lighter--s), var(--nok25-greenblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-greenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-greenblue--lighter {
-  --border-color: hsla(var(--nok25-greenblue--lighter--h), var(--nok25-greenblue--lighter--s), var(--nok25-greenblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-greenblue--lighter--h), var(--nok25-greenblue--lighter--s), var(--nok25-greenblue--lighter--l);
+  --border-color: hsla(var(--nok25-greenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-greenblue--lighter--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-greenblue--lighter {
-  --input-color: hsla(var(--nok25-greenblue--lighter--h), var(--nok25-greenblue--lighter--s), var(--nok25-greenblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-greenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -2570,8 +2570,8 @@
 }
 
 .nok25-bg-lightgreenblue {
-  --bg-color: hsla(var(--nok25-lightgreenblue--h), var(--nok25-lightgreenblue--s), var(--nok25-lightgreenblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-lightgreenblue--h), var(--nok25-lightgreenblue--s), var(--nok25-lightgreenblue--l);
+  --bg-color: hsla(var(--nok25-lightgreenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-lightgreenblue--hsl);
   --bg-color--hover: var(--nok25-lightgreenblue--hover);
   --bg-color--active: var(--nok25-lightgreenblue--active);
   --text-color--contrast: var(--nok25-lightgreenblue--contrast);
@@ -2589,8 +2589,8 @@
 }
 
 .nok25-text-lightgreenblue {
-  --text-color: hsla(var(--nok25-lightgreenblue--h), var(--nok25-lightgreenblue--s), var(--nok25-lightgreenblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-lightgreenblue--h), var(--nok25-lightgreenblue--s), var(--nok25-lightgreenblue--l);
+  --text-color: hsla(var(--nok25-lightgreenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-lightgreenblue--hsl);
   --text-color--hover: var(--nok25-lightgreenblue--hover);
   --text-color--contrast: var(--nok25-lightgreenblue--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -2604,18 +2604,18 @@
   color: #222;
 }
 .nok25-text-lightgreenblue--hover:hover {
-  --text-color: hsla(var(--nok25-lightgreenblue--h), var(--nok25-lightgreenblue--s), var(--nok25-lightgreenblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-lightgreenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-lightgreenblue {
-  --border-color: hsla(var(--nok25-lightgreenblue--h), var(--nok25-lightgreenblue--s), var(--nok25-lightgreenblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-lightgreenblue--h), var(--nok25-lightgreenblue--s), var(--nok25-lightgreenblue--l);
+  --border-color: hsla(var(--nok25-lightgreenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-lightgreenblue--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-lightgreenblue {
-  --input-color: hsla(var(--nok25-lightgreenblue--h), var(--nok25-lightgreenblue--s), var(--nok25-lightgreenblue--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-lightgreenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -2631,8 +2631,8 @@
 }
 
 .nok25-bg-lightgreenblue--darker {
-  --bg-color: hsla(var(--nok25-lightgreenblue--darker--h), var(--nok25-lightgreenblue--darker--s), var(--nok25-lightgreenblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-lightgreenblue--darker--h), var(--nok25-lightgreenblue--darker--s), var(--nok25-lightgreenblue--darker--l);
+  --bg-color: hsla(var(--nok25-lightgreenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-lightgreenblue--darker--hsl);
   --bg-color--hover: var(--nok25-lightgreenblue--darker--hover);
   --bg-color--active: var(--nok25-lightgreenblue--darker--active);
   --text-color--contrast: var(--nok25-lightgreenblue--darker--contrast);
@@ -2650,8 +2650,8 @@
 }
 
 .nok25-text-lightgreenblue--darker {
-  --text-color: hsla(var(--nok25-lightgreenblue--darker--h), var(--nok25-lightgreenblue--darker--s), var(--nok25-lightgreenblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-lightgreenblue--darker--h), var(--nok25-lightgreenblue--darker--s), var(--nok25-lightgreenblue--darker--l);
+  --text-color: hsla(var(--nok25-lightgreenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-lightgreenblue--darker--hsl);
   --text-color--hover: var(--nok25-lightgreenblue--darker--hover);
   --text-color--contrast: var(--nok25-lightgreenblue--darker--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -2665,18 +2665,18 @@
   color: #222;
 }
 .nok25-text-lightgreenblue--darker--hover:hover {
-  --text-color: hsla(var(--nok25-lightgreenblue--darker--h), var(--nok25-lightgreenblue--darker--s), var(--nok25-lightgreenblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-lightgreenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-lightgreenblue--darker {
-  --border-color: hsla(var(--nok25-lightgreenblue--darker--h), var(--nok25-lightgreenblue--darker--s), var(--nok25-lightgreenblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-lightgreenblue--darker--h), var(--nok25-lightgreenblue--darker--s), var(--nok25-lightgreenblue--darker--l);
+  --border-color: hsla(var(--nok25-lightgreenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-lightgreenblue--darker--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-lightgreenblue--darker {
-  --input-color: hsla(var(--nok25-lightgreenblue--darker--h), var(--nok25-lightgreenblue--darker--s), var(--nok25-lightgreenblue--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-lightgreenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -2692,8 +2692,8 @@
 }
 
 .nok25-bg-lightgreenblue--lighter {
-  --bg-color: hsla(var(--nok25-lightgreenblue--lighter--h), var(--nok25-lightgreenblue--lighter--s), var(--nok25-lightgreenblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-lightgreenblue--lighter--h), var(--nok25-lightgreenblue--lighter--s), var(--nok25-lightgreenblue--lighter--l);
+  --bg-color: hsla(var(--nok25-lightgreenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-lightgreenblue--lighter--hsl);
   --bg-color--hover: var(--nok25-lightgreenblue--lighter--hover);
   --bg-color--active: var(--nok25-lightgreenblue--lighter--active);
   --text-color--contrast: var(--nok25-lightgreenblue--lighter--contrast);
@@ -2711,8 +2711,8 @@
 }
 
 .nok25-text-lightgreenblue--lighter {
-  --text-color: hsla(var(--nok25-lightgreenblue--lighter--h), var(--nok25-lightgreenblue--lighter--s), var(--nok25-lightgreenblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-lightgreenblue--lighter--h), var(--nok25-lightgreenblue--lighter--s), var(--nok25-lightgreenblue--lighter--l);
+  --text-color: hsla(var(--nok25-lightgreenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-lightgreenblue--lighter--hsl);
   --text-color--hover: var(--nok25-lightgreenblue--lighter--hover);
   --text-color--contrast: var(--nok25-lightgreenblue--lighter--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -2726,18 +2726,18 @@
   color: #222;
 }
 .nok25-text-lightgreenblue--lighter--hover:hover {
-  --text-color: hsla(var(--nok25-lightgreenblue--lighter--h), var(--nok25-lightgreenblue--lighter--s), var(--nok25-lightgreenblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-lightgreenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-lightgreenblue--lighter {
-  --border-color: hsla(var(--nok25-lightgreenblue--lighter--h), var(--nok25-lightgreenblue--lighter--s), var(--nok25-lightgreenblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-lightgreenblue--lighter--h), var(--nok25-lightgreenblue--lighter--s), var(--nok25-lightgreenblue--lighter--l);
+  --border-color: hsla(var(--nok25-lightgreenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-lightgreenblue--lighter--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-lightgreenblue--lighter {
-  --input-color: hsla(var(--nok25-lightgreenblue--lighter--h), var(--nok25-lightgreenblue--lighter--s), var(--nok25-lightgreenblue--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-lightgreenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -2753,8 +2753,8 @@
 }
 
 .nok25-bg-error {
-  --bg-color: hsla(var(--nok25-error--h), var(--nok25-error--s), var(--nok25-error--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-error--h), var(--nok25-error--s), var(--nok25-error--l);
+  --bg-color: hsla(var(--nok25-error--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-error--hsl);
   --bg-color--hover: var(--nok25-error--hover);
   --bg-color--active: var(--nok25-error--active);
   --text-color--contrast: var(--nok25-error--contrast);
@@ -2772,8 +2772,8 @@
 }
 
 .nok25-text-error {
-  --text-color: hsla(var(--nok25-error--h), var(--nok25-error--s), var(--nok25-error--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-error--h), var(--nok25-error--s), var(--nok25-error--l);
+  --text-color: hsla(var(--nok25-error--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-error--hsl);
   --text-color--hover: var(--nok25-error--hover);
   --text-color--contrast: var(--nok25-error--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -2787,18 +2787,18 @@
   color: #f3f4f9;
 }
 .nok25-text-error--hover:hover {
-  --text-color: hsla(var(--nok25-error--h), var(--nok25-error--s), var(--nok25-error--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-error--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-error {
-  --border-color: hsla(var(--nok25-error--h), var(--nok25-error--s), var(--nok25-error--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-error--h), var(--nok25-error--s), var(--nok25-error--l);
+  --border-color: hsla(var(--nok25-error--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-error--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-error {
-  --input-color: hsla(var(--nok25-error--h), var(--nok25-error--s), var(--nok25-error--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-error--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -2814,8 +2814,8 @@
 }
 
 .nok25-bg-error--darker {
-  --bg-color: hsla(var(--nok25-error--darker--h), var(--nok25-error--darker--s), var(--nok25-error--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-error--darker--h), var(--nok25-error--darker--s), var(--nok25-error--darker--l);
+  --bg-color: hsla(var(--nok25-error--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-error--darker--hsl);
   --bg-color--hover: var(--nok25-error--darker--hover);
   --bg-color--active: var(--nok25-error--darker--active);
   --text-color--contrast: var(--nok25-error--darker--contrast);
@@ -2833,8 +2833,8 @@
 }
 
 .nok25-text-error--darker {
-  --text-color: hsla(var(--nok25-error--darker--h), var(--nok25-error--darker--s), var(--nok25-error--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-error--darker--h), var(--nok25-error--darker--s), var(--nok25-error--darker--l);
+  --text-color: hsla(var(--nok25-error--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-error--darker--hsl);
   --text-color--hover: var(--nok25-error--darker--hover);
   --text-color--contrast: var(--nok25-error--darker--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -2848,18 +2848,18 @@
   color: #f3f4f9;
 }
 .nok25-text-error--darker--hover:hover {
-  --text-color: hsla(var(--nok25-error--darker--h), var(--nok25-error--darker--s), var(--nok25-error--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-error--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-error--darker {
-  --border-color: hsla(var(--nok25-error--darker--h), var(--nok25-error--darker--s), var(--nok25-error--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-error--darker--h), var(--nok25-error--darker--s), var(--nok25-error--darker--l);
+  --border-color: hsla(var(--nok25-error--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-error--darker--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-error--darker {
-  --input-color: hsla(var(--nok25-error--darker--h), var(--nok25-error--darker--s), var(--nok25-error--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-error--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -2875,8 +2875,8 @@
 }
 
 .nok25-bg-error--lighter {
-  --bg-color: hsla(var(--nok25-error--lighter--h), var(--nok25-error--lighter--s), var(--nok25-error--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-error--lighter--h), var(--nok25-error--lighter--s), var(--nok25-error--lighter--l);
+  --bg-color: hsla(var(--nok25-error--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-error--lighter--hsl);
   --bg-color--hover: var(--nok25-error--lighter--hover);
   --bg-color--active: var(--nok25-error--lighter--active);
   --text-color--contrast: var(--nok25-error--lighter--contrast);
@@ -2894,8 +2894,8 @@
 }
 
 .nok25-text-error--lighter {
-  --text-color: hsla(var(--nok25-error--lighter--h), var(--nok25-error--lighter--s), var(--nok25-error--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-error--lighter--h), var(--nok25-error--lighter--s), var(--nok25-error--lighter--l);
+  --text-color: hsla(var(--nok25-error--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-error--lighter--hsl);
   --text-color--hover: var(--nok25-error--lighter--hover);
   --text-color--contrast: var(--nok25-error--lighter--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -2909,18 +2909,18 @@
   color: #222;
 }
 .nok25-text-error--lighter--hover:hover {
-  --text-color: hsla(var(--nok25-error--lighter--h), var(--nok25-error--lighter--s), var(--nok25-error--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-error--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-error--lighter {
-  --border-color: hsla(var(--nok25-error--lighter--h), var(--nok25-error--lighter--s), var(--nok25-error--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-error--lighter--h), var(--nok25-error--lighter--s), var(--nok25-error--lighter--l);
+  --border-color: hsla(var(--nok25-error--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-error--lighter--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-error--lighter {
-  --input-color: hsla(var(--nok25-error--lighter--h), var(--nok25-error--lighter--s), var(--nok25-error--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-error--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -2936,8 +2936,8 @@
 }
 
 .nok25-bg-body {
-  --bg-color: hsla(var(--nok25-body--h), var(--nok25-body--s), var(--nok25-body--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-body--h), var(--nok25-body--s), var(--nok25-body--l);
+  --bg-color: hsla(var(--nok25-body--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-body--hsl);
   --bg-color--hover: var(--nok25-body--hover);
   --bg-color--active: var(--nok25-body--active);
   --text-color--contrast: var(--nok25-body--contrast);
@@ -2955,8 +2955,8 @@
 }
 
 .nok25-text-body {
-  --text-color: hsla(var(--nok25-body--h), var(--nok25-body--s), var(--nok25-body--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-body--h), var(--nok25-body--s), var(--nok25-body--l);
+  --text-color: hsla(var(--nok25-body--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-body--hsl);
   --text-color--hover: var(--nok25-body--hover);
   --text-color--contrast: var(--nok25-body--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -2970,18 +2970,18 @@
   color: #222;
 }
 .nok25-text-body--hover:hover {
-  --text-color: hsla(var(--nok25-body--h), var(--nok25-body--s), var(--nok25-body--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-body--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-body {
-  --border-color: hsla(var(--nok25-body--h), var(--nok25-body--s), var(--nok25-body--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-body--h), var(--nok25-body--s), var(--nok25-body--l);
+  --border-color: hsla(var(--nok25-body--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-body--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-body {
-  --input-color: hsla(var(--nok25-body--h), var(--nok25-body--s), var(--nok25-body--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-body--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -2997,8 +2997,8 @@
 }
 
 .nok25-bg-body--darker {
-  --bg-color: hsla(var(--nok25-body--darker--h), var(--nok25-body--darker--s), var(--nok25-body--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-body--darker--h), var(--nok25-body--darker--s), var(--nok25-body--darker--l);
+  --bg-color: hsla(var(--nok25-body--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-body--darker--hsl);
   --bg-color--hover: var(--nok25-body--darker--hover);
   --bg-color--active: var(--nok25-body--darker--active);
   --text-color--contrast: var(--nok25-body--darker--contrast);
@@ -3016,8 +3016,8 @@
 }
 
 .nok25-text-body--darker {
-  --text-color: hsla(var(--nok25-body--darker--h), var(--nok25-body--darker--s), var(--nok25-body--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-body--darker--h), var(--nok25-body--darker--s), var(--nok25-body--darker--l);
+  --text-color: hsla(var(--nok25-body--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-body--darker--hsl);
   --text-color--hover: var(--nok25-body--darker--hover);
   --text-color--contrast: var(--nok25-body--darker--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -3031,18 +3031,18 @@
   color: #222;
 }
 .nok25-text-body--darker--hover:hover {
-  --text-color: hsla(var(--nok25-body--darker--h), var(--nok25-body--darker--s), var(--nok25-body--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-body--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-body--darker {
-  --border-color: hsla(var(--nok25-body--darker--h), var(--nok25-body--darker--s), var(--nok25-body--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-body--darker--h), var(--nok25-body--darker--s), var(--nok25-body--darker--l);
+  --border-color: hsla(var(--nok25-body--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-body--darker--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-body--darker {
-  --input-color: hsla(var(--nok25-body--darker--h), var(--nok25-body--darker--s), var(--nok25-body--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-body--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -3058,8 +3058,8 @@
 }
 
 .nok25-bg-body--lighter {
-  --bg-color: hsla(var(--nok25-body--lighter--h), var(--nok25-body--lighter--s), var(--nok25-body--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-body--lighter--h), var(--nok25-body--lighter--s), var(--nok25-body--lighter--l);
+  --bg-color: hsla(var(--nok25-body--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-body--lighter--hsl);
   --bg-color--hover: var(--nok25-body--lighter--hover);
   --bg-color--active: var(--nok25-body--lighter--active);
   --text-color--contrast: var(--nok25-body--lighter--contrast);
@@ -3077,8 +3077,8 @@
 }
 
 .nok25-text-body--lighter {
-  --text-color: hsla(var(--nok25-body--lighter--h), var(--nok25-body--lighter--s), var(--nok25-body--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-body--lighter--h), var(--nok25-body--lighter--s), var(--nok25-body--lighter--l);
+  --text-color: hsla(var(--nok25-body--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-body--lighter--hsl);
   --text-color--hover: var(--nok25-body--lighter--hover);
   --text-color--contrast: var(--nok25-body--lighter--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -3092,18 +3092,18 @@
   color: #222;
 }
 .nok25-text-body--lighter--hover:hover {
-  --text-color: hsla(var(--nok25-body--lighter--h), var(--nok25-body--lighter--s), var(--nok25-body--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-body--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-body--lighter {
-  --border-color: hsla(var(--nok25-body--lighter--h), var(--nok25-body--lighter--s), var(--nok25-body--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-body--lighter--h), var(--nok25-body--lighter--s), var(--nok25-body--lighter--l);
+  --border-color: hsla(var(--nok25-body--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-body--lighter--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-body--lighter {
-  --input-color: hsla(var(--nok25-body--lighter--h), var(--nok25-body--lighter--s), var(--nok25-body--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-body--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -3119,8 +3119,8 @@
 }
 
 .nok25-bg-white {
-  --bg-color: hsla(var(--nok25-white--h), var(--nok25-white--s), var(--nok25-white--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-white--h), var(--nok25-white--s), var(--nok25-white--l);
+  --bg-color: hsla(var(--nok25-white--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-white--hsl);
   --bg-color--hover: var(--nok25-white--hover);
   --bg-color--active: var(--nok25-white--active);
   --text-color--contrast: var(--nok25-white--contrast);
@@ -3138,8 +3138,8 @@
 }
 
 .nok25-text-white {
-  --text-color: hsla(var(--nok25-white--h), var(--nok25-white--s), var(--nok25-white--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-white--h), var(--nok25-white--s), var(--nok25-white--l);
+  --text-color: hsla(var(--nok25-white--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-white--hsl);
   --text-color--hover: var(--nok25-white--hover);
   --text-color--contrast: var(--nok25-white--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -3153,18 +3153,18 @@
   color: #222;
 }
 .nok25-text-white--hover:hover {
-  --text-color: hsla(var(--nok25-white--h), var(--nok25-white--s), var(--nok25-white--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-white--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-white {
-  --border-color: hsla(var(--nok25-white--h), var(--nok25-white--s), var(--nok25-white--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-white--h), var(--nok25-white--s), var(--nok25-white--l);
+  --border-color: hsla(var(--nok25-white--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-white--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-white {
-  --input-color: hsla(var(--nok25-white--h), var(--nok25-white--s), var(--nok25-white--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-white--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -3180,8 +3180,8 @@
 }
 
 .nok25-bg-white--darker {
-  --bg-color: hsla(var(--nok25-white--darker--h), var(--nok25-white--darker--s), var(--nok25-white--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-white--darker--h), var(--nok25-white--darker--s), var(--nok25-white--darker--l);
+  --bg-color: hsla(var(--nok25-white--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-white--darker--hsl);
   --bg-color--hover: var(--nok25-white--darker--hover);
   --bg-color--active: var(--nok25-white--darker--active);
   --text-color--contrast: var(--nok25-white--darker--contrast);
@@ -3199,8 +3199,8 @@
 }
 
 .nok25-text-white--darker {
-  --text-color: hsla(var(--nok25-white--darker--h), var(--nok25-white--darker--s), var(--nok25-white--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-white--darker--h), var(--nok25-white--darker--s), var(--nok25-white--darker--l);
+  --text-color: hsla(var(--nok25-white--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-white--darker--hsl);
   --text-color--hover: var(--nok25-white--darker--hover);
   --text-color--contrast: var(--nok25-white--darker--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -3214,18 +3214,18 @@
   color: #222;
 }
 .nok25-text-white--darker--hover:hover {
-  --text-color: hsla(var(--nok25-white--darker--h), var(--nok25-white--darker--s), var(--nok25-white--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-white--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-white--darker {
-  --border-color: hsla(var(--nok25-white--darker--h), var(--nok25-white--darker--s), var(--nok25-white--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-white--darker--h), var(--nok25-white--darker--s), var(--nok25-white--darker--l);
+  --border-color: hsla(var(--nok25-white--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-white--darker--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-white--darker {
-  --input-color: hsla(var(--nok25-white--darker--h), var(--nok25-white--darker--s), var(--nok25-white--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-white--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -3241,8 +3241,8 @@
 }
 
 .nok25-bg-white--lighter {
-  --bg-color: hsla(var(--nok25-white--lighter--h), var(--nok25-white--lighter--s), var(--nok25-white--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-white--lighter--h), var(--nok25-white--lighter--s), var(--nok25-white--lighter--l);
+  --bg-color: hsla(var(--nok25-white--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-white--lighter--hsl);
   --bg-color--hover: var(--nok25-white--lighter--hover);
   --bg-color--active: var(--nok25-white--lighter--active);
   --text-color--contrast: var(--nok25-white--lighter--contrast);
@@ -3260,8 +3260,8 @@
 }
 
 .nok25-text-white--lighter {
-  --text-color: hsla(var(--nok25-white--lighter--h), var(--nok25-white--lighter--s), var(--nok25-white--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-white--lighter--h), var(--nok25-white--lighter--s), var(--nok25-white--lighter--l);
+  --text-color: hsla(var(--nok25-white--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-white--lighter--hsl);
   --text-color--hover: var(--nok25-white--lighter--hover);
   --text-color--contrast: var(--nok25-white--lighter--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -3275,18 +3275,18 @@
   color: #222;
 }
 .nok25-text-white--lighter--hover:hover {
-  --text-color: hsla(var(--nok25-white--lighter--h), var(--nok25-white--lighter--s), var(--nok25-white--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-white--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-white--lighter {
-  --border-color: hsla(var(--nok25-white--lighter--h), var(--nok25-white--lighter--s), var(--nok25-white--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-white--lighter--h), var(--nok25-white--lighter--s), var(--nok25-white--lighter--l);
+  --border-color: hsla(var(--nok25-white--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-white--lighter--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-white--lighter {
-  --input-color: hsla(var(--nok25-white--lighter--h), var(--nok25-white--lighter--s), var(--nok25-white--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-white--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -3302,8 +3302,8 @@
 }
 
 .nok25-bg-black {
-  --bg-color: hsla(var(--nok25-black--h), var(--nok25-black--s), var(--nok25-black--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-black--h), var(--nok25-black--s), var(--nok25-black--l);
+  --bg-color: hsla(var(--nok25-black--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-black--hsl);
   --bg-color--hover: var(--nok25-black--hover);
   --bg-color--active: var(--nok25-black--active);
   --text-color--contrast: var(--nok25-black--contrast);
@@ -3321,8 +3321,8 @@
 }
 
 .nok25-text-black {
-  --text-color: hsla(var(--nok25-black--h), var(--nok25-black--s), var(--nok25-black--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-black--h), var(--nok25-black--s), var(--nok25-black--l);
+  --text-color: hsla(var(--nok25-black--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-black--hsl);
   --text-color--hover: var(--nok25-black--hover);
   --text-color--contrast: var(--nok25-black--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -3336,18 +3336,18 @@
   color: #f3f4f9;
 }
 .nok25-text-black--hover:hover {
-  --text-color: hsla(var(--nok25-black--h), var(--nok25-black--s), var(--nok25-black--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-black--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-black {
-  --border-color: hsla(var(--nok25-black--h), var(--nok25-black--s), var(--nok25-black--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-black--h), var(--nok25-black--s), var(--nok25-black--l);
+  --border-color: hsla(var(--nok25-black--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-black--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-black {
-  --input-color: hsla(var(--nok25-black--h), var(--nok25-black--s), var(--nok25-black--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-black--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -3363,8 +3363,8 @@
 }
 
 .nok25-bg-black--darker {
-  --bg-color: hsla(var(--nok25-black--darker--h), var(--nok25-black--darker--s), var(--nok25-black--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-black--darker--h), var(--nok25-black--darker--s), var(--nok25-black--darker--l);
+  --bg-color: hsla(var(--nok25-black--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-black--darker--hsl);
   --bg-color--hover: var(--nok25-black--darker--hover);
   --bg-color--active: var(--nok25-black--darker--active);
   --text-color--contrast: var(--nok25-black--darker--contrast);
@@ -3382,8 +3382,8 @@
 }
 
 .nok25-text-black--darker {
-  --text-color: hsla(var(--nok25-black--darker--h), var(--nok25-black--darker--s), var(--nok25-black--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-black--darker--h), var(--nok25-black--darker--s), var(--nok25-black--darker--l);
+  --text-color: hsla(var(--nok25-black--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-black--darker--hsl);
   --text-color--hover: var(--nok25-black--darker--hover);
   --text-color--contrast: var(--nok25-black--darker--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -3397,18 +3397,18 @@
   color: #f3f4f9;
 }
 .nok25-text-black--darker--hover:hover {
-  --text-color: hsla(var(--nok25-black--darker--h), var(--nok25-black--darker--s), var(--nok25-black--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-black--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-black--darker {
-  --border-color: hsla(var(--nok25-black--darker--h), var(--nok25-black--darker--s), var(--nok25-black--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-black--darker--h), var(--nok25-black--darker--s), var(--nok25-black--darker--l);
+  --border-color: hsla(var(--nok25-black--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-black--darker--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-black--darker {
-  --input-color: hsla(var(--nok25-black--darker--h), var(--nok25-black--darker--s), var(--nok25-black--darker--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-black--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -3424,8 +3424,8 @@
 }
 
 .nok25-bg-black--lighter {
-  --bg-color: hsla(var(--nok25-black--lighter--h), var(--nok25-black--lighter--s), var(--nok25-black--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --bg-color-hsl: var(--nok25-black--lighter--h), var(--nok25-black--lighter--s), var(--nok25-black--lighter--l);
+  --bg-color: hsla(var(--nok25-black--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-black--lighter--hsl);
   --bg-color--hover: var(--nok25-black--lighter--hover);
   --bg-color--active: var(--nok25-black--lighter--active);
   --text-color--contrast: var(--nok25-black--lighter--contrast);
@@ -3443,8 +3443,8 @@
 }
 
 .nok25-text-black--lighter {
-  --text-color: hsla(var(--nok25-black--lighter--h), var(--nok25-black--lighter--s), var(--nok25-black--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--nok25-black--lighter--h), var(--nok25-black--lighter--s), var(--nok25-black--lighter--l);
+  --text-color: hsla(var(--nok25-black--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-black--lighter--hsl);
   --text-color--hover: var(--nok25-black--lighter--hover);
   --text-color--contrast: var(--nok25-black--lighter--contrast);
   color: var(--text-color, var(--text-color--contrast, inherit));
@@ -3458,18 +3458,18 @@
   color: #f3f4f9;
 }
 .nok25-text-black--lighter--hover:hover {
-  --text-color: hsla(var(--nok25-black--lighter--h), var(--nok25-black--lighter--s), var(--nok25-black--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: hsla(var(--nok25-black--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
 .nok25-border-black--lighter {
-  --border-color: hsla(var(--nok25-black--lighter--h), var(--nok25-black--lighter--s), var(--nok25-black--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--nok25-black--lighter--h), var(--nok25-black--lighter--s), var(--nok25-black--lighter--l);
+  --border-color: hsla(var(--nok25-black--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--nok25-black--lighter--hsl);
   border-color: var(--border-color, inherit);
 }
 
 .nok25-input-black--lighter {
-  --input-color: hsla(var(--nok25-black--lighter--h), var(--nok25-black--lighter--s), var(--nok25-black--lighter--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--nok25-black--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);

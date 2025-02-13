@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="servebolt - dev.obesitaskliniek.nl" preserveTimestamps="false" exclude=".svn;.cvs;.idea;.DS_Store;.git;.hg;*.hprof;*.pyc;*.scss" remoteFilesAllowedToDisappearOnAutoupload="false" autoUploadExternalChanges="true">
+  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="servebolt - dev.obesitaskliniek.nl" preserveTimestamps="false" exclude=".svn;.cvs;.idea;.DS_Store;.git;.hg;*.hprof;*.pyc;*.scss" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false" autoUploadExternalChanges="true">
+    <option name="confirmBeforeUploading" value="false" />
     <serverData>
       <paths name="asset manager">
         <serverdata>
