@@ -1,6 +1,12 @@
 @import "nok-variables";
 @import "nok-mixins";
 
+:root {
+  @each $key, $value in $exposed-variables {
+    --#{$prefix}-#{$key}: #{$value};
+  }
+}
+
 .#{$prefix}-base-font {
   @include nok-font;
 }

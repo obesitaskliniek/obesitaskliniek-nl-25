@@ -13,7 +13,7 @@ $min-contrast-ratio: 4.5;
 $nok-base-colors: (
     'lightblue':      #00b0e4,
 	'darkblue':       #14477c,
-	'darkerblue':     #082355,
+	'darkerblue':     #00205b,
 	'darkestblue':    #00132f,
 	'yellow':         #f5d22b,
 	'darkyellow':     #eab10d,
@@ -104,8 +104,8 @@ $nok-dark-contrast-overrides: (
   );
   @each $color, $value in $sub_map {
     .#{$prefix}-bg-#{$color} {
-      --bg-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-      --bg-color-hsl: var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l);
+      --bg-color: hsla(var(--#{$prefix}-#{$color}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+      --bg-color-hsl: var(--#{$prefix}-#{$color}--hsl);
       --bg-color--hover: var(--#{$prefix}-#{$color}--hover);
       --bg-color--active: var(--#{$prefix}-#{$color}--active);
       --text-color--contrast: var(--#{$prefix}-#{$color}--contrast);
@@ -118,8 +118,8 @@ $nok-dark-contrast-overrides: (
       }
     }
     .#{$prefix}-text-#{$color} {
-      --text-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-      --text-color-hsl: var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l);
+      --text-color: hsla(var(--#{$prefix}-#{$color}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+      --text-color-hsl: var(--#{$prefix}-#{$color}--hsl);
       --text-color--hover: var(--#{$prefix}-#{$color}--hover);
       --text-color--contrast: var(--#{$prefix}-#{$color}--contrast);
       color: var(--text-color, var(--text-color--contrast, inherit));
@@ -129,18 +129,18 @@ $nok-dark-contrast-overrides: (
       }
       &--hover {
         &:hover {
-          --text-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+          --text-color: hsla(var(--#{$prefix}-#{$color}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
           color: var(--text-color, var(--text-color--contrast, inherit)) !important;
         }
       }
     }
     .#{$prefix}-border-#{$color} {
-      --border-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
-      --border-color-hsl: var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l);
+      --border-color: hsla(var(--#{$prefix}-#{$color}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+      --border-color-hsl: var(--#{$prefix}-#{$color}--hsl);
       border-color: var(--border-color, inherit);
     }
     .#{$prefix}-input-#{$color} {
-      --input-color: hsla(var(--#{$prefix}-#{$color}--h), var(--#{$prefix}-#{$color}--s), var(--#{$prefix}-#{$color}--l), var(--global-color-alpha, var(--local-color-alpha, 1)));
+      --input-color: hsla(var(--#{$prefix}-#{$color}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
       --text-color: var(--input-color, inherit);
       accent-color: var(--input-color, inherit);
       caret-color: var(--input-color, inherit);

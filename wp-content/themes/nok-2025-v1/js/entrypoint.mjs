@@ -28,17 +28,7 @@ eventHandler.docReady(function(){
   //https://stackoverflow.com/questions/3885018/active-pseudo-class-doesnt-work-in-mobile-safari
   document.addEventListener('touchstart', function() {},false);
 
-  //calculate site header height and write to root variable --site-header-height
-  eventHandler.addListener('docShift', function(){
-    if (!document.body.querySelectorAll('.nok-menu-container')[0].classList.contains('open')) {
-      document.documentElement.style.setProperty('--site-header-height', parseInt(document.body.querySelectorAll('.nok-site-header')[0].offsetHeight, 10) + 'px');
-    }
-    document.documentElement.style.setProperty('--navbar-height', parseInt(document.body.querySelectorAll('.nok-menu-container')[0].offsetHeight, 10) + 'px');
-    document.documentElement.style.setProperty('--top-navbar-height', parseInt(document.body.querySelectorAll('.nok-top-nav-container')[0].offsetHeight, 10) + 'px');
-    document.documentElement.style.setProperty('--view-height', parseInt(window.innerHeight, 10) + 'px');
-    document.documentElement.style.setProperty('--scrollbar-width', parseInt(window.innerWidth, 10) - parseInt(document.body.clientWidth, 10) + 'px');
-  })();
-
+  /*
   //checks if position:sticky elements are, in fact, stuck. Checks on every scroll.
   const stickies = document.body.querySelectorAll('.position-sticky');
   eventHandler.addListener('scroll', function(){
@@ -46,6 +36,7 @@ eventHandler.docReady(function(){
       el.classList.toggle('stuck', el.getBoundingClientRect().top === parseInt(window.getComputedStyle(el).top, 10));
     });
   })();
+  */
 
   eventHandler.addListener('scroll', (e) => {
   //clear the url hash when scrolled back to top

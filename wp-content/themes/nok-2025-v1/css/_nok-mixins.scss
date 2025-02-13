@@ -2,6 +2,9 @@
 
 @mixin nok-font {
   font-family: "Realist", sans-serif;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  text-rendering: optimizelegibility;
 }
 
 @mixin nok-btn-shadow-border {
@@ -12,10 +15,10 @@
 }
 
 @mixin nok-border-radius {
-  border-radius: round(($padding-base / 4) * 10) / 10;
+  border-radius: var(--nok25-default-border-radius, 0.4rem);
 }
 @mixin nok-border-radius--large {
-  border-radius: round(($padding-base / 2) * 10) / 10;
+  border-radius: var(--nok25-default-border-radius--large, 1rem)
 }
 
 @mixin nok-focus-ring {
@@ -25,7 +28,7 @@
 
 @mixin nok-inline-link {
   --active-color: #000;
-  --hover-transition-time: 0.25s;
+  --hover-transition-time: 0.15s;
   --underline-height: 0.2em;
   //noinspection CssInvalidFunction
   --gradient: linear-gradient(
@@ -44,11 +47,12 @@
   background-repeat: no-repeat;
   background-position: 0 0;
 
-  transition: color 0.25s ease-in-out, transform 0.06s ease-in-out, background-position var(--hover-transition-time) cubic-bezier(0.85, 0, 0.15, 1);
+  transition: background-position var(--hover-transition-time) ease-out;
 
   &:hover {
     background-position: 0 calc(-1 * var(--underline-height));
   }
+  &:active,
   &:hover:focus:not(:focus-visible) {
     color: var(--underline-color--active);
     background-position: 0 100%;

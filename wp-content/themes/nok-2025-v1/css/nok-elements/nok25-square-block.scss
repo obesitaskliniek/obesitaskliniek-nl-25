@@ -1,0 +1,104 @@
+@use "sass:map";
+@import "../nok-variables";
+@import "../nok-mixins";
+
+/**
+ * square block
+ */
+
+$component-name: #{$prefix}-square-block;
+
+#{$component-name},
+:host {
+  --local-color-alpha: 0.8;
+  --icon-color: var(--nok25-yellow);
+  --text-color: hsla(var(--nok25-white--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color--heading: hsla(var(--nok25-white--hsl) / 1);
+  --text-color--link: hsla(var(--nok25-white--hsl) / 1);
+  --text-color--link--hover: var(--nok25-yellow);
+  --text-color--link-icon: var(--nok25-lightblue);
+  --text-color--link-icon--hover: var(--nok25-yellow);
+  --background-color: var(--nok25-darkblue);
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+
+  @include nok-font;
+
+  gap: ($padding-base);
+  padding: ($padding-base * 2);
+  @include nok-border-radius--large;
+  line-height: 1.25;
+
+  padding: calc(var(--nok25-padding-base, 1.5rem) * 2);
+  border-radius: var(--nok25-default-border-radius--large, 8px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--background-color);
+
+  > * {
+    margin: 0;
+  }
+
+}
+
+.#{$component-name} {
+
+  &__icon {
+    color: var(--icon-color);
+    display: flex;
+    svg {
+      width: 3em;
+      height: 3em;
+      aspect-ratio: 1;
+    }
+  }
+
+  &__heading {
+    color: var(--text-color--heading);
+    font-size: 2rem;
+    font-weight: 500;
+  }
+
+  &__text {
+    color: var(--text-color);
+    font-size: 1.1rem;
+  }
+
+  &__link {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    justify-content: start;
+    align-items: center;
+    justify-items: start;
+    cursor: pointer;
+    gap: calc(var(--nok25-padding-base, 1.5rem) / 2);
+
+    height: 2rem;
+
+    --local-color-alpha: 0.8;
+    color: var(--text-color--link);
+
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 1rem;
+
+    svg {
+      color: var(--text-color--link-icon);
+    }
+
+    &::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1;
+      content: "";
+    }
+    &:hover {
+      --text-color--link: var(--text-color--link--hover);
+      --text-color--link-icon: var(--text-color--link-icon--hover);
+    }
+  }
+}

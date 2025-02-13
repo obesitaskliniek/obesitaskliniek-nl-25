@@ -50,7 +50,7 @@
   justify-content: center;
 
   margin: 0;
-  padding: ($padding-base / 2) $padding-base;
+  padding: calc(var(--nok25-padding-base, 1.5rem) / 2) var(--nok25-padding-base, 1.5rem);
 
   font-weight: 500;
   font-size: 1.2rem;
@@ -97,59 +97,50 @@
   }
 }
 
-/**
- * square block
- */
-.#{$prefix}-square-block {
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
+@import "./nok-elements/nok25-square-block.scss";
 
-  height: 100%;
+.#{$prefix}-block-group {
+  --grid-gap: var(--nok25-padding-base);
+  @include nok-font;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 
-  gap: ($padding-base);
-  padding: ($padding-base * 2);
-  @include nok-border-radius--large;
-  line-height: 1.25;
-
-  > * {
-    margin: 0;
-  }
-
-  &__icon {
-    width: 3em;
-    aspect-ratio: 1;
+  &__inner {
+    max-width: 1320px;
+    display: grid;
+    gap: var(--grid-gap, var(--global-grid-gap));
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    align-items: stretch;
   }
 
   &__heading {
-    font-size: 2rem;
+    grid-column: 1;
+    font-size: 2.5rem;
     font-weight: 500;
   }
 
-  &__text {
-    font-size: 1.1rem;
-    --local-color-alpha: 0.8;
+  &__description {
+    grid-column: span 2;
+    font-size: 1rem;
+    font-weight: 400;
   }
 
-  &__link {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    justify-content: start;
-    align-items: center;
-    justify-items: start;
-    gap: ($padding-base / 2);
+  &__scroller {
+    grid-column: 1 / -1;
+    overflow-x: scroll;
+  }
 
-    height: 2rem;
-
-    color: var(--text-color, var(--text-color--contrast, inherit));
-
-    text-decoration: none;
-    text-transform: uppercase;
-    font-weight: 600;
-    font-size: 1rem;
-
-    svg {
-      max-height: 100%;
-      width: auto;
+  &__blocks {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: var(--grid-gap, var(--global-grid-gap));
+    > * {
+      flex-basis: calc(100% / 3);
+      flex-shrink: 0;
     }
   }
 }
