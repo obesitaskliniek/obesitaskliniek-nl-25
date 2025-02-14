@@ -76,7 +76,7 @@ p .nok25-hyperlink:not(.nok25-button) {
   text-decoration: none;
   color: var(--text-color, var(--text-color--contrast, inherit));
   border-radius: var(--nok25-default-border-radius, 0.4rem);
-  box-shadow: 0 0 0 0 hsla(0deg, 0%, 0%, 0);
+  box-shadow: 0 0 0 0 hsla(0, 0%, 0%, 0);
   border: 1px solid rgba(136, 136, 136, 0.3333333333);
   outline: 0 none;
   cursor: pointer;
@@ -85,7 +85,7 @@ p .nok25-hyperlink:not(.nok25-button) {
           user-select: none;
 }
 .nok25-button:hover, .nok25-button:focus {
-  box-shadow: 0 0.4rem 0.1rem -0.3rem hsla(0deg, 0%, 50%, 0.15);
+  box-shadow: 0 0.4rem 0.1rem -0.3rem hsla(0, 0%, 50%, 0.15);
 }
 .nok25-button:hover, .nok25-button:focus, .nok25-button:active, .nok25-button.active, .nok25-button:focus-visible {
   border-color: rgba(136, 136, 136, 0.1333333333);
@@ -209,6 +209,7 @@ nok25-square-block > *,
   justify-content: center;
 }
 .nok25-block-group__inner {
+  padding: calc(var(--grid-gap, var(--global-grid-gap)) * 2) 0;
   max-width: 1320px;
   display: grid;
   gap: var(--grid-gap, var(--global-grid-gap));

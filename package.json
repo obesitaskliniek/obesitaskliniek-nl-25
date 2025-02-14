@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "autoprefixer": "^10.4.20",
     "csso": "^5.0.5",
+    "csso-cli": "^4.0.2",
     "google-closure-compiler": "^20240317.0.0",
     "postcss": "^8.5.1",
     "postcss-cli": "^11.0.0",
