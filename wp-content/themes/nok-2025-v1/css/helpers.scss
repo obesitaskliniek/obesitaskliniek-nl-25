@@ -25,3 +25,17 @@
     position: relative;
   }
 }
+
+/* Enable draggable cursor for non-touch devices */
+@media (pointer: fine) {
+  .#{$prefix}-draggable {
+    & {
+      cursor: grab;
+    }
+
+    &:active {
+      cursor: grabbing;
+      user-select: none;
+    }
+  }
+}

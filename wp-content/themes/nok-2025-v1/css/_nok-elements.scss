@@ -2,6 +2,13 @@
 @import "nok-variables";
 @import "nok-mixins";
 
+//todo: move to generic reset?
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 /*
 //BEM example
 
@@ -100,7 +107,6 @@
 @import "./nok-elements/nok25-square-block.scss";
 
 .#{$prefix}-block-group {
-  --grid-gap: var(--nok25-padding-base);
   @include nok-font;
   display: flex;
   flex-direction: row;
@@ -108,11 +114,16 @@
   justify-content: center;
 
   &__inner {
+    --grid-gap: var(--nok25-padding-base, var(--global-grid-gap, 1.5rem));
+    --grid-columns: 3;
+    --grid-column-width: calc(
+        (100% - (var(--grid-gap, 1) * (var(--grid-columns, 1) - 1))) / var(--grid-columns, 1)
+    );
     padding: calc(var(--grid-gap, var(--global-grid-gap)) * 2) 0;
     max-width: 1320px;
     display: grid;
     gap: var(--grid-gap, var(--global-grid-gap));
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(var(--grid-columns, 1), 1fr);
     grid-template-rows: 1fr;
     align-items: stretch;
   }
@@ -132,6 +143,31 @@
   &__scroller {
     grid-column: 1 / -1;
     overflow-x: scroll;
+    padding-bottom: calc(var(--grid-gap, 1.5rem) * 2);
+    &.#{$prefix}-draggable {
+      @include nok-scrollbar-thin(10px);
+
+      &[data-scroll-snapping="true"] {
+
+        scroll-snap-type: both mandatory;
+        scroll-snap-stop: normal;
+      }
+
+      will-change: scroll-position; /*seems to bump performance in firefox ever so slightly*/
+      overflow-anchor: none !important;
+    }
+  }
+
+  &__scroller {
+    &.#{$prefix}-draggable[data-scroll-snapping="true"] .#{$prefix}-draggable-slider-item {
+      scroll-snap-align: center;
+    }
+    &.#{$prefix}-draggable .#{$prefix}-draggable-slider-item {
+      > *:not(a),
+      a::after {
+        pointer-events: none;
+      }
+    }
   }
 
   &__blocks {
@@ -140,7 +176,7 @@
     flex-wrap: nowrap;
     gap: var(--grid-gap, var(--global-grid-gap));
     > * {
-      flex-basis: calc(100% / 3);
+      flex-basis: var(--grid-column-width);
       flex-shrink: 0;
     }
   }
