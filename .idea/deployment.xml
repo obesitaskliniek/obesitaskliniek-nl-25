@@ -52,6 +52,7 @@
           </mappings>
           <excludedPaths>
             <excludedPath path=".well-known/" />
+            <excludedPath local="true" path="node_modules/" />
           </excludedPaths>
         </serverdata>
       </paths>

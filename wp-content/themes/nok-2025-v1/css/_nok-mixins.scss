@@ -63,3 +63,35 @@
     @include nok-focus-ring;
   }
 }
+
+@mixin nok-scrollbar-thin(
+  $scrollbarHeight: 6px,
+  $scrollbarHandle: var(--nok25-white),
+  $scrollbarHandle_active: var(--nok25-white--lighter),
+  $scrollbarTrack: hsla(var(--nok25-white--hsl) / 0.25)
+) {
+  & {
+    --scrollbar-height: #{$scrollbarHeight};
+    --scrollbar-handle: #{$scrollbarHandle};
+    --scrollbar-handle--active: #{$scrollbarHandle_active};
+    --scrollbar-track: #{$scrollbarTrack};
+  }
+  &::-webkit-scrollbar {
+    height: var(--scrollbar-height, 6px);
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: var(--scrollbar-track, #0008);
+    border-radius: $scrollbarHeight;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-handle, #FFFE);
+    border: 1px solid var(--scrollbar-handle, #FFFE);
+    border-radius: $scrollbarHeight;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-handle--active, #FFFF);
+  }
+}

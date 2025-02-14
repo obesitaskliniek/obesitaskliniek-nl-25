@@ -25,4 +25,17 @@
   position: relative;
 }
 
+/* Enable draggable cursor for non-touch devices */
+@media (pointer: fine) {
+  .nok25-draggable {
+    cursor: grab;
+  }
+  .nok25-draggable:active {
+    cursor: grabbing;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+  }
+}
+
 /*# sourceMappingURL=helpers.css.map */
