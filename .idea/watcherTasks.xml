@@ -14,7 +14,7 @@
         <array />
       </option>
       <option name="outputFromStdout" value="false" />
-      <option name="program" value="sass" />
+      <option name="program" value="$ProjectFileDir$/node_modules/.bin/sass" />
       <option name="runOnExternalChanges" value="true" />
       <option name="scopeName" value="non-bs-css" />
       <option name="trackOnlyRoot" value="true" />
@@ -22,7 +22,7 @@
       <envs />
     </TaskOptions>
     <TaskOptions isEnabled="true">
-      <option name="arguments" value="$FileName$ --use autoprefixer -r -m" />
+      <option name="arguments" value="$FileName$ --replace  --map -u autoprefixer" />
       <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
@@ -34,7 +34,7 @@
         <array />
       </option>
       <option name="outputFromStdout" value="false" />
-      <option name="program" value="postcss" />
+      <option name="program" value="$ProjectFileDir$/node_modules/.bin/postcss" />
       <option name="runOnExternalChanges" value="true" />
       <option name="scopeName" value="Project Files" />
       <option name="trackOnlyRoot" value="false" />
@@ -54,7 +54,7 @@
         <array />
       </option>
       <option name="outputFromStdout" value="false" />
-      <option name="program" value="csso" />
+      <option name="program" value="$ProjectFileDir$/node_modules/.bin/csso" />
       <option name="runOnExternalChanges" value="true" />
       <option name="scopeName" value="All Places" />
       <option name="trackOnlyRoot" value="true" />
@@ -74,7 +74,7 @@
         <array />
       </option>
       <option name="outputFromStdout" value="true" />
-      <option name="program" value="google-closure-compiler" />
+      <option name="program" value="$ProjectFileDir$/node_modules/.bin/google-closure-compiler" />
       <option name="runOnExternalChanges" value="true" />
       <option name="scopeName" value="non-bs-unminified-js" />
       <option name="trackOnlyRoot" value="false" />
@@ -94,7 +94,7 @@
         <array />
       </option>
       <option name="outputFromStdout" value="true" />
-      <option name="program" value="google-closure-compiler" />
+      <option name="program" value="$ProjectFileDir$/node_modules/.bin/google-closure-compiler" />
       <option name="runOnExternalChanges" value="true" />
       <option name="scopeName" value="non-bs-css" />
       <option name="trackOnlyRoot" value="false" />

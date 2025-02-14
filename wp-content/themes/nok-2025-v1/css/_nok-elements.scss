@@ -108,6 +108,7 @@
   justify-content: center;
 
   &__inner {
+    padding: calc(var(--grid-gap, var(--global-grid-gap)) * 2) 0;
     max-width: 1320px;
     display: grid;
     gap: var(--grid-gap, var(--global-grid-gap));
