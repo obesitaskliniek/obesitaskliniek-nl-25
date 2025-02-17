@@ -1,6 +1,6 @@
 @use "sass:map";
 @use "sass:color";
-@import "nok-variables";
+@use "nok-variables";
 
 $white: #f3f4f9;
 $black: #222;
@@ -8,7 +8,7 @@ $color-contrast-dark: #222;
 $color-contrast-light: #f3f4f9;
 $min-contrast-ratio: 4.5;
 
-@import "bs/5.3.3/scss/functions";
+@use "bs/5.3.3/scss/functions";
 
 $nok-base-colors: (
     'lightblue':      #00b0e4,
@@ -20,7 +20,7 @@ $nok-base-colors: (
 	'paleyellow':     #D5D59D,
 	'green':          #54b085,
 	'greenyellow':    #CCCC33,
-	'greenblue':      #23afbf,
+	'greenblue':      #35aba5,
 	'lightgreenblue': #93e1f4,
     'error':          #d82510,
     'body':           $white,
@@ -92,6 +92,59 @@ $nok-dark-contrast-overrides: (
   }
 }
 
+
+
+@mixin bg-colors($prefix, $colorName, $colorValue) {
+  --bg-color: hsla(var(--#{$prefix}-#{$colorName}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color-hsl: var(--#{$prefix}-#{$colorName}--hsl);
+  --bg-color--hover: var(--#{$prefix}-#{$colorName}--hover);
+  --bg-color--active: var(--#{$prefix}-#{$colorName}--active);
+  --text-color--contrast: var(--#{$prefix}-#{$colorName}--contrast);
+  --text-color-button: var(--text-color--contrast);
+  --text-color-button--hover: var(--text-color--contrast);
+  background-color: var(--bg-color, inherit);
+  &::selection {
+    background: var(--text-color--contrast, inherit);
+    color: var(--bg-color, inherit);
+  }
+}
+
+@mixin text-colors($prefix, $colorName, $colorValue) {
+  --text-color: hsla(var(--#{$prefix}-#{$colorName}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--#{$prefix}-#{$colorName}--hsl);
+  --text-color--hover: var(--#{$prefix}-#{$colorName}--hover);
+  --text-color--contrast: var(--#{$prefix}-#{$colorName}--contrast);
+  color: var(--text-color, var(--text-color--contrast, inherit));
+  &::selection {
+    background: var(--text-color, var(--text-color--contrast, inherit));
+    color: #{color-contrast($colorValue)};
+  }
+  &--hover {
+    &:hover {
+      --text-color: hsla(var(--#{$prefix}-#{$colorName}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+      color: var(--text-color, var(--text-color--contrast, inherit)) !important;
+    }
+  }
+}
+
+@mixin border-colors($prefix, $colorName, $colorValue) {
+  --border-color: hsla(var(--#{$prefix}-#{$colorName}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--#{$prefix}-#{$colorName}--hsl);
+  border-color: var(--border-color, inherit);
+}
+
+@mixin input-colors($prefix, $colorName, $colorValue) {
+  --input-color: hsla(var(--#{$prefix}-#{$colorName}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color: var(--input-color, inherit);
+  accent-color: var(--input-color, inherit);
+  caret-color: var(--input-color, inherit);
+  color: var(--input-color, inherit);
+  &::selection {
+    background: var(--input-color, inherit);
+    color: #{color-contrast($colorValue)};
+  }
+}
+
 /**
  * Color style type definitions
  * Structure: .prefix-type-color(--variant)
@@ -104,60 +157,39 @@ $nok-dark-contrast-overrides: (
   );
   @each $color, $value in $sub_map {
     .#{$prefix}-bg-#{$color} {
-      --bg-color: hsla(var(--#{$prefix}-#{$color}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
-      --bg-color-hsl: var(--#{$prefix}-#{$color}--hsl);
-      --bg-color--hover: var(--#{$prefix}-#{$color}--hover);
-      --bg-color--active: var(--#{$prefix}-#{$color}--active);
-      --text-color--contrast: var(--#{$prefix}-#{$color}--contrast);
-      --text-color-button: var(--text-color--contrast);
-      --text-color-button--hover: var(--text-color--contrast);
-      background-color: var(--bg-color, inherit);
-      &::selection {
-        background: var(--text-color--contrast, inherit);
-        color: var(--bg-color, inherit);
-      }
+      @include bg-colors($prefix, $color, $value);
     }
     .#{$prefix}-text-#{$color} {
-      --text-color: hsla(var(--#{$prefix}-#{$color}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
-      --text-color-hsl: var(--#{$prefix}-#{$color}--hsl);
-      --text-color--hover: var(--#{$prefix}-#{$color}--hover);
-      --text-color--contrast: var(--#{$prefix}-#{$color}--contrast);
-      color: var(--text-color, var(--text-color--contrast, inherit));
-      &::selection {
-        background: var(--text-color, var(--text-color--contrast, inherit));
-        color: #{color-contrast($value)};
-      }
-      &--hover {
-        &:hover {
-          --text-color: hsla(var(--#{$prefix}-#{$color}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
-          color: var(--text-color, var(--text-color--contrast, inherit)) !important;
-        }
-      }
+      @include text-colors($prefix, $color, $value);
     }
     .#{$prefix}-border-#{$color} {
-      --border-color: hsla(var(--#{$prefix}-#{$color}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
-      --border-color-hsl: var(--#{$prefix}-#{$color}--hsl);
-      border-color: var(--border-color, inherit);
+      @include border-colors($prefix, $color, $value);
     }
     .#{$prefix}-input-#{$color} {
-      --input-color: hsla(var(--#{$prefix}-#{$color}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
-      --text-color: var(--input-color, inherit);
-      accent-color: var(--input-color, inherit);
-      caret-color: var(--input-color, inherit);
-      color: var(--input-color, inherit);
-      &::selection {
-        background: var(--input-color, inherit);
-        color: #{color-contrast($value)};
+      @include input-colors($prefix, $color, $value);
+    }
+    @media (prefers-color-scheme: dark) {
+      .#{$prefix}-dark-bg-#{$color} {
+        @include bg-colors($prefix, $color, $value);
+      }
+      .#{$prefix}-dark-text-#{$color} {
+        @include text-colors($prefix, $color, $value);
+      }
+      .#{$prefix}-dark-border-#{$color} {
+        @include border-colors($prefix, $color, $value);
+      }
+      .#{$prefix}-dark-input-#{$color} {
+        @include input-colors($prefix, $color, $value);
       }
     }
   }
 }
 
 /**
- * Additional general color classes
+ * Additional general color class helpers
  */
 .#{$prefix}-text-contrast {
-  color: var(--text-color--contrast, inherit);
+  color: var(--text-color--contrast, inherit) !important;
 }
 
 /**

@@ -1,5 +1,6 @@
 @import "../nok-variables";
 @import "../nok-mixins";
+@import "../nok-rfs";
 
 $component-name: #{$prefix}-horizontal-section;
 
@@ -30,15 +31,9 @@ $component-name: #{$prefix}-horizontal-section;
   /* Typography */
   &__heading {
     grid-column: 1;
-    font-size: 2.5rem;
     font-weight: 500;
     line-height: var(--nok25-default-heading-line-height, 1.25);
     margin: 0;
-
-    &--large {
-      font-size: 3.25rem;
-    }
-
     &__description {
       font-size: 1.1rem;
       font-weight: 400;
@@ -46,4 +41,11 @@ $component-name: #{$prefix}-horizontal-section;
       margin: 0;
     }
   }
+}
+
+h1.#{$component-name}__heading {
+  @include rfs(3.25rem, font-size);
+}
+h2.#{$component-name}__heading {
+  @include rfs(2.5rem, font-size);
 }

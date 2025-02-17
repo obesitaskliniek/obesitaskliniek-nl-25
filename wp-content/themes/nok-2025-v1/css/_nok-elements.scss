@@ -1,13 +1,7 @@
 @use "sass:map";
-@import "nok-variables";
-@import "nok-mixins";
-
-//todo: move to generic reset?
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+@use "nok-variables";
+@use "nok-mixins";
+@use "nok-reboot";
 
 /*
 //BEM example
@@ -44,10 +38,18 @@
     --underline-color: var(--nok25-lightblue, inherit);
     --underline-color--active: var(--nok25-lightblue--contrast, inherit);
   }
-
+}
+.#{$prefix}-horizontal-button-group {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: var(--grid-gap, var(--nok25-padding-base, var(--global-grid-gap, 1.5rem)));
+  justify-content: flex-start;
+  align-items: center;
 }
 
-@import "./nok-elements/nok25-sections.scss";
-@import "./nok-elements/nok25-buttons.scss";
-@import "./nok-elements/nok25-square-block.scss";
-@import "./nok-elements/nok25-block-group.scss";
+@use "./nok-elements/nok25-sections.scss";
+@use "./nok-elements/nok25-hero.scss";
+@use "./nok-elements/nok25-buttons.scss";
+@use "./nok-elements/nok25-square-block.scss";
+@use "./nok-elements/nok25-block-group.scss";

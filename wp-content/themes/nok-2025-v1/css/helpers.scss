@@ -1,5 +1,5 @@
-@import "nok-variables";
-@import "nok-mixins";
+@use "nok-variables";
+@use "nok-mixins";
 
 :root {
   @each $key, $value in $exposed-variables {
@@ -38,4 +38,8 @@
       user-select: none;
     }
   }
+}
+
+.fw-bold {
+  font-weight: 600;
 }

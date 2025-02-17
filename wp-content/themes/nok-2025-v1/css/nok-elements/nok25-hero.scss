@@ -1,0 +1,58 @@
+@use "sass:map";
+@import "../nok-variables";
+@import "../nok-mixins";
+
+/**
+ * hero unit
+ */
+
+$component-name: #{$prefix}-hero;
+
+.#{$component-name} {
+  --grid-gap: var(--nok25-padding-base, var(--global-grid-gap, 1.5rem));
+  @include nok-font;
+  position: relative;
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+
+  article {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: var(--grid-gap, var(--global-grid-gap));
+  }
+
+  figure {
+    overflow: hidden;
+    margin: 0;
+    --grad-1-1: var(--nok25-greenblue--hsl);
+    --grad-1-2: var(--nok25-yellow--hsl);
+    --base-layer: var(--nok25-body--darker--hsl);
+    @media (prefers-color-scheme: dark) {
+      --grad-1-1: var(--nok25-greenyellow--lighter--hsl);
+      --grad-1-2: var(--nok25-lightblue--hsl);
+      --base-layer: var(--nok25-darkerblue--darker--hsl);
+    }
+    linearGradient {
+      &#a {
+        --local-color-alpha: 1;
+      }
+      &#b {
+        --local-color-alpha: 0.5;
+      }
+      &#c {
+        --local-color-alpha: 0.3;
+      }
+    }
+  }
+
+}
+
+/* Typography */
+h1.#{$component-name}__heading {
+  font-weight: 500;
+  @include rfs(4.4rem, font-size);
+  @include rfs(1.05, line-height);
+}
