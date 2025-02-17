@@ -1,4 +1,4 @@
-@import "nok-variables";
+@use "nok-variables";
 
 @mixin nok-font {
   font-family: "Realist", sans-serif;
@@ -29,7 +29,7 @@
 @mixin nok-inline-link {
   --active-color: #000;
   --hover-transition-time: 0.15s;
-  --underline-height: 0.2em;
+  --underline-height: 0.15em;
   //noinspection CssInvalidFunction
   --gradient: linear-gradient(
           transparent 0%,

@@ -44,6 +44,7 @@ $component-name: #{$prefix}-block-group;
     overflow-x: scroll;
     margin-top: calc(var(--grid-gap, 1.5rem) * 2);
     padding-bottom: calc(var(--grid-gap, 1.5rem) * 2);
+
     &.#{$prefix}-draggable {
       @include nok-scrollbar-thin(10px);
 
@@ -62,6 +63,7 @@ $component-name: #{$prefix}-block-group;
     &.#{$prefix}-draggable[data-scroll-snapping="true"] .#{$prefix}-draggable-slider-item {
       scroll-snap-align: start;
     }
+
     &.#{$prefix}-draggable .#{$prefix}-draggable-slider-item {
       > *:not(a),
       a::after {
@@ -75,6 +77,7 @@ $component-name: #{$prefix}-block-group;
     flex-direction: row;
     flex-wrap: nowrap;
     gap: var(--grid-gap, var(--global-grid-gap));
+
     > * {
       flex-basis: var(--grid-column-width);
       flex-shrink: 0;
