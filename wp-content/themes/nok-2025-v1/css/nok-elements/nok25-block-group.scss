@@ -1,24 +1,24 @@
 @use "sass:map";
-@import "../nok-variables";
-@import "../nok-mixins";
+@use "../nok-variables";
+@use "../nok-mixins";
 
 /**
  * square block
  */
 
-$component-name: #{$prefix}-block-group;
+$component-name: #{nok-variables.$prefix}-block-group;
 
 .#{$component-name} {
-  @include nok-font;
+  @include nok-mixins.nok-font;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
   --grid-columns: 3;
-  @include media-breakpoint-down(xxl) {
+  @include nok-mixins.media-breakpoint-down(xxl) {
     --grid-columns: 2;
   }
-  @include media-breakpoint-down(lg) {
+  @include nok-mixins.media-breakpoint-down(lg) {
     --grid-columns: 1;
   }
 
@@ -45,8 +45,8 @@ $component-name: #{$prefix}-block-group;
     margin-top: calc(var(--grid-gap, 1.5rem) * 2);
     padding-bottom: calc(var(--grid-gap, 1.5rem) * 2);
 
-    &.#{$prefix}-draggable {
-      @include nok-scrollbar-thin(10px);
+    &.#{nok-variables.$prefix}-draggable {
+      @include nok-mixins.nok-scrollbar-thin(10px);
 
       &[data-scroll-snapping="true"] {
 
@@ -60,11 +60,11 @@ $component-name: #{$prefix}-block-group;
   }
 
   &__scroller {
-    &.#{$prefix}-draggable[data-scroll-snapping="true"] .#{$prefix}-draggable-slider-item {
+    &.#{nok-variables.$prefix}-draggable[data-scroll-snapping="true"] .#{nok-variables.$prefix}-draggable-slider-item {
       scroll-snap-align: start;
     }
 
-    &.#{$prefix}-draggable .#{$prefix}-draggable-slider-item {
+    &.#{nok-variables.$prefix}-draggable .#{nok-variables.$prefix}-draggable-slider-item {
       > *:not(a),
       a::after {
         pointer-events: none;

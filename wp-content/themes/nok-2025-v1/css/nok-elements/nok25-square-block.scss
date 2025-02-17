@@ -1,12 +1,12 @@
 @use "sass:map";
-@import "../nok-variables";
-@import "../nok-mixins";
+@use "../nok-variables";
+@use "../nok-mixins";
 
 /**
  * square block
  */
 
-$component-name: #{$prefix}-square-block;
+$component-name: #{nok-variables.$prefix}-square-block;
 
 #{$component-name},
 :host {
@@ -23,11 +23,11 @@ $component-name: #{$prefix}-square-block;
   display: grid;
   grid-template-rows: auto auto 1fr auto;
 
-  @include nok-font;
+  @include nok-mixins.nok-font;
 
-  gap: ($padding-base);
-  padding: ($padding-base * 2);
-  @include nok-border-radius--large;
+  gap: (nok-variables.$padding-base);
+  padding: (nok-variables.$padding-base * 2);
+  @include nok-mixins.nok-border-radius--large;
   line-height: var(--nok25-default-line-height, 1.25);
 
   padding: calc(var(--nok25-padding-base, 1.5rem) * 2);

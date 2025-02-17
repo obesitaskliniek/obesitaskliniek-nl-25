@@ -1,5 +1,5 @@
 @use "sass:math";
-@import "./nok-utilities";
+@use "nok-utilities";
 
 $prefix : 'nok25';
 $padding-base: 1.5rem;
@@ -27,8 +27,8 @@ $grid-breakpoints: (
     xxl: 1400px,
     xxxl: 1600px
 ) !default;
-@include _assert-ascending($grid-breakpoints, "$grid-breakpoints");
-@include _assert-starts-at-zero($grid-breakpoints, "$grid-breakpoints");
+@include nok-utilities.assert-ascending($grid-breakpoints, "$grid-breakpoints");
+@include nok-utilities.assert-starts-at-zero($grid-breakpoints, "$grid-breakpoints");
 
 $section-max-widths: (
     sm: 540px,
@@ -38,4 +38,4 @@ $section-max-widths: (
     xxl: 1320px,
     xxxl: 1572px
 ) !default;
-@include _assert-ascending($section-max-widths, "$section-max-widths");
+@include nok-utilities.assert-ascending($section-max-widths, "$section-max-widths");

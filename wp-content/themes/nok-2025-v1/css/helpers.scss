@@ -2,16 +2,16 @@
 @use "nok-mixins";
 
 :root {
-  @each $key, $value in $exposed-variables {
-    --#{$prefix}-#{$key}: #{$value};
+  @each $key, $value in nok-variables.$exposed-variables {
+    --#{nok-variables.$prefix}-#{$key}: #{$value};
   }
 }
 
-.#{$prefix}-base-font {
-  @include nok-font;
+.#{nok-variables.$prefix}-base-font {
+  @include nok-mixins.nok-font;
 }
 
-.#{$prefix}-stretched-link {
+.#{nok-variables.$prefix}-stretched-link {
   &::after {
     position: absolute;
     top: 0;
@@ -28,7 +28,7 @@
 
 /* Enable draggable cursor for non-touch devices */
 @media (pointer: fine) {
-  .#{$prefix}-draggable {
+  .#{nok-variables.$prefix}-draggable {
     & {
       cursor: grab;
     }

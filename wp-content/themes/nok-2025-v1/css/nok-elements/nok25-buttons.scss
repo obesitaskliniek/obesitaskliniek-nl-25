@@ -1,12 +1,12 @@
 @use "sass:map";
-@import "../nok-variables";
-@import "../nok-mixins";
+@use "../nok-variables";
+@use "../nok-mixins";
 
 /**
  * square block
  */
 
-$component-name: #{$prefix}-button;
+$component-name: #{nok-variables.$prefix}-button;
 
 .#{$component-name} {
   box-sizing: border-box;
@@ -23,8 +23,8 @@ $component-name: #{$prefix}-button;
   text-decoration: none;
 
   color: var(--text-color, var(--text-color--contrast, inherit));
-  @include nok-border-radius;
-  @include nok-btn-shadow-border;
+  @include nok-mixins.nok-border-radius;
+  @include nok-mixins.nok-btn-shadow-border;
   border: 1px solid #8885;
   outline: 0 none;
 
@@ -45,7 +45,7 @@ $component-name: #{$prefix}-button;
   }
 
   &:focus-visible { // focus state by other input method than mouse
-    @include nok-focus-ring;
+    @include nok-mixins.nok-focus-ring;
   }
 
   &:active,
