@@ -1,12 +1,40 @@
+@import "nok-utilities";
+
 $prefix : 'nok25';
 $padding-base: 1.5rem;
 $default-border-radius: round(($padding-base / 4) * 10) / 10;
 $default-border-radius--large: round($default-border-radius * 2);
 $default-font-family: "Realist", sans-serif;
+$default-line-height: 1.5;
+$default-heading-line-height: 1.25;
 
 $exposed-variables: (
     "default-font-family": $default-font-family,
+    "default-line-height": $default-line-height,
+    "default-heading-line-height": $default-heading-line-height,
     "padding-base": $padding-base,
     "default-border-radius": $default-border-radius,
     "default-border-radius--large": $default-border-radius--large,
 );
+
+$grid-breakpoints: (
+    xs: 0,
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+    xxl: 1400px,
+    xxxl: 1600px
+) !default;
+@include _assert-ascending($grid-breakpoints, "$grid-breakpoints");
+@include _assert-starts-at-zero($grid-breakpoints, "$grid-breakpoints");
+
+$section-max-widths: (
+    sm: 540px,
+    md: 720px,
+    lg: 960px,
+    xl: 1140px,
+    xxl: 1320px,
+    xxxl: 1572px
+) !default;
+@include _assert-ascending($section-max-widths, "$section-max-widths");

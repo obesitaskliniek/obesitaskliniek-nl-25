@@ -1,0 +1,63 @@
+@use "sass:map";
+@import "../nok-variables";
+@import "../nok-mixins";
+
+/**
+ * square block
+ */
+
+$component-name: #{$prefix}-button;
+
+.#{$component-name} {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0;
+  padding: calc(var(--nok25-padding-base, 1.5rem) / 2) var(--nok25-padding-base, 1.5rem);
+
+  font-weight: 500;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  text-decoration: none;
+
+  color: var(--text-color, var(--text-color--contrast, inherit));
+  @include nok-border-radius;
+  @include nok-btn-shadow-border;
+  border: 1px solid #8885;
+  outline: 0 none;
+
+  cursor: pointer;
+  user-select: none;
+
+  &:hover, &:focus, &:active, &.active, &:focus-visible {
+    border-color: #8882;
+  }
+
+  &:hover {
+    color: var(--text-color-button--hover, var(--text-color, var(--text-color--contrast, inherit)));
+    background-color: var(--bg-color--hover, inherit);
+  }
+
+  &:focus {
+    outline: 2px solid hsl(var(--bg-color-hsl, 0 0 0) / 0.25);
+  }
+
+  &:focus-visible { // focus state by other input method than mouse
+    @include nok-focus-ring;
+  }
+
+  &:active,
+  &.active {
+    background-color: var(--bg-color--active, inherit);
+  }
+
+  &:disabled,
+  &.disabled {
+    --local-color-alpha: 0.65;
+    opacity: 0.8;
+    color: var(--text-color-button, var(--text-color--contrast, inherit));
+    pointer-events: none;
+  }
+}

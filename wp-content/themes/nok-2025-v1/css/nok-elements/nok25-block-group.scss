@@ -1,0 +1,83 @@
+@use "sass:map";
+@import "../nok-variables";
+@import "../nok-mixins";
+
+/**
+ * square block
+ */
+
+$component-name: #{$prefix}-block-group;
+
+.#{$component-name} {
+  @include nok-font;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  --grid-columns: 3;
+  @include media-breakpoint-down(xxl) {
+    --grid-columns: 2;
+  }
+  @include media-breakpoint-down(lg) {
+    --grid-columns: 1;
+  }
+
+  &__inner {
+    --grid-gap: var(--nok25-padding-base, var(--global-grid-gap, 1.5rem));
+    --grid-column-width: calc(
+        (100% - (var(--grid-gap, 1) * (var(--grid-columns, 1) - 1))) / var(--grid-columns, 1)
+    );
+    padding: calc(var(--grid-gap, var(--global-grid-gap)) * 2) 0;
+    display: grid;
+    gap: var(--grid-gap, var(--global-grid-gap));
+    grid-template-columns: repeat(var(--grid-columns, 1), 1fr);
+    grid-template-rows: 1fr;
+    align-items: stretch;
+  }
+
+  &__description {
+    grid-column: span 2;
+  }
+
+  &__scroller {
+    grid-column: 1 / -1;
+    overflow-x: scroll;
+    margin-top: calc(var(--grid-gap, 1.5rem) * 2);
+    padding-bottom: calc(var(--grid-gap, 1.5rem) * 2);
+    &.#{$prefix}-draggable {
+      @include nok-scrollbar-thin(10px);
+
+      &[data-scroll-snapping="true"] {
+
+        scroll-snap-type: both mandatory;
+        scroll-snap-stop: normal;
+      }
+
+      will-change: scroll-position; /*seems to bump performance in firefox ever so slightly*/
+      //overflow-anchor: none !important;
+    }
+  }
+
+  &__scroller {
+    &.#{$prefix}-draggable[data-scroll-snapping="true"] .#{$prefix}-draggable-slider-item {
+      scroll-snap-align: start;
+    }
+    &.#{$prefix}-draggable .#{$prefix}-draggable-slider-item {
+      > *:not(a),
+      a::after {
+        pointer-events: none;
+      }
+    }
+  }
+
+  &__blocks {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: var(--grid-gap, var(--global-grid-gap));
+    > * {
+      flex-basis: var(--grid-column-width);
+      flex-shrink: 0;
+    }
+  }
+}
