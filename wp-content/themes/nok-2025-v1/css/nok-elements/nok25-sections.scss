@@ -1,8 +1,8 @@
-@import "../nok-variables";
-@import "../nok-mixins";
-@import "../nok-rfs";
+@use "../nok-variables";
+@use "../nok-mixins";
+@use "../nok-rfs";
 
-$component-name: #{$prefix}-horizontal-section;
+$component-name: #{nok-variables.$prefix}-horizontal-section;
 
 .#{$component-name} {
   display: flex;
@@ -16,11 +16,11 @@ $component-name: #{$prefix}-horizontal-section;
 
   &__inner {
     &, &-fluid {
-      @include make-section();
+      @include nok-mixins.make-section();
     }
 
-    @each $breakpoint, $section-max-width in $section-max-widths {
-      @include media-breakpoint-up($breakpoint, $grid-breakpoints) {
+    @each $breakpoint, $section-max-width in nok-variables.$section-max-widths {
+      @include nok-mixins.media-breakpoint-up($breakpoint, nok-variables.$grid-breakpoints) {
         & {
           max-width: $section-max-width;
         }
@@ -44,8 +44,8 @@ $component-name: #{$prefix}-horizontal-section;
 }
 
 h1.#{$component-name}__heading {
-  @include rfs(3.25rem, font-size);
+  @include nok-rfs.rfs(3.25rem, font-size);
 }
 h2.#{$component-name}__heading {
-  @include rfs(2.5rem, font-size);
+  @include nok-rfs.rfs(2.5rem, font-size);
 }

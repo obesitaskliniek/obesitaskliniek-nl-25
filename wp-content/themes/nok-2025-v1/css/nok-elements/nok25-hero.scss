@@ -1,16 +1,17 @@
 @use "sass:map";
-@import "../nok-variables";
-@import "../nok-mixins";
+@use "../nok-variables";
+@use "../nok-mixins";
+@use "../nok-rfs";
 
 /**
  * hero unit
  */
 
-$component-name: #{$prefix}-hero;
+$component-name: #{nok-variables.$prefix}-hero;
 
 .#{$component-name} {
   --grid-gap: var(--nok25-padding-base, var(--global-grid-gap, 1.5rem));
-  @include nok-font;
+  @include nok-mixins.nok-font;
   position: relative;
   display: grid;
   grid-template-columns: 2fr 3fr;
@@ -53,6 +54,6 @@ $component-name: #{$prefix}-hero;
 /* Typography */
 h1.#{$component-name}__heading {
   font-weight: 500;
-  @include rfs(4.4rem, font-size);
-  @include rfs(1.05, line-height);
+  @include nok-rfs.rfs(4.4rem, font-size);
+  @include nok-rfs.rfs(1.05, line-height);
 }

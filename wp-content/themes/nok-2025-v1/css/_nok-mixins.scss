@@ -23,7 +23,7 @@
 
 @mixin nok-focus-ring {
   outline: 0 none;
-  box-shadow: 0 0 0 2px var(--#{$prefix}-focus-ring, inherit);
+  box-shadow: 0 0 0 2px var(--#{nok-variables.$prefix}-focus-ring, inherit);
 }
 
 @mixin nok-inline-link {
@@ -99,8 +99,8 @@
 
 @mixin make-section() {
   width: 100%;
-  padding-right: var(--nok25-padding-base, $padding-base);
-  padding-left: var(--nok25-padding-base, $padding-base);
+  padding-right: var(--nok25-padding-base, nok-variables.$padding-base);
+  padding-left: var(--nok25-padding-base, nok-variables.$padding-base);
   margin-right: auto;
   margin-left: auto;
 }
@@ -114,7 +114,7 @@
 //
 //    >> breakpoint-max(md, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px, xxl: 1400px))
 //    767.98px
-@function breakpoint-max($name, $breakpoints: $grid-breakpoints) {
+@function breakpoint-max($name, $breakpoints: nok-variables.$grid-breakpoints) {
   $max: map-get($breakpoints, $name);
   @return if($max and $max > 0, $max - .02, null);
 }
@@ -126,7 +126,7 @@
 //    ""  (Returns a blank string)
 //    >> breakpoint-infix(sm, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px, xxl: 1400px))
 //    "-sm"
-@function breakpoint-infix($name, $breakpoints: $grid-breakpoints) {
+@function breakpoint-infix($name, $breakpoints: nok-variables.$grid-breakpoints) {
   @return if(breakpoint-min($name, $breakpoints) == null, "", "-#{$name}");
 }
 
@@ -134,14 +134,14 @@
 //
 //    >> breakpoint-min(sm, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px, xxl: 1400px))
 //    576px
-@function breakpoint-min($name, $breakpoints: $grid-breakpoints) {
+@function breakpoint-min($name, $breakpoints: nok-variables.$grid-breakpoints) {
   $min: map-get($breakpoints, $name);
   @return if($min != 0, $min, null);
 }
 
 // Media of at least the minimum breakpoint width. No query for the smallest breakpoint.
 // Makes the @content apply to the given breakpoint and wider.
-@mixin media-breakpoint-up($name, $breakpoints: $grid-breakpoints) {
+@mixin media-breakpoint-up($name, $breakpoints: nok-variables.$grid-breakpoints) {
   $min: breakpoint-min($name, $breakpoints);
   @if $min {
     @media (min-width: $min) {
@@ -154,7 +154,7 @@
 
 // Media of at most the maximum breakpoint width. No query for the largest breakpoint.
 // Makes the @content apply to the given breakpoint and narrower.
-@mixin media-breakpoint-down($name, $breakpoints: $grid-breakpoints) {
+@mixin media-breakpoint-down($name, $breakpoints: nok-variables.$grid-breakpoints) {
   $max: breakpoint-max($name, $breakpoints);
   @if $max {
     @media (max-width: $max) {
@@ -167,7 +167,7 @@
 
 // Media that spans multiple breakpoint widths.
 // Makes the @content apply between the min and max breakpoints
-@mixin media-breakpoint-between($lower, $upper, $breakpoints: $grid-breakpoints) {
+@mixin media-breakpoint-between($lower, $upper, $breakpoints: nok-variables.$grid-breakpoints) {
   $min: breakpoint-min($lower, $breakpoints);
   $max: breakpoint-max($upper, $breakpoints);
 
@@ -189,7 +189,7 @@
 // Media between the breakpoint's minimum and maximum widths.
 // No minimum for the smallest breakpoint, and no maximum for the largest one.
 // Makes the @content apply only to the given breakpoint, not viewports any wider or narrower.
-@mixin media-breakpoint-only($name, $breakpoints: $grid-breakpoints) {
+@mixin media-breakpoint-only($name, $breakpoints: nok-variables.$grid-breakpoints) {
   $min:  breakpoint-min($name, $breakpoints);
   $next: breakpoint-next($name, $breakpoints);
   $max:  breakpoint-max($next, $breakpoints);

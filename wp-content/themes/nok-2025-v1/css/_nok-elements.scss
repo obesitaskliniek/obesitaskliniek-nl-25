@@ -1,7 +1,11 @@
 @use "sass:map";
 @use "nok-variables";
 @use "nok-mixins";
-@use "nok-reboot";
+@use "./nok-elements/nok25-sections.scss";
+@use "./nok-elements/nok25-hero.scss";
+@use "./nok-elements/nok25-buttons.scss";
+@use "./nok-elements/nok25-square-block.scss";
+@use "./nok-elements/nok25-block-group.scss";
 
 /*
 //BEM example
@@ -26,12 +30,12 @@
 /**
  * hyperlink
  */
-.#{$prefix}-hyperlink:not(.#{$prefix}-button) {
+.#{nok-variables.$prefix}-hyperlink:not(.#{nok-variables.$prefix}-button) {
   color: var(--text-color, var(--text-color--contrast, inherit));
   --underline-color: var(--text-color, var(--text-color--contrast, inherit));
   --underline-color--active: var(--text-color--contrast, inherit);
 
-  @include nok-inline-link;
+  @include nok-mixins.nok-inline-link;
 
   @at-root p & {
     color: var(--nok25-lightblue, inherit);
@@ -39,7 +43,7 @@
     --underline-color--active: var(--nok25-lightblue--contrast, inherit);
   }
 }
-.#{$prefix}-horizontal-button-group {
+.#{nok-variables.$prefix}-horizontal-button-group {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -47,9 +51,3 @@
   justify-content: flex-start;
   align-items: center;
 }
-
-@use "./nok-elements/nok25-sections.scss";
-@use "./nok-elements/nok25-hero.scss";
-@use "./nok-elements/nok25-buttons.scss";
-@use "./nok-elements/nok25-square-block.scss";
-@use "./nok-elements/nok25-block-group.scss";
