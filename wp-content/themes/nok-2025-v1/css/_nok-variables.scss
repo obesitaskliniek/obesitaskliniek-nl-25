@@ -6,8 +6,18 @@ $padding-base: 1.5rem;
 $default-border-radius: math.div(math.round((math.div($padding-base, 4)) * 10), 10);
 $default-border-radius--large: math.round($default-border-radius * 2);
 $default-font-family: "Realist", sans-serif;
+$font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
+
 $default-line-height: 1.5;
 $default-heading-line-height: 1.25;
+
+$font-size-base:              1rem !default;
+$h1-font-size:                $font-size-base * 2.5 !default;
+$h2-font-size:                $font-size-base * 2 !default;
+$h3-font-size:                $font-size-base * 1.75 !default;
+$h4-font-size:                $font-size-base * 1.5 !default;
+$h5-font-size:                $font-size-base * 1.25 !default;
+$h6-font-size:                $font-size-base !default;
 
 $exposed-variables: (
     "default-font-family": $default-font-family,
