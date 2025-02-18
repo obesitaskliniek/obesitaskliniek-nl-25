@@ -1,0 +1,25 @@
+@use "sass:map";
+@use "../nok-variables";
+@use "../nok-mixins";
+@use "../nok-rfs";
+
+/**
+ * hero unit
+ */
+
+$component-name: #{nok-variables.$prefix}-nav;
+
+.#{$component-name} {
+  --grid-gap: var(--nok25-padding-base, var(--global-grid-gap, 1.5rem));
+  @include nok-mixins.nok-text-font;
+  @include nok-rfs.rfs(1.1rem, font-size);
+
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 1fr auto;
+  grid-auto-columns: auto;
+
+  gap: var(--grid-gap, var(--global-grid-gap));
+  padding-top: var(--nok25-padding-base, 1.5rem);
+  padding-bottom: var(--nok25-padding-base, 1.5rem);
+}

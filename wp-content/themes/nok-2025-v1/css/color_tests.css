@@ -740,7 +740,7 @@
  * Structure: .prefix-type-color(--variant)
  */
 .nok25-bg-lightblue {
-  --bg-color: hsla(var(--nok25-lightblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-lightblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-lightblue--hsl);
   --bg-color--hover: var(--nok25-lightblue--hover);
   --bg-color--active: var(--nok25-lightblue--active);
@@ -802,7 +802,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-lightblue {
-    --bg-color: hsla(var(--nok25-lightblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-lightblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-lightblue--hsl);
     --bg-color--hover: var(--nok25-lightblue--hover);
     --bg-color--active: var(--nok25-lightblue--active);
@@ -860,7 +860,7 @@
   }
 }
 .nok25-bg-lightblue--darker {
-  --bg-color: hsla(var(--nok25-lightblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-lightblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-lightblue--darker--hsl);
   --bg-color--hover: var(--nok25-lightblue--darker--hover);
   --bg-color--active: var(--nok25-lightblue--darker--active);
@@ -922,7 +922,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-lightblue--darker {
-    --bg-color: hsla(var(--nok25-lightblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-lightblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-lightblue--darker--hsl);
     --bg-color--hover: var(--nok25-lightblue--darker--hover);
     --bg-color--active: var(--nok25-lightblue--darker--active);
@@ -980,7 +980,7 @@
   }
 }
 .nok25-bg-lightblue--lighter {
-  --bg-color: hsla(var(--nok25-lightblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-lightblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-lightblue--lighter--hsl);
   --bg-color--hover: var(--nok25-lightblue--lighter--hover);
   --bg-color--active: var(--nok25-lightblue--lighter--active);
@@ -1042,7 +1042,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-lightblue--lighter {
-    --bg-color: hsla(var(--nok25-lightblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-lightblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-lightblue--lighter--hsl);
     --bg-color--hover: var(--nok25-lightblue--lighter--hover);
     --bg-color--active: var(--nok25-lightblue--lighter--active);
@@ -1100,7 +1100,7 @@
   }
 }
 .nok25-bg-darkblue {
-  --bg-color: hsla(var(--nok25-darkblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-darkblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-darkblue--hsl);
   --bg-color--hover: var(--nok25-darkblue--hover);
   --bg-color--active: var(--nok25-darkblue--active);
@@ -1162,7 +1162,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-darkblue {
-    --bg-color: hsla(var(--nok25-darkblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-darkblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkblue--hsl);
     --bg-color--hover: var(--nok25-darkblue--hover);
     --bg-color--active: var(--nok25-darkblue--active);
@@ -1220,7 +1220,7 @@
   }
 }
 .nok25-bg-darkblue--darker {
-  --bg-color: hsla(var(--nok25-darkblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-darkblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-darkblue--darker--hsl);
   --bg-color--hover: var(--nok25-darkblue--darker--hover);
   --bg-color--active: var(--nok25-darkblue--darker--active);
@@ -1282,7 +1282,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-darkblue--darker {
-    --bg-color: hsla(var(--nok25-darkblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-darkblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkblue--darker--hsl);
     --bg-color--hover: var(--nok25-darkblue--darker--hover);
     --bg-color--active: var(--nok25-darkblue--darker--active);
@@ -1340,7 +1340,7 @@
   }
 }
 .nok25-bg-darkblue--lighter {
-  --bg-color: hsla(var(--nok25-darkblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-darkblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-darkblue--lighter--hsl);
   --bg-color--hover: var(--nok25-darkblue--lighter--hover);
   --bg-color--active: var(--nok25-darkblue--lighter--active);
@@ -1402,7 +1402,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-darkblue--lighter {
-    --bg-color: hsla(var(--nok25-darkblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-darkblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkblue--lighter--hsl);
     --bg-color--hover: var(--nok25-darkblue--lighter--hover);
     --bg-color--active: var(--nok25-darkblue--lighter--active);
@@ -1460,7 +1460,7 @@
   }
 }
 .nok25-bg-darkerblue {
-  --bg-color: hsla(var(--nok25-darkerblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-darkerblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-darkerblue--hsl);
   --bg-color--hover: var(--nok25-darkerblue--hover);
   --bg-color--active: var(--nok25-darkerblue--active);
@@ -1522,7 +1522,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-darkerblue {
-    --bg-color: hsla(var(--nok25-darkerblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-darkerblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkerblue--hsl);
     --bg-color--hover: var(--nok25-darkerblue--hover);
     --bg-color--active: var(--nok25-darkerblue--active);
@@ -1580,7 +1580,7 @@
   }
 }
 .nok25-bg-darkerblue--darker {
-  --bg-color: hsla(var(--nok25-darkerblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-darkerblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-darkerblue--darker--hsl);
   --bg-color--hover: var(--nok25-darkerblue--darker--hover);
   --bg-color--active: var(--nok25-darkerblue--darker--active);
@@ -1642,7 +1642,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-darkerblue--darker {
-    --bg-color: hsla(var(--nok25-darkerblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-darkerblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkerblue--darker--hsl);
     --bg-color--hover: var(--nok25-darkerblue--darker--hover);
     --bg-color--active: var(--nok25-darkerblue--darker--active);
@@ -1700,7 +1700,7 @@
   }
 }
 .nok25-bg-darkerblue--lighter {
-  --bg-color: hsla(var(--nok25-darkerblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-darkerblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-darkerblue--lighter--hsl);
   --bg-color--hover: var(--nok25-darkerblue--lighter--hover);
   --bg-color--active: var(--nok25-darkerblue--lighter--active);
@@ -1762,7 +1762,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-darkerblue--lighter {
-    --bg-color: hsla(var(--nok25-darkerblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-darkerblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkerblue--lighter--hsl);
     --bg-color--hover: var(--nok25-darkerblue--lighter--hover);
     --bg-color--active: var(--nok25-darkerblue--lighter--active);
@@ -1820,7 +1820,7 @@
   }
 }
 .nok25-bg-darkestblue {
-  --bg-color: hsla(var(--nok25-darkestblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-darkestblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-darkestblue--hsl);
   --bg-color--hover: var(--nok25-darkestblue--hover);
   --bg-color--active: var(--nok25-darkestblue--active);
@@ -1882,7 +1882,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-darkestblue {
-    --bg-color: hsla(var(--nok25-darkestblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-darkestblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkestblue--hsl);
     --bg-color--hover: var(--nok25-darkestblue--hover);
     --bg-color--active: var(--nok25-darkestblue--active);
@@ -1940,7 +1940,7 @@
   }
 }
 .nok25-bg-darkestblue--darker {
-  --bg-color: hsla(var(--nok25-darkestblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-darkestblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-darkestblue--darker--hsl);
   --bg-color--hover: var(--nok25-darkestblue--darker--hover);
   --bg-color--active: var(--nok25-darkestblue--darker--active);
@@ -2002,7 +2002,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-darkestblue--darker {
-    --bg-color: hsla(var(--nok25-darkestblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-darkestblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkestblue--darker--hsl);
     --bg-color--hover: var(--nok25-darkestblue--darker--hover);
     --bg-color--active: var(--nok25-darkestblue--darker--active);
@@ -2060,7 +2060,7 @@
   }
 }
 .nok25-bg-darkestblue--lighter {
-  --bg-color: hsla(var(--nok25-darkestblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-darkestblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-darkestblue--lighter--hsl);
   --bg-color--hover: var(--nok25-darkestblue--lighter--hover);
   --bg-color--active: var(--nok25-darkestblue--lighter--active);
@@ -2122,7 +2122,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-darkestblue--lighter {
-    --bg-color: hsla(var(--nok25-darkestblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-darkestblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkestblue--lighter--hsl);
     --bg-color--hover: var(--nok25-darkestblue--lighter--hover);
     --bg-color--active: var(--nok25-darkestblue--lighter--active);
@@ -2180,7 +2180,7 @@
   }
 }
 .nok25-bg-yellow {
-  --bg-color: hsla(var(--nok25-yellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-yellow--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-yellow--hsl);
   --bg-color--hover: var(--nok25-yellow--hover);
   --bg-color--active: var(--nok25-yellow--active);
@@ -2242,7 +2242,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-yellow {
-    --bg-color: hsla(var(--nok25-yellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-yellow--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-yellow--hsl);
     --bg-color--hover: var(--nok25-yellow--hover);
     --bg-color--active: var(--nok25-yellow--active);
@@ -2300,7 +2300,7 @@
   }
 }
 .nok25-bg-yellow--darker {
-  --bg-color: hsla(var(--nok25-yellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-yellow--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-yellow--darker--hsl);
   --bg-color--hover: var(--nok25-yellow--darker--hover);
   --bg-color--active: var(--nok25-yellow--darker--active);
@@ -2362,7 +2362,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-yellow--darker {
-    --bg-color: hsla(var(--nok25-yellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-yellow--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-yellow--darker--hsl);
     --bg-color--hover: var(--nok25-yellow--darker--hover);
     --bg-color--active: var(--nok25-yellow--darker--active);
@@ -2420,7 +2420,7 @@
   }
 }
 .nok25-bg-yellow--lighter {
-  --bg-color: hsla(var(--nok25-yellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-yellow--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-yellow--lighter--hsl);
   --bg-color--hover: var(--nok25-yellow--lighter--hover);
   --bg-color--active: var(--nok25-yellow--lighter--active);
@@ -2482,7 +2482,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-yellow--lighter {
-    --bg-color: hsla(var(--nok25-yellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-yellow--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-yellow--lighter--hsl);
     --bg-color--hover: var(--nok25-yellow--lighter--hover);
     --bg-color--active: var(--nok25-yellow--lighter--active);
@@ -2540,7 +2540,7 @@
   }
 }
 .nok25-bg-darkyellow {
-  --bg-color: hsla(var(--nok25-darkyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-darkyellow--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-darkyellow--hsl);
   --bg-color--hover: var(--nok25-darkyellow--hover);
   --bg-color--active: var(--nok25-darkyellow--active);
@@ -2602,7 +2602,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-darkyellow {
-    --bg-color: hsla(var(--nok25-darkyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-darkyellow--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkyellow--hsl);
     --bg-color--hover: var(--nok25-darkyellow--hover);
     --bg-color--active: var(--nok25-darkyellow--active);
@@ -2660,7 +2660,7 @@
   }
 }
 .nok25-bg-darkyellow--darker {
-  --bg-color: hsla(var(--nok25-darkyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-darkyellow--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-darkyellow--darker--hsl);
   --bg-color--hover: var(--nok25-darkyellow--darker--hover);
   --bg-color--active: var(--nok25-darkyellow--darker--active);
@@ -2722,7 +2722,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-darkyellow--darker {
-    --bg-color: hsla(var(--nok25-darkyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-darkyellow--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkyellow--darker--hsl);
     --bg-color--hover: var(--nok25-darkyellow--darker--hover);
     --bg-color--active: var(--nok25-darkyellow--darker--active);
@@ -2780,7 +2780,7 @@
   }
 }
 .nok25-bg-darkyellow--lighter {
-  --bg-color: hsla(var(--nok25-darkyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-darkyellow--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-darkyellow--lighter--hsl);
   --bg-color--hover: var(--nok25-darkyellow--lighter--hover);
   --bg-color--active: var(--nok25-darkyellow--lighter--active);
@@ -2842,7 +2842,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-darkyellow--lighter {
-    --bg-color: hsla(var(--nok25-darkyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-darkyellow--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkyellow--lighter--hsl);
     --bg-color--hover: var(--nok25-darkyellow--lighter--hover);
     --bg-color--active: var(--nok25-darkyellow--lighter--active);
@@ -2900,7 +2900,7 @@
   }
 }
 .nok25-bg-paleyellow {
-  --bg-color: hsla(var(--nok25-paleyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-paleyellow--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-paleyellow--hsl);
   --bg-color--hover: var(--nok25-paleyellow--hover);
   --bg-color--active: var(--nok25-paleyellow--active);
@@ -2962,7 +2962,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-paleyellow {
-    --bg-color: hsla(var(--nok25-paleyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-paleyellow--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-paleyellow--hsl);
     --bg-color--hover: var(--nok25-paleyellow--hover);
     --bg-color--active: var(--nok25-paleyellow--active);
@@ -3020,7 +3020,7 @@
   }
 }
 .nok25-bg-paleyellow--darker {
-  --bg-color: hsla(var(--nok25-paleyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-paleyellow--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-paleyellow--darker--hsl);
   --bg-color--hover: var(--nok25-paleyellow--darker--hover);
   --bg-color--active: var(--nok25-paleyellow--darker--active);
@@ -3082,7 +3082,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-paleyellow--darker {
-    --bg-color: hsla(var(--nok25-paleyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-paleyellow--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-paleyellow--darker--hsl);
     --bg-color--hover: var(--nok25-paleyellow--darker--hover);
     --bg-color--active: var(--nok25-paleyellow--darker--active);
@@ -3140,7 +3140,7 @@
   }
 }
 .nok25-bg-paleyellow--lighter {
-  --bg-color: hsla(var(--nok25-paleyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-paleyellow--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-paleyellow--lighter--hsl);
   --bg-color--hover: var(--nok25-paleyellow--lighter--hover);
   --bg-color--active: var(--nok25-paleyellow--lighter--active);
@@ -3202,7 +3202,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-paleyellow--lighter {
-    --bg-color: hsla(var(--nok25-paleyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-paleyellow--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-paleyellow--lighter--hsl);
     --bg-color--hover: var(--nok25-paleyellow--lighter--hover);
     --bg-color--active: var(--nok25-paleyellow--lighter--active);
@@ -3260,7 +3260,7 @@
   }
 }
 .nok25-bg-green {
-  --bg-color: hsla(var(--nok25-green--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-green--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-green--hsl);
   --bg-color--hover: var(--nok25-green--hover);
   --bg-color--active: var(--nok25-green--active);
@@ -3322,7 +3322,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-green {
-    --bg-color: hsla(var(--nok25-green--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-green--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-green--hsl);
     --bg-color--hover: var(--nok25-green--hover);
     --bg-color--active: var(--nok25-green--active);
@@ -3380,7 +3380,7 @@
   }
 }
 .nok25-bg-green--darker {
-  --bg-color: hsla(var(--nok25-green--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-green--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-green--darker--hsl);
   --bg-color--hover: var(--nok25-green--darker--hover);
   --bg-color--active: var(--nok25-green--darker--active);
@@ -3442,7 +3442,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-green--darker {
-    --bg-color: hsla(var(--nok25-green--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-green--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-green--darker--hsl);
     --bg-color--hover: var(--nok25-green--darker--hover);
     --bg-color--active: var(--nok25-green--darker--active);
@@ -3500,7 +3500,7 @@
   }
 }
 .nok25-bg-green--lighter {
-  --bg-color: hsla(var(--nok25-green--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-green--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-green--lighter--hsl);
   --bg-color--hover: var(--nok25-green--lighter--hover);
   --bg-color--active: var(--nok25-green--lighter--active);
@@ -3562,7 +3562,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-green--lighter {
-    --bg-color: hsla(var(--nok25-green--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-green--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-green--lighter--hsl);
     --bg-color--hover: var(--nok25-green--lighter--hover);
     --bg-color--active: var(--nok25-green--lighter--active);
@@ -3620,7 +3620,7 @@
   }
 }
 .nok25-bg-greenyellow {
-  --bg-color: hsla(var(--nok25-greenyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-greenyellow--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-greenyellow--hsl);
   --bg-color--hover: var(--nok25-greenyellow--hover);
   --bg-color--active: var(--nok25-greenyellow--active);
@@ -3682,7 +3682,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-greenyellow {
-    --bg-color: hsla(var(--nok25-greenyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-greenyellow--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-greenyellow--hsl);
     --bg-color--hover: var(--nok25-greenyellow--hover);
     --bg-color--active: var(--nok25-greenyellow--active);
@@ -3740,7 +3740,7 @@
   }
 }
 .nok25-bg-greenyellow--darker {
-  --bg-color: hsla(var(--nok25-greenyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-greenyellow--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-greenyellow--darker--hsl);
   --bg-color--hover: var(--nok25-greenyellow--darker--hover);
   --bg-color--active: var(--nok25-greenyellow--darker--active);
@@ -3802,7 +3802,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-greenyellow--darker {
-    --bg-color: hsla(var(--nok25-greenyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-greenyellow--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-greenyellow--darker--hsl);
     --bg-color--hover: var(--nok25-greenyellow--darker--hover);
     --bg-color--active: var(--nok25-greenyellow--darker--active);
@@ -3860,7 +3860,7 @@
   }
 }
 .nok25-bg-greenyellow--lighter {
-  --bg-color: hsla(var(--nok25-greenyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-greenyellow--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-greenyellow--lighter--hsl);
   --bg-color--hover: var(--nok25-greenyellow--lighter--hover);
   --bg-color--active: var(--nok25-greenyellow--lighter--active);
@@ -3922,7 +3922,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-greenyellow--lighter {
-    --bg-color: hsla(var(--nok25-greenyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-greenyellow--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-greenyellow--lighter--hsl);
     --bg-color--hover: var(--nok25-greenyellow--lighter--hover);
     --bg-color--active: var(--nok25-greenyellow--lighter--active);
@@ -3980,7 +3980,7 @@
   }
 }
 .nok25-bg-greenblue {
-  --bg-color: hsla(var(--nok25-greenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-greenblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-greenblue--hsl);
   --bg-color--hover: var(--nok25-greenblue--hover);
   --bg-color--active: var(--nok25-greenblue--active);
@@ -4042,7 +4042,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-greenblue {
-    --bg-color: hsla(var(--nok25-greenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-greenblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-greenblue--hsl);
     --bg-color--hover: var(--nok25-greenblue--hover);
     --bg-color--active: var(--nok25-greenblue--active);
@@ -4100,7 +4100,7 @@
   }
 }
 .nok25-bg-greenblue--darker {
-  --bg-color: hsla(var(--nok25-greenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-greenblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-greenblue--darker--hsl);
   --bg-color--hover: var(--nok25-greenblue--darker--hover);
   --bg-color--active: var(--nok25-greenblue--darker--active);
@@ -4162,7 +4162,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-greenblue--darker {
-    --bg-color: hsla(var(--nok25-greenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-greenblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-greenblue--darker--hsl);
     --bg-color--hover: var(--nok25-greenblue--darker--hover);
     --bg-color--active: var(--nok25-greenblue--darker--active);
@@ -4220,7 +4220,7 @@
   }
 }
 .nok25-bg-greenblue--lighter {
-  --bg-color: hsla(var(--nok25-greenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-greenblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-greenblue--lighter--hsl);
   --bg-color--hover: var(--nok25-greenblue--lighter--hover);
   --bg-color--active: var(--nok25-greenblue--lighter--active);
@@ -4282,7 +4282,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-greenblue--lighter {
-    --bg-color: hsla(var(--nok25-greenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-greenblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-greenblue--lighter--hsl);
     --bg-color--hover: var(--nok25-greenblue--lighter--hover);
     --bg-color--active: var(--nok25-greenblue--lighter--active);
@@ -4340,7 +4340,7 @@
   }
 }
 .nok25-bg-lightgreenblue {
-  --bg-color: hsla(var(--nok25-lightgreenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-lightgreenblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-lightgreenblue--hsl);
   --bg-color--hover: var(--nok25-lightgreenblue--hover);
   --bg-color--active: var(--nok25-lightgreenblue--active);
@@ -4402,7 +4402,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-lightgreenblue {
-    --bg-color: hsla(var(--nok25-lightgreenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-lightgreenblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-lightgreenblue--hsl);
     --bg-color--hover: var(--nok25-lightgreenblue--hover);
     --bg-color--active: var(--nok25-lightgreenblue--active);
@@ -4460,7 +4460,7 @@
   }
 }
 .nok25-bg-lightgreenblue--darker {
-  --bg-color: hsla(var(--nok25-lightgreenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-lightgreenblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-lightgreenblue--darker--hsl);
   --bg-color--hover: var(--nok25-lightgreenblue--darker--hover);
   --bg-color--active: var(--nok25-lightgreenblue--darker--active);
@@ -4522,7 +4522,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-lightgreenblue--darker {
-    --bg-color: hsla(var(--nok25-lightgreenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-lightgreenblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-lightgreenblue--darker--hsl);
     --bg-color--hover: var(--nok25-lightgreenblue--darker--hover);
     --bg-color--active: var(--nok25-lightgreenblue--darker--active);
@@ -4580,7 +4580,7 @@
   }
 }
 .nok25-bg-lightgreenblue--lighter {
-  --bg-color: hsla(var(--nok25-lightgreenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-lightgreenblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-lightgreenblue--lighter--hsl);
   --bg-color--hover: var(--nok25-lightgreenblue--lighter--hover);
   --bg-color--active: var(--nok25-lightgreenblue--lighter--active);
@@ -4642,7 +4642,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-lightgreenblue--lighter {
-    --bg-color: hsla(var(--nok25-lightgreenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-lightgreenblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-lightgreenblue--lighter--hsl);
     --bg-color--hover: var(--nok25-lightgreenblue--lighter--hover);
     --bg-color--active: var(--nok25-lightgreenblue--lighter--active);
@@ -4700,7 +4700,7 @@
   }
 }
 .nok25-bg-error {
-  --bg-color: hsla(var(--nok25-error--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-error--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-error--hsl);
   --bg-color--hover: var(--nok25-error--hover);
   --bg-color--active: var(--nok25-error--active);
@@ -4762,7 +4762,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-error {
-    --bg-color: hsla(var(--nok25-error--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-error--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-error--hsl);
     --bg-color--hover: var(--nok25-error--hover);
     --bg-color--active: var(--nok25-error--active);
@@ -4820,7 +4820,7 @@
   }
 }
 .nok25-bg-error--darker {
-  --bg-color: hsla(var(--nok25-error--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-error--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-error--darker--hsl);
   --bg-color--hover: var(--nok25-error--darker--hover);
   --bg-color--active: var(--nok25-error--darker--active);
@@ -4882,7 +4882,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-error--darker {
-    --bg-color: hsla(var(--nok25-error--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-error--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-error--darker--hsl);
     --bg-color--hover: var(--nok25-error--darker--hover);
     --bg-color--active: var(--nok25-error--darker--active);
@@ -4940,7 +4940,7 @@
   }
 }
 .nok25-bg-error--lighter {
-  --bg-color: hsla(var(--nok25-error--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-error--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-error--lighter--hsl);
   --bg-color--hover: var(--nok25-error--lighter--hover);
   --bg-color--active: var(--nok25-error--lighter--active);
@@ -5002,7 +5002,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-error--lighter {
-    --bg-color: hsla(var(--nok25-error--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-error--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-error--lighter--hsl);
     --bg-color--hover: var(--nok25-error--lighter--hover);
     --bg-color--active: var(--nok25-error--lighter--active);
@@ -5060,7 +5060,7 @@
   }
 }
 .nok25-bg-body {
-  --bg-color: hsla(var(--nok25-body--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-body--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-body--hsl);
   --bg-color--hover: var(--nok25-body--hover);
   --bg-color--active: var(--nok25-body--active);
@@ -5122,7 +5122,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-body {
-    --bg-color: hsla(var(--nok25-body--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-body--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-body--hsl);
     --bg-color--hover: var(--nok25-body--hover);
     --bg-color--active: var(--nok25-body--active);
@@ -5180,7 +5180,7 @@
   }
 }
 .nok25-bg-body--darker {
-  --bg-color: hsla(var(--nok25-body--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-body--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-body--darker--hsl);
   --bg-color--hover: var(--nok25-body--darker--hover);
   --bg-color--active: var(--nok25-body--darker--active);
@@ -5242,7 +5242,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-body--darker {
-    --bg-color: hsla(var(--nok25-body--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-body--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-body--darker--hsl);
     --bg-color--hover: var(--nok25-body--darker--hover);
     --bg-color--active: var(--nok25-body--darker--active);
@@ -5300,7 +5300,7 @@
   }
 }
 .nok25-bg-body--lighter {
-  --bg-color: hsla(var(--nok25-body--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-body--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-body--lighter--hsl);
   --bg-color--hover: var(--nok25-body--lighter--hover);
   --bg-color--active: var(--nok25-body--lighter--active);
@@ -5362,7 +5362,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-body--lighter {
-    --bg-color: hsla(var(--nok25-body--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-body--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-body--lighter--hsl);
     --bg-color--hover: var(--nok25-body--lighter--hover);
     --bg-color--active: var(--nok25-body--lighter--active);
@@ -5420,7 +5420,7 @@
   }
 }
 .nok25-bg-white {
-  --bg-color: hsla(var(--nok25-white--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-white--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-white--hsl);
   --bg-color--hover: var(--nok25-white--hover);
   --bg-color--active: var(--nok25-white--active);
@@ -5482,7 +5482,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-white {
-    --bg-color: hsla(var(--nok25-white--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-white--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-white--hsl);
     --bg-color--hover: var(--nok25-white--hover);
     --bg-color--active: var(--nok25-white--active);
@@ -5540,7 +5540,7 @@
   }
 }
 .nok25-bg-white--darker {
-  --bg-color: hsla(var(--nok25-white--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-white--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-white--darker--hsl);
   --bg-color--hover: var(--nok25-white--darker--hover);
   --bg-color--active: var(--nok25-white--darker--active);
@@ -5602,7 +5602,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-white--darker {
-    --bg-color: hsla(var(--nok25-white--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-white--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-white--darker--hsl);
     --bg-color--hover: var(--nok25-white--darker--hover);
     --bg-color--active: var(--nok25-white--darker--active);
@@ -5660,7 +5660,7 @@
   }
 }
 .nok25-bg-white--lighter {
-  --bg-color: hsla(var(--nok25-white--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-white--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-white--lighter--hsl);
   --bg-color--hover: var(--nok25-white--lighter--hover);
   --bg-color--active: var(--nok25-white--lighter--active);
@@ -5722,7 +5722,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-white--lighter {
-    --bg-color: hsla(var(--nok25-white--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-white--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-white--lighter--hsl);
     --bg-color--hover: var(--nok25-white--lighter--hover);
     --bg-color--active: var(--nok25-white--lighter--active);
@@ -5780,7 +5780,7 @@
   }
 }
 .nok25-bg-black {
-  --bg-color: hsla(var(--nok25-black--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-black--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-black--hsl);
   --bg-color--hover: var(--nok25-black--hover);
   --bg-color--active: var(--nok25-black--active);
@@ -5842,7 +5842,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-black {
-    --bg-color: hsla(var(--nok25-black--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-black--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-black--hsl);
     --bg-color--hover: var(--nok25-black--hover);
     --bg-color--active: var(--nok25-black--active);
@@ -5900,7 +5900,7 @@
   }
 }
 .nok25-bg-black--darker {
-  --bg-color: hsla(var(--nok25-black--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-black--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-black--darker--hsl);
   --bg-color--hover: var(--nok25-black--darker--hover);
   --bg-color--active: var(--nok25-black--darker--active);
@@ -5962,7 +5962,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-black--darker {
-    --bg-color: hsla(var(--nok25-black--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-black--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-black--darker--hsl);
     --bg-color--hover: var(--nok25-black--darker--hover);
     --bg-color--active: var(--nok25-black--darker--active);
@@ -6020,7 +6020,7 @@
   }
 }
 .nok25-bg-black--lighter {
-  --bg-color: hsla(var(--nok25-black--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--nok25-black--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--nok25-black--lighter--hsl);
   --bg-color--hover: var(--nok25-black--lighter--hover);
   --bg-color--active: var(--nok25-black--lighter--active);
@@ -6082,7 +6082,7 @@
 
 @media (prefers-color-scheme: dark) {
   .nok25-dark-bg-black--lighter {
-    --bg-color: hsla(var(--nok25-black--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --bg-color: hsla(var(--nok25-black--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-black--lighter--hsl);
     --bg-color--hover: var(--nok25-black--lighter--hover);
     --bg-color--active: var(--nok25-black--lighter--active);
@@ -6152,6 +6152,7 @@
 @media (prefers-reduced-transparency) {
   :root {
     --global-color-alpha: 1 !important;
+    --global-bg-color-alpha: 1 !important;
   }
 }
 /** Notes

@@ -7,7 +7,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../fonts/Realist/Realist-full.css" crossorigin="anonymous">
     <link rel="stylesheet" href="./color_tests.css?cache=<?= time();?>" crossorigin="anonymous">
     <link rel="stylesheet" href="./element_tests.css?cache=<?= time();?>" crossorigin="anonymous">
@@ -29,10 +29,26 @@
 </head>
 <body class="nok25-bg-body nok25-text-contrast">
 
+<nav class="nok25-horizontal-section nok25-bg-body nok25-text-darkerblue nok25-dark-text-white">
+    <div class="nok25-horizontal-section__inner nok25-nav">
+        <div>Review</div>
+        <div>Werken bij</div>
+        <div>Kennisbank</div>
+        <div>Mijn NOK</div>
+        <div>NOK App</div>
+        <div>+31 12345678</div>
+        <div>Zoek</div>
+        <div>NL</div>
+    </div>
+</nav>
+
 <section class="nok25-horizontal-section nok25-bg-body nok25-text-darkerblue nok25-dark-text-white">
     <div class="nok25-horizontal-section__inner nok25-hero">
 
         <article>
+            <h2 class="nok25-text-lightblue nok25-hero__pre-heading">
+                #1 Obesitas Kliniek van Nederland
+            </h2>
             <h1 class="nok25-horizontal-section__heading nok25-hero__heading">
                 Serieuze aanpak, gezond afvallen
             </h1>
@@ -49,19 +65,19 @@
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1065">
                 <defs>
                     <linearGradient id="a" x1="865.07" x2="1963.13" y1="1419.45" y2="-190.25" gradientTransform="rotate(-45 804.633 957.17)" gradientUnits="userSpaceOnUse">
-                        <stop offset="0" stop-color="hsla(var(--grad-1-2) / var(--global-color-alpha, var(--local-color-alpha, 1)))"></stop>
-                        <stop offset=".75" stop-color="hsla(var(--grad-1-1) / var(--global-color-alpha, var(--local-color-alpha, 1)))"></stop>
-                        <stop offset="1" stop-color="hsla(var(--grad-1-1) / var(--global-color-alpha, var(--local-color-alpha, 1)))"></stop>
+                        <stop offset="0" stop-color="hsla(var(--grad-1-2) / var(--local-color-alpha, 1))"></stop>
+                        <stop offset=".75" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
+                        <stop offset="1" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
                     </linearGradient>
                     <linearGradient id="b" x1="881.9" x2="1940.53" y1="1391.88" y2="-160.02" gradientTransform="rotate(-45 804.633 957.17)" gradientUnits="userSpaceOnUse">
-                        <stop offset="0" stop-color="hsla(var(--grad-1-2) / var(--global-color-alpha, var(--local-color-alpha, 1)))"></stop>
-                        <stop offset=".75" stop-color="hsla(var(--grad-1-1) / var(--global-color-alpha, var(--local-color-alpha, 1)))"></stop>
-                        <stop offset="1" stop-color="hsla(var(--grad-1-1) / var(--global-color-alpha, var(--local-color-alpha, 1)))"></stop>
+                        <stop offset="0" stop-color="hsla(var(--grad-1-2) / var(--local-color-alpha, 1))"></stop>
+                        <stop offset=".75" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
+                        <stop offset="1" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
                     </linearGradient>
                     <linearGradient id="c" x1="899.81" x2="1920.52" y1="1367.93" y2="-128.38" gradientTransform="rotate(-45 802.663 961.106)" gradientUnits="userSpaceOnUse">
-                        <stop offset="0" stop-color="hsla(var(--grad-1-2) / var(--global-color-alpha, var(--local-color-alpha, 1)))"></stop>
-                        <stop offset=".75" stop-color="hsla(var(--grad-1-1) / var(--global-color-alpha, var(--local-color-alpha, 1)))"></stop>
-                        <stop offset="1" stop-color="hsla(var(--grad-1-1) / var(--global-color-alpha, var(--local-color-alpha, 1)))"></stop>
+                        <stop offset="0" stop-color="hsla(var(--grad-1-2) / var(--local-color-alpha, 1))"></stop>
+                        <stop offset=".75" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
+                        <stop offset="1" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
                     </linearGradient>
                     <mask id="mask-path" maskUnits="userSpaceOnUse">
                         <!-- White background to reveal everything by default -->
@@ -83,7 +99,7 @@
                 </foreignObject>
                 <g class="st2">
                     <g id="a847a6d1-9c45-4359-9797-5a80bb44c069">
-                        <path id="d" fill="hsla(var(--base-layer) / var(--global-color-alpha, var(--local-color-alpha, 1)))" class="st1" d="M169.5,771.2C14.7,446.3,109.3,147.2,437.9-25.3,66,168.3-40.2,484.3,109.9,799.6c146.4,307.3,444.1,427.2,817.6,277.5-.8.2-1.6.5-2.3.7-328.9,126.9-605.8,8.3-755.7-306.6Z"/>
+                        <path id="d" fill="hsla(var(--base-layer) / var(--local-color-alpha, 1))" class="st1" d="M169.5,771.2C14.7,446.3,109.3,147.2,437.9-25.3,66,168.3-40.2,484.3,109.9,799.6c146.4,307.3,444.1,427.2,817.6,277.5-.8.2-1.6.5-2.3.7-328.9,126.9-605.8,8.3-755.7-306.6Z"/>
                         <path id="c" fill="url(#c)" class="st2" d="M169.5,771.2c150,314.9,426.9,433.5,755.7,306.6-1.5.4-3.1.9-4.6,1.3-283.7,102.4-538.8-15.4-691.6-336.2C69.6,408.2,152.8,125.8,438.5-25.6c-.2.1-.4.2-.6.3C109.3,147.2,14.7,446.3,169.5,771.2Z"/>
                         <path id="b" fill="url(#b)" class="st3" d="M288.6,714.5C124.5,370,196.3,104.5,438.9-25.8c-.2,0-.3.2-.5.2C152.8,125.8,69.6,408.2,229,742.9c152.8,320.8,407.9,438.7,691.6,336.2-3.5,1-7,1.9-10.4,2.7-237.5,73.8-467.8-44.6-621.6-367.3Z"/>
                         <path id="a" fill="url(#a)" class="st0" d="M288.6,714.5c153.7,322.8,384.1,441.1,621.6,367.3-203.1,49.5-414.5-84.3-562.1-394.3C184.6,344.2,237.2,80.5,449.5-31.3c-3.5,1.8-7.1,3.6-10.6,5.4C196.3,104.5,124.5,370,288.6,714.5Z"/>
@@ -93,6 +109,12 @@
 
         </figure>
 
+        <section class="nok25-bg-white--darker">
+            <div>Vergoed door zorgverzekeringen</div>
+            <div>Meer dan 30 jaar ervaring</div>
+            <div>Samenwerking met de beste ziekenhuizen</div>
+            <div><button class="nok25-button nok25-base-font nok25-bg-white nok25-text-darkerblue" tabindex="0">Vind een vestiging</button></div>
+        </section>
     </div>
 </section>
 

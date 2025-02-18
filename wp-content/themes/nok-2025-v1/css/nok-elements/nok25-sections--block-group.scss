@@ -9,7 +9,6 @@
 $component-name: #{nok-variables.$prefix}-block-group;
 
 .#{$component-name} {
-  @include nok-mixins.nok-font;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

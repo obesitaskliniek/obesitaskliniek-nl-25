@@ -9,6 +9,7 @@
 $component-name: #{nok-variables.$prefix}-button;
 
 .#{$component-name} {
+  --local-bg-color-alpha: 1;
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
@@ -17,8 +18,9 @@ $component-name: #{nok-variables.$prefix}-button;
   margin: 0;
   padding: calc(var(--nok25-padding-base, 1.5rem) / 2) var(--nok25-padding-base, 1.5rem);
 
+  @include nok-mixins.nok-text-font;
   font-weight: 500;
-  font-size: 1.2rem;
+  font-size: var(--nok25-font-size-buttons, 1.25rem);
   line-height: 1.5;
   text-decoration: none;
 
