@@ -1,1 +1,5 @@
 @use "nok-elements";
+
+body {
+  background: linear-gradient(180deg, var(--nok25-body--darker), hsla(var(--nok25-body--hsl)/1));
+}

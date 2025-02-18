@@ -18,7 +18,7 @@ $component-name: #{nok-variables.$prefix}-hero;
   overflow: hidden;
 
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 3fr 4fr;
   grid-template-rows: auto 1fr;
 
   article {
@@ -29,8 +29,6 @@ $component-name: #{nok-variables.$prefix}-hero;
     justify-content: center;
     align-items: flex-start;
     gap: var(--grid-gap, var(--global-grid-gap));
-    padding-right: var(--nok25-padding-base, 1.5rem);
-    padding-left: var(--nok25-padding-base, 1.5rem);
   }
 
   figure {
@@ -42,7 +40,7 @@ $component-name: #{nok-variables.$prefix}-hero;
     --base-layer: var(--nok25-body--darker--hsl);
     @media (prefers-color-scheme: dark) {
       --grad-1-1: var(--nok25-greenyellow--lighter--hsl);
-      --grad-1-2: var(--nok25-lightblue--hsl);
+      --grad-1-2: var(--nok25-lightblue--lighter--hsl);
       --base-layer: var(--nok25-darkerblue--darker--hsl);
     }
     linearGradient {
@@ -55,6 +53,17 @@ $component-name: #{nok-variables.$prefix}-hero;
       &#c {
         --local-color-alpha: 0.3;
       }
+    }
+    path#d {
+      --local-color-alpha: 0.4;
+    }
+    foreignObject img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      object-position: 40% 50%;
+      background-color: hsla(var(--nok25-green--hsl) / 0.5);
+
     }
   }
 
@@ -73,7 +82,6 @@ $component-name: #{nok-variables.$prefix}-hero;
   }
 
   section {
-    --local-bg-color-alpha: 0.5;
     grid-column: 1 / 3;
     grid-row: 2 / 3;
     align-self: end;
@@ -83,10 +91,15 @@ $component-name: #{nok-variables.$prefix}-hero;
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
 
-    backdrop-filter: blur(10px);
-    padding: var(--nok25-padding-base, 1.5rem);
+    padding-top: var(--nok25-padding-base, 1.5rem);
+    padding-bottom: var(--nok25-padding-base, 1.5rem);
+  }
+
+  article, section {
+    padding-right: var(--nok25-padding-section-sides, 1.5rem);
+    padding-left: var(--nok25-padding-section-sides, 1.5rem);
   }
 
 }

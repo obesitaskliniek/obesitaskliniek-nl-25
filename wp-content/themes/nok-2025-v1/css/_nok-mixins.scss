@@ -17,6 +17,10 @@
   font-style: normal;
 }
 
+@mixin nok-subtle-shadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 @mixin nok-btn-shadow-border {
   box-shadow: 0 0 0 0 hsla(0 0 0 / 0);
   &:hover, &:focus {
@@ -111,9 +115,9 @@
 
 @mixin nok-scrollbar-thin(
   $scrollbarHeight: 6px,
-  $scrollbarHandle: var(--nok25-white),
-  $scrollbarHandle_active: var(--nok25-white--lighter),
-  $scrollbarTrack: hsla(var(--nok25-white--hsl) / 0.25)
+  $scrollbarHandle: var(--nok25-body),
+  $scrollbarHandle_active: var(--nok25-body--lighter),
+  $scrollbarTrack: hsla(var(--nok25-body--hsl) / 0.25)
 ) {
   & {
     --scrollbar-height: #{$scrollbarHeight};
@@ -144,8 +148,8 @@
 
 @mixin make-section() {
   width: 100%;
-  padding-right: var(--nok25-padding-base, nok-variables.$padding-base);
-  padding-left: var(--nok25-padding-base, nok-variables.$padding-base);
+  padding-right: var(--nok25-padding-section-sides, (nok-variables.$padding-base * 2));
+  padding-left: var(--nok25-padding-section-sides, (nok-variables.$padding-base * 2));
   margin-right: auto;
   margin-left: auto;
 }

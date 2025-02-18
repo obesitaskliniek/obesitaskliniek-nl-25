@@ -26,7 +26,8 @@ $component-name: #{nok-variables.$prefix}-block-group;
     --grid-column-width: calc(
         (100% - (var(--grid-gap, 1) * (var(--grid-columns, 1) - 1))) / var(--grid-columns, 1)
     );
-    padding: calc(var(--grid-gap, var(--global-grid-gap)) * 2) 0;
+    padding-top: calc(var(--grid-gap, var(--global-grid-gap)) * 2);
+    padding-bottom: calc(var(--grid-gap, var(--global-grid-gap)) * 2);
     display: grid;
     gap: var(--grid-gap, var(--global-grid-gap));
     grid-template-columns: repeat(var(--grid-columns, 1), 1fr);
