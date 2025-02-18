@@ -29,21 +29,35 @@
 </head>
 <body class="nok25-bg-body nok25-text-contrast">
 
-<nav class="nok25-horizontal-section nok25-bg-body nok25-text-darkerblue nok25-dark-text-white">
-    <div class="nok25-horizontal-section__inner nok25-nav">
-        <div>Review</div>
-        <div>Werken bij</div>
-        <div>Kennisbank</div>
-        <div>Mijn NOK</div>
-        <div>NOK App</div>
-        <div>+31 12345678</div>
-        <div>Zoek</div>
-        <div>NL</div>
+<nav class="nok25-horizontal-section nok25-text-darkerblue nok25-dark-text-white nok25-sticky nok25-nav">
+    <div class="nok25-horizontal-section--stretched nok25-bg-body nok25-bg-blur nok25-nav-top-row nok25-z-1">
+        <div class="nok25-horizontal-section__inner nok25-nav-top">
+            <div>Review</div>
+            <div>Werken bij</div>
+            <div>Kennisbank</div>
+            <div>Mijn NOK</div>
+            <div>NOK App</div>
+            <div>+31 12345678</div>
+            <div>Zoek</div>
+            <div>NL</div>
+        </div>
+    </div>
+    <div class="nok25-horizontal-section__inner nok25-nav-menubar-row nok25-z-2">
+        <div class="nok25-bg-white nok25-nav-menubar">
+            <div>
+                <img src="https://assets.obesitaskliniek.nl/files/logos/NOK_Logo_-_Kleur.svg" alt="NOK Logo">
+            </div>
+            <div>Behandelingen</div>
+            <div>Over NOK</div>
+            <div>Agenda</div>
+            <div>Verwijzers</div>
+            <div><button class="nok25-button nok25-base-font nok25-bg-yellow" tabindex="0">Gratis voorlichtingsavond</button></div>
+        </div>
     </div>
 </nav>
 
-<section class="nok25-horizontal-section nok25-bg-body nok25-text-darkerblue nok25-dark-text-white">
-    <div class="nok25-horizontal-section__inner nok25-hero">
+<section class="nok25-horizontal-section nok25-text-darkerblue nok25-dark-text-white">
+    <div class="nok25-horizontal-section__inner nok25-bg-white nok25-dark-bg-darkerblue nok25-bg-alpha-6 nok25-hero">
 
         <article>
             <h2 class="nok25-text-lightblue nok25-hero__pre-heading">
@@ -88,10 +102,11 @@
                     </mask>
                 </defs>
                 <foreignObject width="100%" height="100%" mask="url(#mask-path)">
-                    <img src="https://assets.obesitaskliniek.nl/files/2022_fotos/11-20220616%20-%20Locatie%20Gouda%20-%2030cm%20HR-36:400x0-25-0-0-center-0.jpg" width="1920" height="1281" srcset="https://assets.obesitaskliniek.nl/files/2022_fotos/11-20220616%20-%20Locatie%20Gouda%20-%2030cm%20HR-36:1920x0-65-0-0-center-0.jpg 1920w,
-                                 https://assets.obesitaskliniek.nl/files/2022_fotos/11-20220616%20-%20Locatie%20Gouda%20-%2030cm%20HR-36:768x0-65-0-0-center-0.jpg 768w,
-                                 https://assets.obesitaskliniek.nl/files/2022_fotos/11-20220616%20-%20Locatie%20Gouda%20-%2030cm%20HR-36:320x0-65-0-0-center-0.jpg 320w,
-                                 https://assets.obesitaskliniek.nl/files/2022_fotos/11-20220616%20-%20Locatie%20Gouda%20-%2030cm%20HR-36:150x0-65-0-0-center-0.jpg 150w" sizes="(max-width: 575px) 100vw,
+                    <?php $testimg = 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%20' . str_pad(rand(1,59),2,0,STR_PAD_LEFT); ?>
+                    <img src="<?= $testimg;?>:400x0-25-0-0-center-0.jpg" width="1920" height="1281" srcset="<?= $testimg;?>:1920x0-65-0-0-center-0.jpg 1920w,
+                                 <?= $testimg;?>:768x0-65-0-0-center-0.jpg 768w,
+                                 <?= $testimg;?>:320x0-65-0-0-center-0.jpg 320w,
+                                 <?= $testimg;?>:150x0-65-0-0-center-0.jpg 150w" sizes="(max-width: 575px) 100vw,
                                      (min-width: 575px) 75vw,
                                      (min-width: 768px) 84vw,
                                      (min-width: 996px) 84vw,
@@ -109,7 +124,7 @@
 
         </figure>
 
-        <section class="nok25-bg-white--darker">
+        <section class="nok25-bg-body--lighter nok25-bg-blur">
             <div>Vergoed door zorgverzekeringen</div>
             <div>Meer dan 30 jaar ervaring</div>
             <div>Samenwerking met de beste ziekenhuizen</div>
@@ -117,35 +132,6 @@
         </section>
     </div>
 </section>
-
-<div class="tests">
-    <div data-stylegroup=".nok25-button" class="nok25-button-tests">
-        <button class="nok25-button nok25-base-font nok25-bg-white nok25-text-darkerblue" tabindex="0">.nok25-button</button>
-        <button class="nok25-button nok25-base-font nok25-bg-darkblue" tabindex="0">.nok25-button</button>
-        <button class="nok25-button nok25-base-font nok25-bg-lightblue" tabindex="0">.nok25-button</button>
-        <button class="nok25-button nok25-base-font nok25-bg-yellow" tabindex="0">.nok25-button</button>
-        <button class="nok25-button nok25-base-font nok25-bg-yellow disabled" tabindex="0">.nok25-button</button>
-        <button class="nok25-button nok25-base-font nok25-bg-green--lighter" tabindex="0">.nok25-button</button>
-        <a role="button" href="#" class="nok25-button nok25-base-font nok25-bg-green--lighter" tabindex="0">.nok25-button</a>
-    </div>
-    <div data-stylegroup=".nok25-hyperlink" class="nok25-hyperlink-tests">
-        <div class="testcard nok25-text-darkblue nok25-base-font">
-            <p>Paragraph text with <a class="nok25-hyperlink" href="#">.nok25-hyperlink</a> inside.</p>
-        </div>
-        <div class="testcard nok25-text-greenblue--lighter nok25-base-font">
-            <p>Paragraph text with <a class="nok25-hyperlink" href="#">.nok25-hyperlink</a> inside.</p>
-        </div>
-        <div class="testcard">
-            <button class="nok25-button nok25-base-font nok25-bg-darkblue" tabindex="0">.nok25-button</button>
-        </div>
-        <div class="testcard nok25-text-darkblue nok25-base-font">
-            <a class="nok25-hyperlink" href="#">.nok25-hyperlink</a>
-        </div>
-        <div class="testcard nok25-text-greenblue--lighter nok25-base-font">
-            <a class="nok25-hyperlink" href="#">.nok25-hyperlink</a>
-        </div>
-    </div>
-</div>
 
 <section class="nok25-horizontal-section nok25-bg-darkerblue nok25-text-contrast">
     <div class="nok25-horizontal-section__inner nok25-block-group">
@@ -182,6 +168,35 @@
         </div>
     </div>
 </section>
+
+<div class="tests">
+    <div data-stylegroup=".nok25-button" class="nok25-button-tests">
+        <button class="nok25-button nok25-base-font nok25-bg-white nok25-text-darkerblue" tabindex="0">.nok25-button</button>
+        <button class="nok25-button nok25-base-font nok25-bg-darkblue" tabindex="0">.nok25-button</button>
+        <button class="nok25-button nok25-base-font nok25-bg-lightblue" tabindex="0">.nok25-button</button>
+        <button class="nok25-button nok25-base-font nok25-bg-yellow" tabindex="0">.nok25-button</button>
+        <button class="nok25-button nok25-base-font nok25-bg-yellow disabled" tabindex="0">.nok25-button</button>
+        <button class="nok25-button nok25-base-font nok25-bg-green--lighter" tabindex="0">.nok25-button</button>
+        <a role="button" href="#" class="nok25-button nok25-base-font nok25-bg-green--lighter" tabindex="0">.nok25-button</a>
+    </div>
+    <div data-stylegroup=".nok25-hyperlink" class="nok25-hyperlink-tests">
+        <div class="testcard nok25-text-darkblue nok25-base-font">
+            <p>Paragraph text with <a class="nok25-hyperlink" href="#">.nok25-hyperlink</a> inside.</p>
+        </div>
+        <div class="testcard nok25-text-greenblue--lighter nok25-base-font">
+            <p>Paragraph text with <a class="nok25-hyperlink" href="#">.nok25-hyperlink</a> inside.</p>
+        </div>
+        <div class="testcard">
+            <button class="nok25-button nok25-base-font nok25-bg-darkblue" tabindex="0">.nok25-button</button>
+        </div>
+        <div class="testcard nok25-text-darkblue nok25-base-font">
+            <a class="nok25-hyperlink" href="#">.nok25-hyperlink</a>
+        </div>
+        <div class="testcard nok25-text-greenblue--lighter nok25-base-font">
+            <a class="nok25-hyperlink" href="#">.nok25-hyperlink</a>
+        </div>
+    </div>
+</div>
 
 <script>
 

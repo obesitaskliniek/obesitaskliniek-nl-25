@@ -15,7 +15,7 @@ $nok-base-colors: (
 	'darkblue':       #14477c,
 	'darkerblue':     #00205b,
 	'darkestblue':    #00132f,
-	'yellow':         #f5d22b,
+	'yellow': #f5cd2b,
 	'darkyellow':     #eab10d,
 	'paleyellow':     #D5D59D,
 	'green':          #54b085,
@@ -24,7 +24,7 @@ $nok-base-colors: (
 	'lightgreenblue': #93e1f4,
     'error':          #d82510,
     'body':           $white,
-	'white':          $white,
+	'white':          #FFF,
 	'black':          $black,
 );
 
@@ -156,18 +156,7 @@ $nok-dark-contrast-overrides: (
       $color+'--lighter' :  saturate(lighten($value, 10%), 20%)
   );
   @each $color, $value in $sub_map {
-    .#{nok-variables.$prefix}-bg-#{$color} {
-      @include bg-colors(nok-variables.$prefix, $color, $value);
-    }
-    .#{nok-variables.$prefix}-text-#{$color} {
-      @include text-colors(nok-variables.$prefix, $color, $value);
-    }
-    .#{nok-variables.$prefix}-border-#{$color} {
-      @include border-colors(nok-variables.$prefix, $color, $value);
-    }
-    .#{nok-variables.$prefix}-input-#{$color} {
-      @include input-colors(nok-variables.$prefix, $color, $value);
-    }
+    //todo: fix Specificity here. Ask GPT
     @media (prefers-color-scheme: dark) {
       .#{nok-variables.$prefix}-dark-bg-#{$color} {
         @include bg-colors(nok-variables.$prefix, $color, $value);
@@ -181,6 +170,18 @@ $nok-dark-contrast-overrides: (
       .#{nok-variables.$prefix}-dark-input-#{$color} {
         @include input-colors(nok-variables.$prefix, $color, $value);
       }
+    }
+    .#{nok-variables.$prefix}-bg-#{$color} {
+      @include bg-colors(nok-variables.$prefix, $color, $value);
+    }
+    .#{nok-variables.$prefix}-text-#{$color} {
+      @include text-colors(nok-variables.$prefix, $color, $value);
+    }
+    .#{nok-variables.$prefix}-border-#{$color} {
+      @include border-colors(nok-variables.$prefix, $color, $value);
+    }
+    .#{nok-variables.$prefix}-input-#{$color} {
+      @include input-colors(nok-variables.$prefix, $color, $value);
     }
   }
 }

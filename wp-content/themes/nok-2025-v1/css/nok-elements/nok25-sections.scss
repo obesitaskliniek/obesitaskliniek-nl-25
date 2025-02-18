@@ -17,6 +17,23 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
 
   @include nok-mixins.nok-text-font;
 
+  @at-root section.#{$component-name} + section.#{$component-name} {
+    margin-top: calc(var(--nok25-padding-base, 1.5rem) * 2);
+  }
+
+  &.#{nok-variables.$prefix}-sticky {
+    position: sticky;
+    top: 0;
+    z-index: nok-variables.$z-stack-top;
+    &--fixed {
+      position: fixed;
+    }
+  }
+
+  &--stretched {
+    align-self: stretch;
+  }
+
   &__inner {
     &, &-fluid {
       @include nok-mixins.make-section();
@@ -45,6 +62,7 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
     }
   }
 }
+
 
 h1.#{$component-name}__heading {
   @include nok-rfs.rfs(3.25rem, font-size);

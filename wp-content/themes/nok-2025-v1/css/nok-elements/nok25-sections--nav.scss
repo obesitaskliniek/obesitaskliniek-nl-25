@@ -7,19 +7,60 @@
  * hero unit
  */
 
-$component-name: #{nok-variables.$prefix}-nav;
+@mixin menu-flex($gap) {
+  --grid-gap: #{$gap};
 
-.#{$component-name} {
-  --grid-gap: var(--nok25-padding-base, var(--global-grid-gap, 1.5rem));
-  @include nok-mixins.nok-text-font;
-  @include nok-rfs.rfs(1.1rem, font-size);
-
-  display: grid;
-  grid-auto-flow: column;
-  grid-template-columns: 1fr auto;
-  grid-auto-columns: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
 
   gap: var(--grid-gap, var(--global-grid-gap));
-  padding-top: var(--nok25-padding-base, 1.5rem);
-  padding-bottom: var(--nok25-padding-base, 1.5rem);
+
+  padding-top: calc(var(--grid-gap, var(--global-grid-gap)) * .75);
+  padding-bottom: calc(var(--grid-gap, var(--global-grid-gap)) * .75);
+
+  > * {
+    flex-shrink: 0;
+    &:first-child {
+      flex-basis: 100%;
+      flex-shrink: 1;
+    }
+  }
+}
+
+$component-name: #{nok-variables.$prefix}-nav;
+
+.#{$component-name}-top {
+  @include nok-mixins.nok-text-font;
+  @include nok-rfs.rfs(1rem, font-size);
+  font-weight: 300;
+
+  @include menu-flex(var(--nok25-padding-base, var(--global-grid-gap, 1.5rem)));
+
+  &-row {
+    padding-bottom: 2rem;
+  }
+}
+
+.#{$component-name}-menubar {
+  @include menu-flex(var(--nok25-padding-base, var(--global-grid-gap, 1.5rem)));
+  @include nok-mixins.nok-border-radius('large');
+  @include nok-mixins.nok-subtle-shadow;
+  @include nok-rfs.rfs(1.2rem, font-size);
+
+  padding-left: var(--nok25-padding-base, 1.5rem);
+  padding-right: var(--nok25-padding-base, 1.5rem);
+
+  img {
+    height: 3.5rem;
+    @include nok-rfs.rfs(3.5rem, height);
+    width: auto;
+  }
+
+  &-row {
+    position: absolute;
+    top: 4rem;
+  }
 }

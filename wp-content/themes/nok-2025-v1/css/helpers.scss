@@ -46,3 +46,34 @@
 .fw-bold {
   font-weight: 600;
 }
+
+.#{nok-variables.$prefix}-bg-blur {
+  backdrop-filter: blur(10px);
+}
+
+/* Alpha classes */
+
+$alphas: (
+    "alpha-1": 1,
+    "bg-alpha-1": 1,
+);
+@for $i from 0 through 9 {
+  $value: ($i / 10);
+  .#{nok-variables.$prefix}-alpha-#{$i} {
+    --local-color-alpha: #{$value};
+  }
+  .#{nok-variables.$prefix}-bg-alpha-#{$i} {
+    --local-bg-color-alpha: #{$value};
+  }
+}
+
+/* Stacking */
+
+@for $i from 1 through 9 {
+  .#{nok-variables.$prefix}-z-#{$i} {
+    z-index: #{$i};
+  }
+}
+.#{nok-variables.$prefix}-z-top {
+  z-index: nok-variables.$z-stack-top;
+}

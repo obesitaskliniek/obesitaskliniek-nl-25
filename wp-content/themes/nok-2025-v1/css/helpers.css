@@ -4,6 +4,7 @@
   --nok25-default-line-height: 1.5;
   --nok25-default-heading-line-height: 1.25;
   --nok25-padding-base: 1.5rem;
+  --nok25-padding-section-sides: 4.5rem;
   --nok25-default-border-radius: 0.4rem;
   --nok25-default-border-radius--large: 1rem;
   --nok25-font-size-buttons: 1.25rem;
@@ -60,6 +61,133 @@
 }
 .fw-bold {
   font-weight: 600;
+}
+
+.nok25-bg-blur {
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+}
+
+/* Alpha classes */
+.nok25-alpha-0 {
+  --local-color-alpha: 0;
+}
+
+.nok25-bg-alpha-0 {
+  --local-bg-color-alpha: 0;
+}
+
+.nok25-alpha-1 {
+  --local-color-alpha: 0.1;
+}
+
+.nok25-bg-alpha-1 {
+  --local-bg-color-alpha: 0.1;
+}
+
+.nok25-alpha-2 {
+  --local-color-alpha: 0.2;
+}
+
+.nok25-bg-alpha-2 {
+  --local-bg-color-alpha: 0.2;
+}
+
+.nok25-alpha-3 {
+  --local-color-alpha: 0.3;
+}
+
+.nok25-bg-alpha-3 {
+  --local-bg-color-alpha: 0.3;
+}
+
+.nok25-alpha-4 {
+  --local-color-alpha: 0.4;
+}
+
+.nok25-bg-alpha-4 {
+  --local-bg-color-alpha: 0.4;
+}
+
+.nok25-alpha-5 {
+  --local-color-alpha: 0.5;
+}
+
+.nok25-bg-alpha-5 {
+  --local-bg-color-alpha: 0.5;
+}
+
+.nok25-alpha-6 {
+  --local-color-alpha: 0.6;
+}
+
+.nok25-bg-alpha-6 {
+  --local-bg-color-alpha: 0.6;
+}
+
+.nok25-alpha-7 {
+  --local-color-alpha: 0.7;
+}
+
+.nok25-bg-alpha-7 {
+  --local-bg-color-alpha: 0.7;
+}
+
+.nok25-alpha-8 {
+  --local-color-alpha: 0.8;
+}
+
+.nok25-bg-alpha-8 {
+  --local-bg-color-alpha: 0.8;
+}
+
+.nok25-alpha-9 {
+  --local-color-alpha: 0.9;
+}
+
+.nok25-bg-alpha-9 {
+  --local-bg-color-alpha: 0.9;
+}
+
+/* Stacking */
+.nok25-z-1 {
+  z-index: 1;
+}
+
+.nok25-z-2 {
+  z-index: 2;
+}
+
+.nok25-z-3 {
+  z-index: 3;
+}
+
+.nok25-z-4 {
+  z-index: 4;
+}
+
+.nok25-z-5 {
+  z-index: 5;
+}
+
+.nok25-z-6 {
+  z-index: 6;
+}
+
+.nok25-z-7 {
+  z-index: 7;
+}
+
+.nok25-z-8 {
+  z-index: 8;
+}
+
+.nok25-z-9 {
+  z-index: 9;
+}
+
+.nok25-z-top {
+  z-index: 100;
 }
 
 /*# sourceMappingURL=helpers.css.map */
