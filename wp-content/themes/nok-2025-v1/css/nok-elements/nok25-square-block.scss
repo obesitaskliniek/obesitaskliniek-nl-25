@@ -23,8 +23,6 @@ $component-name: #{nok-variables.$prefix}-square-block;
   display: grid;
   grid-template-rows: auto auto 1fr auto;
 
-  @include nok-mixins.nok-font;
-
   gap: (nok-variables.$padding-base);
   padding: (nok-variables.$padding-base * 2);
   @include nok-mixins.nok-border-radius('large');

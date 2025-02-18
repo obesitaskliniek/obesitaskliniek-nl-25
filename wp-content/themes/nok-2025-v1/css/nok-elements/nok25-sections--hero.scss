@@ -11,16 +11,18 @@ $component-name: #{nok-variables.$prefix}-hero;
 
 .#{$component-name} {
   --grid-gap: var(--nok25-padding-base, var(--global-grid-gap, 1.5rem));
-  @include nok-mixins.nok-font;
   position: relative;
-  display: grid;
-  grid-template-columns: 2fr 3fr;
   @include nok-mixins.nok-border-radius('x-large', 'bottom');
   padding-right: 0;
   padding-left: 0;
   overflow: hidden;
 
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+
   article {
+    z-index: 1;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -32,6 +34,7 @@ $component-name: #{nok-variables.$prefix}-hero;
   }
 
   figure {
+    z-index: 1;
     overflow: hidden;
     margin: 0;
     --grad-1-1: var(--nok25-greenblue--hsl);
@@ -55,6 +58,37 @@ $component-name: #{nok-variables.$prefix}-hero;
     }
   }
 
+  article, figure {
+    grid-row: 1 / 3;
+    z-index: 1;
+    position: relative;
+  }
+
+  article {
+    grid-column: 1 / 2;
+  }
+
+  figure {
+    grid-column: 2 / 3;
+  }
+
+  section {
+    --local-bg-color-alpha: 0.5;
+    grid-column: 1 / 3;
+    grid-row: 2 / 3;
+    align-self: end;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-evenly;
+
+    backdrop-filter: blur(10px);
+    padding: var(--nok25-padding-base, 1.5rem);
+  }
+
 }
 
 /* Typography */
@@ -62,4 +96,7 @@ h1.#{$component-name}__heading {
   font-weight: 500;
   @include nok-rfs.rfs(4.4rem, font-size);
   @include nok-rfs.rfs(1.05, line-height);
+}
+.#{$component-name}__pre-heading {
+  @include nok-rfs.rfs(1.25rem, font-size);
 }

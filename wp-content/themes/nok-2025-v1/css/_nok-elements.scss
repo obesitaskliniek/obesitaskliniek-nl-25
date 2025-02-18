@@ -3,10 +3,23 @@
 @use "nok-mixins";
 @use "nok-reboot";
 @use "./nok-elements/nok25-sections.scss";
-@use "./nok-elements/nok25-hero.scss";
+@use "nok-elements/nok25-sections--nav";
+@use "nok-elements/nok25-sections--hero";
 @use "./nok-elements/nok25-buttons.scss";
 @use "./nok-elements/nok25-square-block.scss";
-@use "./nok-elements/nok25-block-group.scss";
+@use "nok-elements/nok25-sections--block-group";
+
+//Todo: move to typography sheet
+
+body {
+  @include nok-mixins.nok-text-font;
+}
+@for $i from 1 through 6 {
+  h#{$i} {
+    @include nok-mixins.nok-font;
+  }
+}
+
 
 /*
 //BEM example

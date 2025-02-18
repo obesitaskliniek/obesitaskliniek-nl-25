@@ -95,7 +95,7 @@ $nok-dark-contrast-overrides: (
 
 
 @mixin bg-colors($prefix, $colorName, $colorValue) {
-  --bg-color: hsla(var(--#{$prefix}-#{$colorName}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --bg-color: hsla(var(--#{$prefix}-#{$colorName}--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
   --bg-color-hsl: var(--#{$prefix}-#{$colorName}--hsl);
   --bg-color--hover: var(--#{$prefix}-#{$colorName}--hover);
   --bg-color--active: var(--#{$prefix}-#{$colorName}--active);
@@ -198,6 +198,7 @@ $nok-dark-contrast-overrides: (
 @media (prefers-reduced-transparency) {
   :root {
     --global-color-alpha: 1 !important;
+    --global-bg-color-alpha: 1 !important;
   }
 }
 

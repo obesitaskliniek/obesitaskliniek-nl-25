@@ -7,8 +7,11 @@
   }
 }
 
-.#{nok-variables.$prefix}-base-font {
+.#{nok-variables.$prefix}-heading-font {
   @include nok-mixins.nok-font;
+}
+.#{nok-variables.$prefix}-text-font {
+  @include nok-mixins.nok-text-font;
 }
 
 .#{nok-variables.$prefix}-stretched-link {

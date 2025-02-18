@@ -1,10 +1,20 @@
 @use "nok-variables";
 
 @mixin nok-font {
-  font-family: "Realist", sans-serif;
+  font-family: nok-variables.$default-font-family;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizelegibility;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+@mixin nok-text-font {
+  font-family: nok-variables.$text-font-family;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  text-rendering: optimizelegibility;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 @mixin nok-btn-shadow-border {
@@ -73,6 +83,7 @@
   );
   -webkit-tap-highlight-color: transparent;
 
+  font-size: var(--nok25-font-size-buttons, 1.25rem);
   text-decoration: none;
   padding: calc(2 * var(--underline-height)) 0;
 
