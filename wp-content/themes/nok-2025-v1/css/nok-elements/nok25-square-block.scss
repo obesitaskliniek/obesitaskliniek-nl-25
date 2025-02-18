@@ -27,7 +27,7 @@ $component-name: #{nok-variables.$prefix}-square-block;
 
   gap: (nok-variables.$padding-base);
   padding: (nok-variables.$padding-base * 2);
-  @include nok-mixins.nok-border-radius--large;
+  @include nok-mixins.nok-border-radius('large');
   line-height: var(--nok25-default-line-height, 1.25);
 
   padding: calc(var(--nok25-padding-base, 1.5rem) * 2);

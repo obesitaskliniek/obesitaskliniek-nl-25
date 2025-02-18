@@ -14,12 +14,46 @@
   }
 }
 
-@mixin nok-border-radius {
-  border-radius: var(--nok25-default-border-radius, 0.4rem);
+// Base mixin with extended size options
+@mixin nok-border-radius($size: 'default', $position: 'all') {
+  // Determine border-radius based on size
+  $radius: var(--nok25-default-border-radius, 0.4rem);
+
+  @if $size == 'large' {
+    $radius: var(--nok25-default-border-radius--large, 1rem);
+  } @else if $size == 'x-large' {
+    $radius: calc(var(--nok25-default-border-radius--large, 1rem) * 2.5);
+  } @else if $size == 'xx-large' {
+    $radius: calc(var(--nok25-default-border-radius--xx-large, 1rem) * 4);
+  }
+
+  // Apply border-radius based on position
+  @if $position == 'all' {
+    border-radius: $radius;
+  } @else if $position == 'bottom' {
+    border-bottom-left-radius: $radius;
+    border-bottom-right-radius: $radius;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  } @else if $position == 'top' {
+    border-top-left-radius: $radius;
+    border-top-right-radius: $radius;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  } @else if $position == 'left' {
+    border-top-left-radius: $radius;
+    border-bottom-left-radius: $radius;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  } @else if $position == 'right' {
+    border-top-right-radius: $radius;
+    border-bottom-right-radius: $radius;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
 }
-@mixin nok-border-radius--large {
-  border-radius: var(--nok25-default-border-radius--large, 1rem)
-}
+
+
 
 @mixin nok-focus-ring {
   outline: 0 none;
