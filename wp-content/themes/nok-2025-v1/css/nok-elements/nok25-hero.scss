@@ -15,6 +15,10 @@ $component-name: #{nok-variables.$prefix}-hero;
   position: relative;
   display: grid;
   grid-template-columns: 2fr 3fr;
+  @include nok-mixins.nok-border-radius('x-large', 'bottom');
+  padding-right: 0;
+  padding-left: 0;
+  overflow: hidden;
 
   article {
     display: flex;
@@ -23,6 +27,8 @@ $component-name: #{nok-variables.$prefix}-hero;
     justify-content: center;
     align-items: flex-start;
     gap: var(--grid-gap, var(--global-grid-gap));
+    padding-right: var(--nok25-padding-base, 1.5rem);
+    padding-left: var(--nok25-padding-base, 1.5rem);
   }
 
   figure {

@@ -28,3 +28,54 @@
     }
   }
 }
+
+// Function to convert hex to RGB
+@function hex-to-rgb($color) {
+  @return red($color), green($color), blue($color);
+}
+
+// Function to calculate relative luminance for an RGB color
+@function luminance($color) {
+  $rgb: hex-to-rgb($color);
+  $r: nth($rgb, 1) / 255;
+  $g: nth($rgb, 2) / 255;
+  $b: nth($rgb, 3) / 255;
+
+  // Adjust each channel according to WCAG algorithm
+  @each $channel in ($r, $g, $b) {
+    $adjusted: if($channel <= 0.03928, $channel / 12.92, pow(($channel + 0.055) / 1.055, 2.4));
+    @if $channel == $r {
+      $r: $adjusted;
+    } @else if $channel == $g {
+      $g: $adjusted;
+    } @else {
+      $b: $adjusted;
+    }
+  }
+
+  // Calculate the relative luminance
+  @return (0.2126 * $r) + (0.7152 * $g) + (0.0722 * $b);
+}
+
+// Function to calculate the contrast ratio
+@function contrast-ratio($color1, $color2) {
+  $l1: luminance($color1);
+  $l2: luminance($color2);
+  @if $l1 > $l2 {
+    @return ($l1 + 0.05) / ($l2 + 0.05);
+  } @else {
+    @return ($l2 + 0.05) / ($l1 + 0.05);
+  }
+}
+
+// Main function to get the best contrasting color
+@function get-contrast-color($color, $color-contrast-light: #ffffff, $color-contrast-dark: #000000) {
+  $contrast-light: contrast-ratio($color, $color-contrast-light);
+  $contrast-dark: contrast-ratio($color, $color-contrast-dark);
+
+  @if $contrast-light > $contrast-dark {
+    @return $color-contrast-light;
+  } @else {
+    @return $color-contrast-dark;
+  }
+}
