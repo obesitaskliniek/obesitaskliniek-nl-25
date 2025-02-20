@@ -6,7 +6,7 @@ $padding-base: 1.5rem;
 $default-border-radius: math.div(math.round((math.div($padding-base, 4)) * 10), 10);
 $default-border-radius--large: math.round($default-border-radius * 2);
 $default-font-family: "Realist", sans-serif;
-$text-font-family: "Inter", serif;;
+$text-font-family: "Inter", serif;
 $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
 
 $default-line-height: 1.5;

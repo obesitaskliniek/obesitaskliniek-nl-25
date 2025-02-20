@@ -32,35 +32,41 @@
 
 $component-name: #{nok-variables.$prefix}-nav;
 
-.#{$component-name}-top {
-  @include nok-mixins.nok-text-font;
-  @include nok-rfs.rfs(1rem, font-size);
-  font-weight: 300;
+.#{$component-name} {
+  &-top {
+    @include nok-mixins.nok-text-font;
+    @include nok-rfs.rfs(1rem, font-size);
+    font-weight: 300;
 
-  @include menu-flex(var(--nok25-padding-base, var(--global-grid-gap, 1.5rem)));
+    @include menu-flex(var(--nok25-padding-base, var(--global-grid-gap, 1.5rem)));
 
-  &-row {
-    padding-bottom: 2rem;
+    &-row {
+      padding-bottom: 2rem;
+    }
   }
-}
+  &-menubar {
+    @include menu-flex(var(--nok25-padding-base, var(--global-grid-gap, 1.5rem)));
+    @include nok-mixins.nok-border-radius('large');
+    @include nok-mixins.nok-subtle-shadow;
 
-.#{$component-name}-menubar {
-  @include menu-flex(var(--nok25-padding-base, var(--global-grid-gap, 1.5rem)));
-  @include nok-mixins.nok-border-radius('large');
-  @include nok-mixins.nok-subtle-shadow;
-  @include nok-rfs.rfs(1.2rem, font-size);
+    height: 6rem;
 
-  padding-left: var(--nok25-padding-base, 1.5rem);
-  padding-right: var(--nok25-padding-base, 1.5rem);
+    @include nok-mixins.nok-font;
+    @include nok-rfs.rfs(1.2rem, font-size);
+    font-weight: 500;
 
-  img {
-    height: 3.5rem;
-    @include nok-rfs.rfs(3.5rem, height);
-    width: auto;
-  }
+    padding-left: var(--nok25-padding-base, 1.5rem);
+    padding-right: var(--nok25-padding-base, 1.5rem);
 
-  &-row {
-    position: absolute;
-    top: 4rem;
+    img, svg {
+      height: 3.5rem;
+      @include nok-rfs.rfs(3.5rem, height);
+      width: auto;
+    }
+
+    &-row {
+      position: absolute;
+      top: 4rem;
+    }
   }
 }

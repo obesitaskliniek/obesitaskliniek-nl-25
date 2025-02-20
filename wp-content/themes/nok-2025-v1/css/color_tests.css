@@ -48,30 +48,30 @@
   --nok25-darkblue--lighter--contrast: #f3f4f9;
   --nok25-darkblue--lighter--hover: rgb(34.1666666667, 121.2916666667, 211.8333333333);
   --nok25-darkblue--lighter--active: rgb(7.5833333333, 95.7708333333, 187.4166666667);
-  --nok25-darkerblue: #00205b;
-  --nok25-darkerblue--h: 219deg;
-  --nok25-darkerblue--s: 100%;
-  --nok25-darkerblue--l: 18%;
+  --nok25-darkerblue: #0b2355;
+  --nok25-darkerblue--h: 221deg;
+  --nok25-darkerblue--s: 77%;
+  --nok25-darkerblue--l: 19%;
   --nok25-darkerblue--hsl: var(--nok25-darkerblue--h) var(--nok25-darkerblue--s) var(--nok25-darkerblue--l);
   --nok25-darkerblue--contrast: #f3f4f9;
-  --nok25-darkerblue--hover: rgb(8.375, 61.385989011, 159.125);
-  --nok25-darkerblue--active: hsl(218.9010989011, 110%, 22.8431372549%);
-  --nok25-darkerblue--darker: rgb(3.275, 24.0046703297, 62.225);
-  --nok25-darkerblue--darker--h: 219deg;
-  --nok25-darkerblue--darker--s: 90%;
-  --nok25-darkerblue--darker--l: 13%;
+  --nok25-darkerblue--hover: rgb(28.390625, 65.9210304054, 144.109375);
+  --nok25-darkerblue--active: rgb(7.846875, 42.1624155405, 113.653125);
+  --nok25-darkerblue--darker: rgb(11.603125, 26.9416385135, 58.896875);
+  --nok25-darkerblue--darker--h: 221deg;
+  --nok25-darkerblue--darker--s: 67%;
+  --nok25-darkerblue--darker--l: 14%;
   --nok25-darkerblue--darker--hsl: var(--nok25-darkerblue--darker--h) var(--nok25-darkerblue--darker--s) var(--nok25-darkerblue--darker--l);
   --nok25-darkerblue--darker--contrast: #f3f4f9;
-  --nok25-darkerblue--darker--hover: rgb(14.2, 54.1472527473, 127.8);
-  --nok25-darkerblue--darker--active: #00205b;
-  --nok25-darkerblue--lighter: hsl(218.9010989011, 110%, 22.8431372549%);
-  --nok25-darkerblue--lighter--h: 219deg;
-  --nok25-darkerblue--lighter--s: 110%;
-  --nok25-darkerblue--lighter--l: 23%;
+  --nok25-darkerblue--darker--hover: rgb(31.54375, 58.7586148649, 115.45625);
+  --nok25-darkerblue--darker--active: #0b2355;
+  --nok25-darkerblue--lighter: rgb(7.846875, 42.1624155405, 113.653125);
+  --nok25-darkerblue--lighter--h: 221deg;
+  --nok25-darkerblue--lighter--s: 87%;
+  --nok25-darkerblue--lighter--l: 24%;
   --nok25-darkerblue--lighter--hsl: var(--nok25-darkerblue--lighter--h) var(--nok25-darkerblue--lighter--s) var(--nok25-darkerblue--lighter--l);
   --nok25-darkerblue--lighter--contrast: #f3f4f9;
-  --nok25-darkerblue--lighter--hover: rgb(0, 67.8681318681, 193);
-  --nok25-darkerblue--lighter--active: hsl(218.9010989011, 120%, 27.8431372549%);
+  --nok25-darkerblue--lighter--hover: rgb(22.6875, 72.1875, 175.3125);
+  --nok25-darkerblue--lighter--active: rgb(2.14375, 48.4288851351, 144.85625);
   --nok25-darkestblue: #00132f;
   --nok25-darkestblue--h: 216deg;
   --nok25-darkestblue--s: 100%;
@@ -367,104 +367,34 @@
 }
 
 /* Dark mode color variables */
+/* Note: these are not colors that are meant to use in dark mode, but rather variants of the regular colors,
+slightly dimmed or desaturated in dark-mode (when no dark-specific classes have been applied; see further down this CSS for those '-dark-' classes */
 @media (prefers-color-scheme: dark) {
   :root {
-    --nok25-lightblue: rgb(10.125, 150.8092105263, 192.375);
-    --nok25-lightblue--h: 194deg;
-    --nok25-lightblue--s: 90%;
-    --nok25-lightblue--l: 40%;
-    --nok25-lightblue--hsl: var(--nok25-lightblue--h) var(--nok25-lightblue--s) var(--nok25-lightblue--l);
-    --nok25-lightblue--contrast: #222;
-    --nok25-lightblue--hover: rgb(47.1, 189.7526315789, 231.9);
-    --nok25-lightblue--active: rgb(17.7, 127.0052631579, 159.3);
-    --nok25-lightblue--darker: rgb(13.275, 129.4118421053, 163.725);
-    --nok25-lightblue--darker--h: 194deg;
-    --nok25-lightblue--darker--s: 85%;
-    --nok25-lightblue--darker--l: 35%;
-    --nok25-lightblue--darker--hsl: var(--nok25-lightblue--darker--h) var(--nok25-lightblue--darker--s) var(--nok25-lightblue--darker--l);
-    --nok25-lightblue--darker--contrast: #f3f4f9;
-    --nok25-lightblue--darker--hover: rgb(31.6875, 178.4506578947, 221.8125);
-    --nok25-lightblue--darker--active: rgb(18.9375, 106.6480263158, 132.5625);
-    --nok25-lightblue--lighter: #00b0e4;
-    --nok25-lightblue--lighter--h: 194deg;
-    --nok25-lightblue--lighter--s: 100%;
-    --nok25-lightblue--lighter--l: 45%;
-    --nok25-lightblue--lighter--hsl: var(--nok25-lightblue--lighter--h) var(--nok25-lightblue--lighter--s) var(--nok25-lightblue--lighter--l);
-    --nok25-lightblue--lighter--contrast: #222;
-    --nok25-lightblue--lighter--hover: rgb(59.775, 202.5434210526, 244.725);
-    --nok25-lightblue--lighter--active: rgb(10.125, 150.8092105263, 192.375);
-    --nok25-darkblue: rgb(22.3833333333, 58.541025641, 96.1166666667);
-    --nok25-darkblue--h: 211deg;
-    --nok25-darkblue--s: 62%;
-    --nok25-darkblue--l: 23%;
-    --nok25-darkblue--hsl: var(--nok25-darkblue--h) var(--nok25-darkblue--s) var(--nok25-darkblue--l);
-    --nok25-darkblue--contrast: #f3f4f9;
-    --nok25-darkblue--hover: rgb(46.5833333333, 96.5208333333, 148.4166666667);
-    --nok25-darkblue--active: rgb(22.2166666667, 46.0330128205, 70.7833333333);
-    --nok25-darkblue--darker: rgb(19.8916666667, 45.9883012821, 73.1083333333);
-    --nok25-darkblue--darker--h: 211deg;
-    --nok25-darkblue--darker--s: 57%;
-    --nok25-darkblue--darker--l: 18%;
-    --nok25-darkblue--darker--hsl: var(--nok25-darkblue--darker--h) var(--nok25-darkblue--darker--s) var(--nok25-darkblue--darker--l);
-    --nok25-darkblue--darker--contrast: #f3f4f9;
-    --nok25-darkblue--darker--hover: rgb(44.7291666667, 83.9803685897, 124.7708333333);
-    --nok25-darkblue--darker--active: rgb(17.8125, 33.4435096154, 49.6875);
-    --nok25-darkblue--lighter: #14477c;
-    --nok25-darkblue--lighter--h: 211deg;
-    --nok25-darkblue--lighter--s: 72%;
-    --nok25-darkblue--lighter--l: 28%;
-    --nok25-darkblue--lighter--hsl: var(--nok25-darkblue--lighter--h) var(--nok25-darkblue--lighter--s) var(--nok25-darkblue--lighter--l);
-    --nok25-darkblue--lighter--contrast: #f3f4f9;
-    --nok25-darkblue--lighter--hover: rgb(41.65, 108.9307692308, 178.85);
-    --nok25-darkblue--lighter--active: rgb(22.3833333333, 58.541025641, 96.1166666667);
-    --nok25-darkerblue: rgb(3.275, 24.0046703297, 62.225);
-    --nok25-darkerblue--h: 219deg;
-    --nok25-darkerblue--s: 90%;
-    --nok25-darkerblue--l: 13%;
-    --nok25-darkerblue--hsl: var(--nok25-darkerblue--h) var(--nok25-darkerblue--s) var(--nok25-darkerblue--l);
-    --nok25-darkerblue--contrast: #f3f4f9;
-    --nok25-darkerblue--hover: rgb(14.2, 54.1472527473, 127.8);
-    --nok25-darkerblue--active: rgb(4, 15.2527472527, 36);
-    --nok25-darkerblue--darker: rgb(3, 14.956043956, 37);
-    --nok25-darkerblue--darker--h: 219deg;
-    --nok25-darkerblue--darker--s: 85%;
-    --nok25-darkerblue--darker--l: 8%;
-    --nok25-darkerblue--darker--hsl: var(--nok25-darkerblue--darker--h) var(--nok25-darkerblue--darker--s) var(--nok25-darkerblue--darker--l);
-    --nok25-darkerblue--darker--contrast: #f3f4f9;
-    --nok25-darkerblue--darker--hover: rgb(14.5625, 45.2877747253, 101.9375);
-    --nok25-darkerblue--darker--active: rgb(1.8125, 5.6366758242, 12.6875);
-    --nok25-darkerblue--lighter: #00205b;
-    --nok25-darkerblue--lighter--h: 219deg;
-    --nok25-darkerblue--lighter--s: 100%;
-    --nok25-darkerblue--lighter--l: 18%;
-    --nok25-darkerblue--lighter--hsl: var(--nok25-darkerblue--lighter--h) var(--nok25-darkerblue--lighter--s) var(--nok25-darkerblue--lighter--l);
-    --nok25-darkerblue--lighter--contrast: #f3f4f9;
-    --nok25-darkerblue--lighter--hover: rgb(8.375, 61.385989011, 159.125);
-    --nok25-darkerblue--lighter--active: rgb(3.275, 24.0046703297, 62.225);
-    --nok25-darkestblue: rgb(1.075, 8.8973404255, 20.425);
-    --nok25-darkestblue--h: 216deg;
-    --nok25-darkestblue--s: 90%;
-    --nok25-darkestblue--l: 4%;
-    --nok25-darkestblue--hsl: var(--nok25-darkestblue--h) var(--nok25-darkestblue--s) var(--nok25-darkestblue--l);
-    --nok25-darkestblue--contrast: #f3f4f9;
-    --nok25-darkestblue--hover: rgb(9.8, 41.4936170213, 88.2);
-    --nok25-darkestblue--active: black;
-    --nok25-darkestblue--darker: black;
-    --nok25-darkestblue--darker--h: 0deg;
-    --nok25-darkestblue--darker--s: 0%;
-    --nok25-darkestblue--darker--l: 0%;
-    --nok25-darkestblue--darker--hsl: var(--nok25-darkestblue--darker--h) var(--nok25-darkestblue--darker--s) var(--nok25-darkestblue--darker--l);
-    --nok25-darkestblue--darker--contrast: #f3f4f9;
-    --nok25-darkestblue--darker--hover: rgb(38.25, 38.25, 38.25);
-    --nok25-darkestblue--darker--active: black;
-    --nok25-darkestblue--lighter: #00132f;
-    --nok25-darkestblue--lighter--h: 216deg;
-    --nok25-darkestblue--lighter--s: 100%;
-    --nok25-darkestblue--lighter--l: 9%;
-    --nok25-darkestblue--lighter--hsl: var(--nok25-darkestblue--lighter--h) var(--nok25-darkestblue--lighter--s) var(--nok25-darkestblue--lighter--l);
-    --nok25-darkestblue--lighter--contrast: #f3f4f9;
-    --nok25-darkestblue--lighter--hover: rgb(6.175, 51.1079787234, 117.325);
-    --nok25-darkestblue--lighter--active: rgb(1.075, 8.8973404255, 20.425);
+    --nok25-body: rgb(1.075, 8.8973404255, 20.425);
+    --nok25-body--h: 216deg;
+    --nok25-body--s: 90%;
+    --nok25-body--l: 4%;
+    --nok25-body--hsl: var(--nok25-body--h) var(--nok25-body--s) var(--nok25-body--l);
+    --nok25-body--contrast: #cdd9ed;
+    --nok25-body--hover: rgb(9.8, 41.4936170213, 88.2);
+    --nok25-body--active: black;
+    --nok25-body--darker: black;
+    --nok25-body--darker--h: 0deg;
+    --nok25-body--darker--s: 0%;
+    --nok25-body--darker--l: 0%;
+    --nok25-body--darker--hsl: var(--nok25-body--darker--h) var(--nok25-body--darker--s) var(--nok25-body--darker--l);
+    --nok25-body--darker--contrast: #f3f4f9;
+    --nok25-body--darker--hover: rgb(38.25, 38.25, 38.25);
+    --nok25-body--darker--active: black;
+    --nok25-body--lighter: #00132f;
+    --nok25-body--lighter--h: 216deg;
+    --nok25-body--lighter--s: 100%;
+    --nok25-body--lighter--l: 9%;
+    --nok25-body--lighter--hsl: var(--nok25-body--lighter--h) var(--nok25-body--lighter--s) var(--nok25-body--lighter--l);
+    --nok25-body--lighter--contrast: #f3f4f9;
+    --nok25-body--lighter--hover: rgb(6.175, 51.1079787234, 117.325);
+    --nok25-body--lighter--active: rgb(1.075, 8.8973404255, 20.425);
     --nok25-yellow: rgb(231.4763513514, 191.7827468558, 31.0236486486);
     --nok25-yellow--h: 48deg;
     --nok25-yellow--s: 81%;
@@ -657,78 +587,6 @@
     --nok25-error--lighter--contrast: #f3f4f9;
     --nok25-error--lighter--hover: rgb(231.0284482759, 93.5950258621, 77.4715517241);
     --nok25-error--lighter--active: rgb(181.9336206897, 41.0899396552, 24.5663793103);
-    --nok25-body: rgb(1.075, 8.8973404255, 20.425);
-    --nok25-body--h: 216deg;
-    --nok25-body--s: 90%;
-    --nok25-body--l: 4%;
-    --nok25-body--hsl: var(--nok25-body--h) var(--nok25-body--s) var(--nok25-body--l);
-    --nok25-body--contrast: #cdd9ed;
-    --nok25-body--hover: rgb(9.8, 41.4936170213, 88.2);
-    --nok25-body--active: black;
-    --nok25-body--darker: black;
-    --nok25-body--darker--h: 0deg;
-    --nok25-body--darker--s: 0%;
-    --nok25-body--darker--l: 0%;
-    --nok25-body--darker--hsl: var(--nok25-body--darker--h) var(--nok25-body--darker--s) var(--nok25-body--darker--l);
-    --nok25-body--darker--contrast: #f3f4f9;
-    --nok25-body--darker--hover: rgb(38.25, 38.25, 38.25);
-    --nok25-body--darker--active: black;
-    --nok25-body--lighter: #00132f;
-    --nok25-body--lighter--h: 216deg;
-    --nok25-body--lighter--s: 100%;
-    --nok25-body--lighter--l: 9%;
-    --nok25-body--lighter--hsl: var(--nok25-body--lighter--h) var(--nok25-body--lighter--s) var(--nok25-body--lighter--l);
-    --nok25-body--lighter--contrast: #f3f4f9;
-    --nok25-body--lighter--hover: rgb(6.175, 51.1079787234, 117.325);
-    --nok25-body--lighter--active: rgb(1.075, 8.8973404255, 20.425);
-    --nok25-white: rgb(242.25, 242.25, 242.25);
-    --nok25-white--h: 0deg;
-    --nok25-white--s: 0%;
-    --nok25-white--l: 95%;
-    --nok25-white--hsl: var(--nok25-white--h) var(--nok25-white--s) var(--nok25-white--l);
-    --nok25-white--contrast: #222;
-    --nok25-white--hover: white;
-    --nok25-white--active: rgb(229.5, 229.5, 229.5);
-    --nok25-white--darker: rgb(229.5, 229.5, 229.5);
-    --nok25-white--darker--h: 0deg;
-    --nok25-white--darker--s: 0%;
-    --nok25-white--darker--l: 90%;
-    --nok25-white--darker--hsl: var(--nok25-white--darker--h) var(--nok25-white--darker--s) var(--nok25-white--darker--l);
-    --nok25-white--darker--contrast: #222;
-    --nok25-white--darker--hover: white;
-    --nok25-white--darker--active: rgb(216.75, 216.75, 216.75);
-    --nok25-white--lighter: #FFF;
-    --nok25-white--lighter--h: 0deg;
-    --nok25-white--lighter--s: 0%;
-    --nok25-white--lighter--l: 100%;
-    --nok25-white--lighter--hsl: var(--nok25-white--lighter--h) var(--nok25-white--lighter--s) var(--nok25-white--lighter--l);
-    --nok25-white--lighter--contrast: #222;
-    --nok25-white--lighter--hover: white;
-    --nok25-white--lighter--active: rgb(242.25, 242.25, 242.25);
-    --nok25-black: rgb(21.25, 21.25, 21.25);
-    --nok25-black--h: 0deg;
-    --nok25-black--s: 0%;
-    --nok25-black--l: 8%;
-    --nok25-black--hsl: var(--nok25-black--h) var(--nok25-black--s) var(--nok25-black--l);
-    --nok25-black--contrast: #f3f4f9;
-    --nok25-black--hover: rgb(59.5, 59.5, 59.5);
-    --nok25-black--active: rgb(8.5, 8.5, 8.5);
-    --nok25-black--darker: rgb(8.5, 8.5, 8.5);
-    --nok25-black--darker--h: 0deg;
-    --nok25-black--darker--s: 0%;
-    --nok25-black--darker--l: 3%;
-    --nok25-black--darker--hsl: var(--nok25-black--darker--h) var(--nok25-black--darker--s) var(--nok25-black--darker--l);
-    --nok25-black--darker--contrast: #f3f4f9;
-    --nok25-black--darker--hover: rgb(46.75, 46.75, 46.75);
-    --nok25-black--darker--active: black;
-    --nok25-black--lighter: #222;
-    --nok25-black--lighter--h: 0deg;
-    --nok25-black--lighter--s: 0%;
-    --nok25-black--lighter--l: 13%;
-    --nok25-black--lighter--hsl: var(--nok25-black--lighter--h) var(--nok25-black--lighter--s) var(--nok25-black--lighter--l);
-    --nok25-black--lighter--contrast: #f3f4f9;
-    --nok25-black--lighter--hover: rgb(72.25, 72.25, 72.25);
-    --nok25-black--lighter--active: rgb(21.25, 21.25, 21.25);
     /**
      * Additional color classes
      */
@@ -740,7 +598,7 @@
  * Structure: .prefix-type-color(--variant)
  */
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-lightblue {
+  body .nok25-dark-bg-lightblue {
     --bg-color: hsla(var(--nok25-lightblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-lightblue--hsl);
     --bg-color--hover: var(--nok25-lightblue--hover);
@@ -750,50 +608,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-lightblue::-moz-selection {
+  body .nok25-dark-bg-lightblue::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-lightblue::selection {
+  body .nok25-dark-bg-lightblue::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-lightblue {
+  body .nok25-dark-text-lightblue {
     --text-color: hsla(var(--nok25-lightblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-lightblue--hsl);
     --text-color--hover: var(--nok25-lightblue--hover);
     --text-color--contrast: var(--nok25-lightblue--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-lightblue::-moz-selection {
+  body .nok25-dark-text-lightblue::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-lightblue::selection {
+  body .nok25-dark-text-lightblue::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-lightblue--hover:hover {
+  body .nok25-dark-text-lightblue--hover:hover {
     --text-color: hsla(var(--nok25-lightblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-lightblue {
+  body .nok25-dark-border-lightblue {
     --border-color: hsla(var(--nok25-lightblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-lightblue--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-lightblue {
+  body .nok25-dark-input-lightblue {
     --input-color: hsla(var(--nok25-lightblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-lightblue::-moz-selection {
+  body .nok25-dark-input-lightblue::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-lightblue::selection {
+  body .nok25-dark-input-lightblue::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -860,7 +718,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-lightblue--darker {
+  body .nok25-dark-bg-lightblue--darker {
     --bg-color: hsla(var(--nok25-lightblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-lightblue--darker--hsl);
     --bg-color--hover: var(--nok25-lightblue--darker--hover);
@@ -870,50 +728,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-lightblue--darker::-moz-selection {
+  body .nok25-dark-bg-lightblue--darker::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-lightblue--darker::selection {
+  body .nok25-dark-bg-lightblue--darker::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-lightblue--darker {
+  body .nok25-dark-text-lightblue--darker {
     --text-color: hsla(var(--nok25-lightblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-lightblue--darker--hsl);
     --text-color--hover: var(--nok25-lightblue--darker--hover);
     --text-color--contrast: var(--nok25-lightblue--darker--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-lightblue--darker::-moz-selection {
+  body .nok25-dark-text-lightblue--darker::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-lightblue--darker::selection {
+  body .nok25-dark-text-lightblue--darker::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-lightblue--darker--hover:hover {
+  body .nok25-dark-text-lightblue--darker--hover:hover {
     --text-color: hsla(var(--nok25-lightblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-lightblue--darker {
+  body .nok25-dark-border-lightblue--darker {
     --border-color: hsla(var(--nok25-lightblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-lightblue--darker--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-lightblue--darker {
+  body .nok25-dark-input-lightblue--darker {
     --input-color: hsla(var(--nok25-lightblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-lightblue--darker::-moz-selection {
+  body .nok25-dark-input-lightblue--darker::-moz-selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
-  .nok25-dark-input-lightblue--darker::selection {
+  body .nok25-dark-input-lightblue--darker::selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
@@ -980,7 +838,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-lightblue--lighter {
+  body .nok25-dark-bg-lightblue--lighter {
     --bg-color: hsla(var(--nok25-lightblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-lightblue--lighter--hsl);
     --bg-color--hover: var(--nok25-lightblue--lighter--hover);
@@ -990,50 +848,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-lightblue--lighter::-moz-selection {
+  body .nok25-dark-bg-lightblue--lighter::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-lightblue--lighter::selection {
+  body .nok25-dark-bg-lightblue--lighter::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-lightblue--lighter {
+  body .nok25-dark-text-lightblue--lighter {
     --text-color: hsla(var(--nok25-lightblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-lightblue--lighter--hsl);
     --text-color--hover: var(--nok25-lightblue--lighter--hover);
     --text-color--contrast: var(--nok25-lightblue--lighter--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-lightblue--lighter::-moz-selection {
+  body .nok25-dark-text-lightblue--lighter::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-lightblue--lighter::selection {
+  body .nok25-dark-text-lightblue--lighter::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-lightblue--lighter--hover:hover {
+  body .nok25-dark-text-lightblue--lighter--hover:hover {
     --text-color: hsla(var(--nok25-lightblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-lightblue--lighter {
+  body .nok25-dark-border-lightblue--lighter {
     --border-color: hsla(var(--nok25-lightblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-lightblue--lighter--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-lightblue--lighter {
+  body .nok25-dark-input-lightblue--lighter {
     --input-color: hsla(var(--nok25-lightblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-lightblue--lighter::-moz-selection {
+  body .nok25-dark-input-lightblue--lighter::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-lightblue--lighter::selection {
+  body .nok25-dark-input-lightblue--lighter::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -1100,7 +958,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-darkblue {
+  body .nok25-dark-bg-darkblue {
     --bg-color: hsla(var(--nok25-darkblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkblue--hsl);
     --bg-color--hover: var(--nok25-darkblue--hover);
@@ -1110,50 +968,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkblue::-moz-selection {
+  body .nok25-dark-bg-darkblue::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkblue::selection {
+  body .nok25-dark-bg-darkblue::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-darkblue {
+  body .nok25-dark-text-darkblue {
     --text-color: hsla(var(--nok25-darkblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-darkblue--hsl);
     --text-color--hover: var(--nok25-darkblue--hover);
     --text-color--contrast: var(--nok25-darkblue--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-darkblue::-moz-selection {
+  body .nok25-dark-text-darkblue::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkblue::selection {
+  body .nok25-dark-text-darkblue::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkblue--hover:hover {
+  body .nok25-dark-text-darkblue--hover:hover {
     --text-color: hsla(var(--nok25-darkblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-darkblue {
+  body .nok25-dark-border-darkblue {
     --border-color: hsla(var(--nok25-darkblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-darkblue--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-darkblue {
+  body .nok25-dark-input-darkblue {
     --input-color: hsla(var(--nok25-darkblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-darkblue::-moz-selection {
+  body .nok25-dark-input-darkblue::-moz-selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
-  .nok25-dark-input-darkblue::selection {
+  body .nok25-dark-input-darkblue::selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
@@ -1220,7 +1078,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-darkblue--darker {
+  body .nok25-dark-bg-darkblue--darker {
     --bg-color: hsla(var(--nok25-darkblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkblue--darker--hsl);
     --bg-color--hover: var(--nok25-darkblue--darker--hover);
@@ -1230,50 +1088,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkblue--darker::-moz-selection {
+  body .nok25-dark-bg-darkblue--darker::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkblue--darker::selection {
+  body .nok25-dark-bg-darkblue--darker::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-darkblue--darker {
+  body .nok25-dark-text-darkblue--darker {
     --text-color: hsla(var(--nok25-darkblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-darkblue--darker--hsl);
     --text-color--hover: var(--nok25-darkblue--darker--hover);
     --text-color--contrast: var(--nok25-darkblue--darker--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-darkblue--darker::-moz-selection {
+  body .nok25-dark-text-darkblue--darker::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkblue--darker::selection {
+  body .nok25-dark-text-darkblue--darker::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkblue--darker--hover:hover {
+  body .nok25-dark-text-darkblue--darker--hover:hover {
     --text-color: hsla(var(--nok25-darkblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-darkblue--darker {
+  body .nok25-dark-border-darkblue--darker {
     --border-color: hsla(var(--nok25-darkblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-darkblue--darker--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-darkblue--darker {
+  body .nok25-dark-input-darkblue--darker {
     --input-color: hsla(var(--nok25-darkblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-darkblue--darker::-moz-selection {
+  body .nok25-dark-input-darkblue--darker::-moz-selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
-  .nok25-dark-input-darkblue--darker::selection {
+  body .nok25-dark-input-darkblue--darker::selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
@@ -1340,7 +1198,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-darkblue--lighter {
+  body .nok25-dark-bg-darkblue--lighter {
     --bg-color: hsla(var(--nok25-darkblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkblue--lighter--hsl);
     --bg-color--hover: var(--nok25-darkblue--lighter--hover);
@@ -1350,50 +1208,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkblue--lighter::-moz-selection {
+  body .nok25-dark-bg-darkblue--lighter::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkblue--lighter::selection {
+  body .nok25-dark-bg-darkblue--lighter::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-darkblue--lighter {
+  body .nok25-dark-text-darkblue--lighter {
     --text-color: hsla(var(--nok25-darkblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-darkblue--lighter--hsl);
     --text-color--hover: var(--nok25-darkblue--lighter--hover);
     --text-color--contrast: var(--nok25-darkblue--lighter--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-darkblue--lighter::-moz-selection {
+  body .nok25-dark-text-darkblue--lighter::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkblue--lighter::selection {
+  body .nok25-dark-text-darkblue--lighter::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkblue--lighter--hover:hover {
+  body .nok25-dark-text-darkblue--lighter--hover:hover {
     --text-color: hsla(var(--nok25-darkblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-darkblue--lighter {
+  body .nok25-dark-border-darkblue--lighter {
     --border-color: hsla(var(--nok25-darkblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-darkblue--lighter--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-darkblue--lighter {
+  body .nok25-dark-input-darkblue--lighter {
     --input-color: hsla(var(--nok25-darkblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-darkblue--lighter::-moz-selection {
+  body .nok25-dark-input-darkblue--lighter::-moz-selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
-  .nok25-dark-input-darkblue--lighter::selection {
+  body .nok25-dark-input-darkblue--lighter::selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
@@ -1460,7 +1318,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-darkerblue {
+  body .nok25-dark-bg-darkerblue {
     --bg-color: hsla(var(--nok25-darkerblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkerblue--hsl);
     --bg-color--hover: var(--nok25-darkerblue--hover);
@@ -1470,50 +1328,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkerblue::-moz-selection {
+  body .nok25-dark-bg-darkerblue::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkerblue::selection {
+  body .nok25-dark-bg-darkerblue::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-darkerblue {
+  body .nok25-dark-text-darkerblue {
     --text-color: hsla(var(--nok25-darkerblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-darkerblue--hsl);
     --text-color--hover: var(--nok25-darkerblue--hover);
     --text-color--contrast: var(--nok25-darkerblue--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-darkerblue::-moz-selection {
+  body .nok25-dark-text-darkerblue::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkerblue::selection {
+  body .nok25-dark-text-darkerblue::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkerblue--hover:hover {
+  body .nok25-dark-text-darkerblue--hover:hover {
     --text-color: hsla(var(--nok25-darkerblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-darkerblue {
+  body .nok25-dark-border-darkerblue {
     --border-color: hsla(var(--nok25-darkerblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-darkerblue--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-darkerblue {
+  body .nok25-dark-input-darkerblue {
     --input-color: hsla(var(--nok25-darkerblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-darkerblue::-moz-selection {
+  body .nok25-dark-input-darkerblue::-moz-selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
-  .nok25-dark-input-darkerblue::selection {
+  body .nok25-dark-input-darkerblue::selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
@@ -1580,7 +1438,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-darkerblue--darker {
+  body .nok25-dark-bg-darkerblue--darker {
     --bg-color: hsla(var(--nok25-darkerblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkerblue--darker--hsl);
     --bg-color--hover: var(--nok25-darkerblue--darker--hover);
@@ -1590,50 +1448,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkerblue--darker::-moz-selection {
+  body .nok25-dark-bg-darkerblue--darker::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkerblue--darker::selection {
+  body .nok25-dark-bg-darkerblue--darker::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-darkerblue--darker {
+  body .nok25-dark-text-darkerblue--darker {
     --text-color: hsla(var(--nok25-darkerblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-darkerblue--darker--hsl);
     --text-color--hover: var(--nok25-darkerblue--darker--hover);
     --text-color--contrast: var(--nok25-darkerblue--darker--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-darkerblue--darker::-moz-selection {
+  body .nok25-dark-text-darkerblue--darker::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkerblue--darker::selection {
+  body .nok25-dark-text-darkerblue--darker::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkerblue--darker--hover:hover {
+  body .nok25-dark-text-darkerblue--darker--hover:hover {
     --text-color: hsla(var(--nok25-darkerblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-darkerblue--darker {
+  body .nok25-dark-border-darkerblue--darker {
     --border-color: hsla(var(--nok25-darkerblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-darkerblue--darker--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-darkerblue--darker {
+  body .nok25-dark-input-darkerblue--darker {
     --input-color: hsla(var(--nok25-darkerblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-darkerblue--darker::-moz-selection {
+  body .nok25-dark-input-darkerblue--darker::-moz-selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
-  .nok25-dark-input-darkerblue--darker::selection {
+  body .nok25-dark-input-darkerblue--darker::selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
@@ -1700,7 +1558,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-darkerblue--lighter {
+  body .nok25-dark-bg-darkerblue--lighter {
     --bg-color: hsla(var(--nok25-darkerblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkerblue--lighter--hsl);
     --bg-color--hover: var(--nok25-darkerblue--lighter--hover);
@@ -1710,50 +1568,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkerblue--lighter::-moz-selection {
+  body .nok25-dark-bg-darkerblue--lighter::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkerblue--lighter::selection {
+  body .nok25-dark-bg-darkerblue--lighter::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-darkerblue--lighter {
+  body .nok25-dark-text-darkerblue--lighter {
     --text-color: hsla(var(--nok25-darkerblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-darkerblue--lighter--hsl);
     --text-color--hover: var(--nok25-darkerblue--lighter--hover);
     --text-color--contrast: var(--nok25-darkerblue--lighter--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-darkerblue--lighter::-moz-selection {
+  body .nok25-dark-text-darkerblue--lighter::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkerblue--lighter::selection {
+  body .nok25-dark-text-darkerblue--lighter::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkerblue--lighter--hover:hover {
+  body .nok25-dark-text-darkerblue--lighter--hover:hover {
     --text-color: hsla(var(--nok25-darkerblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-darkerblue--lighter {
+  body .nok25-dark-border-darkerblue--lighter {
     --border-color: hsla(var(--nok25-darkerblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-darkerblue--lighter--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-darkerblue--lighter {
+  body .nok25-dark-input-darkerblue--lighter {
     --input-color: hsla(var(--nok25-darkerblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-darkerblue--lighter::-moz-selection {
+  body .nok25-dark-input-darkerblue--lighter::-moz-selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
-  .nok25-dark-input-darkerblue--lighter::selection {
+  body .nok25-dark-input-darkerblue--lighter::selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
@@ -1820,7 +1678,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-darkestblue {
+  body .nok25-dark-bg-darkestblue {
     --bg-color: hsla(var(--nok25-darkestblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkestblue--hsl);
     --bg-color--hover: var(--nok25-darkestblue--hover);
@@ -1830,50 +1688,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkestblue::-moz-selection {
+  body .nok25-dark-bg-darkestblue::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkestblue::selection {
+  body .nok25-dark-bg-darkestblue::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-darkestblue {
+  body .nok25-dark-text-darkestblue {
     --text-color: hsla(var(--nok25-darkestblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-darkestblue--hsl);
     --text-color--hover: var(--nok25-darkestblue--hover);
     --text-color--contrast: var(--nok25-darkestblue--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-darkestblue::-moz-selection {
+  body .nok25-dark-text-darkestblue::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkestblue::selection {
+  body .nok25-dark-text-darkestblue::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkestblue--hover:hover {
+  body .nok25-dark-text-darkestblue--hover:hover {
     --text-color: hsla(var(--nok25-darkestblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-darkestblue {
+  body .nok25-dark-border-darkestblue {
     --border-color: hsla(var(--nok25-darkestblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-darkestblue--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-darkestblue {
+  body .nok25-dark-input-darkestblue {
     --input-color: hsla(var(--nok25-darkestblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-darkestblue::-moz-selection {
+  body .nok25-dark-input-darkestblue::-moz-selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
-  .nok25-dark-input-darkestblue::selection {
+  body .nok25-dark-input-darkestblue::selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
@@ -1940,7 +1798,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-darkestblue--darker {
+  body .nok25-dark-bg-darkestblue--darker {
     --bg-color: hsla(var(--nok25-darkestblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkestblue--darker--hsl);
     --bg-color--hover: var(--nok25-darkestblue--darker--hover);
@@ -1950,50 +1808,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkestblue--darker::-moz-selection {
+  body .nok25-dark-bg-darkestblue--darker::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkestblue--darker::selection {
+  body .nok25-dark-bg-darkestblue--darker::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-darkestblue--darker {
+  body .nok25-dark-text-darkestblue--darker {
     --text-color: hsla(var(--nok25-darkestblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-darkestblue--darker--hsl);
     --text-color--hover: var(--nok25-darkestblue--darker--hover);
     --text-color--contrast: var(--nok25-darkestblue--darker--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-darkestblue--darker::-moz-selection {
+  body .nok25-dark-text-darkestblue--darker::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkestblue--darker::selection {
+  body .nok25-dark-text-darkestblue--darker::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkestblue--darker--hover:hover {
+  body .nok25-dark-text-darkestblue--darker--hover:hover {
     --text-color: hsla(var(--nok25-darkestblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-darkestblue--darker {
+  body .nok25-dark-border-darkestblue--darker {
     --border-color: hsla(var(--nok25-darkestblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-darkestblue--darker--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-darkestblue--darker {
+  body .nok25-dark-input-darkestblue--darker {
     --input-color: hsla(var(--nok25-darkestblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-darkestblue--darker::-moz-selection {
+  body .nok25-dark-input-darkestblue--darker::-moz-selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
-  .nok25-dark-input-darkestblue--darker::selection {
+  body .nok25-dark-input-darkestblue--darker::selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
@@ -2060,7 +1918,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-darkestblue--lighter {
+  body .nok25-dark-bg-darkestblue--lighter {
     --bg-color: hsla(var(--nok25-darkestblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkestblue--lighter--hsl);
     --bg-color--hover: var(--nok25-darkestblue--lighter--hover);
@@ -2070,50 +1928,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkestblue--lighter::-moz-selection {
+  body .nok25-dark-bg-darkestblue--lighter::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkestblue--lighter::selection {
+  body .nok25-dark-bg-darkestblue--lighter::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-darkestblue--lighter {
+  body .nok25-dark-text-darkestblue--lighter {
     --text-color: hsla(var(--nok25-darkestblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-darkestblue--lighter--hsl);
     --text-color--hover: var(--nok25-darkestblue--lighter--hover);
     --text-color--contrast: var(--nok25-darkestblue--lighter--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-darkestblue--lighter::-moz-selection {
+  body .nok25-dark-text-darkestblue--lighter::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkestblue--lighter::selection {
+  body .nok25-dark-text-darkestblue--lighter::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-darkestblue--lighter--hover:hover {
+  body .nok25-dark-text-darkestblue--lighter--hover:hover {
     --text-color: hsla(var(--nok25-darkestblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-darkestblue--lighter {
+  body .nok25-dark-border-darkestblue--lighter {
     --border-color: hsla(var(--nok25-darkestblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-darkestblue--lighter--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-darkestblue--lighter {
+  body .nok25-dark-input-darkestblue--lighter {
     --input-color: hsla(var(--nok25-darkestblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-darkestblue--lighter::-moz-selection {
+  body .nok25-dark-input-darkestblue--lighter::-moz-selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
-  .nok25-dark-input-darkestblue--lighter::selection {
+  body .nok25-dark-input-darkestblue--lighter::selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
@@ -2180,7 +2038,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-yellow {
+  body .nok25-dark-bg-yellow {
     --bg-color: hsla(var(--nok25-yellow--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-yellow--hsl);
     --bg-color--hover: var(--nok25-yellow--hover);
@@ -2190,50 +2048,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-yellow::-moz-selection {
+  body .nok25-dark-bg-yellow::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-yellow::selection {
+  body .nok25-dark-bg-yellow::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-yellow {
+  body .nok25-dark-text-yellow {
     --text-color: hsla(var(--nok25-yellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-yellow--hsl);
     --text-color--hover: var(--nok25-yellow--hover);
     --text-color--contrast: var(--nok25-yellow--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-yellow::-moz-selection {
+  body .nok25-dark-text-yellow::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-yellow::selection {
+  body .nok25-dark-text-yellow::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-yellow--hover:hover {
+  body .nok25-dark-text-yellow--hover:hover {
     --text-color: hsla(var(--nok25-yellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-yellow {
+  body .nok25-dark-border-yellow {
     --border-color: hsla(var(--nok25-yellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-yellow--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-yellow {
+  body .nok25-dark-input-yellow {
     --input-color: hsla(var(--nok25-yellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-yellow::-moz-selection {
+  body .nok25-dark-input-yellow::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-yellow::selection {
+  body .nok25-dark-input-yellow::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -2300,7 +2158,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-yellow--darker {
+  body .nok25-dark-bg-yellow--darker {
     --bg-color: hsla(var(--nok25-yellow--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-yellow--darker--hsl);
     --bg-color--hover: var(--nok25-yellow--darker--hover);
@@ -2310,50 +2168,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-yellow--darker::-moz-selection {
+  body .nok25-dark-bg-yellow--darker::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-yellow--darker::selection {
+  body .nok25-dark-bg-yellow--darker::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-yellow--darker {
+  body .nok25-dark-text-yellow--darker {
     --text-color: hsla(var(--nok25-yellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-yellow--darker--hsl);
     --text-color--hover: var(--nok25-yellow--darker--hover);
     --text-color--contrast: var(--nok25-yellow--darker--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-yellow--darker::-moz-selection {
+  body .nok25-dark-text-yellow--darker::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-yellow--darker::selection {
+  body .nok25-dark-text-yellow--darker::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-yellow--darker--hover:hover {
+  body .nok25-dark-text-yellow--darker--hover:hover {
     --text-color: hsla(var(--nok25-yellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-yellow--darker {
+  body .nok25-dark-border-yellow--darker {
     --border-color: hsla(var(--nok25-yellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-yellow--darker--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-yellow--darker {
+  body .nok25-dark-input-yellow--darker {
     --input-color: hsla(var(--nok25-yellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-yellow--darker::-moz-selection {
+  body .nok25-dark-input-yellow--darker::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-yellow--darker::selection {
+  body .nok25-dark-input-yellow--darker::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -2420,7 +2278,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-yellow--lighter {
+  body .nok25-dark-bg-yellow--lighter {
     --bg-color: hsla(var(--nok25-yellow--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-yellow--lighter--hsl);
     --bg-color--hover: var(--nok25-yellow--lighter--hover);
@@ -2430,50 +2288,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-yellow--lighter::-moz-selection {
+  body .nok25-dark-bg-yellow--lighter::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-yellow--lighter::selection {
+  body .nok25-dark-bg-yellow--lighter::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-yellow--lighter {
+  body .nok25-dark-text-yellow--lighter {
     --text-color: hsla(var(--nok25-yellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-yellow--lighter--hsl);
     --text-color--hover: var(--nok25-yellow--lighter--hover);
     --text-color--contrast: var(--nok25-yellow--lighter--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-yellow--lighter::-moz-selection {
+  body .nok25-dark-text-yellow--lighter::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-yellow--lighter::selection {
+  body .nok25-dark-text-yellow--lighter::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-yellow--lighter--hover:hover {
+  body .nok25-dark-text-yellow--lighter--hover:hover {
     --text-color: hsla(var(--nok25-yellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-yellow--lighter {
+  body .nok25-dark-border-yellow--lighter {
     --border-color: hsla(var(--nok25-yellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-yellow--lighter--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-yellow--lighter {
+  body .nok25-dark-input-yellow--lighter {
     --input-color: hsla(var(--nok25-yellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-yellow--lighter::-moz-selection {
+  body .nok25-dark-input-yellow--lighter::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-yellow--lighter::selection {
+  body .nok25-dark-input-yellow--lighter::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -2540,7 +2398,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-darkyellow {
+  body .nok25-dark-bg-darkyellow {
     --bg-color: hsla(var(--nok25-darkyellow--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkyellow--hsl);
     --bg-color--hover: var(--nok25-darkyellow--hover);
@@ -2550,50 +2408,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkyellow::-moz-selection {
+  body .nok25-dark-bg-darkyellow::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkyellow::selection {
+  body .nok25-dark-bg-darkyellow::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-darkyellow {
+  body .nok25-dark-text-darkyellow {
     --text-color: hsla(var(--nok25-darkyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-darkyellow--hsl);
     --text-color--hover: var(--nok25-darkyellow--hover);
     --text-color--contrast: var(--nok25-darkyellow--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-darkyellow::-moz-selection {
+  body .nok25-dark-text-darkyellow::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-darkyellow::selection {
+  body .nok25-dark-text-darkyellow::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-darkyellow--hover:hover {
+  body .nok25-dark-text-darkyellow--hover:hover {
     --text-color: hsla(var(--nok25-darkyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-darkyellow {
+  body .nok25-dark-border-darkyellow {
     --border-color: hsla(var(--nok25-darkyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-darkyellow--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-darkyellow {
+  body .nok25-dark-input-darkyellow {
     --input-color: hsla(var(--nok25-darkyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-darkyellow::-moz-selection {
+  body .nok25-dark-input-darkyellow::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-darkyellow::selection {
+  body .nok25-dark-input-darkyellow::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -2660,7 +2518,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-darkyellow--darker {
+  body .nok25-dark-bg-darkyellow--darker {
     --bg-color: hsla(var(--nok25-darkyellow--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkyellow--darker--hsl);
     --bg-color--hover: var(--nok25-darkyellow--darker--hover);
@@ -2670,50 +2528,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkyellow--darker::-moz-selection {
+  body .nok25-dark-bg-darkyellow--darker::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkyellow--darker::selection {
+  body .nok25-dark-bg-darkyellow--darker::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-darkyellow--darker {
+  body .nok25-dark-text-darkyellow--darker {
     --text-color: hsla(var(--nok25-darkyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-darkyellow--darker--hsl);
     --text-color--hover: var(--nok25-darkyellow--darker--hover);
     --text-color--contrast: var(--nok25-darkyellow--darker--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-darkyellow--darker::-moz-selection {
+  body .nok25-dark-text-darkyellow--darker::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-darkyellow--darker::selection {
+  body .nok25-dark-text-darkyellow--darker::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-darkyellow--darker--hover:hover {
+  body .nok25-dark-text-darkyellow--darker--hover:hover {
     --text-color: hsla(var(--nok25-darkyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-darkyellow--darker {
+  body .nok25-dark-border-darkyellow--darker {
     --border-color: hsla(var(--nok25-darkyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-darkyellow--darker--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-darkyellow--darker {
+  body .nok25-dark-input-darkyellow--darker {
     --input-color: hsla(var(--nok25-darkyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-darkyellow--darker::-moz-selection {
+  body .nok25-dark-input-darkyellow--darker::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-darkyellow--darker::selection {
+  body .nok25-dark-input-darkyellow--darker::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -2780,7 +2638,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-darkyellow--lighter {
+  body .nok25-dark-bg-darkyellow--lighter {
     --bg-color: hsla(var(--nok25-darkyellow--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-darkyellow--lighter--hsl);
     --bg-color--hover: var(--nok25-darkyellow--lighter--hover);
@@ -2790,50 +2648,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkyellow--lighter::-moz-selection {
+  body .nok25-dark-bg-darkyellow--lighter::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-darkyellow--lighter::selection {
+  body .nok25-dark-bg-darkyellow--lighter::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-darkyellow--lighter {
+  body .nok25-dark-text-darkyellow--lighter {
     --text-color: hsla(var(--nok25-darkyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-darkyellow--lighter--hsl);
     --text-color--hover: var(--nok25-darkyellow--lighter--hover);
     --text-color--contrast: var(--nok25-darkyellow--lighter--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-darkyellow--lighter::-moz-selection {
+  body .nok25-dark-text-darkyellow--lighter::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-darkyellow--lighter::selection {
+  body .nok25-dark-text-darkyellow--lighter::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-darkyellow--lighter--hover:hover {
+  body .nok25-dark-text-darkyellow--lighter--hover:hover {
     --text-color: hsla(var(--nok25-darkyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-darkyellow--lighter {
+  body .nok25-dark-border-darkyellow--lighter {
     --border-color: hsla(var(--nok25-darkyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-darkyellow--lighter--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-darkyellow--lighter {
+  body .nok25-dark-input-darkyellow--lighter {
     --input-color: hsla(var(--nok25-darkyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-darkyellow--lighter::-moz-selection {
+  body .nok25-dark-input-darkyellow--lighter::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-darkyellow--lighter::selection {
+  body .nok25-dark-input-darkyellow--lighter::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -2900,7 +2758,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-paleyellow {
+  body .nok25-dark-bg-paleyellow {
     --bg-color: hsla(var(--nok25-paleyellow--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-paleyellow--hsl);
     --bg-color--hover: var(--nok25-paleyellow--hover);
@@ -2910,50 +2768,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-paleyellow::-moz-selection {
+  body .nok25-dark-bg-paleyellow::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-paleyellow::selection {
+  body .nok25-dark-bg-paleyellow::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-paleyellow {
+  body .nok25-dark-text-paleyellow {
     --text-color: hsla(var(--nok25-paleyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-paleyellow--hsl);
     --text-color--hover: var(--nok25-paleyellow--hover);
     --text-color--contrast: var(--nok25-paleyellow--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-paleyellow::-moz-selection {
+  body .nok25-dark-text-paleyellow::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-paleyellow::selection {
+  body .nok25-dark-text-paleyellow::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-paleyellow--hover:hover {
+  body .nok25-dark-text-paleyellow--hover:hover {
     --text-color: hsla(var(--nok25-paleyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-paleyellow {
+  body .nok25-dark-border-paleyellow {
     --border-color: hsla(var(--nok25-paleyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-paleyellow--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-paleyellow {
+  body .nok25-dark-input-paleyellow {
     --input-color: hsla(var(--nok25-paleyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-paleyellow::-moz-selection {
+  body .nok25-dark-input-paleyellow::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-paleyellow::selection {
+  body .nok25-dark-input-paleyellow::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -3020,7 +2878,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-paleyellow--darker {
+  body .nok25-dark-bg-paleyellow--darker {
     --bg-color: hsla(var(--nok25-paleyellow--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-paleyellow--darker--hsl);
     --bg-color--hover: var(--nok25-paleyellow--darker--hover);
@@ -3030,50 +2888,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-paleyellow--darker::-moz-selection {
+  body .nok25-dark-bg-paleyellow--darker::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-paleyellow--darker::selection {
+  body .nok25-dark-bg-paleyellow--darker::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-paleyellow--darker {
+  body .nok25-dark-text-paleyellow--darker {
     --text-color: hsla(var(--nok25-paleyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-paleyellow--darker--hsl);
     --text-color--hover: var(--nok25-paleyellow--darker--hover);
     --text-color--contrast: var(--nok25-paleyellow--darker--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-paleyellow--darker::-moz-selection {
+  body .nok25-dark-text-paleyellow--darker::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-paleyellow--darker::selection {
+  body .nok25-dark-text-paleyellow--darker::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-paleyellow--darker--hover:hover {
+  body .nok25-dark-text-paleyellow--darker--hover:hover {
     --text-color: hsla(var(--nok25-paleyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-paleyellow--darker {
+  body .nok25-dark-border-paleyellow--darker {
     --border-color: hsla(var(--nok25-paleyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-paleyellow--darker--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-paleyellow--darker {
+  body .nok25-dark-input-paleyellow--darker {
     --input-color: hsla(var(--nok25-paleyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-paleyellow--darker::-moz-selection {
+  body .nok25-dark-input-paleyellow--darker::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-paleyellow--darker::selection {
+  body .nok25-dark-input-paleyellow--darker::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -3140,7 +2998,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-paleyellow--lighter {
+  body .nok25-dark-bg-paleyellow--lighter {
     --bg-color: hsla(var(--nok25-paleyellow--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-paleyellow--lighter--hsl);
     --bg-color--hover: var(--nok25-paleyellow--lighter--hover);
@@ -3150,50 +3008,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-paleyellow--lighter::-moz-selection {
+  body .nok25-dark-bg-paleyellow--lighter::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-paleyellow--lighter::selection {
+  body .nok25-dark-bg-paleyellow--lighter::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-paleyellow--lighter {
+  body .nok25-dark-text-paleyellow--lighter {
     --text-color: hsla(var(--nok25-paleyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-paleyellow--lighter--hsl);
     --text-color--hover: var(--nok25-paleyellow--lighter--hover);
     --text-color--contrast: var(--nok25-paleyellow--lighter--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-paleyellow--lighter::-moz-selection {
+  body .nok25-dark-text-paleyellow--lighter::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-paleyellow--lighter::selection {
+  body .nok25-dark-text-paleyellow--lighter::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-paleyellow--lighter--hover:hover {
+  body .nok25-dark-text-paleyellow--lighter--hover:hover {
     --text-color: hsla(var(--nok25-paleyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-paleyellow--lighter {
+  body .nok25-dark-border-paleyellow--lighter {
     --border-color: hsla(var(--nok25-paleyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-paleyellow--lighter--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-paleyellow--lighter {
+  body .nok25-dark-input-paleyellow--lighter {
     --input-color: hsla(var(--nok25-paleyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-paleyellow--lighter::-moz-selection {
+  body .nok25-dark-input-paleyellow--lighter::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-paleyellow--lighter::selection {
+  body .nok25-dark-input-paleyellow--lighter::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -3260,7 +3118,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-green {
+  body .nok25-dark-bg-green {
     --bg-color: hsla(var(--nok25-green--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-green--hsl);
     --bg-color--hover: var(--nok25-green--hover);
@@ -3270,50 +3128,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-green::-moz-selection {
+  body .nok25-dark-bg-green::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-green::selection {
+  body .nok25-dark-bg-green::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-green {
+  body .nok25-dark-text-green {
     --text-color: hsla(var(--nok25-green--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-green--hsl);
     --text-color--hover: var(--nok25-green--hover);
     --text-color--contrast: var(--nok25-green--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-green::-moz-selection {
+  body .nok25-dark-text-green::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-green::selection {
+  body .nok25-dark-text-green::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-green--hover:hover {
+  body .nok25-dark-text-green--hover:hover {
     --text-color: hsla(var(--nok25-green--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-green {
+  body .nok25-dark-border-green {
     --border-color: hsla(var(--nok25-green--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-green--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-green {
+  body .nok25-dark-input-green {
     --input-color: hsla(var(--nok25-green--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-green::-moz-selection {
+  body .nok25-dark-input-green::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-green::selection {
+  body .nok25-dark-input-green::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -3380,7 +3238,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-green--darker {
+  body .nok25-dark-bg-green--darker {
     --bg-color: hsla(var(--nok25-green--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-green--darker--hsl);
     --bg-color--hover: var(--nok25-green--darker--hover);
@@ -3390,50 +3248,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-green--darker::-moz-selection {
+  body .nok25-dark-bg-green--darker::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-green--darker::selection {
+  body .nok25-dark-bg-green--darker::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-green--darker {
+  body .nok25-dark-text-green--darker {
     --text-color: hsla(var(--nok25-green--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-green--darker--hsl);
     --text-color--hover: var(--nok25-green--darker--hover);
     --text-color--contrast: var(--nok25-green--darker--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-green--darker::-moz-selection {
+  body .nok25-dark-text-green--darker::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-green--darker::selection {
+  body .nok25-dark-text-green--darker::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-green--darker--hover:hover {
+  body .nok25-dark-text-green--darker--hover:hover {
     --text-color: hsla(var(--nok25-green--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-green--darker {
+  body .nok25-dark-border-green--darker {
     --border-color: hsla(var(--nok25-green--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-green--darker--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-green--darker {
+  body .nok25-dark-input-green--darker {
     --input-color: hsla(var(--nok25-green--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-green--darker::-moz-selection {
+  body .nok25-dark-input-green--darker::-moz-selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
-  .nok25-dark-input-green--darker::selection {
+  body .nok25-dark-input-green--darker::selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
@@ -3500,7 +3358,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-green--lighter {
+  body .nok25-dark-bg-green--lighter {
     --bg-color: hsla(var(--nok25-green--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-green--lighter--hsl);
     --bg-color--hover: var(--nok25-green--lighter--hover);
@@ -3510,50 +3368,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-green--lighter::-moz-selection {
+  body .nok25-dark-bg-green--lighter::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-green--lighter::selection {
+  body .nok25-dark-bg-green--lighter::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-green--lighter {
+  body .nok25-dark-text-green--lighter {
     --text-color: hsla(var(--nok25-green--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-green--lighter--hsl);
     --text-color--hover: var(--nok25-green--lighter--hover);
     --text-color--contrast: var(--nok25-green--lighter--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-green--lighter::-moz-selection {
+  body .nok25-dark-text-green--lighter::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-green--lighter::selection {
+  body .nok25-dark-text-green--lighter::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-green--lighter--hover:hover {
+  body .nok25-dark-text-green--lighter--hover:hover {
     --text-color: hsla(var(--nok25-green--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-green--lighter {
+  body .nok25-dark-border-green--lighter {
     --border-color: hsla(var(--nok25-green--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-green--lighter--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-green--lighter {
+  body .nok25-dark-input-green--lighter {
     --input-color: hsla(var(--nok25-green--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-green--lighter::-moz-selection {
+  body .nok25-dark-input-green--lighter::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-green--lighter::selection {
+  body .nok25-dark-input-green--lighter::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -3620,7 +3478,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-greenyellow {
+  body .nok25-dark-bg-greenyellow {
     --bg-color: hsla(var(--nok25-greenyellow--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-greenyellow--hsl);
     --bg-color--hover: var(--nok25-greenyellow--hover);
@@ -3630,50 +3488,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-greenyellow::-moz-selection {
+  body .nok25-dark-bg-greenyellow::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-greenyellow::selection {
+  body .nok25-dark-bg-greenyellow::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-greenyellow {
+  body .nok25-dark-text-greenyellow {
     --text-color: hsla(var(--nok25-greenyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-greenyellow--hsl);
     --text-color--hover: var(--nok25-greenyellow--hover);
     --text-color--contrast: var(--nok25-greenyellow--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-greenyellow::-moz-selection {
+  body .nok25-dark-text-greenyellow::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-greenyellow::selection {
+  body .nok25-dark-text-greenyellow::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-greenyellow--hover:hover {
+  body .nok25-dark-text-greenyellow--hover:hover {
     --text-color: hsla(var(--nok25-greenyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-greenyellow {
+  body .nok25-dark-border-greenyellow {
     --border-color: hsla(var(--nok25-greenyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-greenyellow--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-greenyellow {
+  body .nok25-dark-input-greenyellow {
     --input-color: hsla(var(--nok25-greenyellow--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-greenyellow::-moz-selection {
+  body .nok25-dark-input-greenyellow::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-greenyellow::selection {
+  body .nok25-dark-input-greenyellow::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -3740,7 +3598,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-greenyellow--darker {
+  body .nok25-dark-bg-greenyellow--darker {
     --bg-color: hsla(var(--nok25-greenyellow--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-greenyellow--darker--hsl);
     --bg-color--hover: var(--nok25-greenyellow--darker--hover);
@@ -3750,50 +3608,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-greenyellow--darker::-moz-selection {
+  body .nok25-dark-bg-greenyellow--darker::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-greenyellow--darker::selection {
+  body .nok25-dark-bg-greenyellow--darker::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-greenyellow--darker {
+  body .nok25-dark-text-greenyellow--darker {
     --text-color: hsla(var(--nok25-greenyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-greenyellow--darker--hsl);
     --text-color--hover: var(--nok25-greenyellow--darker--hover);
     --text-color--contrast: var(--nok25-greenyellow--darker--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-greenyellow--darker::-moz-selection {
+  body .nok25-dark-text-greenyellow--darker::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-greenyellow--darker::selection {
+  body .nok25-dark-text-greenyellow--darker::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-greenyellow--darker--hover:hover {
+  body .nok25-dark-text-greenyellow--darker--hover:hover {
     --text-color: hsla(var(--nok25-greenyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-greenyellow--darker {
+  body .nok25-dark-border-greenyellow--darker {
     --border-color: hsla(var(--nok25-greenyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-greenyellow--darker--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-greenyellow--darker {
+  body .nok25-dark-input-greenyellow--darker {
     --input-color: hsla(var(--nok25-greenyellow--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-greenyellow--darker::-moz-selection {
+  body .nok25-dark-input-greenyellow--darker::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-greenyellow--darker::selection {
+  body .nok25-dark-input-greenyellow--darker::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -3860,7 +3718,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-greenyellow--lighter {
+  body .nok25-dark-bg-greenyellow--lighter {
     --bg-color: hsla(var(--nok25-greenyellow--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-greenyellow--lighter--hsl);
     --bg-color--hover: var(--nok25-greenyellow--lighter--hover);
@@ -3870,50 +3728,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-greenyellow--lighter::-moz-selection {
+  body .nok25-dark-bg-greenyellow--lighter::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-greenyellow--lighter::selection {
+  body .nok25-dark-bg-greenyellow--lighter::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-greenyellow--lighter {
+  body .nok25-dark-text-greenyellow--lighter {
     --text-color: hsla(var(--nok25-greenyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-greenyellow--lighter--hsl);
     --text-color--hover: var(--nok25-greenyellow--lighter--hover);
     --text-color--contrast: var(--nok25-greenyellow--lighter--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-greenyellow--lighter::-moz-selection {
+  body .nok25-dark-text-greenyellow--lighter::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-greenyellow--lighter::selection {
+  body .nok25-dark-text-greenyellow--lighter::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-greenyellow--lighter--hover:hover {
+  body .nok25-dark-text-greenyellow--lighter--hover:hover {
     --text-color: hsla(var(--nok25-greenyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-greenyellow--lighter {
+  body .nok25-dark-border-greenyellow--lighter {
     --border-color: hsla(var(--nok25-greenyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-greenyellow--lighter--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-greenyellow--lighter {
+  body .nok25-dark-input-greenyellow--lighter {
     --input-color: hsla(var(--nok25-greenyellow--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-greenyellow--lighter::-moz-selection {
+  body .nok25-dark-input-greenyellow--lighter::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-greenyellow--lighter::selection {
+  body .nok25-dark-input-greenyellow--lighter::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -3980,7 +3838,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-greenblue {
+  body .nok25-dark-bg-greenblue {
     --bg-color: hsla(var(--nok25-greenblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-greenblue--hsl);
     --bg-color--hover: var(--nok25-greenblue--hover);
@@ -3990,50 +3848,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-greenblue::-moz-selection {
+  body .nok25-dark-bg-greenblue::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-greenblue::selection {
+  body .nok25-dark-bg-greenblue::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-greenblue {
+  body .nok25-dark-text-greenblue {
     --text-color: hsla(var(--nok25-greenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-greenblue--hsl);
     --text-color--hover: var(--nok25-greenblue--hover);
     --text-color--contrast: var(--nok25-greenblue--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-greenblue::-moz-selection {
+  body .nok25-dark-text-greenblue::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-greenblue::selection {
+  body .nok25-dark-text-greenblue::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-greenblue--hover:hover {
+  body .nok25-dark-text-greenblue--hover:hover {
     --text-color: hsla(var(--nok25-greenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-greenblue {
+  body .nok25-dark-border-greenblue {
     --border-color: hsla(var(--nok25-greenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-greenblue--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-greenblue {
+  body .nok25-dark-input-greenblue {
     --input-color: hsla(var(--nok25-greenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-greenblue::-moz-selection {
+  body .nok25-dark-input-greenblue::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-greenblue::selection {
+  body .nok25-dark-input-greenblue::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -4100,7 +3958,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-greenblue--darker {
+  body .nok25-dark-bg-greenblue--darker {
     --bg-color: hsla(var(--nok25-greenblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-greenblue--darker--hsl);
     --bg-color--hover: var(--nok25-greenblue--darker--hover);
@@ -4110,50 +3968,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-greenblue--darker::-moz-selection {
+  body .nok25-dark-bg-greenblue--darker::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-greenblue--darker::selection {
+  body .nok25-dark-bg-greenblue--darker::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-greenblue--darker {
+  body .nok25-dark-text-greenblue--darker {
     --text-color: hsla(var(--nok25-greenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-greenblue--darker--hsl);
     --text-color--hover: var(--nok25-greenblue--darker--hover);
     --text-color--contrast: var(--nok25-greenblue--darker--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-greenblue--darker::-moz-selection {
+  body .nok25-dark-text-greenblue--darker::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-greenblue--darker::selection {
+  body .nok25-dark-text-greenblue--darker::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-greenblue--darker--hover:hover {
+  body .nok25-dark-text-greenblue--darker--hover:hover {
     --text-color: hsla(var(--nok25-greenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-greenblue--darker {
+  body .nok25-dark-border-greenblue--darker {
     --border-color: hsla(var(--nok25-greenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-greenblue--darker--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-greenblue--darker {
+  body .nok25-dark-input-greenblue--darker {
     --input-color: hsla(var(--nok25-greenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-greenblue--darker::-moz-selection {
+  body .nok25-dark-input-greenblue--darker::-moz-selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
-  .nok25-dark-input-greenblue--darker::selection {
+  body .nok25-dark-input-greenblue--darker::selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
@@ -4220,7 +4078,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-greenblue--lighter {
+  body .nok25-dark-bg-greenblue--lighter {
     --bg-color: hsla(var(--nok25-greenblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-greenblue--lighter--hsl);
     --bg-color--hover: var(--nok25-greenblue--lighter--hover);
@@ -4230,50 +4088,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-greenblue--lighter::-moz-selection {
+  body .nok25-dark-bg-greenblue--lighter::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-greenblue--lighter::selection {
+  body .nok25-dark-bg-greenblue--lighter::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-greenblue--lighter {
+  body .nok25-dark-text-greenblue--lighter {
     --text-color: hsla(var(--nok25-greenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-greenblue--lighter--hsl);
     --text-color--hover: var(--nok25-greenblue--lighter--hover);
     --text-color--contrast: var(--nok25-greenblue--lighter--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-greenblue--lighter::-moz-selection {
+  body .nok25-dark-text-greenblue--lighter::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-greenblue--lighter::selection {
+  body .nok25-dark-text-greenblue--lighter::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-greenblue--lighter--hover:hover {
+  body .nok25-dark-text-greenblue--lighter--hover:hover {
     --text-color: hsla(var(--nok25-greenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-greenblue--lighter {
+  body .nok25-dark-border-greenblue--lighter {
     --border-color: hsla(var(--nok25-greenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-greenblue--lighter--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-greenblue--lighter {
+  body .nok25-dark-input-greenblue--lighter {
     --input-color: hsla(var(--nok25-greenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-greenblue--lighter::-moz-selection {
+  body .nok25-dark-input-greenblue--lighter::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-greenblue--lighter::selection {
+  body .nok25-dark-input-greenblue--lighter::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -4340,7 +4198,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-lightgreenblue {
+  body .nok25-dark-bg-lightgreenblue {
     --bg-color: hsla(var(--nok25-lightgreenblue--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-lightgreenblue--hsl);
     --bg-color--hover: var(--nok25-lightgreenblue--hover);
@@ -4350,50 +4208,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-lightgreenblue::-moz-selection {
+  body .nok25-dark-bg-lightgreenblue::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-lightgreenblue::selection {
+  body .nok25-dark-bg-lightgreenblue::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-lightgreenblue {
+  body .nok25-dark-text-lightgreenblue {
     --text-color: hsla(var(--nok25-lightgreenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-lightgreenblue--hsl);
     --text-color--hover: var(--nok25-lightgreenblue--hover);
     --text-color--contrast: var(--nok25-lightgreenblue--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-lightgreenblue::-moz-selection {
+  body .nok25-dark-text-lightgreenblue::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-lightgreenblue::selection {
+  body .nok25-dark-text-lightgreenblue::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-lightgreenblue--hover:hover {
+  body .nok25-dark-text-lightgreenblue--hover:hover {
     --text-color: hsla(var(--nok25-lightgreenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-lightgreenblue {
+  body .nok25-dark-border-lightgreenblue {
     --border-color: hsla(var(--nok25-lightgreenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-lightgreenblue--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-lightgreenblue {
+  body .nok25-dark-input-lightgreenblue {
     --input-color: hsla(var(--nok25-lightgreenblue--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-lightgreenblue::-moz-selection {
+  body .nok25-dark-input-lightgreenblue::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-lightgreenblue::selection {
+  body .nok25-dark-input-lightgreenblue::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -4460,7 +4318,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-lightgreenblue--darker {
+  body .nok25-dark-bg-lightgreenblue--darker {
     --bg-color: hsla(var(--nok25-lightgreenblue--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-lightgreenblue--darker--hsl);
     --bg-color--hover: var(--nok25-lightgreenblue--darker--hover);
@@ -4470,50 +4328,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-lightgreenblue--darker::-moz-selection {
+  body .nok25-dark-bg-lightgreenblue--darker::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-lightgreenblue--darker::selection {
+  body .nok25-dark-bg-lightgreenblue--darker::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-lightgreenblue--darker {
+  body .nok25-dark-text-lightgreenblue--darker {
     --text-color: hsla(var(--nok25-lightgreenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-lightgreenblue--darker--hsl);
     --text-color--hover: var(--nok25-lightgreenblue--darker--hover);
     --text-color--contrast: var(--nok25-lightgreenblue--darker--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-lightgreenblue--darker::-moz-selection {
+  body .nok25-dark-text-lightgreenblue--darker::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-lightgreenblue--darker::selection {
+  body .nok25-dark-text-lightgreenblue--darker::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-lightgreenblue--darker--hover:hover {
+  body .nok25-dark-text-lightgreenblue--darker--hover:hover {
     --text-color: hsla(var(--nok25-lightgreenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-lightgreenblue--darker {
+  body .nok25-dark-border-lightgreenblue--darker {
     --border-color: hsla(var(--nok25-lightgreenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-lightgreenblue--darker--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-lightgreenblue--darker {
+  body .nok25-dark-input-lightgreenblue--darker {
     --input-color: hsla(var(--nok25-lightgreenblue--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-lightgreenblue--darker::-moz-selection {
+  body .nok25-dark-input-lightgreenblue--darker::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-lightgreenblue--darker::selection {
+  body .nok25-dark-input-lightgreenblue--darker::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -4580,7 +4438,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-lightgreenblue--lighter {
+  body .nok25-dark-bg-lightgreenblue--lighter {
     --bg-color: hsla(var(--nok25-lightgreenblue--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-lightgreenblue--lighter--hsl);
     --bg-color--hover: var(--nok25-lightgreenblue--lighter--hover);
@@ -4590,50 +4448,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-lightgreenblue--lighter::-moz-selection {
+  body .nok25-dark-bg-lightgreenblue--lighter::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-lightgreenblue--lighter::selection {
+  body .nok25-dark-bg-lightgreenblue--lighter::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-lightgreenblue--lighter {
+  body .nok25-dark-text-lightgreenblue--lighter {
     --text-color: hsla(var(--nok25-lightgreenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-lightgreenblue--lighter--hsl);
     --text-color--hover: var(--nok25-lightgreenblue--lighter--hover);
     --text-color--contrast: var(--nok25-lightgreenblue--lighter--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-lightgreenblue--lighter::-moz-selection {
+  body .nok25-dark-text-lightgreenblue--lighter::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-lightgreenblue--lighter::selection {
+  body .nok25-dark-text-lightgreenblue--lighter::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-lightgreenblue--lighter--hover:hover {
+  body .nok25-dark-text-lightgreenblue--lighter--hover:hover {
     --text-color: hsla(var(--nok25-lightgreenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-lightgreenblue--lighter {
+  body .nok25-dark-border-lightgreenblue--lighter {
     --border-color: hsla(var(--nok25-lightgreenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-lightgreenblue--lighter--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-lightgreenblue--lighter {
+  body .nok25-dark-input-lightgreenblue--lighter {
     --input-color: hsla(var(--nok25-lightgreenblue--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-lightgreenblue--lighter::-moz-selection {
+  body .nok25-dark-input-lightgreenblue--lighter::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-lightgreenblue--lighter::selection {
+  body .nok25-dark-input-lightgreenblue--lighter::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -4700,7 +4558,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-error {
+  body .nok25-dark-bg-error {
     --bg-color: hsla(var(--nok25-error--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-error--hsl);
     --bg-color--hover: var(--nok25-error--hover);
@@ -4710,50 +4568,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-error::-moz-selection {
+  body .nok25-dark-bg-error::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-error::selection {
+  body .nok25-dark-bg-error::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-error {
+  body .nok25-dark-text-error {
     --text-color: hsla(var(--nok25-error--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-error--hsl);
     --text-color--hover: var(--nok25-error--hover);
     --text-color--contrast: var(--nok25-error--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-error::-moz-selection {
+  body .nok25-dark-text-error::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-error::selection {
+  body .nok25-dark-text-error::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-error--hover:hover {
+  body .nok25-dark-text-error--hover:hover {
     --text-color: hsla(var(--nok25-error--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-error {
+  body .nok25-dark-border-error {
     --border-color: hsla(var(--nok25-error--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-error--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-error {
+  body .nok25-dark-input-error {
     --input-color: hsla(var(--nok25-error--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-error::-moz-selection {
+  body .nok25-dark-input-error::-moz-selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
-  .nok25-dark-input-error::selection {
+  body .nok25-dark-input-error::selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
@@ -4820,7 +4678,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-error--darker {
+  body .nok25-dark-bg-error--darker {
     --bg-color: hsla(var(--nok25-error--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-error--darker--hsl);
     --bg-color--hover: var(--nok25-error--darker--hover);
@@ -4830,50 +4688,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-error--darker::-moz-selection {
+  body .nok25-dark-bg-error--darker::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-error--darker::selection {
+  body .nok25-dark-bg-error--darker::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-error--darker {
+  body .nok25-dark-text-error--darker {
     --text-color: hsla(var(--nok25-error--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-error--darker--hsl);
     --text-color--hover: var(--nok25-error--darker--hover);
     --text-color--contrast: var(--nok25-error--darker--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-error--darker::-moz-selection {
+  body .nok25-dark-text-error--darker::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-error--darker::selection {
+  body .nok25-dark-text-error--darker::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-error--darker--hover:hover {
+  body .nok25-dark-text-error--darker--hover:hover {
     --text-color: hsla(var(--nok25-error--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-error--darker {
+  body .nok25-dark-border-error--darker {
     --border-color: hsla(var(--nok25-error--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-error--darker--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-error--darker {
+  body .nok25-dark-input-error--darker {
     --input-color: hsla(var(--nok25-error--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-error--darker::-moz-selection {
+  body .nok25-dark-input-error--darker::-moz-selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
-  .nok25-dark-input-error--darker::selection {
+  body .nok25-dark-input-error--darker::selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
@@ -4940,7 +4798,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-error--lighter {
+  body .nok25-dark-bg-error--lighter {
     --bg-color: hsla(var(--nok25-error--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-error--lighter--hsl);
     --bg-color--hover: var(--nok25-error--lighter--hover);
@@ -4950,50 +4808,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-error--lighter::-moz-selection {
+  body .nok25-dark-bg-error--lighter::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-error--lighter::selection {
+  body .nok25-dark-bg-error--lighter::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-error--lighter {
+  body .nok25-dark-text-error--lighter {
     --text-color: hsla(var(--nok25-error--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-error--lighter--hsl);
     --text-color--hover: var(--nok25-error--lighter--hover);
     --text-color--contrast: var(--nok25-error--lighter--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-error--lighter::-moz-selection {
+  body .nok25-dark-text-error--lighter::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-error--lighter::selection {
+  body .nok25-dark-text-error--lighter::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-error--lighter--hover:hover {
+  body .nok25-dark-text-error--lighter--hover:hover {
     --text-color: hsla(var(--nok25-error--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-error--lighter {
+  body .nok25-dark-border-error--lighter {
     --border-color: hsla(var(--nok25-error--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-error--lighter--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-error--lighter {
+  body .nok25-dark-input-error--lighter {
     --input-color: hsla(var(--nok25-error--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-error--lighter::-moz-selection {
+  body .nok25-dark-input-error--lighter::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-error--lighter::selection {
+  body .nok25-dark-input-error--lighter::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -5060,7 +4918,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-body {
+  body .nok25-dark-bg-body {
     --bg-color: hsla(var(--nok25-body--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-body--hsl);
     --bg-color--hover: var(--nok25-body--hover);
@@ -5070,50 +4928,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-body::-moz-selection {
+  body .nok25-dark-bg-body::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-body::selection {
+  body .nok25-dark-bg-body::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-body {
+  body .nok25-dark-text-body {
     --text-color: hsla(var(--nok25-body--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-body--hsl);
     --text-color--hover: var(--nok25-body--hover);
     --text-color--contrast: var(--nok25-body--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-body::-moz-selection {
+  body .nok25-dark-text-body::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-body::selection {
+  body .nok25-dark-text-body::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-body--hover:hover {
+  body .nok25-dark-text-body--hover:hover {
     --text-color: hsla(var(--nok25-body--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-body {
+  body .nok25-dark-border-body {
     --border-color: hsla(var(--nok25-body--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-body--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-body {
+  body .nok25-dark-input-body {
     --input-color: hsla(var(--nok25-body--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-body::-moz-selection {
+  body .nok25-dark-input-body::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-body::selection {
+  body .nok25-dark-input-body::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -5180,7 +5038,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-body--darker {
+  body .nok25-dark-bg-body--darker {
     --bg-color: hsla(var(--nok25-body--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-body--darker--hsl);
     --bg-color--hover: var(--nok25-body--darker--hover);
@@ -5190,50 +5048,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-body--darker::-moz-selection {
+  body .nok25-dark-bg-body--darker::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-body--darker::selection {
+  body .nok25-dark-bg-body--darker::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-body--darker {
+  body .nok25-dark-text-body--darker {
     --text-color: hsla(var(--nok25-body--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-body--darker--hsl);
     --text-color--hover: var(--nok25-body--darker--hover);
     --text-color--contrast: var(--nok25-body--darker--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-body--darker::-moz-selection {
+  body .nok25-dark-text-body--darker::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-body--darker::selection {
+  body .nok25-dark-text-body--darker::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-body--darker--hover:hover {
+  body .nok25-dark-text-body--darker--hover:hover {
     --text-color: hsla(var(--nok25-body--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-body--darker {
+  body .nok25-dark-border-body--darker {
     --border-color: hsla(var(--nok25-body--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-body--darker--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-body--darker {
+  body .nok25-dark-input-body--darker {
     --input-color: hsla(var(--nok25-body--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-body--darker::-moz-selection {
+  body .nok25-dark-input-body--darker::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-body--darker::selection {
+  body .nok25-dark-input-body--darker::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -5300,7 +5158,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-body--lighter {
+  body .nok25-dark-bg-body--lighter {
     --bg-color: hsla(var(--nok25-body--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-body--lighter--hsl);
     --bg-color--hover: var(--nok25-body--lighter--hover);
@@ -5310,50 +5168,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-body--lighter::-moz-selection {
+  body .nok25-dark-bg-body--lighter::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-body--lighter::selection {
+  body .nok25-dark-bg-body--lighter::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-body--lighter {
+  body .nok25-dark-text-body--lighter {
     --text-color: hsla(var(--nok25-body--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-body--lighter--hsl);
     --text-color--hover: var(--nok25-body--lighter--hover);
     --text-color--contrast: var(--nok25-body--lighter--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-body--lighter::-moz-selection {
+  body .nok25-dark-text-body--lighter::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-body--lighter::selection {
+  body .nok25-dark-text-body--lighter::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-body--lighter--hover:hover {
+  body .nok25-dark-text-body--lighter--hover:hover {
     --text-color: hsla(var(--nok25-body--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-body--lighter {
+  body .nok25-dark-border-body--lighter {
     --border-color: hsla(var(--nok25-body--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-body--lighter--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-body--lighter {
+  body .nok25-dark-input-body--lighter {
     --input-color: hsla(var(--nok25-body--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-body--lighter::-moz-selection {
+  body .nok25-dark-input-body--lighter::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-body--lighter::selection {
+  body .nok25-dark-input-body--lighter::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -5420,7 +5278,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-white {
+  body .nok25-dark-bg-white {
     --bg-color: hsla(var(--nok25-white--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-white--hsl);
     --bg-color--hover: var(--nok25-white--hover);
@@ -5430,50 +5288,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-white::-moz-selection {
+  body .nok25-dark-bg-white::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-white::selection {
+  body .nok25-dark-bg-white::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-white {
+  body .nok25-dark-text-white {
     --text-color: hsla(var(--nok25-white--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-white--hsl);
     --text-color--hover: var(--nok25-white--hover);
     --text-color--contrast: var(--nok25-white--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-white::-moz-selection {
+  body .nok25-dark-text-white::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-white::selection {
+  body .nok25-dark-text-white::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-white--hover:hover {
+  body .nok25-dark-text-white--hover:hover {
     --text-color: hsla(var(--nok25-white--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-white {
+  body .nok25-dark-border-white {
     --border-color: hsla(var(--nok25-white--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-white--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-white {
+  body .nok25-dark-input-white {
     --input-color: hsla(var(--nok25-white--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-white::-moz-selection {
+  body .nok25-dark-input-white::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-white::selection {
+  body .nok25-dark-input-white::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -5540,7 +5398,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-white--darker {
+  body .nok25-dark-bg-white--darker {
     --bg-color: hsla(var(--nok25-white--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-white--darker--hsl);
     --bg-color--hover: var(--nok25-white--darker--hover);
@@ -5550,50 +5408,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-white--darker::-moz-selection {
+  body .nok25-dark-bg-white--darker::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-white--darker::selection {
+  body .nok25-dark-bg-white--darker::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-white--darker {
+  body .nok25-dark-text-white--darker {
     --text-color: hsla(var(--nok25-white--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-white--darker--hsl);
     --text-color--hover: var(--nok25-white--darker--hover);
     --text-color--contrast: var(--nok25-white--darker--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-white--darker::-moz-selection {
+  body .nok25-dark-text-white--darker::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-white--darker::selection {
+  body .nok25-dark-text-white--darker::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-white--darker--hover:hover {
+  body .nok25-dark-text-white--darker--hover:hover {
     --text-color: hsla(var(--nok25-white--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-white--darker {
+  body .nok25-dark-border-white--darker {
     --border-color: hsla(var(--nok25-white--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-white--darker--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-white--darker {
+  body .nok25-dark-input-white--darker {
     --input-color: hsla(var(--nok25-white--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-white--darker::-moz-selection {
+  body .nok25-dark-input-white--darker::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-white--darker::selection {
+  body .nok25-dark-input-white--darker::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -5660,7 +5518,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-white--lighter {
+  body .nok25-dark-bg-white--lighter {
     --bg-color: hsla(var(--nok25-white--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-white--lighter--hsl);
     --bg-color--hover: var(--nok25-white--lighter--hover);
@@ -5670,50 +5528,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-white--lighter::-moz-selection {
+  body .nok25-dark-bg-white--lighter::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-white--lighter::selection {
+  body .nok25-dark-bg-white--lighter::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-white--lighter {
+  body .nok25-dark-text-white--lighter {
     --text-color: hsla(var(--nok25-white--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-white--lighter--hsl);
     --text-color--hover: var(--nok25-white--lighter--hover);
     --text-color--contrast: var(--nok25-white--lighter--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-white--lighter::-moz-selection {
+  body .nok25-dark-text-white--lighter::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-white--lighter::selection {
+  body .nok25-dark-text-white--lighter::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #222;
   }
-  .nok25-dark-text-white--lighter--hover:hover {
+  body .nok25-dark-text-white--lighter--hover:hover {
     --text-color: hsla(var(--nok25-white--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-white--lighter {
+  body .nok25-dark-border-white--lighter {
     --border-color: hsla(var(--nok25-white--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-white--lighter--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-white--lighter {
+  body .nok25-dark-input-white--lighter {
     --input-color: hsla(var(--nok25-white--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-white--lighter::-moz-selection {
+  body .nok25-dark-input-white--lighter::-moz-selection {
     background: var(--input-color, inherit);
     color: #222;
   }
-  .nok25-dark-input-white--lighter::selection {
+  body .nok25-dark-input-white--lighter::selection {
     background: var(--input-color, inherit);
     color: #222;
   }
@@ -5780,7 +5638,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-black {
+  body .nok25-dark-bg-black {
     --bg-color: hsla(var(--nok25-black--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-black--hsl);
     --bg-color--hover: var(--nok25-black--hover);
@@ -5790,50 +5648,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-black::-moz-selection {
+  body .nok25-dark-bg-black::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-black::selection {
+  body .nok25-dark-bg-black::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-black {
+  body .nok25-dark-text-black {
     --text-color: hsla(var(--nok25-black--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-black--hsl);
     --text-color--hover: var(--nok25-black--hover);
     --text-color--contrast: var(--nok25-black--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-black::-moz-selection {
+  body .nok25-dark-text-black::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-black::selection {
+  body .nok25-dark-text-black::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-black--hover:hover {
+  body .nok25-dark-text-black--hover:hover {
     --text-color: hsla(var(--nok25-black--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-black {
+  body .nok25-dark-border-black {
     --border-color: hsla(var(--nok25-black--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-black--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-black {
+  body .nok25-dark-input-black {
     --input-color: hsla(var(--nok25-black--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-black::-moz-selection {
+  body .nok25-dark-input-black::-moz-selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
-  .nok25-dark-input-black::selection {
+  body .nok25-dark-input-black::selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
@@ -5900,7 +5758,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-black--darker {
+  body .nok25-dark-bg-black--darker {
     --bg-color: hsla(var(--nok25-black--darker--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-black--darker--hsl);
     --bg-color--hover: var(--nok25-black--darker--hover);
@@ -5910,50 +5768,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-black--darker::-moz-selection {
+  body .nok25-dark-bg-black--darker::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-black--darker::selection {
+  body .nok25-dark-bg-black--darker::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-black--darker {
+  body .nok25-dark-text-black--darker {
     --text-color: hsla(var(--nok25-black--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-black--darker--hsl);
     --text-color--hover: var(--nok25-black--darker--hover);
     --text-color--contrast: var(--nok25-black--darker--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-black--darker::-moz-selection {
+  body .nok25-dark-text-black--darker::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-black--darker::selection {
+  body .nok25-dark-text-black--darker::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-black--darker--hover:hover {
+  body .nok25-dark-text-black--darker--hover:hover {
     --text-color: hsla(var(--nok25-black--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-black--darker {
+  body .nok25-dark-border-black--darker {
     --border-color: hsla(var(--nok25-black--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-black--darker--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-black--darker {
+  body .nok25-dark-input-black--darker {
     --input-color: hsla(var(--nok25-black--darker--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-black--darker::-moz-selection {
+  body .nok25-dark-input-black--darker::-moz-selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
-  .nok25-dark-input-black--darker::selection {
+  body .nok25-dark-input-black--darker::selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
@@ -6020,7 +5878,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .nok25-dark-bg-black--lighter {
+  body .nok25-dark-bg-black--lighter {
     --bg-color: hsla(var(--nok25-black--lighter--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
     --bg-color-hsl: var(--nok25-black--lighter--hsl);
     --bg-color--hover: var(--nok25-black--lighter--hover);
@@ -6030,50 +5888,50 @@
     --text-color-button--hover: var(--text-color--contrast);
     background-color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-black--lighter::-moz-selection {
+  body .nok25-dark-bg-black--lighter::-moz-selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-bg-black--lighter::selection {
+  body .nok25-dark-bg-black--lighter::selection {
     background: var(--text-color--contrast, inherit);
     color: var(--bg-color, inherit);
   }
-  .nok25-dark-text-black--lighter {
+  body .nok25-dark-text-black--lighter {
     --text-color: hsla(var(--nok25-black--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color-hsl: var(--nok25-black--lighter--hsl);
     --text-color--hover: var(--nok25-black--lighter--hover);
     --text-color--contrast: var(--nok25-black--lighter--contrast);
     color: var(--text-color, var(--text-color--contrast, inherit));
   }
-  .nok25-dark-text-black--lighter::-moz-selection {
+  body .nok25-dark-text-black--lighter::-moz-selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-black--lighter::selection {
+  body .nok25-dark-text-black--lighter::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
     color: #f3f4f9;
   }
-  .nok25-dark-text-black--lighter--hover:hover {
+  body .nok25-dark-text-black--lighter--hover:hover {
     --text-color: hsla(var(--nok25-black--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     color: var(--text-color, var(--text-color--contrast, inherit)) !important;
   }
-  .nok25-dark-border-black--lighter {
+  body .nok25-dark-border-black--lighter {
     --border-color: hsla(var(--nok25-black--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --border-color-hsl: var(--nok25-black--lighter--hsl);
     border-color: var(--border-color, inherit);
   }
-  .nok25-dark-input-black--lighter {
+  body .nok25-dark-input-black--lighter {
     --input-color: hsla(var(--nok25-black--lighter--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
     --text-color: var(--input-color, inherit);
     accent-color: var(--input-color, inherit);
     caret-color: var(--input-color, inherit);
     color: var(--input-color, inherit);
   }
-  .nok25-dark-input-black--lighter::-moz-selection {
+  body .nok25-dark-input-black--lighter::-moz-selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }
-  .nok25-dark-input-black--lighter::selection {
+  body .nok25-dark-input-black--lighter::selection {
     background: var(--input-color, inherit);
     color: #f3f4f9;
   }

@@ -15,8 +15,6 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
   justify-content: center;
   align-items: center;
 
-  @include nok-mixins.nok-text-font;
-
   @at-root section.#{$component-name} + section.#{$component-name} {
     margin-top: calc(var(--nok25-padding-base, 1.5rem) * 2);
   }

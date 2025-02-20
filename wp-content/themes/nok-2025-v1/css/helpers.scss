@@ -10,6 +10,7 @@
 .#{nok-variables.$prefix}-heading-font {
   @include nok-mixins.nok-font;
 }
+.#{nok-variables.$prefix}-small-text-font,
 .#{nok-variables.$prefix}-text-font {
   @include nok-mixins.nok-text-font;
 }
@@ -57,13 +58,21 @@ $alphas: (
     "alpha-1": 1,
     "bg-alpha-1": 1,
 );
-@for $i from 0 through 9 {
+@for $i from 0 through 10 {
   $value: ($i / 10);
   .#{nok-variables.$prefix}-alpha-#{$i} {
     --local-color-alpha: #{$value};
   }
   .#{nok-variables.$prefix}-bg-alpha-#{$i} {
     --local-bg-color-alpha: #{$value};
+  }
+  @media (prefers-color-scheme: dark) {
+    .#{nok-variables.$prefix}-dark-alpha-#{$i} {
+      --local-color-alpha: #{$value};
+    }
+    .#{nok-variables.$prefix}-dark-bg-alpha-#{$i} {
+      --local-bg-color-alpha: #{$value};
+    }
   }
 }
 
@@ -76,4 +85,11 @@ $alphas: (
 }
 .#{nok-variables.$prefix}-z-top {
   z-index: nok-variables.$z-stack-top;
+}
+
+/* Aligners */
+
+.#{nok-variables.$prefix}-valign-center {
+  display: flex;
+  align-items: center;
 }

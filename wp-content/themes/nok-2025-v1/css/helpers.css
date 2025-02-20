@@ -25,6 +25,7 @@
   font-style: normal;
 }
 
+.nok25-small-text-font,
 .nok25-text-font {
   font-family: "Inter", serif;
   -webkit-text-size-adjust: 100%;
@@ -77,6 +78,14 @@
   --local-bg-color-alpha: 0;
 }
 
+@media (prefers-color-scheme: dark) {
+  .nok25-dark-alpha-0 {
+    --local-color-alpha: 0;
+  }
+  .nok25-dark-bg-alpha-0 {
+    --local-bg-color-alpha: 0;
+  }
+}
 .nok25-alpha-1 {
   --local-color-alpha: 0.1;
 }
@@ -85,6 +94,14 @@
   --local-bg-color-alpha: 0.1;
 }
 
+@media (prefers-color-scheme: dark) {
+  .nok25-dark-alpha-1 {
+    --local-color-alpha: 0.1;
+  }
+  .nok25-dark-bg-alpha-1 {
+    --local-bg-color-alpha: 0.1;
+  }
+}
 .nok25-alpha-2 {
   --local-color-alpha: 0.2;
 }
@@ -93,6 +110,14 @@
   --local-bg-color-alpha: 0.2;
 }
 
+@media (prefers-color-scheme: dark) {
+  .nok25-dark-alpha-2 {
+    --local-color-alpha: 0.2;
+  }
+  .nok25-dark-bg-alpha-2 {
+    --local-bg-color-alpha: 0.2;
+  }
+}
 .nok25-alpha-3 {
   --local-color-alpha: 0.3;
 }
@@ -101,6 +126,14 @@
   --local-bg-color-alpha: 0.3;
 }
 
+@media (prefers-color-scheme: dark) {
+  .nok25-dark-alpha-3 {
+    --local-color-alpha: 0.3;
+  }
+  .nok25-dark-bg-alpha-3 {
+    --local-bg-color-alpha: 0.3;
+  }
+}
 .nok25-alpha-4 {
   --local-color-alpha: 0.4;
 }
@@ -109,6 +142,14 @@
   --local-bg-color-alpha: 0.4;
 }
 
+@media (prefers-color-scheme: dark) {
+  .nok25-dark-alpha-4 {
+    --local-color-alpha: 0.4;
+  }
+  .nok25-dark-bg-alpha-4 {
+    --local-bg-color-alpha: 0.4;
+  }
+}
 .nok25-alpha-5 {
   --local-color-alpha: 0.5;
 }
@@ -117,6 +158,14 @@
   --local-bg-color-alpha: 0.5;
 }
 
+@media (prefers-color-scheme: dark) {
+  .nok25-dark-alpha-5 {
+    --local-color-alpha: 0.5;
+  }
+  .nok25-dark-bg-alpha-5 {
+    --local-bg-color-alpha: 0.5;
+  }
+}
 .nok25-alpha-6 {
   --local-color-alpha: 0.6;
 }
@@ -125,6 +174,14 @@
   --local-bg-color-alpha: 0.6;
 }
 
+@media (prefers-color-scheme: dark) {
+  .nok25-dark-alpha-6 {
+    --local-color-alpha: 0.6;
+  }
+  .nok25-dark-bg-alpha-6 {
+    --local-bg-color-alpha: 0.6;
+  }
+}
 .nok25-alpha-7 {
   --local-color-alpha: 0.7;
 }
@@ -133,6 +190,14 @@
   --local-bg-color-alpha: 0.7;
 }
 
+@media (prefers-color-scheme: dark) {
+  .nok25-dark-alpha-7 {
+    --local-color-alpha: 0.7;
+  }
+  .nok25-dark-bg-alpha-7 {
+    --local-bg-color-alpha: 0.7;
+  }
+}
 .nok25-alpha-8 {
   --local-color-alpha: 0.8;
 }
@@ -141,6 +206,14 @@
   --local-bg-color-alpha: 0.8;
 }
 
+@media (prefers-color-scheme: dark) {
+  .nok25-dark-alpha-8 {
+    --local-color-alpha: 0.8;
+  }
+  .nok25-dark-bg-alpha-8 {
+    --local-bg-color-alpha: 0.8;
+  }
+}
 .nok25-alpha-9 {
   --local-color-alpha: 0.9;
 }
@@ -149,6 +222,30 @@
   --local-bg-color-alpha: 0.9;
 }
 
+@media (prefers-color-scheme: dark) {
+  .nok25-dark-alpha-9 {
+    --local-color-alpha: 0.9;
+  }
+  .nok25-dark-bg-alpha-9 {
+    --local-bg-color-alpha: 0.9;
+  }
+}
+.nok25-alpha-10 {
+  --local-color-alpha: 1;
+}
+
+.nok25-bg-alpha-10 {
+  --local-bg-color-alpha: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nok25-dark-alpha-10 {
+    --local-color-alpha: 1;
+  }
+  .nok25-dark-bg-alpha-10 {
+    --local-bg-color-alpha: 1;
+  }
+}
 /* Stacking */
 .nok25-z-1 {
   z-index: 1;
@@ -188,6 +285,12 @@
 
 .nok25-z-top {
   z-index: 100;
+}
+
+/* Aligners */
+.nok25-valign-center {
+  display: flex;
+  align-items: center;
 }
 
 /*# sourceMappingURL=helpers.css.map */
