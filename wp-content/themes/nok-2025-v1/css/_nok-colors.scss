@@ -9,6 +9,10 @@ $color-contrast-dark: #222;
 $color-contrast-light: #f3f4f9;
 $min-contrast-ratio: 4.5;
 
+$bg-colors: true;
+$text-colors: true;
+$border-colors: false;
+$input-colors: false;
 
 $nok-base-colors: (
     'lightblue':      #00b0e4,
@@ -16,8 +20,8 @@ $nok-base-colors: (
 	'darkerblue':     #0b2355,
 	'darkestblue':    #00132f,
 	'yellow':         #f5cd2b,
-	'darkyellow':     #eab10d,
-	'paleyellow':     #D5D59D,
+	//'darkyellow':     #eab10d, //unused
+	//'paleyellow':     #D5D59D, //unused
 	'green':          #54b085,
 	'greenyellow':    #CCCC33,
 	'greenblue':      #35aba5,
@@ -62,11 +66,12 @@ $nok-dark-contrast-overrides: (
     );
     @each $color, $value in $sub_map {
       --#{nok-variables.$prefix}-#{$color} :          #{$value};
-      --#{nok-variables.$prefix}-#{$color}--h :       #{round(color.hue($value))};
-      --#{nok-variables.$prefix}-#{$color}--s :       #{round(color.saturation($value))};
-      --#{nok-variables.$prefix}-#{$color}--l :       #{round(color.lightness($value))};
-      --#{nok-variables.$prefix}-#{$color}--hsl :     var(--#{nok-variables.$prefix}-#{$color}--h) var(--#{nok-variables.$prefix}-#{$color}--s) var(--#{nok-variables.$prefix}-#{$color}--l);
+      //--#{nok-variables.$prefix}-#{$color}--h :       #{round(color.hue($value))};
+      //--#{nok-variables.$prefix}-#{$color}--s :       #{round(color.saturation($value))};
+      //--#{nok-variables.$prefix}-#{$color}--l :       #{round(color.lightness($value))};
+      --#{nok-variables.$prefix}-#{$color}--hsl :     #{round(color.hue($value))} #{round(color.saturation($value))} #{round(color.lightness($value))};
       --#{nok-variables.$prefix}-#{$color}--contrast: #{if(map-has-key($nok-contrast-overrides, $color), map.get($nok-contrast-overrides, $color), nok-utilities.get-contrast-color($value, $color-contrast-light, $color-contrast-dark))};
+      --#{nok-variables.$prefix}-#{$color}--contrast--hover: #{lighten(if(map-has-key($nok-contrast-overrides, $color), map.get($nok-contrast-overrides, $color), nok-utilities.get-contrast-color($value, $color-contrast-light, $color-contrast-dark)), 10%)};
       --#{nok-variables.$prefix}-#{$color}--hover:    #{color.adjust(color.adjust($value, $lightness: 15%, $space: hsl), $saturation: -10%, $space: hsl)};
       --#{nok-variables.$prefix}-#{$color}--active:   #{color.adjust(color.adjust($value, $lightness: 5%, $space: hsl), $saturation: 10%, $space: hsl)};
     }
@@ -84,20 +89,23 @@ slightly dimmed or desaturated in dark-mode (when no dark-specific classes have 
   :root {
     @each $color in $nok-base-colors-adjust-for-dark {
       $value: if(map-has-key($nok-dark-colors-overrides, $color), map.get($nok-dark-colors-overrides, $color), map.get($nok-base-colors, $color));
-      $sub_map: (
-          $color : desaturate(darken($value, 5%), 10%),
-          $color+'--darker' :  desaturate(darken($value, 10%), 15%),
-          $color+'--lighter' :  $value
-      );
-      @each $color, $value in $sub_map {
-        --#{nok-variables.$prefix}-#{$color} :          #{$value};
-        --#{nok-variables.$prefix}-#{$color}--h :       #{round(color.hue($value))};
-        --#{nok-variables.$prefix}-#{$color}--s :       #{round(color.saturation($value))};
-        --#{nok-variables.$prefix}-#{$color}--l :       #{round(color.lightness($value))};
-        --#{nok-variables.$prefix}-#{$color}--hsl :     var(--#{nok-variables.$prefix}-#{$color}--h) var(--#{nok-variables.$prefix}-#{$color}--s) var(--#{nok-variables.$prefix}-#{$color}--l);
-        --#{nok-variables.$prefix}-#{$color}--contrast: #{if(map-has-key($nok-dark-contrast-overrides, $color), map.get($nok-dark-contrast-overrides, $color), nok-utilities.get-contrast-color($value, $color-contrast-light, $color-contrast-dark))};
-        --#{nok-variables.$prefix}-#{$color}--hover:    #{desaturate(lighten($value, 15%), 10%)};
-        --#{nok-variables.$prefix}-#{$color}--active:   #{desaturate(darken($value, 5%), 10%)};
+      @if $value {
+        $sub_map: (
+                $color : desaturate(darken($value, 5%), 10%),
+                $color+'--darker' :  desaturate(darken($value, 10%), 15%),
+                $color+'--lighter' :  $value
+        );
+        @each $color, $value in $sub_map {
+          --#{nok-variables.$prefix}-#{$color} :          #{$value};
+          //--#{nok-variables.$prefix}-#{$color}--h :       #{round(color.hue($value))};
+          //--#{nok-variables.$prefix}-#{$color}--s :       #{round(color.saturation($value))};
+          //--#{nok-variables.$prefix}-#{$color}--l :       #{round(color.lightness($value))};
+          --#{nok-variables.$prefix}-#{$color}--hsl :     #{round(color.hue($value))} #{round(color.saturation($value))} #{round(color.lightness($value))};
+          --#{nok-variables.$prefix}-#{$color}--contrast: #{if(map-has-key($nok-dark-contrast-overrides, $color), map.get($nok-dark-contrast-overrides, $color), nok-utilities.get-contrast-color($value, $color-contrast-light, $color-contrast-dark))};
+          --#{nok-variables.$prefix}-#{$color}--contrast--hover: #{lighten(if(map-has-key($nok-dark-contrast-overrides, $color), map.get($nok-dark-contrast-overrides, $color), nok-utilities.get-contrast-color($value, $color-contrast-light, $color-contrast-dark)), 10%)};
+          --#{nok-variables.$prefix}-#{$color}--hover:    #{desaturate(lighten($value, 15%), 10%)};
+          --#{nok-variables.$prefix}-#{$color}--active:   #{desaturate(darken($value, 5%), 10%)};
+        }
       }
     }
     /**
@@ -115,8 +123,9 @@ slightly dimmed or desaturated in dark-mode (when no dark-specific classes have 
   --bg-color--hover: var(--#{$prefix}-#{$colorName}--hover);
   --bg-color--active: var(--#{$prefix}-#{$colorName}--active);
   --text-color--contrast: var(--#{$prefix}-#{$colorName}--contrast);
+  --text-color--contrast--hover: var(--#{$prefix}-#{$colorName}--contrast--hover);
   --text-color-button: var(--text-color--contrast);
-  --text-color-button--hover: var(--text-color--contrast);
+  --text-color-button--hover: var(--text-color--contrast--hover);
   background-color: var(--bg-color, inherit);
   &::selection {
     background: var(--text-color--contrast, inherit);
@@ -129,6 +138,7 @@ slightly dimmed or desaturated in dark-mode (when no dark-specific classes have 
   --text-color-hsl: var(--#{$prefix}-#{$colorName}--hsl);
   --text-color--hover: var(--#{$prefix}-#{$colorName}--hover);
   --text-color--contrast: var(--#{$prefix}-#{$colorName}--contrast);
+  --text-color--contrast--hover: var(--#{$prefix}-#{$colorName}--contrast--hover);
   color: var(--text-color, var(--text-color--contrast, inherit));
   &::selection {
     background: var(--text-color, var(--text-color--contrast, inherit));
@@ -179,11 +189,15 @@ slightly dimmed or desaturated in dark-mode (when no dark-specific classes have 
         .#{nok-variables.$prefix}-dark-text-#{$color} {
           @include text-colors(nok-variables.$prefix, $color, $value);
         }
-        .#{nok-variables.$prefix}-dark-border-#{$color} {
-          @include border-colors(nok-variables.$prefix, $color, $value);
+        @if $border-colors {
+          .#{nok-variables.$prefix}-dark-border-#{$color} {
+            @include border-colors(nok-variables.$prefix, $color, $value);
+          }
         }
-        .#{nok-variables.$prefix}-dark-input-#{$color} {
-          @include input-colors(nok-variables.$prefix, $color, $value);
+        @if $input-colors {
+          .#{nok-variables.$prefix}-dark-input-#{$color} {
+            @include input-colors(nok-variables.$prefix, $color, $value);
+          }
         }
       }
     }
@@ -193,11 +207,15 @@ slightly dimmed or desaturated in dark-mode (when no dark-specific classes have 
     .#{nok-variables.$prefix}-text-#{$color} {
       @include text-colors(nok-variables.$prefix, $color, $value);
     }
-    .#{nok-variables.$prefix}-border-#{$color} {
-      @include border-colors(nok-variables.$prefix, $color, $value);
+    @if $border-colors {
+      .#{nok-variables.$prefix}-border-#{$color} {
+        @include border-colors(nok-variables.$prefix, $color, $value);
+      }
     }
-    .#{nok-variables.$prefix}-input-#{$color} {
-      @include input-colors(nok-variables.$prefix, $color, $value);
+    @if $input-colors {
+      .#{nok-variables.$prefix}-input-#{$color} {
+        @include input-colors(nok-variables.$prefix, $color, $value);
+      }
     }
   }
 }
