@@ -118,8 +118,8 @@
 
 @mixin nok-scrollbar-thin(
   $scrollbarHeight: 6px,
-  $scrollbarHandle: var(--nok25-body),
-  $scrollbarHandle_active: var(--nok25-body--lighter),
+  $scrollbarHandle: var(--text-color-button, #CCC),
+  $scrollbarHandle_active: var(--text-color-button--hover, #FFF),
   $scrollbarTrack: hsla(var(--nok25-body--hsl) / 0.25)
 ) {
   & {
@@ -141,11 +141,12 @@
     background-color: var(--scrollbar-handle, #FFFE);
     border: 1px solid var(--scrollbar-handle, #FFFE);
     border-radius: $scrollbarHeight;
+    &:hover {
+      background-color: var(--scrollbar-handle--active, #FFFF);
+      border-color: var(--scrollbar-handle--active, #FFFF);
+    }
   }
 
-  &::-webkit-scrollbar-thumb:hover {
-    background-color: var(--scrollbar-handle--active, #FFFF);
-  }
 }
 
 

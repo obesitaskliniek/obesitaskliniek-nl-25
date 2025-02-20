@@ -85,7 +85,7 @@ $logo = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 173.6">
         </div>
     </div>
     <div class="nok25-horizontal-section__inner nok25-nav-menubar-row nok25-z-2">
-        <div class="nok25-nav-menubar nok25-bg-white nok25-dark-bg-darkblue">
+        <div class="nok25-nav-menubar nok25-bg-white nok25-dark-bg-darkerblue">
             <div>
                 <?= $logo;?>
             </div>

@@ -43,7 +43,7 @@ $component-name: #{nok-variables.$prefix}-button;
   }
 
   &:focus {
-    outline: 2px solid hsl(var(--bg-color-hsl, 0 0 0) / 0.25);
+    outline: 2px solid hsl(var(--bg-color-hsl, 0deg 100% 50%) / 0.25);
   }
 
   &:focus-visible { // focus state by other input method than mouse
