@@ -2,11 +2,11 @@
 @use "nok-variables";
 @use "nok-mixins";
 @use "nok-reboot";
-@use "./nok-elements/nok25-sections.scss";
+@use "nok-elements/nok25-sections.scss";
 @use "nok-elements/nok25-sections--nav";
 @use "nok-elements/nok25-sections--hero";
-@use "./nok-elements/nok25-buttons.scss";
-@use "./nok-elements/nok25-square-block.scss";
+@use "nok-elements/nok25-buttons.scss";
+@use "nok-elements/nok25-square-block.scss";
 @use "nok-elements/nok25-sections--block-group";
 
 //Todo: move to typography sheet
@@ -58,10 +58,22 @@ body {
   }
 }
 .#{nok-variables.$prefix}-horizontal-button-group {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 1fr;
   width: 100%;
   gap: var(--grid-gap, var(--nok25-padding-base, var(--global-grid-gap, 1.5rem)));
-  justify-content: flex-start;
   align-items: center;
+  justify-items: center;
+
+  > button.fill-group-column {
+    width: 100%;
+  }
+}
+
+.#{nok-variables.$prefix}-star-ratings {
+  display: inline-flex;
+  flex-direction: row;
+  gap: .5ex;
+  margin-right: 1ex;
 }

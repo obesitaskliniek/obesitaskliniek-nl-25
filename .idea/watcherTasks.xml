@@ -16,7 +16,7 @@
       <option name="outputFromStdout" value="false" />
       <option name="program" value="$ProjectFileDir$/node_modules/.bin/sass" />
       <option name="runOnExternalChanges" value="true" />
-      <option name="scopeName" value="non-bs-css" />
+      <option name="scopeName" value="non-bs-unminified-css" />
       <option name="trackOnlyRoot" value="true" />
       <option name="workingDir" value="$FileDir$" />
       <envs />
@@ -36,7 +36,7 @@
       <option name="outputFromStdout" value="false" />
       <option name="program" value="$ProjectFileDir$/node_modules/.bin/postcss" />
       <option name="runOnExternalChanges" value="true" />
-      <option name="scopeName" value="Project Files" />
+      <option name="scopeName" value="non-bs-unminified-css" />
       <option name="trackOnlyRoot" value="false" />
       <option name="workingDir" value="$FileDir$" />
       <envs />
@@ -56,7 +56,7 @@
       <option name="outputFromStdout" value="false" />
       <option name="program" value="$ProjectFileDir$/node_modules/.bin/csso" />
       <option name="runOnExternalChanges" value="true" />
-      <option name="scopeName" value="All Places" />
+      <option name="scopeName" value="non-bs-unminified-css" />
       <option name="trackOnlyRoot" value="true" />
       <option name="workingDir" value="$FileDir$" />
       <envs />
@@ -96,7 +96,7 @@
       <option name="outputFromStdout" value="true" />
       <option name="program" value="$ProjectFileDir$/node_modules/.bin/google-closure-compiler" />
       <option name="runOnExternalChanges" value="true" />
-      <option name="scopeName" value="non-bs-css" />
+      <option name="scopeName" value="non-bs-unminified-js" />
       <option name="trackOnlyRoot" value="false" />
       <option name="workingDir" value="$FileDir$" />
       <envs />

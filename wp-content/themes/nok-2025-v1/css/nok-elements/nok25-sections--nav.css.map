@@ -1,0 +1,1 @@
+{"version":3,"sources":["nok25-sections--nav.css"],"names":[],"mappings":"AAAA;;EAEE;AACF;EACE,sBAAsB;EACtB,+BAA+B;EAC/B,uBAAuB;AACzB","file":"nok25-sections--nav.css","sourcesContent":["/**\n * hero unit\n */\n.nok25-nav {\n  grid-auto-flow: column;\n  grid-template-columns: 1fr auto;\n  grid-auto-columns: auto;\n}\n\n/*# sourceMappingURL=nok25-nav.css.map */"]}

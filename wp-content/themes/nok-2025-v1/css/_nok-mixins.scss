@@ -18,7 +18,7 @@
 }
 
 @mixin nok-subtle-shadow {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(80, 80, 80, 0.1);
 }
 
 @mixin nok-btn-shadow-border {
@@ -77,7 +77,8 @@
 @mixin nok-inline-link {
   --active-color: #000;
   --hover-transition-time: 0.15s;
-  --underline-height: 0.15em;
+  --hover-color: var(--text-color--hover, inherit);
+  --underline-height: 0.25ex;
   //noinspection CssInvalidFunction
   --gradient: linear-gradient(
           transparent 0%,
@@ -89,7 +90,7 @@
 
   font-size: var(--nok25-font-size-buttons, 1.25rem);
   text-decoration: none;
-  padding: calc(2 * var(--underline-height)) 0;
+  padding: .75ex 0;
 
   background-image: var(--gradient);
   background-size: 100% 200%;
@@ -99,6 +100,8 @@
   transition: background-position var(--hover-transition-time) ease-out;
 
   &:hover {
+    --underline-color: var(--hover-color);
+    color: var(--hover-color);
     background-position: 0 calc(-1 * var(--underline-height));
   }
   &:active,

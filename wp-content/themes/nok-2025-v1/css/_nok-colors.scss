@@ -13,9 +13,9 @@ $min-contrast-ratio: 4.5;
 $nok-base-colors: (
     'lightblue':      #00b0e4,
 	'darkblue':       #14477c,
-	'darkerblue':     #00205b,
+	'darkerblue':     #0b2355,
 	'darkestblue':    #00132f,
-	'yellow': #f5cd2b,
+	'yellow':         #f5cd2b,
 	'darkyellow':     #eab10d,
 	'paleyellow':     #D5D59D,
 	'green':          #54b085,
@@ -30,10 +30,22 @@ $nok-base-colors: (
 
 $nok-contrast-overrides: ();
 
-$nok-dark-colors: map-merge(
-    $nok-base-colors, (
+// color names listed here will be either adjusted for dark mode (using saturation/lightness)
+// or overridden in dark mode if listed both here and in $nok-dark-colors-overrides
+$nok-base-colors-adjust-for-dark: (
+        'body',
+        'yellow',
+        'darkyellow',
+        'paleyellow',
+        'green',
+        'greenyellow',
+        'greenblue',
+        'lightgreenblue',
+        'error',
+);
+
+$nok-dark-colors-overrides: (
     'body':           #00132f,
-    )
 );
 
 $nok-dark-contrast-overrides: (
@@ -66,9 +78,12 @@ $nok-dark-contrast-overrides: (
 }
 
 /* Dark mode color variables */
+/* Note: these are not colors that are meant to use in dark mode, but rather variants of the regular colors,
+slightly dimmed or desaturated in dark-mode (when no dark-specific classes have been applied; see further down this CSS for those '-dark-' classes */
 @media (prefers-color-scheme: dark) {
   :root {
-    @each $color, $value in $nok-dark-colors {
+    @each $color in $nok-base-colors-adjust-for-dark {
+      $value: if(map-has-key($nok-dark-colors-overrides, $color), map.get($nok-dark-colors-overrides, $color), map.get($nok-base-colors, $color));
       $sub_map: (
           $color : desaturate(darken($value, 5%), 10%),
           $color+'--darker' :  desaturate(darken($value, 10%), 15%),
@@ -156,19 +171,20 @@ $nok-dark-contrast-overrides: (
       $color+'--lighter' :  saturate(lighten($value, 10%), 20%)
   );
   @each $color, $value in $sub_map {
-    //todo: fix Specificity here. Ask GPT
     @media (prefers-color-scheme: dark) {
-      .#{nok-variables.$prefix}-dark-bg-#{$color} {
-        @include bg-colors(nok-variables.$prefix, $color, $value);
-      }
-      .#{nok-variables.$prefix}-dark-text-#{$color} {
-        @include text-colors(nok-variables.$prefix, $color, $value);
-      }
-      .#{nok-variables.$prefix}-dark-border-#{$color} {
-        @include border-colors(nok-variables.$prefix, $color, $value);
-      }
-      .#{nok-variables.$prefix}-dark-input-#{$color} {
-        @include input-colors(nok-variables.$prefix, $color, $value);
+      body { //helps increase specificity
+        .#{nok-variables.$prefix}-dark-bg-#{$color} {
+          @include bg-colors(nok-variables.$prefix, $color, $value);
+        }
+        .#{nok-variables.$prefix}-dark-text-#{$color} {
+          @include text-colors(nok-variables.$prefix, $color, $value);
+        }
+        .#{nok-variables.$prefix}-dark-border-#{$color} {
+          @include border-colors(nok-variables.$prefix, $color, $value);
+        }
+        .#{nok-variables.$prefix}-dark-input-#{$color} {
+          @include input-colors(nok-variables.$prefix, $color, $value);
+        }
       }
     }
     .#{nok-variables.$prefix}-bg-#{$color} {

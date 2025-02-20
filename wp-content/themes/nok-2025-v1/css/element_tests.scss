@@ -1,5 +1,7 @@
 @use "nok-elements";
+@use "nok-mixins";
 
 body {
   background: linear-gradient(180deg, var(--nok25-body--darker), hsla(var(--nok25-body--hsl)/1));
+  @include nok-mixins.nok-text-font;
 }

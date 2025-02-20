@@ -18,7 +18,7 @@ $component-name: #{nok-variables.$prefix}-button;
   margin: 0;
   padding: calc(var(--nok25-padding-base, 1.5rem) / 2) var(--nok25-padding-base, 1.5rem);
 
-  @include nok-mixins.nok-text-font;
+  @include nok-mixins.nok-font;
   font-weight: 500;
   font-size: var(--nok25-font-size-buttons, 1.25rem);
   line-height: 1.5;
@@ -27,7 +27,7 @@ $component-name: #{nok-variables.$prefix}-button;
   color: var(--text-color, var(--text-color--contrast, inherit));
   @include nok-mixins.nok-border-radius;
   @include nok-mixins.nok-btn-shadow-border;
-  border: 1px solid #8885;
+  border: 0px solid #8880;
   outline: 0 none;
 
   cursor: pointer;
