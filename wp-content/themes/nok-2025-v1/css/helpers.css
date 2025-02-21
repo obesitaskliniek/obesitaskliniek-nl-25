@@ -4,7 +4,7 @@
   --nok25-default-line-height: 1.5;
   --nok25-default-heading-line-height: 1.25;
   --nok25-padding-base: 1.5rem;
-  --nok25-padding-section-sides: min(10vw, 4.5rem);
+  --nok25-padding-section-sides: min(6vw, 4.5rem);
   --nok25-default-border-radius: 0.4rem;
   --nok25-default-border-radius--large: 1rem;
   --nok25-font-size-buttons: 1.25rem;
@@ -331,6 +331,16 @@
 @media (min-width: 1600px) {
   .nok25-no-border-xxxl {
     border-radius: 0 !important;
+  }
+}
+/* Conditional visibility */
+.nok25-only-visible-mobile {
+  display: none;
+}
+
+@media (max-width: 575.98px) {
+  .nok25-only-visible-mobile {
+    display: revert;
   }
 }
 

@@ -112,3 +112,15 @@ $alphas: (
     }
   }
 }
+
+/* Conditional visibility */
+//todo: create more of these, using the breakpoint loop
+
+.#{nok-variables.$prefix}-only-visible-mobile {
+  display: none;
+}
+@include nok-mixins.media-breakpoint-down(sm) {
+  .#{nok-variables.$prefix}-only-visible-mobile {
+      display: revert;
+  }
+}

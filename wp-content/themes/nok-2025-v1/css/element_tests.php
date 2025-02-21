@@ -68,58 +68,68 @@ $logo = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 173.6">
 </svg>'
 ?>
 
-<nav class="nok25-horizontal-section nok25-sticky nok25-nav nok25-text-darkerblue">
-    <div class="nok25-nav-mask nok25-bg-darkerblue active"></div>
-    <div class="nok25-horizontal-section--stretched nok25-bg-body nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-top-row nok25-z-1">
-        <div class="nok25-horizontal-section__inner nok25-nav-top">
-            <div>
-                <small class="nok25-valign-center">
-                    <span class="nok25-text-lightblue nok25-star-ratings"><?= $star;?><?= $star;?><?= $star;?><?= $star;?><?= $star;?></span>5/5 op basis van 12.030 beoordelingen
-                </small>
-            </div>
-            <div>Werken bij</div>
-            <div>Kennisbank</div>
-            <div>Mijn NOK</div>
-            <div>NOK App</div>
-            <div>+31 12345678</div>
-            <div>Zoek</div>
-            <div>NL</div>
-        </div>
-    </div>
-    <div class="nok25-horizontal-section__inner nok25-nav-menubar-row nok25-z-2" onclick="document.querySelector('.nok25-nav-dropdown').classList.toggle('open');document.querySelector('.nok25-nav-mask').classList.toggle('active');">
-        <div class="nok25-nav-menubar nok25-bg-white nok25-dark-bg-darkerblue">
+<nav class="nok25-horizontal-section nok25-sticky nok25-nav nok25-text-darkerblue mobile">
+    <div class="nok25-nav-mask nok25-bg-darkerblue nok25-z-1"></div>
+    <nok-25-mobile-nav>
+        <div class="nok25-horizontal-section--stretched nok25-bg-white nok25-dark-bg-darkestblue nok25-dark-text-white nok25-z-2">
             <div>
                 <?= $logo;?>
+                <button class="nok25-button nok25-nav-menu-toggler no-shadow" tabindex="0" onclick="document.querySelector('.nok25-nav').classList.toggle('open');"></button>
             </div>
-            <div>Behandelingen</div>
-            <div>Over NOK</div>
-            <div>Agenda</div>
-            <div>Verwijzers</div>
-            <div><button class="nok25-button nok25-base-font nok25-bg-yellow" tabindex="0">Gratis voorlichtingsavond</button></div>
         </div>
-        <div class="nok25-nav-dropdown open">
-            <div class="nok25-nav-dropdown-contents nok25-bg-white nok25-dark-bg-darkerblue">
-                <div class="nok25-nav-dropdown-contents-menu">
-                    <h3>Behandeling</h3>
-                    <div>Wat is obesitas?</div>
-                    <div>Onze behandeling van obesitas</div>
-                    <div>Ons behandelprogramma</div>
-                    <div>De operatie</div>
-                    <div>De kosten van de behandeling</div>
-                </div>
+    </nok-25-mobile-nav>
+    <nok-25-desktop-nav>
+        <div class="nok25-horizontal-section--stretched nok25-bg-body nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-top-row nok25-z-2">
+            <div class="nok25-horizontal-section__inner nok25-nav-top">
                 <div>
-                    <nok25-square-block class="nok25-bg-darkerblue">
-                        <h3 class="nok25-square-block__heading">
-                            Vragen of behoefte aan persoonlijk advies?
-                        </h3>
-                        <button class="nok25-button nok25-base-font nok25-bg-darkblue nok25-text-contrast" tabindex="0">
-                            Neem contact op  <svg class="nok25-text-yellow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" width="25" height="25" fill="currentColor"><path d="m17.5 5.999-.707.707 5.293 5.293H1v1h21.086l-5.294 5.295.707.707L24 12.499l-6.5-6.5z" data-name="Right"/></svg>
-                        </button>
-                    </nok25-square-block>
+                    <small class="nok25-valign-center">
+                        <span class="nok25-text-lightblue nok25-star-ratings"><?= $star;?><?= $star;?><?= $star;?><?= $star;?><?= $star;?></span>5/5 op basis van 12.030 beoordelingen
+                    </small>
+                </div>
+                <div>Werken bij</div>
+                <div>Kennisbank</div>
+                <div>Mijn NOK</div>
+                <div>NOK App</div>
+                <div>+31 12345678</div>
+                <div>Zoek</div>
+                <div>NL</div>
+            </div>
+        </div>
+        <div class="nok25-horizontal-section__inner nok25-nav-menubar-row nok25-z-3">
+            <div class="nok25-nav-menubar nok25-bg-white nok25-dark-bg-darkerblue nok25-no-border-sm">
+                <div>
+                    <?= $logo;?>
+                </div>
+                <div>Behandelingen</div>
+                <div>Over NOK</div>
+                <div>Agenda</div>
+                <div>Verwijzers</div>
+                <div><button class="nok25-button nok25-base-font nok25-bg-yellow" tabindex="0">Gratis voorlichtingsavond</button></div>
+            </div>
+            <div class="nok25-nav-dropdown">
+                <div class="nok25-nav-dropdown-contents nok25-bg-white nok25-dark-bg-darkerblue">
+                    <div class="nok25-nav-dropdown-contents-menu">
+                        <h3>Behandeling</h3>
+                        <div>Wat is obesitas?</div>
+                        <div>Onze behandeling van obesitas</div>
+                        <div>Ons behandelprogramma</div>
+                        <div>De operatie</div>
+                        <div>De kosten van de behandeling</div>
+                    </div>
+                    <div>
+                        <nok25-square-block class="nok25-bg-darkerblue">
+                            <h3 class="nok25-square-block__heading">
+                                Vragen of behoefte aan persoonlijk advies?
+                            </h3>
+                            <button class="nok25-button nok25-base-font nok25-bg-darkblue nok25-text-contrast" tabindex="0">
+                                Neem contact op  <svg class="nok25-text-yellow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" width="25" height="25" fill="currentColor"><path d="m17.5 5.999-.707.707 5.293 5.293H1v1h21.086l-5.294 5.295.707.707L24 12.499l-6.5-6.5z" data-name="Right"/></svg>
+                            </button>
+                        </nok25-square-block>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </nok-25-desktop-nav>
 </nav>
 
 <section class="nok25-horizontal-section">
