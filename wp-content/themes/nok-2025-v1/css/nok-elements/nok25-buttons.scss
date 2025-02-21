@@ -28,7 +28,9 @@ $component-name: #{nok-variables.$prefix}-button;
 
   color: var(--text-color, var(--text-color--contrast, inherit));
   @include nok-mixins.nok-border-radius;
-  @include nok-mixins.nok-btn-shadow-border;
+  &:not(.no-shadow) {
+    @include nok-mixins.nok-btn-shadow-border;
+  }
   border: 0px solid #8880;
   outline: 0 none;
 
