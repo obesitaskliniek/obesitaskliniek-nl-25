@@ -33,7 +33,9 @@
 $component-name: #{nok-variables.$prefix}-nav;
 
 .#{$component-name} {
+  $z_base: 0;
   &-top {
+    z-index: $z_base + 1;
     @include nok-mixins.nok-text-font;
     @include nok-rfs.rfs(1rem, font-size);
     font-weight: 300;
@@ -42,21 +44,25 @@ $component-name: #{nok-variables.$prefix}-nav;
 
     &-row {
       padding-bottom: 2rem;
+      overflow: hidden;
     }
   }
+
   &-menubar {
+    z-index: $z_base + 3;
     @include menu-flex(var(--nok25-padding-base, var(--global-grid-gap, 1.5rem)));
     @include nok-mixins.nok-border-radius('large');
     @include nok-mixins.nok-subtle-shadow;
 
+    padding-left: var(--nok25-padding-base, 1.5rem);
+    padding-right: var(--nok25-padding-base, 1.5rem);
     height: 6rem;
+
+    overflow: hidden;
 
     @include nok-mixins.nok-font;
     @include nok-rfs.rfs(1.2rem, font-size);
     font-weight: 500;
-
-    padding-left: var(--nok25-padding-base, 1.5rem);
-    padding-right: var(--nok25-padding-base, 1.5rem);
 
     img, svg {
       height: 3.5rem;
@@ -65,8 +71,93 @@ $component-name: #{nok-variables.$prefix}-nav;
     }
 
     &-row {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
       position: absolute;
       top: 4rem;
+      overflow: hidden; // stops the dropdown from appearing at the top when collapsed
+    }
+  }
+
+  &-dropdown {
+    z-index: $z_base + 2;
+    display: grid;
+    grid-template-rows: 1fr;
+    overflow: hidden;
+    justify-content: center;
+
+    margin-top: calc(-1 * var(--nok25-default-border-radius--large, 0));
+    margin-left: var(--nok25-default-border-radius--large, 0); //prevents the dropdown from appearing at the top sides when collapsed due to border radius on the menubar
+    margin-right: var(--nok25-default-border-radius--large, 0); //prevents the dropdown from appearing at the top sides when collapsed due to border radius on the menubar
+    transform: translateY(-100%);
+    transition: transform .65s cubic-bezier(.85,0,.15,1);
+
+    &.open {
+      transform: translateY(0);
+    }
+
+    &-collapser {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    &-contents {
+      --grid-gap: var(--nok25-padding-base, var(--global-grid-gap, 1.5rem));
+      display: inline-flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: stretch;
+      align-self: center;
+
+      gap: var(--grid-gap, var(--global-grid-gap));
+      @include nok-mixins.nok-border-radius('large', 'bottom');
+      @include nok-mixins.nok-subtle-shadow;
+
+      width: max-content;
+      overflow: hidden;
+      padding: calc(var(--grid-gap, var(--nok25-padding-base, 1.5rem)) * 2);
+
+      > * {
+        flex-basis: 50%;
+        min-width: 0;
+        flex-shrink: 1;
+      }
+
+      &-menu {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: calc(var(--grid-gap, var(--nok25-padding-base, 1.5rem)) / 2) 0;
+      }
+
+      h2 {
+        @include nok-rfs.rfs(2rem, font-size);
+      }
+      h3 {
+        @include nok-rfs.rfs(1.5rem, font-size);
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+        font-weight: 300;
+      }
+    }
+  }
+
+  &-mask {
+    --local-bg-color-alpha: 0;
+    inset: 0;
+    position: fixed;
+    z-index: 2;
+    pointer-events: none;
+    transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out;
+    &.active {
+      backdrop-filter: blur(5px);
+      --local-bg-color-alpha: 0.5;
+      pointer-events: all;
     }
   }
 }

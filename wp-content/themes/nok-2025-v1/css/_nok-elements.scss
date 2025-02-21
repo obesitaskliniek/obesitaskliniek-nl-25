@@ -66,6 +66,8 @@ body {
   align-items: center;
   justify-items: center;
 
+  font-size: var(--nok25-font-size-buttons, 1.25rem);
+
   > button.fill-group-column {
     width: 100%;
   }

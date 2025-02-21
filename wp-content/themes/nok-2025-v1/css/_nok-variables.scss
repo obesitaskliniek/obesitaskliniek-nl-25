@@ -29,7 +29,7 @@ $exposed-variables: (
     "default-line-height": $default-line-height,
     "default-heading-line-height": $default-heading-line-height,
     "padding-base": $padding-base,
-    "padding-section-sides": $padding-base * 3,
+    "padding-section-sides": min(10vw, $padding-base * 3),
     "default-border-radius": $default-border-radius,
     "default-border-radius--large": $default-border-radius--large,
     "font-size-buttons" : $font-size-buttons,

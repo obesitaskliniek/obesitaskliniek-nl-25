@@ -68,10 +68,12 @@ $logo = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 173.6">
 </svg>'
 ?>
 
-<nav class="nok25-horizontal-section nok25-sticky nok25-nav">
-    <div class="nok25-horizontal-section--stretched nok25-bg-body nok25-dark-bg-darkestblue nok25-text-darkerblue nok25-dark-text-white nok25-bg-blur nok25-nav-top-row nok25-z-1">
+<nav class="nok25-horizontal-section nok25-sticky nok25-nav nok25-text-darkerblue">
+    <div class="nok25-nav-mask nok25-bg-darkerblue active"></div>
+    <div class="nok25-horizontal-section--stretched nok25-bg-body nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-top-row nok25-z-1">
         <div class="nok25-horizontal-section__inner nok25-nav-top">
-            <div><small class="nok25-valign-center">
+            <div>
+                <small class="nok25-valign-center">
                     <span class="nok25-text-lightblue nok25-star-ratings"><?= $star;?><?= $star;?><?= $star;?><?= $star;?><?= $star;?></span>5/5 op basis van 12.030 beoordelingen
                 </small>
             </div>
@@ -84,7 +86,7 @@ $logo = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 173.6">
             <div>NL</div>
         </div>
     </div>
-    <div class="nok25-horizontal-section__inner nok25-nav-menubar-row nok25-z-2">
+    <div class="nok25-horizontal-section__inner nok25-nav-menubar-row nok25-z-2" onclick="document.querySelector('.nok25-nav-dropdown').classList.toggle('open');document.querySelector('.nok25-nav-mask').classList.toggle('active');">
         <div class="nok25-nav-menubar nok25-bg-white nok25-dark-bg-darkerblue">
             <div>
                 <?= $logo;?>
@@ -95,11 +97,33 @@ $logo = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 173.6">
             <div>Verwijzers</div>
             <div><button class="nok25-button nok25-base-font nok25-bg-yellow" tabindex="0">Gratis voorlichtingsavond</button></div>
         </div>
+        <div class="nok25-nav-dropdown open">
+            <div class="nok25-nav-dropdown-contents nok25-bg-white nok25-dark-bg-darkerblue">
+                <div class="nok25-nav-dropdown-contents-menu">
+                    <h3>Behandeling</h3>
+                    <div>Wat is obesitas?</div>
+                    <div>Onze behandeling van obesitas</div>
+                    <div>Ons behandelprogramma</div>
+                    <div>De operatie</div>
+                    <div>De kosten van de behandeling</div>
+                </div>
+                <div>
+                    <nok25-square-block class="nok25-bg-darkerblue">
+                        <h3 class="nok25-square-block__heading">
+                            Vragen of behoefte aan persoonlijk advies?
+                        </h3>
+                        <button class="nok25-button nok25-base-font nok25-bg-darkblue nok25-text-contrast" tabindex="0">
+                            Neem contact op  <svg class="nok25-text-yellow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" width="25" height="25" fill="currentColor"><path d="m17.5 5.999-.707.707 5.293 5.293H1v1h21.086l-5.294 5.295.707.707L24 12.499l-6.5-6.5z" data-name="Right"/></svg>
+                        </button>
+                    </nok25-square-block>
+                </div>
+            </div>
+        </div>
     </div>
 </nav>
 
 <section class="nok25-horizontal-section">
-    <div class="nok25-horizontal-section__inner nok25-hero nok25-bg-white nok25-dark-bg-darkestblue nok25-text-darkerblue nok25-dark-text-white nok25-bg-alpha-6 nok25-dark-bg-alpha-10">
+    <div class="nok25-horizontal-section__inner nok25-hero nok25-bg-white nok25-dark-bg-darkestblue nok25-text-darkerblue nok25-dark-text-white nok25-bg-alpha-6 nok25-dark-bg-alpha-10 nok25-no-border-sm">
 
         <article>
             <h2 class="nok25-text-lightblue nok25-dark-text-yellow nok25-hero__pre-heading">
@@ -165,7 +189,7 @@ $logo = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 173.6">
 
         </figure>
 
-        <section class="nok25-bg-body--lighter nok25-dark-bg-darkerblue nok25-bg-blur nok25-bg-alpha-6">
+        <section class="nok25-bg-body--lighter nok25-dark-bg-darkerblue nok25-bg-blur--large nok25-bg-alpha-6">
             <div>Vergoed door zorgverzekeringen</div>
             <div>Meer dan 30 jaar ervaring</div>
             <div>Samenwerking met de beste ziekenhuizen</div>

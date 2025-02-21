@@ -30,6 +30,9 @@ $component-name: #{nok-variables.$prefix}-block-group;
     padding-bottom: calc(var(--grid-gap, var(--global-grid-gap)) * 2);
     display: grid;
     gap: var(--grid-gap, var(--global-grid-gap));
+    @include nok-mixins.media-breakpoint-down(lg) {
+      column-gap: 0;
+    }
     grid-template-columns: repeat(var(--grid-columns, 1), 1fr);
     grid-template-rows: 1fr;
     align-items: stretch;
