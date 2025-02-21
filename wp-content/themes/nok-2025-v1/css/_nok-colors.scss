@@ -79,7 +79,7 @@ $nok-dark-contrast-overrides: (
   /**
    * Additional color classes
    */
-  --#{nok-variables.$prefix}-focus-ring: #{$black};
+  //--#{nok-variables.$prefix}-focus-ring: #{$black};
 }
 
 /* Dark mode color variables */
@@ -111,7 +111,7 @@ slightly dimmed or desaturated in dark-mode (when no dark-specific classes have 
     /**
      * Additional color classes
      */
-    --#{nok-variables.$prefix}-focus-ring: #{$white};
+    //--#{nok-variables.$prefix}-focus-ring: #{$white};
   }
 }
 

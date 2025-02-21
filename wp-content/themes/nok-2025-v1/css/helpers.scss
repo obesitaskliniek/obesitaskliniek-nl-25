@@ -49,7 +49,10 @@
 }
 
 .#{nok-variables.$prefix}-bg-blur {
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(5px);
+  &--large {
+    backdrop-filter: blur(10px);
+  }
 }
 
 /* Alpha classes */
@@ -92,4 +95,20 @@ $alphas: (
 .#{nok-variables.$prefix}-valign-center {
   display: flex;
   align-items: center;
+}
+
+/* Border-radius modifiers */
+@each $breakpoint, $section-max-width in nok-variables.$section-max-widths {
+  @include nok-mixins.media-breakpoint-down($breakpoint, nok-variables.$grid-breakpoints) {
+    .#{nok-variables.$prefix}-no-border-#{$breakpoint} {
+      border-radius: 0 !important;
+    }
+  }
+  @if ($breakpoint == xxxl) {
+    @include nok-mixins.media-breakpoint-up($breakpoint, nok-variables.$grid-breakpoints) {
+      .#{nok-variables.$prefix}-no-border-#{$breakpoint} {
+        border-radius: 0 !important;
+      }
+    }
+  }
 }

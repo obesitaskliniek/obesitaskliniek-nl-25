@@ -237,7 +237,6 @@
   /**
    * Additional color classes
    */
-  --nok25-focus-ring: #222;
 }
 
 /* Dark mode color variables */
@@ -374,7 +373,6 @@ slightly dimmed or desaturated in dark-mode (when no dark-specific classes have 
     /**
      * Additional color classes
      */
-    --nok25-focus-ring: #f3f4f9;
   }
 }
 /**

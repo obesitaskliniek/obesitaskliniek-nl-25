@@ -4,7 +4,7 @@
   --nok25-default-line-height: 1.5;
   --nok25-default-heading-line-height: 1.25;
   --nok25-padding-base: 1.5rem;
-  --nok25-padding-section-sides: 4.5rem;
+  --nok25-padding-section-sides: min(10vw, 4.5rem);
   --nok25-default-border-radius: 0.4rem;
   --nok25-default-border-radius--large: 1rem;
   --nok25-font-size-buttons: 1.25rem;
@@ -65,6 +65,10 @@
 }
 
 .nok25-bg-blur {
+  -webkit-backdrop-filter: blur(5px);
+          backdrop-filter: blur(5px);
+}
+.nok25-bg-blur--large {
   -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
 }
@@ -291,6 +295,43 @@
 .nok25-valign-center {
   display: flex;
   align-items: center;
+}
+
+/* Border-radius modifiers */
+@media (max-width: 575.98px) {
+  .nok25-no-border-sm {
+    border-radius: 0 !important;
+  }
+}
+@media (max-width: 767.98px) {
+  .nok25-no-border-md {
+    border-radius: 0 !important;
+  }
+}
+@media (max-width: 991.98px) {
+  .nok25-no-border-lg {
+    border-radius: 0 !important;
+  }
+}
+@media (max-width: 1199.98px) {
+  .nok25-no-border-xl {
+    border-radius: 0 !important;
+  }
+}
+@media (max-width: 1399.98px) {
+  .nok25-no-border-xxl {
+    border-radius: 0 !important;
+  }
+}
+@media (max-width: 1599.98px) {
+  .nok25-no-border-xxxl {
+    border-radius: 0 !important;
+  }
+}
+@media (min-width: 1600px) {
+  .nok25-no-border-xxxl {
+    border-radius: 0 !important;
+  }
 }
 
 /*# sourceMappingURL=helpers.css.map */

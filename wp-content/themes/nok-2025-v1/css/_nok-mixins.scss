@@ -70,8 +70,10 @@
 
 
 @mixin nok-focus-ring {
-  outline: 0 none;
-  box-shadow: 0 0 0 2px var(--#{nok-variables.$prefix}-focus-ring, inherit);
+  //outline: 0 none;
+  //box-shadow: 0 0 0 2px var(--#{nok-variables.$prefix}-focus-ring, var(--text-color--contrast, inherit));
+  box-shadow: 0 0 0px 4px var(--nok25-yellow);
+  outline: 2px solid #FFF;
 }
 
 @mixin nok-inline-link {
@@ -88,7 +90,7 @@
   );
   -webkit-tap-highlight-color: transparent;
 
-  font-size: var(--nok25-font-size-buttons, 1.25rem);
+  //font-size: var(--nok25-font-size-buttons, 1.25rem);
   text-decoration: none;
   padding: .75ex 0;
 
