@@ -12,14 +12,14 @@ $component-name: #{nok-variables.$prefix}-square-block;
 #{$component-name},
 :host {
   --local-color-alpha: 0.8;
-  --icon-color: var(--nok25-yellow);
-  --text-color: hsla(var(--nok25-white--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color--heading: hsla(var(--nok25-white--hsl) / 1);
-  --text-color--link: hsla(var(--nok25-white--hsl) / 1);
-  --text-color--link--hover: var(--nok25-yellow);
-  --text-color--link-icon: var(--nok25-lightblue);
-  --text-color--link-icon--hover: var(--nok25-yellow);
-  --background-color: var(--nok25-darkblue);
+  --icon-color: var(--#{nok-variables.$prefix}-yellow);
+  --text-color: hsla(var(--#{nok-variables.$prefix}-white--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color--heading: hsla(var(--#{nok-variables.$prefix}-white--hsl) / 1);
+  --text-color--link: hsla(var(--#{nok-variables.$prefix}-white--hsl) / 1);
+  --text-color--link--hover: var(--#{nok-variables.$prefix}-yellow);
+  --text-color--link-icon: var(--#{nok-variables.$prefix}-lightblue);
+  --text-color--link-icon--hover: var(--#{nok-variables.$prefix}-yellow);
+  --background-color: var(--#{nok-variables.$prefix}-darkblue);
   position: relative;
   display: grid;
   //grid-template-rows: auto auto 1fr auto;
@@ -28,10 +28,10 @@ $component-name: #{nok-variables.$prefix}-square-block;
   gap: (nok-variables.$padding-base);
   padding: (nok-variables.$padding-base * 2);
   @include nok-mixins.nok-border-radius('large');
-  line-height: var(--nok25-default-line-height, 1.25);
+  line-height: var(--#{nok-variables.$prefix}-default-line-height, 1.25);
 
-  padding: calc(var(--nok25-padding-base, 1.5rem) * 2);
-  border-radius: var(--nok25-default-border-radius--large, 8px);
+  padding: calc(var(--#{nok-variables.$prefix}-padding-base, 1.5rem) * 2);
+  border-radius: var(--#{nok-variables.$prefix}-default-border-radius--large, 8px);
   @include nok-mixins.nok-subtle-shadow;
   background-color: var(--background-color);
 
@@ -70,7 +70,7 @@ $component-name: #{nok-variables.$prefix}-square-block;
     align-items: center;
     justify-items: start;
     cursor: pointer;
-    gap: calc(var(--nok25-padding-base, 1.5rem) / 2);
+    gap: calc(var(--#{nok-variables.$prefix}-padding-base, 1.5rem) / 2);
 
     height: 2rem;
 

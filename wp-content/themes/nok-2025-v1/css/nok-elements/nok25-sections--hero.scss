@@ -11,7 +11,7 @@ $component-name: #{nok-variables.$prefix}-hero;
 
 .#{$component-name} {
   $z_base: 0;
-  --grid-gap: var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem));
+  --grid-gap: var(--#{nok-variables.$prefix}-padding-base, var(--#{nok-variables.$prefix}-global-grid-gap, 1.5rem));
   position: relative;
   @include nok-mixins.nok-border-radius('x-large', 'bottom');
   padding-right: 0;
@@ -35,20 +35,20 @@ $component-name: #{nok-variables.$prefix}-hero;
     flex-wrap: nowrap;
     justify-content: center;
     align-items: flex-start;
-    gap: var(--grid-gap, var(--nok25-global-grid-gap));
+    gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
   }
 
   figure {
     z-index: $z_base + 1;
     overflow: hidden;
     margin: 0;
-    --grad-1-1: var(--nok25-greenblue--hsl);
-    --grad-1-2: var(--nok25-yellow--hsl);
-    --base-layer: var(--nok25-body--darker--hsl);
+    --grad-1-1: var(--#{nok-variables.$prefix}-greenblue--hsl);
+    --grad-1-2: var(--#{nok-variables.$prefix}-yellow--hsl);
+    --base-layer: var(--#{nok-variables.$prefix}-body--darker--hsl);
     @media (prefers-color-scheme: dark) {
-      --grad-1-1: var(--nok25-greenyellow--lighter--hsl);
-      --grad-1-2: var(--nok25-lightblue--lighter--hsl);
-      --base-layer: var(--nok25-lightblue--darker--hsl);
+      --grad-1-1: var(--#{nok-variables.$prefix}-greenyellow--lighter--hsl);
+      --grad-1-2: var(--#{nok-variables.$prefix}-lightblue--lighter--hsl);
+      --base-layer: var(--#{nok-variables.$prefix}-lightblue--darker--hsl);
     }
     linearGradient {
       &#a {
@@ -78,7 +78,7 @@ $component-name: #{nok-variables.$prefix}-hero;
       @include nok-mixins.media-breakpoint-down(xl) {
         object-position: 80% 50%;
       }
-      background-color: hsla(var(--nok25-green--hsl) / 0.5);
+      background-color: hsla(var(--#{nok-variables.$prefix}-green--hsl) / 0.5);
 
     }
   }
@@ -113,16 +113,16 @@ $component-name: #{nok-variables.$prefix}-hero;
     align-items: center;
     justify-content: space-between;
 
-    padding-top: var(--nok25-padding-base, 1.5rem);
-    padding-bottom: var(--nok25-padding-base, 1.5rem);
+    padding-top: var(--#{nok-variables.$prefix}-padding-base, 1.5rem);
+    padding-bottom: var(--#{nok-variables.$prefix}-padding-base, 1.5rem);
   }
 
   section {
-    padding-right: var(--nok25-padding-section-sides, 1.5rem);
-    padding-left: var(--nok25-padding-section-sides, 1.5rem);
+    padding-right: var(--#{nok-variables.$prefix}-padding-section-sides, 1.5rem);
+    padding-left: var(--#{nok-variables.$prefix}-padding-section-sides, 1.5rem);
   }
   article {
-    padding: var(--grid-gap) 0 var(--grid-gap) var(--nok25-padding-section-sides, 1.5rem);
+    padding: var(--grid-gap) 0 var(--grid-gap) var(--#{nok-variables.$prefix}-padding-section-sides, 1.5rem);
   }
 
   /* Mobile */
@@ -135,7 +135,7 @@ $component-name: #{nok-variables.$prefix}-hero;
     article {
       grid-row: 2 / 4;
       align-self: end;
-      padding-right: var(--nok25-padding-section-sides, 1.5rem);
+      padding-right: var(--#{nok-variables.$prefix}-padding-section-sides, 1.5rem);
     }
     figure {
       grid-row: 1 / 3;

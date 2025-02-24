@@ -22,14 +22,14 @@ $component-name: #{nok-variables.$prefix}-block-group;
   }
 
   &__inner {
-    --grid-gap: var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem));
+    --grid-gap: var(--#{nok-variables.$prefix}-padding-base, var(--#{nok-variables.$prefix}-global-grid-gap, 1.5rem));
     --grid-column-width: calc(
         (100% - (var(--grid-gap, 1) * (var(--grid-columns, 1) - 1))) / var(--grid-columns, 1)
     );
-    padding-top: calc(var(--grid-gap, var(--nok25-global-grid-gap)) * 2);
-    padding-bottom: calc(var(--grid-gap, var(--nok25-global-grid-gap)) * 2);
+    padding-top: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * 2);
+    padding-bottom: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * 2);
     display: grid;
-    gap: var(--grid-gap, var(--nok25-global-grid-gap));
+    gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
     @include nok-mixins.media-breakpoint-down(lg) {
       column-gap: 0;
     }
@@ -76,7 +76,7 @@ $component-name: #{nok-variables.$prefix}-block-group;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    gap: var(--grid-gap, var(--nok25-global-grid-gap));
+    gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
 
     > * {
       flex-basis: var(--grid-column-width);
