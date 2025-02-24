@@ -29,6 +29,7 @@ $exposed-variables: (
     "default-line-height": $default-line-height,
     "default-heading-line-height": $default-heading-line-height,
     "padding-base": $padding-base,
+    "global-grid-gap": ($padding-base / 2),
     "padding-section-sides": min(6vw, $padding-base * 3),
     "default-border-radius": $default-border-radius,
     "default-border-radius--large": $default-border-radius--large,

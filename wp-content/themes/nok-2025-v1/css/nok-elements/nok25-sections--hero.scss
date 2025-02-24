@@ -11,7 +11,7 @@ $component-name: #{nok-variables.$prefix}-hero;
 
 .#{$component-name} {
   $z_base: 0;
-  --grid-gap: var(--nok25-padding-base, var(--global-grid-gap, 1.5rem));
+  --grid-gap: var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem));
   position: relative;
   @include nok-mixins.nok-border-radius('x-large', 'bottom');
   padding-right: 0;
@@ -35,7 +35,7 @@ $component-name: #{nok-variables.$prefix}-hero;
     flex-wrap: nowrap;
     justify-content: center;
     align-items: flex-start;
-    gap: var(--grid-gap, var(--global-grid-gap));
+    gap: var(--grid-gap, var(--nok25-global-grid-gap));
   }
 
   figure {

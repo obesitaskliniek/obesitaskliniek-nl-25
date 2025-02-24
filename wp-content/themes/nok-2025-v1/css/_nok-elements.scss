@@ -62,7 +62,7 @@ body {
   grid-template-rows: 1fr;
   grid-template-columns: 1fr 1fr;
   width: 100%;
-  gap: var(--grid-gap, var(--nok25-padding-base, var(--global-grid-gap, 1.5rem)));
+  gap: var(--grid-gap, var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem)));
   align-items: center;
   justify-items: center;
 
