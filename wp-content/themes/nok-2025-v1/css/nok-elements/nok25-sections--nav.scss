@@ -17,10 +17,10 @@
   justify-content: space-between;
   align-items: center;
 
-  gap: var(--grid-gap, var(--global-grid-gap));
+  gap: var(--grid-gap, var(--nok25-global-grid-gap));
 
-  padding-top: calc(var(--grid-gap, var(--global-grid-gap)) * .75);
-  padding-bottom: calc(var(--grid-gap, var(--global-grid-gap)) * .75);
+  padding-top: calc(var(--grid-gap, var(--nok25-global-grid-gap)) * .75);
+  padding-bottom: calc(var(--grid-gap, var(--nok25-global-grid-gap)) * .75);
 
   > * {
     flex-shrink: 0;
@@ -36,34 +36,36 @@ $component-name: #{nok-variables.$prefix}-nav;
 
 .#{$component-name} {
   $z_base: 0;
-  --bs-navbar-toggler-icon-bg: #{nok-utilities.escape-svg(url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke='#{map.get(nok-colors.$nok-base-colors, darkerblue)}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>"))};
-  --bs-navbar-toggler-icon-bg-active: #{nok-utilities.escape-svg(url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' class='bi bi-x-lg' viewBox='0 0 16 16'><path fill='#{map.get(nok-colors.$nok-base-colors, darkerblue)}' d='M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z'/></svg>"))};
 
-  nok-25-mobile-nav, nok-25-mobile-nav {
-    display: contents;
-  }
+  @include nok-mixins.nok-font;
+  @include nok-rfs.rfs(1.2rem, font-size);
 
   @include nok-mixins.media-breakpoint-up(lg) {
-    nok-25-mobile-nav {
+    #{nok-variables.$prefix}-mobile-nav {
       display: none !important;
+    }
+    & {
+      position: sticky;
+      top: 0;
+      z-index: nok-variables.$z-stack-top;
     }
   }
   @include nok-mixins.media-breakpoint-down(lg) {
-    nok-25-desktop-nav {
+    #{nok-variables.$prefix}-desktop-nav {
       display: none !important;
+    }
+    & {
+      position: fixed;
+      bottom: 0;
+      top: 0;
+      justify-content: flex-start;
+      z-index: nok-variables.$z-stack-top;
     }
   }
 
   &-menu-toggler.nok25-button {
-    background-image: var(--bs-navbar-toggler-icon-bg);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 75%;
-    vertical-align: middle;
-    aspect-ratio: 1 / 1;
-    box-shadow: none;
     transform: rotate(0deg);
-    transition: transform .3s ease-in-out;
+    transition: transform .5s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   &-mask {
@@ -87,19 +89,19 @@ $component-name: #{nok-variables.$prefix}-nav;
     }
 
     .#{$component-name}-menu-toggler {
-      background-image: var(--bs-navbar-toggler-icon-bg-active);
+      background-image: var(--nok25-button-icon-navbar-toggler-active);
       transform: rotate(-180deg);
     }
   }
 
-  nok-25-desktop-nav {
+  #{nok-variables.$prefix}-desktop-nav {
     .#{$component-name}-top {
       z-index: $z_base + 1;
       @include nok-mixins.nok-text-font;
       @include nok-rfs.rfs(1rem, font-size);
       font-weight: 300;
 
-      @include menu-flex(var(--nok25-padding-base, var(--global-grid-gap, 1.5rem)));
+      @include menu-flex(var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem)));
 
       &-row {
         padding-bottom: 2rem;
@@ -108,8 +110,9 @@ $component-name: #{nok-variables.$prefix}-nav;
     }
 
     .#{$component-name}-menubar {
+      pointer-events: all;
       z-index: $z_base + 3;
-      @include menu-flex(var(--nok25-padding-base, var(--global-grid-gap, 1.5rem)));
+      @include menu-flex(var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem)));
       @include nok-mixins.nok-border-radius('large');
       @include nok-mixins.nok-subtle-shadow;
 
@@ -119,8 +122,6 @@ $component-name: #{nok-variables.$prefix}-nav;
 
       overflow: hidden;
 
-      @include nok-mixins.nok-font;
-      @include nok-rfs.rfs(1.2rem, font-size);
       font-weight: 500;
 
       img, svg {
@@ -131,6 +132,7 @@ $component-name: #{nok-variables.$prefix}-nav;
       }
 
       &-row {
+        pointer-events: none;
         display: flex;
         flex-direction: column;
         align-items: stretch;
@@ -153,10 +155,6 @@ $component-name: #{nok-variables.$prefix}-nav;
       transform: translateY(-100%);
       transition: transform .65s cubic-bezier(.85, 0, .15, 1);
 
-      &.open {
-        transform: translateY(0);
-      }
-
       &-collapser {
         margin: 0;
         padding: 0;
@@ -164,7 +162,7 @@ $component-name: #{nok-variables.$prefix}-nav;
       }
 
       &-contents {
-        --grid-gap: var(--nok25-padding-base, var(--global-grid-gap, 1.5rem));
+        --grid-gap: var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem));
         display: inline-flex;
         flex-direction: row;
         flex-wrap: nowrap;
@@ -172,7 +170,9 @@ $component-name: #{nok-variables.$prefix}-nav;
         align-items: stretch;
         align-self: center;
 
-        gap: var(--grid-gap, var(--global-grid-gap));
+        pointer-events: all;
+
+        gap: var(--grid-gap, var(--nok25-global-grid-gap));
         @include nok-mixins.nok-border-radius('large', 'bottom');
         @include nok-mixins.nok-subtle-shadow;
 
@@ -208,60 +208,166 @@ $component-name: #{nok-variables.$prefix}-nav;
         }
       }
     }
-
-    /*
-    @include nok-mixins.media-breakpoint-down(lg) {
-      position: fixed !important;
-      bottom: 0;
-      .#{$component-name}-top-row {
-        order: 2;
-      }
-      .#{$component-name}-menubar-row {
-        order: 1;
-        position: relative;
-        flex-basis: 100%;
-        padding: 0;
-        top: 0;
-
-        .#{$component-name}-menubar {
-
-          flex-basis: 100%;
-          flex-direction: column;
-          justify-content: flex-start;
-          align-items: stretch;
-          padding: 0;
-          gap: 0;
-          background-color: var(--nok25-darkblue--darker--contrast);
-
-          > * {
-            padding: var(--grid-gap, 1.5rem);
-          }
-          > :nth-child(1) {
-            background-color: var(--nok25-white);
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            justify-content: space-between;
-            flex-basis: auto;
-          }
-
-        }
-
-        .#{$component-name}-dropdown {
-          transform: none;
-          margin: 0;
-        }
-      }
-    }//*/
   }
 
-  nok-25-mobile-nav {
+  #{nok-variables.$prefix}-mobile-nav {
+    $dur_in: 750ms;
+    $dur_out: 750ms;
+    --animation-duration--in: #{$dur_in};
+    --animation-duration--out: #{$dur_out};
+    --animation-easing: cubic-bezier(.07,1.01,.36,1);
 
-    img, svg {
-      align-self: center;
-      height: 3.5rem;
-      @include nok-rfs.rfs(3.5rem, height);
-      width: auto;
+    @at-root .#{$component-name}.open #{nok-variables.$prefix}-mobile-nav {
+      > * {
+        $inter-delay: 100ms;
+        &:nth-child(n+2) {
+          opacity: 0;
+          animation: slide--in var(--animation-duration--in) var(--animation-easing);
+          animation-fill-mode: forwards;
+          .nok25-nav__menuitem {
+            opacity: 0;
+            animation: fade--in 0.5s ease-out;
+            animation-fill-mode: forwards;
+          }
+          @for $i from 1 through 15 {
+            .nok25-nav__menuitem:nth-child(#{$i}) {
+              animation-delay: ($dur_in / 4) + (50ms * $i);
+            }
+          }
+        }
+      }
+    }
+    @at-root body:has(.#{$component-name}.open) {
+      overflow: hidden !important;
+    }
+    @at-root .#{$component-name}:not(.open) #{nok-variables.$prefix}-mobile-nav {
+      > * {
+        $inter-delay: 100ms;
+        &:nth-child(n+2) {
+          opacity: 0;
+          animation: slide--out var(--animation-duration--out) var(--animation-easing);
+          animation-fill-mode: forwards;
+        }
+      }
+    }
+
+    .#{$component-name} {
+      &-top {
+        &-row {
+          display: flex;
+
+          align-items: center;
+          justify-items: center;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          justify-content: space-between;
+
+          padding: 1rem var(--nok25-padding-section-sides);
+          gap: var(--grid-gap, var(--nok25-global-grid-gap));
+        }
+
+      }
+
+      &-footer, &-carousel {
+        padding: 0;
+        margin: 0;
+      }
+
+      &-carousel {
+        overflow: hidden;
+        scroll-behavior: smooth;
+        overscroll-behavior: contain;
+        touch-action: none;
+
+        flex-grow: 1;
+        flex-shrink: 1;
+
+        &.is-scrolling {
+          //stop listening while scrolling
+          pointer-events: none !important;
+        }
+        &[data-scroll-snapping="true"] {
+          scroll-snap-type: both mandatory;
+          scroll-snap-stop: normal;
+        }
+
+        &__inner {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          gap: var(--grid-gap, var(--nok25-global-grid-gap));
+          height: 100%;
+        }
+
+        &__slide {
+          padding: 0;
+          margin: 0;
+          overflow: hidden;
+          scroll-behavior: smooth;
+          touch-action: none;
+
+          display: flex;
+          flex-direction: column;
+          flex-wrap: nowrap;
+
+          scroll-snap-type: both mandatory;
+          scroll-snap-stop: normal;
+
+          &,
+          > * {
+            flex-shrink: 0;
+            flex-basis: 100%;
+            scroll-snap-align: start;
+          }
+        }
+      }
+
+
+      &__menuitems {
+        --item-padding: 1rem 0;
+        font-weight: 500;
+        padding: 1rem var(--nok25-padding-section-sides);
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto; //make sure we can scroll the submenus on really small screens (or many items)
+        &--compact {
+          @include nok-rfs.rfs(1rem, font-size);
+          font-weight: 400;
+          --item-padding: .5rem 0;
+        }
+      }
+      &__menuitem {
+        padding: var(--item-padding);
+        display: grid;
+        grid-template-columns: 1fr auto;
+        text-decoration: none;
+        &:not(&--back) {
+          border-bottom: 2px solid #8884;
+          &::after {
+            content: "\003E";
+            position: relative;
+          }
+        }
+
+        &--back {
+          font-weight: 400;
+        }
+      }
+
+      &-footer {
+
+      }
+    }
+    #{nok-variables.$prefix}-logo {
+      display: block;
+      flex-grow: 1;
+      min-width: 0;
+      svg {
+        align-self: center;
+        height: 4rem;
+        @include nok-rfs.rfs(4rem, height);
+        width: auto;
+      }
     }
 
   }

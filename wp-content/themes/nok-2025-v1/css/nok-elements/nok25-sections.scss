@@ -19,15 +19,6 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
     margin-top: calc(var(--nok25-padding-base, 1.5rem) * 2);
   }
 
-  &.#{nok-variables.$prefix}-sticky {
-    position: sticky;
-    top: 0;
-    z-index: nok-variables.$z-stack-top;
-    &--fixed {
-      position: fixed;
-    }
-  }
-
   &--stretched {
     align-self: stretch;
   }

@@ -36,7 +36,7 @@ const NOK_THEME_ROOT = 'https://dev.obesitaskliniek.nl/wp-content/themes/nok-202
 $star = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
   <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
 </svg>';
-$logo = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 173.6">
+$logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 173.6">
 <title id="svg-title">Nederlandse Obesitas Kliniek</title>
   <desc id="svg-desc">Nederlandse Obesitas Kliniek logo</desc>
 <path d="M120.05,24.86a11.25,11.25,0,0,0,4.2-9A11.35,11.35,0,0,0,120,6.7c-3-2.43-6.18-2.91-10-2.91h-4.85v24.1h4.78c4,0,7.11-.48,10.18-3M108,6.28H110c3,0,5.64.38,8,2.33a9.42,9.42,0,0,1,.14,14.3c-2.36,2.07-5,2.49-8.13,2.49H108Z" transform="translate(-2.57 -2.64)" fill="currentColor"/>
@@ -65,20 +65,63 @@ $logo = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 173.6">
 <polygon points="354.85 35.88 296.71 35.88 296.71 47.99 320.89 47.99 320.89 137.97 330.65 137.97 330.65 47.99 354.85 47.99 354.85 35.88" fill="currentColor"/>
 <path d="M375.15,38.53l-33.89,102h7.95l8.88-27.34h41.7l8.89,27.34h8.53l-32.82-102Zm-14,65.92,18-56.28,17.9,56.28Z" transform="translate(-2.57 -2.64)" fill="currentColor"/>
 <path d="M442.54,85.34c-10.71-4-20-7.51-20-21,0-10.22,5.56-20.53,18-20.53,11.7,0,18.69,7.42,18.69,19.86v3.76h5.36v-3.5c0-11.76-6.23-25.5-23.8-25.5-18.65,0-23.57,16.59-23.57,25.38,0,16.92,9.75,21.75,23.53,26.74,9.85,3.59,20,7.29,20,21,0,17.32-10.77,23.48-20.84,23.48-12.24,0-19.54-8.52-19.54-22.8v-5.65h-5.36v5.65c0,13,6.56,28.18,25,28.18,18,0,26.08-14.15,26.08-28.18,0-18-12.54-22.77-23.61-26.93" transform="translate(-2.57 -2.64)" fill="currentColor"/>
-</svg>'
+</svg></nok25-logo>'
 ?>
 
-<nav class="nok25-horizontal-section nok25-sticky nok25-nav nok25-text-darkerblue mobile">
-    <div class="nok25-nav-mask nok25-bg-darkerblue nok25-z-1"></div>
-    <nok-25-mobile-nav>
-        <div class="nok25-horizontal-section--stretched nok25-bg-white nok25-dark-bg-darkestblue nok25-dark-text-white nok25-z-2">
-            <div>
-                <?= $logo;?>
-                <button class="nok25-button nok25-nav-menu-toggler no-shadow" tabindex="0" onclick="document.querySelector('.nok25-nav').classList.toggle('open');"></button>
+<nav class="nok25-horizontal-section nok25-nav nok25-text-darkerblue open" data-requires="./nok-toggler.mjs">
+    <div class="nok25-nav-mask nok25-bg-darkerblue nok25-z-1" data-toggles="open"></div>
+
+    <nok25-mobile-nav>
+        <div class="nok25-horizontal-section--stretched nok25-bg-white nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-top-row nok25-z-3">
+            <?= $logo;?>
+            <button class="nok25-button nok25-button-search no-shadow" tabindex="0"></button>
+            <button class="nok25-button nok25-button-phone nok25-bg-yellow mo-shadow" tabindex="0"></button>
+            <button class="nok25-button nok25-button-menu-toggler nok25-nav-menu-toggler no-shadow" tabindex="0" data-toggles="open"></button>
+        </div>
+        <div class="nok25-horizontal-section--stretched nok25-nav-carousel nok25-bg-white--darker nok25-dark-bg-darkestblue nok25-dark-text-white nok25-z-2"
+             data-scroll-snapping="true" data-requires="./nok-menu-carousel.mjs">
+            <div class="nok25-nav-carousel__inner">
+                <div class="nok25-nav-carousel__slide">
+                    <div class="nok25-nav__menuitems" id="topmenu">
+                        <a href="#submenu-behandelingen" class="nok25-nav__menuitem">Behandelingen</a>
+                        <a href="#submenu-over-nok" class="nok25-nav__menuitem">Over NOK</a>
+                        <a href="#" class="nok25-nav__menuitem">Agenda</a>
+                        <a href="#" class="nok25-nav__menuitem">Verwijzers</a>
+                    </div>
+                </div>
+                <div class="nok25-nav-carousel__slide">
+                    <div class="nok25-nav__menuitems" id="submenu-behandelingen">
+                        <a href="#topmenu" class="nok25-nav__menuitem nok25-nav__menuitem--back">&laquo; Terug naar overzicht</a>
+                        <a href="#" class="nok25-nav__menuitem">Wat is obesitas?</a>
+                        <a href="#" class="nok25-nav__menuitem">Onze behandeling van obesitas</a>
+                        <a href="#" class="nok25-nav__menuitem">Ons behandelprogramma</a>
+                        <a href="#" class="nok25-nav__menuitem">De operatie</a>
+                        <a href="#" class="nok25-nav__menuitem">De kosten van de behandeling</a>
+                    </div>
+                    <div class="nok25-nav__menuitems" id="submenu-over-nok">
+                        <a href="#topmenu" class="nok25-nav__menuitem nok25-nav__menuitem--back">&laquo; Terug naar overzicht</a>
+                        <a href="#" class="nok25-nav__menuitem">Over ons</a>
+                        <a href="#" class="nok25-nav__menuitem">Team van specialisten</a>
+                        <a href="#" class="nok25-nav__menuitem">Vestigingen</a>
+                        <a href="#" class="nok25-nav__menuitem">Ervaringen</a>
+                        <a href="#" class="nok25-nav__menuitem">Veelgestelde vragen</a>
+                    </div>
+                </div>
             </div>
         </div>
-    </nok-25-mobile-nav>
-    <nok-25-desktop-nav>
+        <div class="nok25-horizontal-section--stretched nok25-nav-footer nok25-bg-darkerblue nok25-dark-bg-darkestblue nok25-text-contrast nok25-dark-text-white nok25-z-1">
+            <div class="nok25-nav__menuitems nok25-nav__menuitems--compact">
+                <a href="#" class="nok25-nav__menuitem">Werken bij</a>
+                <a href="#" class="nok25-nav__menuitem">Kennisbank</a>
+                <a href="#" class="nok25-nav__menuitem">Mijn NOK</a>
+                <a href="#" class="nok25-nav__menuitem">NOK App</a>
+                <button class="nok25-button nok25-button--small nok25-base-font nok25-bg-yellow nok25-mt-1" tabindex="0">Gratis voorlichtingsavond</button>
+            </div>
+        </div>
+    </nok25-mobile-nav>
+
+
+    <nok25-desktop-nav>
         <div class="nok25-horizontal-section--stretched nok25-bg-body nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-top-row nok25-z-2">
             <div class="nok25-horizontal-section__inner nok25-nav-top">
                 <div>
@@ -96,7 +139,7 @@ $logo = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 173.6">
             </div>
         </div>
         <div class="nok25-horizontal-section__inner nok25-nav-menubar-row nok25-z-3">
-            <div class="nok25-nav-menubar nok25-bg-white nok25-dark-bg-darkerblue nok25-no-border-sm">
+            <div class="nok25-nav-menubar nok25-bg-white nok25-dark-bg-darkerblue nok25-no-border-sm" data-toggles="open">
                 <div>
                     <?= $logo;?>
                 </div>
@@ -129,7 +172,7 @@ $logo = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 173.6">
                 </div>
             </div>
         </div>
-    </nok-25-desktop-nav>
+    </nok25-desktop-nav>
 </nav>
 
 <section class="nok25-horizontal-section">
