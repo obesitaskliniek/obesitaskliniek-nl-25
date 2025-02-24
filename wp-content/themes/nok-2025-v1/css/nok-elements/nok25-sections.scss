@@ -16,7 +16,7 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
   align-items: center;
 
   @at-root section.#{$component-name} + section.#{$component-name} {
-    margin-top: calc(var(--nok25-padding-base, 1.5rem) * 2);
+    margin-top: calc(var(--#{nok-variables.$prefix}-padding-base, 1.5rem) * 2);
   }
 
   &--stretched {
@@ -41,12 +41,12 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
   &__heading {
     grid-column: 1;
     font-weight: 500;
-    line-height: var(--nok25-default-heading-line-height, 1.25);
+    line-height: var(--#{nok-variables.$prefix}-default-heading-line-height, 1.25);
     margin: 0;
     &__description {
       @include nok-rfs.rfs(1.1rem, font-size);
       font-weight: 400;
-      line-height: var(--nok25-default-line-height, 1.25);
+      line-height: var(--#{nok-variables.$prefix}-default-line-height, 1.25);
       margin: 0;
     }
   }

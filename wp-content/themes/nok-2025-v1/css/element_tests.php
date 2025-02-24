@@ -72,13 +72,13 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
     <div class="nok25-nav-mask nok25-bg-darkerblue nok25-z-1" data-toggles="open"></div>
 
     <nok25-mobile-nav>
-        <div class="nok25-horizontal-section--stretched nok25-bg-white nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-top-row nok25-z-3">
+        <div class="nok25-horizontal-section--stretched nok25-bg-white nok25-dark-bg-darkestblue--darker nok25-dark-text-white nok25-nav-top-row nok25-z-3">
             <?= $logo;?>
-            <button class="nok25-button nok25-button-search no-shadow" tabindex="0"></button>
+            <button class="nok25-button nok25-button-search nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"></button>
             <button class="nok25-button nok25-button-phone nok25-bg-yellow mo-shadow" tabindex="0"></button>
-            <button class="nok25-button nok25-button-menu-toggler nok25-nav-menu-toggler no-shadow" tabindex="0" data-toggles="open"></button>
+            <button class="nok25-button nok25-button-menu-toggler nok25-nav-menu-toggler nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0" data-toggles="open"></button>
         </div>
-        <div class="nok25-horizontal-section--stretched nok25-nav-carousel nok25-bg-white--darker nok25-dark-bg-darkestblue nok25-dark-text-white nok25-z-2"
+        <div class="nok25-horizontal-section--stretched nok25-nav-carousel nok25-bg-white--darker nok25-dark-bg-darkerblue nok25-dark-text-white nok25-z-2"
              data-scroll-snapping="true" data-requires="./nok-menu-carousel.mjs">
             <div class="nok25-nav-carousel__inner">
                 <div class="nok25-nav-carousel__slide">
@@ -109,7 +109,7 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                 </div>
             </div>
         </div>
-        <div class="nok25-horizontal-section--stretched nok25-nav-footer nok25-bg-darkerblue nok25-dark-bg-darkestblue nok25-text-contrast nok25-dark-text-white nok25-z-1">
+        <div class="nok25-horizontal-section--stretched nok25-nav-footer nok25-bg-darkerblue nok25-dark-bg-darkestblue nok25-text-contrast nok25-z-1">
             <div class="nok25-nav__menuitems nok25-nav__menuitems--compact">
                 <a href="#" class="nok25-nav__menuitem">Werken bij</a>
                 <a href="#" class="nok25-nav__menuitem">Kennisbank</a>
