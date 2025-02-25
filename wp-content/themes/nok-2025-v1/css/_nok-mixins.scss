@@ -20,6 +20,9 @@
 @mixin nok-subtle-shadow {
   box-shadow: 0 4px 8px rgba(80, 80, 80, 0.1);
 }
+@mixin nok-subtle-shadow-menu {
+  box-shadow: -8px 8px 16px rgba(0, 0, 0, 0.1);
+}
 
 @mixin nok-btn-shadow-border {
   box-shadow: 0 0 0 0 hsla(0 0 0 / 0);

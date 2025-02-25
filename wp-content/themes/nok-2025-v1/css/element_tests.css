@@ -4211,6 +4211,10 @@ h2.nok25-horizontal-section__heading {
  * hero unit
  */
 .nok25-nav {
+  --animation-easing-in: cubic-bezier(.07,1.01,.36,1);
+  --animation-easing-out: cubic-bezier(.85, 0, .15, 1);
+  --animation-duration--in: 750ms;
+  --animation-duration--out: 550ms;
   font-family: "Realist", sans-serif;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -4220,7 +4224,7 @@ h2.nok25-horizontal-section__heading {
   font-size: 1.2rem;
   /* Open state */
 }
-@media (min-width: 992px) {
+@media (min-width: 1200px) {
   .nok25-nav nok25-mobile-nav {
     display: none !important;
   }
@@ -4230,7 +4234,12 @@ h2.nok25-horizontal-section__heading {
     z-index: 100;
   }
 }
-@media (max-width: 991.98px) {
+@media (max-width: 1199.98px) {
+  .nok25-nav {
+    /*@at-root body:has(.nok25-nav.open) {
+      overflow: hidden !important;
+    }*/
+  }
   .nok25-nav nok25-desktop-nav {
     display: none !important;
   }
@@ -4241,9 +4250,6 @@ h2.nok25-horizontal-section__heading {
     justify-content: flex-start;
     z-index: 100;
     pointer-events: none;
-  }
-  body:has(.nok25-nav.open) {
-    overflow: hidden !important;
   }
 }
 .nok25-nav-mask {
@@ -4257,11 +4263,13 @@ h2.nok25-horizontal-section__heading {
   transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out, -webkit-backdrop-filter 500ms ease-in-out;
 }
 .nok25-nav .nok25-button {
+  height: 100%;
+  max-height: 100%;
   --flex-gap: calc(var(--grid-gap, var(--nok25-global-grid-gap)) * .75);
 }
 .nok25-nav-menu-toggler.nok25-button {
   transform: rotate(0deg);
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform var(--animation-duration--in) cubic-bezier(0.16, 1, 0.3, 1);
 }
 .nok25-nav.open {
   touch-action: none;
@@ -4274,6 +4282,8 @@ h2.nok25-horizontal-section__heading {
 }
 .nok25-nav.open .nok25-nav-dropdown {
   transform: translateY(0);
+  transition-duration: var(--animation-duration--in);
+  transition-timing-function: var(--animation-easing-in);
 }
 .nok25-nav.open .nok25-nav-menu-toggler {
   background-image: var(--nok25-button-icon-navbar-toggler-active);
@@ -4281,56 +4291,58 @@ h2.nok25-horizontal-section__heading {
 }
 .nok25-nav.open .nok25-nav-drawer {
   transform: translateX(0%);
+  transition-duration: var(--animation-duration--in);
+  transition-timing-function: var(--animation-easing-in);
 }
 .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem {
   opacity: 0;
-  animation: fade--in 0.5s ease-out;
+  animation: fade--in 0.5s var(--animation-easing-out);
   animation-fill-mode: forwards;
 }
 .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(1) {
-  animation-delay: 237.5ms;
+  animation-delay: 187.5ms;
 }
 .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(2) {
-  animation-delay: 287.5ms;
+  animation-delay: 237.5ms;
 }
 .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(3) {
-  animation-delay: 337.5ms;
+  animation-delay: 287.5ms;
 }
 .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(4) {
-  animation-delay: 387.5ms;
+  animation-delay: 337.5ms;
 }
 .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(5) {
-  animation-delay: 437.5ms;
+  animation-delay: 387.5ms;
 }
 .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(6) {
-  animation-delay: 487.5ms;
+  animation-delay: 437.5ms;
 }
 .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(7) {
-  animation-delay: 537.5ms;
+  animation-delay: 487.5ms;
 }
 .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(8) {
-  animation-delay: 587.5ms;
+  animation-delay: 537.5ms;
 }
 .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(9) {
-  animation-delay: 637.5ms;
+  animation-delay: 587.5ms;
 }
 .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(10) {
-  animation-delay: 687.5ms;
+  animation-delay: 637.5ms;
 }
 .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(11) {
-  animation-delay: 737.5ms;
+  animation-delay: 687.5ms;
 }
 .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(12) {
-  animation-delay: 787.5ms;
+  animation-delay: 737.5ms;
 }
 .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(13) {
-  animation-delay: 837.5ms;
+  animation-delay: 787.5ms;
 }
 .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(14) {
-  animation-delay: 887.5ms;
+  animation-delay: 837.5ms;
 }
 .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(15) {
-  animation-delay: 937.5ms;
+  animation-delay: 887.5ms;
 }
 .nok25-nav nok25-desktop-nav .nok25-nav-top {
   z-index: 1;
@@ -4420,7 +4432,8 @@ h2.nok25-horizontal-section__heading {
   margin-left: var(--nok25-default-border-radius--large, 0);
   margin-right: var(--nok25-default-border-radius--large, 0);
   transform: translateY(-100%);
-  transition: transform 0.65s cubic-bezier(0.85, 0, 0.15, 1);
+  transition: transform var(--animation-duration--out) var(--animation-easing-out);
+  padding-bottom: 24px; /* to prevent box-shadow from being cut off due to overflow - sync px values with applied shadow (currently: nok-subtle-shadow-menu)*/
 }
 .nok25-nav nok25-desktop-nav .nok25-nav-dropdown-collapser {
   margin: 0;
@@ -4442,10 +4455,9 @@ h2.nok25-horizontal-section__heading {
   border-bottom-right-radius: var(--nok25-default-border-radius--large, 1rem);
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  box-shadow: 0 4px 8px rgba(80, 80, 80, 0.1);
+  box-shadow: -8px 8px 16px rgba(0, 0, 0, 0.1);
   width: -moz-max-content;
   width: max-content;
-  overflow: hidden;
   padding: calc(var(--grid-gap, var(--nok25-padding-base, 1.5rem)) * 2);
 }
 @media (min-width: 1200px) {
@@ -4485,11 +4497,6 @@ h2.nok25-horizontal-section__heading {
   padding: 0;
   font-weight: 300;
 }
-.nok25-nav nok25-mobile-nav {
-  --animation-duration--in: 750ms;
-  --animation-duration--out: 750ms;
-  --animation-easing: cubic-bezier(.07,1.01,.36,1);
-}
 .nok25-nav nok25-mobile-nav .nok25-nav-top-row, .nok25-nav nok25-mobile-nav .nok25-nav-drawer {
   pointer-events: all;
 }
@@ -4505,12 +4512,18 @@ h2.nok25-horizontal-section__heading {
 }
 .nok25-nav nok25-mobile-nav .nok25-nav-drawer {
   transform: translateX(100%);
-  transition: transform var(--animation-duration--out) var(--animation-easing);
+  transition: transform var(--animation-duration--out) var(--animation-easing-out);
   display: flex;
   flex-direction: column;
   min-height: 0;
-  align-self: stretch;
+  align-self: flex-end;
   flex-basis: 100%;
+  box-shadow: -8px 8px 16px rgba(0, 0, 0, 0.1);
+}
+@media (max-width: 767.98px) {
+  .nok25-nav nok25-mobile-nav .nok25-nav-drawer {
+    align-self: stretch;
+  }
 }
 .nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-footer,
 .nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel {
@@ -4587,7 +4600,7 @@ h2.nok25-horizontal-section__heading {
   grid-template-columns: 1fr auto;
   text-decoration: none;
 }
-.nok25-nav nok25-mobile-nav .nok25-nav__menuitem:not(.nok25-nav nok25-mobile-nav .nok25-nav__menuitem--back) {
+.nok25-nav nok25-mobile-nav .nok25-nav__menuitem:not(.nok25-nav nok25-mobile-nav .nok25-nav__menuitem--back):not(:last-of-type) {
   border-bottom: 2px solid rgba(136, 136, 136, 0.2666666667);
 }
 .nok25-nav nok25-mobile-nav .nok25-nav__menuitem:not(.nok25-nav nok25-mobile-nav .nok25-nav__menuitem--back)::after {

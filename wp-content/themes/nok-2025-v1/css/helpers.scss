@@ -106,33 +106,38 @@ $alphas: (
   align-items: center;
 }
 
-/* Border-radius modifiers */
+/* Breakpoint-related modifiers */
 @each $breakpoint, $section-max-width in nok-variables.$section-max-widths {
   @include nok-mixins.media-breakpoint-down($breakpoint, nok-variables.$grid-breakpoints) {
+    /* Border-radius modifiers */
     .#{nok-variables.$prefix}-no-border-#{$breakpoint} {
       border-radius: 0 !important;
     }
+    /* Visibility */
+    .#{nok-variables.$prefix}-invisible-#{$breakpoint} {
+      display: none !important;
+    }
   }
   @if ($breakpoint == xxxl) {
-    @include nok-mixins.media-breakpoint-up($breakpoint, nok-variables.$grid-breakpoints) {
+    @include nok-mixins.media-breakpoint-down($breakpoint, nok-variables.$grid-breakpoints) {
+      /* Border-radius modifiers */
       .#{nok-variables.$prefix}-no-border-#{$breakpoint} {
         border-radius: 0 !important;
       }
+      /* Visibility */
+      .#{nok-variables.$prefix}-invisible-#{$breakpoint} {
+        display: none !important;
+      }
+    }
+  }
+  @include nok-mixins.media-breakpoint-up($breakpoint, nok-variables.$grid-breakpoints) {
+    /* Visibility */
+    .#{nok-variables.$prefix}-invisible-from-#{$breakpoint} {
+      display: none !important;
     }
   }
 }
 
-/* Conditional visibility */
-//todo: create more of these, using the breakpoint loop
-
-.#{nok-variables.$prefix}-only-visible-mobile {
-  display: none;
-}
-@include nok-mixins.media-breakpoint-down(sm) {
-  .#{nok-variables.$prefix}-only-visible-mobile {
-      display: revert;
-  }
-}
 
 /* margin */
 @for $i from 1 through 5 {
