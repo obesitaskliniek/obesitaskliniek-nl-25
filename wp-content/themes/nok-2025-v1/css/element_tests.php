@@ -69,13 +69,14 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
 ?>
 
 <nav class="nok25-horizontal-section nok25-nav nok25-text-darkerblue" data-requires="./nok-toggler.mjs">
-    <div class="nok25-nav-mask nok25-bg-darkerblue nok25-z-1" data-toggles="open"></div>
+    <div class="nok25-nav-mask nok25-bg-darkerblue nok25-dark-bg-darkerblue--darker nok25-z-1" data-toggles="open"></div>
 
     <nok25-mobile-nav>
         <div class="nok25-horizontal-section--stretched nok25-bg-white nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-top-row nok25-z-3">
             <?= $logo;?>
-            <button class="nok25-button nok25-button-search nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"></button>
+            <button class="nok25-button nok25-button--small nok25-base-font nok25-bg-yellow nok25-text-contrast nok25-invisible-sm" tabindex="0">Gratis voorlichtingsavond</button>
             <button class="nok25-button nok25-button-phone nok25-bg-yellow mo-shadow" tabindex="0"></button>
+            <button class="nok25-button nok25-button-search nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"></button>
             <button class="nok25-button nok25-button-menu-toggler nok25-nav-menu-toggler nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0" data-toggles="open"></button>
         </div>
         <div class="nok25-z-2 nok25-nav-drawer">
@@ -116,7 +117,7 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                     <a href="#" class="nok25-nav__menuitem">Kennisbank</a>
                     <a href="#" class="nok25-nav__menuitem">Mijn NOK</a>
                     <a href="#" class="nok25-nav__menuitem">NOK App</a>
-                    <button class="nok25-button nok25-button--small nok25-base-font nok25-bg-yellow nok25-mt-1" tabindex="0">Gratis voorlichtingsavond</button>
+                    <button class="nok25-button nok25-button--small nok25-base-font nok25-bg-yellow nok25-mt-1 nok25-invisible-from-sm" tabindex="0">Gratis voorlichtingsavond</button>
                 </div>
             </div>
         </div>

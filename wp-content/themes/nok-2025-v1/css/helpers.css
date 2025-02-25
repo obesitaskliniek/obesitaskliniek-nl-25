@@ -307,50 +307,111 @@
   align-items: center;
 }
 
-/* Border-radius modifiers */
+/* Breakpoint-related modifiers */
 @media (max-width: 575.98px) {
+  /* Border-radius modifiers */
   .nok25-no-border-sm {
     border-radius: 0 !important;
   }
+  /* Visibility */
+  .nok25-invisible-sm {
+    display: none !important;
+  }
+}
+@media (min-width: 576px) {
+  /* Visibility */
+  .nok25-invisible-from-sm {
+    display: none !important;
+  }
 }
 @media (max-width: 767.98px) {
+  /* Border-radius modifiers */
   .nok25-no-border-md {
     border-radius: 0 !important;
   }
+  /* Visibility */
+  .nok25-invisible-md {
+    display: none !important;
+  }
+}
+@media (min-width: 768px) {
+  /* Visibility */
+  .nok25-invisible-from-md {
+    display: none !important;
+  }
 }
 @media (max-width: 991.98px) {
+  /* Border-radius modifiers */
   .nok25-no-border-lg {
     border-radius: 0 !important;
   }
+  /* Visibility */
+  .nok25-invisible-lg {
+    display: none !important;
+  }
+}
+@media (min-width: 992px) {
+  /* Visibility */
+  .nok25-invisible-from-lg {
+    display: none !important;
+  }
 }
 @media (max-width: 1199.98px) {
+  /* Border-radius modifiers */
   .nok25-no-border-xl {
     border-radius: 0 !important;
   }
+  /* Visibility */
+  .nok25-invisible-xl {
+    display: none !important;
+  }
+}
+@media (min-width: 1200px) {
+  /* Visibility */
+  .nok25-invisible-from-xl {
+    display: none !important;
+  }
 }
 @media (max-width: 1399.98px) {
+  /* Border-radius modifiers */
   .nok25-no-border-xxl {
     border-radius: 0 !important;
   }
+  /* Visibility */
+  .nok25-invisible-xxl {
+    display: none !important;
+  }
+}
+@media (min-width: 1400px) {
+  /* Visibility */
+  .nok25-invisible-from-xxl {
+    display: none !important;
+  }
 }
 @media (max-width: 1599.98px) {
+  /* Border-radius modifiers */
   .nok25-no-border-xxxl {
     border-radius: 0 !important;
+  }
+  /* Visibility */
+  .nok25-invisible-xxxl {
+    display: none !important;
+  }
+}
+@media (max-width: 1599.98px) {
+  /* Border-radius modifiers */
+  .nok25-no-border-xxxl {
+    border-radius: 0 !important;
+  }
+  /* Visibility */
+  .nok25-invisible-xxxl {
+    display: none !important;
   }
 }
 @media (min-width: 1600px) {
-  .nok25-no-border-xxxl {
-    border-radius: 0 !important;
-  }
-}
-/* Conditional visibility */
-.nok25-only-visible-mobile {
-  display: none;
-}
-
-@media (max-width: 575.98px) {
-  .nok25-only-visible-mobile {
-    display: revert;
+  /* Visibility */
+  .nok25-invisible-from-xxxl {
+    display: none !important;
   }
 }
 /* margin */
