@@ -37,6 +37,10 @@ $component-name: #{nok-variables.$prefix}-nav;
 .#{$component-name} {
   $z_base: 0;
 
+  $dur_in: 750ms;
+  $dur_out: 750ms;
+  $inter-delay: 100ms;
+
   @include nok-mixins.nok-font;
   @include nok-rfs.rfs(1.2rem, font-size);
 
@@ -56,23 +60,15 @@ $component-name: #{nok-variables.$prefix}-nav;
     }
     & {
       position: fixed;
-      bottom: 0;
       top: 0;
+      bottom: 0;
       justify-content: flex-start;
       z-index: nok-variables.$z-stack-top;
+      pointer-events: none;
     }
     @at-root body:has(.#{$component-name}.open) {
       overflow: hidden !important;
     }
-  }
-
-  .#{nok-variables.$prefix}-button {
-    --flex-gap: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * .75);
-  }
-
-  &-menu-toggler.#{nok-variables.$prefix}-button {
-    transform: rotate(0deg);
-    transition: transform .5s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   &-mask {
@@ -84,7 +80,20 @@ $component-name: #{nok-variables.$prefix}-nav;
     transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out;
   }
 
+  .#{nok-variables.$prefix}-button {
+    --flex-gap: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * .75);
+  }
+
+  &-menu-toggler.#{nok-variables.$prefix}-button {
+    transform: rotate(0deg);
+    transition: transform .5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Open state */
+
   &.open {
+    touch-action: none;
+
     .#{$component-name}-mask {
       backdrop-filter: blur(5px);
       --local-bg-color-alpha: 0.5;
@@ -98,6 +107,20 @@ $component-name: #{nok-variables.$prefix}-nav;
     .#{$component-name}-menu-toggler {
       background-image: var(--#{nok-variables.$prefix}-button-icon-navbar-toggler-active);
       transform: rotate(-180deg);
+    }
+
+    .#{$component-name}-drawer {
+      transform: translateX(0%);
+      .#{nok-variables.$prefix}-nav__menuitem {
+        opacity: 0;
+        animation: fade--in 0.5s ease-out;
+        animation-fill-mode: forwards;
+      }
+      @for $i from 1 through 15 {
+        .#{nok-variables.$prefix}-nav__menuitem:nth-child(#{$i}) {
+          animation-delay: ($dur_in / 4) + (50ms * $i);
+        }
+      }
     }
   }
 
@@ -151,10 +174,10 @@ $component-name: #{nok-variables.$prefix}-nav;
 
     .#{$component-name}-dropdown {
       z-index: $z_base + 2;
-      display: grid;
-      grid-template-rows: 1fr;
+      display: flex;
       overflow: hidden;
       justify-content: center;
+      flex-basis: 100%;
 
       margin-top: calc(-1 * var(--#{nok-variables.$prefix}-default-border-radius--large, 0));
       margin-left: var(--#{nok-variables.$prefix}-default-border-radius--large, 0); //prevents the dropdown from appearing at the top sides when collapsed due to border radius on the menubar
@@ -177,6 +200,7 @@ $component-name: #{nok-variables.$prefix}-nav;
         align-items: stretch;
         align-self: center;
 
+        flex-basis: 100%;
         pointer-events: all;
 
         gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
@@ -186,6 +210,10 @@ $component-name: #{nok-variables.$prefix}-nav;
         width: max-content;
         overflow: hidden;
         padding: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-padding-base, 1.5rem)) * 2);
+
+        @include nok-mixins.media-breakpoint-up(xl) {
+          max-width: map.get(nok-variables.$grid-breakpoints, lg);
+        }
 
         > * {
           flex-basis: 50%;
@@ -224,110 +252,101 @@ $component-name: #{nok-variables.$prefix}-nav;
     --animation-duration--out: #{$dur_out};
     --animation-easing: cubic-bezier(.07,1.01,.36,1);
 
-    @at-root .#{$component-name}.open {
-      touch-action: none;
-
-      #{nok-variables.$prefix}-mobile-nav {
-        > * {
-          $inter-delay: 100ms;
-          &:nth-child(n+2) {
-            opacity: 0;
-            animation: slide--in var(--animation-duration--in) var(--animation-easing);
-            animation-fill-mode: forwards;
-            .#{nok-variables.$prefix}-nav__menuitem {
-              opacity: 0;
-              animation: fade--in 0.5s ease-out;
-              animation-fill-mode: forwards;
-            }
-            @for $i from 1 through 15 {
-              .#{nok-variables.$prefix}-nav__menuitem:nth-child(#{$i}) {
-                animation-delay: ($dur_in / 4) + (50ms * $i);
-              }
-            }
-          }
-        }
-      }
-    }
-    @at-root .#{$component-name}:not(.open) #{nok-variables.$prefix}-mobile-nav {
-      > * {
-        $inter-delay: 100ms;
-        &:nth-child(n+2) {
-          opacity: 1;
-          animation: slide--out var(--animation-duration--out) var(--animation-easing);
-          animation-fill-mode: forwards;
-        }
-      }
-    }
-
     .#{$component-name} {
-      &-top {
-        &-row {
-          display: flex;
 
-          align-items: center;
-          justify-items: center;
-          flex-direction: row;
-          flex-wrap: nowrap;
-          justify-content: space-between;
+      &-top-row,
+      &-drawer {
+        pointer-events: all;
+      }
+      &-top-row {
+        display: flex;
 
-          padding: 1rem var(--#{nok-variables.$prefix}-padding-section-sides);
-          gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
-        }
+        align-items: center;
+        justify-items: center;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
 
+        padding: 1rem var(--#{nok-variables.$prefix}-padding-section-sides);
+        gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
       }
 
-      &-footer, &-carousel {
-        padding: 0;
-        margin: 0;
-      }
+      &-drawer {
 
-      &-carousel {
-        overflow: hidden;
-        scroll-behavior: smooth;
-        overscroll-behavior: contain;
-        touch-action: none;
+        transform: translateX(100%);
+        transition: transform var(--animation-duration--out) var(--animation-easing);
 
-        flex-grow: 1;
-        flex-shrink: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        align-self: stretch;
+        flex-basis: 100%;
 
-        &.is-scrolling {
-          //stop listening while scrolling
-          pointer-events: none !important;
-        }
-        &[data-scroll-snapping="true"] {
-          scroll-snap-type: both mandatory;
-          scroll-snap-stop: normal;
-        }
-
-        &__inner {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: nowrap;
-          gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
-          height: 100%;
-        }
-
-        &__slide {
+        .#{$component-name}-footer,
+        .#{$component-name}-carousel {
           padding: 0;
           margin: 0;
+        }
+
+        .#{$component-name}-carousel {
           overflow: hidden;
           scroll-behavior: smooth;
+          overscroll-behavior: contain;
           touch-action: none;
 
-          display: flex;
-          flex-direction: column;
-          flex-wrap: nowrap;
+          flex-grow: 1;
+          flex-shrink: 1;
 
-          scroll-snap-type: both mandatory;
-          scroll-snap-stop: normal;
+          &.is-scrolling {
+            //stop listening while scrolling
+            pointer-events: none !important;
+          }
+          &[data-scroll-snapping="true"] {
+            scroll-snap-type: both mandatory;
+            scroll-snap-stop: normal;
+          }
 
-          &,
-          > * {
-            flex-shrink: 0;
-            flex-basis: 100%;
-            scroll-snap-align: start;
+          &__inner {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
+            height: 100%;
+          }
+
+          &__slide {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            scroll-behavior: smooth;
+            touch-action: none;
+
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+
+            scroll-snap-type: both mandatory;
+            scroll-snap-stop: normal;
+
+            &,
+            > * {
+              flex-shrink: 0;
+              flex-basis: 100%;
+              scroll-snap-align: start;
+            }
           }
         }
+
+        @media (orientation: landscape) {
+          flex-direction: row;
+          flex-wrap: nowrap;
+          .#{$component-name}-footer,
+          .#{$component-name}-carousel {
+            flex-basis: 50%;
+            flex-shrink: 1;
+          }
+        }
+
       }
 
 
@@ -362,9 +381,6 @@ $component-name: #{nok-variables.$prefix}-nav;
         }
       }
 
-      &-footer {
-
-      }
     }
     #{nok-variables.$prefix}-logo {
       display: block;
@@ -372,9 +388,9 @@ $component-name: #{nok-variables.$prefix}-nav;
       min-width: 0;
       svg {
         align-self: center;
-        height: 4rem;
-        @include nok-rfs.rfs(4rem, height);
+        @include nok-rfs.rfs(3rem, height);
         width: auto;
+        padding: 0 1px;
       }
     }
 

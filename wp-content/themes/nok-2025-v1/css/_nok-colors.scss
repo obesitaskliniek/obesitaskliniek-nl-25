@@ -19,7 +19,7 @@ $nok-base-colors: (
 	'darkblue':       #14477c,
 	'darkerblue':     #0b2355,
 	'darkestblue':    #00132f,
-	'yellow':         #f5cd2b,
+	'yellow':         #ffd41f,
 	//'darkyellow':     #eab10d, //unused
 	//'paleyellow':     #D5D59D, //unused
 	'green':          #54b085,
@@ -188,6 +188,9 @@ slightly dimmed or desaturated in dark-mode (when no dark-specific classes have 
         }
         .#{nok-variables.$prefix}-dark-text-#{$color} {
           @include text-colors(nok-variables.$prefix, $color, $value);
+        }
+        .#{nok-variables.$prefix}-dark-text-contrast {
+          color: var(--text-color--contrast, inherit) !important;
         }
         @if $border-colors {
           .#{nok-variables.$prefix}-dark-border-#{$color} {
