@@ -68,54 +68,56 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
 </svg></nok25-logo>'
 ?>
 
-<nav class="nok25-horizontal-section nok25-nav nok25-text-darkerblue open" data-requires="./nok-toggler.mjs">
+<nav class="nok25-horizontal-section nok25-nav nok25-text-darkerblue" data-requires="./nok-toggler.mjs">
     <div class="nok25-nav-mask nok25-bg-darkerblue nok25-z-1" data-toggles="open"></div>
 
     <nok25-mobile-nav>
-        <div class="nok25-horizontal-section--stretched nok25-bg-white nok25-dark-bg-darkestblue--darker nok25-dark-text-white nok25-nav-top-row nok25-z-3">
+        <div class="nok25-horizontal-section--stretched nok25-bg-white nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-top-row nok25-z-3">
             <?= $logo;?>
             <button class="nok25-button nok25-button-search nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"></button>
             <button class="nok25-button nok25-button-phone nok25-bg-yellow mo-shadow" tabindex="0"></button>
             <button class="nok25-button nok25-button-menu-toggler nok25-nav-menu-toggler nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0" data-toggles="open"></button>
         </div>
-        <div class="nok25-horizontal-section--stretched nok25-nav-carousel nok25-bg-white--darker nok25-dark-bg-darkerblue nok25-dark-text-white nok25-z-2"
-             data-scroll-snapping="true" data-requires="./nok-menu-carousel.mjs">
-            <div class="nok25-nav-carousel__inner">
-                <div class="nok25-nav-carousel__slide">
-                    <div class="nok25-nav__menuitems" id="topmenu">
-                        <a href="#submenu-behandelingen" class="nok25-nav__menuitem">Behandelingen</a>
-                        <a href="#submenu-over-nok" class="nok25-nav__menuitem">Over NOK</a>
-                        <a href="#" class="nok25-nav__menuitem">Agenda</a>
-                        <a href="#" class="nok25-nav__menuitem">Verwijzers</a>
+        <div class="nok25-z-2 nok25-nav-drawer">
+            <div class="nok25-horizontal-section--stretched nok25-nav-carousel nok25-bg-white--darker nok25-dark-bg-darkerblue nok25-dark-text-white nok25-z-2"
+                 data-scroll-snapping="true" data-requires="./nok-menu-carousel.mjs">
+                <div class="nok25-nav-carousel__inner">
+                    <div class="nok25-nav-carousel__slide">
+                        <div class="nok25-nav__menuitems" id="topmenu">
+                            <a href="#submenu-behandelingen" class="nok25-nav__menuitem">Behandelingen</a>
+                            <a href="#submenu-over-nok" class="nok25-nav__menuitem">Over NOK</a>
+                            <a href="#" class="nok25-nav__menuitem">Agenda</a>
+                            <a href="#" class="nok25-nav__menuitem">Verwijzers</a>
+                        </div>
                     </div>
-                </div>
-                <div class="nok25-nav-carousel__slide">
-                    <div class="nok25-nav__menuitems" id="submenu-behandelingen">
-                        <a href="#topmenu" class="nok25-nav__menuitem nok25-nav__menuitem--back">&laquo; Terug naar overzicht</a>
-                        <a href="#" class="nok25-nav__menuitem">Wat is obesitas?</a>
-                        <a href="#" class="nok25-nav__menuitem">Onze behandeling van obesitas</a>
-                        <a href="#" class="nok25-nav__menuitem">Ons behandelprogramma</a>
-                        <a href="#" class="nok25-nav__menuitem">De operatie</a>
-                        <a href="#" class="nok25-nav__menuitem">De kosten van de behandeling</a>
-                    </div>
-                    <div class="nok25-nav__menuitems" id="submenu-over-nok">
-                        <a href="#topmenu" class="nok25-nav__menuitem nok25-nav__menuitem--back">&laquo; Terug naar overzicht</a>
-                        <a href="#" class="nok25-nav__menuitem">Over ons</a>
-                        <a href="#" class="nok25-nav__menuitem">Team van specialisten</a>
-                        <a href="#" class="nok25-nav__menuitem">Vestigingen</a>
-                        <a href="#" class="nok25-nav__menuitem">Ervaringen</a>
-                        <a href="#" class="nok25-nav__menuitem">Veelgestelde vragen</a>
+                    <div class="nok25-nav-carousel__slide">
+                        <div class="nok25-nav__menuitems" id="submenu-behandelingen">
+                            <a href="#topmenu" class="nok25-nav__menuitem nok25-nav__menuitem--back">&laquo; Terug naar overzicht</a>
+                            <a href="#" class="nok25-nav__menuitem">Wat is obesitas?</a>
+                            <a href="#" class="nok25-nav__menuitem">Onze behandeling van obesitas</a>
+                            <a href="#" class="nok25-nav__menuitem">Ons behandelprogramma</a>
+                            <a href="#" class="nok25-nav__menuitem">De operatie</a>
+                            <a href="#" class="nok25-nav__menuitem">De kosten van de behandeling</a>
+                        </div>
+                        <div class="nok25-nav__menuitems" id="submenu-over-nok">
+                            <a href="#topmenu" class="nok25-nav__menuitem nok25-nav__menuitem--back">&laquo; Terug naar overzicht</a>
+                            <a href="#" class="nok25-nav__menuitem">Over ons</a>
+                            <a href="#" class="nok25-nav__menuitem">Team van specialisten</a>
+                            <a href="#" class="nok25-nav__menuitem">Vestigingen</a>
+                            <a href="#" class="nok25-nav__menuitem">Ervaringen</a>
+                            <a href="#" class="nok25-nav__menuitem">Veelgestelde vragen</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="nok25-horizontal-section--stretched nok25-nav-footer nok25-bg-darkerblue nok25-dark-bg-darkestblue nok25-text-contrast nok25-z-1">
-            <div class="nok25-nav__menuitems nok25-nav__menuitems--compact">
-                <a href="#" class="nok25-nav__menuitem">Werken bij</a>
-                <a href="#" class="nok25-nav__menuitem">Kennisbank</a>
-                <a href="#" class="nok25-nav__menuitem">Mijn NOK</a>
-                <a href="#" class="nok25-nav__menuitem">NOK App</a>
-                <button class="nok25-button nok25-button--small nok25-base-font nok25-bg-yellow nok25-mt-1" tabindex="0">Gratis voorlichtingsavond</button>
+            <div class="nok25-horizontal-section--stretched nok25-nav-footer nok25-bg-darkerblue nok25-dark-bg-darkestblue nok25-text-contrast nok25-z-1">
+                <div class="nok25-nav__menuitems nok25-nav__menuitems--compact">
+                    <a href="#" class="nok25-nav__menuitem">Werken bij</a>
+                    <a href="#" class="nok25-nav__menuitem">Kennisbank</a>
+                    <a href="#" class="nok25-nav__menuitem">Mijn NOK</a>
+                    <a href="#" class="nok25-nav__menuitem">NOK App</a>
+                    <button class="nok25-button nok25-button--small nok25-base-font nok25-bg-yellow nok25-mt-1" tabindex="0">Gratis voorlichtingsavond</button>
+                </div>
             </div>
         </div>
     </nok25-mobile-nav>
@@ -139,7 +141,7 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
             </div>
         </div>
         <div class="nok25-horizontal-section__inner nok25-nav-menubar-row nok25-z-3">
-            <div class="nok25-nav-menubar nok25-bg-white nok25-dark-bg-darkerblue nok25-no-border-sm" data-toggles="open">
+            <div class="nok25-nav-menubar nok25-bg-white nok25-dark-bg-darkerblue nok25-dark-text-contrast nok25-no-border-sm" data-toggles="open">
                 <div>
                     <?= $logo;?>
                 </div>
@@ -150,7 +152,7 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                 <div><button class="nok25-button nok25-base-font nok25-bg-yellow" tabindex="0">Gratis voorlichtingsavond</button></div>
             </div>
             <div class="nok25-nav-dropdown">
-                <div class="nok25-nav-dropdown-contents nok25-bg-white nok25-dark-bg-darkerblue">
+                <div class="nok25-nav-dropdown-contents nok25-bg-white nok25-dark-bg-darkerblue--darker nok25-dark-text-contrast">
                     <div class="nok25-nav-dropdown-contents-menu">
                         <h3>Behandeling</h3>
                         <div>Wat is obesitas?</div>
@@ -159,16 +161,14 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                         <div>De operatie</div>
                         <div>De kosten van de behandeling</div>
                     </div>
-                    <div>
-                        <nok25-square-block class="nok25-bg-darkerblue">
-                            <h3 class="nok25-square-block__heading">
-                                Vragen of behoefte aan persoonlijk advies?
-                            </h3>
-                            <button class="nok25-button nok25-base-font nok25-bg-darkblue nok25-text-contrast" tabindex="0">
-                                Neem contact op  <svg class="nok25-text-yellow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" width="25" height="25" fill="currentColor"><path d="m17.5 5.999-.707.707 5.293 5.293H1v1h21.086l-5.294 5.295.707.707L24 12.499l-6.5-6.5z" data-name="Right"/></svg>
-                            </button>
-                        </nok25-square-block>
-                    </div>
+                    <nok25-square-block class="nok25-bg-darkerblue">
+                        <h3 class="nok25-square-block__heading">
+                            Vragen of behoefte aan persoonlijk advies?
+                        </h3>
+                        <button class="nok25-button nok25-base-font nok25-bg-darkblue nok25-text-contrast" tabindex="0">
+                            Neem contact op  <svg class="nok25-text-yellow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" width="25" height="25" fill="currentColor"><path d="m17.5 5.999-.707.707 5.293 5.293H1v1h21.086l-5.294 5.295.707.707L24 12.499l-6.5-6.5z" data-name="Right"/></svg>
+                        </button>
+                    </nok25-square-block>
                 </div>
             </div>
         </div>
@@ -194,32 +194,35 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
             </div>
         </article>
         <figure>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1065">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1199.9 1065.5">
                 <defs>
-                    <linearGradient id="a" x1="865.07" x2="1963.13" y1="1419.45" y2="-190.25" gradientTransform="rotate(-45 804.633 957.17)" gradientUnits="userSpaceOnUse">
-                        <stop offset="0" stop-color="hsla(var(--grad-1-2) / var(--local-color-alpha, 1))"></stop>
-                        <stop offset=".75" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
+                    <linearGradient id="c" x1="899.81" x2="1920.52" y1="1367.93" y2="-128.38" gradientTransform="rotate(-45 802.663 961.106)" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="hsla(var(--grad-1-3) / var(--local-color-alpha, 1))"></stop>
+                        <stop offset=".5" stop-color="hsla(var(--grad-1-2) / var(--local-color-alpha, 1))"></stop>
                         <stop offset="1" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
                     </linearGradient>
                     <linearGradient id="b" x1="881.9" x2="1940.53" y1="1391.88" y2="-160.02" gradientTransform="rotate(-45 804.633 957.17)" gradientUnits="userSpaceOnUse">
-                        <stop offset="0" stop-color="hsla(var(--grad-1-2) / var(--local-color-alpha, 1))"></stop>
-                        <stop offset=".75" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
+                        <stop offset="0" stop-color="hsla(var(--grad-1-3) / var(--local-color-alpha, 1))"></stop>
+                        <stop offset=".5" stop-color="hsla(var(--grad-1-2) / var(--local-color-alpha, 1))"></stop>
                         <stop offset="1" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
                     </linearGradient>
-                    <linearGradient id="c" x1="899.81" x2="1920.52" y1="1367.93" y2="-128.38" gradientTransform="rotate(-45 802.663 961.106)" gradientUnits="userSpaceOnUse">
-                        <stop offset="0" stop-color="hsla(var(--grad-1-2) / var(--local-color-alpha, 1))"></stop>
-                        <stop offset=".75" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
+                    <linearGradient id="a" x1="865.07" x2="1963.13" y1="1419.45" y2="-190.25" gradientTransform="rotate(-45 804.633 957.17)" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="hsla(var(--grad-1-3) / var(--local-color-alpha, 1))"></stop>
+                        <stop offset=".5" stop-color="hsla(var(--grad-1-2) / var(--local-color-alpha, 1))"></stop>
                         <stop offset="1" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
                     </linearGradient>
-                    <mask id="mask-path" maskUnits="userSpaceOnUse">
-                        <!-- White background to reveal everything by default -->
-                        <rect x="-155" y="-699.19" width="2155.65" height="2014.27" fill="white"/>
 
-                        <!-- Black shape to hide the image -->
-                        <path d="M441.6-27c2.6-1.5,5.3-2.9,7.9-4.3-2.7,1.4-5.4,2.7-8,4.1l-.5-1L-20-20v1118.2h945.4v-20.1c.7-.3,1.4-.6,2.2-.9-.8.2-1.6.5-2.3.7,0,0,0,0,0,0-1.5.4-3.1.9-4.6,1.3-3.5,1-7,1.9-10.4,2.7-203.1,49.5-414.5-84.3-562.1-394.3C186.6,348.6,235.9,87.1,441.6-27Z" fill="black"/>
+                    <filter id="luminosity-noclip" x="-234.9" y="-148" width="1685.7" height="1213.5" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+                        <feFlood flood-color="#fff" result="bg"/>
+                        <feBlend in="SourceGraphic" in2="bg"/>
+                    </filter>
+                    <mask id="image-mask" x="-234.9" y="-148" width="1685.7" height="1213.5" maskUnits="userSpaceOnUse">
+                        <g style="filter: url(#luminosity-noclip)">
+                            <path id="mask-path" d="M418-143.6c2.7-1.6,5.5-3,8.2-4.4-2.8,1.4-5.6,2.8-8.3,4.2l-.5-1-652.3,2.5v1207.8h1685.7v-65.4c-283.3-.3-530.7-.6-529.9-.9-.8.2-1.7.5-2.4.7h0c-1.6.4-3.2.9-4.8,1.3-3.6,1-7.2,2-10.8,2.8-210.2,51.2-429-87.2-581.7-408.1C154.1,245.1,205.1-25.5,418-143.6Z"/>
+                        </g>
                     </mask>
                 </defs>
-                <foreignObject width="100%" height="100%" mask="url(#mask-path)">
+                <foreignObject width="100%" height="100%" mask="url(#image-mask)">
                     <?php $testimg = 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%20' . str_pad(rand(1,59),2,0,STR_PAD_LEFT); ?>
                     <img src="<?= $testimg;?>:400x0-25-0-0-center-0.jpg" width="1920" height="1281" srcset="<?= $testimg;?>:1920x0-65-0-0-center-0.jpg 1920w,
                                  <?= $testimg;?>:768x0-65-0-0-center-0.jpg 768w,
@@ -230,14 +233,10 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                                      (min-width: 996px) 84vw,
                                      (min-width: 1200px) 84vw" loading="lazy">
                 </foreignObject>
-                <g class="st2">
-                    <g id="a847a6d1-9c45-4359-9797-5a80bb44c069">
-                        <path id="d" fill="hsla(var(--base-layer) / var(--local-color-alpha, 1))" class="st1" d="M169.5,771.2C14.7,446.3,109.3,147.2,437.9-25.3,66,168.3-40.2,484.3,109.9,799.6c146.4,307.3,444.1,427.2,817.6,277.5-.8.2-1.6.5-2.3.7-328.9,126.9-605.8,8.3-755.7-306.6Z"/>
-                        <path id="c" fill="url(#c)" class="st2" d="M169.5,771.2c150,314.9,426.9,433.5,755.7,306.6-1.5.4-3.1.9-4.6,1.3-283.7,102.4-538.8-15.4-691.6-336.2C69.6,408.2,152.8,125.8,438.5-25.6c-.2.1-.4.2-.6.3C109.3,147.2,14.7,446.3,169.5,771.2Z"/>
-                        <path id="b" fill="url(#b)" class="st3" d="M288.6,714.5C124.5,370,196.3,104.5,438.9-25.8c-.2,0-.3.2-.5.2C152.8,125.8,69.6,408.2,229,742.9c152.8,320.8,407.9,438.7,691.6,336.2-3.5,1-7,1.9-10.4,2.7-237.5,73.8-467.8-44.6-621.6-367.3Z"/>
-                        <path id="a" fill="url(#a)" class="st0" d="M288.6,714.5c153.7,322.8,384.1,441.1,621.6,367.3-203.1,49.5-414.5-84.3-562.1-394.3C184.6,344.2,237.2,80.5,449.5-31.3c-3.5,1.8-7.1,3.6-10.6,5.4C196.3,104.5,124.5,370,288.6,714.5Z"/>
-                    </g>
-                </g>
+                <path id="d" fill="hsla(var(--base-layer) / var(--local-color-alpha, 1))" d="M137.3,682.5C-22.9,346.2,75,36.7,415.1-141.8,30.2,58.5-79.7,385.6,75.6,711.9c151.5,318,459.6,442.1,846.1,287.2-.8.2-1.7.5-2.4.7-340.4,131.3-626.9,8.6-782.1-317.3h0Z"/>
+                <path id="c" fill="url(#c)" d="M137.3,682.5c155.2,325.9,441.8,448.6,782.1,317.3-1.6.4-3.2.9-4.8,1.3-293.6,106-557.6-15.9-715.7-347.9C33.9,306.8,120,14.6,415.7-142.1c-.2.1-.4.2-.6.3C75,36.7-22.9,346.2,137.3,682.5Z"/>
+                <path id="b" fill="url(#b)" d="M260.6,623.8C90.7,267.3,165-7.5,416.1-142.3c-.2,0-.3.2-.5.2C120,14.6,33.9,306.8,198.9,653.2c158.1,332,422.1,454,715.7,347.9-3.6,1-7.2,2-10.8,2.8-245.8,76.4-484.1-46.2-643.3-380.1h0Z"/>
+                <path id="a" fill="url(#a)" d="M260.6,623.8c159.1,334.1,397.5,456.5,643.3,380.1-210.2,51.2-429-87.2-581.7-408.1C152.9,240.6,207.4-32.3,427.1-148c-3.6,1.9-7.3,3.7-11,5.6C165-7.5,90.7,267.3,260.6,623.8Z"/>
             </svg>
 
         </figure>

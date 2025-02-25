@@ -22,6 +22,9 @@ $component-name: #{nok-variables.$prefix}-button;
   padding: var(--flex-gap) calc(var(--flex-gap) * 2);
   gap: var(--flex-gap, .75rem);
 
+  white-space: nowrap;
+  overflow: hidden;
+
   @include nok-mixins.nok-font;
   font-weight: 500;
   font-size: var(--#{nok-variables.$prefix}-font-size-buttons, 1.25rem);
@@ -33,7 +36,7 @@ $component-name: #{nok-variables.$prefix}-button;
   &:not(.no-shadow) {
     @include nok-mixins.nok-btn-shadow-border;
   }
-  border: 0px solid #8880;
+  border: 0 solid #8880;
   outline: 0 none;
 
   cursor: pointer;
