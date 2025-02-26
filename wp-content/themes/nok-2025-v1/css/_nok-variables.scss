@@ -5,9 +5,11 @@ $prefix : 'nok25';
 $padding-base: 1.5rem;
 $default-border-radius: math.div(math.round((math.div($padding-base, 4)) * 10), 10);
 $default-border-radius--large: math.round($default-border-radius * 2);
-$default-font-family: "Realist", sans-serif;
-$text-font-family: "Inter", serif;
-$font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
+$heading-font-family: "Realist", Arial, Helvetica, sans-serif;
+$heading-font-size-adjust: 0.525; //Realist as relative to Arial
+$text-font-family: "Inter", Arial, Helvetica, sans-serif;
+$text-font-size-adjust: 0.514; //Inter as relative to Arial
+$font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
 
 $default-line-height: 1.5;
 $default-heading-line-height: 1.25;
@@ -24,8 +26,12 @@ $font-size-buttons:           1.25rem;
 $z-stack-top: 100;
 
 $exposed-variables: (
-    "default-font-family": $default-font-family,
+    "body-font-size": $font-size-base,
+    "body-font-size-adjust": $text-font-size-adjust,
+    "heading-font-family": $heading-font-family,
+    "heading-font-size-adjust": $heading-font-size-adjust,
     "text-font-family": $text-font-family,
+    "text-font-size-adjust": $text-font-size-adjust,
     "default-line-height": $default-line-height,
     "default-heading-line-height": $default-heading-line-height,
     "padding-base": $padding-base,

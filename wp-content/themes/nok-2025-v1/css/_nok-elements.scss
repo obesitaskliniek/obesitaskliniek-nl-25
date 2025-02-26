@@ -16,11 +16,16 @@ body {
 }
 @for $i from 1 through 6 {
   h#{$i} {
-    @include nok-mixins.nok-font;
+    @include nok-mixins.nok-heading-font;
   }
 }
 
 
+
+/* custom elements */
+#{nok-variables.$prefix}-logo, #{nok-variables.$prefix}-mobile-nav, #{nok-variables.$prefix}-desktop-nav {
+  display: contents;
+}
 /*
 //BEM example
 
@@ -78,4 +83,25 @@ body {
   flex-direction: row;
   gap: .5ex;
   margin-right: 1ex;
+}
+
+
+.#{nok-variables.$prefix}-font-size-adjuster {
+  > div {
+    @include nok-mixins.nok-mini-popup;
+
+    align-items: center;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    button {
+      --flex-gap: 0.4rem !important;
+      --nok25-font-size-buttons: 1.4rem;
+      font-weight: bold;
+      aspect-ratio: 1 / 1;
+      width: 1.2rem;
+      &:first-of-type {
+        --nok25-font-size-buttons: 0.9rem;
+      }
+    }
+  }
 }

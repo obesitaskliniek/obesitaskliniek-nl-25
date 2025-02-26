@@ -34,13 +34,14 @@
 // scss-docs-start reboot-body-rules
 body {
   margin: 0; // 1
-  font-family: var(--#{nok-variables.$prefix}body-font-family);
-  @include nok-rfs.font-size(var(--#{nok-variables.$prefix}body-font-size));
-  font-weight: var(--#{nok-variables.$prefix}body-font-weight);
-  line-height: var(--#{nok-variables.$prefix}body-line-height);
-  color: var(--#{nok-variables.$prefix}body-color);
-  text-align: var(--#{nok-variables.$prefix}body-text-align);
-  background-color: var(--#{nok-variables.$prefix}body-bg); // 2
+  font-family: var(--#{nok-variables.$prefix}-body-font-family);
+  @include nok-rfs.font-size(var(--#{nok-variables.$prefix}-body-font-size));
+  font-weight: var(--#{nok-variables.$prefix}-body-font-weight);
+  font-size-adjust: var(--#{nok-variables.$prefix}-body-font-size-adjust);
+  line-height: var(--#{nok-variables.$prefix}-body-line-height);
+  color: var(--#{nok-variables.$prefix}-body-color);
+  text-align: var(--#{nok-variables.$prefix}-body-text-align);
+  background-color: var(--#{nok-variables.$prefix}-body-bg); // 2
   -webkit-text-size-adjust: 100%; // 3
   -webkit-tap-highlight-color: rgba(nok-colors.$black, 0); // 4
 }
@@ -70,7 +71,7 @@ hr {
   margin-top: 0; // 1
   margin-bottom: 0;
   line-height: 1.2;
-  color: var(--#{nok-variables.$prefix}heading-color);
+  color: var(--#{nok-variables.$prefix}-heading-color);
 }
 
 h1 {
@@ -200,8 +201,8 @@ small {
 
 mark {
   padding: .1875em;
-  color: var(--#{nok-variables.$prefix}highlight-color);
-  background-color: var(--#{nok-variables.$prefix}highlight-bg);
+  color: var(--#{nok-variables.$prefix}-highlight-color);
+  background-color: var(--#{nok-variables.$prefix}-highlight-bg);
 }
 
 
@@ -225,11 +226,11 @@ sup { top: -.5em; }
 // Links
 
 a {
-  color: rgba(var(--#{nok-variables.$prefix}link-color-rgb), var(--#{nok-variables.$prefix}link-opacity, 1));
+  color: var(--text-color), var(--text-color--contrast, 1);
   text-decoration: underline;
 
   &:hover {
-    --#{nok-variables.$prefix}link-color-rgb: var(--#{nok-variables.$prefix}link-hover-color-rgb);
+    color: var(--text-color--hover);
     text-decoration: inherit;
   }
 }
@@ -280,7 +281,7 @@ pre {
 
 code {
   @include nok-rfs.font-size(.875em);
-  color: var(--#{nok-variables.$prefix}code-color);
+  color: var(--#{nok-variables.$prefix}-code-color);
   word-wrap: break-word;
 
   // Streamline the style when inside anchors to avoid broken underline and more
@@ -292,8 +293,8 @@ code {
 kbd {
   padding: .1875rem .375rem;
   @include nok-rfs.font-size(.875em);
-  color: var(--#{nok-variables.$prefix}body-bg) ;
-  background-color: var(--#{nok-variables.$prefix}body-color);
+  color: var(--#{nok-variables.$prefix}-body-bg) ;
+  background-color: var(--#{nok-variables.$prefix}-body-color);
   border-radius: 2px;
 
   kbd {
@@ -333,7 +334,7 @@ table {
 caption {
   padding-top: .5rem;
   padding-bottom: .5rem;
-  color: var(--#{nok-variables.$prefix}secondary-color);
+  color: var(--#{nok-variables.$prefix}-secondary-color);
   text-align: left;
 }
 

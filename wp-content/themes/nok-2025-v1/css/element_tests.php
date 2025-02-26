@@ -11,8 +11,8 @@ const NOK_THEME_ROOT = 'https://dev.obesitaskliniek.nl/wp-content/themes/nok-202
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link href="../fonts/realist.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="stylesheet" href="./tests.css?cache=<?= time();?>" crossorigin="anonymous">
-    <link rel="stylesheet" href="../fonts/Realist/Realist-full.css" crossorigin="anonymous">
     <link rel="stylesheet" href="./color_tests.css?cache=<?= time();?>" crossorigin="anonymous">
     <link rel="stylesheet" href="./element_tests.css?cache=<?= time();?>" crossorigin="anonymous">
     <link rel="stylesheet" href="./helpers.css?cache=<?= time();?>" crossorigin="anonymous">
@@ -68,24 +68,34 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
 </svg></nok25-logo>'
 ?>
 
-<nav class="nok25-horizontal-section nok25-nav nok25-text-darkerblue" data-requires="./nok-toggler.mjs">
-    <div class="nok25-nav-mask nok25-bg-darkerblue nok25-dark-bg-darkerblue--darker nok25-z-1" data-toggles="open"></div>
+<nav class="nok25-horizontal-section nok25-nav nok25-text-darkerblue" data-requires="./nok-toggler.mjs?cache=<?= time();?>">
+    <div class="nok25-nav-mask nok25-bg-darkerblue nok25-dark-bg-darkerblue--darker nok25-z-1" ></div>
+    <div class=" nok25-bg-white nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-control-dropdown">
+        <div class="nok25-nav-control-dropdown__section">
+            Tekstgrootte:
+            <button class="nok25-button nok25-button--small nok25-bg-darkerblue nok25-text-contrast" tabindex="0" onclick="document.documentElement.style.fontSize = `${parseInt(window.getComputedStyle(document.documentElement).fontSize) - 1}px`;">A</button>
+            <button class="nok25-button nok25-button--small nok25-bg-darkerblue nok25-text-contrast" tabindex="0" onclick="document.documentElement.style.fontSize = `${parseInt(window.getComputedStyle(document.documentElement).fontSize) + 1}px`;">A</button>
+        </div>
+    </div>
 
     <nok25-mobile-nav>
         <div class="nok25-horizontal-section--stretched nok25-bg-white nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-top-row nok25-z-3">
             <?= $logo;?>
             <button class="nok25-button nok25-button--small nok25-base-font nok25-bg-yellow nok25-text-contrast nok25-invisible-sm" tabindex="0">Gratis voorlichtingsavond</button>
-            <button class="nok25-button nok25-button-phone nok25-bg-yellow mo-shadow" tabindex="0"></button>
+            <button class="nok25-button nok25-button-phone  nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"></button>
             <button class="nok25-button nok25-button-search nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"></button>
             <button class="nok25-button nok25-button-menu-toggler nok25-nav-menu-toggler nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0" data-toggles="open"></button>
+            <div class="nok25-font-size-adjuster" data-toggles="open" data-target=".nok25-nav-control-dropdown">
+                aA
+            </div>
         </div>
         <div class="nok25-z-2 nok25-nav-drawer">
             <div class="nok25-horizontal-section--stretched nok25-nav-carousel nok25-bg-white--darker nok25-dark-bg-darkerblue nok25-dark-text-white nok25-z-2"
                  data-scroll-snapping="true" data-requires="./nok-menu-carousel.mjs">
-                <div class="nok25-nav-carousel__inner">
+                <div class="nok25-nav-carousel__inner nok25-text-darkerblue nok25-dark-text-white">
                     <div class="nok25-nav-carousel__slide">
                         <div class="nok25-nav__menuitems" id="topmenu">
-                            <a href="#submenu-behandelingen" class="nok25-nav__menuitem">Behandelingen</a>
+                            <a href="#submenu-behandelingen" class="nok25-nav__menuitem nok25-nav__menuitem--active">Behandelingen</a>
                             <a href="#submenu-over-nok" class="nok25-nav__menuitem">Over NOK</a>
                             <a href="#" class="nok25-nav__menuitem">Agenda</a>
                             <a href="#" class="nok25-nav__menuitem">Verwijzers</a>
@@ -93,15 +103,15 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                     </div>
                     <div class="nok25-nav-carousel__slide">
                         <div class="nok25-nav__menuitems" id="submenu-behandelingen">
-                            <a href="#topmenu" class="nok25-nav__menuitem nok25-nav__menuitem--back">&laquo; Terug naar overzicht</a>
+                            <a href="#topmenu" class="nok25-nav__menuitem nok25-nav__menuitem__back">&laquo; Terug naar overzicht</a>
                             <a href="#" class="nok25-nav__menuitem">Wat is obesitas?</a>
-                            <a href="#" class="nok25-nav__menuitem">Onze behandeling van obesitas</a>
+                            <a href="#" class="nok25-nav__menuitem nok25-nav__menuitem--active">Onze behandeling van obesitas</a>
                             <a href="#" class="nok25-nav__menuitem">Ons behandelprogramma</a>
                             <a href="#" class="nok25-nav__menuitem">De operatie</a>
                             <a href="#" class="nok25-nav__menuitem">De kosten van de behandeling</a>
                         </div>
                         <div class="nok25-nav__menuitems" id="submenu-over-nok">
-                            <a href="#topmenu" class="nok25-nav__menuitem nok25-nav__menuitem--back">&laquo; Terug naar overzicht</a>
+                            <a href="#topmenu" class="nok25-nav__menuitem nok25-nav__menuitem__back">&laquo; Terug naar overzicht</a>
                             <a href="#" class="nok25-nav__menuitem">Over ons</a>
                             <a href="#" class="nok25-nav__menuitem">Team van specialisten</a>
                             <a href="#" class="nok25-nav__menuitem">Vestigingen</a>
@@ -111,9 +121,9 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                     </div>
                 </div>
             </div>
-            <div class="nok25-horizontal-section--stretched nok25-nav-footer nok25-bg-darkerblue nok25-dark-bg-darkestblue nok25-text-contrast nok25-z-1">
+            <div class="nok25-horizontal-section--stretched nok25-nav-footer nok25-text-contrast nok25-bg-darkerblue nok25-dark-bg-darkestblue nok25-z-1">
                 <div class="nok25-nav__menuitems nok25-nav__menuitems--compact">
-                    <a href="#" class="nok25-nav__menuitem">Werken bij</a>
+                    <a href="#" class="nok25-nav__menuitem nok25-nav__menuitem--active">Werken bij</a>
                     <a href="#" class="nok25-nav__menuitem">Kennisbank</a>
                     <a href="#" class="nok25-nav__menuitem">Mijn NOK</a>
                     <a href="#" class="nok25-nav__menuitem">NOK App</a>
@@ -139,6 +149,9 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                 <div>+31 12345678</div>
                 <div>Zoek</div>
                 <div>NL</div>
+                <div class="nok25-font-size-adjuster" data-toggles="open" data-target=".nok25-nav-control-dropdown">
+                    aA
+                </div>
             </div>
         </div>
         <div class="nok25-horizontal-section__inner nok25-nav-menubar-row nok25-z-3">
@@ -190,7 +203,7 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos vero.
             </p>
             <div class="nok25-horizontal-button-group">
-                <button class="nok25-button fill-group-column nok25-base-font nok25-bg-darkerblue nok25-text-contrast" tabindex="0">De behandeling</button>
+                <button class="nok25-button fill-group-column nok25-bg-darkerblue nok25-text-contrast" tabindex="0">De behandeling</button>
                 <a class="nok25-hyperlink fw-bold" href="#">Kom ik in aanmerking?</a>
             </div>
         </article>

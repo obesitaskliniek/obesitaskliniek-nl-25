@@ -1,12 +1,11 @@
 @use "nok-elements";
 @use "nok-mixins";
 
-body {
-  background: linear-gradient(180deg, var(--nok25-body--darker), hsla(var(--nok25-body--hsl)/1));
-  @include nok-mixins.nok-text-font;
+html {
+  font-size: 1em;
 }
 
-/* custom elements */
-nok25-logo, nok25-mobile-nav, nok25-desktop-nav {
-  display: contents;
+body {
+  background: linear-gradient(180deg, var(--nok25-body--darker), hsla(var(--nok25-body-hsl)/1));
+  @include nok-mixins.nok-text-font;
 }
