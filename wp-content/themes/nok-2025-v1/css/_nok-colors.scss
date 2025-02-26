@@ -65,15 +65,14 @@ $nok-dark-contrast-overrides: (
         $color+'--lighter' :  color.adjust(color.adjust($value, $lightness: 5%, $space: hsl), $saturation: 10%, $space: hsl)
     );
     @each $color, $value in $sub_map {
+      $contrast_value: if(map-has-key($nok-contrast-overrides, $color), map.get($nok-contrast-overrides, $color), nok-utilities.get-contrast-color($value, $color-contrast-light, $color-contrast-dark));
       --#{nok-variables.$prefix}-#{$color} :          #{$value};
-      //--#{nok-variables.$prefix}-#{$color}--h :       #{round(color.hue($value))};
-      //--#{nok-variables.$prefix}-#{$color}--s :       #{round(color.saturation($value))};
-      //--#{nok-variables.$prefix}-#{$color}--l :       #{round(color.lightness($value))};
-      --#{nok-variables.$prefix}-#{$color}--hsl :     #{round(color.hue($value))} #{round(color.saturation($value))} #{round(color.lightness($value))};
-      --#{nok-variables.$prefix}-#{$color}--contrast: #{if(map-has-key($nok-contrast-overrides, $color), map.get($nok-contrast-overrides, $color), nok-utilities.get-contrast-color($value, $color-contrast-light, $color-contrast-dark))};
-      --#{nok-variables.$prefix}-#{$color}--contrast--hover: #{lighten(if(map-has-key($nok-contrast-overrides, $color), map.get($nok-contrast-overrides, $color), nok-utilities.get-contrast-color($value, $color-contrast-light, $color-contrast-dark)), 10%)};
+      --#{nok-variables.$prefix}-#{$color}-hsl :     #{round(color.hue($value))} #{round(color.saturation($value))} #{round(color.lightness($value))};
       --#{nok-variables.$prefix}-#{$color}--hover:    #{color.adjust(color.adjust($value, $lightness: 15%, $space: hsl), $saturation: -10%, $space: hsl)};
       --#{nok-variables.$prefix}-#{$color}--active:   #{color.adjust(color.adjust($value, $lightness: 5%, $space: hsl), $saturation: 10%, $space: hsl)};
+      --#{nok-variables.$prefix}-#{$color}--contrast: #{$contrast_value};
+      --#{nok-variables.$prefix}-#{$color}--contrast-hsl: #{round(color.hue($contrast_value))} #{round(color.saturation($contrast_value))} #{round(color.lightness($contrast_value))};
+      --#{nok-variables.$prefix}-#{$color}--contrast--hover: #{lighten($contrast_value, 10%)};
     }
   }
   /**
@@ -96,15 +95,14 @@ slightly dimmed or desaturated in dark-mode (when no dark-specific classes have 
                 $color+'--lighter' :  $value
         );
         @each $color, $value in $sub_map {
+          $contrast_value: if(map-has-key($nok-dark-contrast-overrides, $color), map.get($nok-dark-contrast-overrides, $color), nok-utilities.get-contrast-color($value, $color-contrast-light, $color-contrast-dark));
           --#{nok-variables.$prefix}-#{$color} :          #{$value};
-          //--#{nok-variables.$prefix}-#{$color}--h :       #{round(color.hue($value))};
-          //--#{nok-variables.$prefix}-#{$color}--s :       #{round(color.saturation($value))};
-          //--#{nok-variables.$prefix}-#{$color}--l :       #{round(color.lightness($value))};
-          --#{nok-variables.$prefix}-#{$color}--hsl :     #{round(color.hue($value))} #{round(color.saturation($value))} #{round(color.lightness($value))};
-          --#{nok-variables.$prefix}-#{$color}--contrast: #{if(map-has-key($nok-dark-contrast-overrides, $color), map.get($nok-dark-contrast-overrides, $color), nok-utilities.get-contrast-color($value, $color-contrast-light, $color-contrast-dark))};
-          --#{nok-variables.$prefix}-#{$color}--contrast--hover: #{lighten(if(map-has-key($nok-dark-contrast-overrides, $color), map.get($nok-dark-contrast-overrides, $color), nok-utilities.get-contrast-color($value, $color-contrast-light, $color-contrast-dark)), 10%)};
+          --#{nok-variables.$prefix}-#{$color}-hsl :     #{round(color.hue($value))} #{round(color.saturation($value))} #{round(color.lightness($value))};
           --#{nok-variables.$prefix}-#{$color}--hover:    #{desaturate(lighten($value, 15%), 10%)};
           --#{nok-variables.$prefix}-#{$color}--active:   #{desaturate(darken($value, 5%), 10%)};
+          --#{nok-variables.$prefix}-#{$color}--contrast: #{$contrast_value};
+          --#{nok-variables.$prefix}-#{$color}--contrast-hsl: #{round(color.hue($contrast_value))} #{round(color.saturation($contrast_value))} #{round(color.lightness($contrast_value))};
+          --#{nok-variables.$prefix}-#{$color}--contrast--hover: #{lighten($contrast_value, 10%)};
         }
       }
     }
@@ -118,11 +116,12 @@ slightly dimmed or desaturated in dark-mode (when no dark-specific classes have 
 
 
 @mixin bg-colors($prefix, $colorName, $colorValue) {
-  --bg-color: hsla(var(--#{$prefix}-#{$colorName}--hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
-  --bg-color-hsl: var(--#{$prefix}-#{$colorName}--hsl);
+  --bg-color: hsla(var(--#{$prefix}-#{$colorName}-hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
+  --bg-color-hsl: var(--#{$prefix}-#{$colorName}-hsl);
   --bg-color--hover: var(--#{$prefix}-#{$colorName}--hover);
   --bg-color--active: var(--#{$prefix}-#{$colorName}--active);
   --text-color--contrast: var(--#{$prefix}-#{$colorName}--contrast);
+  --text-color--contrast-hsl: var(--#{$prefix}-#{$colorName}--contrast-hsl);
   --text-color--contrast--hover: var(--#{$prefix}-#{$colorName}--contrast--hover);
   --text-color-button: var(--text-color--contrast);
   --text-color-button--hover: var(--text-color--contrast--hover);
@@ -134,10 +133,11 @@ slightly dimmed or desaturated in dark-mode (when no dark-specific classes have 
 }
 
 @mixin text-colors($prefix, $colorName, $colorValue) {
-  --text-color: hsla(var(--#{$prefix}-#{$colorName}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color-hsl: var(--#{$prefix}-#{$colorName}--hsl);
+  --text-color: hsla(var(--#{$prefix}-#{$colorName}-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--#{$prefix}-#{$colorName}-hsl);
   --text-color--hover: var(--#{$prefix}-#{$colorName}--hover);
   --text-color--contrast: var(--#{$prefix}-#{$colorName}--contrast);
+  --text-color--contrast-hsl: var(--#{$prefix}-#{$colorName}--contrast-hsl);
   --text-color--contrast--hover: var(--#{$prefix}-#{$colorName}--contrast--hover);
   color: var(--text-color, var(--text-color--contrast, inherit));
   &::selection {
@@ -146,20 +146,20 @@ slightly dimmed or desaturated in dark-mode (when no dark-specific classes have 
   }
   &--hover {
     &:hover {
-      --text-color: hsla(var(--#{$prefix}-#{$colorName}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+      --text-color: hsla(var(--#{$prefix}-#{$colorName}-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
       color: var(--text-color, var(--text-color--contrast, inherit)) !important;
     }
   }
 }
 
 @mixin border-colors($prefix, $colorName, $colorValue) {
-  --border-color: hsla(var(--#{$prefix}-#{$colorName}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --border-color-hsl: var(--#{$prefix}-#{$colorName}--hsl);
+  --border-color: hsla(var(--#{$prefix}-#{$colorName}-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --border-color-hsl: var(--#{$prefix}-#{$colorName}-hsl);
   border-color: var(--border-color, inherit);
 }
 
 @mixin input-colors($prefix, $colorName, $colorValue) {
-  --input-color: hsla(var(--#{$prefix}-#{$colorName}--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --input-color: hsla(var(--#{$prefix}-#{$colorName}-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   --text-color: var(--input-color, inherit);
   accent-color: var(--input-color, inherit);
   caret-color: var(--input-color, inherit);
@@ -226,8 +226,12 @@ slightly dimmed or desaturated in dark-mode (when no dark-specific classes have 
 /**
  * Additional general color class helpers
  */
-.#{nok-variables.$prefix}-text-contrast {
-  color: var(--text-color--contrast, inherit) !important;
+body { //helps increase specificity
+  .#{nok-variables.$prefix}-text-contrast {
+    --text-color-hsl: var(--text-color--contrast-hsl, inherit) !important;
+    --text-color: var(--text-color--contrast, inherit) !important;
+    color: var(--text-color--contrast, inherit) !important;
+  }
 }
 
 /**

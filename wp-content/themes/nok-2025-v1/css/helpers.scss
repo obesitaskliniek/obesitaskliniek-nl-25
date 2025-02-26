@@ -8,7 +8,7 @@
 }
 
 .#{nok-variables.$prefix}-heading-font {
-  @include nok-mixins.nok-font;
+  @include nok-mixins.nok-heading-font;
 }
 .#{nok-variables.$prefix}-small-text-font,
 .#{nok-variables.$prefix}-text-font {

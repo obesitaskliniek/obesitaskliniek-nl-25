@@ -1,7 +1,8 @@
 @use "nok-variables";
 
-@mixin nok-font {
-  font-family: nok-variables.$default-font-family;
+@mixin nok-heading-font {
+  font-family: var(--nok25-heading-font-family, nok-variables.$heading-font-family);
+  font-size-adjust: var(--nok25-heading-font-size-adjust, nok-variables.$heading-font-size-adjust);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizelegibility;
@@ -9,7 +10,8 @@
   font-style: normal;
 }
 @mixin nok-text-font {
-  font-family: nok-variables.$text-font-family;
+  font-family: var(--nok25-text-font-family, nok-variables.$text-font-family);
+  font-size-adjust: var(--nok25-text-font-size-adjust, nok-variables.$text-font-size-adjust);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizelegibility;
@@ -28,6 +30,29 @@
   box-shadow: 0 0 0 0 hsla(0 0 0 / 0);
   &:hover, &:focus {
     box-shadow: 0 0.4rem 0.1rem -0.3rem hsla(0 0 50 / 0.15);
+  }
+}
+
+@mixin nok-mini-popup {
+  display: none;
+
+  position: absolute;
+  right: var(--#{nok-variables.$prefix}-padding-section-sides, 1.5rem);
+  top: var(--#{nok-variables.$prefix}-padding-base, 0.5rem);
+
+  gap: 0.5rem;
+  padding: 0.5rem;
+
+  font-size: 1.1rem;
+  font-weight: bold;
+
+  @include nok-border-radius;
+  @include nok-subtle-shadow;
+
+  &.open {
+    z-index: nok-variables.$z-stack-top;
+    display: flex;
+    animation: fade--in .2s ease-in-out;
   }
 }
 
@@ -125,7 +150,7 @@
   $scrollbarHeight: 6px,
   $scrollbarHandle: var(--text-color-button, #CCC),
   $scrollbarHandle_active: var(--text-color-button--hover, #FFF),
-  $scrollbarTrack: hsla(var(--nok25-body--hsl) / 0.25)
+  $scrollbarTrack: hsla(var(--nok25-body-hsl) / 0.25)
 ) {
   & {
     --scrollbar-height: #{$scrollbarHeight};

@@ -13,9 +13,9 @@ $component-name: #{nok-variables.$prefix}-square-block;
 :host {
   --local-color-alpha: 0.8;
   --icon-color: var(--#{nok-variables.$prefix}-yellow);
-  --text-color: hsla(var(--#{nok-variables.$prefix}-white--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color--heading: hsla(var(--#{nok-variables.$prefix}-white--hsl) / 1);
-  --text-color--link: hsla(var(--#{nok-variables.$prefix}-white--hsl) / 1);
+  --text-color: hsla(var(--#{nok-variables.$prefix}-white-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color--heading: hsla(var(--#{nok-variables.$prefix}-white-hsl) / 1);
+  --text-color--link: hsla(var(--#{nok-variables.$prefix}-white-hsl) / 1);
   --text-color--link--hover: var(--#{nok-variables.$prefix}-yellow);
   --text-color--link-icon: var(--#{nok-variables.$prefix}-lightblue);
   --text-color--link-icon--hover: var(--#{nok-variables.$prefix}-yellow);

@@ -25,13 +25,13 @@ $component-name: #{nok-variables.$prefix}-button;
   white-space: nowrap;
   overflow: hidden;
 
-  @include nok-mixins.nok-font;
+  @include nok-mixins.nok-heading-font;
   font-weight: 500;
   font-size: var(--#{nok-variables.$prefix}-font-size-buttons, 1.25rem);
   line-height: 1.5;
   text-decoration: none;
 
-  color: var(--text-color, var(--text-color--contrast, inherit));
+  color: var(--text-color--contrast, var(--text-color, inherit));
   @include nok-mixins.nok-border-radius;
   &:not(.no-shadow) {
     @include nok-mixins.nok-btn-shadow-border;

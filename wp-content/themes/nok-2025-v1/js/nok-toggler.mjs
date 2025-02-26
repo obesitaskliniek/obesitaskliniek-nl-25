@@ -9,9 +9,13 @@ export function init(elements){
   elements.forEach(function(element){
     element.querySelectorAll('[data-toggles]').forEach((toggler) => {
       const toggles = toggler.dataset.toggles;
+      const target = toggler.dataset.target ? (toggler.dataset.target === '_self' ? toggler : document.querySelector(toggler.dataset.target)) : element;
+
       singleClick(toggler, ()=>{
-        element.classList.toggle(toggles);
+        target.classList.toggle(toggles);
       });
+
+      //todo: add "click outside" once handler to unset
     })
   })
 }

@@ -47,7 +47,7 @@ $component-name: #{nok-variables.$prefix}-nav;
   --animation-duration--in: #{$dur_in};
   --animation-duration--out: #{$dur_out};
 
-  @include nok-mixins.nok-font;
+  @include nok-mixins.nok-heading-font;
   @include nok-rfs.rfs(1.2rem, font-size);
 
   @include nok-mixins.media-breakpoint-up($switch_point) {
@@ -86,6 +86,53 @@ $component-name: #{nok-variables.$prefix}-nav;
     transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out;
   }
 
+  &-control-dropdown {
+    font-size: 16px; //fix this
+    position: absolute;
+    top: 0;
+    z-index: nok-variables.$z-stack-top;
+
+    max-width: 75vw;
+
+    display: flex;
+    gap: 8px;
+
+    padding: calc(16px * 1.6);
+
+    @include nok-mixins.nok-border-radius('large', 'bottom');
+    --nok25-default-border-radius: 16px;
+    --nok25-default-border-radius--large: 24px;
+
+    .nok25-button {
+      font-size: 16px; //fix this
+      --flex-gap: 8px !important;
+    }
+
+    &__section {
+      display: flex;
+      flex-direction: row;
+      gap: inherit;
+      align-items: center;
+    }
+  }
+  &-control-dropdown.open  {
+    box-shadow: 0 0 2rem rgba(80, 80, 80, 0.5);
+  }
+
+  &-dropdown,
+  &-control-dropdown {
+    transform: translateY(-100%);
+    transition: transform var(--animation-duration--out) var(--animation-easing-out), box-shadow var(--animation-duration--out) var(--animation-easing-out);
+  }
+
+  &.open &-dropdown,
+  &-control-dropdown.open  {
+    transform: translateY(0);
+    transition-duration: var(--animation-duration--in);
+    transition-timing-function: var(--animation-easing-in);
+    pointer-events: all;
+  }
+
   .#{nok-variables.$prefix}-button {
     height: 100%;
     max-height: 100%;
@@ -106,12 +153,6 @@ $component-name: #{nok-variables.$prefix}-nav;
       backdrop-filter: blur(5px);
       --local-bg-color-alpha: 0.5;
       pointer-events: all;
-    }
-
-    .#{$component-name}-dropdown {
-      transform: translateY(0);
-      transition-duration: var(--animation-duration--in);
-      transition-timing-function: var(--animation-easing-in);
     }
 
     .#{$component-name}-menu-toggler {
@@ -194,8 +235,6 @@ $component-name: #{nok-variables.$prefix}-nav;
       margin-top: calc(-1 * var(--#{nok-variables.$prefix}-default-border-radius--large, 0));
       margin-left: var(--#{nok-variables.$prefix}-default-border-radius--large, 0); //prevents the dropdown from appearing at the top sides when collapsed due to border radius on the menubar
       margin-right: var(--#{nok-variables.$prefix}-default-border-radius--large, 0); //prevents the dropdown from appearing at the top sides when collapsed due to border radius on the menubar
-      transform: translateY(-100%);
-      transition: transform var(--animation-duration--out) var(--animation-easing-out);
 
       padding-bottom: 16px + 8px; /* to prevent box-shadow from being cut off due to overflow - sync px values with applied shadow (currently: nok-subtle-shadow-menu)*/
 
@@ -365,24 +404,33 @@ $component-name: #{nok-variables.$prefix}-nav;
 
 
       &__menuitems {
-        --item-padding: 1rem 0;
+        --item-padding: clamp(0.5rem, 2vw, 1rem);
         font-weight: 500;
         padding: 1rem var(--#{nok-variables.$prefix}-padding-section-sides);
         display: flex;
         flex-direction: column;
         overflow-y: auto; //make sure we can scroll the submenus on really small screens (or many items)
-        &--compact {
+        @mixin __local_compact {
           @include nok-rfs.rfs(1rem, font-size);
           font-weight: 400;
-          --item-padding: .5rem 0;
+          --item-padding: 0.5rem;
+        }
+        &--compact {
+          @include __local_compact;
+        }
+        @include nok-mixins.media-breakpoint-down(md) {
+          @include __local_compact;
         }
       }
       &__menuitem {
-        padding: var(--item-padding);
+        padding: var(--item-padding) 0;
         display: grid;
         grid-template-columns: 1fr auto;
+
         text-decoration: none;
-        &:not(&--back) {
+        color: hsla(var(--text-color-hsl) / var(--local-color-alpha, 1));
+
+        &:not(&__back) {
           &:not(:last-of-type) {
             border-bottom: 2px solid #8884;
           }
@@ -392,8 +440,16 @@ $component-name: #{nok-variables.$prefix}-nav;
           }
         }
 
-        &--back {
+        &__back {
           font-weight: 400;
+        }
+
+        &--active {
+          border-color: var(--nok25-yellow) !important;
+          --local-color-alpha: 0.6;
+          &::after {
+            content: none !important;
+          }
         }
       }
 

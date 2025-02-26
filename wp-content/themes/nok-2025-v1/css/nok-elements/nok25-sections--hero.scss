@@ -72,15 +72,15 @@ $component-name: #{nok-variables.$prefix}-hero;
     z-index: $z_base + 1;
     overflow: hidden;
     margin: 0;
-    --grad-1-1: var(--#{nok-variables.$prefix}-lightblue--hsl);
-    --grad-1-2: var(--#{nok-variables.$prefix}-green--hsl);
-    --grad-1-3: var(--#{nok-variables.$prefix}-yellow--hsl);
-    --base-layer: var(--#{nok-variables.$prefix}-body--darker--hsl);
+    --grad-1-1: var(--#{nok-variables.$prefix}-lightblue-hsl);
+    --grad-1-2: var(--#{nok-variables.$prefix}-green-hsl);
+    --grad-1-3: var(--#{nok-variables.$prefix}-yellow-hsl);
+    --base-layer: var(--#{nok-variables.$prefix}-body--darker-hsl);
 
     @media (prefers-color-scheme: dark) {
-      --grad-1-3: var(--#{nok-variables.$prefix}-lightblue--hsl);
-      --grad-1-1: var(--#{nok-variables.$prefix}-yellow--hsl);
-      --base-layer: var(--#{nok-variables.$prefix}-lightblue--darker--hsl);
+      --grad-1-3: var(--#{nok-variables.$prefix}-lightblue-hsl);
+      --grad-1-1: var(--#{nok-variables.$prefix}-yellow-hsl);
+      --base-layer: var(--#{nok-variables.$prefix}-lightblue--darker-hsl);
     }
 
     svg {
@@ -117,7 +117,7 @@ $component-name: #{nok-variables.$prefix}-hero;
         @include nok-mixins.media-breakpoint-down(xl) {
           object-position: 60% 50%;
         }
-        background-color: hsla(var(--#{nok-variables.$prefix}-green--hsl) / 0.5);
+        background-color: hsla(var(--#{nok-variables.$prefix}-green-hsl) / 0.5);
       }
     }
   }
