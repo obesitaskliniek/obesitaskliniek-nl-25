@@ -238,17 +238,17 @@
   --nok25-white--contrast: #222;
   --nok25-white--contrast-hsl: 0deg 0% 13%;
   --nok25-white--contrast--hover: rgb(59.5, 59.5, 59.5);
-  --nok25-white--darker: rgb(242.25, 242.25, 242.25);
-  --nok25-white--darker-hsl: 0deg 0% 95%;
-  --nok25-white--darker--hover: hsl(0, 0%, 110%);
-  --nok25-white--darker--active: white;
+  --nok25-white--darker: rgb(229.5, 229.5, 229.5);
+  --nok25-white--darker-hsl: 0deg 0% 90%;
+  --nok25-white--darker--hover: hsl(0, 0%, 105%);
+  --nok25-white--darker--active: rgb(243.525, 240.975, 240.975);
   --nok25-white--darker--contrast: #222;
   --nok25-white--darker--contrast-hsl: 0deg 0% 13%;
   --nok25-white--darker--contrast--hover: rgb(59.5, 59.5, 59.5);
-  --nok25-white--lighter: hsl(0, 10%, 105%);
-  --nok25-white--lighter-hsl: 0deg 10% 105%;
-  --nok25-white--lighter--hover: hsl(0, 0%, 120%);
-  --nok25-white--lighter--active: hsl(0, 20%, 110%);
+  --nok25-white--lighter: hsl(0, 0%, 110%);
+  --nok25-white--lighter-hsl: 0deg 0% 110%;
+  --nok25-white--lighter--hover: hsl(0, 0%, 125%);
+  --nok25-white--lighter--active: hsl(0, 10%, 115%);
   --nok25-white--lighter--contrast: #222;
   --nok25-white--lighter--contrast-hsl: 0deg 0% 13%;
   --nok25-white--lighter--contrast--hover: rgb(59.5, 59.5, 59.5);
@@ -259,20 +259,41 @@
   --nok25-black--contrast: #f3f4f9;
   --nok25-black--contrast-hsl: 230deg 33% 96%;
   --nok25-black--contrast--hover: white;
-  --nok25-black--darker: rgb(21.25, 21.25, 21.25);
-  --nok25-black--darker-hsl: 0deg 0% 8%;
-  --nok25-black--darker--hover: rgb(59.5, 59.5, 59.5);
-  --nok25-black--darker--active: rgb(37.4, 30.6, 30.6);
+  --nok25-black--darker: rgb(8.5, 8.5, 8.5);
+  --nok25-black--darker-hsl: 0deg 0% 3%;
+  --nok25-black--darker--hover: rgb(46.75, 46.75, 46.75);
+  --nok25-black--darker--active: rgb(23.375, 19.125, 19.125);
   --nok25-black--darker--contrast: #f3f4f9;
   --nok25-black--darker--contrast-hsl: 230deg 33% 96%;
   --nok25-black--darker--contrast--hover: white;
-  --nok25-black--lighter: rgb(51.425, 42.075, 42.075);
-  --nok25-black--lighter-hsl: 0deg 10% 18%;
-  --nok25-black--lighter--hover: #555555;
-  --nok25-black--lighter--active: rgb(71.4, 47.6, 47.6);
+  --nok25-black--lighter: rgb(59.5, 59.5, 59.5);
+  --nok25-black--lighter-hsl: 0deg 0% 23%;
+  --nok25-black--lighter--hover: rgb(97.75, 97.75, 97.75);
+  --nok25-black--lighter--active: rgb(79.475, 65.025, 65.025);
   --nok25-black--lighter--contrast: #f3f4f9;
   --nok25-black--lighter--contrast-hsl: 230deg 33% 96%;
   --nok25-black--lighter--contrast--hover: white;
+  --nok25-lightgrey: #CCC;
+  --nok25-lightgrey-hsl: 0deg 0% 80%;
+  --nok25-lightgrey--hover: rgb(242.25, 242.25, 242.25);
+  --nok25-lightgrey--active: rgb(220.575, 212.925, 212.925);
+  --nok25-lightgrey--contrast: #222;
+  --nok25-lightgrey--contrast-hsl: 0deg 0% 13%;
+  --nok25-lightgrey--contrast--hover: rgb(59.5, 59.5, 59.5);
+  --nok25-lightgrey--darker: rgb(178.5, 178.5, 178.5);
+  --nok25-lightgrey--darker-hsl: 0deg 0% 70%;
+  --nok25-lightgrey--darker--hover: rgb(216.75, 216.75, 216.75);
+  --nok25-lightgrey--darker--active: rgb(197.625, 184.875, 184.875);
+  --nok25-lightgrey--darker--contrast: #222;
+  --nok25-lightgrey--darker--contrast-hsl: 0deg 0% 13%;
+  --nok25-lightgrey--darker--contrast--hover: rgb(59.5, 59.5, 59.5);
+  --nok25-lightgrey--lighter: rgb(229.5, 229.5, 229.5);
+  --nok25-lightgrey--lighter-hsl: 0deg 0% 90%;
+  --nok25-lightgrey--lighter--hover: hsl(0, 0%, 105%);
+  --nok25-lightgrey--lighter--active: rgb(243.525, 240.975, 240.975);
+  --nok25-lightgrey--lighter--contrast: #222;
+  --nok25-lightgrey--lighter--contrast-hsl: 0deg 0% 13%;
+  --nok25-lightgrey--lighter--contrast--hover: rgb(59.5, 59.5, 59.5);
   /**
    * Additional color classes
    */
@@ -3910,6 +3931,273 @@ slightly dimmed or desaturated in dark-mode (when no dark-specific classes have 
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 
+@media (prefers-color-scheme: dark) {
+  body .nok25-dark-bg-lightgrey {
+    --bg-color: hsla(var(--nok25-lightgrey-hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
+    --bg-color-hsl: var(--nok25-lightgrey-hsl);
+    --bg-color--hover: var(--nok25-lightgrey--hover);
+    --bg-color--active: var(--nok25-lightgrey--active);
+    --text-color--contrast: var(--nok25-lightgrey--contrast);
+    --text-color--contrast-hsl: var(--nok25-lightgrey--contrast-hsl);
+    --text-color--contrast--hover: var(--nok25-lightgrey--contrast--hover);
+    --text-color-button: var(--text-color--contrast);
+    --text-color-button--hover: var(--text-color--contrast--hover);
+    background-color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-bg-lightgrey::-moz-selection {
+    background: var(--text-color--contrast, inherit);
+    color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-bg-lightgrey::selection {
+    background: var(--text-color--contrast, inherit);
+    color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-text-lightgrey {
+    --text-color: hsla(var(--nok25-lightgrey-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --text-color-hsl: var(--nok25-lightgrey-hsl);
+    --text-color--hover: var(--nok25-lightgrey--hover);
+    --text-color--contrast: var(--nok25-lightgrey--contrast);
+    --text-color--contrast-hsl: var(--nok25-lightgrey--contrast-hsl);
+    --text-color--contrast--hover: var(--nok25-lightgrey--contrast--hover);
+    color: var(--text-color, var(--text-color--contrast, inherit));
+  }
+  body .nok25-dark-text-lightgrey::-moz-selection {
+    background: var(--text-color, var(--text-color--contrast, inherit));
+    color: #222;
+  }
+  body .nok25-dark-text-lightgrey::selection {
+    background: var(--text-color, var(--text-color--contrast, inherit));
+    color: #222;
+  }
+  body .nok25-dark-text-lightgrey--hover:hover {
+    --text-color: hsla(var(--nok25-lightgrey-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    color: var(--text-color, var(--text-color--contrast, inherit)) !important;
+  }
+  body .nok25-dark-text-contrast {
+    color: var(--text-color--contrast, inherit) !important;
+  }
+}
+.nok25-bg-lightgrey {
+  --bg-color: hsla(var(--nok25-lightgrey-hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-lightgrey-hsl);
+  --bg-color--hover: var(--nok25-lightgrey--hover);
+  --bg-color--active: var(--nok25-lightgrey--active);
+  --text-color--contrast: var(--nok25-lightgrey--contrast);
+  --text-color--contrast-hsl: var(--nok25-lightgrey--contrast-hsl);
+  --text-color--contrast--hover: var(--nok25-lightgrey--contrast--hover);
+  --text-color-button: var(--text-color--contrast);
+  --text-color-button--hover: var(--text-color--contrast--hover);
+  background-color: var(--bg-color, inherit);
+}
+.nok25-bg-lightgrey::-moz-selection {
+  background: var(--text-color--contrast, inherit);
+  color: var(--bg-color, inherit);
+}
+.nok25-bg-lightgrey::selection {
+  background: var(--text-color--contrast, inherit);
+  color: var(--bg-color, inherit);
+}
+
+.nok25-text-lightgrey {
+  --text-color: hsla(var(--nok25-lightgrey-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-lightgrey-hsl);
+  --text-color--hover: var(--nok25-lightgrey--hover);
+  --text-color--contrast: var(--nok25-lightgrey--contrast);
+  --text-color--contrast-hsl: var(--nok25-lightgrey--contrast-hsl);
+  --text-color--contrast--hover: var(--nok25-lightgrey--contrast--hover);
+  color: var(--text-color, var(--text-color--contrast, inherit));
+}
+.nok25-text-lightgrey::-moz-selection {
+  background: var(--text-color, var(--text-color--contrast, inherit));
+  color: #222;
+}
+.nok25-text-lightgrey::selection {
+  background: var(--text-color, var(--text-color--contrast, inherit));
+  color: #222;
+}
+.nok25-text-lightgrey--hover:hover {
+  --text-color: hsla(var(--nok25-lightgrey-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  color: var(--text-color, var(--text-color--contrast, inherit)) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  body .nok25-dark-bg-lightgrey--darker {
+    --bg-color: hsla(var(--nok25-lightgrey--darker-hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
+    --bg-color-hsl: var(--nok25-lightgrey--darker-hsl);
+    --bg-color--hover: var(--nok25-lightgrey--darker--hover);
+    --bg-color--active: var(--nok25-lightgrey--darker--active);
+    --text-color--contrast: var(--nok25-lightgrey--darker--contrast);
+    --text-color--contrast-hsl: var(--nok25-lightgrey--darker--contrast-hsl);
+    --text-color--contrast--hover: var(--nok25-lightgrey--darker--contrast--hover);
+    --text-color-button: var(--text-color--contrast);
+    --text-color-button--hover: var(--text-color--contrast--hover);
+    background-color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-bg-lightgrey--darker::-moz-selection {
+    background: var(--text-color--contrast, inherit);
+    color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-bg-lightgrey--darker::selection {
+    background: var(--text-color--contrast, inherit);
+    color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-text-lightgrey--darker {
+    --text-color: hsla(var(--nok25-lightgrey--darker-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --text-color-hsl: var(--nok25-lightgrey--darker-hsl);
+    --text-color--hover: var(--nok25-lightgrey--darker--hover);
+    --text-color--contrast: var(--nok25-lightgrey--darker--contrast);
+    --text-color--contrast-hsl: var(--nok25-lightgrey--darker--contrast-hsl);
+    --text-color--contrast--hover: var(--nok25-lightgrey--darker--contrast--hover);
+    color: var(--text-color, var(--text-color--contrast, inherit));
+  }
+  body .nok25-dark-text-lightgrey--darker::-moz-selection {
+    background: var(--text-color, var(--text-color--contrast, inherit));
+    color: #222;
+  }
+  body .nok25-dark-text-lightgrey--darker::selection {
+    background: var(--text-color, var(--text-color--contrast, inherit));
+    color: #222;
+  }
+  body .nok25-dark-text-lightgrey--darker--hover:hover {
+    --text-color: hsla(var(--nok25-lightgrey--darker-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    color: var(--text-color, var(--text-color--contrast, inherit)) !important;
+  }
+  body .nok25-dark-text-contrast {
+    color: var(--text-color--contrast, inherit) !important;
+  }
+}
+.nok25-bg-lightgrey--darker {
+  --bg-color: hsla(var(--nok25-lightgrey--darker-hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-lightgrey--darker-hsl);
+  --bg-color--hover: var(--nok25-lightgrey--darker--hover);
+  --bg-color--active: var(--nok25-lightgrey--darker--active);
+  --text-color--contrast: var(--nok25-lightgrey--darker--contrast);
+  --text-color--contrast-hsl: var(--nok25-lightgrey--darker--contrast-hsl);
+  --text-color--contrast--hover: var(--nok25-lightgrey--darker--contrast--hover);
+  --text-color-button: var(--text-color--contrast);
+  --text-color-button--hover: var(--text-color--contrast--hover);
+  background-color: var(--bg-color, inherit);
+}
+.nok25-bg-lightgrey--darker::-moz-selection {
+  background: var(--text-color--contrast, inherit);
+  color: var(--bg-color, inherit);
+}
+.nok25-bg-lightgrey--darker::selection {
+  background: var(--text-color--contrast, inherit);
+  color: var(--bg-color, inherit);
+}
+
+.nok25-text-lightgrey--darker {
+  --text-color: hsla(var(--nok25-lightgrey--darker-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-lightgrey--darker-hsl);
+  --text-color--hover: var(--nok25-lightgrey--darker--hover);
+  --text-color--contrast: var(--nok25-lightgrey--darker--contrast);
+  --text-color--contrast-hsl: var(--nok25-lightgrey--darker--contrast-hsl);
+  --text-color--contrast--hover: var(--nok25-lightgrey--darker--contrast--hover);
+  color: var(--text-color, var(--text-color--contrast, inherit));
+}
+.nok25-text-lightgrey--darker::-moz-selection {
+  background: var(--text-color, var(--text-color--contrast, inherit));
+  color: #222;
+}
+.nok25-text-lightgrey--darker::selection {
+  background: var(--text-color, var(--text-color--contrast, inherit));
+  color: #222;
+}
+.nok25-text-lightgrey--darker--hover:hover {
+  --text-color: hsla(var(--nok25-lightgrey--darker-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  color: var(--text-color, var(--text-color--contrast, inherit)) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  body .nok25-dark-bg-lightgrey--lighter {
+    --bg-color: hsla(var(--nok25-lightgrey--lighter-hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
+    --bg-color-hsl: var(--nok25-lightgrey--lighter-hsl);
+    --bg-color--hover: var(--nok25-lightgrey--lighter--hover);
+    --bg-color--active: var(--nok25-lightgrey--lighter--active);
+    --text-color--contrast: var(--nok25-lightgrey--lighter--contrast);
+    --text-color--contrast-hsl: var(--nok25-lightgrey--lighter--contrast-hsl);
+    --text-color--contrast--hover: var(--nok25-lightgrey--lighter--contrast--hover);
+    --text-color-button: var(--text-color--contrast);
+    --text-color-button--hover: var(--text-color--contrast--hover);
+    background-color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-bg-lightgrey--lighter::-moz-selection {
+    background: var(--text-color--contrast, inherit);
+    color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-bg-lightgrey--lighter::selection {
+    background: var(--text-color--contrast, inherit);
+    color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-text-lightgrey--lighter {
+    --text-color: hsla(var(--nok25-lightgrey--lighter-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --text-color-hsl: var(--nok25-lightgrey--lighter-hsl);
+    --text-color--hover: var(--nok25-lightgrey--lighter--hover);
+    --text-color--contrast: var(--nok25-lightgrey--lighter--contrast);
+    --text-color--contrast-hsl: var(--nok25-lightgrey--lighter--contrast-hsl);
+    --text-color--contrast--hover: var(--nok25-lightgrey--lighter--contrast--hover);
+    color: var(--text-color, var(--text-color--contrast, inherit));
+  }
+  body .nok25-dark-text-lightgrey--lighter::-moz-selection {
+    background: var(--text-color, var(--text-color--contrast, inherit));
+    color: #222;
+  }
+  body .nok25-dark-text-lightgrey--lighter::selection {
+    background: var(--text-color, var(--text-color--contrast, inherit));
+    color: #222;
+  }
+  body .nok25-dark-text-lightgrey--lighter--hover:hover {
+    --text-color: hsla(var(--nok25-lightgrey--lighter-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    color: var(--text-color, var(--text-color--contrast, inherit)) !important;
+  }
+  body .nok25-dark-text-contrast {
+    color: var(--text-color--contrast, inherit) !important;
+  }
+}
+.nok25-bg-lightgrey--lighter {
+  --bg-color: hsla(var(--nok25-lightgrey--lighter-hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-lightgrey--lighter-hsl);
+  --bg-color--hover: var(--nok25-lightgrey--lighter--hover);
+  --bg-color--active: var(--nok25-lightgrey--lighter--active);
+  --text-color--contrast: var(--nok25-lightgrey--lighter--contrast);
+  --text-color--contrast-hsl: var(--nok25-lightgrey--lighter--contrast-hsl);
+  --text-color--contrast--hover: var(--nok25-lightgrey--lighter--contrast--hover);
+  --text-color-button: var(--text-color--contrast);
+  --text-color-button--hover: var(--text-color--contrast--hover);
+  background-color: var(--bg-color, inherit);
+}
+.nok25-bg-lightgrey--lighter::-moz-selection {
+  background: var(--text-color--contrast, inherit);
+  color: var(--bg-color, inherit);
+}
+.nok25-bg-lightgrey--lighter::selection {
+  background: var(--text-color--contrast, inherit);
+  color: var(--bg-color, inherit);
+}
+
+.nok25-text-lightgrey--lighter {
+  --text-color: hsla(var(--nok25-lightgrey--lighter-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-lightgrey--lighter-hsl);
+  --text-color--hover: var(--nok25-lightgrey--lighter--hover);
+  --text-color--contrast: var(--nok25-lightgrey--lighter--contrast);
+  --text-color--contrast-hsl: var(--nok25-lightgrey--lighter--contrast-hsl);
+  --text-color--contrast--hover: var(--nok25-lightgrey--lighter--contrast--hover);
+  color: var(--text-color, var(--text-color--contrast, inherit));
+}
+.nok25-text-lightgrey--lighter::-moz-selection {
+  background: var(--text-color, var(--text-color--contrast, inherit));
+  color: #222;
+}
+.nok25-text-lightgrey--lighter::selection {
+  background: var(--text-color, var(--text-color--contrast, inherit));
+  color: #222;
+}
+.nok25-text-lightgrey--lighter--hover:hover {
+  --text-color: hsla(var(--nok25-lightgrey--lighter-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  color: var(--text-color, var(--text-color--contrast, inherit)) !important;
+}
+
 /**
  * Additional general color class helpers
  */
@@ -4366,31 +4654,49 @@ section.nok25-horizontal-section + section.nok25-horizontal-section {
   margin-left: auto;
 }
 @media (min-width: 576px) {
+  :root {
+    --section-max-width: 540px;
+  }
   .nok25-horizontal-section__inner {
     max-width: 540px;
   }
 }
 @media (min-width: 768px) {
+  :root {
+    --section-max-width: 720px;
+  }
   .nok25-horizontal-section__inner {
     max-width: 720px;
   }
 }
 @media (min-width: 992px) {
+  :root {
+    --section-max-width: 960px;
+  }
   .nok25-horizontal-section__inner {
     max-width: 960px;
   }
 }
 @media (min-width: 1200px) {
+  :root {
+    --section-max-width: 1140px;
+  }
   .nok25-horizontal-section__inner {
     max-width: 1140px;
   }
 }
 @media (min-width: 1400px) {
+  :root {
+    --section-max-width: 1320px;
+  }
   .nok25-horizontal-section__inner {
     max-width: 1320px;
   }
 }
 @media (min-width: 1600px) {
+  :root {
+    --section-max-width: 1572px;
+  }
   .nok25-horizontal-section__inner {
     max-width: 1572px;
   }
@@ -4403,12 +4709,14 @@ section.nok25-horizontal-section + section.nok25-horizontal-section {
 }
 .nok25-horizontal-section__heading__description {
   font-size: 1.1rem;
+  font-size: 1.1rem;
   font-weight: 400;
   line-height: var(--nok25-default-line-height, 1.25);
   margin: 0;
 }
 
 h1.nok25-horizontal-section__heading {
+  font-size: 3.25rem;
   font-size: calc(1.45rem + 2.4vw);
 }
 @media (min-width: 1200px) {
@@ -4418,6 +4726,7 @@ h1.nok25-horizontal-section__heading {
 }
 
 h2.nok25-horizontal-section__heading {
+  font-size: 2.5rem;
   font-size: calc(1.375rem + 1.5vw);
 }
 @media (min-width: 1200px) {
@@ -4434,13 +4743,7 @@ h2.nok25-horizontal-section__heading {
   --animation-easing-out: cubic-bezier(.85, 0, .15, 1);
   --animation-duration--in: 750ms;
   --animation-duration--out: 550ms;
-  font-family: var(--nok25-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
-  font-size-adjust: var(--nok25-heading-font-size-adjust, 0.525);
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  text-rendering: optimizelegibility;
-  font-optical-sizing: auto;
-  font-style: normal;
+  font-size: 1.2rem;
   font-size: 1.2rem;
   /* Open state */
 }
@@ -4455,11 +4758,6 @@ h2.nok25-horizontal-section__heading {
   }
 }
 @media (max-width: 1199.98px) {
-  .nok25-nav {
-    /*@at-root body:has(.nok25-nav.open) {
-      overflow: hidden !important;
-    }*/
-  }
   .nok25-nav nok25-desktop-nav {
     display: none !important;
   }
@@ -4478,19 +4776,36 @@ h2.nok25-horizontal-section__heading {
   position: fixed;
   z-index: 2;
   pointer-events: none;
-  transition: background 500ms ease-in-out, -webkit-backdrop-filter 500ms ease-in-out;
-  transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out;
-  transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out, -webkit-backdrop-filter 500ms ease-in-out;
+}
+@media (prefers-reduced-transparency) {
+  .nok25-nav-mask {
+    display: none;
+  }
+}
+@media (prefers-reduced-transparency) and (prefers-reduced-motion: no-preference) {
+  .nok25-nav-mask {
+    animation: fade--in 0.5s ease-in-out;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nok25-nav-mask {
+    transition: background 500ms ease-in-out, -webkit-backdrop-filter 500ms ease-in-out;
+    transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out;
+    transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out, -webkit-backdrop-filter 500ms ease-in-out;
+  }
 }
 .nok25-nav-control-dropdown {
   font-size: 16px;
   position: absolute;
   top: 0;
   z-index: 100;
-  max-width: 75vw;
+  max-width: var(--section-max-width, calc(100vw - var(--nok25-padding-section-sides, 1.5rem) * 2));
   display: flex;
-  gap: 8px;
-  padding: 25.6px;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 16px;
+  padding: 32px;
   border-bottom-left-radius: var(--nok25-default-border-radius--large, 1rem);
   border-bottom-right-radius: var(--nok25-default-border-radius--large, 1rem);
   border-top-left-radius: 0;
@@ -4498,28 +4813,50 @@ h2.nok25-horizontal-section__heading {
   --nok25-default-border-radius: 16px;
   --nok25-default-border-radius--large: 24px;
 }
+@media (max-width: 767.98px) {
+  .nok25-nav-control-dropdown {
+    width: 100%;
+  }
+}
+.nok25-nav-control-dropdown h5 {
+  font-size: 20px;
+}
 .nok25-nav-control-dropdown .nok25-button {
-  font-size: 16px;
+  --nok25-default-border-radius: 8px;
   --flex-gap: 8px !important;
+  font-size: inherit !important;
+  flex-shrink: 1;
+  aspect-ratio: 1;
+  flex-basis: 100%;
+  align-self: stretch;
+  padding: 10px;
 }
 .nok25-nav-control-dropdown__section {
   display: flex;
   flex-direction: row;
-  gap: inherit;
+  gap: 8px;
   align-items: center;
 }
 .nok25-nav-control-dropdown.open {
-  box-shadow: 0 0 2rem rgba(80, 80, 80, 0.5);
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1), 0 0 2rem rgba(0, 0, 0, 0.1);
 }
 .nok25-nav-dropdown, .nok25-nav-control-dropdown {
   transform: translateY(-100%);
-  transition: transform var(--animation-duration--out) var(--animation-easing-out), box-shadow var(--animation-duration--out) var(--animation-easing-out);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nok25-nav-dropdown, .nok25-nav-control-dropdown {
+    transition: transform var(--animation-duration--out) var(--animation-easing-out), box-shadow var(--animation-duration--out) var(--animation-easing-out);
+  }
 }
 .nok25-nav.open .nok25-nav-dropdown, .nok25-nav-control-dropdown.open {
   transform: translateY(0);
-  transition-duration: var(--animation-duration--in);
-  transition-timing-function: var(--animation-easing-in);
   pointer-events: all;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nok25-nav.open .nok25-nav-dropdown, .nok25-nav-control-dropdown.open {
+    transition-duration: var(--animation-duration--in);
+    transition-timing-function: var(--animation-easing-in);
+  }
 }
 .nok25-nav .nok25-button {
   height: 100%;
@@ -4528,7 +4865,11 @@ h2.nok25-horizontal-section__heading {
 }
 .nok25-nav-menu-toggler.nok25-button {
   transform: rotate(0deg);
-  transition: transform var(--animation-duration--in) cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nok25-nav-menu-toggler.nok25-button {
+    transition: transform var(--animation-duration--in) cubic-bezier(0.16, 1, 0.3, 1);
+  }
 }
 .nok25-nav.open {
   touch-action: none;
@@ -4539,19 +4880,31 @@ h2.nok25-horizontal-section__heading {
   --local-bg-color-alpha: 0.5;
   pointer-events: all;
 }
+@media (prefers-reduced-transparency) {
+  .nok25-nav.open .nok25-nav-mask {
+    display: none;
+  }
+}
 .nok25-nav.open .nok25-nav-menu-toggler {
   background-image: var(--nok25-button-icon-navbar-toggler-active);
   transform: rotate(-180deg);
 }
 .nok25-nav.open .nok25-nav-drawer {
   transform: translateX(0%);
-  transition-duration: var(--animation-duration--in);
-  transition-timing-function: var(--animation-easing-in);
+  box-shadow: -8px 8px 16px rgba(0, 0, 0, 0.1);
 }
-.nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem {
-  opacity: 0;
-  animation: fade--in 0.5s var(--animation-easing-out);
-  animation-fill-mode: forwards;
+@media (prefers-reduced-motion: no-preference) {
+  .nok25-nav.open .nok25-nav-drawer {
+    transition-duration: var(--animation-duration--in);
+    transition-timing-function: var(--animation-easing-in);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem {
+    opacity: 0;
+    animation: fade--in 0.5s var(--animation-easing-out);
+    animation-fill-mode: forwards;
+  }
 }
 .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(1) {
   animation-delay: 187.5ms;
@@ -4608,6 +4961,7 @@ h2.nok25-horizontal-section__heading {
   font-optical-sizing: auto;
   font-style: normal;
   font-size: 1rem;
+  font-size: 1rem;
   font-weight: 300;
   --grid-gap: var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem));
   display: flex;
@@ -4630,6 +4984,12 @@ h2.nok25-horizontal-section__heading {
   padding-bottom: 2rem;
   overflow: hidden;
 }
+.nok25-nav nok25-desktop-nav .nok25-nav-top a {
+  text-decoration: none;
+}
+.nok25-nav nok25-desktop-nav .nok25-nav-top a:hover {
+  color: var(--nok25-lightblue);
+}
 .nok25-nav nok25-desktop-nav .nok25-nav-menubar {
   pointer-events: all;
   z-index: 3;
@@ -4643,12 +5003,12 @@ h2.nok25-horizontal-section__heading {
   padding-top: calc(var(--grid-gap, var(--nok25-global-grid-gap)) * 0.75);
   padding-bottom: calc(var(--grid-gap, var(--nok25-global-grid-gap)) * 0.75);
   border-radius: var(--nok25-default-border-radius--large, 1rem);
-  box-shadow: 0 4px 8px rgba(80, 80, 80, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding-left: var(--nok25-padding-base, 1.5rem);
   padding-right: var(--nok25-padding-base, 1.5rem);
   height: 6rem;
   overflow: hidden;
-  font-weight: 500;
+  font-weight: 400;
 }
 .nok25-nav nok25-desktop-nav .nok25-nav-menubar > * {
   flex-shrink: 0;
@@ -4730,6 +5090,7 @@ h2.nok25-horizontal-section__heading {
   padding: calc(var(--grid-gap, var(--nok25-padding-base, 1.5rem)) / 2) 0;
 }
 .nok25-nav nok25-desktop-nav .nok25-nav-dropdown-contents h2 {
+  font-size: 2rem;
   font-size: calc(1.325rem + 0.9vw);
 }
 @media (min-width: 1200px) {
@@ -4738,6 +5099,7 @@ h2.nok25-horizontal-section__heading {
   }
 }
 .nok25-nav nok25-desktop-nav .nok25-nav-dropdown-contents h3 {
+  font-size: 1.5rem;
   font-size: calc(1.275rem + 0.3vw);
 }
 @media (min-width: 1200px) {
@@ -4765,13 +5127,16 @@ h2.nok25-horizontal-section__heading {
 }
 .nok25-nav nok25-mobile-nav .nok25-nav-drawer {
   transform: translateX(100%);
-  transition: transform var(--animation-duration--out) var(--animation-easing-out);
   display: flex;
   flex-direction: column;
   min-height: 0;
   align-self: flex-end;
   flex-basis: 100%;
-  box-shadow: -8px 8px 16px rgba(0, 0, 0, 0.1);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nok25-nav nok25-mobile-nav .nok25-nav-drawer {
+    transition: transform var(--animation-duration--out) var(--animation-easing-out);
+  }
 }
 @media (max-width: 767.98px) {
   .nok25-nav nok25-mobile-nav .nok25-nav-drawer {
@@ -4785,11 +5150,15 @@ h2.nok25-horizontal-section__heading {
 }
 .nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel {
   overflow: hidden;
-  scroll-behavior: smooth;
   overscroll-behavior: contain;
   touch-action: none;
   flex-grow: 1;
   flex-shrink: 1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel {
+    scroll-behavior: smooth;
+  }
 }
 .nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel.is-scrolling {
   pointer-events: none !important;
@@ -4809,13 +5178,17 @@ h2.nok25-horizontal-section__heading {
   padding: 0;
   margin: 0;
   overflow: hidden;
-  scroll-behavior: smooth;
   touch-action: none;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   scroll-snap-type: both mandatory;
   scroll-snap-stop: normal;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel__slide {
+    scroll-behavior: smooth;
+  }
 }
 .nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel__slide,
 .nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel__slide > * {
@@ -4836,7 +5209,7 @@ h2.nok25-horizontal-section__heading {
 }
 .nok25-nav nok25-mobile-nav .nok25-nav__menuitems {
   --item-padding: clamp(0.5rem, 2vw, 1rem);
-  font-weight: 500;
+  font-weight: 400;
   padding: 1rem var(--nok25-padding-section-sides);
   display: flex;
   flex-direction: column;
@@ -4844,11 +5217,13 @@ h2.nok25-horizontal-section__heading {
 }
 .nok25-nav nok25-mobile-nav .nok25-nav__menuitems--compact {
   font-size: 1rem;
+  font-size: 1rem;
   font-weight: 400;
   --item-padding: 0.5rem;
 }
 @media (max-width: 767.98px) {
   .nok25-nav nok25-mobile-nav .nok25-nav__menuitems {
+    font-size: 1rem;
     font-size: 1rem;
     font-weight: 400;
     --item-padding: 0.5rem;
@@ -4887,6 +5262,7 @@ h2.nok25-horizontal-section__heading {
   align-self: center;
   height: calc(1.425rem + 2.1vw);
   width: auto;
+  max-width: 100%;
   padding: 0 1px;
 }
 @media (min-width: 1200px) {
@@ -5067,6 +5443,7 @@ h2.nok25-horizontal-section__heading {
 /* Typography */
 h1.nok25-hero__heading {
   font-weight: 500;
+  font-size: 4.4rem;
   font-size: calc(1.565rem + 3.78vw);
   line-height: 1.05;
 }
@@ -5077,6 +5454,7 @@ h1.nok25-hero__heading {
 }
 
 .nok25-hero__pre-heading {
+  font-size: 1.25rem;
   font-size: 1.25rem;
 }
 
@@ -5103,6 +5481,7 @@ h1.nok25-hero__heading {
   font-optical-sizing: auto;
   font-style: normal;
   font-weight: 500;
+  font-weight: 500;
   font-size: var(--nok25-font-size-buttons, 1.25rem);
   line-height: 1.5;
   text-decoration: none;
@@ -5114,6 +5493,7 @@ h1.nok25-hero__heading {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
+  touch-action: manipulation;
 }
 .nok25-button:not(.no-shadow) {
   box-shadow: 0 0 0 0 hsla(0, 0%, 0%, 0);
@@ -5148,7 +5528,7 @@ h1.nok25-hero__heading {
   --flex-gap: calc(var(--nok25-padding-base, 1.5rem) / 4);
   font-size: calc(var(--nok25-font-size-buttons, 1.25rem) * 0.8);
 }
-.nok25-button-menu-toggler, .nok25-button-phone, .nok25-button-search {
+.nok25-button-menu-toggler, .nok25-button-phone, .nok25-button-font-size-adjust, .nok25-button-search {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 55%;
@@ -5172,7 +5552,7 @@ h1.nok25-hero__heading {
 }
 @media (prefers-color-scheme: dark) {
   .nok25-button-phone {
-    --nok25-button-icon-phone: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%230b2355' class='bi bi-telephone' viewBox='0 0 16 16'%3e %3cpath d='M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z'/%3e %3c/svg%3e");
+    --nok25-button-icon-phone: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23FFF' class='bi bi-telephone' viewBox='0 0 16 16'%3e %3cpath d='M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z'/%3e %3c/svg%3e");
   }
 }
 .nok25-button-search {
@@ -5182,6 +5562,15 @@ h1.nok25-hero__heading {
 @media (prefers-color-scheme: dark) {
   .nok25-button-search {
     --nok25-button-icon-search: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23FFF' class='bi bi-search' viewBox='0 0 16 16'%3e%3cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0'/%3e%3c/svg%3e");
+  }
+}
+.nok25-button-font-size-adjust {
+  --nok25-button-icon-font-size-adjust: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%230b2355' class='bi bi-font-size-adjust' viewBox='0 0 16 16'%3e%3cpath d='M11.7 3.7H9.9l-3.3 8.6-2.3-5.7H3.1L.8 12.3H2l.5-1.3h2.3l.5 1.3h3.1l.7-2h3.4l.8 2h1.9l-3.4-8.6ZM2.9 10l.8-2.1.8 2.1H2.9Zm6.7-1.1 1.2-3.2L12 8.9H9.7Z'/%3e%3c/svg%3e");
+  background-image: var(--nok25-button-icon-font-size-adjust);
+}
+@media (prefers-color-scheme: dark) {
+  .nok25-button-font-size-adjust {
+    --nok25-button-icon-font-size-adjust: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23FFF' class='bi bi-font-size-adjust' viewBox='0 0 16 16'%3e%3cpath d='M11.7 3.7H9.9l-3.3 8.6-2.3-5.7H3.1L.8 12.3H2l.5-1.3h2.3l.5 1.3h3.1l.7-2h3.4l.8 2h1.9l-3.4-8.6ZM2.9 10l.8-2.1.8 2.1H2.9Zm6.7-1.1 1.2-3.2L12 8.9H9.7Z'/%3e%3c/svg%3e");
   }
 }
 
@@ -5209,7 +5598,7 @@ nok25-square-block,
   line-height: var(--nok25-default-line-height, 1.25);
   padding: calc(var(--nok25-padding-base, 1.5rem) * 2);
   border-radius: var(--nok25-default-border-radius--large, 8px);
-  box-shadow: 0 4px 8px rgba(80, 80, 80, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: var(--background-color);
 }
 nok25-square-block > *,
@@ -5380,6 +5769,7 @@ h1 {
   text-rendering: optimizelegibility;
   font-optical-sizing: auto;
   font-style: normal;
+  font-weight: 500;
 }
 
 h2 {
@@ -5390,6 +5780,7 @@ h2 {
   text-rendering: optimizelegibility;
   font-optical-sizing: auto;
   font-style: normal;
+  font-weight: 500;
 }
 
 h3 {
@@ -5400,6 +5791,7 @@ h3 {
   text-rendering: optimizelegibility;
   font-optical-sizing: auto;
   font-style: normal;
+  font-weight: 500;
 }
 
 h4 {
@@ -5410,6 +5802,7 @@ h4 {
   text-rendering: optimizelegibility;
   font-optical-sizing: auto;
   font-style: normal;
+  font-weight: 500;
 }
 
 h5 {
@@ -5420,6 +5813,7 @@ h5 {
   text-rendering: optimizelegibility;
   font-optical-sizing: auto;
   font-style: normal;
+  font-weight: 500;
 }
 
 h6 {
@@ -5430,6 +5824,7 @@ h6 {
   text-rendering: optimizelegibility;
   font-optical-sizing: auto;
   font-style: normal;
+  font-weight: 500;
 }
 
 /* custom elements */
@@ -5521,37 +5916,6 @@ p .nok25-hyperlink:not(.nok25-button) {
   flex-direction: row;
   gap: 0.5ex;
   margin-right: 1ex;
-}
-
-.nok25-font-size-adjuster > div {
-  display: none;
-  position: absolute;
-  right: var(--nok25-padding-section-sides, 1.5rem);
-  top: var(--nok25-padding-base, 0.5rem);
-  gap: 0.5rem;
-  padding: 0.5rem;
-  font-size: 1.1rem;
-  font-weight: bold;
-  border-radius: var(--nok25-default-border-radius, 0.4rem);
-  box-shadow: 0 4px 8px rgba(80, 80, 80, 0.1);
-  align-items: center;
-  flex-wrap: nowrap;
-  flex-direction: row;
-}
-.nok25-font-size-adjuster > div.open {
-  z-index: 100;
-  display: flex;
-  animation: fade--in 0.2s ease-in-out;
-}
-.nok25-font-size-adjuster > div button {
-  --flex-gap: 0.4rem !important;
-  --nok25-font-size-buttons: 1.4rem;
-  font-weight: bold;
-  aspect-ratio: 1/1;
-  width: 1.2rem;
-}
-.nok25-font-size-adjuster > div button:first-of-type {
-  --nok25-font-size-buttons: 0.9rem;
 }
 
 /*# sourceMappingURL=base.css.map */

@@ -25,18 +25,16 @@ eventHandler.docReady(function(){
     hnlLogger.info(NAME, 'Ready.');
   });
 
+  //universally stop href="#" links from scrolling to top
+  document.addEventListener("click", function(event) {
+    const link = event.target.closest("a[href='#']");
+    if (link) {
+      event.preventDefault(); // Prevents page from jumping to the top
+    }
+  });
+
   //https://stackoverflow.com/questions/3885018/active-pseudo-class-doesnt-work-in-mobile-safari
   document.addEventListener('touchstart', function() {},false);
-
-  /*
-  //checks if position:sticky elements are, in fact, stuck. Checks on every scroll.
-  const stickies = document.body.querySelectorAll('.position-sticky');
-  eventHandler.addListener('scroll', function(){
-    stickies.forEach(function(el){
-      el.classList.toggle('stuck', el.getBoundingClientRect().top === parseInt(window.getComputedStyle(el).top, 10));
-    });
-  })();
-  */
 
   eventHandler.addListener('scroll', (e) => {
   //clear the url hash when scrolled back to top

@@ -30,6 +30,9 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
 
     @each $breakpoint, $section-max-width in nok-variables.$section-max-widths {
       @include nok-mixins.media-breakpoint-up($breakpoint, nok-variables.$grid-breakpoints) {
+        @at-root :root {
+          --section-max-width: #{$section-max-width};
+        }
         & {
           max-width: $section-max-width;
         }
@@ -44,6 +47,7 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
     line-height: var(--#{nok-variables.$prefix}-default-heading-line-height, 1.25);
     margin: 0;
     &__description {
+      font-size: 1.1rem;
       @include nok-rfs.rfs(1.1rem, font-size);
       font-weight: 400;
       line-height: var(--#{nok-variables.$prefix}-default-line-height, 1.25);
@@ -54,8 +58,10 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
 
 
 h1.#{$component-name}__heading {
+  font-size: 3.25rem;
   @include nok-rfs.rfs(3.25rem, font-size);
 }
 h2.#{$component-name}__heading {
+  font-size: 2.5rem;
   @include nok-rfs.rfs(2.5rem, font-size);
 }

@@ -30,6 +30,7 @@ $nok-base-colors: (
     'body':           $white,
 	'white':          #FFF,
 	'black':          $black,
+	'lightgrey':      #CCC,
 );
 
 $nok-contrast-overrides: ();
@@ -37,15 +38,15 @@ $nok-contrast-overrides: ();
 // color names listed here will be either adjusted for dark mode (using saturation/lightness)
 // or overridden in dark mode if listed both here and in $nok-dark-colors-overrides
 $nok-base-colors-adjust-for-dark: (
-        'body',
-        'yellow',
-        'darkyellow',
-        'paleyellow',
-        'green',
-        'greenyellow',
-        'greenblue',
-        'lightgreenblue',
-        'error',
+    'body',
+    'yellow',
+    'darkyellow',
+    'paleyellow',
+    'green',
+    'greenyellow',
+    'greenblue',
+    'lightgreenblue',
+    'error',
 );
 
 $nok-dark-colors-overrides: (
@@ -61,8 +62,8 @@ $nok-dark-contrast-overrides: (
   @each $color, $value in $nok-base-colors {
     $sub_map: (
         $color : $value,
-        $color+'--darker' :  color.adjust(color.adjust($value, $lightness: -5%, $space: hsl), $saturation: -10%, $space: hsl),
-        $color+'--lighter' :  color.adjust(color.adjust($value, $lightness: 5%, $space: hsl), $saturation: 10%, $space: hsl)
+        $color+'--darker' :  color.adjust(color.adjust($value, $lightness: if(color.saturation($value) > 0%, -5%, -10%), $space: hsl), $saturation: if(color.saturation($value) > 0%, -10%, 0%), $space: hsl),
+        $color+'--lighter' :  color.adjust(color.adjust($value, $lightness: if(color.saturation($value) > 0%, 5%, 10%), $space: hsl), $saturation: if(color.saturation($value) > 0%, 10%, 0%), $space: hsl)
     );
     @each $color, $value in $sub_map {
       $contrast_value: if(map-has-key($nok-contrast-overrides, $color), map.get($nok-contrast-overrides, $color), nok-utilities.get-contrast-color($value, $color-contrast-light, $color-contrast-dark));
@@ -112,7 +113,6 @@ slightly dimmed or desaturated in dark-mode (when no dark-specific classes have 
     //--#{nok-variables.$prefix}-focus-ring: #{$white};
   }
 }
-
 
 
 @mixin bg-colors($prefix, $colorName, $colorValue) {
