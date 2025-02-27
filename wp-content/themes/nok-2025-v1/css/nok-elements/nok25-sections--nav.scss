@@ -47,7 +47,7 @@ $component-name: #{nok-variables.$prefix}-nav;
   --animation-duration--in: #{$dur_in};
   --animation-duration--out: #{$dur_out};
 
-  @include nok-mixins.nok-heading-font;
+  font-size: 1.2rem;
   @include nok-rfs.rfs(1.2rem, font-size);
 
   @include nok-mixins.media-breakpoint-up($switch_point) {
@@ -72,9 +72,6 @@ $component-name: #{nok-variables.$prefix}-nav;
       z-index: nok-variables.$z-stack-top;
       pointer-events: none;
     }
-    /*@at-root body:has(.#{$component-name}.open) {
-      overflow: hidden !important;
-    }*/
   }
 
   &-mask {
@@ -83,53 +80,80 @@ $component-name: #{nok-variables.$prefix}-nav;
     position: fixed;
     z-index: 2;
     pointer-events: none;
-    transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out;
+    @media (prefers-reduced-transparency) {
+      display: none;
+      @media (prefers-reduced-motion: no-preference) {
+        animation: fade--in .5s ease-in-out;
+      }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out;
+    }
   }
 
   &-control-dropdown {
-    font-size: 16px; //fix this
+    font-size: 16px; //fixed
     position: absolute;
     top: 0;
     z-index: nok-variables.$z-stack-top;
 
-    max-width: 75vw;
+    max-width: var(--section-max-width, calc(100vw - (var(--nok25-padding-section-sides, 1.5rem) * 2)));
+    @include nok-mixins.media-breakpoint-down(md) {
+      width: 100%;
+    }
 
     display: flex;
-    gap: 8px;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 16px;
 
-    padding: calc(16px * 1.6);
+    padding: 32px;
 
     @include nok-mixins.nok-border-radius('large', 'bottom');
     --nok25-default-border-radius: 16px;
     --nok25-default-border-radius--large: 24px;
 
+    h5 {
+      font-size: 20px
+    }
     .nok25-button {
-      font-size: 16px; //fix this
+      --nok25-default-border-radius: 8px;
       --flex-gap: 8px !important;
+      font-size: inherit !important;
+      flex-shrink: 1;
+      aspect-ratio: 1;
+      flex-basis: 100%;
+      align-self: stretch;
+      padding: 10px;
     }
 
     &__section {
       display: flex;
       flex-direction: row;
-      gap: inherit;
+      gap: 8px;
       align-items: center;
     }
   }
   &-control-dropdown.open  {
-    box-shadow: 0 0 2rem rgba(80, 80, 80, 0.5);
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1), 0 0 2rem rgba(0, 0, 0, 0.1);
   }
 
   &-dropdown,
   &-control-dropdown {
     transform: translateY(-100%);
-    transition: transform var(--animation-duration--out) var(--animation-easing-out), box-shadow var(--animation-duration--out) var(--animation-easing-out);
+    @media (prefers-reduced-motion: no-preference) {
+      transition: transform var(--animation-duration--out) var(--animation-easing-out), box-shadow var(--animation-duration--out) var(--animation-easing-out);
+    }
   }
 
   &.open &-dropdown,
   &-control-dropdown.open  {
     transform: translateY(0);
-    transition-duration: var(--animation-duration--in);
-    transition-timing-function: var(--animation-easing-in);
+    @media (prefers-reduced-motion: no-preference) {
+      transition-duration: var(--animation-duration--in);
+      transition-timing-function: var(--animation-easing-in);
+    }
     pointer-events: all;
   }
 
@@ -141,7 +165,9 @@ $component-name: #{nok-variables.$prefix}-nav;
 
   &-menu-toggler.#{nok-variables.$prefix}-button {
     transform: rotate(0deg);
-    transition: transform var(--animation-duration--in) cubic-bezier(0.16, 1, 0.3, 1);
+    @media (prefers-reduced-motion: no-preference) {
+      transition: transform var(--animation-duration--in) cubic-bezier(0.16, 1, 0.3, 1);
+    }
   }
 
   /* Open state */
@@ -150,6 +176,9 @@ $component-name: #{nok-variables.$prefix}-nav;
     touch-action: none;
 
     .#{$component-name}-mask {
+      @media (prefers-reduced-transparency) {
+        display: none;
+      }
       backdrop-filter: blur(5px);
       --local-bg-color-alpha: 0.5;
       pointer-events: all;
@@ -162,12 +191,17 @@ $component-name: #{nok-variables.$prefix}-nav;
 
     .#{$component-name}-drawer {
       transform: translateX(0%);
-      transition-duration: var(--animation-duration--in);
-      transition-timing-function: var(--animation-easing-in);
-      .#{nok-variables.$prefix}-nav__menuitem {
-        opacity: 0;
-        animation: fade--in 0.5s var(--animation-easing-out);
-        animation-fill-mode: forwards;
+      @include nok-mixins.nok-subtle-shadow-menu;
+      @media (prefers-reduced-motion: no-preference) {
+        transition-duration: var(--animation-duration--in);
+        transition-timing-function: var(--animation-easing-in);
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .#{nok-variables.$prefix}-nav__menuitem {
+          opacity: 0;
+          animation: fade--in 0.5s var(--animation-easing-out);
+          animation-fill-mode: forwards;
+        }
       }
       @for $i from 1 through 15 {
         .#{nok-variables.$prefix}-nav__menuitem:nth-child(#{$i}) {
@@ -181,6 +215,7 @@ $component-name: #{nok-variables.$prefix}-nav;
     .#{$component-name}-top {
       z-index: $z_base + 1;
       @include nok-mixins.nok-text-font;
+      font-size: 1rem;
       @include nok-rfs.rfs(1rem, font-size);
       font-weight: 300;
 
@@ -189,6 +224,12 @@ $component-name: #{nok-variables.$prefix}-nav;
       &-row {
         padding-bottom: 2rem;
         overflow: hidden;
+      }
+      a {
+        text-decoration: none;
+        &:hover {
+          color: var(--nok25-lightblue);
+        }
       }
     }
 
@@ -205,7 +246,7 @@ $component-name: #{nok-variables.$prefix}-nav;
 
       overflow: hidden;
 
-      font-weight: 500;
+      font-weight: 400;
 
       img, svg {
         align-self: center;
@@ -282,10 +323,12 @@ $component-name: #{nok-variables.$prefix}-nav;
         }
 
         h2 {
+          font-size: 2rem;
           @include nok-rfs.rfs(2rem, font-size);
         }
 
         h3 {
+          font-size: 1.5rem;
           @include nok-rfs.rfs(1.5rem, font-size);
         }
 
@@ -322,7 +365,9 @@ $component-name: #{nok-variables.$prefix}-nav;
       &-drawer {
 
         transform: translateX(100%);
-        transition: transform var(--animation-duration--out) var(--animation-easing-out);
+        @media (prefers-reduced-motion: no-preference) {
+          transition: transform var(--animation-duration--out) var(--animation-easing-out);
+        }
 
         display: flex;
         flex-direction: column;
@@ -333,8 +378,6 @@ $component-name: #{nok-variables.$prefix}-nav;
         }
         flex-basis: 100%;
 
-        @include nok-mixins.nok-subtle-shadow-menu;
-
         .#{$component-name}-footer,
         .#{$component-name}-carousel {
           padding: 0;
@@ -343,7 +386,9 @@ $component-name: #{nok-variables.$prefix}-nav;
 
         .#{$component-name}-carousel {
           overflow: hidden;
-          scroll-behavior: smooth;
+          @media (prefers-reduced-motion: no-preference) {
+            scroll-behavior: smooth;
+          }
           overscroll-behavior: contain;
           touch-action: none;
 
@@ -371,7 +416,9 @@ $component-name: #{nok-variables.$prefix}-nav;
             padding: 0;
             margin: 0;
             overflow: hidden;
-            scroll-behavior: smooth;
+            @media (prefers-reduced-motion: no-preference) {
+              scroll-behavior: smooth;
+            }
             touch-action: none;
 
             display: flex;
@@ -405,12 +452,13 @@ $component-name: #{nok-variables.$prefix}-nav;
 
       &__menuitems {
         --item-padding: clamp(0.5rem, 2vw, 1rem);
-        font-weight: 500;
+        font-weight: 400;
         padding: 1rem var(--#{nok-variables.$prefix}-padding-section-sides);
         display: flex;
         flex-direction: column;
         overflow-y: auto; //make sure we can scroll the submenus on really small screens (or many items)
         @mixin __local_compact {
+          font-size: 1rem;
           @include nok-rfs.rfs(1rem, font-size);
           font-weight: 400;
           --item-padding: 0.5rem;
@@ -462,6 +510,7 @@ $component-name: #{nok-variables.$prefix}-nav;
         align-self: center;
         @include nok-rfs.rfs(3rem, height);
         width: auto;
+        max-width: 100%;
         padding: 0 1px;
       }
     }

@@ -60,7 +60,10 @@
      Object.keys(rules).forEach(key => {
        const groupDiv = document.createElement('div');
        groupDiv.setAttribute('data-stylegroup', `.${key}`);
-       groupDiv.classList.add(`${key}-tests`)
+       if (key.includes(' ')) {
+         key = key.split(' ').pop();
+       }
+       groupDiv.classList.add(`${key}-tests`);
        parentNode.appendChild(groupDiv);
 
        if (Array.isArray(rules[key])) {

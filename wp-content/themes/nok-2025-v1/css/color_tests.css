@@ -238,17 +238,17 @@
   --nok25-white--contrast: #222;
   --nok25-white--contrast-hsl: 0deg 0% 13%;
   --nok25-white--contrast--hover: rgb(59.5, 59.5, 59.5);
-  --nok25-white--darker: rgb(242.25, 242.25, 242.25);
-  --nok25-white--darker-hsl: 0deg 0% 95%;
-  --nok25-white--darker--hover: hsl(0, 0%, 110%);
-  --nok25-white--darker--active: white;
+  --nok25-white--darker: rgb(229.5, 229.5, 229.5);
+  --nok25-white--darker-hsl: 0deg 0% 90%;
+  --nok25-white--darker--hover: hsl(0, 0%, 105%);
+  --nok25-white--darker--active: rgb(243.525, 240.975, 240.975);
   --nok25-white--darker--contrast: #222;
   --nok25-white--darker--contrast-hsl: 0deg 0% 13%;
   --nok25-white--darker--contrast--hover: rgb(59.5, 59.5, 59.5);
-  --nok25-white--lighter: hsl(0, 10%, 105%);
-  --nok25-white--lighter-hsl: 0deg 10% 105%;
-  --nok25-white--lighter--hover: hsl(0, 0%, 120%);
-  --nok25-white--lighter--active: hsl(0, 20%, 110%);
+  --nok25-white--lighter: hsl(0, 0%, 110%);
+  --nok25-white--lighter-hsl: 0deg 0% 110%;
+  --nok25-white--lighter--hover: hsl(0, 0%, 125%);
+  --nok25-white--lighter--active: hsl(0, 10%, 115%);
   --nok25-white--lighter--contrast: #222;
   --nok25-white--lighter--contrast-hsl: 0deg 0% 13%;
   --nok25-white--lighter--contrast--hover: rgb(59.5, 59.5, 59.5);
@@ -259,20 +259,41 @@
   --nok25-black--contrast: #f3f4f9;
   --nok25-black--contrast-hsl: 230deg 33% 96%;
   --nok25-black--contrast--hover: white;
-  --nok25-black--darker: rgb(21.25, 21.25, 21.25);
-  --nok25-black--darker-hsl: 0deg 0% 8%;
-  --nok25-black--darker--hover: rgb(59.5, 59.5, 59.5);
-  --nok25-black--darker--active: rgb(37.4, 30.6, 30.6);
+  --nok25-black--darker: rgb(8.5, 8.5, 8.5);
+  --nok25-black--darker-hsl: 0deg 0% 3%;
+  --nok25-black--darker--hover: rgb(46.75, 46.75, 46.75);
+  --nok25-black--darker--active: rgb(23.375, 19.125, 19.125);
   --nok25-black--darker--contrast: #f3f4f9;
   --nok25-black--darker--contrast-hsl: 230deg 33% 96%;
   --nok25-black--darker--contrast--hover: white;
-  --nok25-black--lighter: rgb(51.425, 42.075, 42.075);
-  --nok25-black--lighter-hsl: 0deg 10% 18%;
-  --nok25-black--lighter--hover: #555555;
-  --nok25-black--lighter--active: rgb(71.4, 47.6, 47.6);
+  --nok25-black--lighter: rgb(59.5, 59.5, 59.5);
+  --nok25-black--lighter-hsl: 0deg 0% 23%;
+  --nok25-black--lighter--hover: rgb(97.75, 97.75, 97.75);
+  --nok25-black--lighter--active: rgb(79.475, 65.025, 65.025);
   --nok25-black--lighter--contrast: #f3f4f9;
   --nok25-black--lighter--contrast-hsl: 230deg 33% 96%;
   --nok25-black--lighter--contrast--hover: white;
+  --nok25-lightgrey: #CCC;
+  --nok25-lightgrey-hsl: 0deg 0% 80%;
+  --nok25-lightgrey--hover: rgb(242.25, 242.25, 242.25);
+  --nok25-lightgrey--active: rgb(220.575, 212.925, 212.925);
+  --nok25-lightgrey--contrast: #222;
+  --nok25-lightgrey--contrast-hsl: 0deg 0% 13%;
+  --nok25-lightgrey--contrast--hover: rgb(59.5, 59.5, 59.5);
+  --nok25-lightgrey--darker: rgb(178.5, 178.5, 178.5);
+  --nok25-lightgrey--darker-hsl: 0deg 0% 70%;
+  --nok25-lightgrey--darker--hover: rgb(216.75, 216.75, 216.75);
+  --nok25-lightgrey--darker--active: rgb(197.625, 184.875, 184.875);
+  --nok25-lightgrey--darker--contrast: #222;
+  --nok25-lightgrey--darker--contrast-hsl: 0deg 0% 13%;
+  --nok25-lightgrey--darker--contrast--hover: rgb(59.5, 59.5, 59.5);
+  --nok25-lightgrey--lighter: rgb(229.5, 229.5, 229.5);
+  --nok25-lightgrey--lighter-hsl: 0deg 0% 90%;
+  --nok25-lightgrey--lighter--hover: hsl(0, 0%, 105%);
+  --nok25-lightgrey--lighter--active: rgb(243.525, 240.975, 240.975);
+  --nok25-lightgrey--lighter--contrast: #222;
+  --nok25-lightgrey--lighter--contrast-hsl: 0deg 0% 13%;
+  --nok25-lightgrey--lighter--contrast--hover: rgb(59.5, 59.5, 59.5);
   /**
    * Additional color classes
    */
@@ -3907,6 +3928,273 @@ slightly dimmed or desaturated in dark-mode (when no dark-specific classes have 
 }
 .nok25-text-black--lighter--hover:hover {
   --text-color: hsla(var(--nok25-black--lighter-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  color: var(--text-color, var(--text-color--contrast, inherit)) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  body .nok25-dark-bg-lightgrey {
+    --bg-color: hsla(var(--nok25-lightgrey-hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
+    --bg-color-hsl: var(--nok25-lightgrey-hsl);
+    --bg-color--hover: var(--nok25-lightgrey--hover);
+    --bg-color--active: var(--nok25-lightgrey--active);
+    --text-color--contrast: var(--nok25-lightgrey--contrast);
+    --text-color--contrast-hsl: var(--nok25-lightgrey--contrast-hsl);
+    --text-color--contrast--hover: var(--nok25-lightgrey--contrast--hover);
+    --text-color-button: var(--text-color--contrast);
+    --text-color-button--hover: var(--text-color--contrast--hover);
+    background-color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-bg-lightgrey::-moz-selection {
+    background: var(--text-color--contrast, inherit);
+    color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-bg-lightgrey::selection {
+    background: var(--text-color--contrast, inherit);
+    color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-text-lightgrey {
+    --text-color: hsla(var(--nok25-lightgrey-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --text-color-hsl: var(--nok25-lightgrey-hsl);
+    --text-color--hover: var(--nok25-lightgrey--hover);
+    --text-color--contrast: var(--nok25-lightgrey--contrast);
+    --text-color--contrast-hsl: var(--nok25-lightgrey--contrast-hsl);
+    --text-color--contrast--hover: var(--nok25-lightgrey--contrast--hover);
+    color: var(--text-color, var(--text-color--contrast, inherit));
+  }
+  body .nok25-dark-text-lightgrey::-moz-selection {
+    background: var(--text-color, var(--text-color--contrast, inherit));
+    color: #222;
+  }
+  body .nok25-dark-text-lightgrey::selection {
+    background: var(--text-color, var(--text-color--contrast, inherit));
+    color: #222;
+  }
+  body .nok25-dark-text-lightgrey--hover:hover {
+    --text-color: hsla(var(--nok25-lightgrey-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    color: var(--text-color, var(--text-color--contrast, inherit)) !important;
+  }
+  body .nok25-dark-text-contrast {
+    color: var(--text-color--contrast, inherit) !important;
+  }
+}
+.nok25-bg-lightgrey {
+  --bg-color: hsla(var(--nok25-lightgrey-hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-lightgrey-hsl);
+  --bg-color--hover: var(--nok25-lightgrey--hover);
+  --bg-color--active: var(--nok25-lightgrey--active);
+  --text-color--contrast: var(--nok25-lightgrey--contrast);
+  --text-color--contrast-hsl: var(--nok25-lightgrey--contrast-hsl);
+  --text-color--contrast--hover: var(--nok25-lightgrey--contrast--hover);
+  --text-color-button: var(--text-color--contrast);
+  --text-color-button--hover: var(--text-color--contrast--hover);
+  background-color: var(--bg-color, inherit);
+}
+.nok25-bg-lightgrey::-moz-selection {
+  background: var(--text-color--contrast, inherit);
+  color: var(--bg-color, inherit);
+}
+.nok25-bg-lightgrey::selection {
+  background: var(--text-color--contrast, inherit);
+  color: var(--bg-color, inherit);
+}
+
+.nok25-text-lightgrey {
+  --text-color: hsla(var(--nok25-lightgrey-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-lightgrey-hsl);
+  --text-color--hover: var(--nok25-lightgrey--hover);
+  --text-color--contrast: var(--nok25-lightgrey--contrast);
+  --text-color--contrast-hsl: var(--nok25-lightgrey--contrast-hsl);
+  --text-color--contrast--hover: var(--nok25-lightgrey--contrast--hover);
+  color: var(--text-color, var(--text-color--contrast, inherit));
+}
+.nok25-text-lightgrey::-moz-selection {
+  background: var(--text-color, var(--text-color--contrast, inherit));
+  color: #222;
+}
+.nok25-text-lightgrey::selection {
+  background: var(--text-color, var(--text-color--contrast, inherit));
+  color: #222;
+}
+.nok25-text-lightgrey--hover:hover {
+  --text-color: hsla(var(--nok25-lightgrey-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  color: var(--text-color, var(--text-color--contrast, inherit)) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  body .nok25-dark-bg-lightgrey--darker {
+    --bg-color: hsla(var(--nok25-lightgrey--darker-hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
+    --bg-color-hsl: var(--nok25-lightgrey--darker-hsl);
+    --bg-color--hover: var(--nok25-lightgrey--darker--hover);
+    --bg-color--active: var(--nok25-lightgrey--darker--active);
+    --text-color--contrast: var(--nok25-lightgrey--darker--contrast);
+    --text-color--contrast-hsl: var(--nok25-lightgrey--darker--contrast-hsl);
+    --text-color--contrast--hover: var(--nok25-lightgrey--darker--contrast--hover);
+    --text-color-button: var(--text-color--contrast);
+    --text-color-button--hover: var(--text-color--contrast--hover);
+    background-color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-bg-lightgrey--darker::-moz-selection {
+    background: var(--text-color--contrast, inherit);
+    color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-bg-lightgrey--darker::selection {
+    background: var(--text-color--contrast, inherit);
+    color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-text-lightgrey--darker {
+    --text-color: hsla(var(--nok25-lightgrey--darker-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --text-color-hsl: var(--nok25-lightgrey--darker-hsl);
+    --text-color--hover: var(--nok25-lightgrey--darker--hover);
+    --text-color--contrast: var(--nok25-lightgrey--darker--contrast);
+    --text-color--contrast-hsl: var(--nok25-lightgrey--darker--contrast-hsl);
+    --text-color--contrast--hover: var(--nok25-lightgrey--darker--contrast--hover);
+    color: var(--text-color, var(--text-color--contrast, inherit));
+  }
+  body .nok25-dark-text-lightgrey--darker::-moz-selection {
+    background: var(--text-color, var(--text-color--contrast, inherit));
+    color: #222;
+  }
+  body .nok25-dark-text-lightgrey--darker::selection {
+    background: var(--text-color, var(--text-color--contrast, inherit));
+    color: #222;
+  }
+  body .nok25-dark-text-lightgrey--darker--hover:hover {
+    --text-color: hsla(var(--nok25-lightgrey--darker-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    color: var(--text-color, var(--text-color--contrast, inherit)) !important;
+  }
+  body .nok25-dark-text-contrast {
+    color: var(--text-color--contrast, inherit) !important;
+  }
+}
+.nok25-bg-lightgrey--darker {
+  --bg-color: hsla(var(--nok25-lightgrey--darker-hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-lightgrey--darker-hsl);
+  --bg-color--hover: var(--nok25-lightgrey--darker--hover);
+  --bg-color--active: var(--nok25-lightgrey--darker--active);
+  --text-color--contrast: var(--nok25-lightgrey--darker--contrast);
+  --text-color--contrast-hsl: var(--nok25-lightgrey--darker--contrast-hsl);
+  --text-color--contrast--hover: var(--nok25-lightgrey--darker--contrast--hover);
+  --text-color-button: var(--text-color--contrast);
+  --text-color-button--hover: var(--text-color--contrast--hover);
+  background-color: var(--bg-color, inherit);
+}
+.nok25-bg-lightgrey--darker::-moz-selection {
+  background: var(--text-color--contrast, inherit);
+  color: var(--bg-color, inherit);
+}
+.nok25-bg-lightgrey--darker::selection {
+  background: var(--text-color--contrast, inherit);
+  color: var(--bg-color, inherit);
+}
+
+.nok25-text-lightgrey--darker {
+  --text-color: hsla(var(--nok25-lightgrey--darker-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-lightgrey--darker-hsl);
+  --text-color--hover: var(--nok25-lightgrey--darker--hover);
+  --text-color--contrast: var(--nok25-lightgrey--darker--contrast);
+  --text-color--contrast-hsl: var(--nok25-lightgrey--darker--contrast-hsl);
+  --text-color--contrast--hover: var(--nok25-lightgrey--darker--contrast--hover);
+  color: var(--text-color, var(--text-color--contrast, inherit));
+}
+.nok25-text-lightgrey--darker::-moz-selection {
+  background: var(--text-color, var(--text-color--contrast, inherit));
+  color: #222;
+}
+.nok25-text-lightgrey--darker::selection {
+  background: var(--text-color, var(--text-color--contrast, inherit));
+  color: #222;
+}
+.nok25-text-lightgrey--darker--hover:hover {
+  --text-color: hsla(var(--nok25-lightgrey--darker-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  color: var(--text-color, var(--text-color--contrast, inherit)) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  body .nok25-dark-bg-lightgrey--lighter {
+    --bg-color: hsla(var(--nok25-lightgrey--lighter-hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
+    --bg-color-hsl: var(--nok25-lightgrey--lighter-hsl);
+    --bg-color--hover: var(--nok25-lightgrey--lighter--hover);
+    --bg-color--active: var(--nok25-lightgrey--lighter--active);
+    --text-color--contrast: var(--nok25-lightgrey--lighter--contrast);
+    --text-color--contrast-hsl: var(--nok25-lightgrey--lighter--contrast-hsl);
+    --text-color--contrast--hover: var(--nok25-lightgrey--lighter--contrast--hover);
+    --text-color-button: var(--text-color--contrast);
+    --text-color-button--hover: var(--text-color--contrast--hover);
+    background-color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-bg-lightgrey--lighter::-moz-selection {
+    background: var(--text-color--contrast, inherit);
+    color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-bg-lightgrey--lighter::selection {
+    background: var(--text-color--contrast, inherit);
+    color: var(--bg-color, inherit);
+  }
+  body .nok25-dark-text-lightgrey--lighter {
+    --text-color: hsla(var(--nok25-lightgrey--lighter-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    --text-color-hsl: var(--nok25-lightgrey--lighter-hsl);
+    --text-color--hover: var(--nok25-lightgrey--lighter--hover);
+    --text-color--contrast: var(--nok25-lightgrey--lighter--contrast);
+    --text-color--contrast-hsl: var(--nok25-lightgrey--lighter--contrast-hsl);
+    --text-color--contrast--hover: var(--nok25-lightgrey--lighter--contrast--hover);
+    color: var(--text-color, var(--text-color--contrast, inherit));
+  }
+  body .nok25-dark-text-lightgrey--lighter::-moz-selection {
+    background: var(--text-color, var(--text-color--contrast, inherit));
+    color: #222;
+  }
+  body .nok25-dark-text-lightgrey--lighter::selection {
+    background: var(--text-color, var(--text-color--contrast, inherit));
+    color: #222;
+  }
+  body .nok25-dark-text-lightgrey--lighter--hover:hover {
+    --text-color: hsla(var(--nok25-lightgrey--lighter-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+    color: var(--text-color, var(--text-color--contrast, inherit)) !important;
+  }
+  body .nok25-dark-text-contrast {
+    color: var(--text-color--contrast, inherit) !important;
+  }
+}
+.nok25-bg-lightgrey--lighter {
+  --bg-color: hsla(var(--nok25-lightgrey--lighter-hsl) / var(--global-bg-color-alpha, var(--local-bg-color-alpha, 1)));
+  --bg-color-hsl: var(--nok25-lightgrey--lighter-hsl);
+  --bg-color--hover: var(--nok25-lightgrey--lighter--hover);
+  --bg-color--active: var(--nok25-lightgrey--lighter--active);
+  --text-color--contrast: var(--nok25-lightgrey--lighter--contrast);
+  --text-color--contrast-hsl: var(--nok25-lightgrey--lighter--contrast-hsl);
+  --text-color--contrast--hover: var(--nok25-lightgrey--lighter--contrast--hover);
+  --text-color-button: var(--text-color--contrast);
+  --text-color-button--hover: var(--text-color--contrast--hover);
+  background-color: var(--bg-color, inherit);
+}
+.nok25-bg-lightgrey--lighter::-moz-selection {
+  background: var(--text-color--contrast, inherit);
+  color: var(--bg-color, inherit);
+}
+.nok25-bg-lightgrey--lighter::selection {
+  background: var(--text-color--contrast, inherit);
+  color: var(--bg-color, inherit);
+}
+
+.nok25-text-lightgrey--lighter {
+  --text-color: hsla(var(--nok25-lightgrey--lighter-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
+  --text-color-hsl: var(--nok25-lightgrey--lighter-hsl);
+  --text-color--hover: var(--nok25-lightgrey--lighter--hover);
+  --text-color--contrast: var(--nok25-lightgrey--lighter--contrast);
+  --text-color--contrast-hsl: var(--nok25-lightgrey--lighter--contrast-hsl);
+  --text-color--contrast--hover: var(--nok25-lightgrey--lighter--contrast--hover);
+  color: var(--text-color, var(--text-color--contrast, inherit));
+}
+.nok25-text-lightgrey--lighter::-moz-selection {
+  background: var(--text-color, var(--text-color--contrast, inherit));
+  color: #222;
+}
+.nok25-text-lightgrey--lighter::selection {
+  background: var(--text-color, var(--text-color--contrast, inherit));
+  color: #222;
+}
+.nok25-text-lightgrey--lighter--hover:hover {
+  --text-color: hsla(var(--nok25-lightgrey--lighter-hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
   color: var(--text-color, var(--text-color--contrast, inherit)) !important;
 }
 

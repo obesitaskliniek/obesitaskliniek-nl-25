@@ -194,9 +194,11 @@ $component-name: #{nok-variables.$prefix}-hero;
 /* Typography */
 h1.#{$component-name}__heading {
   font-weight: 500;
+  font-size: 4.4rem;
   @include nok-rfs.rfs(4.4rem, font-size);
   @include nok-rfs.rfs(1.05, line-height);
 }
 .#{$component-name}__pre-heading {
+  font-size: 1.25rem;
   @include nok-rfs.rfs(1.25rem, font-size);
 }

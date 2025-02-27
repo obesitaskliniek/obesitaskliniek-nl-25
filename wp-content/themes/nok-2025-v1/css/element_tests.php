@@ -5,7 +5,8 @@ const NOK_THEME_ROOT = 'https://dev.obesitaskliniek.nl/wp-content/themes/nok-202
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
     <title>Element tests</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,6 +32,7 @@ const NOK_THEME_ROOT = 'https://dev.obesitaskliniek.nl/wp-content/themes/nok-202
     </style>-->
 </head>
 <body class="nok25-bg-body nok25-text-contrast">
+    <div class="nok25-accessibility-helper"></div>
 
 <?php
 $star = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
@@ -69,12 +71,20 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
 ?>
 
 <nav class="nok25-horizontal-section nok25-nav nok25-text-darkerblue" data-requires="./nok-toggler.mjs?cache=<?= time();?>">
-    <div class="nok25-nav-mask nok25-bg-darkerblue nok25-dark-bg-darkerblue--darker nok25-z-1" ></div>
-    <div class=" nok25-bg-white nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-control-dropdown">
+    <div class="nok25-nav-mask nok25-bg-darkerblue nok25-dark-bg-darkerblue--darker nok25-z-1" data-toggles="open"></div>
+    <div class="nok25-bg-body nok25-text-darkerblue nok25-dark-text-contrast nok25-nav-control-dropdown nok25-bg-blur nok25-bg-alpha-9"
+         data-requires="./nok-user-prefs.mjs?cache=<?= time();?>">
+        <h5>Toegankelijkheid</h5>
         <div class="nok25-nav-control-dropdown__section">
             Tekstgrootte:
-            <button class="nok25-button nok25-button--small nok25-bg-darkerblue nok25-text-contrast" tabindex="0" onclick="document.documentElement.style.fontSize = `${parseInt(window.getComputedStyle(document.documentElement).fontSize) - 1}px`;">A</button>
-            <button class="nok25-button nok25-button--small nok25-bg-darkerblue nok25-text-contrast" tabindex="0" onclick="document.documentElement.style.fontSize = `${parseInt(window.getComputedStyle(document.documentElement).fontSize) + 1}px`;">A</button>
+            <button class="nok25-button nok25-button--small nok25-bg-darkerblue nok25-text-contrast" style="font-variant: all-small-caps;" tabindex="0" data-set-font-size="-2">A</button>
+            <button class="nok25-button nok25-button--small nok25-bg-darkerblue nok25-text-contrast" tabindex="0" data-set-font-size="+2">A</button>
+            <button class="nok25-button nok25-button--small nok25-bg-darkblue nok25-dark-bg-lightblue--darker nok25-text-contrast" tabindex="0" data-reset-font-size="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+                </svg>
+            </button>
         </div>
     </div>
 
@@ -82,12 +92,12 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
         <div class="nok25-horizontal-section--stretched nok25-bg-white nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-top-row nok25-z-3">
             <?= $logo;?>
             <button class="nok25-button nok25-button--small nok25-base-font nok25-bg-yellow nok25-text-contrast nok25-invisible-sm" tabindex="0">Gratis voorlichtingsavond</button>
-            <button class="nok25-button nok25-button-phone  nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"></button>
+            <button class="nok25-button nok25-button-phone nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"></button>
             <button class="nok25-button nok25-button-search nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"></button>
-            <button class="nok25-button nok25-button-menu-toggler nok25-nav-menu-toggler nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0" data-toggles="open"></button>
-            <div class="nok25-font-size-adjuster" data-toggles="open" data-target=".nok25-nav-control-dropdown">
-                aA
-            </div>
+            <button class="nok25-button nok25-button-font-size-adjust nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"
+                    data-toggles="open" data-target=".nok25-nav-control-dropdown" data-swipe-close=".nok25-nav-control-dropdown"></button>
+            <button class="nok25-button nok25-button-menu-toggler nok25-nav-menu-toggler nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"
+                    data-toggles="open" data-swipe-close=".nok25-nav-drawer" data-swipe-direction="x" data-swipe-limits="0,9999"></button>
         </div>
         <div class="nok25-z-2 nok25-nav-drawer">
             <div class="nok25-horizontal-section--stretched nok25-nav-carousel nok25-bg-white--darker nok25-dark-bg-darkerblue nok25-dark-text-white nok25-z-2"
@@ -149,9 +159,9 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                 <div>+31 12345678</div>
                 <div>Zoek</div>
                 <div>NL</div>
-                <div class="nok25-font-size-adjuster" data-toggles="open" data-target=".nok25-nav-control-dropdown">
-                    aA
-                </div>
+                <a href="#" data-toggles="open" data-target=".nok25-nav-control-dropdown">
+                    <span style="font-variant: all-small-caps;">a</span>A
+                </a>
             </div>
         </div>
         <div class="nok25-horizontal-section__inner nok25-nav-menubar-row nok25-z-3">
@@ -329,10 +339,5 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
     </div>
 </div>
 
-<script>
-
-
-
-</script>
 </body>
 </html>
