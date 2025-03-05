@@ -18,7 +18,7 @@ const NOK_THEME_ROOT = 'https://dev.obesitaskliniek.nl/wp-content/themes/nok-202
     <link rel="stylesheet" href="./element_tests.css?cache=<?= time();?>" crossorigin="anonymous">
     <link rel="stylesheet" href="./helpers.css?cache=<?= time();?>" crossorigin="anonymous">
 
-    <link rel="modulepreload" href="../js/mobileConsole/hnl.mobileconsole.js?cache=<?= time();?>">
+    <!-- <link rel="modulepreload" href="../js/mobileConsole/hnl.mobileconsole.js?cache=<?= time();?>">
     <script src="../js/mobileConsole/hnl.mobileconsole.js?cache=<?= time();?>"></script><!--//-->
     <link rel="modulepreload" href="../js/entrypoint.min.mjs?cache=<?= time();?>">
     <script type="module" src="../js/entrypoint.min.mjs?cache=<?= time();?>" defer></script>

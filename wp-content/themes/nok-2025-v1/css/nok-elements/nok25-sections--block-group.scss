@@ -78,6 +78,12 @@ $component-name: #{nok-variables.$prefix}-block-group;
     }
   }
 
+  &:has(.fake-scrollbar) {
+    .#{$component-name}__scroller .#{$component-name}__blocks {
+      margin-bottom: calc(var(--grid-gap, 1.5rem) * 1); //removes one gap space if fake scrollbar is present
+    }
+  }
+
   &__blocks {
     display: flex;
     flex-direction: row;

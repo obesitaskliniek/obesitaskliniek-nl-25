@@ -5722,7 +5722,6 @@ nok25-square-block > *,
 }
 .nok25-block-group__scroller.nok25-draggable {
   position: relative;
-  scrollbar-width: none;
   /* Fake Scrollbar */
   will-change: scroll-position; /*seems to bump performance in firefox ever so slightly*/
 }
@@ -5748,10 +5747,15 @@ nok25-square-block > *,
   background-color: var(--scrollbar-handle--active, white);
   border-color: var(--scrollbar-handle--active, white);
 }
-.nok25-block-group__scroller.nok25-draggable::-webkit-scrollbar {
+.nok25-block-group__scroller.nok25-draggable:has(+ .fake-scrollbar) {
+  scrollbar-width: none;
+}
+.nok25-block-group__scroller.nok25-draggable:has(+ .fake-scrollbar)::-webkit-scrollbar {
   display: none;
 }
 .nok25-block-group__scroller.nok25-draggable + .fake-scrollbar {
+  touch-action: none;
+  -webkit-touch-callout: none;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
@@ -5766,10 +5770,10 @@ nok25-square-block > *,
 .nok25-block-group__scroller.nok25-draggable + .fake-scrollbar .fake-scrollbar-thumb {
   touch-action: none;
   -webkit-touch-callout: none;
-  cursor: grab;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
+  cursor: grab;
   position: absolute;
   height: 100%;
   width: 20%; /* Will be dynamically updated */
@@ -5780,10 +5784,13 @@ nok25-square-block > *,
   contain: strict;
   backface-visibility: hidden;
 }
-.nok25-block-group__scroller.nok25-draggable + .fake-scrollbar:active {
+.nok25-block-group__scroller.nok25-draggable + .fake-scrollbar:hover .fake-scrollbar-thumb, .nok25-block-group__scroller.nok25-draggable:hover + .fake-scrollbar .fake-scrollbar-thumb, .nok25-block-group__scroller.nok25-draggable.grabbed-scrollbar + .fake-scrollbar .fake-scrollbar-thumb, .nok25-block-group__scroller.nok25-draggable.grabbed-direct + .fake-scrollbar .fake-scrollbar-thumb {
+  background-color: var(--scrollbar-handle--active, white);
+}
+.nok25-block-group__scroller.nok25-draggable.grabbed-scrollbar + .fake-scrollbar {
   overflow: visible;
 }
-.nok25-block-group__scroller.nok25-draggable + .fake-scrollbar:active .fake-scrollbar-thumb {
+.nok25-block-group__scroller.nok25-draggable.grabbed-scrollbar + .fake-scrollbar .fake-scrollbar-thumb {
   cursor: grabbing;
   outline: 5px solid rgba(255, 255, 255, 0.5333333333);
 }
@@ -5805,6 +5812,9 @@ nok25-square-block > *,
 }
 .nok25-block-group__scroller .nok25-block-group__blocks {
   margin-bottom: calc(var(--grid-gap, 1.5rem) * 2);
+}
+.nok25-block-group:has(.fake-scrollbar) .nok25-block-group__scroller .nok25-block-group__blocks {
+  margin-bottom: calc(var(--grid-gap, 1.5rem) * 1);
 }
 .nok25-block-group__blocks {
   display: flex;

@@ -156,14 +156,20 @@
   }
 
   position: relative;
-  scrollbar-width: none; //hides scrollbars in Firefox
 
-  &::-webkit-scrollbar {
-    display: none;
+  &:has(+ .fake-scrollbar) {
+    scrollbar-width: none; //hides scrollbars in Firefox
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
+
   /* Fake Scrollbar */
   + .fake-scrollbar {
+    touch-action: none;
+    -webkit-touch-callout: none;
     user-select: none;
+
     position: relative;
     display: flex;
     width: 100%;
@@ -174,8 +180,9 @@
     .fake-scrollbar-thumb {
       touch-action: none;
       -webkit-touch-callout: none;
-      cursor: grab;
       user-select: none;
+
+      cursor: grab;
       position: absolute;
       height: 100%;
       width: 20%; /* Will be dynamically updated */
@@ -186,12 +193,20 @@
       contain: strict; // Prevents Main Thread Overload
       backface-visibility: hidden;
     }
-    &:active {
-      overflow: visible;
-      .fake-scrollbar-thumb {
-        cursor: grabbing;
-        outline: 5px solid #FFF8;
-      }
+  }
+  + .fake-scrollbar:hover,
+  &:hover + .fake-scrollbar,
+  &.grabbed-scrollbar + .fake-scrollbar,
+  &.grabbed-direct + .fake-scrollbar {
+    .fake-scrollbar-thumb {
+      background-color: var(--scrollbar-handle--active, #FFFF);
+    }
+  }
+  &.grabbed-scrollbar + .fake-scrollbar {
+    overflow: visible;
+    .fake-scrollbar-thumb {
+      cursor: grabbing;
+      outline: 5px solid #FFF8;
     }
   }
 
