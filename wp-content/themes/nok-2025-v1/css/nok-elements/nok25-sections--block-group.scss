@@ -46,15 +46,17 @@ $component-name: #{nok-variables.$prefix}-block-group;
     grid-column: 1 / -1;
     overflow-x: scroll;
     margin-top: calc(var(--grid-gap, 1.5rem) * 2);
-    padding-bottom: calc(var(--grid-gap, 1.5rem) * 2);
 
     &.#{nok-variables.$prefix}-draggable {
+
       @include nok-mixins.nok-scrollbar-thin(10px);
 
       &[data-scroll-snapping="true"] {
-
         scroll-snap-type: both mandatory;
         scroll-snap-stop: normal;
+      }
+      &[data-scroll-snapping="false"] {
+        user-select: none !important;
       }
 
       will-change: scroll-position; /*seems to bump performance in firefox ever so slightly*/
@@ -69,6 +71,10 @@ $component-name: #{nok-variables.$prefix}-block-group;
       a::after {
         pointer-events: none;
       }
+    }
+
+    .#{$component-name}__blocks {
+      margin-bottom: calc(var(--grid-gap, 1.5rem) * 2);
     }
   }
 
