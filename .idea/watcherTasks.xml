@@ -76,7 +76,7 @@
       <option name="outputFromStdout" value="true" />
       <option name="program" value="$ProjectFileDir$/node_modules/.bin/google-closure-compiler" />
       <option name="runOnExternalChanges" value="true" />
-      <option name="scopeName" value="non-bs-unminified-js" />
+      <option name="scopeName" value="non-bs-unminified-mjs" />
       <option name="trackOnlyRoot" value="false" />
       <option name="workingDir" value="$FileDir$" />
       <envs />

@@ -1,6 +1,7 @@
 :root {
   --nok25-body-font-size: 1rem;
   --nok25-body-font-size-adjust: 0.514;
+  --nok25-body-line-height: 1.5;
   --nok25-heading-font-family: Realist, Arial, Helvetica, sans-serif;
   --nok25-heading-font-size-adjust: 0.525;
   --nok25-text-font-family: Inter, Arial, Helvetica, sans-serif;
@@ -12,7 +13,7 @@
   --nok25-padding-section-sides: min(6vw, 4.5rem);
   --nok25-default-border-radius: 0.4rem;
   --nok25-default-border-radius--large: 1rem;
-  --nok25-font-size-buttons: 1.25rem;
+  --nok25-font-size-buttons: 1.15rem;
   --nok25-font-size-1: 1rem;
   --nok25-font-size-2: 1.25rem;
   --nok25-font-size-3: 1.5rem;
@@ -314,8 +315,13 @@
   align-items: center;
 }
 
+.nok25-align-self-stretch {
+  align-self: stretch;
+  grid-column: 1/-1;
+}
+
 /* Breakpoint-related modifiers */
-@media (max-width: 575.98px) {
+@media (min-width: 576px) and (max-width: 767.98px) {
   /* Border-radius modifiers */
   .nok25-no-border-sm {
     border-radius: 0 !important;
@@ -326,12 +332,18 @@
   }
 }
 @media (min-width: 576px) {
-  /* Visibility */
+  /* Visibility from breakpoint up*/
   .nok25-invisible-from-sm {
     display: none !important;
   }
 }
-@media (max-width: 767.98px) {
+@media (max-width: 575.98px) {
+  /* Visibility from breakpoint to*/
+  .nok25-invisible-to-sm {
+    display: none !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 991.98px) {
   /* Border-radius modifiers */
   .nok25-no-border-md {
     border-radius: 0 !important;
@@ -342,12 +354,18 @@
   }
 }
 @media (min-width: 768px) {
-  /* Visibility */
+  /* Visibility from breakpoint up*/
   .nok25-invisible-from-md {
     display: none !important;
   }
 }
-@media (max-width: 991.98px) {
+@media (max-width: 767.98px) {
+  /* Visibility from breakpoint to*/
+  .nok25-invisible-to-md {
+    display: none !important;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199.98px) {
   /* Border-radius modifiers */
   .nok25-no-border-lg {
     border-radius: 0 !important;
@@ -358,12 +376,18 @@
   }
 }
 @media (min-width: 992px) {
-  /* Visibility */
+  /* Visibility from breakpoint up*/
   .nok25-invisible-from-lg {
     display: none !important;
   }
 }
-@media (max-width: 1199.98px) {
+@media (max-width: 991.98px) {
+  /* Visibility from breakpoint to*/
+  .nok25-invisible-to-lg {
+    display: none !important;
+  }
+}
+@media (min-width: 1200px) and (max-width: 1399.98px) {
   /* Border-radius modifiers */
   .nok25-no-border-xl {
     border-radius: 0 !important;
@@ -374,12 +398,18 @@
   }
 }
 @media (min-width: 1200px) {
-  /* Visibility */
+  /* Visibility from breakpoint up*/
   .nok25-invisible-from-xl {
     display: none !important;
   }
 }
-@media (max-width: 1399.98px) {
+@media (max-width: 1199.98px) {
+  /* Visibility from breakpoint to*/
+  .nok25-invisible-to-xl {
+    display: none !important;
+  }
+}
+@media (min-width: 1400px) and (max-width: 1599.98px) {
   /* Border-radius modifiers */
   .nok25-no-border-xxl {
     border-radius: 0 !important;
@@ -390,22 +420,18 @@
   }
 }
 @media (min-width: 1400px) {
-  /* Visibility */
+  /* Visibility from breakpoint up*/
   .nok25-invisible-from-xxl {
     display: none !important;
   }
 }
-@media (max-width: 1599.98px) {
-  /* Border-radius modifiers */
-  .nok25-no-border-xxxl {
-    border-radius: 0 !important;
-  }
-  /* Visibility */
-  .nok25-invisible-xxxl {
+@media (max-width: 1399.98px) {
+  /* Visibility from breakpoint to*/
+  .nok25-invisible-to-xxl {
     display: none !important;
   }
 }
-@media (max-width: 1599.98px) {
+@media (min-width: 1600px) {
   /* Border-radius modifiers */
   .nok25-no-border-xxxl {
     border-radius: 0 !important;
@@ -416,8 +442,14 @@
   }
 }
 @media (min-width: 1600px) {
-  /* Visibility */
+  /* Visibility from breakpoint up*/
   .nok25-invisible-from-xxxl {
+    display: none !important;
+  }
+}
+@media (max-width: 1599.98px) {
+  /* Visibility from breakpoint to*/
+  .nok25-invisible-to-xxxl {
     display: none !important;
   }
 }
@@ -506,6 +538,34 @@
     -webkit-backdrop-filter: brightness(1.1) contrast(1.1);
             backdrop-filter: brightness(1.1) contrast(1.1);
   }
+}
+/* Font size */
+.nok25-fs-1 {
+  font-size: var(--nok25-font-size-6);
+}
+
+.nok25-fs-2 {
+  font-size: var(--nok25-font-size-5);
+}
+
+.nok25-fs-3 {
+  font-size: var(--nok25-font-size-4);
+}
+
+.nok25-fs-4 {
+  font-size: var(--nok25-font-size-3);
+}
+
+.nok25-fs-5 {
+  font-size: var(--nok25-font-size-2);
+}
+
+.nok25-fs-6 {
+  font-size: var(--nok25-font-size-1);
+}
+
+.nok25-fs-buttons {
+  font-size: var(--nok25-font-size-buttons);
 }
 
 /*# sourceMappingURL=helpers.css.map */

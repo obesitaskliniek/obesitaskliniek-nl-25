@@ -21,13 +21,14 @@ $h3-font-size:                $font-size-base * 1.75 !default;
 $h4-font-size:                $font-size-base * 1.5 !default;
 $h5-font-size:                $font-size-base * 1.25 !default;
 $h6-font-size:                $font-size-base !default;
-$font-size-buttons:           1.25rem;
+$font-size-buttons:           1.15rem;
 
 $z-stack-top: 100;
 
 $exposed-variables: (
     "body-font-size": $font-size-base,
     "body-font-size-adjust": $text-font-size-adjust,
+    "body-line-height": $default-line-height,
     "heading-font-family": $heading-font-family,
     "heading-font-size-adjust": $heading-font-size-adjust,
     "text-font-family": $text-font-family,

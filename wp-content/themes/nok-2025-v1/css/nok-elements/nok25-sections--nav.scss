@@ -108,7 +108,7 @@ $component-name: #{nok-variables.$prefix}-nav;
     flex-wrap: nowrap;
     gap: 16px;
 
-    padding: 32px;
+    padding: 32px 32px 0 32px;
 
     @include nok-mixins.nok-border-radius('large', 'bottom');
     --nok25-default-border-radius: 16px;
@@ -133,6 +133,22 @@ $component-name: #{nok-variables.$prefix}-nav;
       flex-direction: row;
       gap: 8px;
       align-items: center;
+    }
+
+    &::after {
+      content: "";
+      display: flex;
+      background: #8885;
+      width: 75%;
+      height: 5px;
+      border-radius: 5px;
+      margin-bottom: 8px;
+      cursor: grab;
+    }
+    &:active {
+      &::after {
+        cursor: grabbing;
+      }
     }
   }
   &-control-dropdown.open  {
@@ -493,11 +509,7 @@ $component-name: #{nok-variables.$prefix}-nav;
         }
 
         &--active {
-          border-color: var(--nok25-yellow) !important;
-          --local-color-alpha: 0.6;
-          &::after {
-            content: none !important;
-          }
+          color: var(--nok25-lightblue--darker--active);
         }
       }
 

@@ -18,6 +18,8 @@ const NOK_THEME_ROOT = 'https://dev.obesitaskliniek.nl/wp-content/themes/nok-202
     <link rel="stylesheet" href="./element_tests.css?cache=<?= time();?>" crossorigin="anonymous">
     <link rel="stylesheet" href="./helpers.css?cache=<?= time();?>" crossorigin="anonymous">
 
+    <link rel="modulepreload" href="../js/mobileConsole/hnl.mobileconsole.js?cache=<?= time();?>">
+    <script src="../js/mobileConsole/hnl.mobileconsole.js?cache=<?= time();?>"></script><!--//-->
     <link rel="modulepreload" href="../js/entrypoint.min.mjs?cache=<?= time();?>">
     <script type="module" src="../js/entrypoint.min.mjs?cache=<?= time();?>" defer></script>
 
@@ -91,7 +93,7 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
     <nok25-mobile-nav>
         <div class="nok25-horizontal-section--stretched nok25-bg-white nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-top-row nok25-z-3">
             <?= $logo;?>
-            <button class="nok25-button nok25-button--small nok25-base-font nok25-bg-yellow nok25-text-contrast nok25-invisible-sm" tabindex="0">Gratis voorlichtingsavond</button>
+            <button class="nok25-button nok25-button--small nok25-base-font nok25-bg-yellow nok25-text-contrast nok25-invisible-to-sm" tabindex="0">Gratis voorlichtingsavond</button>
             <button class="nok25-button nok25-button-phone nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"></button>
             <button class="nok25-button nok25-button-search nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"></button>
             <button class="nok25-button nok25-button-font-size-adjust nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"
@@ -266,10 +268,25 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
         </figure>
 
         <section class="nok25-bg-body--lighter nok25-dark-bg-darkerblue nok25-bg-blur--large nok25-bg-alpha-6">
-            <div>Vergoed door zorgverzekeringen</div>
-            <div>Meer dan 30 jaar ervaring</div>
-            <div>Samenwerking met de beste ziekenhuizen</div>
-            <button class="nok25-button nok25-base-font nok25-bg-white nok25-text-darkerblue nok25-visible-mobile" tabindex="0">Vind een vestiging</button>
+            <div class="nok25-fs-buttons nok25-usp nok25-invisible-to-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nok25-text-lightblue" viewBox="0 0 16 16">
+                    <path d="M4 9.42h1.063C5.4 12.323 7.317 14 10.34 14c.622 0 1.167-.068 1.659-.185v-1.3c-.484.119-1.045.17-1.659.17-2.1 0-3.455-1.198-3.775-3.264h4.017v-.928H6.497v-.936q-.002-.165.008-.329h4.078v-.927H6.618c.388-1.898 1.719-2.985 3.723-2.985.614 0 1.175.05 1.659.177V2.194A6.6 6.6 0 0 0 10.341 2c-2.928 0-4.82 1.569-5.244 4.3H4v.928h1.01v1.265H4v.928z"/>
+                </svg>
+                Vergoed door je zorgverzekering</div>
+            <div class="nok25-fs-buttons nok25-usp nok25-invisible-to-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="nok25-text-lightblue">
+                    <path d="M3.5 5.1c.7-.3 1.1-.9 1.1-1.7s-.8-1.9-2-1.9-1.9.5-2.2.9l.6 1c.4-.4.8-.6 1.3-.6s.9.3.9.7c0 .8-.8.9-1.4.9h-.2v1.2h.3c1 0 1.6.3 1.6 1s-.4.9-1.1.9-1.1-.4-1.3-.6L.5 8c.2.2.8.8 2.1.8s1.4-.2 1.8-.6c.4-.4.7-.9.7-1.5 0-.9-.4-1.6-1.3-1.8Zm6.4-2.7c-.6-.7-1.4-.9-2-.9s-1.3.1-2 .9C5.3 3.1 5 4 5 5.3s.3 2.2.9 2.9c.6.7 1.4.9 2 .9s1.3-.1 2-.9c.6-.7.9-1.6.9-2.9s-.3-2.2-.9-2.9Zm-.6 2.8c0 1.5-.5 2.4-1.4 2.4s-1.4-.8-1.4-2.4.5-2.4 1.4-2.4 1.4.8 1.4 2.4Zm6.6-.2h-1.7V3.3h-1.1V5h-1.7v1.1h1.7v1.8h1.1V6.1h1.7V5Z"/>
+                    <rect width=".7" height=".6" x="5.1" y="11" rx="0" ry="0"/>
+                    <path d="M5.7 11.8h-.6V14c0 .3 0 .3-.2.3h-.1v.5h.3c.5 0 .8-.3.8-.8v-2.2Zm1.2-.1c-.4 0-.7.1-.9.4l.2.4c0-.1.3-.2.5-.2s.4.1.4.4h-.3c-.6 0-.9.3-.9.7s.2.7.7.7.5-.1.6-.2v.2h.5v-1.2c0-.6-.3-1-.9-1Zm.3 1.4v.2s-.1.1-.4.1-.2 0-.2-.2.1-.2.4-.2h.2ZM9 11.7c-.4 0-.7.1-.9.4l.2.4c0-.1.3-.2.5-.2s.4.1.4.4h-.3c-.6 0-.9.3-.9.7s.2.7.7.7.5-.1.6-.2v.2h.5v-1.2c0-.6-.3-1-.9-1Zm.3 1.4v.2s-.1.1-.4.1-.2 0-.2-.2.1-.2.4-.2h.2Zm2.2-1.4c-.4 0-.5.1-.6.3v-.2h-.5v2.1h.6v-1.4c0-.2.3-.3.5-.3v-.5Z"/>
+                </svg>
+                Meer dan 30 jaar ervaring</div>
+            <div class="nok25-fs-buttons nok25-usp nok25-invisible-to-xxxl">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="nok25-text-lightblue">
+                    <path d="M8.5 5.034v1.1l.953-.55.5.867L9 7l.953.55-.5.866-.953-.55v1.1h-1v-1.1l-.953.55-.5-.866L7 7l-.953-.55.5-.866.953.55v-1.1zM13.25 9a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25zM13 11.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm.25 1.75a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25zm-11-4a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5A.25.25 0 0 0 3 9.75v-.5A.25.25 0 0 0 2.75 9zm0 2a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25zM2 13.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25z"/>
+                    <path d="M5 1a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1a1 1 0 0 1 1 1v4h3a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h3V3a1 1 0 0 1 1-1zm2 14h2v-3H7zm3 0h1V3H5v12h1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1zm0-14H6v1h4zm2 7v7h3V8zm-8 7V8H1v7z"/>
+                </svg>
+                Samenwerking met de beste ziekenhuizen</div>
+            <button class="nok25-button nok25-base-font nok25-bg-white nok25-text-darkerblue nok25-visible-xs nok25-align-self-stretch" tabindex="0">Vind een vestiging</button>
         </section>
     </div>
 </section>
@@ -283,9 +300,11 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
             <p class="nok25-horizontal-section__heading__description nok25-block-group__description">
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos vero. Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas, quia reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab cumque est illo laboriosam libero officia praesentium quasi similique vitae voluptates? Adipisci aspernatur autem, corporis dolorem esse facere ipsam laboriosam rem!
             </p>
-            <div class="nok25-block-group__scroller nok25-draggable" data-requires="./modules/hnl.draggable" data-snap-items="nok25-draggable-slider-item">
+            <div class="nok25-block-group__scroller nok25-draggable" data-requires="./modules/hnl.draggable"
+                 data-snap-items="nok25-draggable-slider-item" data-scroll-snapping="true">
                 <div class="nok25-block-group__blocks">
-                    <?php $x = 6; while ($x--) : ?>
+                    <?php $x = 6;
+                    while ($x--) : ?>
                         <nok25-square-block class="nok25-draggable-slider-item">
                             <div class="nok25-square-block__icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 13" fill="currentColor">
@@ -294,17 +313,25 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                                 </svg>
                             </div>
                             <h2 class="nok25-square-block__heading">
-                                Een titeltekst met variabele lengte
+                                Een titeltekst met variabele lengte <?= $x; ?>
                             </h2>
                             <p class="nok25-square-block__text">
-                                Aenean ac feugiat nibh. Praesent venenatis non nibh vitae pretium. Suspendisse euismod blandit lorem vel mattis. Pellentesque ultrices velit at nisl placerat faucibus.
+                                Aenean ac feugiat nibh. Praesent venenatis non nibh vitae pretium. Suspendisse euismod
+                                blandit lorem vel mattis. Pellentesque ultrices velit at nisl placerat faucibus.
                             </p>
                             <a class="nok25-square-block__link" href="#">Read more
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" width="25" height="25" fill="currentColor"><path d="m17.5 5.999-.707.707 5.293 5.293H1v1h21.086l-5.294 5.295.707.707L24 12.499l-6.5-6.5z" data-name="Right"/></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" width="25" height="25"
+                                     fill="currentColor">
+                                    <path d="m17.5 5.999-.707.707 5.293 5.293H1v1h21.086l-5.294 5.295.707.707L24 12.499l-6.5-6.5z"
+                                          data-name="Right"/>
+                                </svg>
                             </a>
                         </nok25-square-block>
-                    <?php endwhile;?>
+                    <?php endwhile; ?>
                 </div>
+            </div>
+            <div class="fake-scrollbar nok25-align-self-stretch">
+                <div class="fake-scrollbar-thumb"></div>
             </div>
         </div>
     </div>
