@@ -26,6 +26,7 @@ $font-size-buttons:           1.15rem;
 $z-stack-top: 100;
 
 $exposed-variables: (
+    "html-font-size": 1em,
     "body-font-size": $font-size-base,
     "body-font-size-adjust": $text-font-size-adjust,
     "body-line-height": $default-line-height,
@@ -38,6 +39,7 @@ $exposed-variables: (
     "padding-base": $padding-base,
     "global-grid-gap": ($padding-base / 2),
     "padding-section-sides": min(6vw, $padding-base * 3),
+    "spacing-section-ends": min(12vw, $padding-base * 3),
     "default-border-radius": $default-border-radius,
     "default-border-radius--large": $default-border-radius--large,
     "font-size-buttons" : $font-size-buttons,

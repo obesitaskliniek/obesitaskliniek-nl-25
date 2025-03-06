@@ -26,6 +26,12 @@ $component-name: #{nok-variables.$prefix}-hero;
   }
   grid-template-rows: 1fr auto 1fr;
 
+  margin-bottom: map.get(nok-variables.$exposed-variables, 'spacing-section-ends');
+  @include nok-mixins.media-breakpoint-down(sm) {
+    margin-bottom: 0;
+    padding-bottom: calc(map.get(nok-variables.$exposed-variables, 'spacing-section-ends') - #{nok-variables.$padding-base});
+  }
+
   article {
     grid-row: 2 / 3;
     grid-column: 1 / 2;

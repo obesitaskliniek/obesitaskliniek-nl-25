@@ -1,11 +1,16 @@
 @use "nok-elements";
 @use "nok-mixins";
+@use "nok-variables";
 
 html {
-  font-size: 1em;
+  --font-size-base: var(--#{nok-variables.$prefix}-html-font-size, 1em);
+  font-size: var(--font-size-base, 1em);
+  @include nok-mixins.media-breakpoint-down(md) {
+    font-size: calc(var(--font-size-base) * .9);
+  }
 }
 
 body {
-  background: linear-gradient(180deg, var(--nok25-body--darker), hsla(var(--nok25-body-hsl)/1));
+  background: linear-gradient(180deg, var(--#{nok-variables.$prefix}-body--darker), hsla(var(--#{nok-variables.$prefix}-body-hsl)/1));
   @include nok-mixins.nok-text-font;
 }

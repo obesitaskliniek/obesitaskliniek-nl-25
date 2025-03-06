@@ -1,4 +1,5 @@
 :root {
+  --nok25-html-font-size: 1em;
   --nok25-body-font-size: 1rem;
   --nok25-body-font-size-adjust: 0.514;
   --nok25-body-line-height: 1.5;
@@ -11,6 +12,7 @@
   --nok25-padding-base: 1.5rem;
   --nok25-global-grid-gap: 0.75rem;
   --nok25-padding-section-sides: min(6vw, 4.5rem);
+  --nok25-spacing-section-ends: min(12vw, 4.5rem);
   --nok25-default-border-radius: 0.4rem;
   --nok25-default-border-radius--large: 1rem;
   --nok25-font-size-buttons: 1.15rem;
@@ -336,11 +338,19 @@
   .nok25-invisible-from-sm {
     display: none !important;
   }
+  /* Border-radius modifiers */
+  .nok25-no-border-from-sm {
+    border-radius: 0 !important;
+  }
 }
 @media (max-width: 575.98px) {
   /* Visibility from breakpoint to*/
   .nok25-invisible-to-sm {
     display: none !important;
+  }
+  /* Border-radius modifiers */
+  .nok25-no-border-to-sm {
+    border-radius: 0 !important;
   }
 }
 @media (min-width: 768px) and (max-width: 991.98px) {
@@ -358,11 +368,19 @@
   .nok25-invisible-from-md {
     display: none !important;
   }
+  /* Border-radius modifiers */
+  .nok25-no-border-from-md {
+    border-radius: 0 !important;
+  }
 }
 @media (max-width: 767.98px) {
   /* Visibility from breakpoint to*/
   .nok25-invisible-to-md {
     display: none !important;
+  }
+  /* Border-radius modifiers */
+  .nok25-no-border-to-md {
+    border-radius: 0 !important;
   }
 }
 @media (min-width: 992px) and (max-width: 1199.98px) {
@@ -380,11 +398,19 @@
   .nok25-invisible-from-lg {
     display: none !important;
   }
+  /* Border-radius modifiers */
+  .nok25-no-border-from-lg {
+    border-radius: 0 !important;
+  }
 }
 @media (max-width: 991.98px) {
   /* Visibility from breakpoint to*/
   .nok25-invisible-to-lg {
     display: none !important;
+  }
+  /* Border-radius modifiers */
+  .nok25-no-border-to-lg {
+    border-radius: 0 !important;
   }
 }
 @media (min-width: 1200px) and (max-width: 1399.98px) {
@@ -402,11 +428,19 @@
   .nok25-invisible-from-xl {
     display: none !important;
   }
+  /* Border-radius modifiers */
+  .nok25-no-border-from-xl {
+    border-radius: 0 !important;
+  }
 }
 @media (max-width: 1199.98px) {
   /* Visibility from breakpoint to*/
   .nok25-invisible-to-xl {
     display: none !important;
+  }
+  /* Border-radius modifiers */
+  .nok25-no-border-to-xl {
+    border-radius: 0 !important;
   }
 }
 @media (min-width: 1400px) and (max-width: 1599.98px) {
@@ -424,11 +458,19 @@
   .nok25-invisible-from-xxl {
     display: none !important;
   }
+  /* Border-radius modifiers */
+  .nok25-no-border-from-xxl {
+    border-radius: 0 !important;
+  }
 }
 @media (max-width: 1399.98px) {
   /* Visibility from breakpoint to*/
   .nok25-invisible-to-xxl {
     display: none !important;
+  }
+  /* Border-radius modifiers */
+  .nok25-no-border-to-xxl {
+    border-radius: 0 !important;
   }
 }
 @media (min-width: 1600px) {
@@ -446,11 +488,19 @@
   .nok25-invisible-from-xxxl {
     display: none !important;
   }
+  /* Border-radius modifiers */
+  .nok25-no-border-from-xxxl {
+    border-radius: 0 !important;
+  }
 }
 @media (max-width: 1599.98px) {
   /* Visibility from breakpoint to*/
   .nok25-invisible-to-xxxl {
     display: none !important;
+  }
+  /* Border-radius modifiers */
+  .nok25-no-border-to-xxxl {
+    border-radius: 0 !important;
   }
 }
 /* margin */

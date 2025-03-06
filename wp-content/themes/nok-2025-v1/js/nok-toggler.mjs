@@ -75,13 +75,16 @@ export function init(elements){
   elements.forEach(function(element){
     element.querySelectorAll('[data-toggles]').forEach((toggler) => {
       const toggles = toggler.dataset.toggles;
+      const autoHide = toggler.dataset.autohide ?? 0;
+      let autoHideTimeout;
       const target = toggler.dataset.target ? (toggler.dataset.target === '_self' ? toggler : document.querySelector(toggler.dataset.target)) : element;
       const hide = toggler.dataset.togglePermanent?.toLowerCase() !== "true";
 
       function handleClickOutside(event) {
-        if (!target.contains(event.target) && !toggler.contains(event.target)) { //only handle cases where neither the toggler nor its target are clicked
+        if (!event || (!target.contains(event.target) && !toggler.contains(event.target))) { //only handle cases where neither the toggler nor its target are clicked
           if (target.classList.contains(toggles)) {
             target.classList.remove(toggles);
+            clearTimeout(autoHideTimeout);
           }
           document.removeEventListener("click", handleClickOutside);
         }
@@ -89,7 +92,11 @@ export function init(elements){
 
       singleClick(toggler, ()=>{
         target.classList.toggle(toggles);
+        clearTimeout(autoHideTimeout);
         if (hide) document.addEventListener("click", handleClickOutside);
+        if (autoHide) {
+          autoHideTimeout = setTimeout(handleClickOutside, (autoHide * 1000));
+        }
       });
 
       if (toggler.dataset.swipeClose?.toLowerCase()) {
@@ -97,6 +104,7 @@ export function init(elements){
         swipeToClose(document.querySelector(toggler.dataset.swipeClose?.toLowerCase()), () => {
           if (target.classList.contains(toggles)) {
             target.classList.remove(toggles);
+            clearTimeout(autoHideTimeout);
           }
         }, toggler.dataset.swipeDirection || 'y', ...swipeLimits);
       }
