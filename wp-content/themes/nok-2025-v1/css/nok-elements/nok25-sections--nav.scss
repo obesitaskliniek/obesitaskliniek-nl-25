@@ -126,6 +126,12 @@ $component-name: #{nok-variables.$prefix}-nav;
       flex-basis: 100%;
       align-self: stretch;
       padding: 10px;
+      @at-root body.larger-font &.font-increase {
+        background: var(--nok25-lightblue);
+      }
+      @at-root body.smaller-font &.font-decrease {
+        background: var(--nok25-lightblue);
+      }
     }
 
     &__section {
@@ -150,9 +156,12 @@ $component-name: #{nok-variables.$prefix}-nav;
         cursor: grabbing;
       }
     }
-  }
-  &-control-dropdown.open  {
-    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1), 0 0 2rem rgba(0, 0, 0, 0.1);
+    &.open  {
+      touch-action: none;
+      -webkit-touch-callout: none;
+      user-select: none;
+      box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1), 0 0 2rem rgba(0, 0, 0, 0.1);
+    }
   }
 
   &-dropdown,
@@ -206,6 +215,10 @@ $component-name: #{nok-variables.$prefix}-nav;
     }
 
     .#{$component-name}-drawer {
+      touch-action: none;
+      -webkit-touch-callout: none;
+      user-select: none;
+
       transform: translateX(0%);
       @include nok-mixins.nok-subtle-shadow-menu;
       @media (prefers-reduced-motion: no-preference) {
@@ -406,7 +419,9 @@ $component-name: #{nok-variables.$prefix}-nav;
             scroll-behavior: smooth;
           }
           overscroll-behavior: contain;
+
           touch-action: none;
+          user-select: none;
 
           flex-grow: 1;
           flex-shrink: 1;

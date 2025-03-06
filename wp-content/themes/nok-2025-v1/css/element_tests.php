@@ -79,8 +79,8 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
         <h5>Toegankelijkheid</h5>
         <div class="nok25-nav-control-dropdown__section">
             Tekstgrootte:
-            <button class="nok25-button nok25-button--small nok25-bg-darkerblue nok25-text-contrast" style="font-variant: all-small-caps;" tabindex="0" data-set-font-size="-2">A</button>
-            <button class="nok25-button nok25-button--small nok25-bg-darkerblue nok25-text-contrast" tabindex="0" data-set-font-size="+2">A</button>
+            <button class="nok25-button nok25-button--small nok25-bg-darkerblue nok25-text-contrast font-decrease" style="font-variant: all-small-caps;" tabindex="0" data-set-font-size="-0.1">A</button>
+            <button class="nok25-button nok25-button--small nok25-bg-darkerblue nok25-text-contrast font-increase" tabindex="0" data-set-font-size="+0.1">A</button>
             <button class="nok25-button nok25-button--small nok25-bg-darkblue nok25-dark-bg-lightblue--darker nok25-text-contrast" tabindex="0" data-reset-font-size="true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
@@ -91,18 +91,20 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
     </div>
 
     <nok25-mobile-nav>
-        <div class="nok25-horizontal-section--stretched nok25-bg-white nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-top-row nok25-z-3">
+        <div class="nok25-horizontal-section__inner--stretched nok25-bg-white nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-top-row nok25-z-3">
             <?= $logo;?>
             <button class="nok25-button nok25-button--small nok25-base-font nok25-bg-yellow nok25-text-contrast nok25-invisible-to-sm" tabindex="0">Gratis voorlichtingsavond</button>
             <button class="nok25-button nok25-button-phone nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"></button>
             <button class="nok25-button nok25-button-search nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"></button>
             <button class="nok25-button nok25-button-font-size-adjust nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"
-                    data-toggles="open" data-target=".nok25-nav-control-dropdown" data-swipe-close=".nok25-nav-control-dropdown"></button>
+                    data-toggles="open" data-target=".nok25-nav-control-dropdown" data-swipe-close=".nok25-nav-control-dropdown" data-autohide="2"></button>
             <button class="nok25-button nok25-button-menu-toggler nok25-nav-menu-toggler nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"
-                    data-toggles="open" data-swipe-close=".nok25-nav-drawer" data-swipe-direction="x" data-swipe-limits="0,9999"></button>
+                    data-toggles="open">
+            <!--data-swipe-close=".nok25-nav-drawer" data-swipe-direction="x" data-swipe-limits="0,9999"-->
+            </button>
         </div>
         <div class="nok25-z-2 nok25-nav-drawer">
-            <div class="nok25-horizontal-section--stretched nok25-nav-carousel nok25-bg-white--darker nok25-dark-bg-darkerblue nok25-dark-text-white nok25-z-2"
+            <div class="nok25-horizontal-section__inner--stretched nok25-nav-carousel nok25-bg-white--darker nok25-dark-bg-darkerblue nok25-dark-text-white nok25-z-2"
                  data-scroll-snapping="true" data-requires="./nok-menu-carousel.mjs">
                 <div class="nok25-nav-carousel__inner nok25-text-darkerblue nok25-dark-text-white">
                     <div class="nok25-nav-carousel__slide">
@@ -133,7 +135,7 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                     </div>
                 </div>
             </div>
-            <div class="nok25-horizontal-section--stretched nok25-nav-footer nok25-text-contrast nok25-bg-darkerblue nok25-dark-bg-darkestblue nok25-z-1">
+            <div class="nok25-horizontal-section__inner--stretched nok25-nav-footer nok25-text-contrast nok25-bg-darkerblue nok25-dark-bg-darkestblue nok25-z-1">
                 <div class="nok25-nav__menuitems nok25-nav__menuitems--compact">
                     <a href="#" class="nok25-nav__menuitem nok25-nav__menuitem--active">Werken bij</a>
                     <a href="#" class="nok25-nav__menuitem">Kennisbank</a>
@@ -147,8 +149,8 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
 
 
     <nok25-desktop-nav>
-        <div class="nok25-horizontal-section--stretched nok25-bg-body nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-top-row nok25-z-2">
-            <div class="nok25-horizontal-section__inner nok25-nav-top">
+        <div class="nok25-horizontal-section__inner--stretched nok25-bg-body nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-top-row nok25-z-2">
+            <div class="nok25-horizontal-section__inner nok25-horizontal-section__inner--collapsed nok25-nav-top">
                 <div>
                     <small class="nok25-valign-center">
                         <span class="nok25-text-lightblue nok25-star-ratings"><?= $star;?><?= $star;?><?= $star;?><?= $star;?><?= $star;?></span>5/5 op basis van 12.030 beoordelingen
@@ -161,13 +163,13 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                 <div>+31 12345678</div>
                 <div>Zoek</div>
                 <div>NL</div>
-                <a href="#" data-toggles="open" data-target=".nok25-nav-control-dropdown">
+                <a href="#" data-toggles="open" data-target=".nok25-nav-control-dropdown" data-autohide="10">
                     <span style="font-variant: all-small-caps;">a</span>A
                 </a>
             </div>
         </div>
-        <div class="nok25-horizontal-section__inner nok25-nav-menubar-row nok25-z-3">
-            <div class="nok25-nav-menubar nok25-bg-white nok25-dark-bg-darkerblue nok25-dark-text-contrast nok25-no-border-sm" data-toggles="open">
+        <div class="nok25-horizontal-section__inner nok25-horizontal-section__inner--collapsed nok25-nav-menubar-row nok25-z-3">
+            <div class="nok25-nav-menubar nok25-bg-white nok25-dark-bg-darkerblue nok25-dark-text-contrast" data-toggles="open">
                 <div>
                     <?= $logo;?>
                 </div>
@@ -202,7 +204,7 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
 </nav>
 
 <section class="nok25-horizontal-section">
-    <div class="nok25-horizontal-section__inner nok25-hero nok25-bg-white nok25-dark-bg-darkestblue nok25-text-darkerblue nok25-dark-text-white nok25-bg-alpha-6 nok25-dark-bg-alpha-10 nok25-no-border-sm">
+    <div class="nok25-horizontal-section__inner nok25-horizontal-section__inner--collapsed nok25-hero nok25-bg-white nok25-dark-bg-darkestblue nok25-text-darkerblue nok25-dark-text-white nok25-bg-alpha-6 nok25-dark-bg-alpha-10 nok25-no-border-to-sm">
 
         <article>
             <h2 class="nok25-text-lightblue nok25-dark-text-yellow nok25-hero__pre-heading">

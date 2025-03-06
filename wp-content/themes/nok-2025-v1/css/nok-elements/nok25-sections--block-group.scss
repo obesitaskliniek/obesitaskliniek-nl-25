@@ -26,8 +26,8 @@ $component-name: #{nok-variables.$prefix}-block-group;
     --grid-column-width: calc(
         (100% - (var(--grid-gap, 1) * (var(--grid-columns, 1) - 1))) / var(--grid-columns, 1)
     );
-    padding-top: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * 2);
-    padding-bottom: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * 2);
+    //padding-top: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * 2);
+    //padding-bottom: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * 2);
     display: grid;
     gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
     @include nok-mixins.media-breakpoint-down(lg) {
@@ -45,7 +45,7 @@ $component-name: #{nok-variables.$prefix}-block-group;
   &__scroller {
     grid-column: 1 / -1;
     overflow-x: scroll;
-    margin-top: calc(var(--grid-gap, 1.5rem) * 2);
+    margin-top: var(--grid-gap, 1.5rem);
 
     &.#{nok-variables.$prefix}-draggable {
 
@@ -80,7 +80,7 @@ $component-name: #{nok-variables.$prefix}-block-group;
 
   &:has(.fake-scrollbar) {
     .#{$component-name}__scroller .#{$component-name}__blocks {
-      margin-bottom: calc(var(--grid-gap, 1.5rem) * 1); //removes one gap space if fake scrollbar is present
+      margin-bottom:var(--grid-gap, 1.5rem); //removes one gap space if fake scrollbar is present
     }
   }
 

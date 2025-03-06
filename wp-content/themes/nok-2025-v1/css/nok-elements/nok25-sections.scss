@@ -1,3 +1,4 @@
+@use "sass:map";
 @use "../nok-variables";
 @use "../nok-mixins";
 @use "../nok-rfs";
@@ -5,6 +6,7 @@
 $component-name: #{nok-variables.$prefix}-horizontal-section;
 
 .#{$component-name} {
+  --section-inner-spacing: #{map.get(nok-variables.$exposed-variables, 'spacing-section-ends')};
   display: flex;
   width: 100%;
   padding: 0;
@@ -15,17 +17,18 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
   justify-content: center;
   align-items: center;
 
-  @at-root section.#{$component-name} + section.#{$component-name} {
-    margin-top: calc(var(--#{nok-variables.$prefix}-padding-base, 1.5rem) * 2);
-  }
-
-  &--stretched {
-    align-self: stretch;
-  }
-
   &__inner {
+    &--stretched {
+      align-self: stretch;
+    }
+    &--collapsed {
+      --section-inner-spacing: 0;
+    }
     &, &-fluid {
-      @include nok-mixins.make-section();
+      width: 100%;
+      padding-right: var(--#{nok-variables.$prefix}-padding-section-sides, (nok-variables.$padding-base * 2));
+      padding-left: var(--#{nok-variables.$prefix}-padding-section-sides, (nok-variables.$padding-base * 2));
+      margin: var(--section-inner-spacing, nok-variables.$padding-base) auto;
     }
 
     @each $breakpoint, $section-max-width in nok-variables.$section-max-widths {
@@ -47,8 +50,7 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
     line-height: var(--#{nok-variables.$prefix}-default-heading-line-height, 1.25);
     margin: 0;
     &__description {
-      font-size: 1.1rem;
-      @include nok-rfs.rfs(1.1rem, font-size);
+      @include nok-rfs.rfs(1rem, font-size);
       font-weight: 400;
       line-height: var(--#{nok-variables.$prefix}-default-line-height, 1.25);
       margin: 0;

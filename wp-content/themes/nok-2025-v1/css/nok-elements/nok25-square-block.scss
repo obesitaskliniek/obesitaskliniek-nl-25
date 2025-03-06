@@ -28,11 +28,10 @@ $component-name: #{nok-variables.$prefix}-square-block;
   container-type: inline-size;
 
   gap: (nok-variables.$padding-base);
-  padding: (nok-variables.$padding-base * 2);
   @include nok-mixins.nok-border-radius('large');
-  line-height: var(--#{nok-variables.$prefix}-default-line-height, 1.25);
+  //line-height: var(--#{nok-variables.$prefix}-default-line-height, 1.25);
 
-  padding: calc(var(--#{nok-variables.$prefix}-padding-base, 1.5rem) * 2);
+  padding: var(--#{nok-variables.$prefix}-padding-section-sides, 3rem);
   border-radius: var(--#{nok-variables.$prefix}-default-border-radius--large, 8px);
   @include nok-mixins.nok-subtle-shadow;
   background-color: var(--background-color);

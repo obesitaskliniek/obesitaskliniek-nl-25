@@ -139,11 +139,19 @@ $alphas: (
     .#{nok-variables.$prefix}-invisible-from-#{$breakpoint} {
       display: none !important;
     }
+    /* Border-radius modifiers */
+    .#{nok-variables.$prefix}-no-border-from-#{$breakpoint} {
+      border-radius: 0 !important;
+    }
   }
   @include nok-mixins.media-breakpoint-down($breakpoint, nok-variables.$grid-breakpoints) {
     /* Visibility from breakpoint to*/
     .#{nok-variables.$prefix}-invisible-to-#{$breakpoint} {
       display: none !important;
+    }
+    /* Border-radius modifiers */
+    .#{nok-variables.$prefix}-no-border-to-#{$breakpoint} {
+      border-radius: 0 !important;
     }
   }
 }
