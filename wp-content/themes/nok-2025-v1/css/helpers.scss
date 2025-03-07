@@ -109,6 +109,39 @@ $alphas: (
   align-self: stretch;
   grid-column: 1 / -1;
 }
+.#{nok-variables.$prefix}-align-self-end {
+  align-self: end;
+}
+
+/* Rounded borders */
+
+.#{nok-variables.$prefix}-rounded-border {
+  @include nok-mixins.nok-border-radius();
+
+  $border-sizes: 'default', 'large', 'x-large', 'xx-large';
+  $border-positions: 'top', 'right', 'left', 'bottom';
+
+  @each $size in $border-sizes {
+    @if $size == 'default' {
+      @each $pos in $border-positions {
+        &-#{$pos} {
+          @include nok-mixins.nok-border-radius('default', $pos);
+        }
+      }
+    } @else {
+      &-#{$size} {
+        @include nok-mixins.nok-border-radius($size);
+
+        @each $pos in $border-positions {
+          &-#{$pos} {
+            @include nok-mixins.nok-border-radius($size, $pos);
+          }
+        }
+      }
+    }
+  }
+}
+
 
 /* Breakpoint-related modifiers */
 @each $breakpoint, $section-max-width in nok-variables.$section-max-widths {

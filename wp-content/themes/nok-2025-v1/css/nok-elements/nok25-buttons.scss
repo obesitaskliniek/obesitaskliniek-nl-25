@@ -82,21 +82,12 @@ $component-name: #{nok-variables.$prefix}-button;
   &-phone,
   &-font-size-adjust,
   &-search {
+    --bg-size: 55%;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 55%;
+    background-size: var(--bg-size);
     vertical-align: middle;
     aspect-ratio: 1 / 1;
-  }
-
-  &-menu-toggler {
-    --#{nok-variables.$prefix}-button-icon-navbar-toggler: #{nok-utilities.escape-svg(url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke='#{map.get(nok-colors.$nok-base-colors, "darkerblue")}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>"))};
-    --#{nok-variables.$prefix}-button-icon-navbar-toggler-active: #{nok-utilities.escape-svg(url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#{map.get(nok-colors.$nok-base-colors, "darkerblue")}' class='bi bi-x-lg' viewBox='0 0 16 16'> <path d='M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z'/> </svg>"))};
-    @media (prefers-color-scheme: dark) {
-      --#{nok-variables.$prefix}-button-icon-navbar-toggler: #{nok-utilities.escape-svg(url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke='#{map.get(nok-colors.$nok-base-colors, "white")}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>"))};
-      --#{nok-variables.$prefix}-button-icon-navbar-toggler-active: #{nok-utilities.escape-svg(url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#{map.get(nok-colors.$nok-base-colors, "white")}' class='bi bi-x-lg' viewBox='0 0 16 16'> <path d='M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z'/> </svg>"))};
-    }
-    background-image: var(--#{nok-variables.$prefix}-button-icon-navbar-toggler);
   }
 
   &-phone {
