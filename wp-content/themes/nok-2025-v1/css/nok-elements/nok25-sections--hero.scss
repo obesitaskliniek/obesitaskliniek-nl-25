@@ -105,6 +105,8 @@ $component-name: #{nok-variables.$prefix}-hero;
 
     foreignObject {
       img {
+        width: auto;
+        height: inherit;
         //position: absolute;
         //inset: 0;
         max-width: 100%;

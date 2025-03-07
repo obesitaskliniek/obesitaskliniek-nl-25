@@ -82,11 +82,11 @@ $component-name: #{nok-variables.$prefix}-nav;
     pointer-events: none;
     @media (prefers-reduced-transparency) {
       display: none;
-      @media (prefers-reduced-motion: no-preference) {
+      @include nok-mixins.transition-properties {
         animation: fade--in .5s ease-in-out;
       }
     }
-    @media (prefers-reduced-motion: no-preference) {
+    @include nok-mixins.transition-properties {
       transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out;
     }
   }
@@ -167,7 +167,7 @@ $component-name: #{nok-variables.$prefix}-nav;
   &-dropdown,
   &-control-dropdown {
     transform: translateY(-100%);
-    @media (prefers-reduced-motion: no-preference) {
+    @include nok-mixins.transition-properties {
       transition: transform var(--animation-duration--out) var(--animation-easing-out), box-shadow var(--animation-duration--out) var(--animation-easing-out);
     }
   }
@@ -175,7 +175,7 @@ $component-name: #{nok-variables.$prefix}-nav;
   &.open &-dropdown,
   &-control-dropdown.open  {
     transform: translateY(0);
-    @media (prefers-reduced-motion: no-preference) {
+    @include nok-mixins.transition-properties {
       transition-duration: var(--animation-duration--in);
       transition-timing-function: var(--animation-easing-in);
     }
@@ -189,9 +189,18 @@ $component-name: #{nok-variables.$prefix}-nav;
   }
 
   &-menu-toggler.#{nok-variables.$prefix}-button {
-    transform: rotate(0deg);
-    @media (prefers-reduced-motion: no-preference) {
-      transition: transform var(--animation-duration--in) cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    svg {
+      position: absolute;
+      width: var(--bg-size);
+      height: var(--bg-size);
+      transform: rotate(0deg);
+      @include nok-mixins.transition-properties {
+        transition: transform var(--animation-duration--in) cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .closed {
+        display: none;
+      }
     }
   }
 
@@ -210,8 +219,15 @@ $component-name: #{nok-variables.$prefix}-nav;
     }
 
     .#{$component-name}-menu-toggler {
-      background-image: var(--#{nok-variables.$prefix}-button-icon-navbar-toggler-active);
-      transform: rotate(-180deg);
+      svg {
+        transform: rotate(-180deg);
+        .open {
+          display: none;
+        }
+        .closed {
+          display: inline;
+        }
+      }
     }
 
     .#{$component-name}-drawer {
@@ -221,10 +237,12 @@ $component-name: #{nok-variables.$prefix}-nav;
 
       transform: translateX(0%);
       @include nok-mixins.nok-subtle-shadow-menu;
-      @media (prefers-reduced-motion: no-preference) {
+
+      @include nok-mixins.transition-properties {
         transition-duration: var(--animation-duration--in);
         transition-timing-function: var(--animation-easing-in);
       }
+
       @media (prefers-reduced-motion: no-preference) {
         .#{nok-variables.$prefix}-nav__menuitem {
           opacity: 0;
@@ -392,13 +410,13 @@ $component-name: #{nok-variables.$prefix}-nav;
       }
 
       &-drawer {
-
         transform: translateX(100%);
-        @media (prefers-reduced-motion: no-preference) {
+        @include nok-mixins.transition-properties {
           transition: transform var(--animation-duration--out) var(--animation-easing-out);
         }
 
         display: flex;
+
         flex-direction: column;
         min-height: 0;
         align-self: flex-end;

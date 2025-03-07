@@ -39,7 +39,7 @@ body {
   font-weight: var(--#{nok-variables.$prefix}-body-font-weight);
   font-size-adjust: var(--#{nok-variables.$prefix}-body-font-size-adjust);
   line-height: var(--#{nok-variables.$prefix}-body-line-height);
-  color: var(--#{nok-variables.$prefix}-body-color);
+  color: var(--#{nok-variables.$prefix}-body-text-color);
   text-align: var(--#{nok-variables.$prefix}-body-text-align);
   background-color: var(--#{nok-variables.$prefix}-body-bg); // 2
   -webkit-text-size-adjust: 100%; // 3
@@ -310,7 +310,11 @@ kbd {
 // Apply a consistent margin strategy (matches our type styles).
 
 figure {
-  margin: 0 0 1rem;
+  margin: 0;
+  img {
+    width: 100%;
+    height: auto;
+  }
 }
 
 

@@ -78,9 +78,11 @@ $component-name: #{nok-variables.$prefix}-block-group;
     }
   }
 
-  &:has(.fake-scrollbar) {
-    .#{$component-name}__scroller .#{$component-name}__blocks {
-      margin-bottom:var(--grid-gap, 1.5rem); //removes one gap space if fake scrollbar is present
+  @include nok-mixins.javascript-properties {
+    &:has(.fake-scrollbar) {
+      .#{$component-name}__scroller .#{$component-name}__blocks {
+        margin-bottom:var(--grid-gap, 1.5rem); //removes one gap space if fake scrollbar is present
+      }
     }
   }
 

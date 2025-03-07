@@ -18,17 +18,16 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
   align-items: center;
 
   &__inner {
+    width: 100%;
+    padding-right: var(--#{nok-variables.$prefix}-padding-section-sides, (nok-variables.$padding-base * 2));
+    padding-left: var(--#{nok-variables.$prefix}-padding-section-sides, (nok-variables.$padding-base * 2));
+    margin: var(--section-inner-spacing, nok-variables.$padding-base) auto;
+
     &--stretched {
       align-self: stretch;
     }
     &--collapsed {
       --section-inner-spacing: 0;
-    }
-    &, &-fluid {
-      width: 100%;
-      padding-right: var(--#{nok-variables.$prefix}-padding-section-sides, (nok-variables.$padding-base * 2));
-      padding-left: var(--#{nok-variables.$prefix}-padding-section-sides, (nok-variables.$padding-base * 2));
-      margin: var(--section-inner-spacing, nok-variables.$padding-base) auto;
     }
 
     @each $breakpoint, $section-max-width in nok-variables.$section-max-widths {
@@ -41,24 +40,23 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
         }
       }
     }
+
   }
 
-  /* Typography */
+  /* Typography todo: move? */
   &__heading {
     grid-column: 1;
-    font-weight: 500;
-    line-height: var(--#{nok-variables.$prefix}-default-heading-line-height, 1.25);
     margin: 0;
     &__description {
-      @include nok-rfs.rfs(1rem, font-size);
-      font-weight: 400;
-      line-height: var(--#{nok-variables.$prefix}-default-line-height, 1.25);
       margin: 0;
     }
   }
 }
 
 
+.#{$component-name} p {
+  @include nok-rfs.rfs(1.1rem, font-size);
+}
 h1.#{$component-name}__heading {
   font-size: 3.25rem;
   @include nok-rfs.rfs(3.25rem, font-size);

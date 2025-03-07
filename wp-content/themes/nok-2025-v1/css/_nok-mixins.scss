@@ -26,7 +26,6 @@
 @mixin nok-subtle-shadow-menu {
   box-shadow: -8px 8px 16px rgba(0, 0, 0, 0.1);
 }
-
 @mixin nok-btn-shadow-border {
   box-shadow: 0 0 0 0 hsla(0 0 0 / 0);
   &:hover, &:focus {
@@ -34,7 +33,13 @@
   }
 }
 
-// Base mixin with extended size options
+/**
+ * Mixin to apply border-radius with customizable size and position.
+ * by hnldesign - 2025
+ *
+ * @param {String} $size - The size of the border-radius. Options: 'default', 'large', 'x-large', 'xx-large'.
+ * @param {String} $position - The position to apply the border-radius. Options: 'all', 'bottom', 'top', 'left', 'right'.
+ */
 @mixin nok-border-radius($size: 'default', $position: 'all') {
   // Determine border-radius based on size
   $radius: var(--nok25-default-border-radius, 0.4rem);
@@ -47,41 +52,43 @@
     $radius: calc(var(--nok25-default-border-radius--xx-large, 1rem) * 4);
   }
 
+  overflow: hidden;
   // Apply border-radius based on position
   @if $position == 'all' {
     border-radius: $radius;
   } @else if $position == 'bottom' {
-    border-bottom-left-radius: $radius;
-    border-bottom-right-radius: $radius;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+    border-radius: 0 0 $radius $radius;
   } @else if $position == 'top' {
-    border-top-left-radius: $radius;
-    border-top-right-radius: $radius;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+    border-radius: $radius $radius 0 0;
   } @else if $position == 'left' {
-    border-top-left-radius: $radius;
-    border-bottom-left-radius: $radius;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+    border-radius: $radius 0 0 $radius;
   } @else if $position == 'right' {
-    border-top-right-radius: $radius;
-    border-bottom-right-radius: $radius;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    border-radius: 0 $radius $radius 0;
   }
 }
 
 
-
 @mixin nok-focus-ring {
-  //outline: 0 none;
-  //box-shadow: 0 0 0 2px var(--#{nok-variables.$prefix}-focus-ring, var(--text-color--contrast, inherit));
   box-shadow: 0 0 0px 4px var(--nok25-yellow);
   outline: 2px solid #FFF;
 }
 
+/**
+ * Mixin to style inline links with hover and focus effects.
+ * for NOK by hnldesign - 2025
+ *
+ * This mixin applies various styles to inline links, including:
+ * - Custom underline with gradient background
+ * - Hover and active states
+ * - Focus-visible state with border radius and focus ring
+ *
+ * Variables:
+ * - --active-color: The color of the link when active.
+ * - --hover-transition-time: The duration of the hover transition.
+ * - --hover-color: The color of the link when hovered.
+ * - --underline-height: The height of the underline.
+ * - --gradient: The gradient background for the underline.
+ */
 @mixin nok-inline-link {
   --active-color: #000;
   --hover-transition-time: 0.15s;
@@ -124,6 +131,15 @@
   }
 }
 
+/**
+ * Mixin to style scrollbars and optionally add a fake scrollbar with identical styles.
+ * by hnldesign - 2025
+ *
+ * @param {Length} $scrollbarHeight - The height of the scrollbar.
+ * @param {Color} $scrollbarHandle - The color of the scrollbar handle.
+ * @param {Color} $scrollbarHandle_active - The color of the scrollbar handle when active.
+ * @param {Color} $scrollbarTrack - The color of the scrollbar track.
+ */
 @mixin nok-scrollbar-thin(
   $scrollbarHeight: 6px,
   $scrollbarHandle: var(--text-color-button, #CCC),
@@ -157,56 +173,64 @@
 
   position: relative;
 
-  &:has(+ .fake-scrollbar) {
-    scrollbar-width: none; //hides scrollbars in Firefox
-    &::-webkit-scrollbar {
+  @include no-javascript-properties {
+    + .fake-scrollbar {
       display: none;
+      visibility: hidden;
     }
   }
 
-  /* Fake Scrollbar */
-  + .fake-scrollbar {
-    touch-action: none;
-    -webkit-touch-callout: none;
-    user-select: none;
+  @include javascript-properties {
+    &:has(+ .fake-scrollbar) {
+      scrollbar-width: none; //hides scrollbars in Firefox
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
 
-    position: relative;
-    display: flex;
-    width: 100%;
-    height: var(--scrollbar-height, 6px);
-    background-color: var(--scrollbar-track, #0008);
-    border-radius: $scrollbarHeight;
-    overflow: hidden;
-    .fake-scrollbar-thumb {
+    + .fake-scrollbar {
       touch-action: none;
       -webkit-touch-callout: none;
       user-select: none;
 
-      cursor: grab;
-      position: absolute;
-      height: 100%;
-      width: 20%; /* Will be dynamically updated */
-      background-color: var(--scrollbar-handle, #FFFE);
-      border: 1px solid var(--scrollbar-handle, #FFFE);
+      position: relative;
+      display: flex;
+      width: 100%;
+      height: var(--scrollbar-height, 6px);
+      background-color: var(--scrollbar-track, #0008);
       border-radius: $scrollbarHeight;
-      will-change: transform;
-      contain: strict; // Prevents Main Thread Overload
-      backface-visibility: hidden;
+      overflow: hidden;
+      .fake-scrollbar-thumb {
+        touch-action: none;
+        -webkit-touch-callout: none;
+        user-select: none;
+
+        cursor: grab;
+        position: absolute;
+        height: 100%;
+        width: 20%; /* Will be dynamically updated */
+        background-color: var(--scrollbar-handle, #FFFE);
+        border: 1px solid var(--scrollbar-handle, #FFFE);
+        border-radius: $scrollbarHeight;
+        will-change: transform;
+        contain: strict; // Prevents Main Thread Overload
+        backface-visibility: hidden;
+      }
     }
-  }
-  + .fake-scrollbar:hover,
-  &:hover + .fake-scrollbar,
-  &.grabbed-scrollbar + .fake-scrollbar,
-  &.grabbed-direct + .fake-scrollbar {
-    .fake-scrollbar-thumb {
-      background-color: var(--scrollbar-handle--active, #FFFF);
+    + .fake-scrollbar:hover,
+    &:hover + .fake-scrollbar,
+    &.grabbed-scrollbar + .fake-scrollbar,
+    &.grabbed-direct + .fake-scrollbar {
+      .fake-scrollbar-thumb {
+        background-color: var(--scrollbar-handle--active, #FFFF);
+      }
     }
-  }
-  &.grabbed-scrollbar + .fake-scrollbar {
-    overflow: visible;
-    .fake-scrollbar-thumb {
-      cursor: grabbing;
-      outline: 5px solid #FFF8;
+    &.grabbed-scrollbar + .fake-scrollbar {
+      overflow: visible;
+      .fake-scrollbar-thumb {
+        cursor: grabbing;
+        outline: 5px solid #FFF8;
+      }
     }
   }
 
@@ -329,5 +353,49 @@
     @include media-breakpoint-down($next, $breakpoints) {
       @content;
     }
+  }
+}
+
+/**
+ * Mixin to apply transition properties conditionally based on user preferences.
+ * By hnldesign - 2025
+ *
+ * This mixin checks if the user has a preference for reduced motion. If the user
+ * does not prefer reduced motion, it applies the transition properties to the
+ * specified elements when the `body` element has the `__enable-transitions` class.
+ *
+ * Usage:
+ * @include transition-properties {
+ *   transition: all 0.3s ease;
+ * }
+ */
+@mixin transition-properties {
+  @media (prefers-reduced-motion: no-preference) {
+    @at-root body.__enable-transitions & {
+      @content;
+    }
+  }
+}
+
+/**
+ * Mixin to apply styles when JavaScript is disabled.
+ * By hnldesign - 2025
+ *
+ * This mixin targets elements when the `body` element has the `no-js` class,
+ * indicating that JavaScript is disabled, since it will be unset at docReady.
+ *
+ * Usage:
+ * @include no-javascript-properties {
+ *   // Your styles here
+ * }
+ */
+@mixin no-javascript-properties {
+  @at-root body.no-js & {
+    @content;
+  }
+}
+@mixin javascript-properties {
+  @at-root body:not(.no-js) & {
+    @content;
   }
 }

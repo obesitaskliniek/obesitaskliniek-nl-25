@@ -11,21 +11,22 @@ const NOK_THEME_ROOT = 'https://dev.obesitaskliniek.nl/wp-content/themes/nok-202
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+          rel="stylesheet">
     <link href="../fonts/realist.css" rel="stylesheet" crossorigin="anonymous">
-    <link rel="stylesheet" href="./tests.css?cache=<?= time();?>" crossorigin="anonymous">
-    <link rel="stylesheet" href="./color_tests.css?cache=<?= time();?>" crossorigin="anonymous">
-    <link rel="stylesheet" href="./element_tests.css?cache=<?= time();?>" crossorigin="anonymous">
-    <link rel="stylesheet" href="./helpers.css?cache=<?= time();?>" crossorigin="anonymous">
+    <link rel="stylesheet" href="./tests.css?cache=<?= time(); ?>" crossorigin="anonymous">
+    <link rel="stylesheet" href="./color_tests.css?cache=<?= time(); ?>" crossorigin="anonymous">
+    <link rel="stylesheet" href="./element_tests.css?cache=<?= time(); ?>" crossorigin="anonymous">
+    <link rel="stylesheet" href="./helpers.css?cache=<?= time(); ?>" crossorigin="anonymous">
 
-    <!-- <link rel="modulepreload" href="../js/mobileConsole/hnl.mobileconsole.js?cache=<?= time();?>">
-    <script src="../js/mobileConsole/hnl.mobileconsole.js?cache=<?= time();?>"></script><!--//-->
-    <link rel="modulepreload" href="../js/entrypoint.min.mjs?cache=<?= time();?>">
-    <script type="module" src="../js/entrypoint.min.mjs?cache=<?= time();?>" defer></script>
+    <!-- <link rel="modulepreload" href="../js/mobileConsole/hnl.mobileconsole.js?cache=<?= time(); ?>">
+    <script src="../js/mobileConsole/hnl.mobileconsole.js?cache=<?= time(); ?>"></script><!--//-->
+    <link rel="modulepreload" href="../js/entrypoint.min.mjs?cache=<?= time(); ?>">
+    <script type="module" src="../js/entrypoint.min.mjs?cache=<?= time(); ?>" defer></script>
 
     <!-- Load the module with explicit defer
-    <link rel="modulepreload" href="../js/nok-element-library.min.mjs?cache=<?= time();?>">
-    <script type="module" src="../js/nok-element-library.min.mjs?cache=<?= time();?>" defer></script>
+    <link rel="modulepreload" href="../js/nok-element-library.min.mjs?cache=<?= time(); ?>">
+    <script type="module" src="../js/nok-element-library.min.mjs?cache=<?= time(); ?>" defer></script>
 
     <style>
         :not(:defined) {
@@ -33,8 +34,8 @@ const NOK_THEME_ROOT = 'https://dev.obesitaskliniek.nl/wp-content/themes/nok-202
         }
     </style>-->
 </head>
-<body class="nok25-bg-body nok25-text-contrast">
-    <div class="nok25-accessibility-helper"></div>
+<body class="no-js nok25-bg-body nok25-text-contrast">
+<div class="nok25-accessibility-helper"></div>
 
 <?php
 $star = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
@@ -72,17 +73,24 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
 </svg></nok25-logo>'
 ?>
 
-<nav class="nok25-horizontal-section nok25-nav nok25-text-darkerblue" data-requires="./nok-toggler.mjs?cache=<?= time();?>">
-    <div class="nok25-nav-mask nok25-bg-darkerblue nok25-dark-bg-darkerblue--darker nok25-z-1" data-toggles="open"></div>
+<nav class="nok25-horizontal-section nok25-nav nok25-text-darkerblue"
+     data-requires="./nok-toggler.mjs?cache=<?= time(); ?>">
+    <div class="nok25-nav-mask nok25-bg-darkerblue nok25-dark-bg-darkerblue--darker nok25-z-1"
+         data-toggles="open"></div>
     <div class="nok25-bg-body nok25-text-darkerblue nok25-dark-text-contrast nok25-nav-control-dropdown nok25-bg-blur nok25-bg-alpha-9"
-         data-requires="./nok-user-prefs.mjs?cache=<?= time();?>">
+         data-requires="./nok-user-prefs.mjs?cache=<?= time(); ?>">
         <h5>Toegankelijkheid</h5>
         <div class="nok25-nav-control-dropdown__section">
             Tekstgrootte:
-            <button class="nok25-button nok25-button--small nok25-bg-darkerblue nok25-text-contrast font-decrease" style="font-variant: all-small-caps;" tabindex="0" data-set-font-size="-0.1">A</button>
-            <button class="nok25-button nok25-button--small nok25-bg-darkerblue nok25-text-contrast font-increase" tabindex="0" data-set-font-size="+0.1">A</button>
-            <button class="nok25-button nok25-button--small nok25-bg-darkblue nok25-dark-bg-lightblue--darker nok25-text-contrast" tabindex="0" data-reset-font-size="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+            <button class="nok25-button nok25-button--small nok25-bg-darkerblue nok25-text-contrast font-decrease"
+                    style="font-variant: all-small-caps;" tabindex="0" data-set-font-size="-0.1">A
+            </button>
+            <button class="nok25-button nok25-button--small nok25-bg-darkerblue nok25-text-contrast font-increase"
+                    tabindex="0" data-set-font-size="+0.1">A
+            </button>
+            <button class="nok25-button nok25-button--small nok25-bg-darkblue nok25-dark-bg-lightblue--darker nok25-text-contrast"
+                    tabindex="0" data-reset-font-size="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
                     <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
                 </svg>
@@ -92,15 +100,29 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
 
     <nok25-mobile-nav>
         <div class="nok25-horizontal-section__inner--stretched nok25-bg-white nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-top-row nok25-z-3">
-            <?= $logo;?>
-            <button class="nok25-button nok25-button--small nok25-base-font nok25-bg-yellow nok25-text-contrast nok25-invisible-to-sm" tabindex="0">Gratis voorlichtingsavond</button>
-            <button class="nok25-button nok25-button-phone nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"></button>
-            <button class="nok25-button nok25-button-search nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"></button>
-            <button class="nok25-button nok25-button-font-size-adjust nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"
-                    data-toggles="open" data-target=".nok25-nav-control-dropdown" data-swipe-close=".nok25-nav-control-dropdown" data-autohide="2"></button>
-            <button class="nok25-button nok25-button-menu-toggler nok25-nav-menu-toggler nok25-dark-bg-darkerblue nok25-text-contrast no-shadow" tabindex="0"
+            <?= $logo; ?>
+            <button class="nok25-button nok25-button--small nok25-base-font nok25-bg-yellow nok25-text-contrast nok25-invisible-to-sm"
+                    tabindex="0">Gratis voorlichtingsavond
+            </button>
+            <button class="nok25-button nok25-button-phone nok25-dark-bg-darkerblue nok25-text-contrast no-shadow"
+                    tabindex="0"></button>
+            <button class="nok25-button nok25-button-search nok25-dark-bg-darkerblue nok25-text-contrast no-shadow"
+                    tabindex="0"></button>
+            <button class="nok25-button nok25-button-font-size-adjust nok25-dark-bg-darkerblue nok25-text-contrast no-shadow"
+                    tabindex="0"
+                    data-toggles="open" data-target=".nok25-nav-control-dropdown"
+                    data-swipe-close=".nok25-nav-control-dropdown" data-autohide="10"></button>
+            <button class="nok25-button nok25-button-menu-toggler nok25-nav-menu-toggler nok25-dark-bg-darkerblue nok25-text-contrast no-shadow"
+                    tabindex="0"
                     data-toggles="open">
-            <!--data-swipe-close=".nok25-nav-drawer" data-swipe-direction="x" data-swipe-limits="0,9999"-->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                    <path class="open" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10"
+                          stroke-width="1.5" d="M2.7 3.9h11m-11 4h11m-11 4h11"/>
+                    <path class="closed" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10"
+                          stroke-width="0.8"
+                          d="M2.4 2.8c-.2-.2-.2-.5 0-.7.2-.2.5-.2.7 0l5.1 5.1 5.1-5.1c.2-.2.5-.2.7 0 .2.2.2.5 0 .7L8.9 7.9 14 13c.2.2.2.5 0 .7s-.5.2-.7 0L8.2 8.6l-5.1 5.1c-.2.2-.5.2-.7 0-.2-.2-.2-.5 0-.7l5.1-5.1-5.1-5.1Z"/>
+                </svg>
+                <!--data-swipe-close=".nok25-nav-drawer" data-swipe-direction="x" data-swipe-limits="0,9999"-->
             </button>
         </div>
         <div class="nok25-z-2 nok25-nav-drawer">
@@ -117,15 +139,18 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                     </div>
                     <div class="nok25-nav-carousel__slide">
                         <div class="nok25-nav__menuitems" id="submenu-behandelingen">
-                            <a href="#topmenu" class="nok25-nav__menuitem nok25-nav__menuitem__back">&laquo; Terug naar overzicht</a>
+                            <a href="#topmenu" class="nok25-nav__menuitem nok25-nav__menuitem__back">&laquo; Terug naar
+                                overzicht</a>
                             <a href="#" class="nok25-nav__menuitem">Wat is obesitas?</a>
-                            <a href="#" class="nok25-nav__menuitem nok25-nav__menuitem--active">Onze behandeling van obesitas</a>
+                            <a href="#" class="nok25-nav__menuitem nok25-nav__menuitem--active">Onze behandeling van
+                                obesitas</a>
                             <a href="#" class="nok25-nav__menuitem">Ons behandelprogramma</a>
                             <a href="#" class="nok25-nav__menuitem">De operatie</a>
                             <a href="#" class="nok25-nav__menuitem">De kosten van de behandeling</a>
                         </div>
                         <div class="nok25-nav__menuitems" id="submenu-over-nok">
-                            <a href="#topmenu" class="nok25-nav__menuitem nok25-nav__menuitem__back">&laquo; Terug naar overzicht</a>
+                            <a href="#topmenu" class="nok25-nav__menuitem nok25-nav__menuitem__back">&laquo; Terug naar
+                                overzicht</a>
                             <a href="#" class="nok25-nav__menuitem">Over ons</a>
                             <a href="#" class="nok25-nav__menuitem">Team van specialisten</a>
                             <a href="#" class="nok25-nav__menuitem">Vestigingen</a>
@@ -141,7 +166,9 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                     <a href="#" class="nok25-nav__menuitem">Kennisbank</a>
                     <a href="#" class="nok25-nav__menuitem">Mijn NOK</a>
                     <a href="#" class="nok25-nav__menuitem">NOK App</a>
-                    <button class="nok25-button nok25-button--small nok25-base-font nok25-bg-yellow nok25-mt-1 nok25-invisible-from-sm" tabindex="0">Gratis voorlichtingsavond</button>
+                    <button class="nok25-button nok25-button--small nok25-base-font nok25-bg-yellow nok25-mt-1 nok25-invisible-from-sm"
+                            tabindex="0">Gratis voorlichtingsavond
+                    </button>
                 </div>
             </div>
         </div>
@@ -153,7 +180,8 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
             <div class="nok25-horizontal-section__inner nok25-horizontal-section__inner--collapsed nok25-nav-top">
                 <div>
                     <small class="nok25-valign-center">
-                        <span class="nok25-text-lightblue nok25-star-ratings"><?= $star;?><?= $star;?><?= $star;?><?= $star;?><?= $star;?></span>5/5 op basis van 12.030 beoordelingen
+                        <span class="nok25-text-lightblue nok25-star-ratings"><?= $star; ?><?= $star; ?><?= $star; ?><?= $star; ?><?= $star; ?></span>5/5
+                        op basis van 12.030 beoordelingen
                     </small>
                 </div>
                 <div>Werken bij</div>
@@ -169,15 +197,20 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
             </div>
         </div>
         <div class="nok25-horizontal-section__inner nok25-horizontal-section__inner--collapsed nok25-nav-menubar-row nok25-z-3">
-            <div class="nok25-nav-menubar nok25-bg-white nok25-dark-bg-darkerblue nok25-dark-text-contrast" data-toggles="open">
+            <div class="nok25-nav-menubar nok25-bg-white nok25-dark-bg-darkerblue nok25-dark-text-contrast"
+                 data-toggles="open">
                 <div>
-                    <?= $logo;?>
+                    <?= $logo; ?>
                 </div>
                 <div>Behandelingen</div>
                 <div>Over NOK</div>
                 <div>Agenda</div>
                 <div>Verwijzers</div>
-                <div><button class="nok25-button nok25-base-font nok25-bg-yellow" tabindex="0">Gratis voorlichtingsavond</button></div>
+                <div>
+                    <button class="nok25-button nok25-base-font nok25-bg-yellow" tabindex="0">Gratis
+                        voorlichtingsavond
+                    </button>
+                </div>
             </div>
             <div class="nok25-nav-dropdown">
                 <div class="nok25-nav-dropdown-contents nok25-bg-white nok25-dark-bg-darkerblue--darker nok25-dark-text-contrast">
@@ -194,7 +227,12 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                             Vragen of behoefte aan persoonlijk advies?
                         </h3>
                         <button class="nok25-button nok25-base-font nok25-bg-darkblue nok25-text-contrast" tabindex="0">
-                            Neem contact op  <svg class="nok25-text-yellow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" width="25" height="25" fill="currentColor"><path d="m17.5 5.999-.707.707 5.293 5.293H1v1h21.086l-5.294 5.295.707.707L24 12.499l-6.5-6.5z" data-name="Right"/></svg>
+                            Neem contact op
+                            <svg class="nok25-text-yellow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25"
+                                 width="25" height="25" fill="currentColor">
+                                <path d="m17.5 5.999-.707.707 5.293 5.293H1v1h21.086l-5.294 5.295.707.707L24 12.499l-6.5-6.5z"
+                                      data-name="Right"/>
+                            </svg>
                         </button>
                     </nok25-square-block>
                 </div>
@@ -213,83 +251,249 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
             <h1 class="nok25-horizontal-section__heading nok25-hero__heading">
                 Serieuze aanpak, gezond afvallen
             </h1>
-            <p class="nok25-horizontal-section__heading__description nok25-block-group__description">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos vero.
+            <p class="nok25-block-group__description">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos
+                vero.
             </p>
             <div class="nok25-horizontal-button-group">
-                <button class="nok25-button fill-group-column nok25-bg-darkerblue nok25-text-contrast" tabindex="0">De behandeling</button>
+                <button class="nok25-button fill-group-column nok25-bg-darkerblue nok25-text-contrast" tabindex="0">De
+                    behandeling
+                </button>
                 <a class="nok25-hyperlink fw-bold" href="#">Kom ik in aanmerking?</a>
             </div>
         </article>
         <figure>
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1199.9 1065.5">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                 viewBox="0 0 1199.9 1065.5">
                 <defs>
-                    <linearGradient id="c" x1="899.81" x2="1920.52" y1="1367.93" y2="-128.38" gradientTransform="rotate(-45 802.663 961.106)" gradientUnits="userSpaceOnUse">
+                    <linearGradient id="c" x1="899.81" x2="1920.52" y1="1367.93" y2="-128.38"
+                                    gradientTransform="rotate(-45 802.663 961.106)" gradientUnits="userSpaceOnUse">
                         <stop offset="0" stop-color="hsla(var(--grad-1-3) / var(--local-color-alpha, 1))"></stop>
                         <stop offset=".5" stop-color="hsla(var(--grad-1-2) / var(--local-color-alpha, 1))"></stop>
                         <stop offset="1" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
                     </linearGradient>
-                    <linearGradient id="b" x1="881.9" x2="1940.53" y1="1391.88" y2="-160.02" gradientTransform="rotate(-45 804.633 957.17)" gradientUnits="userSpaceOnUse">
+                    <linearGradient id="b" x1="881.9" x2="1940.53" y1="1391.88" y2="-160.02"
+                                    gradientTransform="rotate(-45 804.633 957.17)" gradientUnits="userSpaceOnUse">
                         <stop offset="0" stop-color="hsla(var(--grad-1-3) / var(--local-color-alpha, 1))"></stop>
                         <stop offset=".5" stop-color="hsla(var(--grad-1-2) / var(--local-color-alpha, 1))"></stop>
                         <stop offset="1" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
                     </linearGradient>
-                    <linearGradient id="a" x1="865.07" x2="1963.13" y1="1419.45" y2="-190.25" gradientTransform="rotate(-45 804.633 957.17)" gradientUnits="userSpaceOnUse">
+                    <linearGradient id="a" x1="865.07" x2="1963.13" y1="1419.45" y2="-190.25"
+                                    gradientTransform="rotate(-45 804.633 957.17)" gradientUnits="userSpaceOnUse">
                         <stop offset="0" stop-color="hsla(var(--grad-1-3) / var(--local-color-alpha, 1))"></stop>
                         <stop offset=".5" stop-color="hsla(var(--grad-1-2) / var(--local-color-alpha, 1))"></stop>
                         <stop offset="1" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
                     </linearGradient>
 
-                    <filter id="luminosity-noclip" x="-234.9" y="-148" width="1685.7" height="1213.5" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+                    <filter id="luminosity-noclip" x="-234.9" y="-148" width="1685.7" height="1213.5"
+                            color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
                         <feFlood flood-color="#fff" result="bg"/>
                         <feBlend in="SourceGraphic" in2="bg"/>
                     </filter>
                     <mask id="image-mask" x="-234.9" y="-148" width="1685.7" height="1213.5" maskUnits="userSpaceOnUse">
                         <g style="filter: url(#luminosity-noclip)">
-                            <path id="mask-path" d="M418-143.6c2.7-1.6,5.5-3,8.2-4.4-2.8,1.4-5.6,2.8-8.3,4.2l-.5-1-652.3,2.5v1207.8h1685.7v-65.4c-283.3-.3-530.7-.6-529.9-.9-.8.2-1.7.5-2.4.7h0c-1.6.4-3.2.9-4.8,1.3-3.6,1-7.2,2-10.8,2.8-210.2,51.2-429-87.2-581.7-408.1C154.1,245.1,205.1-25.5,418-143.6Z"/>
+                            <path id="mask-path"
+                                  d="M418-143.6c2.7-1.6,5.5-3,8.2-4.4-2.8,1.4-5.6,2.8-8.3,4.2l-.5-1-652.3,2.5v1207.8h1685.7v-65.4c-283.3-.3-530.7-.6-529.9-.9-.8.2-1.7.5-2.4.7h0c-1.6.4-3.2.9-4.8,1.3-3.6,1-7.2,2-10.8,2.8-210.2,51.2-429-87.2-581.7-408.1C154.1,245.1,205.1-25.5,418-143.6Z"/>
                         </g>
                     </mask>
                 </defs>
                 <foreignObject width="100%" height="100%" mask="url(#image-mask)">
-                    <?php $testimg = 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%20' . str_pad(rand(1,59),2,0,STR_PAD_LEFT); ?>
-                    <img src="<?= $testimg;?>:400x0-25-0-0-center-0.jpg" width="1920" height="1281" srcset="<?= $testimg;?>:1920x0-65-0-0-center-0.jpg 1920w,
-                                 <?= $testimg;?>:768x0-65-0-0-center-0.jpg 768w,
-                                 <?= $testimg;?>:320x0-65-0-0-center-0.jpg 320w,
-                                 <?= $testimg;?>:150x0-65-0-0-center-0.jpg 150w" sizes="(max-width: 575px) 100vw,
+                    <?php $testimg = 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%20' . str_pad(rand(1, 59), 2, 0, STR_PAD_LEFT); ?>
+                    <img src="<?= $testimg; ?>:400x0-25-0-0-center-0.jpg" width="1920" height="1281"
+                         srcset="<?= $testimg; ?>:1920x0-65-0-0-center-0.jpg 1920w,
+                                 <?= $testimg; ?>:768x0-65-0-0-center-0.jpg 768w,
+                                 <?= $testimg; ?>:320x0-65-0-0-center-0.jpg 320w,
+                                 <?= $testimg; ?>:150x0-65-0-0-center-0.jpg 150w" sizes="(max-width: 575px) 100vw,
                                      (min-width: 575px) 75vw,
                                      (min-width: 768px) 84vw,
                                      (min-width: 996px) 84vw,
                                      (min-width: 1200px) 84vw" loading="lazy">
                 </foreignObject>
-                <path id="d" fill="hsla(var(--base-layer) / var(--local-color-alpha, 1))" d="M137.3,682.5C-22.9,346.2,75,36.7,415.1-141.8,30.2,58.5-79.7,385.6,75.6,711.9c151.5,318,459.6,442.1,846.1,287.2-.8.2-1.7.5-2.4.7-340.4,131.3-626.9,8.6-782.1-317.3h0Z"/>
-                <path id="c" fill="url(#c)" d="M137.3,682.5c155.2,325.9,441.8,448.6,782.1,317.3-1.6.4-3.2.9-4.8,1.3-293.6,106-557.6-15.9-715.7-347.9C33.9,306.8,120,14.6,415.7-142.1c-.2.1-.4.2-.6.3C75,36.7-22.9,346.2,137.3,682.5Z"/>
-                <path id="b" fill="url(#b)" d="M260.6,623.8C90.7,267.3,165-7.5,416.1-142.3c-.2,0-.3.2-.5.2C120,14.6,33.9,306.8,198.9,653.2c158.1,332,422.1,454,715.7,347.9-3.6,1-7.2,2-10.8,2.8-245.8,76.4-484.1-46.2-643.3-380.1h0Z"/>
-                <path id="a" fill="url(#a)" d="M260.6,623.8c159.1,334.1,397.5,456.5,643.3,380.1-210.2,51.2-429-87.2-581.7-408.1C152.9,240.6,207.4-32.3,427.1-148c-3.6,1.9-7.3,3.7-11,5.6C165-7.5,90.7,267.3,260.6,623.8Z"/>
+                <path id="d" fill="hsla(var(--base-layer) / var(--local-color-alpha, 1))"
+                      d="M137.3,682.5C-22.9,346.2,75,36.7,415.1-141.8,30.2,58.5-79.7,385.6,75.6,711.9c151.5,318,459.6,442.1,846.1,287.2-.8.2-1.7.5-2.4.7-340.4,131.3-626.9,8.6-782.1-317.3h0Z"/>
+                <path id="c" fill="url(#c)"
+                      d="M137.3,682.5c155.2,325.9,441.8,448.6,782.1,317.3-1.6.4-3.2.9-4.8,1.3-293.6,106-557.6-15.9-715.7-347.9C33.9,306.8,120,14.6,415.7-142.1c-.2.1-.4.2-.6.3C75,36.7-22.9,346.2,137.3,682.5Z"/>
+                <path id="b" fill="url(#b)"
+                      d="M260.6,623.8C90.7,267.3,165-7.5,416.1-142.3c-.2,0-.3.2-.5.2C120,14.6,33.9,306.8,198.9,653.2c158.1,332,422.1,454,715.7,347.9-3.6,1-7.2,2-10.8,2.8-245.8,76.4-484.1-46.2-643.3-380.1h0Z"/>
+                <path id="a" fill="url(#a)"
+                      d="M260.6,623.8c159.1,334.1,397.5,456.5,643.3,380.1-210.2,51.2-429-87.2-581.7-408.1C152.9,240.6,207.4-32.3,427.1-148c-3.6,1.9-7.3,3.7-11,5.6C165-7.5,90.7,267.3,260.6,623.8Z"/>
             </svg>
 
         </figure>
 
         <section class="nok25-bg-body--lighter nok25-dark-bg-darkerblue nok25-bg-blur--large nok25-bg-alpha-6">
             <div class="nok25-fs-buttons nok25-usp nok25-invisible-to-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nok25-text-lightblue" viewBox="0 0 16 16">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="nok25-text-lightblue" viewBox="0 0 16 16">
                     <path d="M4 9.42h1.063C5.4 12.323 7.317 14 10.34 14c.622 0 1.167-.068 1.659-.185v-1.3c-.484.119-1.045.17-1.659.17-2.1 0-3.455-1.198-3.775-3.264h4.017v-.928H6.497v-.936q-.002-.165.008-.329h4.078v-.927H6.618c.388-1.898 1.719-2.985 3.723-2.985.614 0 1.175.05 1.659.177V2.194A6.6 6.6 0 0 0 10.341 2c-2.928 0-4.82 1.569-5.244 4.3H4v.928h1.01v1.265H4v.928z"/>
                 </svg>
-                Vergoed door je zorgverzekering</div>
+                Vergoed door je zorgverzekering
+            </div>
             <div class="nok25-fs-buttons nok25-usp nok25-invisible-to-xl">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="nok25-text-lightblue">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                     class="nok25-text-lightblue">
                     <path d="M3.5 5.1c.7-.3 1.1-.9 1.1-1.7s-.8-1.9-2-1.9-1.9.5-2.2.9l.6 1c.4-.4.8-.6 1.3-.6s.9.3.9.7c0 .8-.8.9-1.4.9h-.2v1.2h.3c1 0 1.6.3 1.6 1s-.4.9-1.1.9-1.1-.4-1.3-.6L.5 8c.2.2.8.8 2.1.8s1.4-.2 1.8-.6c.4-.4.7-.9.7-1.5 0-.9-.4-1.6-1.3-1.8Zm6.4-2.7c-.6-.7-1.4-.9-2-.9s-1.3.1-2 .9C5.3 3.1 5 4 5 5.3s.3 2.2.9 2.9c.6.7 1.4.9 2 .9s1.3-.1 2-.9c.6-.7.9-1.6.9-2.9s-.3-2.2-.9-2.9Zm-.6 2.8c0 1.5-.5 2.4-1.4 2.4s-1.4-.8-1.4-2.4.5-2.4 1.4-2.4 1.4.8 1.4 2.4Zm6.6-.2h-1.7V3.3h-1.1V5h-1.7v1.1h1.7v1.8h1.1V6.1h1.7V5Z"/>
                     <rect width=".7" height=".6" x="5.1" y="11" rx="0" ry="0"/>
                     <path d="M5.7 11.8h-.6V14c0 .3 0 .3-.2.3h-.1v.5h.3c.5 0 .8-.3.8-.8v-2.2Zm1.2-.1c-.4 0-.7.1-.9.4l.2.4c0-.1.3-.2.5-.2s.4.1.4.4h-.3c-.6 0-.9.3-.9.7s.2.7.7.7.5-.1.6-.2v.2h.5v-1.2c0-.6-.3-1-.9-1Zm.3 1.4v.2s-.1.1-.4.1-.2 0-.2-.2.1-.2.4-.2h.2ZM9 11.7c-.4 0-.7.1-.9.4l.2.4c0-.1.3-.2.5-.2s.4.1.4.4h-.3c-.6 0-.9.3-.9.7s.2.7.7.7.5-.1.6-.2v.2h.5v-1.2c0-.6-.3-1-.9-1Zm.3 1.4v.2s-.1.1-.4.1-.2 0-.2-.2.1-.2.4-.2h.2Zm2.2-1.4c-.4 0-.5.1-.6.3v-.2h-.5v2.1h.6v-1.4c0-.2.3-.3.5-.3v-.5Z"/>
                 </svg>
-                Meer dan 30 jaar ervaring</div>
+                Meer dan 30 jaar ervaring
+            </div>
             <div class="nok25-fs-buttons nok25-usp nok25-invisible-to-xxxl">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="nok25-text-lightblue">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
+                     class="nok25-text-lightblue">
                     <path d="M8.5 5.034v1.1l.953-.55.5.867L9 7l.953.55-.5.866-.953-.55v1.1h-1v-1.1l-.953.55-.5-.866L7 7l-.953-.55.5-.866.953.55v-1.1zM13.25 9a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25zM13 11.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm.25 1.75a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25zm-11-4a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5A.25.25 0 0 0 3 9.75v-.5A.25.25 0 0 0 2.75 9zm0 2a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25zM2 13.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25z"/>
                     <path d="M5 1a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1a1 1 0 0 1 1 1v4h3a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h3V3a1 1 0 0 1 1-1zm2 14h2v-3H7zm3 0h1V3H5v12h1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1zm0-14H6v1h4zm2 7v7h3V8zm-8 7V8H1v7z"/>
                 </svg>
-                Samenwerking met de beste ziekenhuizen</div>
-            <button class="nok25-button nok25-base-font nok25-bg-white nok25-text-darkerblue nok25-visible-xs nok25-align-self-stretch" tabindex="0">Vind een vestiging</button>
+                Samenwerking met de beste ziekenhuizen
+            </div>
+            <button class="nok25-button nok25-base-font nok25-bg-white nok25-text-darkerblue nok25-visible-xs nok25-align-self-stretch"
+                    tabindex="0">Vind een vestiging
+            </button>
         </section>
+    </div>
+</section>
+
+
+<div class="nok25-grid__wrapper one-row-overlap">
+
+    <section class="nok25-horizontal-section span-all">
+        <div class="nok25-horizontal-section__inner">
+            <h2 class="nok25-text-lightblue">
+                #1 Obesitas Kliniek van Nederland
+            </h2>
+            <h1 class="nok25-horizontal-section__heading">
+                Het centrum voor gezond afvallen
+            </h1>
+        </div>
+
+        <div class="nok25-grid__wrapper nok-icon-bg">
+            <div class="nok25-horizontal-section__inner nok25-horizontal-section__inner--collapsed span-all tuck-over">
+                <article class="nok25-grid__wrapper five-columns prevent-bump">
+                    <p class="in-last-two-columns">
+                        Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas, quia
+                        reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab
+                        cumque est illo laboriosam libero officia praesentium quasi similique vitae voluptates?
+                        Adipisci aspernatur autem, corporis dolorem esse facere ipsam laboriosam rem!
+                    </p>
+                    <p class="in-last-two-columns">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab cumque est illo laboriosam
+                        libero officia praesentium quasi similique vitae voluptates? Adipisci aspernatur autem,
+                        corporis dolorem esse facere ipsam laboriosam rem!
+                    </p>
+                    <p class="in-last-two-columns">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab cumque est illo laboriosam
+                        libero officia praesentium quasi similique vitae voluptates? Adipisci aspernatur autem,
+                        corporis dolorem esse facere ipsam laboriosam rem!
+                    </p>
+                    <p class="in-last-two-columns">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab cumque est illo laboriosam
+                        libero officia praesentium quasi similique vitae voluptates? Adipisci aspernatur autem,
+                        corporis dolorem esse facere ipsam laboriosam rem!
+                    </p>
+                </article>
+            </div>
+            <figure class="nok25-rounded-border-large-right tuck-under nok25-align-self-end">
+                <img src="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2032:400x0-25-0-0-center-0.jpg"
+                     width="1920" height="1281" srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2032:1920x0-65-0-0-center-0.jpg 1920w,
+                                 https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2032:768x0-65-0-0-center-0.jpg 768w,
+                                 https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2032:320x0-65-0-0-center-0.jpg 320w,
+                                 https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2032:150x0-65-0-0-center-0.jpg 150w"
+                     sizes="(max-width: 575px) 100vw,
+                                     (min-width: 575px) 75vw,
+                                     (min-width: 768px) 84vw,
+                                     (min-width: 996px) 84vw,
+                                     (min-width: 1200px) 84vw" loading="lazy">
+            </figure>
+        </div>
+    </section>
+
+    <section class="nok25-horizontal-section nok25-bg-darkerblue nok25-text-contrast span-all">
+        <div class="nok25-horizontal-section__inner nok25-block-group prevent-bump">
+            <div class="nok25-block-group__inner">
+                <h1 class="nok25-horizontal-section__heading">
+                    Een titel voor deze sectie
+                </h1>
+                <p class="nok25-block-group__description">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos
+                    vero. Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas, quia
+                    reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab cumque est
+                    illo laboriosam libero officia praesentium quasi similique vitae voluptates? Adipisci aspernatur autem,
+                    corporis dolorem esse facere ipsam laboriosam rem!
+                </p>
+                <div class="nok25-block-group__scroller nok25-draggable" data-requires="./modules/hnl.draggable"
+                     data-snap-items="nok25-draggable-slider-item" data-scroll-snapping="true">
+                    <div class="nok25-block-group__blocks">
+                        <?php $x = 6;
+                        while ($x--) : ?>
+                            <nok25-square-block class="nok25-draggable-slider-item">
+                                <div class="nok25-square-block__icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 13" fill="currentColor">
+                                        <path d="M4.578.004c-.398.02-.777.094-1.133.223a3.803 3.803 0 0 0-2.058 1.746A4.127 4.127 0 0 0 .956 3.2a4.602 4.602 0 0 0-.047.976c.042.58.209 1.145.488 1.656.059.106.153.16.27.16.137 0 .25-.09.285-.226a.318.318 0 0 0 0-.149q-.008-.031-.082-.176a3.474 3.474 0 0 1-.367-1.77c.023-.335.082-.62.187-.913.36-1.02 1.2-1.79 2.239-2.051.187-.047.359-.078.562-.094.11-.008.41-.008.52 0a3.361 3.361 0 0 1 2.034.895c.024.023.305.3.626.625.418.422.586.586.601.597.054.034.117.05.18.047.07 0 .117-.011.172-.05.016-.008.226-.22.617-.614.328-.328.617-.617.645-.64.272-.248.583-.448.921-.594.352-.149.7-.234 1.098-.27.078-.004.395-.004.477 0a3.249 3.249 0 0 1 3.011 3.227c.014.864-.3 1.702-.879 2.344-.05.058-.449.46-1.761 1.777-3.102 3.113-4.301 4.316-4.309 4.316 0 0-.07-.066-.152-.148-.086-.086-.3-.3-.48-.477-.829-.828-1.876-1.87-2.899-2.902-.328-.324-.461-.457-.48-.473a.275.275 0 0 0-.098-.043.361.361 0 0 0-.145.004.298.298 0 0 0-.215.22.452.452 0 0 0 0 .144c.012.04.03.079.055.113.04.047 3.996 4.004 4.192 4.191.045.049.105.08.171.09.04.008.09.008.13-.004a.456.456 0 0 0 .109-.05c.035-.032.433-.43 4.203-4.211a212.272 212.272 0 0 0 2.11-2.125 4.02 4.02 0 0 0 1.035-3.055 3.879 3.879 0 0 0-.872-2.16A3.844 3.844 0 0 0 12.144 0c-.886 0-1.753.3-2.453.852-.18.14-.222.183-.758.722l-.484.485-.433-.434a19.35 19.35 0 0 0-.637-.629 4.002 4.002 0 0 0-2.39-.988 7.13 7.13 0 0 0-.411-.004Z"/>
+                                        <path d="M6.996 7.805c0 .004.027.058-.55-1.125-.29-.594-.532-1.09-.54-1.098a.31.31 0 0 0-.172-.133.37.37 0 0 0-.16 0 .324.324 0 0 0-.133.078c-.011.012-.226.301-.48.649l-.461.625-2.121.004c-2.012 0-2.13 0-2.149.008a.29.29 0 0 0-.136.074.265.265 0 0 0-.086.136C0 7.051 0 7.063 0 7.105a.297.297 0 0 0 .219.293l.027.008h4.453l.027-.008a.3.3 0 0 0 .137-.082c.012-.011.18-.238.38-.507.194-.27.358-.489.358-.489.004.004.274.555.602 1.227.328.676.602 1.234.61 1.246.044.065.11.11.187.129a.337.337 0 0 0 .125 0 .3.3 0 0 0 .207-.168c.008-.016.23-.742.559-1.824.3-.989.546-1.797.55-1.797l.375 1.047c.124.357.252.712.383 1.066a.32.32 0 0 0 .106.133c.029.019.06.033.093.043.024.008.059.008.903.008.863 0 .879 0 .914-.008a.3.3 0 0 0 .219-.395.31.31 0 0 0-.215-.195c-.02-.004-.075-.004-.782-.004-.71-.004-.754-.004-.757-.008 0-.004-.223-.625-.493-1.379-.27-.753-.496-1.382-.504-1.398a.274.274 0 0 0-.136-.137.254.254 0 0 0-.121-.031c-.032 0-.047 0-.075.008a.3.3 0 0 0-.207.168L6.996 7.805Z"/>
+                                    </svg>
+                                </div>
+                                <h2 class="nok25-square-block__heading">
+                                    Een titeltekst met variabele lengte <?= $x; ?>
+                                </h2>
+                                <p class="nok25-square-block__text">
+                                    Aenean ac feugiat nibh. Praesent venenatis non nibh vitae pretium. Suspendisse euismod
+                                    blandit lorem vel mattis. Pellentesque ultrices velit at nisl placerat faucibus.
+                                </p>
+                                <a class="nok25-square-block__link" href="#">Read more
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" width="25" height="25"
+                                         fill="currentColor">
+                                        <path d="m17.5 5.999-.707.707 5.293 5.293H1v1h21.086l-5.294 5.295.707.707L24 12.499l-6.5-6.5z"
+                                              data-name="Right"/>
+                                    </svg>
+                                </a>
+                            </nok25-square-block>
+                        <?php endwhile; ?>
+                    </div>
+                </div>
+                <div class="fake-scrollbar nok25-align-self-stretch">
+                    <div class="fake-scrollbar-thumb"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<section class="nok25-horizontal-section">
+    <div class="nok25-horizontal-section__inner">
+        <h2 class="nok25-text-lightblue">
+            #1 Obesitas Kliniek van Nederland
+        </h2>
+        <h1 class="nok25-horizontal-section__heading">
+            Het centrum voor gezond afvallen
+        </h1>
+    </div>
+    <div class="nok25-grid__wrapper">
+        <div class="nok25-horizontal-section__inner nok25-horizontal-section__inner--collapsed span-all tuck-over">
+            <article class="nok25-grid__wrapper five-columns">
+                <p class="in-last-two-columns">
+                    Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas, quia
+                    reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab cumque
+                    est illo laboriosam libero officia praesentium quasi similique vitae voluptates? Adipisci aspernatur
+                    autem, corporis dolorem esse facere ipsam laboriosam rem!
+                </p>
+                <p class="in-last-two-columns">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab cumque est illo laboriosam libero
+                    officia praesentium quasi similique vitae voluptates? Adipisci aspernatur autem, corporis dolorem
+                    esse facere ipsam laboriosam rem!
+                </p>
+            </article>
+        </div>
+        <figure class="nok25-rounded-border-large-right tuck-under">
+            <?php $testimg2 = 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%20' . str_pad(rand(1, 59), 2, 0, STR_PAD_LEFT); ?>
+            <img src="<?= $testimg2; ?>:400x0-25-0-0-center-0.jpg" width="1920" height="1281" srcset="<?= $testimg2; ?>:1920x0-65-0-0-center-0.jpg 1920w,
+                                     <?= $testimg2; ?>:768x0-65-0-0-center-0.jpg 768w,
+                                     <?= $testimg2; ?>:320x0-65-0-0-center-0.jpg 320w,
+                                     <?= $testimg2; ?>:150x0-65-0-0-center-0.jpg 150w" sizes="(max-width: 575px) 100vw,
+                                         (min-width: 575px) 75vw,
+                                         (min-width: 768px) 84vw,
+                                         (min-width: 996px) 84vw,
+                                         (min-width: 1200px) 84vw" loading="lazy">
+        </figure>
     </div>
 </section>
 
@@ -299,8 +503,12 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
             <h1 class="nok25-horizontal-section__heading">
                 Een titel voor deze sectie
             </h1>
-            <p class="nok25-horizontal-section__heading__description nok25-block-group__description">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos vero. Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas, quia reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab cumque est illo laboriosam libero officia praesentium quasi similique vitae voluptates? Adipisci aspernatur autem, corporis dolorem esse facere ipsam laboriosam rem!
+            <p class="nok25-block-group__description">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos
+                vero. Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas, quia
+                reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab cumque est
+                illo laboriosam libero officia praesentium quasi similique vitae voluptates? Adipisci aspernatur autem,
+                corporis dolorem esse facere ipsam laboriosam rem!
             </p>
             <div class="nok25-block-group__scroller nok25-draggable" data-requires="./modules/hnl.draggable"
                  data-snap-items="nok25-draggable-slider-item" data-scroll-snapping="true">
@@ -341,7 +549,8 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
 
 <div class="tests">
     <div data-stylegroup=".nok25-button" class="nok25-button-tests">
-        <button class="nok25-button nok25-base-font nok25-bg-white nok25-text-darkerblue" tabindex="0">.nok25-button</button>
+        <button class="nok25-button nok25-base-font nok25-bg-white nok25-text-darkerblue" tabindex="0">.nok25-button
+        </button>
         <button class="nok25-button nok25-base-font nok25-bg-darkblue" tabindex="0">.nok25-button</button>
         <button class="nok25-button nok25-base-font nok25-bg-lightblue" tabindex="0">.nok25-button</button>
         <button class="nok25-button nok25-base-font nok25-bg-yellow" tabindex="0">.nok25-button</button>

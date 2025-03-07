@@ -1,3 +1,60 @@
+/**
+ * Mixin to apply border-radius with customizable size and position.
+ * by hnldesign - 2025
+ *
+ * @param {String} $size - The size of the border-radius. Options: 'default', 'large', 'x-large', 'xx-large'.
+ * @param {String} $position - The position to apply the border-radius. Options: 'all', 'bottom', 'top', 'left', 'right'.
+ */
+/**
+ * Mixin to style inline links with hover and focus effects.
+ * for NOK by hnldesign - 2025
+ *
+ * This mixin applies various styles to inline links, including:
+ * - Custom underline with gradient background
+ * - Hover and active states
+ * - Focus-visible state with border radius and focus ring
+ *
+ * Variables:
+ * - --active-color: The color of the link when active.
+ * - --hover-transition-time: The duration of the hover transition.
+ * - --hover-color: The color of the link when hovered.
+ * - --underline-height: The height of the underline.
+ * - --gradient: The gradient background for the underline.
+ */
+/**
+ * Mixin to style scrollbars and optionally add a fake scrollbar with identical styles.
+ * by hnldesign - 2025
+ *
+ * @param {Length} $scrollbarHeight - The height of the scrollbar.
+ * @param {Color} $scrollbarHandle - The color of the scrollbar handle.
+ * @param {Color} $scrollbarHandle_active - The color of the scrollbar handle when active.
+ * @param {Color} $scrollbarTrack - The color of the scrollbar track.
+ */
+/**
+ * Mixin to apply transition properties conditionally based on user preferences.
+ * By hnldesign - 2025
+ *
+ * This mixin checks if the user has a preference for reduced motion. If the user
+ * does not prefer reduced motion, it applies the transition properties to the
+ * specified elements when the `body` element has the `__enable-transitions` class.
+ *
+ * Usage:
+ * @include transition-properties {
+ *   transition: all 0.3s ease;
+ * }
+ */
+/**
+ * Mixin to apply styles when JavaScript is disabled.
+ * By hnldesign - 2025
+ *
+ * This mixin targets elements when the `body` element has the `no-js` class,
+ * indicating that JavaScript is disabled, since it will be unset at docReady.
+ *
+ * Usage:
+ * @include no-javascript-properties {
+ *   // Your styles here
+ * }
+ */
 :root {
   --nok25-html-font-size: 1em;
   --nok25-body-font-size: 1rem;
@@ -320,6 +377,92 @@
 .nok25-align-self-stretch {
   align-self: stretch;
   grid-column: 1/-1;
+}
+
+.nok25-align-self-end {
+  align-self: end;
+}
+
+/* Rounded borders */
+.nok25-rounded-border {
+  overflow: hidden;
+  border-radius: var(--nok25-default-border-radius, 0.4rem);
+}
+.nok25-rounded-border-top {
+  overflow: hidden;
+  border-radius: var(--nok25-default-border-radius, 0.4rem) var(--nok25-default-border-radius, 0.4rem) 0 0;
+}
+.nok25-rounded-border-right {
+  overflow: hidden;
+  border-radius: 0 var(--nok25-default-border-radius, 0.4rem) var(--nok25-default-border-radius, 0.4rem) 0;
+}
+.nok25-rounded-border-left {
+  overflow: hidden;
+  border-radius: var(--nok25-default-border-radius, 0.4rem) 0 0 var(--nok25-default-border-radius, 0.4rem);
+}
+.nok25-rounded-border-bottom {
+  overflow: hidden;
+  border-radius: 0 0 var(--nok25-default-border-radius, 0.4rem) var(--nok25-default-border-radius, 0.4rem);
+}
+.nok25-rounded-border-large {
+  overflow: hidden;
+  border-radius: var(--nok25-default-border-radius--large, 1rem);
+}
+.nok25-rounded-border-large-top {
+  overflow: hidden;
+  border-radius: var(--nok25-default-border-radius--large, 1rem) var(--nok25-default-border-radius--large, 1rem) 0 0;
+}
+.nok25-rounded-border-large-right {
+  overflow: hidden;
+  border-radius: 0 var(--nok25-default-border-radius--large, 1rem) var(--nok25-default-border-radius--large, 1rem) 0;
+}
+.nok25-rounded-border-large-left {
+  overflow: hidden;
+  border-radius: var(--nok25-default-border-radius--large, 1rem) 0 0 var(--nok25-default-border-radius--large, 1rem);
+}
+.nok25-rounded-border-large-bottom {
+  overflow: hidden;
+  border-radius: 0 0 var(--nok25-default-border-radius--large, 1rem) var(--nok25-default-border-radius--large, 1rem);
+}
+.nok25-rounded-border-x-large {
+  overflow: hidden;
+  border-radius: calc(var(--nok25-default-border-radius--large, 1rem) * 2.5);
+}
+.nok25-rounded-border-x-large-top {
+  overflow: hidden;
+  border-radius: calc(var(--nok25-default-border-radius--large, 1rem) * 2.5) calc(var(--nok25-default-border-radius--large, 1rem) * 2.5) 0 0;
+}
+.nok25-rounded-border-x-large-right {
+  overflow: hidden;
+  border-radius: 0 calc(var(--nok25-default-border-radius--large, 1rem) * 2.5) calc(var(--nok25-default-border-radius--large, 1rem) * 2.5) 0;
+}
+.nok25-rounded-border-x-large-left {
+  overflow: hidden;
+  border-radius: calc(var(--nok25-default-border-radius--large, 1rem) * 2.5) 0 0 calc(var(--nok25-default-border-radius--large, 1rem) * 2.5);
+}
+.nok25-rounded-border-x-large-bottom {
+  overflow: hidden;
+  border-radius: 0 0 calc(var(--nok25-default-border-radius--large, 1rem) * 2.5) calc(var(--nok25-default-border-radius--large, 1rem) * 2.5);
+}
+.nok25-rounded-border-xx-large {
+  overflow: hidden;
+  border-radius: calc(var(--nok25-default-border-radius--xx-large, 1rem) * 4);
+}
+.nok25-rounded-border-xx-large-top {
+  overflow: hidden;
+  border-radius: calc(var(--nok25-default-border-radius--xx-large, 1rem) * 4) calc(var(--nok25-default-border-radius--xx-large, 1rem) * 4) 0 0;
+}
+.nok25-rounded-border-xx-large-right {
+  overflow: hidden;
+  border-radius: 0 calc(var(--nok25-default-border-radius--xx-large, 1rem) * 4) calc(var(--nok25-default-border-radius--xx-large, 1rem) * 4) 0;
+}
+.nok25-rounded-border-xx-large-left {
+  overflow: hidden;
+  border-radius: calc(var(--nok25-default-border-radius--xx-large, 1rem) * 4) 0 0 calc(var(--nok25-default-border-radius--xx-large, 1rem) * 4);
+}
+.nok25-rounded-border-xx-large-bottom {
+  overflow: hidden;
+  border-radius: 0 0 calc(var(--nok25-default-border-radius--xx-large, 1rem) * 4) calc(var(--nok25-default-border-radius--xx-large, 1rem) * 4);
 }
 
 /* Breakpoint-related modifiers */
