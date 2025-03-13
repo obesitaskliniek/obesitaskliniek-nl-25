@@ -5,14 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Color tests</title>
 
-    <?php $css = ($_GET['version'] == 'v2') ? 'color_tests-v2.css' : 'color_tests.css' ;?>
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./<?=$css;?>" crossorigin="anonymous">
+    <link rel="stylesheet" href="./color_tests-v2.css" crossorigin="anonymous">
     <link rel="stylesheet" href="./helpers.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="./tests.css" crossorigin="anonymous">
+    <style>
+        body {
+            line-height: 1.75;
+            font-size: 1.1rem;
+            font-family: "JetBrains Mono", serif;
+            background-color: #fff;
+        }
+
+        div.tests {
+            display: grid;
+            gap: 15px;
+            row-gap: 30px;
+            margin: 15px;
+        }
+
+        div.tests div[data-stylegroup] {
+            display: grid;
+            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-rows: 1fr;
+            align-items: stretch;
+        }
+
+        div.tests > div[data-stylegroup]:before {
+            font-weight: 500;
+            font-size: 1.3rem;
+            content: attr(data-stylegroup); /*chrome 113+ only*/
+            grid-column: 1/-1;
+            border-bottom: 1px solid rgba(136, 136, 136, 0.5333333333);
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+        }
+
+        div.tests div[data-stylegroup] .testcard {
+            font-weight: 400;
+            font-size: 1rem;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: start;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        div.tests div[data-stylegroup] .testcard--square {
+            aspect-ratio: 4/3;
+        }
+
+        div.tests div[data-stylegroup] .testcard--large {
+            grid-column: span 2;
+        }
+
+        div.tests div[data-stylegroup=".nok25-border"] .testcard {
+            border-width: 1px;
+            border-style: solid;
+        }
+        div.tests div[data-stylegroup] > [class*="nok25-bg-"]:hover {
+            background-color: var(--bg-color--hover);
+        }
+        div.tests div[data-stylegroup] > [class*="nok25-text-"]:hover {
+            color: var(--text-color--hover);
+        }
+    </style>
 </head>
 <body class="nok25-bg-body nok25-text-contrast">
 

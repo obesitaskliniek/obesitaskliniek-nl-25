@@ -45,7 +45,6 @@ $component-name: #{nok-variables.$prefix}-block-group;
   &__scroller {
     grid-column: 1 / -1;
     overflow-x: scroll;
-    margin-top: var(--grid-gap, 1.5rem);
 
     &.#{nok-variables.$prefix}-draggable {
 

@@ -4499,10 +4499,6 @@ kbd kbd {
 figure {
   margin: 0;
 }
-figure img {
-  width: 100%;
-  height: auto;
-}
 
 img,
 svg {
@@ -4713,12 +4709,16 @@ progress {
 .nok25-horizontal-section__inner--collapsed {
   --section-inner-spacing: 0;
 }
+.nok25-horizontal-section__inner--full-width {
+  --section-max-width: 100%;
+}
 @media (min-width: 576px) {
   :root {
     --section-max-width: 540px;
   }
   .nok25-horizontal-section__inner {
-    max-width: 540px;
+    width: 100%;
+    max-width: var(--section-max-width, 540px);
   }
 }
 @media (min-width: 768px) {
@@ -4726,7 +4726,8 @@ progress {
     --section-max-width: 720px;
   }
   .nok25-horizontal-section__inner {
-    max-width: 720px;
+    width: 100%;
+    max-width: var(--section-max-width, 720px);
   }
 }
 @media (min-width: 992px) {
@@ -4734,7 +4735,8 @@ progress {
     --section-max-width: 960px;
   }
   .nok25-horizontal-section__inner {
-    max-width: 960px;
+    width: 100%;
+    max-width: var(--section-max-width, 960px);
   }
 }
 @media (min-width: 1200px) {
@@ -4742,7 +4744,8 @@ progress {
     --section-max-width: 1140px;
   }
   .nok25-horizontal-section__inner {
-    max-width: 1140px;
+    width: 100%;
+    max-width: var(--section-max-width, 1140px);
   }
 }
 @media (min-width: 1400px) {
@@ -4750,7 +4753,8 @@ progress {
     --section-max-width: 1320px;
   }
   .nok25-horizontal-section__inner {
-    max-width: 1320px;
+    width: 100%;
+    max-width: var(--section-max-width, 1320px);
   }
 }
 @media (min-width: 1600px) {
@@ -4758,7 +4762,8 @@ progress {
     --section-max-width: 1572px;
   }
   .nok25-horizontal-section__inner {
-    max-width: 1572px;
+    width: 100%;
+    max-width: var(--section-max-width, 1572px);
   }
 }
 .nok25-horizontal-section__heading {
@@ -4767,6 +4772,12 @@ progress {
 }
 .nok25-horizontal-section__heading__description {
   margin: 0;
+}
+.nok25-horizontal-section .pull-down {
+  margin-bottom: calc(-1 * var(--section-inner-spacing, 0));
+}
+.nok25-horizontal-section .pull-down-compensation {
+  margin-top: var(--section-inner-spacing, 0);
 }
 
 .nok25-horizontal-section p {
@@ -5464,8 +5475,6 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   }
 }
 .nok25-hero figure foreignObject img {
-  width: auto;
-  height: inherit;
   max-width: 100%;
   -o-object-fit: cover;
      object-fit: cover;
@@ -5803,7 +5812,6 @@ nok25-square-block > *,
 .nok25-block-group__scroller {
   grid-column: 1/-1;
   overflow-x: scroll;
-  margin-top: var(--grid-gap, 1.5rem);
 }
 .nok25-block-group__scroller.nok25-draggable {
   position: relative;
@@ -6090,39 +6098,23 @@ p .nok25-hyperlink:not(.nok25-button) {
 .nok25-grid__wrapper {
   --grid-gap: var(--nok25-padding-base, 1.5rem);
   display: grid;
-  grid-template-columns: repeat(var(--grid-columns, 2), 1fr);
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
   grid-gap: var(--grid-gap);
 }
+.nok25-grid__wrapper.one-columns {
+  --grid-columns: var(--grid-columns-override, 1);
+}
 .nok25-grid__wrapper.two-columns {
-  --grid-columns: 2;
+  --grid-columns: var(--grid-columns-override, 2);
 }
 .nok25-grid__wrapper.three-columns {
-  --grid-columns: 3;
+  --grid-columns: var(--grid-columns-override, 3);
 }
 .nok25-grid__wrapper.four-columns {
-  --grid-columns: 4;
+  --grid-columns: var(--grid-columns-override, 4);
 }
 .nok25-grid__wrapper.five-columns {
-  --grid-columns: 5;
-}
-.nok25-grid__wrapper.one-row-overlap {
-  --overlap: calc(var(--grid-gap, auto) * 2);
-  --bump-margin: calc(var(--overlap) * 3);
-  grid-template-rows: auto calc(var(--overlap) * 3) auto;
-}
-.nok25-grid__wrapper.one-row-overlap > :nth-of-type(2) .prevent-bump::before, .nok25-grid__wrapper.one-row-overlap > :nth-of-type(1) .prevent-bump::after {
-  content: "";
-  margin-bottom: var(--bump-margin, 0);
-  width: 100%;
-  flex-basis: 100%;
-  grid-column: 1/-1;
-  background: rgba(255, 0, 0, 0.2666666667);
-}
-.nok25-grid__wrapper.one-row-overlap > :nth-of-type(1) {
-  grid-row: 1/3;
-}
-.nok25-grid__wrapper.one-row-overlap > :nth-of-type(2) {
-  grid-row: 2/4;
+  --grid-columns: var(--grid-columns-override, 5);
 }
 .nok25-grid__wrapper .span-all {
   grid-column: 1/-1;
@@ -6141,6 +6133,14 @@ p .nok25-hyperlink:not(.nok25-button) {
 }
 .nok25-grid__wrapper .in-last-two-columns {
   grid-column: calc(var(--grid-columns, 2) - 1)/-1;
+}
+@media (max-width: 991.98px) {
+  .nok25-grid__wrapper {
+    --grid-columns-override: 1;
+  }
+  .nok25-grid__wrapper .tuck-under {
+    grid-row: auto;
+  }
 }
 
 .nok-icon-bg:before {

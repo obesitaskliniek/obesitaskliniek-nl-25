@@ -132,6 +132,15 @@
   font-weight: 600;
 }
 
+.natural-fit-image img {
+  width: 100%;
+  height: auto;
+}
+
+.w-100 {
+  width: 100%;
+}
+
 .nok25-bg-blur {
   -webkit-backdrop-filter: blur(5px);
           backdrop-filter: blur(5px);
@@ -369,17 +378,17 @@
 }
 
 /* Aligners */
-.nok25-valign-center {
+.valign-center {
   display: flex;
   align-items: center;
 }
 
-.nok25-align-self-stretch {
+.align-self-stretch {
   align-self: stretch;
   grid-column: 1/-1;
 }
 
-.nok25-align-self-end {
+.align-self-end {
   align-self: end;
 }
 
@@ -475,6 +484,10 @@
   .nok25-invisible-sm {
     display: none !important;
   }
+  /* Margin */
+  .nok25-mr-section-padding-sm {
+    margin-right: var(--nok25-padding-section-sides);
+  }
 }
 @media (min-width: 576px) {
   /* Visibility from breakpoint up*/
@@ -484,6 +497,10 @@
   /* Border-radius modifiers */
   .nok25-no-border-from-sm {
     border-radius: 0 !important;
+  }
+  /* Margin */
+  .nok25-mr-section-padding-from-sm {
+    margin-right: var(--nok25-padding-section-sides);
   }
 }
 @media (max-width: 575.98px) {
@@ -495,6 +512,10 @@
   .nok25-no-border-to-sm {
     border-radius: 0 !important;
   }
+  /* Margin */
+  .nok25-mr-section-padding-to-sm {
+    margin-right: var(--nok25-padding-section-sides);
+  }
 }
 @media (min-width: 768px) and (max-width: 991.98px) {
   /* Border-radius modifiers */
@@ -504,6 +525,10 @@
   /* Visibility */
   .nok25-invisible-md {
     display: none !important;
+  }
+  /* Margin */
+  .nok25-mr-section-padding-md {
+    margin-right: var(--nok25-padding-section-sides);
   }
 }
 @media (min-width: 768px) {
@@ -515,6 +540,10 @@
   .nok25-no-border-from-md {
     border-radius: 0 !important;
   }
+  /* Margin */
+  .nok25-mr-section-padding-from-md {
+    margin-right: var(--nok25-padding-section-sides);
+  }
 }
 @media (max-width: 767.98px) {
   /* Visibility from breakpoint to*/
@@ -524,6 +553,10 @@
   /* Border-radius modifiers */
   .nok25-no-border-to-md {
     border-radius: 0 !important;
+  }
+  /* Margin */
+  .nok25-mr-section-padding-to-md {
+    margin-right: var(--nok25-padding-section-sides);
   }
 }
 @media (min-width: 992px) and (max-width: 1199.98px) {
@@ -535,6 +568,10 @@
   .nok25-invisible-lg {
     display: none !important;
   }
+  /* Margin */
+  .nok25-mr-section-padding-lg {
+    margin-right: var(--nok25-padding-section-sides);
+  }
 }
 @media (min-width: 992px) {
   /* Visibility from breakpoint up*/
@@ -544,6 +581,10 @@
   /* Border-radius modifiers */
   .nok25-no-border-from-lg {
     border-radius: 0 !important;
+  }
+  /* Margin */
+  .nok25-mr-section-padding-from-lg {
+    margin-right: var(--nok25-padding-section-sides);
   }
 }
 @media (max-width: 991.98px) {
@@ -555,6 +596,10 @@
   .nok25-no-border-to-lg {
     border-radius: 0 !important;
   }
+  /* Margin */
+  .nok25-mr-section-padding-to-lg {
+    margin-right: var(--nok25-padding-section-sides);
+  }
 }
 @media (min-width: 1200px) and (max-width: 1399.98px) {
   /* Border-radius modifiers */
@@ -564,6 +609,10 @@
   /* Visibility */
   .nok25-invisible-xl {
     display: none !important;
+  }
+  /* Margin */
+  .nok25-mr-section-padding-xl {
+    margin-right: var(--nok25-padding-section-sides);
   }
 }
 @media (min-width: 1200px) {
@@ -575,6 +624,10 @@
   .nok25-no-border-from-xl {
     border-radius: 0 !important;
   }
+  /* Margin */
+  .nok25-mr-section-padding-from-xl {
+    margin-right: var(--nok25-padding-section-sides);
+  }
 }
 @media (max-width: 1199.98px) {
   /* Visibility from breakpoint to*/
@@ -584,6 +637,10 @@
   /* Border-radius modifiers */
   .nok25-no-border-to-xl {
     border-radius: 0 !important;
+  }
+  /* Margin */
+  .nok25-mr-section-padding-to-xl {
+    margin-right: var(--nok25-padding-section-sides);
   }
 }
 @media (min-width: 1400px) and (max-width: 1599.98px) {
@@ -595,6 +652,10 @@
   .nok25-invisible-xxl {
     display: none !important;
   }
+  /* Margin */
+  .nok25-mr-section-padding-xxl {
+    margin-right: var(--nok25-padding-section-sides);
+  }
 }
 @media (min-width: 1400px) {
   /* Visibility from breakpoint up*/
@@ -604,6 +665,10 @@
   /* Border-radius modifiers */
   .nok25-no-border-from-xxl {
     border-radius: 0 !important;
+  }
+  /* Margin */
+  .nok25-mr-section-padding-from-xxl {
+    margin-right: var(--nok25-padding-section-sides);
   }
 }
 @media (max-width: 1399.98px) {
@@ -615,6 +680,10 @@
   .nok25-no-border-to-xxl {
     border-radius: 0 !important;
   }
+  /* Margin */
+  .nok25-mr-section-padding-to-xxl {
+    margin-right: var(--nok25-padding-section-sides);
+  }
 }
 @media (min-width: 1600px) {
   /* Border-radius modifiers */
@@ -624,6 +693,10 @@
   /* Visibility */
   .nok25-invisible-xxxl {
     display: none !important;
+  }
+  /* Margin */
+  .nok25-mr-section-padding-xxxl {
+    margin-right: var(--nok25-padding-section-sides);
   }
 }
 @media (min-width: 1600px) {
@@ -635,6 +708,10 @@
   .nok25-no-border-from-xxxl {
     border-radius: 0 !important;
   }
+  /* Margin */
+  .nok25-mr-section-padding-from-xxxl {
+    margin-right: var(--nok25-padding-section-sides);
+  }
 }
 @media (max-width: 1599.98px) {
   /* Visibility from breakpoint to*/
@@ -645,26 +722,90 @@
   .nok25-no-border-to-xxxl {
     border-radius: 0 !important;
   }
+  /* Margin */
+  .nok25-mr-section-padding-to-xxxl {
+    margin-right: var(--nok25-padding-section-sides);
+  }
 }
 /* margin */
 .nok25-mt-1 {
   margin-top: 1.5rem;
 }
 
+.nok25-mr-1 {
+  margin-right: 1.5rem;
+}
+
+.nok25-mb-1 {
+  margin-bottom: 1.5rem;
+}
+
+.nok25-ml-1 {
+  margin-left: 1.5rem;
+}
+
 .nok25-mt-2 {
   margin-top: 3rem;
+}
+
+.nok25-mr-2 {
+  margin-right: 3rem;
+}
+
+.nok25-mb-2 {
+  margin-bottom: 3rem;
+}
+
+.nok25-ml-2 {
+  margin-left: 3rem;
 }
 
 .nok25-mt-3 {
   margin-top: 4.5rem;
 }
 
+.nok25-mr-3 {
+  margin-right: 4.5rem;
+}
+
+.nok25-mb-3 {
+  margin-bottom: 4.5rem;
+}
+
+.nok25-ml-3 {
+  margin-left: 4.5rem;
+}
+
 .nok25-mt-4 {
   margin-top: 6rem;
 }
 
+.nok25-mr-4 {
+  margin-right: 6rem;
+}
+
+.nok25-mb-4 {
+  margin-bottom: 6rem;
+}
+
+.nok25-ml-4 {
+  margin-left: 6rem;
+}
+
 .nok25-mt-5 {
   margin-top: 7.5rem;
+}
+
+.nok25-mr-5 {
+  margin-right: 7.5rem;
+}
+
+.nok25-mb-5 {
+  margin-bottom: 7.5rem;
+}
+
+.nok25-ml-5 {
+  margin-left: 7.5rem;
 }
 
 /* animations */
@@ -759,6 +900,10 @@
 
 .nok25-fs-buttons {
   font-size: var(--nok25-font-size-buttons);
+}
+
+.mh-50-vh {
+  max-height: 50vh;
 }
 
 /*# sourceMappingURL=helpers.css.map */
