@@ -29,6 +29,9 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
     &--collapsed {
       --section-inner-spacing: 0;
     }
+    &--full-width {
+      --section-max-width: 100%;
+    }
 
     @each $breakpoint, $section-max-width in nok-variables.$section-max-widths {
       @include nok-mixins.media-breakpoint-up($breakpoint, nok-variables.$grid-breakpoints) {
@@ -36,7 +39,8 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
           --section-max-width: #{$section-max-width};
         }
         & {
-          max-width: $section-max-width;
+          width: 100%;
+          max-width: var(--section-max-width, $section-max-width);
         }
       }
     }
@@ -50,6 +54,13 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
     &__description {
       margin: 0;
     }
+  }
+
+  .pull-down {
+    margin-bottom: calc(-1 * var(--section-inner-spacing, 0));
+  }
+  .pull-down-compensation {
+    margin-top: var(--section-inner-spacing, 0);
   }
 }
 
