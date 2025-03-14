@@ -1,5 +1,6 @@
 @use "sass:map";
 @use "sass:color";
+@use "sass:list";
 @use "nok-variables";
 @use "nok-utilities";
 
@@ -7,12 +8,14 @@ $white: #f3f4f9;
 $black: #222;
 $color-contrast-dark: #222;
 $color-contrast-light: #f3f4f9;
-$min-contrast-ratio: 4.5;
 
-$bg-colors: true;
-$text-colors: true;
-$border-colors: false;
-$input-colors: false;
+
+$generate_classes: (
+    'bg' : true,
+    'text': true,
+    'border': true,
+    'fill' : true
+);
 
 $nok-base-colors: (
     'lightblue':      #00b0e4,
@@ -40,8 +43,6 @@ $nok-contrast-overrides: ();
 $nok-base-colors-adjust-for-dark: (
     'body',
     'yellow',
-    'darkyellow',
-    'paleyellow',
     'green',
     'greenyellow',
     'greenblue',
@@ -57,27 +58,58 @@ $nok-dark-contrast-overrides: (
     'body':           #cdd9ed,
 );
 
+/**
+ * Generates color variations for a given color.
+ *
+ * @param {Color} $color - The base color.
+ * @param {String} $name - The name of the color.
+ * @param {Number} $saturation - The saturation level of the color.
+ * @return {Map} A map containing the darker and lighter variations of the color.
+ */
+@function generate-color-variations($color, $name, $saturation) {
+  @return (
+      #{$name}+'--darker': color.adjust(
+              color.adjust($color, $lightness: if($saturation > 0%, -7%, -10%), $space: oklch),
+          $chroma: if($saturation > 0%, 2%, 0%),
+          $space: oklch
+      ),
+      #{$name}+'--lighter': color.adjust(
+              color.adjust($color, $lightness: if($saturation > 0%, 7%, 10%), $space: oklch),
+          $chroma: if($saturation > 0%, 2%, 0%),
+          $space: oklch
+      )
+  );
+}
 
+// Generate light color variations for each base color
 @each $name, $color in $nok-base-colors {
-  $nok-base-colors_light: map.merge($nok-base-colors_light, (
-      $name: $color,
-      $name+'--darker' :  color.adjust(color.adjust($color, $lightness: if(color.saturation($color) > 0%, -5%, -10%), $space: hsl), $saturation: if(color.saturation($color) > 0%, -10%, 0%), $space: hsl),
-      $name+'--lighter' :  color.adjust(color.adjust($color, $lightness: if(color.saturation($color) > 0%, 5%, 10%), $space: hsl), $saturation: if(color.saturation($color) > 0%, 10%, 0%), $space: hsl)
+  $saturation: color.channel(color.to-space($color, hsl), "saturation", $space: hsl);
+  $color: color.to-space($color, oklch);
+  $nok-base-colors_light: map.merge($nok-base-colors_light, map.merge(
+          ($name: $color),
+          generate-color-variations($color, $name, $saturation)
   ));
 }
 
+// Update the base colors to the generated light color variations
+$nok-base-colors: $nok-base-colors_light;
+
+// Generate dark color variations for each base color that needs adjustment for dark mode
+// determined by colors listed in $nok-base-colors-adjust-for-dark
 @each $name in $nok-base-colors-adjust-for-dark {
-  $color: if(map-has-key($nok-dark-colors-overrides, $name), map.get($nok-dark-colors-overrides, $name), map.get($nok-base-colors, $name));
-  @if $color {
-    $nok-base-colors_dark: map.merge($nok-base-colors_dark, (
-        $name : color.adjust(color.adjust($color, $lightness: -5%), $saturation: -10%),
-        $name+'--darker' :  color.adjust(color.adjust($color, $lightness: -10%), $saturation: -15%),
-        $name+'--lighter' :  $color
+  $color: if(map-has-key($nok-dark-colors-overrides, $name),
+      color.to-space(map.get($nok-dark-colors-overrides, $name), oklch),
+      map.get($nok-base-colors, $name+'--darker') //dark variants are based on the '--darker' variants from the light color subset
+  );
+
+  @if ($color) {
+    $saturation: color.channel(color.to-space($color, hsl), "saturation", $space: hsl);
+    $nok-base-colors_dark: map.merge($nok-base-colors_dark, map.merge(
+            ($name: $color),
+            generate-color-variations($color, $name, $saturation)
     ));
   }
 }
-
-$nok-base-colors: $nok-base-colors_light;
 
 /* Normal (and dark unless overridden) mode color variables */
 :root {
@@ -97,49 +129,75 @@ $nok-base-colors: $nok-base-colors_light;
   }
 }
 
-
-@each $name, $color in $nok-base-colors {
-  .#{nok-variables.$prefix}-bg-#{$name} {
-    --bg-rgb-base: var(--#{nok-variables.$prefix}-#{$name});
-    --bg-rgb-base-contrast: var(--#{nok-variables.$prefix}-#{$name}-contrast);
-    --bg-color: rgb(from var(--bg-rgb-base) r g b / var(--alpha-value, 1));
-  }
-  .#{nok-variables.$prefix}-text-#{$name} {
-    --text-rgb-base: var(--#{nok-variables.$prefix}-#{$name});
-    --text-rgb-base-contrast: var(--#{nok-variables.$prefix}-#{$name}-contrast);
-  }
-}
-
 // Generate the background and text color classes
-$bg-selectors: ();
-$text-selectors: ();
+$selectors: ('bg' : (), 'text' : (), 'border' : (), 'fill' : ());
+$alpha_values: ();
+@each $type, $selector in $selectors {
+  $alpha_values: map.set($alpha_values, $type, var(--global-#{$type}-alpha-value, var(--#{$type}-alpha-value, 1)));
+}
 
 @each $name, $color in $nok-base-colors {
-  $bg-selectors: append($bg-selectors, ".#{nok-variables.$prefix}-bg-#{$name}", comma);
-  $text-selectors: append($text-selectors, ".#{nok-variables.$prefix}-text-#{$name}", comma);
+  @each $type, $selector in $selectors {
+    @if (map.get($generate_classes, $type)) {
+      $selectors: map.set($selectors, $type, list.append(map.get($selectors, $type), ".#{nok-variables.$prefix}-#{$type}-#{$name}", comma));
+      .#{nok-variables.$prefix}-#{$type}-#{$name} {
+        --#{$type}-base: var(--#{nok-variables.$prefix}-#{$name});
+        --#{$type}-base-contrast: var(--#{nok-variables.$prefix}-#{$name}-contrast);
+      }
+    }
+  }
 }
 
-%general_color_variables {
-  --alpha-value: 1;
+@each $type, $selector in $selectors {
+  @if ($selector != ()) {
+    #{$selector} {
+      --#{$type}-alpha-value: 1;
+      --#{$type}-color: oklch(from var(--#{$type}-base) l c h / #{map.get($alpha_values, $type)});
+      --#{$type}-color--contrast: oklch(from var(--#{$type}-base-contrast) l c h / #{map.get($alpha_values, 'text')});
+      --#{$type}-color--hover: oklch(from var(--#{$type}-base) calc(l * 1.1) calc(c * 0.9) h / #{map.get($alpha_values, $type)});
+      --#{$type}-color--active: oklch(from var(--#{$type}-base) calc(l * 1.05) calc(c * 1.1) h / #{map.get($alpha_values, $type)});
+      --#{$type}-color--grayscale: oklch(from var(--#{$type}-base) l 0 h / #{map.get($alpha_values, $type)});
+
+      @if($type == 'bg') {
+        background-color: oklch(from var(--bg-color, inherit) l c h / #{map.get($alpha_values, 'bg')});
+        color: var(--text-color, oklch(from var(--bg-color--contrast, inherit) l c h / #{map.get($alpha_values, 'bg')}));
+      }
+      @if($type == 'text') {
+        color: var(--text-color, oklch(from var(--bg-color--contrast, inherit) l c h / #{map.get($alpha_values, 'text')}));
+      }
+      @if($type == 'border') {
+        border-color:  oklch(from var(--border-color, inherit) l c h / #{map.get($alpha_values, 'border')});
+      }
+      @if($type == 'fill') {
+        fill:  oklch(from var(--fill-color, inherit) l c h / #{map.get($alpha_values, 'fill')});
+      }
+    }
+  }
 }
 
-#{$bg-selectors} {
-  @extend %general_color_variables;
-  --bg-color: rgb(from var(--bg-rgb-base) r g b / var(--alpha-value, 1));
-  --bg-color--contrast: rgb(from var(--bg-rgb-base-contrast) r g b / var(--alpha-value, 1));
-  --bg-color--hover: oklch(from var(--bg-rgb-base) calc(l * 1.1) calc(c * 0.9) h);
-  --bg-color--active: oklch(from var(--bg-rgb-base) calc(l * 1.05) calc(c * 1.1) h);
-  --bg-color--grayscale: oklch(from var(--bg-rgb-base) l 0 h); //for disabled
-  background-color: var(--bg-color, inherit);
-  color: var(--bg-color--contrast, inherit);
+/**
+ * Additional general color class helpers
+ */
+body { //helps increase specificity
+  .#{nok-variables.$prefix}-text-contrast {
+    --text-color: var(--bg-color--contrast, inherit) !important;
+  }
 }
 
-#{$text-selectors} {
-  @extend %general_color_variables;
-  --text-color: rgb(from var(--text-rgb-base) r g b / var(--alpha-value, 1));
-  --text-color--contrast: rgb(from var(--bg-rgb-base-contrast) r g b / var(--alpha-value, 1));
-  --text-color--hover: oklch(from var(--text-rgb-base) calc(l * 1.1) calc(c * 0.9) h);
-  --text-color--active: oklch(from var(--text-rgb-base) calc(l * 1.05) calc(c * 1.1) h);
-  --text-color--grayscale: oklch(from var(--text-rgb-base) l 0 h); //for disabled
-  color: var(--text-color, inherit);
+
+/**
+ * Additional media queries
+ */
+@media (prefers-reduced-transparency) {
+  :root {
+    --global-text-alpha-value: 1 !important;
+    --global-bg-alpha-value: 1 !important;
+    --global-border-alpha-value: 1 !important;
+  }
 }
+
+/** Notes
+ * Only use local color alpha (i.e. --text-alpha-value, --bg-alpha-value) for alpha adjustments.
+ * Global color alpha is an override used only for the media query
+ * 'prefers-reduced-transparency' and should not be overridden manually (as it's the other way round).
+ */

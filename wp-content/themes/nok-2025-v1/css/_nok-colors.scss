@@ -67,13 +67,17 @@ $nok-dark-contrast-overrides: (
     );
     @each $color, $value in $sub_map {
       $contrast_value: if(map-has-key($nok-contrast-overrides, $color), map.get($nok-contrast-overrides, $color), nok-utilities.get-contrast-color($value, $color-contrast-light, $color-contrast-dark));
+      $contrast_staturation: round(color.channel(color.to-space($contrast_value, hsl), "saturation", $space: hsl));
+      $contrast_lightness: round(color.channel(color.to-space($contrast_value, hsl), "lightness", $space: hsl));
+      $hue_value: round(color.channel(color.to-space($value, hsl), "hue"));
+
       --#{nok-variables.$prefix}-#{$color} :          #{$value};
-      --#{nok-variables.$prefix}-#{$color}-hsl :     #{round(color.hue($value))} #{round(color.saturation($value))} #{round(color.lightness($value))};
+      --#{nok-variables.$prefix}-#{$color}-hsl :      #{$hue_value} #{round(color.saturation($value))} #{round(color.lightness($value))};
       --#{nok-variables.$prefix}-#{$color}--hover:    #{color.adjust(color.adjust($value, $lightness: 15%, $space: hsl), $saturation: -10%, $space: hsl)};
       --#{nok-variables.$prefix}-#{$color}--active:   #{color.adjust(color.adjust($value, $lightness: 5%, $space: hsl), $saturation: 10%, $space: hsl)};
       --#{nok-variables.$prefix}-#{$color}--contrast: #{$contrast_value};
-      --#{nok-variables.$prefix}-#{$color}--contrast-hsl: #{round(color.hue($contrast_value))} #{round(color.saturation($contrast_value))} #{round(color.lightness($contrast_value))};
-      --#{nok-variables.$prefix}-#{$color}--contrast--hover: #{lighten($contrast_value, 10%)};
+      --#{nok-variables.$prefix}-#{$color}--contrast-hsl: #{$hue_value} #{$contrast_staturation} #{$contrast_lightness};
+      --#{nok-variables.$prefix}-#{$color}--contrast--hover: #{color.adjust($contrast_value, $lightness: 10%, $space: hsl)};
     }
   }
   /**
@@ -97,13 +101,17 @@ slightly dimmed or desaturated in dark-mode (when no dark-specific classes have 
         );
         @each $color, $value in $sub_map {
           $contrast_value: if(map-has-key($nok-dark-contrast-overrides, $color), map.get($nok-dark-contrast-overrides, $color), nok-utilities.get-contrast-color($value, $color-contrast-light, $color-contrast-dark));
+          $contrast_staturation: round(color.channel(color.to-space($contrast_value, hsl), "saturation", $space: hsl));
+          $contrast_lightness: round(color.channel(color.to-space($contrast_value, hsl), "lightness", $space: hsl));
+          $hue_value: round(color.channel(color.to-space($value, hsl), "hue"));
+
           --#{nok-variables.$prefix}-#{$color} :          #{$value};
-          --#{nok-variables.$prefix}-#{$color}-hsl :     #{round(color.hue($value))} #{round(color.saturation($value))} #{round(color.lightness($value))};
-          --#{nok-variables.$prefix}-#{$color}--hover:    #{desaturate(lighten($value, 15%), 10%)};
-          --#{nok-variables.$prefix}-#{$color}--active:   #{desaturate(darken($value, 5%), 10%)};
+          --#{nok-variables.$prefix}-#{$color}-hsl :      #{$hue_value} #{round(color.saturation($value))} #{round(color.lightness($value))};
+          --#{nok-variables.$prefix}-#{$color}--hover:    #{color.adjust(color.adjust($value, $lightness: 15%, $space: hsl), $saturation: -10%, $space: hsl)};
+          --#{nok-variables.$prefix}-#{$color}--active:   #{color.adjust(color.adjust($value, $lightness: 5%, $space: hsl), $saturation: 10%, $space: hsl)};
           --#{nok-variables.$prefix}-#{$color}--contrast: #{$contrast_value};
-          --#{nok-variables.$prefix}-#{$color}--contrast-hsl: #{round(color.hue($contrast_value))} #{round(color.saturation($contrast_value))} #{round(color.lightness($contrast_value))};
-          --#{nok-variables.$prefix}-#{$color}--contrast--hover: #{lighten($contrast_value, 10%)};
+          --#{nok-variables.$prefix}-#{$color}--contrast-hsl: #{$hue_value} #{$contrast_staturation} #{$contrast_lightness};
+          --#{nok-variables.$prefix}-#{$color}--contrast--hover: #{color.adjust($contrast_value, $lightness: 10%, $space: hsl)};
         }
       }
     }
