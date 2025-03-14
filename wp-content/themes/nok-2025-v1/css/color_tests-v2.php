@@ -27,7 +27,7 @@
 
         div.tests div[data-stylegroup] {
             display: grid;
-            gap: 15px;
+            gap: 5px;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             grid-template-rows: 1fr;
             align-items: stretch;
@@ -71,6 +71,10 @@
         }
         div.tests div[data-stylegroup] > [class*="nok25-text-"]:hover {
             color: var(--text-color--hover);
+        }
+        div.tests div[data-stylegroup] > [class*="nok25-border-"] {
+            border-width: 1px;
+            border-style: solid;
         }
     </style>
 </head>

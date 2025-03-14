@@ -57,26 +57,18 @@ $component-name: #{nok-variables.$prefix}-hero;
       padding-left: var(--#{nok-variables.$prefix}-padding-section-sides, 1.5rem);
     }
 
-    @function hex-to-hsl($hex) {
-      $hue: color.hue($hex);
-      $saturation: color.saturation($hex);
-      $lightness: color.lightness($hex);
-
-      @return "#{$hue} #{$saturation} #{$lightness}";
-    }
-
     z-index: $z_base + 1;
     overflow: hidden;
     margin: 0;
-    --grad-1-1: var(--#{nok-variables.$prefix}-lightblue-hsl);
-    --grad-1-2: var(--#{nok-variables.$prefix}-green-hsl);
-    --grad-1-3: var(--#{nok-variables.$prefix}-yellow-hsl);
-    --base-layer: var(--#{nok-variables.$prefix}-body--darker-hsl);
+    --grad-1-1: var(--#{nok-variables.$prefix}-lightblue);
+    --grad-1-2: var(--#{nok-variables.$prefix}-green);
+    --grad-1-3: var(--#{nok-variables.$prefix}-yellow);
+    --base-layer: var(--#{nok-variables.$prefix}-body--darker);
 
     @media (prefers-color-scheme: dark) {
-      --grad-1-3: var(--#{nok-variables.$prefix}-lightblue-hsl);
-      --grad-1-1: var(--#{nok-variables.$prefix}-yellow-hsl);
-      --base-layer: var(--#{nok-variables.$prefix}-lightblue--darker-hsl);
+      --grad-1-3: var(--#{nok-variables.$prefix}-lightblue);
+      --grad-1-1: var(--#{nok-variables.$prefix}-yellow);
+      --base-layer: var(--#{nok-variables.$prefix}-lightblue--darker);
     }
 
     svg {
@@ -86,20 +78,20 @@ $component-name: #{nok-variables.$prefix}-hero;
 
     linearGradient {
       &#a {
-        --local-color-alpha: 1;
+        --bg-alpha-value: 1;
       }
       &#b {
-        --local-color-alpha: 0.5;
+        --bg-alpha-value: 0.5;
       }
       &#c {
-        --local-color-alpha: 0.3;
+        --bg-alpha-value: 0.3;
       }
     }
 
     path#d {
-      --local-color-alpha: 0.4;
+      --bg-alpha-value: 0.4;
       @media (prefers-color-scheme: dark) {
-        --local-color-alpha: 0.1;
+        --bg-alpha-value: 0.1;
       }
     }
 
@@ -111,7 +103,7 @@ $component-name: #{nok-variables.$prefix}-hero;
         @include nok-mixins.media-breakpoint-down(xl) {
           object-position: 60% 50%;
         }
-        background-color: hsla(var(--#{nok-variables.$prefix}-green-hsl) / 0.5);
+        background-color: hsla(var(--#{nok-variables.$prefix}-green) / 0.5);
       }
     }
   }
@@ -185,7 +177,7 @@ $component-name: #{nok-variables.$prefix}-hero;
       mask-image: linear-gradient(to bottom, rgb(0 0 0) 70%, rgba(0, 0, 0, 0.5) 80%, rgba(255, 255, 255, 0) 95%);
     }
     section {
-      --local-bg-color-alpha: 0;
+      --bg-alpha-value: 0;
       grid-row: 4 / 5;
       flex-wrap: wrap;
       justify-content: center;

@@ -74,17 +74,17 @@ $alphas: (
 @for $i from 0 through 10 {
   $value: ($i / 10);
   .#{nok-variables.$prefix}-alpha-#{$i} {
-    --local-color-alpha: #{$value};
+    --text-alpha-value: #{$value};
   }
   .#{nok-variables.$prefix}-bg-alpha-#{$i} {
-    --local-bg-color-alpha: #{$value};
+    --bg-alpha-value: #{$value};
   }
   @media (prefers-color-scheme: dark) {
     .#{nok-variables.$prefix}-dark-alpha-#{$i} {
-      --local-color-alpha: #{$value};
+      --text-alpha-value: #{$value};
     }
     .#{nok-variables.$prefix}-dark-bg-alpha-#{$i} {
-      --local-bg-color-alpha: #{$value};
+      --bg-alpha-value: #{$value};
     }
   }
 }

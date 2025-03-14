@@ -1,6 +1,6 @@
 @use "nok-variables";
 @use "nok-rfs";
-@use "nok-colors";
+//@use "nok-colors";
 
 // stylelint-disable declaration-no-important, selector-no-qualifying-type, property-no-vendor-prefix
 
@@ -43,7 +43,7 @@ body {
   text-align: var(--#{nok-variables.$prefix}-body-text-align);
   background-color: var(--#{nok-variables.$prefix}-body-bg); // 2
   -webkit-text-size-adjust: 100%; // 3
-  -webkit-tap-highlight-color: rgba(nok-colors.$black, 0); // 4
+  //-webkit-tap-highlight-color: rgba(nok-colors.$black, 0); // 4
 }
 // scss-docs-end reboot-body-rules
 

@@ -12,7 +12,7 @@ div.tests {
 }
 div.tests div[data-stylegroup] {
   display: grid;
-  gap: 15px;
+  gap: 1px;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   grid-template-rows: 1fr;
   align-items: stretch;

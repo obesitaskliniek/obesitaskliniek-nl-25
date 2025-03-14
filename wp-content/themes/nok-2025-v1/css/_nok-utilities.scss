@@ -1,3 +1,6 @@
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:color';
 
 // Ascending
 // Used to evaluate Sass maps like our grid breakpoints.
@@ -20,7 +23,7 @@
 // Starts at zero
 // Used to ensure the min-width of the lowest breakpoint starts at 0.
 @mixin assert-starts-at-zero($map, $map-name: "$grid-breakpoints") {
-  @if length($map) > 0 {
+  @if list.length(map.values($map)) > 0 {
     $values: map-values($map);
     $first-value: nth($values, 1);
     @if $first-value != 0 {
@@ -31,15 +34,16 @@
 
 // Function to convert hex to RGB
 @function hex-to-rgb($color) {
-  @return red($color), green($color), blue($color);
+  $color: color.to-space($color, rgb);
+  @return color.channel($color, "red"), color.channel($color, "green"), color.channel($color, "blue");
 }
 
 // Function to calculate relative luminance for an RGB color
 @function luminance($color) {
   $rgb: hex-to-rgb($color);
-  $r: nth($rgb, 1) / 255;
-  $g: nth($rgb, 2) / 255;
-  $b: nth($rgb, 3) / 255;
+  $r: list.nth($rgb, 1) / 255;
+  $g: list.nth($rgb, 2) / 255;
+  $b: list.nth($rgb, 3) / 255;
 
   // Adjust each channel according to WCAG algorithm
   @each $channel in ($r, $g, $b) {
@@ -74,9 +78,9 @@
   $contrast-dark: contrast-ratio($color, $color-contrast-dark);
 
   @if $contrast-light > $contrast-dark {
-    @return $color-contrast-light;
+    @return color.to-space($color-contrast-light, oklch);
   } @else {
-    @return $color-contrast-dark;
+    @return color.to-space($color-contrast-dark, oklch);
   }
 }
 

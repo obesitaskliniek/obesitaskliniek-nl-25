@@ -1,4 +1,6 @@
 @use "nok-variables";
+@use 'sass:list';
+@use 'sass:map';
 
 @mixin nok-heading-font {
   font-family: var(--nok25-heading-font-family, nok-variables.$heading-font-family);
@@ -274,7 +276,7 @@
   @if not $n {
     @error "breakpoint `#{$name}` not found in `#{$breakpoints}`";
   }
-  @return if($n < length($breakpoint-names), nth($breakpoint-names, $n + 1), null);
+  @return if($n < list.length($breakpoint-names), list.nth($breakpoint-names, $n + 1), null);
 }
 
 // Minimum breakpoint width. Null for the smallest (first) breakpoint.

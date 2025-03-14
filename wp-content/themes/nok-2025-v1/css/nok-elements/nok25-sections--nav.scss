@@ -1,6 +1,5 @@
 @use "sass:map";
 @use "../nok-variables";
-@use "../nok-colors";
 @use "../nok-mixins";
 @use "../nok-rfs";
 @use "../nok-utilities";
@@ -75,7 +74,7 @@ $component-name: #{nok-variables.$prefix}-nav;
   }
 
   &-mask {
-    --local-bg-color-alpha: 0;
+    --bg-alpha-value: 0;
     inset: 0;
     position: fixed;
     z-index: 2;
@@ -214,7 +213,7 @@ $component-name: #{nok-variables.$prefix}-nav;
         display: none;
       }
       backdrop-filter: blur(5px);
-      --local-bg-color-alpha: 0.5;
+      --bg-alpha-value: 0.5;
       pointer-events: all;
     }
 
@@ -525,7 +524,7 @@ $component-name: #{nok-variables.$prefix}-nav;
         grid-template-columns: 1fr auto;
 
         text-decoration: none;
-        color: hsla(var(--text-color-hsl) / var(--local-color-alpha, 1));
+        color: hsla(var(--text-color-hsl) / var(--text-alpha-value, 1));
 
         &:not(&__back) {
           &:not(:last-of-type) {

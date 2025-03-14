@@ -15,7 +15,7 @@ const NOK_THEME_ROOT = 'https://dev.obesitaskliniek.nl/wp-content/themes/nok-202
           rel="stylesheet">
     <link href="../fonts/realist.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="stylesheet" href="./tests.css?cache=<?= time(); ?>" crossorigin="anonymous">
-    <link rel="stylesheet" href="./color_tests.css?cache=<?= time(); ?>" crossorigin="anonymous">
+    <link rel="stylesheet" href="./color_tests-v2.css?cache=<?= time(); ?>" crossorigin="anonymous">
     <link rel="stylesheet" href="./element_tests.css?cache=<?= time(); ?>" crossorigin="anonymous">
     <link rel="stylesheet" href="./helpers.css?cache=<?= time(); ?>" crossorigin="anonymous">
 
@@ -268,21 +268,21 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                 <defs>
                     <linearGradient id="c" x1="899.81" x2="1920.52" y1="1367.93" y2="-128.38"
                                     gradientTransform="rotate(-45 802.663 961.106)" gradientUnits="userSpaceOnUse">
-                        <stop offset="0" stop-color="hsla(var(--grad-1-3) / var(--local-color-alpha, 1))"></stop>
-                        <stop offset=".5" stop-color="hsla(var(--grad-1-2) / var(--local-color-alpha, 1))"></stop>
-                        <stop offset="1" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
+                        <stop offset="0" stop-color="oklch(from var(--grad-1-3) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1))"></stop>
+                        <stop offset=".5" stop-color="oklch(from var(--grad-1-2) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1))"></stop>
+                        <stop offset="1" stop-color="oklch(from var(--grad-1-1) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1))"></stop>
                     </linearGradient>
                     <linearGradient id="b" x1="881.9" x2="1940.53" y1="1391.88" y2="-160.02"
                                     gradientTransform="rotate(-45 804.633 957.17)" gradientUnits="userSpaceOnUse">
-                        <stop offset="0" stop-color="hsla(var(--grad-1-3) / var(--local-color-alpha, 1))"></stop>
-                        <stop offset=".5" stop-color="hsla(var(--grad-1-2) / var(--local-color-alpha, 1))"></stop>
-                        <stop offset="1" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
+                        <stop offset="0" stop-color="oklch(from var(--grad-1-3) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1))"></stop>
+                        <stop offset=".5" stop-color="oklch(from var(--grad-1-2) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1))"></stop>
+                        <stop offset="1" stop-color="oklch(from var(--grad-1-1) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1))"></stop>
                     </linearGradient>
                     <linearGradient id="a" x1="865.07" x2="1963.13" y1="1419.45" y2="-190.25"
                                     gradientTransform="rotate(-45 804.633 957.17)" gradientUnits="userSpaceOnUse">
-                        <stop offset="0" stop-color="hsla(var(--grad-1-3) / var(--local-color-alpha, 1))"></stop>
-                        <stop offset=".5" stop-color="hsla(var(--grad-1-2) / var(--local-color-alpha, 1))"></stop>
-                        <stop offset="1" stop-color="hsla(var(--grad-1-1) / var(--local-color-alpha, 1))"></stop>
+                        <stop offset="0" stop-color="oklch(from var(--grad-1-3) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1))"></stop>
+                        <stop offset=".5" stop-color="oklch(from var(--grad-1-2) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1))"></stop>
+                        <stop offset="1" stop-color="oklch(from var(--grad-1-1) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1))"></stop>
                     </linearGradient>
 
                     <filter id="luminosity-noclip" x="-234.9" y="-148" width="1685.7" height="1213.5"
@@ -309,7 +309,7 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                                      (min-width: 996px) 84vw,
                                      (min-width: 1200px) 84vw" loading="lazy">
                 </foreignObject>
-                <path id="d" fill="hsla(var(--base-layer) / var(--local-color-alpha, 1))"
+                <path id="d" fill="oklch(from var(--base-layer) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1))"
                       d="M137.3,682.5C-22.9,346.2,75,36.7,415.1-141.8,30.2,58.5-79.7,385.6,75.6,711.9c151.5,318,459.6,442.1,846.1,287.2-.8.2-1.7.5-2.4.7-340.4,131.3-626.9,8.6-782.1-317.3h0Z"/>
                 <path id="c" fill="url(#c)"
                       d="M137.3,682.5c155.2,325.9,441.8,448.6,782.1,317.3-1.6.4-3.2.9-4.8,1.3-293.6,106-557.6-15.9-715.7-347.9C33.9,306.8,120,14.6,415.7-142.1c-.2.1-.4.2-.6.3C75,36.7-22.9,346.2,137.3,682.5Z"/>
