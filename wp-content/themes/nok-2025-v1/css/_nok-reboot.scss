@@ -71,7 +71,7 @@ hr {
   margin-top: 0; // 1
   margin-bottom: 0;
   line-height: 1.2;
-  color: var(--#{nok-variables.$prefix}-heading-color);
+  color: var(--#{nok-variables.$prefix}-heading-color, var(--bg-color--contrast));
 }
 
 h1 {
@@ -112,7 +112,7 @@ h6 {
 
 p {
   margin-top: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 }
 
 

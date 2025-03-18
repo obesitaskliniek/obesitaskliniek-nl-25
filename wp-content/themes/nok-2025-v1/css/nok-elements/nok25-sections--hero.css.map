@@ -1,1 +1,0 @@
-{"version":3,"sources":["nok25-sections--hero.css"],"names":[],"mappings":"AAAA;;EAEE;AACF;EACE,kBAAkB;EAClB,aAAa;EACb,sCAAsC;AACxC","file":"nok25-sections--hero.css","sourcesContent":["/**\n * hero unit\n */\n.nok25-hero {\n  position: relative;\n  display: grid;\n  grid-template-rows: auto auto 1fr auto;\n}\n\n/*# sourceMappingURL=nok25-hero.css.map */"]}

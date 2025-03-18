@@ -1,0 +1,1 @@
+{"version":3,"sources":["nok25-sections--nav.min.css"],"names":[],"mappings":"AAAA,WAAW,qBAAqB,CAAC,8BAA8B,CAAC,sBAAsB","file":"nok-sections--nav.min.css","sourcesContent":[".nok25-nav{grid-auto-flow:column;grid-template-columns:1fr auto;grid-auto-columns:auto}"]}

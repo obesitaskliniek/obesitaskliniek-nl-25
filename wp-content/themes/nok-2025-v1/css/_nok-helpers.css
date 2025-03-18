@@ -392,6 +392,10 @@
   align-self: end;
 }
 
+.span-all-columns {
+  grid-column: 1/-1;
+}
+
 /* Rounded borders */
 .nok25-rounded-border {
   overflow: hidden;
@@ -905,5 +909,4 @@
 .mh-50-vh {
   max-height: 50vh;
 }
-
-/*# sourceMappingURL=helpers.css.map */
+/*# sourceMappingURL=_nok-helpers.css.map */

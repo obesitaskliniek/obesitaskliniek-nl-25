@@ -2,12 +2,12 @@
 @use "nok-variables";
 @use "nok-mixins";
 @use "nok-reboot";
-@use "nok-elements/nok25-sections.scss";
-@use "nok-elements/nok25-sections--nav";
-@use "nok-elements/nok25-sections--hero";
-@use "nok-elements/nok25-buttons.scss";
-@use "nok-elements/nok25-square-block.scss";
-@use "nok-elements/nok25-sections--block-group";
+@use "nok-elements/nok-sections";
+@use "nok-elements/nok-sections--nav";
+@use "nok-elements/nok-sections--hero";
+@use "nok-elements/nok-buttons";
+@use "nok-elements/nok-square-block";
+@use "nok-elements/nok-sections--block-group";
 
 //Todo: move everything below to something that makes more sense
 
@@ -21,12 +21,6 @@ body {
   }
 }
 
-
-
-/* custom elements */
-#{nok-variables.$prefix}-logo, #{nok-variables.$prefix}-mobile-nav, #{nok-variables.$prefix}-desktop-nav {
-  display: contents;
-}
 /*
 //BEM example
 
@@ -51,7 +45,7 @@ body {
  * hyperlink
  */
 .#{nok-variables.$prefix}-hyperlink:not(.#{nok-variables.$prefix}-button) {
-  color: var(--text-color, var(--text-color--contrast, inherit));
+  color: var(--text-color, var(--text-color----bg-color--contrast, inherit));
   --underline-color: var(--text-color, var(--text-color--contrast, inherit));
   --underline-color--active: var(--text-color--contrast, inherit);
 
@@ -62,28 +56,6 @@ body {
     --underline-color: var(--nok25-lightblue, inherit);
     --underline-color--active: var(--nok25-lightblue--contrast, inherit);
   }
-}
-.#{nok-variables.$prefix}-horizontal-button-group {
-  display: grid;
-  grid-template-rows: 1fr;
-  grid-template-columns: 1fr 1fr;
-  width: 100%;
-  gap: var(--grid-gap, var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem)));
-  align-items: center;
-  justify-items: center;
-
-  font-size: var(--nok25-font-size-buttons, 1.25rem);
-
-  > button.fill-group-column {
-    width: 100%;
-  }
-}
-
-.#{nok-variables.$prefix}-star-ratings {
-  display: inline-flex;
-  flex-direction: row;
-  gap: .5ex;
-  margin-right: 1ex;
 }
 
 $columns: (

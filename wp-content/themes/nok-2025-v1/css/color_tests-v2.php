@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./color_tests-v2.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="./helpers.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="_nok-helpers.css" crossorigin="anonymous">
     <style>
         body {
             line-height: 1.75;
