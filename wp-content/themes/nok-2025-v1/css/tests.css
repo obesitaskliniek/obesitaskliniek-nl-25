@@ -56,4 +56,12 @@ div.tests div[data-stylegroup=".nok25-border"] .testcard {
   border-style: solid;
 }
 
+.mockup-image {
+  border-width: 1px;
+  border-style: solid;
+  aspect-ratio: 4/3;
+  width: 100%;
+  height: auto;
+}
+
 /*# sourceMappingURL=tests.css.map */

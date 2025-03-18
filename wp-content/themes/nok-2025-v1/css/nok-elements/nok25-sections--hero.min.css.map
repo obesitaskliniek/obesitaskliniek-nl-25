@@ -1,1 +1,0 @@
-{"version":3,"sources":["nok25-sections--hero.min.css"],"names":[],"mappings":"AAAA,YAAY,iBAAiB,CAAC,YAAY,CAAC,qCAAqC","file":"nok25-sections--hero.min.css","sourcesContent":[".nok25-hero{position:relative;display:grid;grid-template-rows:auto auto 1fr auto}"]}

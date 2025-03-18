@@ -6,9 +6,8 @@
 
 $white: #f3f4f9;
 $black: #222;
-$color-contrast-dark: #222;
+$color-contrast-dark: #00132f; //= darkestblue
 $color-contrast-light: #f3f4f9;
-
 
 $generate_classes: (
     'bg' : true,
@@ -140,36 +139,58 @@ $alpha_values: ();
   @each $type, $selector in $selectors {
     @if (map.get($generate_classes, $type)) {
       $selectors: map.set($selectors, $type, list.append(map.get($selectors, $type), ".#{nok-variables.$prefix}-#{$type}-#{$name}", comma));
+      $selectors: map.set($selectors, $type, list.append(map.get($selectors, $type), ".#{nok-variables.$prefix}-dark-#{$type}-#{$name}", comma));
       .#{nok-variables.$prefix}-#{$type}-#{$name} {
         --#{$type}-base: var(--#{nok-variables.$prefix}-#{$name});
         --#{$type}-base-contrast: var(--#{nok-variables.$prefix}-#{$name}-contrast);
+      }
+      @media (prefers-color-scheme: dark) {
+        body { //helps increase specificity when overriding
+          .#{nok-variables.$prefix}-dark-#{$type}-#{$name} {
+            --#{$type}-base: var(--#{nok-variables.$prefix}-#{$name});
+            --#{$type}-base-contrast: var(--#{nok-variables.$prefix}-#{$name}-contrast);
+          }
+        }
       }
     }
   }
 }
 
+@mixin basic_variables($type, $alpha_values) {
+  //--#{$type}-alpha-value: 1;
+  --#{$type}-color: oklch(from var(--#{$type}-base) l c h / #{map.get($alpha_values, $type)});
+}
+
+@mixin extended_variables($type, $alpha_values) {
+  --#{$type}-color--contrast: oklch(from var(--#{$type}-base-contrast) l c h / #{map.get($alpha_values, 'text')});
+  --#{$type}-color--hover: oklch(from var(--#{$type}-base) calc(l * 1.1) calc(c * 0.9) h / #{map.get($alpha_values, $type)});
+  --#{$type}-color--active: oklch(from var(--#{$type}-base) calc(l * 1.05) calc(c * 1.1) h / #{map.get($alpha_values, $type)});
+  --#{$type}-color--grayscale: oklch(from var(--#{$type}-base) l 0 h / #{map.get($alpha_values, $type)});
+}
+
 @each $type, $selector in $selectors {
   @if ($selector != ()) {
     #{$selector} {
-      --#{$type}-alpha-value: 1;
-      --#{$type}-color: oklch(from var(--#{$type}-base) l c h / #{map.get($alpha_values, $type)});
-      --#{$type}-color--contrast: oklch(from var(--#{$type}-base-contrast) l c h / #{map.get($alpha_values, 'text')});
-      --#{$type}-color--hover: oklch(from var(--#{$type}-base) calc(l * 1.1) calc(c * 0.9) h / #{map.get($alpha_values, $type)});
-      --#{$type}-color--active: oklch(from var(--#{$type}-base) calc(l * 1.05) calc(c * 1.1) h / #{map.get($alpha_values, $type)});
-      --#{$type}-color--grayscale: oklch(from var(--#{$type}-base) l 0 h / #{map.get($alpha_values, $type)});
-
       @if($type == 'bg') {
+        @include basic_variables($type, $alpha_values);
+        @include extended_variables($type, $alpha_values);
         background-color: oklch(from var(--bg-color, inherit) l c h / #{map.get($alpha_values, 'bg')});
         color: var(--text-color, oklch(from var(--bg-color--contrast, inherit) l c h / #{map.get($alpha_values, 'bg')}));
       }
       @if($type == 'text') {
+        @include basic_variables($type, $alpha_values);
+        @include extended_variables($type, $alpha_values);
         color: var(--text-color, oklch(from var(--bg-color--contrast, inherit) l c h / #{map.get($alpha_values, 'text')}));
       }
       @if($type == 'border') {
-        border-color:  oklch(from var(--border-color, inherit) l c h / #{map.get($alpha_values, 'border')});
+        @include basic_variables($type, $alpha_values);
+        @include extended_variables($type, $alpha_values);
+        border-color: oklch(from var(--border-color, inherit) l c h / #{map.get($alpha_values, 'border')});
       }
       @if($type == 'fill') {
-        fill:  oklch(from var(--fill-color, inherit) l c h / #{map.get($alpha_values, 'fill')});
+        @include basic_variables($type, $alpha_values);
+        fill: oklch(from var(--fill-color, inherit) l c h / #{map.get($alpha_values, 'fill')});
+        color: oklch(from var(--fill-color, inherit) l c h / #{map.get($alpha_values, 'fill')});
       }
     }
   }
@@ -182,6 +203,17 @@ body { //helps increase specificity
   .#{nok-variables.$prefix}-text-contrast {
     --text-color: var(--bg-color--contrast, inherit) !important;
   }
+  .#{nok-variables.$prefix}-fill-contrast {
+    fill: var(--bg-color--contrast, inherit) !important;
+  }
+  @media (prefers-color-scheme: dark) {
+    .#{nok-variables.$prefix}-dark-text-contrast {
+      --text-color: var(--bg-color--contrast, inherit) !important;
+    }
+    .#{nok-variables.$prefix}-dark-fill-contrast {
+      fill: var(--bg-color--contrast, inherit) !important;
+    }
+  }
 }
 
 
@@ -190,9 +222,9 @@ body { //helps increase specificity
  */
 @media (prefers-reduced-transparency) {
   :root {
-    --global-text-alpha-value: 1 !important;
-    --global-bg-alpha-value: 1 !important;
-    --global-border-alpha-value: 1 !important;
+    @each $type, $selector in $selectors {
+      --global-#{$type}-alpha-value: 1 !important;
+    }
   }
 }
 

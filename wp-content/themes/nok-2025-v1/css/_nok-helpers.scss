@@ -1,6 +1,8 @@
 @use "sass:math";
+@use "sass:map";
 @use "nok-variables";
 @use "nok-mixins";
+@use "nok-api";
 
 :root {
   @each $key, $value in nok-variables.$exposed-variables {
@@ -66,29 +68,6 @@
   }
 }
 
-/* Alpha classes */
-$alphas: (
-    "alpha-1": 1,
-    "bg-alpha-1": 1,
-);
-@for $i from 0 through 10 {
-  $value: ($i / 10);
-  .#{nok-variables.$prefix}-alpha-#{$i} {
-    --text-alpha-value: #{$value};
-  }
-  .#{nok-variables.$prefix}-bg-alpha-#{$i} {
-    --bg-alpha-value: #{$value};
-  }
-  @media (prefers-color-scheme: dark) {
-    .#{nok-variables.$prefix}-dark-alpha-#{$i} {
-      --text-alpha-value: #{$value};
-    }
-    .#{nok-variables.$prefix}-dark-bg-alpha-#{$i} {
-      --bg-alpha-value: #{$value};
-    }
-  }
-}
-
 /* Stacking */
 
 .#{nok-variables.$prefix}-sticky {
@@ -115,6 +94,10 @@ $alphas: (
   display: flex;
   align-items: center;
 }
+.align-center {
+  align-self: center;
+  text-align: center;
+}
 .align-self-stretch {
   align-self: stretch;
   grid-column: 1 / -1;
@@ -122,6 +105,10 @@ $alphas: (
 .align-self-end {
   align-self: end;
 }
+.span-all-columns {
+  grid-column: 1 / -1;
+}
+
 
 /* Rounded borders */
 
@@ -153,84 +140,6 @@ $alphas: (
 }
 
 
-/* Breakpoint-related modifiers */
-@each $breakpoint, $section-max-width in nok-variables.$section-max-widths {
-  @include nok-mixins.media-breakpoint-only($breakpoint, nok-variables.$grid-breakpoints) {
-    /* Border-radius modifiers */
-    .#{nok-variables.$prefix}-no-border-#{$breakpoint} {
-      border-radius: 0 !important;
-    }
-    /* Visibility */
-    .#{nok-variables.$prefix}-invisible-#{$breakpoint} {
-      display: none !important;
-    }
-    /* Margin */
-    .#{nok-variables.$prefix}-mr-section-padding-#{$breakpoint} {
-      margin-right: var(--nok25-padding-section-sides);
-    }
-  }
-  @if ($breakpoint == xs) {
-    @include nok-mixins.media-breakpoint-down($breakpoint, nok-variables.$grid-breakpoints) {
-      /* Border-radius modifiers */
-      .#{nok-variables.$prefix}-no-border-#{$breakpoint} {
-        border-radius: 0 !important;
-      }
-      /* Visibility */
-      .#{nok-variables.$prefix}-invisible-#{$breakpoint} {
-        display: none !important;
-      }
-      /* Margin */
-      .#{nok-variables.$prefix}-mr-section-padding-#{$breakpoint} {
-        margin-right: var(--nok25-padding-section-sides);
-      }
-    }
-  }
-  @include nok-mixins.media-breakpoint-up($breakpoint, nok-variables.$grid-breakpoints) {
-    /* Visibility from breakpoint up*/
-    .#{nok-variables.$prefix}-invisible-from-#{$breakpoint} {
-      display: none !important;
-    }
-    /* Border-radius modifiers */
-    .#{nok-variables.$prefix}-no-border-from-#{$breakpoint} {
-      border-radius: 0 !important;
-    }
-    /* Margin */
-    .#{nok-variables.$prefix}-mr-section-padding-from-#{$breakpoint} {
-      margin-right: var(--nok25-padding-section-sides);
-    }
-  }
-  @include nok-mixins.media-breakpoint-down($breakpoint, nok-variables.$grid-breakpoints) {
-    /* Visibility from breakpoint to*/
-    .#{nok-variables.$prefix}-invisible-to-#{$breakpoint} {
-      display: none !important;
-    }
-    /* Border-radius modifiers */
-    .#{nok-variables.$prefix}-no-border-to-#{$breakpoint} {
-      border-radius: 0 !important;
-    }
-    /* Margin */
-    .#{nok-variables.$prefix}-mr-section-padding-to-#{$breakpoint} {
-      margin-right: var(--nok25-padding-section-sides);
-    }
-  }
-}
-
-
-/* margin */
-@for $i from 1 through 5 {
-  .#{nok-variables.$prefix}-mt-#{$i} {
-    margin-top: #{($i * nok-variables.$padding-base)};
-  }
-  .#{nok-variables.$prefix}-mr-#{$i} {
-    margin-right: #{($i * nok-variables.$padding-base)};
-  }
-  .#{nok-variables.$prefix}-mb-#{$i} {
-    margin-bottom: #{($i * nok-variables.$padding-base)};
-  }
-  .#{nok-variables.$prefix}-ml-#{$i} {
-    margin-left: #{($i * nok-variables.$padding-base)};
-  }
-}
 
 /* animations */
 @media (prefers-reduced-motion: no-preference) {
@@ -311,6 +220,128 @@ $alphas: (
   font-size: var(--nok25-font-size-buttons);
 }
 
-.mh-50-vh {
-  max-height: 50vh;
+/* Alpha classes */
+$alphas: (
+    "alpha-1": 1,
+    "bg-alpha-1": 1,
+);
+@for $i from 0 through 10 {
+  $value: ($i / 10);
+  .#{nok-variables.$prefix}-alpha-#{$i} {
+    --text-alpha-value: #{$value};
+  }
+  .#{nok-variables.$prefix}-bg-alpha-#{$i} {
+    --bg-alpha-value: #{$value};
+  }
+  @media (prefers-color-scheme: dark) {
+    .#{nok-variables.$prefix}-dark-alpha-#{$i} {
+      --text-alpha-value: #{$value};
+    }
+    .#{nok-variables.$prefix}-dark-bg-alpha-#{$i} {
+      --bg-alpha-value: #{$value};
+    }
+  }
 }
+
+
+/* margin */
+@for $i from 1 through 5 {
+  .#{nok-variables.$prefix}-mr-#{$i} {
+    margin-right: #{($i * nok-variables.$padding-base)};
+  }
+  .#{nok-variables.$prefix}-mb-#{$i} {
+    margin-bottom: #{($i * nok-variables.$padding-base)};
+  }
+  .#{nok-variables.$prefix}-ml-#{$i} {
+    margin-left: #{($i * nok-variables.$padding-base)};
+  }
+}
+
+$padding-base-values: (
+    grid-gap: var(--grid-gap),
+    section-padding: var(--nok25-padding-section-sides),
+    1: #{(1 * nok-variables.$padding-base)},
+    2: #{(2 * nok-variables.$padding-base)},
+    3: #{(3 * nok-variables.$padding-base)},
+    4: #{(4 * nok-variables.$padding-base)},
+    5: #{(5 * nok-variables.$padding-base)},
+);
+
+$utilities: (
+    "padding-top": (
+        property: padding-bottom,
+        responsive-up-to: true,
+        class: #{nok-variables.$prefix}-pb,
+        values: $padding-base-values
+    ),
+    "padding-bottom": (
+        property: padding-bottom,
+        responsive-up-to: true,
+        class: #{nok-variables.$prefix}-pb,
+        values: $padding-base-values
+    ),
+    "margin-top": (
+        property: margin-top,
+        responsive: true,
+        responsive-up-to: true,
+        class: #{nok-variables.$prefix}-mt,
+        values: $padding-base-values
+    ),
+    "margin-end": (
+        property: margin-right,
+        responsive: true,
+        responsive-up-to: true,
+        class: #{nok-variables.$prefix}-me,
+        values: $padding-base-values
+    ),
+    "margin-bottom": (
+        property: margin-right,
+        responsive: true,
+        responsive-up-to: true,
+        class: #{nok-variables.$prefix}-mb,
+        values: $padding-base-values
+    ),
+    "margin-start": (
+        property: margin-left,
+        responsive: true,
+        responsive-up-to: true,
+        class: #{nok-variables.$prefix}-ms,
+        values: $padding-base-values
+    ),
+    "border-radius": (
+        css-var: true,
+        css-variable-name: -default-border-radius--large,
+        responsive-up-to: true,
+        class: #{nok-variables.$prefix}-border-radius,
+        values: (
+          0
+        )
+    ),
+    "invisible": (
+        responsive: true,
+        property: display,
+        responsive-up-to: true,
+        class: #{nok-variables.$prefix}-invisible,
+        no-suffix: true,
+        values: (
+            none
+        ),
+    ),
+    "order": (
+        responsive: true,
+        property: order,
+        class: #{nok-variables.$prefix}-order,
+        values: (
+            first: -1,
+            0: 0,
+            1: 1,
+            2: 2,
+            3: 3,
+            4: 4,
+            last: 5,
+        ),
+    ),
+);
+
+//construct helpers
+@include nok-api.generate-helpers($utilities);

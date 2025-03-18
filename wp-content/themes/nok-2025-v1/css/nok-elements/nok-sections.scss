@@ -3,10 +3,9 @@
 @use "../nok-mixins";
 @use "../nok-rfs";
 
-$component-name: #{nok-variables.$prefix}-horizontal-section;
+$component-name: #{nok-variables.$prefix}-section;
 
 .#{$component-name} {
-  --section-inner-spacing: #{map.get(nok-variables.$exposed-variables, 'spacing-section-ends')};
   display: flex;
   width: 100%;
   padding: 0;
@@ -21,13 +20,19 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
     width: 100%;
     padding-right: var(--#{nok-variables.$prefix}-padding-section-sides, (nok-variables.$padding-base * 2));
     padding-left: var(--#{nok-variables.$prefix}-padding-section-sides, (nok-variables.$padding-base * 2));
-    margin: var(--section-inner-spacing, nok-variables.$padding-base) auto;
+    margin: var(--nok25-spacing-section-ends, nok-variables.$padding-base) auto;
 
     &--stretched {
       align-self: stretch;
     }
     &--collapsed {
-      --section-inner-spacing: 0;
+      margin: 0;
+      &-top {
+        margin-top: 0;
+      }
+      &-bottom {
+        margin-bottom: 0;
+      }
     }
     &--full-width {
       --section-max-width: 100%;
@@ -47,20 +52,11 @@ $component-name: #{nok-variables.$prefix}-horizontal-section;
 
   }
 
-  /* Typography todo: move? */
-  &__heading {
-    grid-column: 1;
-    margin: 0;
-    &__description {
-      margin: 0;
-    }
-  }
-
   .pull-down {
-    margin-bottom: calc(-1 * var(--section-inner-spacing, 0));
+    margin-bottom: calc(-1 * var(--nok25-spacing-section-ends, 0));
   }
   .pull-down-compensation {
-    margin-top: var(--section-inner-spacing, 0);
+    margin-top: var(--nok25-spacing-section-ends, 0);
   }
 }
 

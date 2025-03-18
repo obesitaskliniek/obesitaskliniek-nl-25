@@ -1,0 +1,186 @@
+@use "sass:list";
+@use "sass:map";
+
+@use "nok-variables";
+@use "nok-mixins";
+@use "nok-rfs";
+
+$utilities: () !default;
+$enable-important-utilities: true !default;
+
+// Utility generator
+// Used to generate utilities & print utilities
+@mixin generate-utility($utility, $infix: "", $is-rfs-media-query: false, $generate-up-to: false) {
+  $values: map.get($utility, values);
+
+  // If the values are a list or string, convert it into a map
+  @if type-of($values) == "string" or type-of(list.nth($values, 1)) != "list" {
+    $values: zip($values, $values);
+  }
+
+  @each $key, $value in $values {
+    $properties: map.get($utility, property);
+
+    // Multiple properties are possible, for example with vertical or horizontal margins or paddings
+    @if type-of($properties) == "string" {
+      $properties: append((), $properties);
+    }
+
+    // Use custom class if present
+    $property-class_: map.get($utility, class);
+    $property-class: if(map.has-key($utility, class), $property-class_, list.nth($properties, 1));
+    @if ($generate-up-to and $infix != "") {
+      $property-class: $property-class + "-to";
+    }
+    $property-class: if($property-class == null, "", $property-class);
+
+    // Use custom CSS variable name if present, otherwise default to `class`
+    $css-variable-name: if(map.has-key($utility, css-variable-name), map.get($utility, css-variable-name), map.get($utility, class));
+
+    // State params to generate pseudo-classes
+    $state: if(map.has-key($utility, state), map.get($utility, state), ());
+
+    $infix: if($property-class == "" and str-slice($infix, 1, 1) == "-", str-slice($infix, 2), $infix);
+
+    // Don't prefix if value key is null (e.g. with shadow class)
+    $property-class-modifier: if($key, if($property-class == "" and $infix == "", "", "-") + $key, "");
+    @if (map.get($utility, no-suffix)) {
+      $property-class-modifier: "";
+    }
+
+    @if map.get($utility, rfs) {
+      // Inside the media query
+      @if $is-rfs-media-query {
+        $val: rfs-value($value);
+
+        // Do not render anything if fluid and non fluid values are the same
+        $value: if($val == rfs-fluid-value($value), null, $val);
+      } @else {
+        $value: rfs-fluid-value($value);
+      }
+    }
+
+    $is-css-var: map.get($utility, css-var);
+    $is-local-vars: map.get($utility, local-vars);
+    $is-rtl: map.get($utility, rtl);
+
+    @if $value != null {
+      @if $is-rtl == false {
+        /* rtl:begin:remove */
+      }
+
+      @if $is-css-var {
+        .#{$property-class + $infix + $property-class-modifier} {
+          --#{nok-variables.$prefix}#{$css-variable-name}: #{$value};
+        }
+
+        @each $pseudo in $state {
+          .#{$property-class + $infix + $property-class-modifier}-#{$pseudo}:#{$pseudo} {
+            --#{nok-variables.$prefix}#{$css-variable-name}: #{$value};
+          }
+        }
+      } @else {
+        .#{$property-class + $infix + $property-class-modifier} {
+          @each $property in $properties {
+            @if $is-local-vars {
+              @each $local-var, $variable in $is-local-vars {
+                --#{nok-variables.$prefix}#{$local-var}: #{$variable};
+              }
+            }
+            #{$property}: $value if($enable-important-utilities, !important, null);
+          }
+        }
+
+        @each $pseudo in $state {
+          .#{$property-class + $infix + $property-class-modifier}-#{$pseudo}:#{$pseudo} {
+            @each $property in $properties {
+              @if $is-local-vars {
+                @each $local-var, $variable in $is-local-vars {
+                  --#{nok-variables.$prefix}#{$local-var}: #{$variable};
+                }
+              }
+              #{$property}: $value if($enable-important-utilities, !important, null);
+            }
+          }
+        }
+      }
+
+      @if $is-rtl == false {
+        /* rtl:end:remove */
+      }
+    }
+
+  }
+}
+
+@mixin generate-helpers($utilities) {
+
+  // Generate the 'normal', non-responsive classes (e.g. .mt-1)
+  @each $key, $utility in $utilities {
+    @include generate-utility($utility, "");
+  }
+
+  // Loop over each breakpoint
+  @each $breakpoint in map.keys(nok-variables.$grid-breakpoints) {
+
+    // Generate media query if needed
+    @include nok-mixins.media-breakpoint-up($breakpoint) {
+      $infix: nok-mixins.breakpoint-infix($breakpoint, nok-variables.$grid-breakpoints);
+
+      @if ($infix != "") {
+        // Loop over each utility property
+        @each $key, $utility in $utilities {
+          // The utility can be disabled with `false`, thus check if the utility is a map first
+          // Only proceed if responsive media queries are enabled or if it's the base media query
+          @if type-of($utility) == "map" and map.get($utility, responsive) {
+            @include generate-utility($utility, $infix, $generate-up-to: false);
+          }
+        }
+      }
+    }
+
+    // Generate "up-to" classes, if wanted
+    @include nok-mixins.media-breakpoint-down($breakpoint) {
+      $infix: nok-mixins.breakpoint-infix($breakpoint, nok-variables.$grid-breakpoints);
+
+      @if ($infix != "") {
+        @each $key, $utility in $utilities {
+          @if type-of($utility) == "map" and map.get($utility, responsive-up-to) {
+            @include generate-utility($utility, $infix, $generate-up-to: true);
+          }
+        }
+      }
+    }
+  }
+
+  // RFS rescaling
+  @media (min-width: nok-rfs.$rfs-mq-value) {
+    @each $breakpoint in map.keys(nok-variables.$grid-breakpoints) {
+      $infix: nok-mixins.breakpoint-infix($breakpoint, nok-variables.$grid-breakpoints);
+
+      @if (map.get(nok-variables.$grid-breakpoints, $breakpoint) < nok-rfs.$rfs-breakpoint) {
+        // Loop over each utility property
+        @each $key, $utility in $utilities {
+          // The utility can be disabled with `false`, thus check if the utility is a map first
+          // Only proceed if responsive media queries are enabled or if it's the base media query
+          @if type-of($utility) == "map" and map.get($utility, rfs) and (map.get($utility, responsive) or $infix == "") {
+            @include generate-utility($utility, $infix, true);
+          }
+        }
+      }
+    }
+  }
+
+
+  // Print utilities
+  @media print {
+    @each $key, $utility in $utilities {
+      // The utility can be disabled with `false`, thus check if the utility is a map first
+      // Then check if the utility needs print styles
+      @if type-of($utility) == "map" and map.get($utility, print) == true {
+        @include generate-utility($utility, "-print");
+      }
+    }
+  }
+
+}

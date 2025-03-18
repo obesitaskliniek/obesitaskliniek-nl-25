@@ -11,6 +11,6 @@ html {
 }
 
 body {
-  background: linear-gradient(180deg, var(--#{nok-variables.$prefix}-body--darker), hsla(var(--#{nok-variables.$prefix}-body-hsl)/1));
+  background: linear-gradient(180deg, var(--#{nok-variables.$prefix}-body--darker), var(--#{nok-variables.$prefix}-body));
   @include nok-mixins.nok-text-font;
 }

@@ -59,6 +59,7 @@ $component-name: #{nok-variables.$prefix}-nav;
       z-index: nok-variables.$z-stack-top;
     }
   }
+
   @include nok-mixins.media-breakpoint-down($switch_point) {
     #{nok-variables.$prefix}-desktop-nav {
       display: none !important;
@@ -71,6 +72,13 @@ $component-name: #{nok-variables.$prefix}-nav;
       z-index: nok-variables.$z-stack-top;
       pointer-events: none;
     }
+  }
+
+  .#{nok-variables.$prefix}-star-ratings {
+    display: inline-flex;
+    flex-direction: row;
+    gap: .5ex;
+    margin-right: 1ex;
   }
 
   &-mask {
@@ -187,12 +195,8 @@ $component-name: #{nok-variables.$prefix}-nav;
     --flex-gap: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * .75);
   }
 
-  &-menu-toggler.#{nok-variables.$prefix}-button {
-    position: relative;
+  &-menu-toggler.#{nok-variables.$prefix}-button-menu {
     svg {
-      position: absolute;
-      width: var(--bg-size);
-      height: var(--bg-size);
       transform: rotate(0deg);
       @include nok-mixins.transition-properties {
         transition: transform var(--animation-duration--in) cubic-bezier(0.16, 1, 0.3, 1);

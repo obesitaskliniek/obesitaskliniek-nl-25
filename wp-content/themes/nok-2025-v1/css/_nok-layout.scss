@@ -1,0 +1,40 @@
+@use "sass:map";
+@use "sass:string";
+@use "nok-variables";
+@use "nok-mixins";
+
+.nok-layout {
+
+  &-grid {
+
+    display: grid;
+    gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
+    grid-template-columns: repeat(var(--grid-columns, 1), 1fr);
+
+
+    //default: cascade down at breakpoints
+    &__2-column {
+      --grid-columns: 1;
+    }
+    &__2-column {
+      --grid-columns: 2;
+      @include nok-mixins.media-breakpoint-down(lg) {
+        --grid-columns: 1;
+      }
+    }
+    &__3-column {
+      --grid-columns: 3;
+      @include nok-mixins.media-breakpoint-down(xxl) {
+        --grid-columns: 2;
+      }
+      @include nok-mixins.media-breakpoint-down(lg) {
+        --grid-columns: 1;
+      }
+    }
+
+    &, & > * {
+      border: 1px dashed #c11085;
+    }
+  }
+
+}

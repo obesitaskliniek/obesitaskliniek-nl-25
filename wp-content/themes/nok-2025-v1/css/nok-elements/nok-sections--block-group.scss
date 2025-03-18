@@ -13,23 +13,19 @@ $component-name: #{nok-variables.$prefix}-block-group;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  --grid-columns: 3;
-  @include nok-mixins.media-breakpoint-down(xxl) {
-    --grid-columns: 2;
-  }
-  @include nok-mixins.media-breakpoint-down(lg) {
-    --grid-columns: 1;
-  }
+  //--grid-columns: 3;
+  //@include nok-mixins.media-breakpoint-down(xxl) {
+  //  --grid-columns: 2;
+  //}
+  //@include nok-mixins.media-breakpoint-down(lg) {
+  //  --grid-columns: 1;
+  //}
 
   &__inner {
     --grid-gap: var(--#{nok-variables.$prefix}-padding-base, var(--#{nok-variables.$prefix}-global-grid-gap, 1.5rem));
     --grid-column-width: calc(
         (100% - (var(--grid-gap, 1) * (var(--grid-columns, 1) - 1))) / var(--grid-columns, 1)
     );
-    //padding-top: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * 2);
-    //padding-bottom: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * 2);
-    display: grid;
-    gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
     @include nok-mixins.media-breakpoint-down(lg) {
       column-gap: 0;
     }
@@ -39,7 +35,7 @@ $component-name: #{nok-variables.$prefix}-block-group;
   }
 
   &__description {
-    grid-column: span 2;
+    //grid-column: span 2;
   }
 
   &__scroller {
