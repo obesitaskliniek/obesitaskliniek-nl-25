@@ -1,11 +1,12 @@
 @use "sass:map";
 @use "sass:string";
 @use "nok-variables";
-@use "nok-mixins";
+@use "tools/nok-mixins";
 
 .nok-layout {
 
   &-grid {
+    --grid-gap: var(--#{nok-variables.$prefix}-padding-base, var(--#{nok-variables.$prefix}-global-grid-gap, 1.5rem));
 
     display: grid;
     gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
@@ -13,7 +14,9 @@
 
 
     //default: cascade down at breakpoints
-    &__2-column {
+    //i.e: the column count set in the class is more of a maximum.
+    //Override behaviour with the nok25-columns-x helpers
+    &__1-column {
       --grid-columns: 1;
     }
     &__2-column {
@@ -32,9 +35,6 @@
       }
     }
 
-    &, & > * {
-      border: 1px dashed #c11085;
-    }
   }
 
 }

@@ -90,6 +90,12 @@
     pointer-events: none;
   }
 }
+.nok25-nav .nok25-star-ratings {
+  display: inline-flex;
+  flex-direction: row;
+  gap: 0.5ex;
+  margin-right: 1ex;
+}
 .nok25-nav-mask {
   --bg-alpha-value: 0;
   inset: 0;
@@ -185,7 +191,7 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1), 0 0 2rem rgba(0, 0, 0, 0.1);
 }
 .nok25-nav-dropdown, .nok25-nav-control-dropdown {
-  transform: translateY(-100%);
+  transform: translate3d(0%, -100%, 0);
 }
 @media (prefers-reduced-motion: no-preference) {
   body.__enable-transitions .nok25-nav-dropdown, body.__enable-transitions .nok25-nav-control-dropdown {
@@ -193,7 +199,7 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   }
 }
 .nok25-nav.open .nok25-nav-dropdown, .nok25-nav-control-dropdown.open {
-  transform: translateY(0);
+  transform: translate3d(0%, 0%, 0);
   pointer-events: all;
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -205,7 +211,7 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
 .nok25-nav .nok25-button {
   height: 100%;
   max-height: 100%;
-  --flex-gap: calc(var(--grid-gap, var(--nok25-global-grid-gap)) * .75);
+  --flex-gap: calc(var(--grid-gap, var(--nok25-global-grid-gap)) * .5);
 }
 .nok25-nav-menu-toggler.nok25-button-menu svg {
   transform: rotate(0deg);
@@ -247,7 +253,7 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
-  transform: translateX(0%);
+  transform: translate3d(0%, 100%, 0);
   box-shadow: -8px 8px 16px rgba(0, 0, 0, 0.1);
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -482,7 +488,7 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   gap: var(--grid-gap, var(--nok25-global-grid-gap));
 }
 .nok25-nav nok25-mobile-nav .nok25-nav-drawer {
-  transform: translateX(100%);
+  transform: translate3d(100%, 0%, 0);
   display: flex;
   flex-direction: column;
   min-height: 0;

@@ -1,0 +1,21 @@
+@use "../nok-variables";
+@use "../tools/nok-mixins";
+
+/**
+ * hyperlink
+ */
+$component-name: #{nok-variables.$prefix}-hyperlink;
+
+.#{$component-name}:not(.#{nok-variables.$prefix}-button) {
+  color: var(--text-color, var(--text-color----bg-color--contrast, inherit));
+  --underline-color: var(--text-color, var(--text-color--contrast, inherit));
+  --underline-color--active: var(--text-color--contrast, inherit);
+
+  @include nok-mixins.nok-inline-link;
+
+  @at-root p & {
+    color: var(--nok25-lightblue, inherit);
+    --underline-color: var(--nok25-lightblue, inherit);
+    --underline-color--active: var(--nok25-lightblue--contrast, inherit);
+  }
+}

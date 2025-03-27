@@ -1,10 +1,11 @@
 @use "nok-variables";
-@use "nok-mixins";
+@use "tools/nok-mixins";
 
 @use "nok-reboot";
 @use "nok-layout";
 
 @use "nok-elements/nok-buttons";
+@use "nok-elements/nok-links";
 @use "nok-elements/nok-square-block";
 @use "nok-elements/nok-sections";
 @use "nok-elements/nok-sections--nav";

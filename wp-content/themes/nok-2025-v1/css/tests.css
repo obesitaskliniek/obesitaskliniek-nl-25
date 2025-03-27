@@ -56,12 +56,20 @@ div.tests div[data-stylegroup=".nok25-border"] .testcard {
   border-style: solid;
 }
 
+.nok-layout-grid, .nok-layout-grid > * {
+  --outline-color: #c11085;
+  outline: 1px dashed var(--outline-color, #c11085);
+}
+
 .mockup-image {
-  border-width: 1px;
-  border-style: solid;
+  outline: 1px dashed var(--outline-color, #c11085);
   aspect-ratio: 4/3;
   width: 100%;
   height: auto;
+}
+.mockup-image line {
+  stroke-dasharray: 4;
+  stroke: var(--outline-color, #c11085);
 }
 
 /*# sourceMappingURL=tests.css.map */
