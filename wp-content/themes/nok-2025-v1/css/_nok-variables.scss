@@ -1,5 +1,7 @@
 @use "sass:math";
-@use "nok-utilities";
+@use "sass:map";
+@use "tools/nok-utilities";
+@use "tools/nok-rfs";
 
 $prefix : 'nok25';
 $padding-base: 1.5rem;
@@ -37,19 +39,29 @@ $exposed-variables: (
     "default-line-height": $default-line-height,
     "default-heading-line-height": $default-heading-line-height,
     "padding-base": $padding-base,
-    "global-grid-gap": ($padding-base / 2),
+    "global-grid-gap": $padding-base,
     "padding-section-sides": min(6vw, $padding-base * 3),
     "spacing-section-ends": min(12vw, $padding-base * 3),
     "default-border-radius": $default-border-radius,
     "default-border-radius--large": $default-border-radius--large,
     "font-size-buttons" : $font-size-buttons,
-    "font-size-1": $h6-font-size,
-    "font-size-2": $h5-font-size,
-    "font-size-3": $h4-font-size,
-    "font-size-4": $h3-font-size,
-    "font-size-5": $h2-font-size,
-    "font-size-6": $h1-font-size,
+    "font-size-1": nok-rfs.rfs-fluid-value($h6-font-size),
+    "font-size-2": nok-rfs.rfs-fluid-value($h5-font-size),
+    "font-size-3": nok-rfs.rfs-fluid-value($h4-font-size),
+    "font-size-4": nok-rfs.rfs-fluid-value($h3-font-size),
+    "font-size-5": nok-rfs.rfs-fluid-value($h2-font-size),
+    "font-size-6": nok-rfs.rfs-fluid-value($h1-font-size),
+    "font-size-7": nok-rfs.rfs-fluid-value($h1-font-size * 1.25),
 );
+
+$font-sizes: ();
+
+@for $i from 1 through 7 {
+    $font-sizes: map.merge($font-sizes,(
+            $i: var(--nok25-font-size-#{($i)})
+    ));
+}
+@debug $font-sizes;
 
 $grid-breakpoints: (
     xs: 0,

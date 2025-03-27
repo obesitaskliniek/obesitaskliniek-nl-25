@@ -1,6 +1,6 @@
 @use "sass:map";
 @use "../nok-variables";
-@use "../nok-mixins";
+@use "../tools/nok-mixins";
 
 /**
  * square block
@@ -13,13 +13,6 @@ $component-name: #{nok-variables.$prefix}-block-group;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  //--grid-columns: 3;
-  //@include nok-mixins.media-breakpoint-down(xxl) {
-  //  --grid-columns: 2;
-  //}
-  //@include nok-mixins.media-breakpoint-down(lg) {
-  //  --grid-columns: 1;
-  //}
 
   &__inner {
     --grid-gap: var(--#{nok-variables.$prefix}-padding-base, var(--#{nok-variables.$prefix}-global-grid-gap, 1.5rem));
@@ -32,10 +25,6 @@ $component-name: #{nok-variables.$prefix}-block-group;
     grid-template-columns: repeat(var(--grid-columns, 1), 1fr);
     grid-template-rows: 1fr;
     align-items: stretch;
-  }
-
-  &__description {
-    //grid-column: span 2;
   }
 
   &__scroller {

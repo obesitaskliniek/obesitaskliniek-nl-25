@@ -1,8 +1,8 @@
 @use "sass:math";
 @use "sass:map";
 @use "nok-variables";
-@use "nok-mixins";
-@use "nok-api";
+@use "tools/nok-mixins";
+@use "tools/nok-api";
 
 :root {
   @each $key, $value in nok-variables.$exposed-variables {
@@ -13,6 +13,7 @@
 .#{nok-variables.$prefix}-heading-font {
   @include nok-mixins.nok-heading-font;
 }
+
 .#{nok-variables.$prefix}-small-text-font,
 .#{nok-variables.$prefix}-text-font {
   @include nok-mixins.nok-text-font;
@@ -28,6 +29,7 @@
     z-index: 1;
     content: "";
   }
+
   @at-root *:has(&) {
     position: relative;
   }
@@ -57,12 +59,14 @@
     height: auto;
   }
 }
+
 .w-100 {
   width: 100%;
 }
 
 .#{nok-variables.$prefix}-bg-blur {
   backdrop-filter: blur(5px);
+
   &--large {
     backdrop-filter: blur(10px);
   }
@@ -74,6 +78,7 @@
   position: sticky;
   top: 0;
   z-index: nok-variables.$z-stack-top;
+
   &--fixed {
     position: fixed;
   }
@@ -84,6 +89,7 @@
     z-index: #{$i};
   }
 }
+
 .#{nok-variables.$prefix}-z-top {
   z-index: nok-variables.$z-stack-top;
 }
@@ -94,17 +100,21 @@
   display: flex;
   align-items: center;
 }
+
 .align-center {
   align-self: center;
   text-align: center;
 }
+
 .align-self-stretch {
   align-self: stretch;
   grid-column: 1 / -1;
 }
+
 .align-self-end {
   align-self: end;
 }
+
 .span-all-columns {
   grid-column: 1 / -1;
 }
@@ -140,8 +150,8 @@
 }
 
 
-
 /* animations */
+//todo: are these used?
 @media (prefers-reduced-motion: no-preference) {
   @keyframes slide--in {
     from {
@@ -202,6 +212,7 @@
     backdrop-filter: brightness(0.9) contrast(0.9);
   }
 }
+
 @media (prefers-contrast: more) {
   body > .#{nok-variables.$prefix}-accessibility-helper {
     display: block;
@@ -211,19 +222,20 @@
 }
 
 /* Font size */
-@for $i from 1 through 6 {
+@for $i from 1 through 7 {
   .#{nok-variables.$prefix}-fs-#{$i} {
-    font-size: var(--nok25-font-size-#{(7- $i)});
+    font-size: var(--nok25-font-size-#{(8- $i)});
   }
 }
+
 .#{nok-variables.$prefix}-fs-buttons {
   font-size: var(--nok25-font-size-buttons);
 }
 
 /* Alpha classes */
 $alphas: (
-    "alpha-1": 1,
-    "bg-alpha-1": 1,
+        "alpha-1": 1,
+        "bg-alpha-1": 1,
 );
 @for $i from 0 through 10 {
   $value: ($i / 10);
@@ -258,89 +270,142 @@ $alphas: (
 }
 
 $padding-base-values: (
-    grid-gap: var(--grid-gap),
-    section-padding: var(--nok25-padding-section-sides),
-    1: #{(1 * nok-variables.$padding-base)},
-    2: #{(2 * nok-variables.$padding-base)},
-    3: #{(3 * nok-variables.$padding-base)},
-    4: #{(4 * nok-variables.$padding-base)},
-    5: #{(5 * nok-variables.$padding-base)},
+        0 : 0,
+        grid-gap: var(--grid-gap),
+        section-padding: var(--nok25-padding-section-sides),
+        1: #{(1 * nok-variables.$padding-base)},
+        2: #{(2 * nok-variables.$padding-base)},
+        3: #{(3 * nok-variables.$padding-base)},
+        4: #{(4 * nok-variables.$padding-base)},
+        5: #{(5 * nok-variables.$padding-base)},
 );
 
 $utilities: (
-    "padding-top": (
-        property: padding-bottom,
-        responsive-up-to: true,
-        class: #{nok-variables.$prefix}-pb,
-        values: $padding-base-values
-    ),
-    "padding-bottom": (
-        property: padding-bottom,
-        responsive-up-to: true,
-        class: #{nok-variables.$prefix}-pb,
-        values: $padding-base-values
-    ),
-    "margin-top": (
-        property: margin-top,
-        responsive: true,
-        responsive-up-to: true,
-        class: #{nok-variables.$prefix}-mt,
-        values: $padding-base-values
-    ),
-    "margin-end": (
-        property: margin-right,
-        responsive: true,
-        responsive-up-to: true,
-        class: #{nok-variables.$prefix}-me,
-        values: $padding-base-values
-    ),
-    "margin-bottom": (
-        property: margin-right,
-        responsive: true,
-        responsive-up-to: true,
-        class: #{nok-variables.$prefix}-mb,
-        values: $padding-base-values
-    ),
-    "margin-start": (
-        property: margin-left,
-        responsive: true,
-        responsive-up-to: true,
-        class: #{nok-variables.$prefix}-ms,
-        values: $padding-base-values
-    ),
-    "border-radius": (
-        css-var: true,
-        css-variable-name: -default-border-radius--large,
-        responsive-up-to: true,
-        class: #{nok-variables.$prefix}-border-radius,
-        values: (
-          0
+        "padding-top": (
+                property: padding-bottom,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-pb,
+                values: $padding-base-values
+        ),
+        "padding-bottom": (
+                property: padding-bottom,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-pb,
+                values: $padding-base-values
+        ),
+        "margin-top": (
+                property: margin-top,
+                responsive: true,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-mt,
+                values: $padding-base-values
+        ),
+        "margin-end": (
+                property: margin-right,
+                responsive: true,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-me,
+                values: $padding-base-values
+        ),
+        "margin-bottom": (
+                property: margin-right,
+                responsive: true,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-mb,
+                values: $padding-base-values
+        ),
+        "margin-start": (
+                property: margin-left,
+                responsive: true,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-ms,
+                values: $padding-base-values
+        ),
+        "margin-collapse-x": (
+                property: margin-right margin-left,
+                responsive: true,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-collapse-x,
+                no-suffix: true,
+                values: 0
+        ),
+        "margin-collapse-y": (
+                property: margin-top margin-bottom,
+                responsive: true,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-collapse-y,
+                no-suffix: true,
+                values: 0
+        ),
+        "margin-collapse-top": (
+                property: margin-top,
+                responsive: true,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-collapse-top,
+                no-suffix: true,
+                values: 0
+        ),
+        "margin-collapse-bottom": (
+                property: margin-bottom,
+                responsive: true,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-collapse-bottom,
+                no-suffix: true,
+                values: 0
+        ),
+        "border-radius": (
+                css-var: true,
+                css-variable-name: default-border-radius--large,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-border-radius,
+                values: 0
+        ),
+        "invisible": (
+                property: display,
+                responsive: true,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-invisible,
+                no-suffix: true,
+                values: none,
+        ),
+        "order": (
+                responsive: true,
+                property: order,
+                class: #{nok-variables.$prefix}-order,
+                values: (
+                        first: -1,
+                        0: 0,
+                        1: 1,
+                        2: 2,
+                        3: 3,
+                        4: 4,
+                        last: 5,
+                ),
+        ),
+        "columns": (
+                css-var: true,
+                css-variable-name: grid-columns,
+                no-prefix: true,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-columns,
+                values: 0 1 2 3 4 5
+        ),
+        "align-self": (
+                responsive: false,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-align-self,
+                values: (
+                        stretch: (align-self: stretch, grid-column: "1 / -1")
+                )
+        ),
+        "font-size": (
+                property: font-size,
+                responsive: true,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-fs,
+                values: nok-variables.$font-sizes
+
         )
-    ),
-    "invisible": (
-        responsive: true,
-        property: display,
-        responsive-up-to: true,
-        class: #{nok-variables.$prefix}-invisible,
-        no-suffix: true,
-        values: (
-            none
-        ),
-    ),
-    "order": (
-        responsive: true,
-        property: order,
-        class: #{nok-variables.$prefix}-order,
-        values: (
-            first: -1,
-            0: 0,
-            1: 1,
-            2: 2,
-            3: 3,
-            4: 4,
-            last: 5,
-        ),
-    ),
 );
 
 //construct helpers

@@ -191,7 +191,7 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
 
     <nok25-desktop-nav>
         <div class="nok25-section__inner--stretched nok25-bg-body nok25-dark-bg-darkestblue nok25-dark-text-white nok25-nav-top-row nok25-z-2">
-            <div class="nok25-section__inner nok25-section__inner--collapsed nok25-nav-top">
+            <div class="nok25-section__inner nok25-collapse-y nok25-nav-top">
                 <div>
                     <small class="valign-center">
                         <span class="nok25-text-lightblue nok25-star-ratings"><?= $star; ?><?= $star; ?><?= $star; ?><?= $star; ?><?= $star; ?></span>5/5
@@ -210,7 +210,7 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                 </a>
             </div>
         </div>
-        <div class="nok25-section__inner nok25-section__inner--collapsed nok25-nav-menubar-row nok25-z-3">
+        <div class="nok25-section__inner nok25-collapse-y nok25-nav-menubar-row nok25-z-3">
             <div class="nok25-nav-menubar nok25-bg-white nok25-dark-bg-darkerblue nok25-dark-text-contrast"
                  data-toggles="open">
                 <div>
@@ -256,26 +256,26 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
 </nav>
 
 <section class="nok25-section">
-    <div class="nok25-section__inner nok25-section__inner--collapsed nok25-hero
+    <div class="nok25-section__inner nok25-collapse-y nok25-hero
     nok25-bg-white nok25-dark-bg-darkestblue nok25-text-darkerblue nok25-dark-text-white nok25-bg-alpha-6 nok25-dark-bg-alpha-10
     nok25-pb-to-lg-grid-gap nok25-border-radius-to-sm-0">
 
         <article>
-            <h2 class="nok25-text-lightblue nok25-dark-text-yellow nok25-hero__pre-heading">
+            <h2 class="nok25-text-lightblue nok25-dark-text-yellow nok25-hero__pre-heading nok25-fs-3">
                 #1 Obesitas Kliniek van Nederland
             </h2>
-            <h1 class="nok25-section__heading nok25-hero__heading">
-                Serieuze aanpak, gezond afvallen
+            <h1 class="nok25-section__heading nok25-hero__heading nok25-fs-6">
+                Verander je leven, verander je gewicht
             </h1>
             <p class="nok25-block-group__description">
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos
                 vero.
             </p>
             <div class="nok25-button-group">
-                <button class="nok25-button fill-group-column nok25-bg-darkerblue nok25-text-contrast" tabindex="0">De
+                <button class="nok25-button nok25-align-self-to-sm-stretch fill-group-column nok25-bg-darkerblue nok25-text-contrast" tabindex="0">De
                     behandeling
                 </button>
-                <a class="nok25-hyperlink fw-bold" href="#">Kom ik in aanmerking?</a>
+                <a class="nok25-hyperlink nok25-align-self-to-sm-stretch fw-bold" href="#">Kom ik in aanmerking?</a>
             </div>
         </article>
         <figure>
@@ -373,7 +373,7 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
     <div class="nok25-section__inner">
         <div class="nok-layout-grid nok-layout-grid__2-column">
             <div class="nok25-order-2 nok25-order-lg-1">
-                <svg class="nok25-fill-darkblue nok25-border-darkblue mockup-image">
+                <svg class="mockup-image">
                     <line x1="0" y1="100%" x2="100%" y2="0" stroke="currentColor"></line>
                     <line x1="0" y1="0" x2="100%" y2="100%" stroke="currentColor"></line>
                 </svg>

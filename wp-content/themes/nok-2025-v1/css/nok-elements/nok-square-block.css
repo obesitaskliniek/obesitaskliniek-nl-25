@@ -1,32 +1,87 @@
 /**
+ * Mixin to apply border-radius with customizable size and position.
+ * by hnldesign - 2025
+ *
+ * @param {String} $size - The size of the border-radius. Options: 'default', 'large', 'x-large', 'xx-large'.
+ * @param {String} $position - The position to apply the border-radius. Options: 'all', 'bottom', 'top', 'left', 'right'.
+ */
+/**
+ * Mixin to style inline links with hover and focus effects.
+ * for NOK by hnldesign - 2025
+ *
+ * This mixin applies various styles to inline links, including:
+ * - Custom underline with gradient background
+ * - Hover and active states
+ * - Focus-visible state with border radius and focus ring
+ *
+ * Variables:
+ * - --active-color: The color of the link when active.
+ * - --hover-transition-time: The duration of the hover transition.
+ * - --hover-color: The color of the link when hovered.
+ * - --underline-height: The height of the underline.
+ * - --gradient: The gradient background for the underline.
+ */
+/**
+ * Mixin to style scrollbars and optionally add a fake scrollbar with identical styles.
+ * by hnldesign - 2025
+ *
+ * @param {Length} $scrollbarHeight - The height of the scrollbar.
+ * @param {Color} $scrollbarHandle - The color of the scrollbar handle.
+ * @param {Color} $scrollbarHandle_active - The color of the scrollbar handle when active.
+ * @param {Color} $scrollbarTrack - The color of the scrollbar track.
+ */
+/**
+ * Mixin to apply transition properties conditionally based on user preferences.
+ * By hnldesign - 2025
+ *
+ * This mixin checks if the user has a preference for reduced motion. If the user
+ * does not prefer reduced motion, it applies the transition properties to the
+ * specified elements when the `body` element has the `__enable-transitions` class.
+ *
+ * Usage:
+ * @include transition-properties {
+ *   transition: all 0.3s ease;
+ * }
+ */
+/**
+ * Mixin to apply styles when JavaScript is disabled.
+ * By hnldesign - 2025
+ *
+ * This mixin targets elements when the `body` element has the `no-js` class,
+ * indicating that JavaScript is disabled, since it will be unset at docReady.
+ *
+ * Usage:
+ * @include no-javascript-properties {
+ *   // Your styles here
+ * }
+ */
+/**
  * square block
  */
+nok25-square-block,
 :host {
-  --local-color-alpha: 0.8;
+  --text-alpha-value: 0.8;
   --icon-color: var(--nok25-yellow);
-  --text-color: hsla(var(--nok25-white--hsl) / var(--global-color-alpha, var(--local-color-alpha, 1)));
-  --text-color--heading: hsla(var(--nok25-white--hsl) / 1);
-  --text-color--link: hsla(var(--nok25-white--hsl) / 1);
+  --text-color: hsla(var(--nok25-white-hsl) / var(--global-color-alpha, var(--text-alpha-value, 1)));
+  --text-color--heading: hsla(var(--nok25-white-hsl) / 1);
+  --text-color--link: hsla(var(--nok25-white-hsl) / 1);
   --text-color--link--hover: var(--nok25-yellow);
   --text-color--link-icon: var(--nok25-lightblue);
   --text-color--link-icon--hover: var(--nok25-yellow);
   --background-color: var(--nok25-darkblue);
   position: relative;
   display: grid;
-  grid-template-rows: auto auto 1fr auto;
-  font-family: "Realist", sans-serif;
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  text-rendering: optimizelegibility;
+  grid-template-rows: auto;
+  container-type: inline-size;
   gap: 1.5rem;
-  padding: 3rem;
+  overflow: hidden;
   border-radius: var(--nok25-default-border-radius--large, 1rem);
-  line-height: 1.25;
-  padding: calc(var(--nok25-padding-base, 1.5rem) * 2);
+  padding: var(--nok25-padding-section-sides, 3rem);
   border-radius: var(--nok25-default-border-radius--large, 8px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: var(--background-color);
 }
+nok25-square-block > *,
 :host > * {
   margin: 0;
 }
@@ -42,7 +97,6 @@
 }
 .nok25-square-block__heading {
   color: var(--text-color--heading);
-  font-size: 2rem;
   font-weight: 500;
 }
 .nok25-square-block__text {
@@ -58,7 +112,7 @@
   cursor: pointer;
   gap: calc(var(--nok25-padding-base, 1.5rem) / 2);
   height: 2rem;
-  --local-color-alpha: 0.8;
+  --text-alpha-value: 0.8;
   color: var(--text-color--link);
   text-decoration: none;
   text-transform: uppercase;
@@ -81,4 +135,5 @@
   --text-color--link: var(--text-color--link--hover);
   --text-color--link-icon: var(--text-color--link-icon--hover);
 }
+
 /*# sourceMappingURL=nok-square-block.css.map */

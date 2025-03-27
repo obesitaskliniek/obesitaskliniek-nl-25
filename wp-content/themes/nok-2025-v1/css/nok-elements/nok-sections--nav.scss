@@ -1,8 +1,8 @@
 @use "sass:map";
 @use "../nok-variables";
-@use "../nok-mixins";
-@use "../nok-rfs";
-@use "../nok-utilities";
+@use "../tools/nok-mixins";
+@use "../tools/nok-rfs";
+@use "../tools/nok-utilities";
 
 /**
  * hero unit
@@ -173,7 +173,7 @@ $component-name: #{nok-variables.$prefix}-nav;
 
   &-dropdown,
   &-control-dropdown {
-    transform: translateY(-100%);
+    transform: translate3d(0%, -100%, 0);
     @include nok-mixins.transition-properties {
       transition: transform var(--animation-duration--out) var(--animation-easing-out), box-shadow var(--animation-duration--out) var(--animation-easing-out);
     }
@@ -181,7 +181,7 @@ $component-name: #{nok-variables.$prefix}-nav;
 
   &.open &-dropdown,
   &-control-dropdown.open  {
-    transform: translateY(0);
+    transform: translate3d(0%, 0%, 0);
     @include nok-mixins.transition-properties {
       transition-duration: var(--animation-duration--in);
       transition-timing-function: var(--animation-easing-in);
@@ -192,7 +192,7 @@ $component-name: #{nok-variables.$prefix}-nav;
   .#{nok-variables.$prefix}-button {
     height: 100%;
     max-height: 100%;
-    --flex-gap: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * .75);
+    --flex-gap: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * .5);
   }
 
   &-menu-toggler.#{nok-variables.$prefix}-button-menu {
@@ -238,7 +238,7 @@ $component-name: #{nok-variables.$prefix}-nav;
       -webkit-touch-callout: none;
       user-select: none;
 
-      transform: translateX(0%);
+      transform: translate3d(0%, 0%, 0);
       @include nok-mixins.nok-subtle-shadow-menu;
 
       @include nok-mixins.transition-properties {
@@ -413,7 +413,7 @@ $component-name: #{nok-variables.$prefix}-nav;
       }
 
       &-drawer {
-        transform: translateX(100%);
+        transform: translate3d(100%, 0%, 0);
         @include nok-mixins.transition-properties {
           transition: transform var(--animation-duration--out) var(--animation-easing-out);
         }
@@ -500,7 +500,6 @@ $component-name: #{nok-variables.$prefix}-nav;
         }
 
       }
-
 
       &__menuitems {
         --item-padding: clamp(0.5rem, 2vw, 1rem);

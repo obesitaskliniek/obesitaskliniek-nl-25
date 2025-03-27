@@ -1,15 +1,70 @@
 @use "sass:list";
 @use "sass:map";
 
-@use "nok-variables";
+@use "../nok-variables";
 @use "nok-mixins";
 @use "nok-rfs";
 
 $utilities: () !default;
 $enable-important-utilities: true !default;
 
-// Utility generator
-// Used to generate utilities & print utilities
+/* Custom Utility Generator Mixin
+ * 2025 - Klaas Leussink
+ * --------------------------------
+ * Extended version of Bootstrap's `generate-utility` (v5.3), tailored for a more powerful and flexible utility API.
+ * 
+ * Supports:
+ * - **Responsive utilities** via `responsive: true`
+ * - **"Up to" breakpoints** (max-width media queries) via `responsive-up-to: true`
+ * - **Multiple properties**, each with their own distinct value (see below)
+ * - **CSS variables** via `css-var: true`
+ * - **Optional variable prefixing** via `no-prefix: true`
+ * - **Optional class suffixing** via `no-suffix: true`
+ * - **Custom pseudo states**, RTL removal, and RFS support (as in Bootstrap)
+ * 
+ * Value Handling:
+ * - Standard values apply the same value to all defined properties
+ * - For multiple property support, pass a map of property-value pairs:
+ *   @example
+ *     values: (
+ *       stretch: (align-self: stretch, grid-column: "1  * -1")
+ *     )
+ *
+ * CSS Variable Handling:
+ * - If `css-var: true` is set:
+ *   - The CSS variable name is taken from `css-variable-name`
+ *   - By default, the variable will be prefixed (e.g. `--my_prefix-grid-columns`)
+ *   - If `no-prefix: true` is set, the prefix will be omitted (e.g. `--grid-columns`)
+ *
+ * Class Suffixing:
+ * - By default, class names are suffixed with the value key (e.g. `.mb-0`)
+ * - If `no-suffix: true` is set, the suffix is omitted (e.g. `.no-margin`)
+ *
+ * Usage Example:
+ * ```scss
+ * "align-grid": (
+ *   responsive: false, //doesn't generate min-width responsive classes
+ *   responsive-up-to: true, //generate max-width responsive classes
+ *   class: align-grid,
+ *   values: (
+ *     stretch: (align-self: stretch, grid-column: "1  * -1")
+ *   )
+ * )
+ * ```
+ *
+ * This would generate:
+ * ```css
+ * .align-grid-to-sm-stretch {
+ *   align-self: stretch !important;
+ *   grid-column: 1  * -1 !important;
+ * }
+ * ```
+
+ * @param {Map} $utility - The utility definition map
+ * @param {String} $infix - The responsive breakpoint infix (e.g. "-md")
+ * @param {Bool} $is-rfs-media-query - Whether inside an RFS media query
+ * @param {Bool} $generate-up-to - If true, generates "up to" (max-width) media queries
+*/
 @mixin generate-utility($utility, $infix: "", $is-rfs-media-query: false, $generate-up-to: false) {
   $values: map.get($utility, values);
 
@@ -61,6 +116,8 @@ $enable-important-utilities: true !default;
     }
 
     $is-css-var: map.get($utility, css-var);
+    $no-prefix-css-var: map.get($utility, no-prefix);
+    $css-prefix: if($no-prefix-css-var,--,--#{nok-variables.$prefix}-);
     $is-local-vars: map.get($utility, local-vars);
     $is-rtl: map.get($utility, rtl);
 
@@ -71,12 +128,12 @@ $enable-important-utilities: true !default;
 
       @if $is-css-var {
         .#{$property-class + $infix + $property-class-modifier} {
-          --#{nok-variables.$prefix}#{$css-variable-name}: #{$value};
+          #{$css-prefix}#{$css-variable-name}: #{$value};
         }
 
         @each $pseudo in $state {
           .#{$property-class + $infix + $property-class-modifier}-#{$pseudo}:#{$pseudo} {
-            --#{nok-variables.$prefix}#{$css-variable-name}: #{$value};
+            #{$css-prefix}#{$css-variable-name}: #{$value};
           }
         }
       } @else {
@@ -84,10 +141,18 @@ $enable-important-utilities: true !default;
           @each $property in $properties {
             @if $is-local-vars {
               @each $local-var, $variable in $is-local-vars {
-                --#{nok-variables.$prefix}#{$local-var}: #{$variable};
+                #{$css-prefix}#{$local-var}: #{$variable};
               }
             }
-            #{$property}: $value if($enable-important-utilities, !important, null);
+            @if type-of($value) == "map" {
+              @each $custom-prop, $custom-val in $value {
+                #{$custom-prop}: #{$custom-val} if($enable-important-utilities, !important, null);
+              }
+            } @else {
+              @each $property in $properties {
+                #{$property}: #{$value} if($enable-important-utilities, !important, null);
+              }
+            }
           }
         }
 
@@ -96,10 +161,18 @@ $enable-important-utilities: true !default;
             @each $property in $properties {
               @if $is-local-vars {
                 @each $local-var, $variable in $is-local-vars {
-                  --#{nok-variables.$prefix}#{$local-var}: #{$variable};
+                  #{$css-prefix}#{$local-var}: #{$variable};
                 }
               }
-              #{$property}: $value if($enable-important-utilities, !important, null);
+              @if type-of($value) == "map" {
+                @each $custom-prop, $custom-val in $value {
+                  #{$custom-prop}: #{$custom-val} if($enable-important-utilities, !important, null);
+                }
+              } @else {
+                @each $property in $properties {
+                  #{$property}: #{$value} if($enable-important-utilities, !important, null);
+                }
+              }
             }
           }
         }

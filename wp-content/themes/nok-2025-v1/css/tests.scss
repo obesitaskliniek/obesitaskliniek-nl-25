@@ -1,3 +1,5 @@
+@use 'tools/nok-utilities';
+
 body {
   line-height: 1.75;
   font-size: 1.1rem;
@@ -49,12 +51,23 @@ div.tests div[data-stylegroup=".nok25-border"] .testcard {
   border-width: 1px;
   border-style: solid;
 }
+.nok-layout {
+  &-grid {
+    &, & > * {
+      --outline-color: #c11085;
+      outline: 1px dashed var(--outline-color, #c11085);
+    }
+  }
+}
 .mockup {
   &-image {
-    border-width: 1px;
-    border-style: solid;
+    outline: 1px dashed var(--outline-color, #c11085);
     aspect-ratio: 4/3;
     width: 100%;
     height: auto;
+    line {
+      stroke-dasharray: 4;
+      stroke: var(--outline-color, #c11085);
+    }
   }
 }

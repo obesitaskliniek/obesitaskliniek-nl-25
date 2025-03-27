@@ -1,5 +1,5 @@
 @use "nok-variables";
-@use "nok-rfs";
+@use "tools/nok-rfs";
 //@use "nok-colors";
 
 // stylelint-disable declaration-no-important, selector-no-qualifying-type, property-no-vendor-prefix
@@ -23,6 +23,16 @@
   box-sizing: border-box;
 }
 
+/* Remove default margin */
+* {
+  margin: 0;
+}
+
+/* Enable keyword animations */
+html {
+  interpolate-size: allow-keywords;
+}
+
 
 // Body
 //
@@ -38,11 +48,12 @@ body {
   @include nok-rfs.font-size(var(--#{nok-variables.$prefix}-body-font-size));
   font-weight: var(--#{nok-variables.$prefix}-body-font-weight);
   font-size-adjust: var(--#{nok-variables.$prefix}-body-font-size-adjust);
-  line-height: var(--#{nok-variables.$prefix}-body-line-height);
+  line-height: var(--#{nok-variables.$prefix}-body-line-height, 1.5);
   color: var(--#{nok-variables.$prefix}-body-text-color);
   text-align: var(--#{nok-variables.$prefix}-body-text-align);
-  background-color: var(--#{nok-variables.$prefix}-body-bg); // 2
-  -webkit-text-size-adjust: 100%; // 3
+  background-color: var(--#{nok-variables.$prefix}-body-bg);
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
   //-webkit-tap-highlight-color: rgba(nok-colors.$black, 0); // 4
 }
 // scss-docs-end reboot-body-rules
@@ -115,6 +126,18 @@ p {
   margin-bottom: 0;
 }
 
+/* Avoid text overflows */
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+/* Improve line wrapping */
+p {
+  text-wrap: pretty;
+}
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
 
 // Abbreviations
 //
@@ -321,6 +344,12 @@ svg {
   vertical-align: middle;
 }
 
+/* Improve media defaults */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
 
 // Tables
 //
@@ -393,7 +422,7 @@ select,
 optgroup,
 textarea {
   margin: 0; // 1
-  font-family: inherit;
+  font: inherit;
   @include nok-rfs.font-size(inherit);
   line-height: inherit;
 }
@@ -590,4 +619,9 @@ progress {
 
 [hidden] {
   display: none !important;
+}
+
+/* Create a root stacking context */
+#root, #__next {
+  isolation: isolate;
 }

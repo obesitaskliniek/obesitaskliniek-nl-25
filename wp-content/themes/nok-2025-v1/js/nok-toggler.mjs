@@ -87,6 +87,10 @@ export function init(elements){
             clearTimeout(autoHideTimeout);
           }
           document.removeEventListener("click", handleClickOutside);
+        } else if (autoHideTimeout) {
+          //restart the autohide timer, to prevent autohide while interaction
+          clearTimeout(autoHideTimeout);
+          autoHideTimeout = setTimeout(handleClickOutside, (autoHide * 1000));
         }
       }
 
