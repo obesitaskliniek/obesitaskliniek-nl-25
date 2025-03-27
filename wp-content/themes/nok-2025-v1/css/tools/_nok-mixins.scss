@@ -367,11 +367,18 @@
  * specified elements when the `body` element has the `__enable-transitions` class.
  *
  * Usage:
- * @include transition-properties {
- *   transition: all 0.3s ease;
+ * @include transition-properties(margin) {
+ *   transition: margin 0.3s ease;
  * }
+ * The optional property-hint lets the browser prepare for changes in the property specified,
+ * as waiting for the body to assume __enable-transitions class state will create a slight stutter,
+ * because the browser has not been able to prepare for this (as there's a race condition for the class being added
+ * and the animation kicking off)
  */
-@mixin transition-properties {
+@mixin transition-properties($property-hint: null) {
+  @if ($property-hint) {
+    will-change: $property-hint;
+  }
   @media (prefers-reduced-motion: no-preference) {
     @at-root body.__enable-transitions & {
       @content;

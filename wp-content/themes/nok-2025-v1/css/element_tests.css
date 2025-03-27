@@ -39,9 +39,13 @@
  * specified elements when the `body` element has the `__enable-transitions` class.
  *
  * Usage:
- * @include transition-properties {
- *   transition: all 0.3s ease;
+ * @include transition-properties(margin) {
+ *   transition: margin 0.3s ease;
  * }
+ * The optional property-hint lets the browser prepare for changes in the property specified,
+ * as waiting for the body to assume __enable-transitions class state will create a slight stutter,
+ * because the browser has not been able to prepare for this (as there's a race condition for the class being added
+ * and the animation kicking off)
  */
 /**
  * Mixin to apply styles when JavaScript is disabled.
@@ -661,19 +665,16 @@ h2.nok25-section__heading {
   position: fixed;
   z-index: 2;
   pointer-events: none;
+  will-change: opacity;
 }
 @media (prefers-reduced-transparency) {
   .nok25-nav-mask {
     display: none;
   }
 }
-@media (prefers-reduced-transparency) and (prefers-reduced-motion: no-preference) {
-  body.__enable-transitions .nok25-nav-mask {
-    animation: fade--in 0.5s ease-in-out;
-  }
-}
 @media (prefers-reduced-motion: no-preference) {
   body.__enable-transitions .nok25-nav-mask {
+    animation: fade--in 0.5s ease-in-out;
     transition: background 500ms ease-in-out, -webkit-backdrop-filter 500ms ease-in-out;
     transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out;
     transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out, -webkit-backdrop-filter 500ms ease-in-out;
@@ -751,6 +752,7 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
 }
 .nok25-nav-dropdown, .nok25-nav-control-dropdown {
   transform: translate3d(0%, -100%, 0);
+  will-change: transform;
 }
 @media (prefers-reduced-motion: no-preference) {
   body.__enable-transitions .nok25-nav-dropdown, body.__enable-transitions .nok25-nav-control-dropdown {
@@ -759,6 +761,7 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
 }
 .nok25-nav.open .nok25-nav-dropdown, .nok25-nav-control-dropdown.open {
   transform: translate3d(0%, 0%, 0);
+  will-change: transform;
   pointer-events: all;
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -768,12 +771,12 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   }
 }
 .nok25-nav .nok25-button {
-  height: 100%;
-  max-height: 100%;
-  --flex-gap: calc(var(--grid-gap, var(--nok25-global-grid-gap)) * .5);
+  flex-shrink: 1;
+  flex-grow: 0;
 }
 .nok25-nav-menu-toggler.nok25-button-menu svg {
   transform: rotate(0deg);
+  will-change: transform;
 }
 @media (prefers-reduced-motion: no-preference) {
   body.__enable-transitions .nok25-nav-menu-toggler.nok25-button-menu svg {
@@ -814,6 +817,7 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
           user-select: none;
   transform: translate3d(0%, 0%, 0);
   box-shadow: -8px 8px 16px rgba(0, 0, 0, 0.1);
+  will-change: transform;
 }
 @media (prefers-reduced-motion: no-preference) {
   body.__enable-transitions .nok25-nav.open .nok25-nav-drawer {
@@ -1037,6 +1041,7 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   pointer-events: all;
 }
 .nok25-nav nok25-mobile-nav .nok25-nav-top-row {
+  --grid-gap: 0.25rem;
   display: flex;
   align-items: center;
   justify-items: center;
@@ -1048,6 +1053,7 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
 }
 .nok25-nav nok25-mobile-nav .nok25-nav-drawer {
   transform: translate3d(100%, 0%, 0);
+  will-change: transform;
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -1176,6 +1182,7 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
 .nok25-nav nok25-mobile-nav nok25-logo {
   display: block;
   flex-grow: 1;
+  flex-shrink: 1;
   min-width: 0;
 }
 .nok25-nav nok25-mobile-nav nok25-logo svg {
@@ -1422,6 +1429,7 @@ h1.nok25-hero__heading {
   border-color: rgba(136, 136, 136, 0.1333333333);
 }
 .nok25-button:hover {
+  --text-alpha-value: 1;
   color: var(--bg-color--contrast, inherit);
   background-color: var(--bg-color--hover, inherit);
 }
