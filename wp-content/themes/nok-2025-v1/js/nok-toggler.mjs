@@ -31,7 +31,11 @@ function swipeToClose(element, closeCallback, direction = 'y', min = -9999, max 
     e.preventDefault();
     if (element.style.userSelect !== "none") element.style.userSelect = "none"; // Prevent selection
     element.style.transition = "none";
-    element.style.transform = `translate${direction.toUpperCase()}(${clamp(current - start, min, max)}px)`;
+    //element.style.transform = `translate${direction.toUpperCase()}(${clamp(current - start, min, max)}px)`;
+    element.style.transform = direction === 'x'
+        ? `translate3d(${clamp(current - start, min, max)}px, 0, 0)`
+        : `translate3d(0, ${clamp(current - start, min, max)}px, 0)`;
+
   }
 
   function pointerUp(e) {
@@ -41,7 +45,12 @@ function swipeToClose(element, closeCallback, direction = 'y', min = -9999, max 
       element.removeEventListener('transitionend', resetStyles); // Avoid duplicate calls
       element.addEventListener('transitionend', resetStyles, { once: true });
 
-      element.style.transform = Math.abs(start - current) > threshold ? "" : `translate${direction.toUpperCase()}(0px)`;
+      //element.style.transform = Math.abs(start - current) > threshold ? "" : `translate${direction.toUpperCase()}(0px)`;
+      element.style.transform = Math.abs(start - current) > threshold
+          ? ""
+          : direction === 'x'
+              ? `translate3d(0px, 0, 0)`
+              : `translate3d(0, 0px, 0)`;
       if (Math.abs(start - current) > threshold) closeCallback(element);
     }
 

@@ -47,6 +47,7 @@ $component-name: #{nok-variables.$prefix}-button;
   }
 
   &:hover {
+    --text-alpha-value: 1;
     color: var(--bg-color--contrast, inherit);
     background-color: var(--bg-color--hover, inherit);
   }

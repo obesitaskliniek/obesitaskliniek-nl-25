@@ -2,6 +2,8 @@
 Embedded scroll menu handler (c)2025 Klaas Leussink / hnldesign
  */
 
+//todo: this file is queued for deletion
+
 export const NAME = 'carousel';
 
 export function init(elements){
