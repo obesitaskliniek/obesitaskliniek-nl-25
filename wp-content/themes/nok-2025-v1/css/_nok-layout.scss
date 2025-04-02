@@ -19,7 +19,7 @@
     &__1-column {
       --grid-columns: 1;
     }
-    &__2-column {
+    &__2-column, &.fill-fill {
       --grid-columns: 2;
       @include nok-mixins.media-breakpoint-down(lg) {
         --grid-columns: 1;
@@ -34,6 +34,27 @@
         --grid-columns: 1;
       }
     }
+
+    //Layout patterns
+    &.fill-one { //fills first child across columns, followed by a single column for the second element
+      > :first-child {
+        grid-column-start: 1;
+        grid-column-end: var(--grid-columns);
+      }
+      > :last-child {
+        grid-column-end: span 1;
+      }
+    }
+    &.one-fill { //fills first child across 1 colum, followed by the second element spanning across columns
+      > :first-child {
+        grid-column-start: 1;
+        grid-column-end: span 1;
+      }
+      > :last-child {
+        grid-column-end: span max(1, calc(var(--grid-columns) - 1));
+      }
+    }
+    //"fill-fill" is another layout pattern, which fills both children 50/50. See 2-column layout above; it's identical
 
   }
 

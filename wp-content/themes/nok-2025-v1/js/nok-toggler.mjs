@@ -104,8 +104,6 @@ export function init(elements){
       }
 
       singleClick(toggler, ()=>{
-        //enable transitions once
-        document.body.classList.add('__enable-transitions');
         target.classList.toggle(toggles);
         clearTimeout(autoHideTimeout);
         if (hide) document.addEventListener("click", handleClickOutside);

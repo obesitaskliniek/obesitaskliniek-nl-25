@@ -2,7 +2,7 @@
 Embedded scroll menu handler (c)2025 Klaas Leussink / hnldesign
  */
 
-//todo: this file is queued for deletion
+//todo: this file is queued for deletion - now handled in hnl.draggable
 
 export const NAME = 'carousel';
 
