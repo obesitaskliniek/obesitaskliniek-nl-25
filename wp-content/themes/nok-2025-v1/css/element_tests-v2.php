@@ -267,7 +267,7 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
             <h1 class="nok25-section__heading nok25-hero__heading nok25-fs-6">
                 Verander je leven, verander je gewicht
             </h1>
-            <p class="nok25-block-group__description">
+            <p class="nok25-usp-block__description">
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos
                 vero.
             </p>
@@ -386,21 +386,21 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
 </section>
 
 <section class="nok25-section nok25-bg-darkerblue nok25-text-contrast">
-    <div class="nok25-section__inner nok25-block-group">
-        <div class="nok25-block-group__inner nok-layout-grid nok-layout-grid__3-column">
-            <h1 class="nok25-section__heading span-all-columns align-center">
-                Een titel voor deze sectie
-            </h1>
-            <p class="nok25-block-group__description span-all-columns align-center">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos
-                vero. Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas, quia
-                reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab cumque est
-                illo laboriosam libero officia praesentium quasi similique vitae voluptates? Adipisci aspernatur autem,
-                corporis dolorem esse facere ipsam laboriosam rem!
-            </p>
-            <div class="nok25-block-group__scroller nok25-draggable nok25-mt-grid-gap" data-requires="./modules/hnl.draggable"
+    <div class="nok25-section__inner nok25-usp-block">
+        <div class="nok25-usp-block__inner nok-layout-grid nok-layout-grid__3-column">
+            <div class="nok-layout-grid nok-layout-grid__3-column fill-one align-self-stretch">
+                <h1 class="nok25-section__heading align-center">
+                    USP Block
+                </h1>
+                <p class="nok25-usp-block__description align-center">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos
+                    vero. Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas, quia
+                    reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                </p>
+            </div>
+            <div class="nok25-usp-block__scroller nok25-draggable nok25-mt-grid-gap" data-requires="./modules/hnl.draggable"
                  data-snap-items="nok25-draggable-slider-item" data-scroll-snapping="true">
-                <div class="nok25-block-group__blocks">
+                <div class="nok25-usp-block__blocks">
                     <?php $x = 6;
                     while ($x--) : ?>
                         <nok25-square-block class="nok25-draggable-slider-item">

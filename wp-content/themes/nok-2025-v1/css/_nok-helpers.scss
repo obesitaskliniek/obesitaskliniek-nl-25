@@ -103,6 +103,9 @@
 
 .align-center {
   align-self: center;
+}
+
+.text-center {
   text-align: center;
 }
 
@@ -114,11 +117,6 @@
 .align-self-end {
   align-self: end;
 }
-
-.span-all-columns {
-  grid-column: 1 / -1;
-}
-
 
 /* Rounded borders */
 
@@ -398,6 +396,19 @@ $utilities: (
                         stretch: (align-self: stretch, grid-column: "1 / -1")
                 )
         ),
+
+        //conceptual
+        "column-start-to": (
+                property: grid-column,
+                class: #{nok-variables.$prefix}-column-start-to,
+                values: (
+                        end: "1 / -1",
+                        3: "1 / 3",
+                        2: "1 / 2",
+                )
+        ),
+
+
         "font-size": (
                 property: font-size,
                 responsive: true,

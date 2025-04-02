@@ -36,6 +36,9 @@ eventHandler.docReady(function(){
   //https://stackoverflow.com/questions/3885018/active-pseudo-class-doesnt-work-in-mobile-safari
   document.addEventListener('touchstart', function() {},false);
 
+  //enable transitions once
+  document.body.classList.add('__enable-transitions');
+
   eventHandler.addListener('scroll', (e) => {
   //clear the url hash when scrolled back to top
     if (window.scrollY === 0) {
@@ -47,3 +50,4 @@ eventHandler.docReady(function(){
     document.documentElement.style.setProperty('--doc-scrolled-float', `${scrolled / 100}`);
   })();
 });
+
