@@ -35,13 +35,13 @@
   }
 }
 
-/**
- * Mixin to apply border-radius with customizable size and position.
- * by hnldesign - 2025
- *
- * @param {String} $size - The size of the border-radius. Options: 'default', 'large', 'x-large', 'xx-large'.
- * @param {String} $position - The position to apply the border-radius. Options: 'all', 'bottom', 'top', 'left', 'right'.
- */
+///**
+// * Mixin to apply border-radius with customizable size and position.
+// * by hnldesign - 2025
+// *
+// * @param {String} $size - The size of the border-radius. Options: 'default', 'large', 'x-large', 'xx-large'.
+// * @param {String} $position - The position to apply the border-radius. Options: 'all', 'bottom', 'top', 'left', 'right'.
+// */
 @mixin nok-border-radius($size: 'default', $position: 'all') {
   // Determine border-radius based on size
   $radius: var(--nok25-default-border-radius, 0.4rem);
@@ -75,22 +75,22 @@
   outline: 2px solid #FFF;
 }
 
-/**
- * Mixin to style inline links with hover and focus effects.
- * for NOK by hnldesign - 2025
- *
- * This mixin applies various styles to inline links, including:
- * - Custom underline with gradient background
- * - Hover and active states
- * - Focus-visible state with border radius and focus ring
- *
- * Variables:
- * - --active-color: The color of the link when active.
- * - --hover-transition-time: The duration of the hover transition.
- * - --hover-color: The color of the link when hovered.
- * - --underline-height: The height of the underline.
- * - --gradient: The gradient background for the underline.
- */
+///**
+// * Mixin to style inline links with hover and focus effects.
+// * for NOK by hnldesign - 2025
+// *
+// * This mixin applies various styles to inline links, including:
+// * - Custom underline with gradient background
+// * - Hover and active states
+// * - Focus-visible state with border radius and focus ring
+// *
+// * Variables:
+// * - --active-color: The color of the link when active.
+// * - --hover-transition-time: The duration of the hover transition.
+// * - --hover-color: The color of the link when hovered.
+// * - --underline-height: The height of the underline.
+// * - --gradient: The gradient background for the underline.
+// */
 @mixin nok-inline-link {
   --active-color: #000;
   --hover-transition-time: 0.15s;
@@ -133,15 +133,15 @@
   }
 }
 
-/**
- * Mixin to style scrollbars and optionally add a fake scrollbar with identical styles.
- * by hnldesign - 2025
- *
- * @param {Length} $scrollbarHeight - The height of the scrollbar.
- * @param {Color} $scrollbarHandle - The color of the scrollbar handle.
- * @param {Color} $scrollbarHandle_active - The color of the scrollbar handle when active.
- * @param {Color} $scrollbarTrack - The color of the scrollbar track.
- */
+///**
+// * Mixin to style scrollbars and optionally add a fake scrollbar with identical styles.
+// * by hnldesign - 2025
+// *
+// * @param {Length} $scrollbarHeight - The height of the scrollbar.
+// * @param {Color} $scrollbarHandle - The color of the scrollbar handle.
+// * @param {Color} $scrollbarHandle_active - The color of the scrollbar handle when active.
+// * @param {Color} $scrollbarTrack - The color of the scrollbar track.
+// */
 @mixin nok-scrollbar-thin(
   $scrollbarHeight: 6px,
   $scrollbarHandle: var(--text-color--contrast, #CCC),
@@ -358,23 +358,23 @@
   }
 }
 
-/**
- * Mixin to apply transition properties conditionally based on user preferences.
- * By hnldesign - 2025
- *
- * This mixin checks if the user has a preference for reduced motion. If the user
- * does not prefer reduced motion, it applies the transition properties to the
- * specified elements when the `body` element has the `__enable-transitions` class.
- *
- * Usage:
- * @include transition-properties(margin) {
- *   transition: margin 0.3s ease;
- * }
- * The optional property-hint lets the browser prepare for changes in the property specified,
- * as waiting for the body to assume __enable-transitions class state will create a slight stutter,
- * because the browser has not been able to prepare for this (as there's a race condition for the class being added
- * and the animation kicking off)
- */
+///**
+// * Mixin to apply transition properties conditionally based on user preferences.
+// * By hnldesign - 2025
+// *
+// * This mixin checks if the user has a preference for reduced motion. If the user
+// * does not prefer reduced motion, it applies the transition properties to the
+// * specified elements when the `body` element has the `__enable-transitions` class.
+// *
+// * Usage:
+// * @include transition-properties(margin) {
+// *   transition: margin 0.3s ease;
+// * }
+// * The optional property-hint lets the browser prepare for changes in the property specified,
+// * as waiting for the body to assume __enable-transitions class state will create a slight stutter,
+// * because the browser has not been able to prepare for this (as there's a race condition for the class being added
+// * and the animation kicking off)
+// */
 @mixin transition-properties($property-hint: null) {
   @if ($property-hint) {
     will-change: $property-hint;
@@ -386,18 +386,18 @@
   }
 }
 
-/**
- * Mixin to apply styles when JavaScript is disabled.
- * By hnldesign - 2025
- *
- * This mixin targets elements when the `body` element has the `no-js` class,
- * indicating that JavaScript is disabled, since it will be unset at docReady.
- *
- * Usage:
- * @include no-javascript-properties {
- *   // Your styles here
- * }
- */
+///**
+// * Mixin to apply styles when JavaScript is disabled.
+// * By hnldesign - 2025
+// *
+// * This mixin targets elements when the `body` element has the `no-js` class,
+// * indicating that JavaScript is disabled, since it will be unset at docReady.
+// *
+// * Usage:
+// * @include no-javascript-properties {
+// *   // Your styles here
+// * }
+// */
 @mixin no-javascript-properties {
   @at-root body.no-js & {
     @content;

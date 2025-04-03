@@ -1,0 +1,76 @@
+@use "sass:map";
+@use "shared" as components-base;
+
+@mixin nok-section {
+  display: flex;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+
+  &__inner {
+    width: 100%;
+    padding-right: var(--#{components-base.$prefix}-padding-section-sides, (components-base.$padding-base * 2));
+    padding-left: var(--#{components-base.$prefix}-padding-section-sides, (components-base.$padding-base * 2));
+    margin: var(--nok25-spacing-section-ends, components-base.$padding-base) auto;
+
+    &--stretched {
+      align-self: stretch;
+    }
+    &--collapsed {
+      margin: 0 auto;
+      &-top {
+        margin-top: 0;
+      }
+      &-bottom {
+        margin-bottom: 0;
+      }
+    }
+    &--full-width {
+      --section-max-width: 100%;
+    }
+
+    @each $breakpoint, $section-max-width in components-base.$section-max-widths {
+      @include components-base.media-breakpoint-up($breakpoint, components-base.$grid-breakpoints) {
+        @at-root :root {
+          --section-max-width: #{$section-max-width};
+        }
+        & {
+          width: 100%;
+          max-width: var(--section-max-width, $section-max-width);
+        }
+      }
+    }
+
+  }
+
+  /*
+  .pull-down {
+    margin-bottom: calc(-1 * var(--nok25-spacing-section-ends, 0));
+  }
+  .pull-down-compensation {
+    margin-top: var(--nok25-spacing-section-ends, 0);
+  }*/
+}
+
+.nok-section,
+nok-section {
+  @include nok-section;
+}
+
+//
+//.#{$component-name} p {
+//  @include nok-rfs.rfs(1.1rem, font-size);
+//}
+//h1.#{$component-name}__heading {
+//  font-size: 3.25rem;
+//  @include nok-rfs.rfs(3.25rem, font-size);
+//}
+//h2.#{$component-name}__heading {
+//  font-size: 2.5rem;
+//  @include nok-rfs.rfs(2.5rem, font-size);
+//}

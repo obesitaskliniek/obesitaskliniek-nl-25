@@ -1,64 +1,3 @@
-/**
- * Mixin to apply border-radius with customizable size and position.
- * by hnldesign - 2025
- *
- * @param {String} $size - The size of the border-radius. Options: 'default', 'large', 'x-large', 'xx-large'.
- * @param {String} $position - The position to apply the border-radius. Options: 'all', 'bottom', 'top', 'left', 'right'.
- */
-/**
- * Mixin to style inline links with hover and focus effects.
- * for NOK by hnldesign - 2025
- *
- * This mixin applies various styles to inline links, including:
- * - Custom underline with gradient background
- * - Hover and active states
- * - Focus-visible state with border radius and focus ring
- *
- * Variables:
- * - --active-color: The color of the link when active.
- * - --hover-transition-time: The duration of the hover transition.
- * - --hover-color: The color of the link when hovered.
- * - --underline-height: The height of the underline.
- * - --gradient: The gradient background for the underline.
- */
-/**
- * Mixin to style scrollbars and optionally add a fake scrollbar with identical styles.
- * by hnldesign - 2025
- *
- * @param {Length} $scrollbarHeight - The height of the scrollbar.
- * @param {Color} $scrollbarHandle - The color of the scrollbar handle.
- * @param {Color} $scrollbarHandle_active - The color of the scrollbar handle when active.
- * @param {Color} $scrollbarTrack - The color of the scrollbar track.
- */
-/**
- * Mixin to apply transition properties conditionally based on user preferences.
- * By hnldesign - 2025
- *
- * This mixin checks if the user has a preference for reduced motion. If the user
- * does not prefer reduced motion, it applies the transition properties to the
- * specified elements when the `body` element has the `__enable-transitions` class.
- *
- * Usage:
- * @include transition-properties(margin) {
- *   transition: margin 0.3s ease;
- * }
- * The optional property-hint lets the browser prepare for changes in the property specified,
- * as waiting for the body to assume __enable-transitions class state will create a slight stutter,
- * because the browser has not been able to prepare for this (as there's a race condition for the class being added
- * and the animation kicking off)
- */
-/**
- * Mixin to apply styles when JavaScript is disabled.
- * By hnldesign - 2025
- *
- * This mixin targets elements when the `body` element has the `no-js` class,
- * indicating that JavaScript is disabled, since it will be unset at docReady.
- *
- * Usage:
- * @include no-javascript-properties {
- *   // Your styles here
- * }
- */
 *,
 *::before,
 *::after {
@@ -77,14 +16,14 @@ html {
 
 body {
   margin: 0;
-  font-family: var(--nok25-body-font-family);
-  font-size: var(--nok25-body-font-size);
-  font-weight: var(--nok25-body-font-weight);
-  font-size-adjust: var(--nok25-body-font-size-adjust);
-  line-height: var(--nok25-body-line-height, 1.5);
-  color: var(--nok25-body-text-color);
-  text-align: var(--nok25-body-text-align);
-  background-color: var(--nok25-body-bg);
+  font-family: var(--nok-body-font-family);
+  font-size: var(--nok-body-font-size);
+  font-weight: var(--nok-body-font-weight);
+  font-size-adjust: var(--nok-body-font-size-adjust);
+  line-height: var(--nok-body-line-height, 1.5);
+  color: var(--nok-body-text-color);
+  text-align: var(--nok-body-text-align);
+  background-color: var(--nok-body-bg);
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
 }
@@ -101,7 +40,7 @@ h6, h5, h4, h3, h2, h1 {
   margin-top: 0;
   margin-bottom: 0;
   line-height: 1.2;
-  color: var(--nok25-heading-color, var(--bg-color--contrast));
+  color: var(--nok-heading-color, var(--bg-color--contrast));
 }
 
 h1 {
@@ -224,8 +163,8 @@ small {
 
 mark {
   padding: 0.1875em;
-  color: var(--nok25-highlight-color);
-  background-color: var(--nok25-highlight-bg);
+  color: var(--nok-highlight-color);
+  background-color: var(--nok-highlight-bg);
 }
 
 sub,
@@ -282,7 +221,7 @@ pre code {
 
 code {
   font-size: 0.875em;
-  color: var(--nok25-code-color);
+  color: var(--nok-code-color);
   word-wrap: break-word;
 }
 a > code {
@@ -292,8 +231,8 @@ a > code {
 kbd {
   padding: 0.1875rem 0.375rem;
   font-size: 0.875em;
-  color: var(--nok25-body-bg);
-  background-color: var(--nok25-body-color);
+  color: var(--nok-body-bg);
+  background-color: var(--nok-body-color);
   border-radius: 2px;
 }
 kbd kbd {
@@ -325,7 +264,7 @@ table {
 caption {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  color: var(--nok25-secondary-color);
+  color: var(--nok-secondary-color);
   text-align: left;
 }
 
@@ -502,7 +441,7 @@ progress {
   isolation: isolate;
 }
 
-.nok25-section {
+.nok-section {
   display: flex;
   width: 100%;
   padding: 0;
@@ -512,32 +451,32 @@ progress {
   justify-content: center;
   align-items: center;
 }
-.nok25-section__inner {
+.nok-section__inner {
   width: 100%;
-  padding-right: var(--nok25-padding-section-sides, 3rem);
-  padding-left: var(--nok25-padding-section-sides, 3rem);
+  padding-right: var(--nok-padding-section-sides, 3rem);
+  padding-left: var(--nok-padding-section-sides, 3rem);
   margin: var(--nok25-spacing-section-ends, 1.5rem) auto;
 }
-.nok25-section__inner--stretched {
+.nok-section__inner--stretched {
   align-self: stretch;
 }
-.nok25-section__inner--collapsed {
+.nok-section__inner--collapsed {
   margin: 0 auto;
 }
-.nok25-section__inner--collapsed-top {
+.nok-section__inner--collapsed-top {
   margin-top: 0;
 }
-.nok25-section__inner--collapsed-bottom {
+.nok-section__inner--collapsed-bottom {
   margin-bottom: 0;
 }
-.nok25-section__inner--full-width {
+.nok-section__inner--full-width {
   --section-max-width: 100%;
 }
 @media (min-width: 576px) {
   :root {
     --section-max-width: 540px;
   }
-  .nok25-section__inner {
+  .nok-section__inner {
     width: 100%;
     max-width: var(--section-max-width, 540px);
   }
@@ -546,7 +485,7 @@ progress {
   :root {
     --section-max-width: 720px;
   }
-  .nok25-section__inner {
+  .nok-section__inner {
     width: 100%;
     max-width: var(--section-max-width, 720px);
   }
@@ -555,7 +494,7 @@ progress {
   :root {
     --section-max-width: 960px;
   }
-  .nok25-section__inner {
+  .nok-section__inner {
     width: 100%;
     max-width: var(--section-max-width, 960px);
   }
@@ -564,7 +503,7 @@ progress {
   :root {
     --section-max-width: 1140px;
   }
-  .nok25-section__inner {
+  .nok-section__inner {
     width: 100%;
     max-width: var(--section-max-width, 1140px);
   }
@@ -573,7 +512,7 @@ progress {
   :root {
     --section-max-width: 1320px;
   }
-  .nok25-section__inner {
+  .nok-section__inner {
     width: 100%;
     max-width: var(--section-max-width, 1320px);
   }
@@ -582,38 +521,38 @@ progress {
   :root {
     --section-max-width: 1572px;
   }
-  .nok25-section__inner {
+  .nok-section__inner {
     width: 100%;
     max-width: var(--section-max-width, 1572px);
   }
 }
-.nok25-section .pull-down {
+.nok-section .pull-down {
   margin-bottom: calc(-1 * var(--nok25-spacing-section-ends, 0));
 }
-.nok25-section .pull-down-compensation {
+.nok-section .pull-down-compensation {
   margin-top: var(--nok25-spacing-section-ends, 0);
 }
 
-.nok25-section p {
+.nok-section p {
   font-size: 1.1rem;
 }
 
-h1.nok25-section__heading {
+h1.nok-section__heading {
   font-size: 3.25rem;
   font-size: calc(1.45rem + 2.4vw);
 }
 @media (min-width: 1200px) {
-  h1.nok25-section__heading {
+  h1.nok-section__heading {
     font-size: 3.25rem;
   }
 }
 
-h2.nok25-section__heading {
+h2.nok-section__heading {
   font-size: 2.5rem;
   font-size: calc(1.375rem + 1.5vw);
 }
 @media (min-width: 1200px) {
-  h2.nok25-section__heading {
+  h2.nok-section__heading {
     font-size: 2.5rem;
   }
 }
@@ -621,7 +560,7 @@ h2.nok25-section__heading {
 /**
  * hero unit
  */
-.nok25-nav {
+.nok-nav {
   --animation-easing-in: cubic-bezier(.07,1.01,.36,1);
   --animation-easing-out: cubic-bezier(.85, 0, .15, 1);
   --animation-duration--in: 750ms;
@@ -631,20 +570,20 @@ h2.nok25-section__heading {
   /* Open state */
 }
 @media (min-width: 1200px) {
-  .nok25-nav nok25-mobile-nav {
+  .nok-nav nok-mobile-nav {
     display: none !important;
   }
-  .nok25-nav {
+  .nok-nav {
     position: sticky;
     top: 0;
     z-index: 100;
   }
 }
 @media (max-width: 1199.98px) {
-  .nok25-nav nok25-desktop-nav {
+  .nok-nav nok-desktop-nav {
     display: none !important;
   }
-  .nok25-nav {
+  .nok-nav {
     position: fixed;
     top: 0;
     bottom: 0;
@@ -653,13 +592,13 @@ h2.nok25-section__heading {
     pointer-events: none;
   }
 }
-.nok25-nav .nok25-star-ratings {
+.nok-nav .nok-star-ratings {
   display: inline-flex;
   flex-direction: row;
   gap: 0.5ex;
   margin-right: 1ex;
 }
-.nok25-nav-mask {
+.nok-nav-mask {
   --bg-alpha-value: 0;
   inset: 0;
   position: fixed;
@@ -668,19 +607,19 @@ h2.nok25-section__heading {
   will-change: opacity;
 }
 @media (prefers-reduced-transparency) {
-  .nok25-nav-mask {
+  .nok-nav-mask {
     display: none;
   }
 }
 @media (prefers-reduced-motion: no-preference) {
-  body.__enable-transitions .nok25-nav-mask {
+  body.__enable-transitions .nok-nav-mask {
     animation: fade--in 0.5s ease-in-out;
     transition: background 500ms ease-in-out, -webkit-backdrop-filter 500ms ease-in-out;
     transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out;
     transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out, -webkit-backdrop-filter 500ms ease-in-out;
   }
 }
-.nok25-nav-control-dropdown {
+.nok-nav-control-dropdown {
   font-size: 16px;
   position: absolute;
   top: 0;
@@ -698,14 +637,14 @@ h2.nok25-section__heading {
   --nok25-default-border-radius--large: 24px;
 }
 @media (max-width: 767.98px) {
-  .nok25-nav-control-dropdown {
+  .nok-nav-control-dropdown {
     width: 100%;
   }
 }
-.nok25-nav-control-dropdown h5 {
+.nok-nav-control-dropdown h5 {
   font-size: 20px;
 }
-.nok25-nav-control-dropdown .nok25-button {
+.nok-nav-control-dropdown .nok25-button {
   --nok25-default-border-radius: 8px;
   --flex-gap: 8px !important;
   font-size: inherit !important;
@@ -715,21 +654,21 @@ h2.nok25-section__heading {
   align-self: stretch;
   padding: 10px;
 }
-body.larger-font .nok25-nav-control-dropdown .nok25-button.font-increase {
+body.larger-font .nok-nav-control-dropdown .nok25-button.font-increase {
   background: var(--nok25-lightblue);
 }
 
-body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
+body.smaller-font .nok-nav-control-dropdown .nok25-button.font-decrease {
   background: var(--nok25-lightblue);
 }
 
-.nok25-nav-control-dropdown__section {
+.nok-nav-control-dropdown__section {
   display: flex;
   flex-direction: row;
   gap: 8px;
   align-items: center;
 }
-.nok25-nav-control-dropdown::after {
+.nok-nav-control-dropdown::after {
   content: "";
   display: flex;
   background: rgba(136, 136, 136, 0.3333333333);
@@ -739,10 +678,10 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   margin-bottom: 8px;
   cursor: grab;
 }
-.nok25-nav-control-dropdown:active::after {
+.nok-nav-control-dropdown:active::after {
   cursor: grabbing;
 }
-.nok25-nav-control-dropdown.open {
+.nok-nav-control-dropdown.open {
   touch-action: none;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -750,66 +689,66 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
           user-select: none;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1), 0 0 2rem rgba(0, 0, 0, 0.1);
 }
-.nok25-nav-dropdown, .nok25-nav-control-dropdown {
+.nok-nav-dropdown, .nok-nav-control-dropdown {
   transform: translate3d(0%, -100%, 0);
   will-change: transform;
 }
 @media (prefers-reduced-motion: no-preference) {
-  body.__enable-transitions .nok25-nav-dropdown, body.__enable-transitions .nok25-nav-control-dropdown {
+  body.__enable-transitions .nok-nav-dropdown, body.__enable-transitions .nok-nav-control-dropdown {
     transition: transform var(--animation-duration--out) var(--animation-easing-out), box-shadow var(--animation-duration--out) var(--animation-easing-out);
   }
 }
-.nok25-nav.open .nok25-nav-dropdown, .nok25-nav-control-dropdown.open {
+.nok-nav.open .nok-nav-dropdown, .nok-nav-control-dropdown.open {
   transform: translate3d(0%, 0%, 0);
   will-change: transform;
   pointer-events: all;
 }
 @media (prefers-reduced-motion: no-preference) {
-  body.__enable-transitions .nok25-nav.open .nok25-nav-dropdown, body.__enable-transitions .nok25-nav-control-dropdown.open {
+  body.__enable-transitions .nok-nav.open .nok-nav-dropdown, body.__enable-transitions .nok-nav-control-dropdown.open {
     transition-duration: var(--animation-duration--in);
     transition-timing-function: var(--animation-easing-in);
   }
 }
-.nok25-nav .nok25-button {
+.nok-nav .nok-button {
   flex-shrink: 1;
   flex-grow: 0;
 }
-.nok25-nav-menu-toggler.nok25-button-menu svg {
+.nok-nav-menu-toggler.nok-button-menu svg {
   transform: rotate(0deg);
   will-change: transform;
 }
 @media (prefers-reduced-motion: no-preference) {
-  body.__enable-transitions .nok25-nav-menu-toggler.nok25-button-menu svg {
+  body.__enable-transitions .nok-nav-menu-toggler.nok-button-menu svg {
     transition: transform var(--animation-duration--in) cubic-bezier(0.16, 1, 0.3, 1);
   }
 }
-.nok25-nav-menu-toggler.nok25-button-menu svg .closed {
+.nok-nav-menu-toggler.nok-button-menu svg .closed {
   display: none;
 }
-.nok25-nav.open {
+.nok-nav.open {
   touch-action: none;
 }
-.nok25-nav.open .nok25-nav-mask {
+.nok-nav.open .nok-nav-mask {
   -webkit-backdrop-filter: blur(5px);
           backdrop-filter: blur(5px);
   --bg-alpha-value: 0.5;
   pointer-events: all;
 }
 @media (prefers-reduced-transparency) {
-  .nok25-nav.open .nok25-nav-mask {
+  .nok-nav.open .nok-nav-mask {
     display: none;
   }
 }
-.nok25-nav.open .nok25-nav-menu-toggler svg {
+.nok-nav.open .nok-nav-menu-toggler svg {
   transform: rotate(-180deg);
 }
-.nok25-nav.open .nok25-nav-menu-toggler svg .open {
+.nok-nav.open .nok-nav-menu-toggler svg .open {
   display: none;
 }
-.nok25-nav.open .nok25-nav-menu-toggler svg .closed {
+.nok-nav.open .nok-nav-menu-toggler svg .closed {
   display: inline;
 }
-.nok25-nav.open .nok25-nav-drawer {
+.nok-nav.open .nok-nav-drawer {
   touch-action: none;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -820,64 +759,64 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   will-change: transform;
 }
 @media (prefers-reduced-motion: no-preference) {
-  body.__enable-transitions .nok25-nav.open .nok25-nav-drawer {
+  body.__enable-transitions .nok-nav.open .nok-nav-drawer {
     transition-duration: var(--animation-duration--in);
     transition-timing-function: var(--animation-easing-in);
   }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem {
+  .nok-nav.open .nok-nav-drawer .nok-nav__menuitem {
     opacity: 0;
     animation: fade--in 0.5s var(--animation-easing-out);
     animation-fill-mode: forwards;
   }
 }
-.nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(1) {
+.nok-nav.open .nok-nav-drawer .nok-nav__menuitem:nth-child(1) {
   animation-delay: 187.5ms;
 }
-.nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(2) {
+.nok-nav.open .nok-nav-drawer .nok-nav__menuitem:nth-child(2) {
   animation-delay: 237.5ms;
 }
-.nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(3) {
+.nok-nav.open .nok-nav-drawer .nok-nav__menuitem:nth-child(3) {
   animation-delay: 287.5ms;
 }
-.nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(4) {
+.nok-nav.open .nok-nav-drawer .nok-nav__menuitem:nth-child(4) {
   animation-delay: 337.5ms;
 }
-.nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(5) {
+.nok-nav.open .nok-nav-drawer .nok-nav__menuitem:nth-child(5) {
   animation-delay: 387.5ms;
 }
-.nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(6) {
+.nok-nav.open .nok-nav-drawer .nok-nav__menuitem:nth-child(6) {
   animation-delay: 437.5ms;
 }
-.nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(7) {
+.nok-nav.open .nok-nav-drawer .nok-nav__menuitem:nth-child(7) {
   animation-delay: 487.5ms;
 }
-.nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(8) {
+.nok-nav.open .nok-nav-drawer .nok-nav__menuitem:nth-child(8) {
   animation-delay: 537.5ms;
 }
-.nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(9) {
+.nok-nav.open .nok-nav-drawer .nok-nav__menuitem:nth-child(9) {
   animation-delay: 587.5ms;
 }
-.nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(10) {
+.nok-nav.open .nok-nav-drawer .nok-nav__menuitem:nth-child(10) {
   animation-delay: 637.5ms;
 }
-.nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(11) {
+.nok-nav.open .nok-nav-drawer .nok-nav__menuitem:nth-child(11) {
   animation-delay: 687.5ms;
 }
-.nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(12) {
+.nok-nav.open .nok-nav-drawer .nok-nav__menuitem:nth-child(12) {
   animation-delay: 737.5ms;
 }
-.nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(13) {
+.nok-nav.open .nok-nav-drawer .nok-nav__menuitem:nth-child(13) {
   animation-delay: 787.5ms;
 }
-.nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(14) {
+.nok-nav.open .nok-nav-drawer .nok-nav__menuitem:nth-child(14) {
   animation-delay: 837.5ms;
 }
-.nok25-nav.open .nok25-nav-drawer .nok25-nav__menuitem:nth-child(15) {
+.nok-nav.open .nok-nav-drawer .nok-nav__menuitem:nth-child(15) {
   animation-delay: 887.5ms;
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-top {
+.nok-nav nok-desktop-nav .nok-nav-top {
   z-index: 1;
   font-family: var(--nok25-text-font-family, "Inter", Arial, Helvetica, sans-serif);
   font-size-adjust: var(--nok25-text-font-size-adjust, 0.514);
@@ -889,73 +828,73 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   font-size: 1rem;
   font-size: 1rem;
   font-weight: 300;
-  --grid-gap: var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem));
+  --grid-gap: var(--nok-padding-base, var(--nok-global-grid-gap, 1.5rem));
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
-  gap: var(--grid-gap, var(--nok25-global-grid-gap));
-  padding-top: calc(var(--grid-gap, var(--nok25-global-grid-gap)) * 0.75);
-  padding-bottom: calc(var(--grid-gap, var(--nok25-global-grid-gap)) * 0.75);
+  gap: var(--grid-gap, var(--nok-global-grid-gap));
+  padding-top: calc(var(--grid-gap, var(--nok-global-grid-gap)) * 0.75);
+  padding-bottom: calc(var(--grid-gap, var(--nok-global-grid-gap)) * 0.75);
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-top > * {
+.nok-nav nok-desktop-nav .nok-nav-top > * {
   flex-shrink: 0;
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-top > *:first-child {
+.nok-nav nok-desktop-nav .nok-nav-top > *:first-child {
   flex-basis: 100%;
   flex-shrink: 1;
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-top-row {
+.nok-nav nok-desktop-nav .nok-nav-top-row {
   padding-bottom: 2rem;
   overflow: hidden;
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-top a {
+.nok-nav nok-desktop-nav .nok-nav-top a {
   text-decoration: none;
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-top a:hover {
+.nok-nav nok-desktop-nav .nok-nav-top a:hover {
   color: var(--nok25-lightblue);
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-menubar {
+.nok-nav nok-desktop-nav .nok-nav-menubar {
   pointer-events: all;
   z-index: 3;
-  --grid-gap: var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem));
+  --grid-gap: var(--nok-padding-base, var(--nok-global-grid-gap, 1.5rem));
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
-  gap: var(--grid-gap, var(--nok25-global-grid-gap));
-  padding-top: calc(var(--grid-gap, var(--nok25-global-grid-gap)) * 0.75);
-  padding-bottom: calc(var(--grid-gap, var(--nok25-global-grid-gap)) * 0.75);
+  gap: var(--grid-gap, var(--nok-global-grid-gap));
+  padding-top: calc(var(--grid-gap, var(--nok-global-grid-gap)) * 0.75);
+  padding-bottom: calc(var(--grid-gap, var(--nok-global-grid-gap)) * 0.75);
   overflow: hidden;
   border-radius: var(--nok25-default-border-radius--large, 1rem);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding-left: var(--nok25-padding-base, 1.5rem);
-  padding-right: var(--nok25-padding-base, 1.5rem);
+  padding-left: var(--nok-padding-base, 1.5rem);
+  padding-right: var(--nok-padding-base, 1.5rem);
   height: 6rem;
   overflow: hidden;
   font-weight: 400;
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-menubar > * {
+.nok-nav nok-desktop-nav .nok-nav-menubar > * {
   flex-shrink: 0;
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-menubar > *:first-child {
+.nok-nav nok-desktop-nav .nok-nav-menubar > *:first-child {
   flex-basis: 100%;
   flex-shrink: 1;
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-menubar img, .nok25-nav nok25-desktop-nav .nok25-nav-menubar svg {
+.nok-nav nok-desktop-nav .nok-nav-menubar img, .nok-nav nok-desktop-nav .nok-nav-menubar svg {
   align-self: center;
   height: 3.5rem;
   height: calc(1.475rem + 2.7vw);
   width: auto;
 }
 @media (min-width: 1200px) {
-  .nok25-nav nok25-desktop-nav .nok25-nav-menubar img, .nok25-nav nok25-desktop-nav .nok25-nav-menubar svg {
+  .nok-nav nok-desktop-nav .nok-nav-menubar img, .nok-nav nok-desktop-nav .nok-nav-menubar svg {
     height: 3.5rem;
   }
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-menubar-row {
+.nok-nav nok-desktop-nav .nok-nav-menubar-row {
   pointer-events: none;
   display: flex;
   flex-direction: column;
@@ -964,24 +903,24 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   top: 4rem;
   overflow: hidden;
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-dropdown {
+.nok-nav nok-desktop-nav .nok-nav-dropdown {
   z-index: 2;
   display: flex;
   overflow: hidden;
   justify-content: center;
   flex-basis: 100%;
-  margin-top: calc(-1 * var(--nok25-default-border-radius--large, 0));
-  margin-left: var(--nok25-default-border-radius--large, 0);
-  margin-right: var(--nok25-default-border-radius--large, 0);
+  margin-top: calc(-1 * var(--nok-default-border-radius--large, 0));
+  margin-left: var(--nok-default-border-radius--large, 0);
+  margin-right: var(--nok-default-border-radius--large, 0);
   padding-bottom: 24px; /* to prevent box-shadow from being cut off due to overflow - sync px values with applied shadow (currently: nok-subtle-shadow-menu)*/
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-dropdown-collapser {
+.nok-nav nok-desktop-nav .nok-nav-dropdown-collapser {
   margin: 0;
   padding: 0;
   overflow: hidden;
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-dropdown-contents {
-  --grid-gap: var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem));
+.nok-nav nok-desktop-nav .nok-nav-dropdown-contents {
+  --grid-gap: var(--nok-padding-base, var(--nok-global-grid-gap, 1.5rem));
   display: inline-flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -990,57 +929,57 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   align-self: center;
   flex-basis: 100%;
   pointer-events: all;
-  gap: var(--grid-gap, var(--nok25-global-grid-gap));
+  gap: var(--grid-gap, var(--nok-global-grid-gap));
   overflow: hidden;
   border-radius: 0 0 var(--nok25-default-border-radius--large, 1rem) var(--nok25-default-border-radius--large, 1rem);
   box-shadow: -8px 8px 16px rgba(0, 0, 0, 0.1);
   width: -moz-max-content;
   width: max-content;
-  padding: calc(var(--grid-gap, var(--nok25-padding-base, 1.5rem)) * 2);
+  padding: calc(var(--grid-gap, var(--nok-padding-base, 1.5rem)) * 2);
 }
 @media (min-width: 1200px) {
-  .nok25-nav nok25-desktop-nav .nok25-nav-dropdown-contents {
+  .nok-nav nok-desktop-nav .nok-nav-dropdown-contents {
     max-width: 992px;
   }
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-dropdown-contents > * {
+.nok-nav nok-desktop-nav .nok-nav-dropdown-contents > * {
   flex-basis: 50%;
   min-width: 0;
   flex-shrink: 1;
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-dropdown-contents-menu {
+.nok-nav nok-desktop-nav .nok-nav-dropdown-contents-menu {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: calc(var(--grid-gap, var(--nok25-padding-base, 1.5rem)) / 2) 0;
+  padding: calc(var(--grid-gap, var(--nok-padding-base, 1.5rem)) / 2) 0;
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-dropdown-contents h2 {
+.nok-nav nok-desktop-nav .nok-nav-dropdown-contents h2 {
   font-size: 2rem;
   font-size: calc(1.325rem + 0.9vw);
 }
 @media (min-width: 1200px) {
-  .nok25-nav nok25-desktop-nav .nok25-nav-dropdown-contents h2 {
+  .nok-nav nok-desktop-nav .nok-nav-dropdown-contents h2 {
     font-size: 2rem;
   }
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-dropdown-contents h3 {
+.nok-nav nok-desktop-nav .nok-nav-dropdown-contents h3 {
   font-size: 1.5rem;
   font-size: calc(1.275rem + 0.3vw);
 }
 @media (min-width: 1200px) {
-  .nok25-nav nok25-desktop-nav .nok25-nav-dropdown-contents h3 {
+  .nok-nav nok-desktop-nav .nok-nav-dropdown-contents h3 {
     font-size: 1.5rem;
   }
 }
-.nok25-nav nok25-desktop-nav .nok25-nav-dropdown-contents ul {
+.nok-nav nok-desktop-nav .nok-nav-dropdown-contents ul {
   list-style-type: none;
   padding: 0;
   font-weight: 300;
 }
-.nok25-nav nok25-mobile-nav .nok25-nav-top-row, .nok25-nav nok25-mobile-nav .nok25-nav-drawer {
+.nok-nav nok-mobile-nav .nok-nav-top-row, .nok-nav nok-mobile-nav .nok-nav-drawer {
   pointer-events: all;
 }
-.nok25-nav nok25-mobile-nav .nok25-nav-top-row {
+.nok-nav nok-mobile-nav .nok-nav-top-row {
   --grid-gap: 0.25rem;
   display: flex;
   align-items: center;
@@ -1048,10 +987,10 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between;
-  padding: 1rem var(--nok25-padding-section-sides);
-  gap: var(--grid-gap, var(--nok25-global-grid-gap));
+  padding: 1rem var(--nok-padding-section-sides);
+  gap: var(--grid-gap, var(--nok-global-grid-gap));
 }
-.nok25-nav nok25-mobile-nav .nok25-nav-drawer {
+.nok-nav nok-mobile-nav .nok-nav-drawer {
   transform: translate3d(100%, 0%, 0);
   will-change: transform;
   display: flex;
@@ -1061,21 +1000,21 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   flex-basis: 100%;
 }
 @media (prefers-reduced-motion: no-preference) {
-  body.__enable-transitions .nok25-nav nok25-mobile-nav .nok25-nav-drawer {
+  body.__enable-transitions .nok-nav nok-mobile-nav .nok-nav-drawer {
     transition: transform var(--animation-duration--out) var(--animation-easing-out);
   }
 }
 @media (max-width: 767.98px) {
-  .nok25-nav nok25-mobile-nav .nok25-nav-drawer {
+  .nok-nav nok-mobile-nav .nok-nav-drawer {
     align-self: stretch;
   }
 }
-.nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-footer,
-.nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel {
+.nok-nav nok-mobile-nav .nok-nav-drawer .nok-nav-footer,
+.nok-nav nok-mobile-nav .nok-nav-drawer .nok-nav-carousel {
   padding: 0;
   margin: 0;
 }
-.nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel {
+.nok-nav nok-mobile-nav .nok-nav-drawer .nok-nav-carousel {
   overflow: hidden;
   overscroll-behavior: contain;
   touch-action: none;
@@ -1086,25 +1025,25 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   flex-shrink: 1;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel {
+  .nok-nav nok-mobile-nav .nok-nav-drawer .nok-nav-carousel {
     scroll-behavior: smooth;
   }
 }
-.nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel.is-scrolling {
+.nok-nav nok-mobile-nav .nok-nav-drawer .nok-nav-carousel.is-scrolling {
   pointer-events: none !important;
 }
-.nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel[data-scroll-snapping=true] {
+.nok-nav nok-mobile-nav .nok-nav-drawer .nok-nav-carousel[data-scroll-snapping=true] {
   scroll-snap-type: both mandatory;
   scroll-snap-stop: normal;
 }
-.nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel__inner {
+.nok-nav nok-mobile-nav .nok-nav-drawer .nok-nav-carousel__inner {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  gap: var(--grid-gap, var(--nok25-global-grid-gap));
+  gap: var(--grid-gap, var(--nok-global-grid-gap));
   height: 100%;
 }
-.nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel__slide {
+.nok-nav nok-mobile-nav .nok-nav-drawer .nok-nav-carousel__slide {
   padding: 0;
   margin: 0;
   overflow: hidden;
@@ -1116,76 +1055,76 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   scroll-snap-stop: normal;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel__slide {
+  .nok-nav nok-mobile-nav .nok-nav-drawer .nok-nav-carousel__slide {
     scroll-behavior: smooth;
   }
 }
-.nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel__slide,
-.nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel__slide > * {
+.nok-nav nok-mobile-nav .nok-nav-drawer .nok-nav-carousel__slide,
+.nok-nav nok-mobile-nav .nok-nav-drawer .nok-nav-carousel__slide > * {
   flex-shrink: 0;
   flex-basis: 100%;
   scroll-snap-align: start;
 }
 @media (orientation: landscape) {
-  .nok25-nav nok25-mobile-nav .nok25-nav-drawer {
+  .nok-nav nok-mobile-nav .nok-nav-drawer {
     flex-direction: row;
     flex-wrap: nowrap;
   }
-  .nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-footer,
-  .nok25-nav nok25-mobile-nav .nok25-nav-drawer .nok25-nav-carousel {
+  .nok-nav nok-mobile-nav .nok-nav-drawer .nok-nav-footer,
+  .nok-nav nok-mobile-nav .nok-nav-drawer .nok-nav-carousel {
     flex-basis: 50%;
     flex-shrink: 1;
   }
 }
-.nok25-nav nok25-mobile-nav .nok25-nav__menuitems {
+.nok-nav nok-mobile-nav .nok-nav__menuitems {
   --item-padding: clamp(0.5rem, 2vw, 1rem);
   font-weight: 400;
-  padding: 1rem var(--nok25-padding-section-sides);
+  padding: 1rem var(--nok-padding-section-sides);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
 }
-.nok25-nav nok25-mobile-nav .nok25-nav__menuitems--compact {
+.nok-nav nok-mobile-nav .nok-nav__menuitems--compact {
   font-size: 1rem;
   font-size: 1rem;
   font-weight: 400;
   --item-padding: 0.5rem;
 }
 @media (max-width: 767.98px) {
-  .nok25-nav nok25-mobile-nav .nok25-nav__menuitems {
+  .nok-nav nok-mobile-nav .nok-nav__menuitems {
     font-size: 1rem;
     font-size: 1rem;
     font-weight: 400;
     --item-padding: 0.5rem;
   }
 }
-.nok25-nav nok25-mobile-nav .nok25-nav__menuitem {
+.nok-nav nok-mobile-nav .nok-nav__menuitem {
   padding: var(--item-padding) 0;
   display: grid;
   grid-template-columns: 1fr auto;
   text-decoration: none;
   color: hsla(var(--text-color-hsl)/var(--text-alpha-value, 1));
 }
-.nok25-nav nok25-mobile-nav .nok25-nav__menuitem:not(.nok25-nav nok25-mobile-nav .nok25-nav__menuitem__back):not(:last-of-type) {
+.nok-nav nok-mobile-nav .nok-nav__menuitem:not(.nok-nav nok-mobile-nav .nok-nav__menuitem__back):not(:last-of-type) {
   border-bottom: 2px solid rgba(136, 136, 136, 0.2666666667);
 }
-.nok25-nav nok25-mobile-nav .nok25-nav__menuitem:not(.nok25-nav nok25-mobile-nav .nok25-nav__menuitem__back)::after {
+.nok-nav nok-mobile-nav .nok-nav__menuitem:not(.nok-nav nok-mobile-nav .nok-nav__menuitem__back)::after {
   content: ">";
   position: relative;
 }
-.nok25-nav nok25-mobile-nav .nok25-nav__menuitem__back {
+.nok-nav nok-mobile-nav .nok-nav__menuitem__back {
   font-weight: 400;
 }
-.nok25-nav nok25-mobile-nav .nok25-nav__menuitem--active {
+.nok-nav nok-mobile-nav .nok-nav__menuitem--active {
   color: var(--nok25-lightblue--darker--active);
 }
-.nok25-nav nok25-mobile-nav nok25-logo {
+.nok-nav nok-mobile-nav nok-logo {
   display: block;
   flex-grow: 1;
   flex-shrink: 1;
   min-width: 0;
 }
-.nok25-nav nok25-mobile-nav nok25-logo svg {
+.nok-nav nok-mobile-nav nok-logo svg {
   align-self: center;
   height: calc(1.425rem + 2.1vw);
   width: auto;
@@ -1193,7 +1132,7 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   padding: 0 1px;
 }
 @media (min-width: 1200px) {
-  .nok25-nav nok25-mobile-nav nok25-logo svg {
+  .nok-nav nok-mobile-nav nok-logo svg {
     height: 3rem;
   }
 }
@@ -1201,8 +1140,8 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
 /**
  * hero unit
  */
-.nok25-hero {
-  --grid-gap: var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem));
+.nok-hero {
+  --grid-gap: var(--nok-padding-base, var(--nok-global-grid-gap, 1.5rem));
   position: relative;
   overflow: hidden;
   border-radius: 0 0 calc(var(--nok25-default-border-radius--large, 1rem) * 2.5) calc(var(--nok25-default-border-radius--large, 1rem) * 2.5);
@@ -1215,11 +1154,11 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   /* Mobile */
 }
 @media (max-width: 1399.98px) {
-  .nok25-hero {
+  .nok-hero {
     grid-template-columns: 4fr 1fr 3fr;
   }
 }
-.nok25-hero article {
+.nok-hero article {
   grid-row: 2/3;
   grid-column: 1/2;
   z-index: 2;
@@ -1228,82 +1167,82 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   flex-wrap: nowrap;
   justify-content: center;
   align-items: flex-start;
-  gap: var(--grid-gap, var(--nok25-global-grid-gap));
+  gap: var(--grid-gap, var(--nok-global-grid-gap));
 }
 @media (max-width: 1399.98px) {
-  .nok25-hero article {
+  .nok-hero article {
     grid-column: 1/3;
   }
 }
-.nok25-hero figure {
+.nok-hero figure {
   grid-row: 1/-1;
   grid-column: 2/3;
   z-index: 1;
   overflow: hidden;
   margin: 0;
-  --grad-1-1: var(--nok25-lightblue);
-  --grad-1-2: var(--nok25-green);
-  --grad-1-3: var(--nok25-yellow);
-  --base-layer: var(--nok25-body--darker);
+  --grad-1-1: var(--nok-lightblue);
+  --grad-1-2: var(--nok-green);
+  --grad-1-3: var(--nok-yellow);
+  --base-layer: var(--nok-body--darker);
 }
 @media (max-width: 1399.98px) {
-  .nok25-hero figure {
+  .nok-hero figure {
     grid-column: 2/4;
   }
 }
 @media (max-width: 991.98px) {
-  .nok25-hero figure {
-    padding-left: var(--nok25-padding-section-sides, 1.5rem);
+  .nok-hero figure {
+    padding-left: var(--nok-padding-section-sides, 1.5rem);
   }
 }
 @media (prefers-color-scheme: dark) {
-  .nok25-hero figure {
-    --grad-1-3: var(--nok25-lightblue);
-    --grad-1-1: var(--nok25-yellow);
-    --base-layer: var(--nok25-lightblue--darker);
+  .nok-hero figure {
+    --grad-1-3: var(--nok-lightblue);
+    --grad-1-1: var(--nok-yellow);
+    --base-layer: var(--nok-lightblue--darker);
   }
 }
-.nok25-hero figure svg {
+.nok-hero figure svg {
   min-height: 100%;
   min-width: 100%;
   max-width: -moz-fit-content;
   max-width: fit-content;
 }
-.nok25-hero figure linearGradient#a {
+.nok-hero figure linearGradient#a {
   --bg-alpha-value: 1;
 }
-.nok25-hero figure linearGradient#b {
+.nok-hero figure linearGradient#b {
   --bg-alpha-value: 0.5;
 }
-.nok25-hero figure linearGradient#c {
+.nok-hero figure linearGradient#c {
   --bg-alpha-value: 0.3;
 }
-.nok25-hero figure path#d {
+.nok-hero figure path#d {
   --bg-alpha-value: 0.4;
 }
 @media (prefers-color-scheme: dark) {
-  .nok25-hero figure path#d {
+  .nok-hero figure path#d {
     --bg-alpha-value: 0.1;
   }
 }
-.nok25-hero figure foreignObject img {
+.nok-hero figure foreignObject img {
   max-width: 100%;
   -o-object-fit: cover;
      object-fit: cover;
   -o-object-position: 40% 50%;
      object-position: 40% 50%;
-  background-color: hsla(var(--nok25-green)/0.5);
+  background-color: hsla(var(--nok-green)/0.5);
 }
 @media (max-width: 1199.98px) {
-  .nok25-hero figure foreignObject img {
+  .nok-hero figure foreignObject img {
     -o-object-position: 60% 50%;
        object-position: 60% 50%;
   }
 }
-.nok25-hero article, .nok25-hero figure {
+.nok-hero article, .nok-hero figure {
   position: relative;
 }
-.nok25-hero section {
+.nok-hero section {
   grid-column: 1/-1;
   grid-row: 3/4;
   z-index: 3;
@@ -1313,15 +1252,15 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
-  padding-top: var(--nok25-padding-base, 1.5rem);
-  padding-bottom: var(--nok25-padding-base, 1.5rem);
+  padding-top: var(--nok-padding-base, 1.5rem);
+  padding-bottom: var(--nok-padding-base, 1.5rem);
 }
-.nok25-hero section > * {
+.nok-hero section > * {
   flex-shrink: 0;
   flex-grow: 1;
   flex-basis: max-content;
 }
-.nok25-hero section .nok25-usp {
+.nok-hero section .nok-usp {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -1329,36 +1268,36 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   justify-content: flex-start;
   gap: calc(var(--grid-gap) / 2);
 }
-.nok25-hero section .nok25-usp > svg {
+.nok-hero section .nok-usp > svg {
   width: calc(var(--nok25-font-size-buttons) * var(--nok25-body-line-height));
   height: calc(var(--nok25-font-size-buttons) * var(--nok25-body-line-height));
 }
-.nok25-hero section {
-  padding-right: var(--nok25-padding-section-sides, 1.5rem);
-  padding-left: var(--nok25-padding-section-sides, 1.5rem);
+.nok-hero section {
+  padding-right: var(--nok-padding-section-sides, 1.5rem);
+  padding-left: var(--nok-padding-section-sides, 1.5rem);
 }
-.nok25-hero article {
-  padding: var(--grid-gap) 0 var(--grid-gap) var(--nok25-padding-section-sides, 1.5rem);
+.nok-hero article {
+  padding: var(--grid-gap) 0 var(--grid-gap) var(--nok-padding-section-sides, 1.5rem);
 }
 @media (max-width: 991.98px) {
-  .nok25-hero {
+  .nok-hero {
     grid-template-columns: 1fr;
     grid-template-rows: 60vw 10vw auto 1fr;
   }
-  .nok25-hero article, .nok25-hero figure, .nok25-hero section, .nok25-hero-figure-mask {
+  .nok-hero article, .nok-hero figure, .nok-hero section, .nok-hero-figure-mask {
     grid-column: 1;
   }
-  .nok25-hero article {
+  .nok-hero article {
     grid-row: 2/4;
     align-self: end;
-    padding-right: var(--nok25-padding-section-sides, 1.5rem);
+    padding-right: var(--nok-padding-section-sides, 1.5rem);
   }
-  .nok25-hero figure {
+  .nok-hero figure {
     grid-row: 1/3;
     -webkit-mask-image: linear-gradient(to bottom, rgb(0, 0, 0) 70%, rgba(0, 0, 0, 0.5) 80%, rgba(255, 255, 255, 0) 95%);
             mask-image: linear-gradient(to bottom, rgb(0, 0, 0) 70%, rgba(0, 0, 0, 0.5) 80%, rgba(255, 255, 255, 0) 95%);
   }
-  .nok25-hero section {
+  .nok-hero section {
     --bg-alpha-value: 0;
     grid-row: 4/5;
     flex-wrap: wrap;
@@ -1367,16 +1306,16 @@ body.smaller-font .nok25-nav-control-dropdown .nok25-button.font-decrease {
   }
 }
 @media (max-width: 767.98px) {
-  .nok25-hero button {
+  .nok-hero button {
     align-self: stretch;
   }
-  .nok25-hero article .nok25-horizontal-button-group {
+  .nok-hero article .nok-horizontal-button-group {
     grid-template-columns: 1fr;
   }
 }
 
 /* Typography */
-h1.nok25-hero__heading {
+h1.nok-hero__heading {
   font-weight: 500;
   line-height: 1.05;
 }
@@ -1384,8 +1323,8 @@ h1.nok25-hero__heading {
 /**
  * square block
  */
-.nok25-button {
-  --flex-gap: calc(var(--nok25-padding-base, 1.5rem) / 2);
+.nok-button {
+  --flex-gap: calc(var(--nok-padding-base, 1.5rem) / 2);
   --bg-alpha-value: 1;
   box-sizing: border-box;
   display: inline-flex;
@@ -1405,7 +1344,7 @@ h1.nok25-hero__heading {
   font-style: normal;
   font-weight: 500;
   font-weight: 500;
-  font-size: var(--nok25-font-size-buttons, 1.25rem);
+  font-size: var(--nok-font-size-buttons, 1.25rem);
   line-height: 1.5;
   text-decoration: none;
   color: var(--bg-color--contrast, var(--text-color, inherit));
@@ -1419,41 +1358,41 @@ h1.nok25-hero__heading {
           user-select: none;
   touch-action: manipulation;
 }
-.nok25-button:not(.no-shadow) {
+.nok-button:not(.no-shadow) {
   box-shadow: 0 0 0 0 hsla(0, 0%, 0%, 0);
 }
-.nok25-button:not(.no-shadow):hover, .nok25-button:not(.no-shadow):focus {
+.nok-button:not(.no-shadow):hover, .nok-button:not(.no-shadow):focus {
   box-shadow: 0 0.4rem 0.1rem -0.3rem hsla(0, 0%, 50%, 0.15);
 }
-.nok25-button:hover, .nok25-button:focus, .nok25-button:active, .nok25-button.active, .nok25-button:focus-visible {
+.nok-button:hover, .nok-button:focus, .nok-button:active, .nok-button.active, .nok-button:focus-visible {
   border-color: rgba(136, 136, 136, 0.1333333333);
 }
-.nok25-button:hover {
+.nok-button:hover {
   --text-alpha-value: 1;
   color: var(--bg-color--contrast, inherit);
   background-color: var(--bg-color--hover, inherit);
 }
-.nok25-button:focus {
+.nok-button:focus {
   outline: 2px solid hsl(var(--bg-color-hsl, 0deg 100% 50%)/0.25);
 }
-.nok25-button:focus-visible {
+.nok-button:focus-visible {
   box-shadow: 0 0 0px 4px var(--nok25-yellow);
   outline: 2px solid #FFF;
 }
-.nok25-button:active, .nok25-button.active {
+.nok-button:active, .nok-button.active {
   background-color: var(--bg-color--active, inherit);
 }
-.nok25-button:disabled, .nok25-button.disabled {
+.nok-button:disabled, .nok-button.disabled {
   --text-alpha-value: 0.65;
   opacity: 0.8;
   color: var(--text-color-button, var(--text-color--contrast, inherit));
   pointer-events: none;
 }
-.nok25-button--small {
-  --flex-gap: calc(var(--nok25-padding-base, 1.5rem) / 4);
-  font-size: calc(var(--nok25-font-size-buttons, 1.25rem) * 0.8);
+.nok-button--small {
+  --flex-gap: calc(var(--nok-padding-base, 1.5rem) / 4);
+  font-size: calc(var(--nok-font-size-buttons, 1.25rem) * 0.8);
 }
-.nok25-button-menu {
+.nok-button-menu {
   --bg-size: 55%;
   background-repeat: no-repeat;
   background-position: center;
@@ -1462,42 +1401,42 @@ h1.nok25-hero__heading {
   aspect-ratio: 1/1;
   position: relative;
 }
-.nok25-button-menu svg {
+.nok-button-menu svg {
   position: absolute;
   width: var(--bg-size);
   height: var(--bg-size);
 }
-.nok25-button-menu svg .closed {
+.nok-button-menu svg .closed {
   display: none;
 }
-.nok25-button-group {
+.nok-button-group {
   display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: 1fr 1fr;
   width: 100%;
-  gap: var(--grid-gap, var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem)));
+  gap: var(--grid-gap, var(--nok-padding-base, var(--nok-global-grid-gap, 1.5rem)));
   align-items: center;
   justify-items: center;
-  font-size: var(--nok25-font-size-buttons, 1.25rem);
+  font-size: var(--nok-font-size-buttons, 1.25rem);
 }
-.nok25-button-group > button.fill-group-column {
+.nok-button-group > button.fill-group-column {
   width: 100%;
 }
 
 /**
  * square block
  */
-nok25-square-block,
+nok-square-block,
 :host {
   --text-alpha-value: 0.8;
-  --icon-color: var(--nok25-yellow);
-  --text-color: hsla(var(--nok25-white-hsl) / var(--global-color-alpha, var(--text-alpha-value, 1)));
-  --text-color--heading: hsla(var(--nok25-white-hsl) / 1);
-  --text-color--link: hsla(var(--nok25-white-hsl) / 1);
-  --text-color--link--hover: var(--nok25-yellow);
-  --text-color--link-icon: var(--nok25-lightblue);
-  --text-color--link-icon--hover: var(--nok25-yellow);
-  --background-color: var(--nok25-darkblue);
+  --icon-color: var(--nok-yellow);
+  --text-color: hsla(var(--nok-white-hsl) / var(--global-color-alpha, var(--text-alpha-value, 1)));
+  --text-color--heading: hsla(var(--nok-white-hsl) / 1);
+  --text-color--link: hsla(var(--nok-white-hsl) / 1);
+  --text-color--link--hover: var(--nok-yellow);
+  --text-color--link-icon: var(--nok-lightblue);
+  --text-color--link-icon--hover: var(--nok-yellow);
+  --background-color: var(--nok-darkblue);
   position: relative;
   display: grid;
   grid-template-rows: auto;
@@ -1505,41 +1444,41 @@ nok25-square-block,
   gap: 1.5rem;
   overflow: hidden;
   border-radius: var(--nok25-default-border-radius--large, 1rem);
-  padding: var(--nok25-padding-section-sides, 3rem);
-  border-radius: var(--nok25-default-border-radius--large, 8px);
+  padding: var(--nok-padding-section-sides, 3rem);
+  border-radius: var(--nok-default-border-radius--large, 8px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: var(--background-color);
 }
-nok25-square-block > *,
+nok-square-block > *,
 :host > * {
   margin: 0;
 }
 
-.nok25-square-block__icon {
+.nok-square-block__icon {
   color: var(--icon-color);
   display: flex;
 }
-.nok25-square-block__icon svg {
+.nok-square-block__icon svg {
   width: 3em;
   height: 3em;
   aspect-ratio: 1;
 }
-.nok25-square-block__heading {
+.nok-square-block__heading {
   color: var(--text-color--heading);
   font-weight: 500;
 }
-.nok25-square-block__text {
+.nok-square-block__text {
   color: var(--text-color);
   font-size: 1.1rem;
 }
-.nok25-square-block__link {
+.nok-square-block__link {
   display: grid;
   grid-template-columns: auto 1fr;
   justify-content: start;
   align-items: center;
   justify-items: start;
   cursor: pointer;
-  gap: calc(var(--nok25-padding-base, 1.5rem) / 2);
+  gap: calc(var(--nok-padding-base, 1.5rem) / 2);
   height: 2rem;
   --text-alpha-value: 0.8;
   color: var(--text-color--link);
@@ -1548,10 +1487,10 @@ nok25-square-block > *,
   font-weight: 600;
   font-size: 1rem;
 }
-.nok25-square-block__link svg {
+.nok-square-block__link svg {
   color: var(--text-color--link-icon);
 }
-.nok25-square-block__link::after {
+.nok-square-block__link::after {
   position: absolute;
   top: 0;
   right: 0;
@@ -1560,7 +1499,7 @@ nok25-square-block > *,
   z-index: 1;
   content: "";
 }
-.nok25-square-block__link:hover {
+.nok-square-block__link:hover {
   --text-color--link: var(--text-color--link--hover);
   --text-color--link-icon: var(--text-color--link-icon--hover);
 }
@@ -1568,14 +1507,14 @@ nok25-square-block > *,
 /**
  * square block
  */
-.nok25-block-group {
+.nok-usp-block {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
 }
-.nok25-block-group__inner {
-  --grid-gap: var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem));
+.nok-usp-block__inner {
+  --grid-gap: var(--nok-padding-base, var(--nok-global-grid-gap, 1.5rem));
   --grid-column-width: calc(
       (100% - (var(--grid-gap, 1) * (var(--grid-columns, 1) - 1))) / var(--grid-columns, 1)
   );
@@ -1584,53 +1523,53 @@ nok25-square-block > *,
   align-items: stretch;
 }
 @media (max-width: 991.98px) {
-  .nok25-block-group__inner {
+  .nok-usp-block__inner {
     -moz-column-gap: 0;
          column-gap: 0;
   }
 }
-.nok25-block-group__scroller {
+.nok-usp-block__scroller {
   grid-column: 1/-1;
   overflow-x: scroll;
 }
-.nok25-block-group__scroller.nok25-draggable {
+.nok-usp-block__scroller.nok-draggable {
   position: relative;
   will-change: scroll-position; /*seems to bump performance in firefox ever so slightly*/
 }
-.nok25-block-group__scroller.nok25-draggable, .nok25-block-group__scroller.nok25-draggable + .fake-scrollbar {
+.nok-usp-block__scroller.nok-draggable, .nok-usp-block__scroller.nok-draggable + .fake-scrollbar {
   --scrollbar-height: 10px;
   --scrollbar-handle: var(--text-color--contrast, #CCC);
   --scrollbar-handle--active: var(--text-color--hover, #FFF);
   --scrollbar-track: oklch(from var(--nok25-body) l c h/0.25);
 }
-.nok25-block-group__scroller.nok25-draggable::-webkit-scrollbar {
+.nok-usp-block__scroller.nok-draggable::-webkit-scrollbar {
   height: var(--scrollbar-height, 6px);
 }
-.nok25-block-group__scroller.nok25-draggable::-webkit-scrollbar-track {
+.nok-usp-block__scroller.nok-draggable::-webkit-scrollbar-track {
   background-color: var(--scrollbar-track, rgba(0, 0, 0, 0.5333333333));
   border-radius: 10px;
 }
-.nok25-block-group__scroller.nok25-draggable::-webkit-scrollbar-thumb {
+.nok-usp-block__scroller.nok-draggable::-webkit-scrollbar-thumb {
   background-color: var(--scrollbar-handle, rgba(255, 255, 255, 0.9333333333));
   border: 1px solid var(--scrollbar-handle, rgba(255, 255, 255, 0.9333333333));
   border-radius: 10px;
 }
-.nok25-block-group__scroller.nok25-draggable::-webkit-scrollbar-thumb:hover {
+.nok-usp-block__scroller.nok-draggable::-webkit-scrollbar-thumb:hover {
   background-color: var(--scrollbar-handle--active, white);
   border-color: var(--scrollbar-handle--active, white);
 }
-body.no-js .nok25-block-group__scroller.nok25-draggable + .fake-scrollbar {
+body.no-js .nok-usp-block__scroller.nok-draggable + .fake-scrollbar {
   display: none;
   visibility: hidden;
 }
 
-body:not(.no-js) .nok25-block-group__scroller.nok25-draggable:has(+ .fake-scrollbar) {
+body:not(.no-js) .nok-usp-block__scroller.nok-draggable:has(+ .fake-scrollbar) {
   scrollbar-width: none;
 }
-body:not(.no-js) .nok25-block-group__scroller.nok25-draggable:has(+ .fake-scrollbar)::-webkit-scrollbar {
+body:not(.no-js) .nok-usp-block__scroller.nok-draggable:has(+ .fake-scrollbar)::-webkit-scrollbar {
   display: none;
 }
-body:not(.no-js) .nok25-block-group__scroller.nok25-draggable + .fake-scrollbar {
+body:not(.no-js) .nok-usp-block__scroller.nok-draggable + .fake-scrollbar {
   touch-action: none;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -1644,7 +1583,7 @@ body:not(.no-js) .nok25-block-group__scroller.nok25-draggable + .fake-scrollbar 
   border-radius: 10px;
   overflow: hidden;
 }
-body:not(.no-js) .nok25-block-group__scroller.nok25-draggable + .fake-scrollbar .fake-scrollbar-thumb {
+body:not(.no-js) .nok-usp-block__scroller.nok-draggable + .fake-scrollbar .fake-scrollbar-thumb {
   touch-action: none;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -1661,47 +1600,47 @@ body:not(.no-js) .nok25-block-group__scroller.nok25-draggable + .fake-scrollbar 
   contain: strict;
   backface-visibility: hidden;
 }
-body:not(.no-js) .nok25-block-group__scroller.nok25-draggable + .fake-scrollbar:hover .fake-scrollbar-thumb, body:not(.no-js) .nok25-block-group__scroller.nok25-draggable:hover + .fake-scrollbar .fake-scrollbar-thumb, body:not(.no-js) .nok25-block-group__scroller.nok25-draggable.grabbed-scrollbar + .fake-scrollbar .fake-scrollbar-thumb, body:not(.no-js) .nok25-block-group__scroller.nok25-draggable.grabbed-direct + .fake-scrollbar .fake-scrollbar-thumb {
+body:not(.no-js) .nok-usp-block__scroller.nok-draggable + .fake-scrollbar:hover .fake-scrollbar-thumb, body:not(.no-js) .nok-usp-block__scroller.nok-draggable:hover + .fake-scrollbar .fake-scrollbar-thumb, body:not(.no-js) .nok-usp-block__scroller.nok-draggable.grabbed-scrollbar + .fake-scrollbar .fake-scrollbar-thumb, body:not(.no-js) .nok-usp-block__scroller.nok-draggable.grabbed-direct + .fake-scrollbar .fake-scrollbar-thumb {
   background-color: var(--scrollbar-handle--active, white);
 }
-body:not(.no-js) .nok25-block-group__scroller.nok25-draggable.grabbed-scrollbar + .fake-scrollbar {
+body:not(.no-js) .nok-usp-block__scroller.nok-draggable.grabbed-scrollbar + .fake-scrollbar {
   overflow: visible;
 }
-body:not(.no-js) .nok25-block-group__scroller.nok25-draggable.grabbed-scrollbar + .fake-scrollbar .fake-scrollbar-thumb {
+body:not(.no-js) .nok-usp-block__scroller.nok-draggable.grabbed-scrollbar + .fake-scrollbar .fake-scrollbar-thumb {
   cursor: grabbing;
   outline: 5px solid rgba(255, 255, 255, 0.5333333333);
 }
 
-.nok25-block-group__scroller.nok25-draggable[data-scroll-snapping=true] {
+.nok-usp-block__scroller.nok-draggable[data-scroll-snapping=true] {
   scroll-snap-type: both mandatory;
   scroll-snap-stop: normal;
 }
-.nok25-block-group__scroller.nok25-draggable[data-scroll-snapping=false] {
+.nok-usp-block__scroller.nok-draggable[data-scroll-snapping=false] {
   -webkit-user-select: none !important;
      -moz-user-select: none !important;
           user-select: none !important;
 }
-.nok25-block-group__scroller.nok25-draggable[data-scroll-snapping=true] .nok25-draggable-slider-item {
+.nok-usp-block__scroller.nok-draggable[data-scroll-snapping=true] .nok-draggable-slider-item {
   scroll-snap-align: start;
 }
-.nok25-block-group__scroller.nok25-draggable .nok25-draggable-slider-item > *:not(a),
-.nok25-block-group__scroller.nok25-draggable .nok25-draggable-slider-item a::after {
+.nok-usp-block__scroller.nok-draggable .nok-draggable-slider-item > *:not(a),
+.nok-usp-block__scroller.nok-draggable .nok-draggable-slider-item a::after {
   pointer-events: none;
 }
-.nok25-block-group__scroller .nok25-block-group__blocks {
+.nok-usp-block__scroller .nok-usp-block__blocks {
   margin-bottom: calc(var(--grid-gap, 1.5rem) * 2);
 }
-body:not(.no-js) .nok25-block-group:has(.fake-scrollbar) .nok25-block-group__scroller .nok25-block-group__blocks {
+body:not(.no-js) .nok-usp-block:has(.fake-scrollbar) .nok-usp-block__scroller .nok-usp-block__blocks {
   margin-bottom: var(--grid-gap, 1.5rem);
 }
 
-.nok25-block-group__blocks {
+.nok-usp-block__blocks {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  gap: var(--grid-gap, var(--nok25-global-grid-gap));
+  gap: var(--grid-gap, var(--nok-global-grid-gap));
 }
-.nok25-block-group__blocks > * {
+.nok-usp-block__blocks > * {
   flex-basis: var(--grid-column-width);
   flex-shrink: 0;
 }
@@ -1714,7 +1653,7 @@ body {
   text-rendering: optimizelegibility;
   font-optical-sizing: auto;
   font-style: normal;
-  --nok25-body-text-color: var(--nok25-darkerblue);
+  --nok-body-text-color: var(--nok-darkerblue);
 }
 
 h1 {
@@ -1805,7 +1744,7 @@ h6 {
 /**
  * hyperlink
  */
-.nok25-hyperlink:not(.nok25-button) {
+.nok-hyperlink:not(.nok-button) {
   color: var(--text-color, var(--text-color----bg-color--contrast, inherit));
   --underline-color: var(--text-color, var(--text-color--contrast, inherit));
   --underline-color--active: var(--text-color--contrast, inherit);
@@ -1828,71 +1767,71 @@ h6 {
   background-position: 0 0;
   transition: background-position var(--hover-transition-time) ease-out;
 }
-.nok25-hyperlink:not(.nok25-button):hover {
+.nok-hyperlink:not(.nok-button):hover {
   --underline-color: var(--hover-color);
   color: var(--hover-color);
   background-position: 0 calc(-1 * var(--underline-height));
 }
-.nok25-hyperlink:not(.nok25-button):active, .nok25-hyperlink:not(.nok25-button):hover:focus:not(:focus-visible) {
+.nok-hyperlink:not(.nok-button):active, .nok-hyperlink:not(.nok-button):hover:focus:not(:focus-visible) {
   color: var(--underline-color--active);
   background-position: 0 100%;
 }
-.nok25-hyperlink:not(.nok25-button):focus-visible {
+.nok-hyperlink:not(.nok-button):focus-visible {
   overflow: hidden;
   border-radius: var(--nok25-default-border-radius, 0.4rem);
   box-shadow: 0 0 0px 4px var(--nok25-yellow);
   outline: 2px solid #FFF;
 }
-p .nok25-hyperlink:not(.nok25-button) {
+p .nok-hyperlink:not(.nok-button) {
   color: var(--nok25-lightblue, inherit);
   --underline-color: var(--nok25-lightblue, inherit);
   --underline-color--active: var(--nok25-lightblue--contrast, inherit);
 }
 
-.nok25-grid__wrapper {
-  --grid-gap: var(--nok25-padding-base, 1.5rem);
+.nok-grid__wrapper {
+  --grid-gap: var(--nok-padding-base, 1.5rem);
   display: grid;
   grid-template-columns: repeat(var(--grid-columns), 1fr);
   grid-gap: var(--grid-gap);
 }
-.nok25-grid__wrapper.one-columns {
+.nok-grid__wrapper.one-columns {
   --grid-columns: var(--grid-columns-override, 1);
 }
-.nok25-grid__wrapper.two-columns {
+.nok-grid__wrapper.two-columns {
   --grid-columns: var(--grid-columns-override, 2);
 }
-.nok25-grid__wrapper.three-columns {
+.nok-grid__wrapper.three-columns {
   --grid-columns: var(--grid-columns-override, 3);
 }
-.nok25-grid__wrapper.four-columns {
+.nok-grid__wrapper.four-columns {
   --grid-columns: var(--grid-columns-override, 4);
 }
-.nok25-grid__wrapper.five-columns {
+.nok-grid__wrapper.five-columns {
   --grid-columns: var(--grid-columns-override, 5);
 }
-.nok25-grid__wrapper .span-all {
+.nok-grid__wrapper .span-all {
   grid-column: 1/-1;
 }
-.nok25-grid__wrapper .tuck-over {
+.nok-grid__wrapper .tuck-over {
   z-index: 2;
   grid-row: 1;
 }
-.nok25-grid__wrapper .tuck-under {
+.nok-grid__wrapper .tuck-under {
   z-index: 1;
   grid-row: 1/-1;
   grid-column: 1;
 }
-.nok25-grid__wrapper .in-last-column {
+.nok-grid__wrapper .in-last-column {
   grid-column: calc(var(--grid-columns, 2))/-1;
 }
-.nok25-grid__wrapper .in-last-two-columns {
+.nok-grid__wrapper .in-last-two-columns {
   grid-column: calc(var(--grid-columns, 2) - 1)/-1;
 }
 @media (max-width: 991.98px) {
-  .nok25-grid__wrapper {
+  .nok-grid__wrapper {
     --grid-columns-override: 1;
   }
-  .nok25-grid__wrapper .tuck-under {
+  .nok-grid__wrapper .tuck-under {
     grid-row: auto;
   }
 }
@@ -1912,7 +1851,7 @@ p .nok25-hyperlink:not(.nok25-button) {
 }
 
 html {
-  --font-size-base: var(--nok25-html-font-size, 1em);
+  --font-size-base: var(--nok-html-font-size, 1em);
   font-size: var(--font-size-base, 1em);
 }
 @media (max-width: 767.98px) {
@@ -1922,7 +1861,7 @@ html {
 }
 
 body {
-  background: linear-gradient(180deg, var(--nok25-body--darker), var(--nok25-body));
+  background: linear-gradient(180deg, var(--nok-body--darker), var(--nok-body));
   font-family: var(--nok25-text-font-family, "Inter", Arial, Helvetica, sans-serif);
   font-size-adjust: var(--nok25-text-font-size-adjust, 0.514);
   -webkit-text-size-adjust: 100%;

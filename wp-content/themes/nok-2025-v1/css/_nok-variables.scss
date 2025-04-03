@@ -3,7 +3,7 @@
 @use "tools/nok-utilities";
 @use "tools/nok-rfs";
 
-$prefix : 'nok25';
+$prefix : 'nok';
 $padding-base: 1.5rem;
 $default-border-radius: math.div(math.round((math.div($padding-base, 4)) * 10), 10);
 $default-border-radius--large: math.round($default-border-radius * 2);

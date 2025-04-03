@@ -2,10 +2,10 @@
 Universal single click toggler (c)2025 Klaas Leussink / hnldesign
 
 usage:
-<div data-toggles="open" data-target=".nok25-nav-control-dropdown">Click me</div>
+<div data-toggles="open" data-target=".nok-nav-control-dropdown">Click me</div>
 
 optionally add data-toggle-permanent="true" to keep the target open even if clicked outside:
-<div data-toggles="open" data-target=".nok25-nav-control-dropdown" data-toggle-permanent="true">Click me</div>
+<div data-toggles="open" data-target=".nok-nav-control-dropdown" data-toggle-permanent="true">Click me</div>
 
  */
 import {singleClick} from "./modules/hnl.clickhandlers.mjs";

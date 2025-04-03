@@ -5,9 +5,11 @@
 
 .nok-layout {
 
-  &-grid {
+  &-grid, &-flex {
     --grid-gap: var(--#{nok-variables.$prefix}-padding-base, var(--#{nok-variables.$prefix}-global-grid-gap, 1.5rem));
+  }
 
+  &-grid {
     display: grid;
     gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
     grid-template-columns: repeat(var(--grid-columns, 1), 1fr);
@@ -56,6 +58,13 @@
     }
     //"fill-fill" is another layout pattern, which fills both children 50/50. See 2-column layout above; it's identical
 
+  }
+
+  &-flex {
+    display: flex;
+    gap: var(--flex-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
+    align-items: center;
+    flex-direction: row;
   }
 
 }

@@ -1,0 +1,21 @@
+@use "nok-variables";
+@use "./tools/nok-mixins";
+@use "nok-reboot";
+@use "nok-helpers";
+@use "nok-layout";
+@use "./components/nok-buttons";
+@use "./components/nok-screen-mask";
+@use "./components/nok-accessibility-helper";
+@use "./components/nok-top-navigation";
+
+//Todo: move everything below to something that makes more sense
+
+body {
+  @include nok-mixins.nok-text-font;
+  --#{nok-variables.$prefix}-body-text-color: var(--#{nok-variables.$prefix}-darkerblue);
+}
+@for $i from 1 through 6 {
+  h#{$i} {
+    @include nok-mixins.nok-heading-font;
+  }
+}
