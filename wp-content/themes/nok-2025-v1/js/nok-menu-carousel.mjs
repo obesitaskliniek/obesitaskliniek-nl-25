@@ -22,12 +22,12 @@ function scrollHandler(e) {
 export function init(elements){
   elements.forEach(element => {
 
-    element.querySelectorAll('.nok25-nav-carousel__slide').forEach(slide => {
-      slide.querySelectorAll('a.nok25-nav__menuitem').forEach(link => {
+    element.querySelectorAll('.nok-nav-carousel__slide').forEach(slide => {
+      slide.querySelectorAll('a.nok-nav-menu-item').forEach(link => {
         const targetElement = document.getElementById(link.getAttribute("href").slice(1));
 
         if (targetElement) {
-          const closestSlide = targetElement.closest('.nok25-nav-carousel__slide');
+          const closestSlide = targetElement.closest('.nok-nav-carousel__slide');
           singleClick(link, (e) => {
             e.preventDefault();
             if (!element.__busy) {

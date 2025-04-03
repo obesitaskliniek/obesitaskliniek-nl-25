@@ -1,0 +1,8 @@
+@forward "../nok-variables";
+@forward "../tools/nok-mixins";
+@forward "../tools/nok-rfs";
+@forward "../tools/nok-utilities";
+
+@mixin nok-component {
+  //display: block;
+}

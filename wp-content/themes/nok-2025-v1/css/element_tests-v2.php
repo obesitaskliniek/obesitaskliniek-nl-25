@@ -70,7 +70,8 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
 <path d="M442.54,85.34c-10.71-4-20-7.51-20-21,0-10.22,5.56-20.53,18-20.53,11.7,0,18.69,7.42,18.69,19.86v3.76h5.36v-3.5c0-11.76-6.23-25.5-23.8-25.5-18.65,0-23.57,16.59-23.57,25.38,0,16.92,9.75,21.75,23.53,26.74,9.85,3.59,20,7.29,20,21,0,17.32-10.77,23.48-20.84,23.48-12.24,0-19.54-8.52-19.54-22.8v-5.65h-5.36v5.65c0,13,6.56,28.18,25,28.18,18,0,26.08-14.15,26.08-28.18,0-18-12.54-22.77-23.61-26.93" transform="translate(-2.57 -2.64)" fill="currentColor"/>
 </svg></nok25-logo>';  ?>
 
-<nav class="nok25-section nok25-nav nok25-text-darkerblue"
+<nav class="nok25-section nok25-nav
+nok25-text-darkerblue"
      data-requires="./nok-toggler.mjs?cache=<?= time(); ?>">
     <div class="nok25-nav-mask nok25-bg-darkerblue nok25-dark-bg-darkerblue--darker nok25-z-1"
          data-toggles="open"></div>
