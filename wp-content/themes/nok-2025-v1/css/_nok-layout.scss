@@ -61,10 +61,24 @@
   }
 
   &-flex {
-    display: flex;
-    gap: var(--flex-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
-    align-items: center;
-    flex-direction: row;
+    &-row, &-column {
+      display: flex;
+      gap: var(--flex-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
+      align-items: center;
+    }
+    &-row {
+      flex-direction: row;
+    }
+    &-column {
+      flex-direction: column;
+    }
   }
 
+}
+
+.half-grid-gap {
+  gap: calc(var(--grid-gap) / 2);
+}
+.half-flex-gap {
+  gap: calc(var(--flex-gap) / 2);
 }

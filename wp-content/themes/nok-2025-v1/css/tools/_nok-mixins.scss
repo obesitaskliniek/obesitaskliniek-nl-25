@@ -408,3 +408,30 @@
     @content;
   }
 }
+
+///
+// Mainly used on the top navigation menus. First child (usually the logo) is 100% width, rest are flex items.
+// Pass 'auto' as $first-child value to make all items flexible
+//
+@mixin inline-flex-menu($gap, $first-child: 100%) {
+  --grid-gap: #{$gap};
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
+
+  padding-top: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * .75);
+  padding-bottom: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * .75);
+
+  > * {
+    flex-shrink: 0;
+
+    &:first-child {
+      flex-basis: $first-child;
+      flex-shrink: if($first-child == 100%, 1, 0);
+    }
+  }
+}

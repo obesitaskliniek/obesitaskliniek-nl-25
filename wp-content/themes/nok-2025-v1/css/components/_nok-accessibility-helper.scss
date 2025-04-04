@@ -11,18 +11,20 @@ nok-accessibility-helper {
   align-items: center;
   flex-direction: column;
   flex-wrap: nowrap;
-  max-width: var(--section-max-width, calc(100vw - (var(--nok25-padding-section-sides, 1.5rem) * 2)));
+  max-width: var(--section-max-width, calc(100vw - (var(--nok-padding-section-sides, 1.5rem) * 2)));
   padding: 32px 32px 0 32px;
+  transform: translate3d(0%, -100%, 0);
   @include components-base.media-breakpoint-down(md) {
     width: 100%;
   }
+
   --flex-gap: 16px;
 
-  gap: var(--flex-gap);
-
   @include components-base.nok-border-radius('large', 'bottom');
-  --nok25-default-border-radius: 16px;
-  --nok25-default-border-radius--large: 24px;
+  gap: var(--flex-gap);
+  --nok-default-border-radius: 16px;
+
+  --nok-default-border-radius--large: 24px;
 
   h5 {
     font-size: 20px;
@@ -35,14 +37,14 @@ nok-accessibility-helper {
     flex-basis: 100%;
     flex-shrink: 1;
     padding: 10px;
-    --nok25-default-border-radius: 8px;
+    --nok-default-border-radius: 8px;
     --flex-gap: 8px !important;
     aspect-ratio: 1;
     @at-root body.larger-font &.font-increase {
-      background: var(--nok25-lightblue);
+      background: var(--nok-lightblue);
     }
     @at-root body.smaller-font &.font-decrease {
-      background: var(--nok25-lightblue);
+      background: var(--nok-lightblue);
     }
   }
 
@@ -62,23 +64,21 @@ nok-accessibility-helper {
       cursor: grabbing;
     }
   }
-
-  transform: translate3d(0%, -100%, 0);
   @include components-base.transition-properties(transform) {
     transition: transform var(--animation-duration--out) var(--animation-easing-out), box-shadow var(--animation-duration--out) var(--animation-easing-out);
   }
 
   &.open {
     user-select: none;
+    transform: translate3d(0%, 0%, 0);
+    pointer-events: all;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1), 0 0 2rem rgba(0, 0, 0, 0.1);
+
     touch-action: none;
     -webkit-touch-callout: none;
-
-    transform: translate3d(0%, 0%, 0);
     @include components-base.transition-properties(transform) {
-      transition-duration: var(--animation-duration--in);
       transition-timing-function: var(--animation-easing-in);
+      transition-duration: var(--animation-duration--in);
     }
-    pointer-events: all;
   }
 }

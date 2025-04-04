@@ -1,21 +1,52 @@
 @use "nok-variables";
 @use "./tools/nok-mixins";
 @use "nok-reboot";
-@use "nok-helpers";
 @use "nok-layout";
 @use "./components/nok-buttons";
+@use "./components/nok-square-block";
 @use "./components/nok-screen-mask";
 @use "./components/nok-accessibility-helper";
 @use "./components/nok-top-navigation";
 
 //Todo: move everything below to something that makes more sense
 
+/* custom elements */
+article, aside, section,
+#{nok-variables.$prefix}-logo, #{nok-variables.$prefix}-mobile-nav, #{nok-variables.$prefix}-desktop-nav {
+  display: contents;
+}
+
 body {
-  @include nok-mixins.nok-text-font;
   --#{nok-variables.$prefix}-body-text-color: var(--#{nok-variables.$prefix}-darkerblue);
+  background: linear-gradient(180deg, var(--#{nok-variables.$prefix}-body--darker), var(--#{nok-variables.$prefix}-body));
+  @include nok-mixins.nok-text-font;
+  min-height: 100vh; //warning: temp
 }
 @for $i from 1 through 6 {
   h#{$i} {
     @include nok-mixins.nok-heading-font;
   }
 }
+
+body {
+  --#{nok-variables.$prefix}-body-text-color: var(--#{nok-variables.$prefix}-darkerblue);
+  background: linear-gradient(180deg, var(--#{nok-variables.$prefix}-body--darker), var(--#{nok-variables.$prefix}-body));
+  @include nok-mixins.nok-text-font;
+}
+@for $i from 1 through 6 {
+  h#{$i} {
+    @include nok-mixins.nok-heading-font;
+  }
+}
+
+html {
+  --font-size-base: var(--#{nok-variables.$prefix}-html-font-size, 1em);
+  font-size: var(--font-size-base, 1em);
+  @include nok-mixins.media-breakpoint-down(md) {
+    font-size: calc(var(--font-size-base) * .9);
+  }
+}
+
+//as helpers contain overrides, include them last
+//todo: move all other styles that are not inside files to scss files, so we can revert to a @use again to place these helpers last
+@import "nok-helpers";

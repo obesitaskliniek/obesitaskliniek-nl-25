@@ -267,13 +267,6 @@ $alphas: (
   }
 }
 
-.half-grid-gap {
-  gap: calc(var(--grid-gap) / 2);
-}
-.half-flex-gap {
-  gap: calc(var(--flex-gap) / 2);
-}
-
 $padding-base-values: (
         0 : 0,
         grid-gap: var(--grid-gap),
