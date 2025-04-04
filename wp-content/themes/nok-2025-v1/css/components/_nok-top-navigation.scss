@@ -1,31 +1,11 @@
 @use "sass:map";
 @use "shared" as components-base;
 @use "nok-sections";
+@use "nok-navigation-top-row";
+@use "nok-navigation-menu-bar";
+@use "nok-navigation-drawer";
 
 //Top navigation menu, used throughout the site
-
-@mixin menu-flex($gap) {
-  --grid-gap: #{$gap};
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  align-items: center;
-
-  gap: var(--grid-gap, var(--#{components-base.$prefix}-global-grid-gap));
-
-  padding-top: calc(var(--grid-gap, var(--#{components-base.$prefix}-global-grid-gap)) * .75);
-  padding-bottom: calc(var(--grid-gap, var(--#{components-base.$prefix}-global-grid-gap)) * .75);
-
-  > * {
-    flex-shrink: 0;
-
-    &:first-child {
-      flex-basis: 100%;
-      flex-shrink: 1;
-    }
-  }
-}
 
 nok-navigation-desktop, nok-navigation-mobile {
   display: contents;
@@ -33,7 +13,6 @@ nok-navigation-desktop, nok-navigation-mobile {
 
 nok-top-navigation {
 
-  $z_base: 0;
   $switch_point: xl;
 
   $dur_in: 750ms;
@@ -67,8 +46,6 @@ nok-top-navigation {
       position: fixed;
       top: 0;
       bottom: 0;
-      //left: 0;
-      //right: 0;
       justify-content: flex-start;
       z-index: components-base.$z-stack-top;
       pointer-events: none;
@@ -125,346 +102,19 @@ nok-top-navigation {
       }
     }
 
-    nok-navigation-drawer {
-      touch-action: none;
-      -webkit-touch-callout: none;
-      user-select: none;
-
-      transform: translate3d(0%, 0%, 0);
-      @include components-base.nok-subtle-shadow-menu;
-
-      @include components-base.transition-properties(transform) {
-        transition-duration: var(--animation-duration--in);
-        transition-timing-function: var(--animation-easing-in);
-      }
-
-      @media (prefers-reduced-motion: no-preference) {
-        .nok-nav__menuitem {
-          opacity: 0;
-          animation: fade--in 0.5s var(--animation-easing-out);
-          animation-fill-mode: forwards;
-        }
-      }
-      @for $i from 1 through 15 {
-        .nok-nav__menuitem:nth-child(#{$i}) {
-          animation-delay: ($dur_in / 4) + (50ms * ($i - 1));
-        }
-      }
-    }
   }
 
   nok-navigation-desktop {
     --top-row-height: 4rem;
-
-    nok-navigation {
-
-      &-top-row {
-        .nok-navigation-top-row__inner {
-          z-index: $z_base + 1;
-          @include components-base.nok-text-font;
-          font-size: 1rem;
-          @include components-base.rfs(1rem, font-size);
-          font-weight: 300;
-
-          @include menu-flex(var(--#{components-base.$prefix}-padding-base, var(--#{components-base.$prefix}-global-grid-gap, 1.5rem)));
-
-          padding-bottom: var(--top-row-height);
-          overflow: hidden;
-
-          a {
-            text-decoration: none;
-            &:hover {
-              color: var(--nok25-lightblue);
-            }
-          }
-        }
-      }
-
-      &-menu-bar {
-        pointer-events: none;
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        position: absolute;
-        top: var(--top-row-height);
-        overflow: hidden; // stops the dropdown from appearing at the top when collapsed
-
-        .nok-navigation-menu-bar__inner {
-          pointer-events: all;
-          z-index: $z_base + 3;
-          @include menu-flex(var(--#{components-base.$prefix}-padding-base, var(--#{components-base.$prefix}-global-grid-gap, 1.5rem)));
-          @include components-base.nok-border-radius('large');
-          @include components-base.nok-subtle-shadow;
-
-          padding-left: var(--#{components-base.$prefix}-padding-base, 1.5rem);
-          padding-right: var(--#{components-base.$prefix}-padding-base, 1.5rem);
-          height: 6rem;
-
-          overflow: hidden;
-
-          font-weight: 400;
-        }
-
-        img, svg {
-          align-self: center;
-          height: 3.5rem;
-          @include components-base.rfs(3.5rem, height);
-          width: auto;
-        }
-
-        .nok-nav-menu-bar-dropdown {
-          z-index: $z_base + 2;
-          display: flex;
-          overflow: hidden;
-          justify-content: center;
-          flex-basis: 100%;
-
-          margin-top: calc(-1 * var(--#{components-base.$prefix}-default-border-radius--large, 0));
-          margin-left: var(--#{components-base.$prefix}-default-border-radius--large, 0); //prevents the dropdown from appearing at the top sides when collapsed due to border radius on the menubar
-          margin-right: var(--#{components-base.$prefix}-default-border-radius--large, 0); //prevents the dropdown from appearing at the top sides when collapsed due to border radius on the menubar
-
-          padding-bottom: 16px + 8px; /* to prevent box-shadow from being cut off due to overflow - sync px values with applied shadow (currently: nok-subtle-shadow-menu)*/
-
-          //
-          //&-collapser {
-          //  margin: 0;
-          //  padding: 0;
-          //  overflow: hidden;
-          //}
-
-          &-contents {
-            --grid-gap: var(--#{components-base.$prefix}-padding-base, var(--#{components-base.$prefix}-global-grid-gap, 1.5rem));
-            display: inline-flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            justify-content: center;
-            align-items: stretch;
-            align-self: center;
-
-            flex-basis: 100%;
-            pointer-events: all;
-
-            gap: var(--grid-gap, var(--#{components-base.$prefix}-global-grid-gap));
-            @include components-base.nok-border-radius('large', 'bottom');
-            @include components-base.nok-subtle-shadow-menu;
-
-            width: max-content;
-            //overflow: hidden;
-            padding: calc(var(--grid-gap, var(--#{components-base.$prefix}-padding-base, 1.5rem)) * 2);
-
-            @include components-base.media-breakpoint-up(xl) {
-              max-width: map.get(components-base.$grid-breakpoints, lg);
-            }
-
-            > * {
-              flex-basis: 50%;
-              min-width: 0;
-              flex-shrink: 1;
-            }
-
-            &-menu {
-              display: flex;
-              flex-direction: column;
-              justify-content: space-between;
-              padding: calc(var(--grid-gap, var(--#{components-base.$prefix}-padding-base, 1.5rem)) / 2) 0;
-            }
-
-            h2 {
-              font-size: 2rem;
-              @include components-base.rfs(2rem, font-size);
-            }
-
-            h3 {
-              font-size: 1.5rem;
-              @include components-base.rfs(1.5rem, font-size);
-            }
-
-            ul {
-              list-style-type: none;
-              padding: 0;
-              font-weight: 300;
-            }
-          }
-
-          transform: translate3d(0%, -100%, 0);
-          @include components-base.transition-properties(transform) {
-            transition: transform var(--animation-duration--out) var(--animation-easing-out), box-shadow var(--animation-duration--out) var(--animation-easing-out);
-          }
-          @at-root nok-top-navigation.open .nok-nav-menu-bar-dropdown {
-            transform: translate3d(0%, 0%, 0);
-            @include components-base.transition-properties(transform) {
-              transition-duration: var(--animation-duration--in);
-              transition-timing-function: var(--animation-easing-in);
-            }
-            pointer-events: all;
-          }
-        }
-
-      }
-
-    }
+    --z-base: 0;
   }
 
   nok-navigation-mobile {
-
     nok-navigation {
-
       &-top-row,
       &-drawer {
         pointer-events: all;
       }
-      &-top-row {
-        --grid-gap: 0.25rem;
-
-        display: flex;
-
-        align-items: center;
-        justify-items: center;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-
-        padding: 1rem var(--#{components-base.$prefix}-padding-section-sides);
-        gap: var(--grid-gap, var(--#{components-base.$prefix}-global-grid-gap));
-      }
-
-      &-drawer {
-        transform: translate3d(100%, 0%, 0);
-        @include components-base.transition-properties(transform) {
-          transition: transform var(--animation-duration--out) var(--animation-easing-out);
-        }
-
-        display: flex;
-
-        flex-direction: column;
-        min-height: 0;
-        align-self: flex-end;
-        @include components-base.media-breakpoint-down(md) {
-          align-self: stretch;
-        }
-        flex-basis: 100%;
-
-        .nok-nav-footer,
-        .nok-nav-carousel {
-          padding: 0;
-          margin: 0;
-        }
-
-        .nok-nav-carousel {
-          overflow: hidden;
-          @media (prefers-reduced-motion: no-preference) {
-            scroll-behavior: smooth;
-          }
-          overscroll-behavior: contain;
-
-          touch-action: none;
-          user-select: none;
-
-          flex-grow: 1;
-          flex-shrink: 1;
-
-          &.is-scrolling {
-            //stop listening while scrolling
-            pointer-events: none !important;
-          }
-          &[data-scroll-snapping="true"] {
-            scroll-snap-type: both mandatory;
-            scroll-snap-stop: normal;
-          }
-
-          &__inner {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            gap: var(--grid-gap, var(--#{components-base.$prefix}-global-grid-gap));
-            height: 100%;
-          }
-
-          &__slide {
-            padding: 0;
-            margin: 0;
-            overflow: hidden;
-            @media (prefers-reduced-motion: no-preference) {
-              scroll-behavior: smooth;
-            }
-            touch-action: none;
-
-            display: flex;
-            flex-direction: column;
-            flex-wrap: nowrap;
-
-            scroll-snap-type: both mandatory;
-            scroll-snap-stop: normal;
-
-            &,
-            > * {
-              flex-shrink: 0;
-              flex-basis: 100%;
-              scroll-snap-align: start;
-            }
-          }
-        }
-
-        @media (orientation: landscape) {
-          flex-direction: row;
-          flex-wrap: nowrap;
-          .nok-nav-footer,
-          .nok-nav-carousel {
-            flex-basis: 50%;
-            flex-shrink: 1;
-          }
-        }
-
-        .nok-nav-menu-items {
-          --item-padding: clamp(0.5rem, 2vw, 1rem);
-          font-weight: 400;
-          padding: 1rem var(--#{components-base.$prefix}-padding-section-sides);
-          display: flex;
-          flex-direction: column;
-          overflow-y: auto; //make sure we can scroll the submenus on really small screens (or many items)
-          @mixin __local_compact {
-            font-size: 1rem;
-            @include components-base.rfs(1rem, font-size);
-            font-weight: 400;
-            --item-padding: 0.5rem;
-          }
-          &--compact {
-            @include __local_compact;
-          }
-          @include components-base.media-breakpoint-down(md) {
-            @include __local_compact;
-          }
-
-          .nok-nav-menu-item {
-            padding: var(--item-padding) 0;
-            display: grid;
-            grid-template-columns: 1fr auto;
-
-            text-decoration: none;
-            color: hsla(var(--text-color-hsl) / var(--text-alpha-value, 1));
-
-            &:not(&__back) {
-              &:not(:last-of-type) {
-                border-bottom: 2px solid #8884;
-              }
-              &::after {
-                content: "\003E";
-                position: relative;
-              }
-            }
-
-            &__back {
-              font-weight: 400;
-            }
-
-            &--active {
-              color: var(--nok25-lightblue--darker--active);
-            }
-          }
-        }
-
-      }
-
     }
 
     #{components-base.$prefix}-logo {

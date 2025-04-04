@@ -1,0 +1,45 @@
+@use "sass:map";
+@use "shared" as components-base;
+@use "nok-sections";
+
+//Top bar that hugs the top of the screen, with secondary menu items (ratings, language, etc)
+
+nok-navigation-top-row {
+
+  .nok-navigation-top-row__inner {
+    font-size: 1rem;
+    @include components-base.nok-text-font;
+    font-weight: 300;
+    @include components-base.rfs(1rem, font-size);
+    z-index: calc(var(--z-base, 1) + 1);
+
+    @include components-base.inline-flex-menu(var(--#{components-base.$prefix}-padding-base, var(--#{components-base.$prefix}-global-grid-gap, 1.5rem)));
+
+    overflow: hidden;
+    padding-bottom: var(--top-row-height, 4rem);
+
+    a {
+      text-decoration: none;
+
+      &:hover {
+        color: var(--nok25-lightblue);
+      }
+    }
+  }
+
+  @at-root  nok-navigation-mobile & {
+    --grid-gap: 0.25rem;
+
+    display: flex;
+
+    align-items: center;
+    justify-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+
+    padding: 1rem var(--#{components-base.$prefix}-padding-section-sides);
+    gap: var(--grid-gap, var(--#{components-base.$prefix}-global-grid-gap));
+  }
+
+}

@@ -1,0 +1,176 @@
+@use "sass:map";
+@use "shared" as components-base;
+@use "nok-sections";
+
+//Drawer, used on mobile/small screen
+
+nok-navigation-drawer {
+  display: flex;
+  align-self: flex-end;
+
+  flex-basis: 100%;
+
+  flex-direction: column;
+  min-height: 0;
+  transform: translate3d(100%, 0%, 0);
+  @include components-base.transition-properties(transform) {
+    transition: transform var(--animation-duration--out) var(--animation-easing-out);
+  }
+  @include components-base.media-breakpoint-down(md) {
+    align-self: stretch;
+  }
+
+  .nok-nav-footer,
+  .nok-nav-carousel {
+    margin: 0;
+    padding: 0;
+  }
+
+  .nok-nav-carousel {
+    overflow: hidden;
+    flex-grow: 1;
+    flex-shrink: 1;
+
+    user-select: none;
+    @media (prefers-reduced-motion: no-preference) {
+      scroll-behavior: smooth;
+    }
+
+    overscroll-behavior: contain;
+    touch-action: none;
+
+    &.is-scrolling {
+      //stop listening while scrolling
+      pointer-events: none !important;
+    }
+
+    &[data-scroll-snapping="true"] {
+      scroll-snap-type: both mandatory;
+      scroll-snap-stop: normal;
+    }
+
+    &__inner {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      height: 100%;
+      gap: var(--grid-gap, var(--#{components-base.$prefix}-global-grid-gap));
+    }
+
+    &__slide {
+      display: flex;
+      overflow: hidden;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      margin: 0;
+
+      padding: 0;
+      @media (prefers-reduced-motion: no-preference) {
+        scroll-behavior: smooth;
+      }
+      touch-action: none;
+
+      scroll-snap-type: both mandatory;
+      scroll-snap-stop: normal;
+
+      &,
+      > * {
+        flex-basis: 100%;
+        flex-shrink: 0;
+        scroll-snap-align: start;
+      }
+    }
+  }
+
+  @media (orientation: landscape) {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    .nok-nav-footer,
+    .nok-nav-carousel {
+      flex-basis: 50%;
+      flex-shrink: 1;
+    }
+  }
+
+  .nok-nav-menu-items {
+    display: flex;
+    font-weight: 400;
+    overflow-y: auto; //make sure we can scroll the submenus on really small screens (or many items)
+    flex-direction: column;
+    padding: 1rem var(--#{components-base.$prefix}-padding-section-sides);
+    --item-padding: clamp(0.5rem, 2vw, 1rem);
+    @mixin __local_compact {
+      font-size: 1rem;
+      @include components-base.rfs(1rem, font-size);
+      font-weight: 400;
+      --item-padding: 0.5rem;
+    }
+
+    &--compact {
+      @include __local_compact;
+    }
+
+    @include components-base.media-breakpoint-down(md) {
+      @include __local_compact;
+    }
+
+    .nok-nav-menu-item {
+      display: grid;
+      padding: var(--item-padding) 0;
+      text-decoration: none;
+
+      color: hsla(var(--text-color-hsl) / var(--text-alpha-value, 1));
+      grid-template-columns: 1fr auto;
+
+      &:not(&__back) {
+        &:not(:last-of-type) {
+          border-bottom: 2px solid #8884;
+        }
+
+        &::after {
+          position: relative;
+          content: "\003E";
+        }
+      }
+
+      &__back {
+        font-weight: 400;
+      }
+
+      &--active {
+        color: var(--nok25-lightblue--darker--active);
+      }
+    }
+  }
+}
+
+nok-top-navigation.open {
+
+  nok-navigation-drawer {
+    user-select: none;
+    transform: translate3d(0%, 0%, 0);
+    touch-action: none;
+
+    -webkit-touch-callout: none;
+    @include components-base.nok-subtle-shadow-menu;
+
+    @include components-base.transition-properties(transform) {
+      transition-timing-function: var(--animation-easing-in, cubic-bezier(.07,1.01,.36,1));
+      transition-duration: var(--animation-duration--in, 750ms);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .nok-nav__menuitem {
+        animation: fade--in 0.5s var(--animation-easing-out, cubic-bezier(.85, 0, .15, 1));
+        opacity: 0;
+        animation-fill-mode: forwards;
+      }
+    }
+    @for $i from 1 through 15 {
+      .nok-nav__menuitem:nth-child(#{$i}) {
+        animation-delay: (var(--animation-duration--in, 750ms) / 4) + (50ms * ($i - 1));
+      }
+    }
+  }
+
+}

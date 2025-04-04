@@ -1,0 +1,98 @@
+@use "sass:map";
+@use "shared" as components-base;
+
+// Square block, for use in carousels/sliders, or standalone use
+
+nok-square-block {
+  
+  --text-alpha-value: 0.8;
+  --icon-color: var(--#{components-base.$prefix}-yellow);
+  --text-color: hsla(var(--#{components-base.$prefix}-white-hsl) / var(--global-color-alpha, var(--text-alpha-value, 1)));
+  --text-color--heading: hsla(var(--#{components-base.$prefix}-white-hsl) / 1);
+  --text-color--link: hsla(var(--#{components-base.$prefix}-white-hsl) / 1);
+  --text-color--link--hover: var(--#{components-base.$prefix}-yellow);
+  --text-color--link-icon: var(--#{components-base.$prefix}-lightblue);
+  --text-color--link-icon--hover: var(--#{components-base.$prefix}-yellow);
+  --background-color: var(--#{components-base.$prefix}-darkblue);
+  position: relative;
+  display: grid;
+  //grid-template-rows: auto auto 1fr auto;
+  grid-template-rows: auto;
+
+  container-type: inline-size;
+
+  gap: (components-base.$padding-base);
+  @include components-base.nok-border-radius('large');
+  //line-height: var(--#{components-base.$prefix}-default-line-height, 1.25);
+
+  padding: var(--#{components-base.$prefix}-padding-section-sides, 3rem);
+  border-radius: var(--#{components-base.$prefix}-default-border-radius--large, 8px);
+  @include components-base.nok-subtle-shadow;
+  background-color: var(--background-color);
+
+  > * {
+    margin: 0;
+  }
+
+  .nok-square-block {
+
+    &__icon {
+      color: var(--icon-color);
+      display: flex;
+      svg {
+        width: 3em;
+        height: 3em;
+        aspect-ratio: 1;
+      }
+    }
+
+    &__heading {
+      color: var(--text-color--heading);
+      font-weight: 500;
+    }
+
+    &__text {
+      color: var(--text-color);
+      font-size: 1.1rem;
+    }
+
+    &__link {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      justify-content: start;
+      align-items: center;
+      justify-items: start;
+      cursor: pointer;
+      gap: calc(var(--#{components-base.$prefix}-padding-base, 1.5rem) / 2);
+
+      height: 2rem;
+
+      --text-alpha-value: 0.8;
+      color: var(--text-color--link);
+
+      text-decoration: none;
+      text-transform: uppercase;
+      font-weight: 600;
+      font-size: 1rem;
+
+      svg {
+        color: var(--text-color--link-icon);
+      }
+
+      &::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1;
+        content: "";
+      }
+      &:hover {
+        --text-color--link: var(--text-color--link--hover);
+        --text-color--link-icon: var(--text-color--link-icon--hover);
+      }
+    }
+
+  }
+}

@@ -1,0 +1,120 @@
+@use "sass:map";
+@use "shared" as components-base;
+@use "nok-sections";
+
+//Menu bar with logo and menu items. Half-overlaid on nok-navigation-top-row
+
+nok-navigation-menu-bar {
+
+  display: flex;
+  position: absolute;
+  top: var(--top-row-height);
+  overflow: hidden; // stops the dropdown from appearing at the top when collapsed
+  align-items: stretch;
+  flex-direction: column;
+  pointer-events: none;
+
+  .nok-navigation-menu-bar__inner {
+    font-weight: 400;
+    z-index: calc(var(--z-base, 1) + 3);
+    @include components-base.inline-flex-menu(var(--#{components-base.$prefix}-padding-base, var(--#{components-base.$prefix}-global-grid-gap, 1.5rem)));
+    @include components-base.nok-border-radius('large');
+    @include components-base.nok-subtle-shadow;
+
+    overflow: hidden;
+    height: 6rem;
+    padding-right: var(--#{components-base.$prefix}-padding-base, 1.5rem);
+
+    padding-left: var(--#{components-base.$prefix}-padding-base, 1.5rem);
+
+    pointer-events: all;
+  }
+
+  img, svg {
+    align-self: center;
+    width: auto;
+    @include components-base.rfs(3.5rem, height);
+    height: 3.5rem;
+  }
+
+  nok-nav-menu-bar-dropdown {
+    display: flex;
+    z-index: calc(var(--z-base, 1) + 2);
+    overflow: hidden;
+    flex-basis: 100%;
+    justify-content: center;
+
+    margin-top: calc(-1 * var(--#{components-base.$prefix}-default-border-radius--large, 0));
+    margin-right: var(--#{components-base.$prefix}-default-border-radius--large, 0); //prevents the dropdown from appearing at the top sides when collapsed due to border radius on the menubar
+    margin-left: var(--#{components-base.$prefix}-default-border-radius--large, 0); //prevents the dropdown from appearing at the top sides when collapsed due to border radius on the menubar
+
+    padding-bottom: 16px + 8px; /* to prevent box-shadow from being cut off due to overflow - sync px values with applied shadow (currently: nok-subtle-shadow-menu)*/
+
+    transform: translate3d(0%, -100%, 0);
+
+    .dropdown-contents {
+      display: inline-flex;
+      align-items: stretch;
+      align-self: center;
+      flex-basis: 100%;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: center;
+
+      width: max-content;
+      padding: calc(var(--grid-gap, var(--#{components-base.$prefix}-padding-base, 1.5rem)) * 2);
+
+      pointer-events: all;
+      @include components-base.nok-border-radius('large', 'bottom');
+      @include components-base.nok-subtle-shadow-menu;
+
+      --grid-gap: var(--#{components-base.$prefix}-padding-base, var(--#{components-base.$prefix}-global-grid-gap, 1.5rem));
+      //overflow: hidden;
+      gap: var(--grid-gap, var(--#{components-base.$prefix}-global-grid-gap));
+
+      @include components-base.media-breakpoint-up(xl) {
+        max-width: map.get(components-base.$grid-breakpoints, lg);
+      }
+
+      > * {
+        flex-basis: 50%;
+        flex-shrink: 1;
+        min-width: 0;
+      }
+
+      &-menu {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: calc(var(--grid-gap, var(--#{components-base.$prefix}-padding-base, 1.5rem)) / 2) 0;
+      }
+
+      h2 {
+        font-size: 2rem;
+        @include components-base.rfs(2rem, font-size);
+      }
+
+      h3 {
+        font-size: 1.5rem;
+        @include components-base.rfs(1.5rem, font-size);
+      }
+
+      ul {
+        font-weight: 300;
+        padding: 0;
+        list-style-type: none;
+      }
+    }
+    @include components-base.transition-properties(transform) {
+      transition: transform var(--animation-duration--out) var(--animation-easing-out), box-shadow var(--animation-duration--out) var(--animation-easing-out);
+    }
+    @at-root nok-top-navigation.open nok-nav-menu-bar-dropdown {
+      transform: translate3d(0%, 0%, 0);
+      @include components-base.transition-properties(transform) {
+        transition-duration: var(--animation-duration--in);
+        transition-timing-function: var(--animation-easing-in);
+      }
+      pointer-events: all;
+    }
+  }
+}

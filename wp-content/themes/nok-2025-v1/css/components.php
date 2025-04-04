@@ -5,7 +5,7 @@ const NOK_THEME_ROOT = 'https://dev.obesitaskliniek.nl/wp-content/themes/nok-202
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
 
     <title>NOK Components</title>
 
@@ -63,10 +63,9 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
 <nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs?cache=<?= time(); ?>">
     <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkerblue--darker nok-z-1" data-toggles="open"></nok-screen-mask>
 
-
     <nok-accessibility-helper class="nok-bg-body nok-text-darkerblue nok-dark-text-contrast nok-nav-control-dropdown" data-requires="./nok-user-prefs.mjs?cache=<?= time(); ?>">
         <h5>Toegankelijkheid</h5>
-        <div class="nok-layout-flex half-flex-gap">
+        <div class="nok-layout-flex-row half-flex-gap">
             Tekstgrootte:
             <button class="nok-button nok-button--small nok-bg-darkerblue nok-text-contrast font-decrease"
                     style="font-variant: all-small-caps;" tabindex="0" data-set-font-size="-0.1">A
@@ -83,7 +82,6 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
             </button>
         </div>
     </nok-accessibility-helper>
-
 
     <nok-navigation-mobile>
         <nok-navigation-top-row class="nok-section__inner--stretched  nok-bg-white nok-dark-bg-darkestblue nok-text-contrast nok-fill-contrast  nok-z-3">
@@ -223,9 +221,9 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                     </button>
                 </div>
             </div>
-            <div class="nok-nav-menu-bar-dropdown">
-                <div class="nok-nav-menu-bar-dropdown-contents nok-bg-white nok-dark-bg-darkerblue--darker nok-dark-text-contrast">
-                    <div class="nok-nav-menu-bar-dropdown-contents-menu">
+            <nok-nav-menu-bar-dropdown>
+                <div class="dropdown-contents nok-bg-white nok-dark-bg-darkerblue--darker nok-dark-text-contrast">
+                    <div class="dropdown-contents-menu">
                         <h3>Behandeling</h3>
                         <div>Wat is obesitas?</div>
                         <div>Onze behandeling van obesitas</div>
@@ -247,10 +245,10 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                         </button>
                     </nok-square-block>
                 </div>
-            </div>
+            </nok-nav-menu-bar-dropdown>
         </nok-navigation-menu-bar>
     </nok-navigation-desktop>
-    
+
 </nok-top-navigation>
 
 
