@@ -1,6 +1,5 @@
 @use "sass:map";
 @use "shared" as components-base;
-@use "nok-sections";
 
 //Menu bar with logo and menu items. Half-overlaid on nok-navigation-top-row
 
@@ -8,7 +7,8 @@ nok-navigation-menu-bar {
 
   display: flex;
   position: absolute;
-  top: var(--top-row-height);
+  top: var(--nok-top-navigation-height);
+
   overflow: hidden; // stops the dropdown from appearing at the top when collapsed
   align-items: stretch;
   flex-direction: column;
@@ -17,7 +17,7 @@ nok-navigation-menu-bar {
   .nok-navigation-menu-bar__inner {
     font-weight: 400;
     z-index: calc(var(--z-base, 1) + 3);
-    @include components-base.inline-flex-menu(var(--#{components-base.$prefix}-padding-base, var(--#{components-base.$prefix}-global-grid-gap, 1.5rem)));
+    @include components-base.inline-flex-menu(var(--#{components-base.$prefix}-padding-base));
     @include components-base.nok-border-radius('large');
     @include components-base.nok-subtle-shadow;
 

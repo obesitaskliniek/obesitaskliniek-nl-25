@@ -58,7 +58,7 @@ $font-sizes: ();
 
 @for $i from 1 through 7 {
     $font-sizes: map.merge($font-sizes,(
-            $i: var(--nok25-font-size-#{($i)})
+            $i: var(--nok-font-size-#{($i)})
     ));
 }
 @debug $font-sizes;

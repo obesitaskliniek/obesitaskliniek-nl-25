@@ -3,10 +3,14 @@
 @use "nok-reboot";
 @use "nok-layout";
 @use "./components/nok-buttons";
+@use "./components/nok-links";
 @use "./components/nok-square-block";
+
 @use "./components/nok-screen-mask";
 @use "./components/nok-accessibility-helper";
 @use "./components/nok-top-navigation";
+
+@use "./components/nok-hero";
 
 //Todo: move everything below to something that makes more sense
 

@@ -8,63 +8,63 @@
 $utilities: () !default;
 $enable-important-utilities: true !default;
 
-/* Custom Utility Generator Mixin
- * 2025 - Klaas Leussink
- * --------------------------------
- * Extended version of Bootstrap's `generate-utility` (v5.3), tailored for a more powerful and flexible utility API.
- * 
- * Supports:
- * - **Responsive utilities** via `responsive: true`
- * - **"Up to" breakpoints** (max-width media queries) via `responsive-up-to: true`
- * - **Multiple properties**, each with their own distinct value (see below)
- * - **CSS variables** via `css-var: true`
- * - **Optional variable prefixing** via `no-prefix: true`
- * - **Optional class suffixing** via `no-suffix: true`
- * - **Custom pseudo states**, RTL removal, and RFS support (as in Bootstrap)
- * 
- * Value Handling:
- * - Standard values apply the same value to all defined properties
- * - For multiple property support, pass a map of property-value pairs:
- *   @example
- *     values: (
- *       stretch: (align-self: stretch, grid-column: "1  * -1")
- *     )
- *
- * CSS Variable Handling:
- * - If `css-var: true` is set:
- *   - The CSS variable name is taken from `css-variable-name`
- *   - By default, the variable will be prefixed (e.g. `--my_prefix-grid-columns`)
- *   - If `no-prefix: true` is set, the prefix will be omitted (e.g. `--grid-columns`)
- *
- * Class Suffixing:
- * - By default, class names are suffixed with the value key (e.g. `.mb-0`)
- * - If `no-suffix: true` is set, the suffix is omitted (e.g. `.no-margin`)
- *
- * Usage Example:
- * ```scss
- * "align-grid": (
- *   responsive: false, //doesn't generate min-width responsive classes
- *   responsive-up-to: true, //generate max-width responsive classes
- *   class: align-grid,
- *   values: (
- *     stretch: (align-self: stretch, grid-column: "1  * -1")
- *   )
- * )
- * ```
- *
- * This would generate:
- * ```css
- * .align-grid-to-sm-stretch {
- *   align-self: stretch !important;
- *   grid-column: 1  * -1 !important;
- * }
- * ```
+//Custom Utility Generator Mixin
+//2025 - Klaas Leussink
+//--------------------------------
+//Extended version of Bootstrap's `generate-utility` (v5.3), tailored for a more powerful and flexible utility API.
+//
+//Supports:
+//- Responsive utilities** via `responsive: true`
+//- "Up to" breakpoints** (max-width media queries) via `responsive-up-to: true`
+//- Multiple properties**, each with their own distinct value (see below)
+//- CSS variables** via `css-var: true`
+//- Optional variable prefixing** via `no-prefix: true`
+//- Optional class suffixing** via `no-suffix: true`
+//- Custom pseudo states**, RTL removal, and RFS support (as in Bootstrap)
+//
+//Value Handling:
+//- Standard values apply the same value to all defined properties
+//- For multiple property support, pass a map of property-value pairs:
+//  @example
+//    values: (
+//      stretch: (align-self: stretch, grid-column: "1   -1")
+//    )
+//
+//CSS Variable Handling:
+//- If `css-var: true` is set:
+//  - The CSS variable name is taken from `css-variable-name`
+//  - By default, the variable will be prefixed (e.g. `--my_prefix-grid-columns`)
+//  - If `no-prefix: true` is set, the prefix will be omitted (e.g. `--grid-columns`)
+//
+//Class Suffixing:
+//- By default, class names are suffixed with the value key (e.g. `.mb-0`)
+//- If `no-suffix: true` is set, the suffix is omitted (e.g. `.no-margin`)
+//
+//Usage Example:
+//```scss
+//"align-grid": (
+//  responsive: false, //doesn't generate min-width responsive classes
+//  responsive-up-to: true, //generate max-width responsive classes
+//  class: align-grid,
+//  values: (
+//    stretch: (align-self: stretch, grid-column: "1   -1")
+//  )
+//)
+//```
+//
+//This would generate:
+//```css
+//.align-grid-to-sm-stretch {
+//  align-self: stretch !important;
+//  grid-column: 1   -1 !important;
+//}
+//```
+//
+//@param {Map} $utility - The utility definition map
+//@param {String} $infix - The responsive breakpoint infix (e.g. "-md")
+//@param {Bool} $is-rfs-media-query - Whether inside an RFS media query
+//@param {Bool} $generate-up-to - If true, generates "up to" (max-width) media queries
 
- * @param {Map} $utility - The utility definition map
- * @param {String} $infix - The responsive breakpoint infix (e.g. "-md")
- * @param {Bool} $is-rfs-media-query - Whether inside an RFS media query
- * @param {Bool} $generate-up-to - If true, generates "up to" (max-width) media queries
-*/
 @mixin generate-utility($utility, $infix: "", $is-rfs-media-query: false, $generate-up-to: false) {
   $values: map.get($utility, values);
 
@@ -138,12 +138,41 @@ $enable-important-utilities: true !default;
         }
       } @else {
         .#{$property-class + $infix + $property-class-modifier} {
-          @each $property in $properties {
+          // Normalize $properties to always be a list
+          @if type-of($properties) != "list" {
+            $properties: ($properties,);
+          }
+          @if length($properties) == 1 and type-of(nth($properties, 1)) == "list" {
+            $properties: nth($properties, 1); // flatten nested lists
+          }
+
+          @if $is-local-vars {
+            @each $local-var, $variable in $is-local-vars {
+              #{$css-prefix}#{$local-var}: #{$variable};
+            }
+          }
+
+          @if type-of($value) == "map" {
+            // Map of property-value pairs
+            @each $custom-prop, $custom-val in $value {
+              #{$custom-prop}: #{$custom-val} if($enable-important-utilities, !important, null);
+            }
+          } @else {
+            // Apply value to all properties
+            @each $property in $properties {
+              #{$property}: #{$value} if($enable-important-utilities, !important, null);
+            }
+          }
+        }
+
+        @each $pseudo in $state {
+          .#{$property-class + $infix + $property-class-modifier}-#{$pseudo}:#{$pseudo} {
             @if $is-local-vars {
               @each $local-var, $variable in $is-local-vars {
                 #{$css-prefix}#{$local-var}: #{$variable};
               }
             }
+
             @if type-of($value) == "map" {
               @each $custom-prop, $custom-val in $value {
                 #{$custom-prop}: #{$custom-val} if($enable-important-utilities, !important, null);
@@ -151,27 +180,6 @@ $enable-important-utilities: true !default;
             } @else {
               @each $property in $properties {
                 #{$property}: #{$value} if($enable-important-utilities, !important, null);
-              }
-            }
-          }
-        }
-
-        @each $pseudo in $state {
-          .#{$property-class + $infix + $property-class-modifier}-#{$pseudo}:#{$pseudo} {
-            @each $property in $properties {
-              @if $is-local-vars {
-                @each $local-var, $variable in $is-local-vars {
-                  #{$css-prefix}#{$local-var}: #{$variable};
-                }
-              }
-              @if type-of($value) == "map" {
-                @each $custom-prop, $custom-val in $value {
-                  #{$custom-prop}: #{$custom-val} if($enable-important-utilities, !important, null);
-                }
-              } @else {
-                @each $property in $properties {
-                  #{$property}: #{$value} if($enable-important-utilities, !important, null);
-                }
               }
             }
           }
