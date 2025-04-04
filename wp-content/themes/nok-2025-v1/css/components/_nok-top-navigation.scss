@@ -12,7 +12,7 @@ nok-navigation-desktop, nok-navigation-mobile {
 }
 
 nok-top-navigation {
-
+  --z-base: 0;
   $switch_point: xl;
 
   $dur_in: 750ms;
@@ -104,9 +104,11 @@ nok-top-navigation {
 
   }
 
-  nok-navigation-desktop {
-    --top-row-height: 4rem;
-    --z-base: 0;
+  @at-root :root {
+    --nok-top-navigation-height: 4rem;
+    @include components-base.media-breakpoint-down($switch_point) {
+      --nok-top-navigation-height: 6rem;
+    }
   }
 
   nok-navigation-mobile {

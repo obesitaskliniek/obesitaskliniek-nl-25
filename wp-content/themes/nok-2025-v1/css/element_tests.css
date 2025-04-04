@@ -446,6 +446,7 @@ progress {
   width: 100%;
   padding: 0;
   margin: 0;
+  gap: var(--grid-gap);
   flex-direction: column;
   flex-wrap: nowrap;
   justify-content: center;
@@ -632,7 +633,7 @@ h2.nok-section__heading {
   gap: 16px;
   padding: 32px 32px 0 32px;
   overflow: hidden;
-  border-radius: 0 0 var(--nok25-default-border-radius--large, 1rem) var(--nok25-default-border-radius--large, 1rem);
+  border-radius: 0 0 var(--nok-default-border-radius--large, 1rem) var(--nok-default-border-radius--large, 1rem);
   --nok25-default-border-radius: 16px;
   --nok25-default-border-radius--large: 24px;
 }
@@ -818,8 +819,8 @@ body.smaller-font .nok-nav-control-dropdown .nok25-button.font-decrease {
 }
 .nok-nav nok-desktop-nav .nok-nav-top {
   z-index: 1;
-  font-family: var(--nok25-text-font-family, "Inter", Arial, Helvetica, sans-serif);
-  font-size-adjust: var(--nok25-text-font-size-adjust, 0.514);
+  font-family: var(--nok-text-font-family, "Inter", Arial, Helvetica, sans-serif);
+  font-size-adjust: var(--nok-text-font-size-adjust, 0.514);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizelegibility;
@@ -868,7 +869,7 @@ body.smaller-font .nok-nav-control-dropdown .nok25-button.font-decrease {
   padding-top: calc(var(--grid-gap, var(--nok-global-grid-gap)) * 0.75);
   padding-bottom: calc(var(--grid-gap, var(--nok-global-grid-gap)) * 0.75);
   overflow: hidden;
-  border-radius: var(--nok25-default-border-radius--large, 1rem);
+  border-radius: var(--nok-default-border-radius--large, 1rem);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding-left: var(--nok-padding-base, 1.5rem);
   padding-right: var(--nok-padding-base, 1.5rem);
@@ -931,7 +932,7 @@ body.smaller-font .nok-nav-control-dropdown .nok25-button.font-decrease {
   pointer-events: all;
   gap: var(--grid-gap, var(--nok-global-grid-gap));
   overflow: hidden;
-  border-radius: 0 0 var(--nok25-default-border-radius--large, 1rem) var(--nok25-default-border-radius--large, 1rem);
+  border-radius: 0 0 var(--nok-default-border-radius--large, 1rem) var(--nok-default-border-radius--large, 1rem);
   box-shadow: -8px 8px 16px rgba(0, 0, 0, 0.1);
   width: -moz-max-content;
   width: max-content;
@@ -1144,7 +1145,7 @@ body.smaller-font .nok-nav-control-dropdown .nok25-button.font-decrease {
   --grid-gap: var(--nok-padding-base, var(--nok-global-grid-gap, 1.5rem));
   position: relative;
   overflow: hidden;
-  border-radius: 0 0 calc(var(--nok25-default-border-radius--large, 1rem) * 2.5) calc(var(--nok25-default-border-radius--large, 1rem) * 2.5);
+  border-radius: 0 0 calc(var(--nok-default-border-radius--large, 1rem) * 2.5) calc(var(--nok-default-border-radius--large, 1rem) * 2.5);
   padding-right: 0;
   padding-left: 0;
   overflow: hidden;
@@ -1335,8 +1336,8 @@ h1.nok-hero__heading {
   gap: var(--flex-gap, 0.75rem);
   white-space: nowrap;
   overflow: hidden;
-  font-family: var(--nok25-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
-  font-size-adjust: var(--nok25-heading-font-size-adjust, 0.525);
+  font-family: var(--nok-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
+  font-size-adjust: var(--nok-heading-font-size-adjust, 0.525);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizelegibility;
@@ -1349,7 +1350,7 @@ h1.nok-hero__heading {
   text-decoration: none;
   color: var(--bg-color--contrast, var(--text-color, inherit));
   overflow: hidden;
-  border-radius: var(--nok25-default-border-radius, 0.4rem);
+  border-radius: var(--nok-default-border-radius, 0.4rem);
   border: 0 solid rgba(136, 136, 136, 0);
   outline: 0 none;
   cursor: pointer;
@@ -1376,7 +1377,7 @@ h1.nok-hero__heading {
   outline: 2px solid hsl(var(--bg-color-hsl, 0deg 100% 50%)/0.25);
 }
 .nok-button:focus-visible {
-  box-shadow: 0 0 0px 4px var(--nok25-yellow);
+  box-shadow: 0 0 0px 4px var(--nok-yellow);
   outline: 2px solid #FFF;
 }
 .nok-button:active, .nok-button.active {
@@ -1443,7 +1444,7 @@ nok-square-block,
   container-type: inline-size;
   gap: 1.5rem;
   overflow: hidden;
-  border-radius: var(--nok25-default-border-radius--large, 1rem);
+  border-radius: var(--nok-default-border-radius--large, 1rem);
   padding: var(--nok-padding-section-sides, 3rem);
   border-radius: var(--nok-default-border-radius--large, 8px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -1540,7 +1541,7 @@ nok-square-block > *,
   --scrollbar-height: 10px;
   --scrollbar-handle: var(--text-color--contrast, #CCC);
   --scrollbar-handle--active: var(--text-color--hover, #FFF);
-  --scrollbar-track: oklch(from var(--nok25-body) l c h/0.25);
+  --scrollbar-track: oklch(from var(--nok-body) l c h/0.25);
 }
 .nok-usp-block__scroller.nok-draggable::-webkit-scrollbar {
   height: var(--scrollbar-height, 6px);
@@ -1646,8 +1647,8 @@ body:not(.no-js) .nok-usp-block:has(.fake-scrollbar) .nok-usp-block__scroller .n
 }
 
 body {
-  font-family: var(--nok25-text-font-family, "Inter", Arial, Helvetica, sans-serif);
-  font-size-adjust: var(--nok25-text-font-size-adjust, 0.514);
+  font-family: var(--nok-text-font-family, "Inter", Arial, Helvetica, sans-serif);
+  font-size-adjust: var(--nok-text-font-size-adjust, 0.514);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizelegibility;
@@ -1657,8 +1658,8 @@ body {
 }
 
 h1 {
-  font-family: var(--nok25-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
-  font-size-adjust: var(--nok25-heading-font-size-adjust, 0.525);
+  font-family: var(--nok-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
+  font-size-adjust: var(--nok-heading-font-size-adjust, 0.525);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizelegibility;
@@ -1668,8 +1669,8 @@ h1 {
 }
 
 h2 {
-  font-family: var(--nok25-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
-  font-size-adjust: var(--nok25-heading-font-size-adjust, 0.525);
+  font-family: var(--nok-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
+  font-size-adjust: var(--nok-heading-font-size-adjust, 0.525);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizelegibility;
@@ -1679,8 +1680,8 @@ h2 {
 }
 
 h3 {
-  font-family: var(--nok25-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
-  font-size-adjust: var(--nok25-heading-font-size-adjust, 0.525);
+  font-family: var(--nok-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
+  font-size-adjust: var(--nok-heading-font-size-adjust, 0.525);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizelegibility;
@@ -1690,8 +1691,8 @@ h3 {
 }
 
 h4 {
-  font-family: var(--nok25-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
-  font-size-adjust: var(--nok25-heading-font-size-adjust, 0.525);
+  font-family: var(--nok-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
+  font-size-adjust: var(--nok-heading-font-size-adjust, 0.525);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizelegibility;
@@ -1701,8 +1702,8 @@ h4 {
 }
 
 h5 {
-  font-family: var(--nok25-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
-  font-size-adjust: var(--nok25-heading-font-size-adjust, 0.525);
+  font-family: var(--nok-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
+  font-size-adjust: var(--nok-heading-font-size-adjust, 0.525);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizelegibility;
@@ -1712,8 +1713,8 @@ h5 {
 }
 
 h6 {
-  font-family: var(--nok25-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
-  font-size-adjust: var(--nok25-heading-font-size-adjust, 0.525);
+  font-family: var(--nok-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
+  font-size-adjust: var(--nok-heading-font-size-adjust, 0.525);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizelegibility;
@@ -1778,8 +1779,8 @@ h6 {
 }
 .nok-hyperlink:not(.nok-button):focus-visible {
   overflow: hidden;
-  border-radius: var(--nok25-default-border-radius, 0.4rem);
-  box-shadow: 0 0 0px 4px var(--nok25-yellow);
+  border-radius: var(--nok-default-border-radius, 0.4rem);
+  box-shadow: 0 0 0px 4px var(--nok-yellow);
   outline: 2px solid #FFF;
 }
 p .nok-hyperlink:not(.nok-button) {
@@ -1862,8 +1863,8 @@ html {
 
 body {
   background: linear-gradient(180deg, var(--nok-body--darker), var(--nok-body));
-  font-family: var(--nok25-text-font-family, "Inter", Arial, Helvetica, sans-serif);
-  font-size-adjust: var(--nok25-text-font-size-adjust, 0.514);
+  font-family: var(--nok-text-font-family, "Inter", Arial, Helvetica, sans-serif);
+  font-size-adjust: var(--nok-text-font-size-adjust, 0.514);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizelegibility;

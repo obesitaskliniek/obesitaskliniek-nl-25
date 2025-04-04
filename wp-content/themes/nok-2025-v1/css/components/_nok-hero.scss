@@ -1,0 +1,189 @@
+@use "sass:map";
+@use "shared" as components-base;
+
+nok-hero {
+  --z-base: 0;
+  --grid-gap: var(--#{components-base.$prefix}-padding-base, var(--#{components-base.$prefix}-global-grid-gap, 1.5rem));
+  --footer-height: 6rem;
+
+  .#{&}__inner {
+    display: grid;
+    row-gap: var(--nok-padding-section-sides, var(--grid-gap));
+    @include components-base.nok-border-radius('x-large', 'bottom');
+    position: relative;
+    overflow: hidden;
+
+    article {
+      display: flex;
+      z-index: calc(var(--z-base, 1) + 2);
+      align-items: flex-start;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: center;
+      grid-row: 2 / 3;
+      grid-column: 1 / 2;
+      @include components-base.media-breakpoint-down(xxl) {
+        //grid-column: 1 / 3;
+      }
+      gap: var(--grid-gap, var(--#{components-base.$prefix}-global-grid-gap));
+
+
+      p {
+        @include components-base.rfs(1.1rem, font-size);
+      }
+      h1 {
+        font-size: 3.25rem;
+        @include components-base.rfs(3.25rem, font-size);
+      }
+      h2 {
+        font-size: 2.5rem;
+        @include components-base.rfs(2.5rem, font-size);
+      }
+    }
+  
+    figure {
+      z-index: calc(var(--z-base, 1) + 1);
+      overflow: hidden;
+      margin: 0;
+      grid-row: 1/-1;
+      grid-column: 2 / 3;
+
+      @include components-base.media-breakpoint-down(xxl) {
+        grid-column: 2 / 4;
+      }
+      @include components-base.media-breakpoint-down(lg) {
+        padding-left: var(--#{components-base.$prefix}-padding-section-sides, 1.5rem);
+      }
+      --grad-1-1: var(--#{components-base.$prefix}-lightblue);
+      --grad-1-2: var(--#{components-base.$prefix}-green);
+      --grad-1-3: var(--#{components-base.$prefix}-yellow);
+      --base-layer: var(--#{components-base.$prefix}-body--darker);
+
+      @media (prefers-color-scheme: dark) {
+        --grad-1-3: var(--#{components-base.$prefix}-lightblue);
+        --grad-1-1: var(--#{components-base.$prefix}-yellow);
+        --base-layer: var(--#{components-base.$prefix}-lightblue--darker);
+      }
+
+      svg {
+        //min-width: 100%;
+        max-width: fit-content;
+        min-height: 100%;
+        height: 100%;
+      }
+
+      linearGradient {
+        &#a {
+          --bg-alpha-value: 1;
+        }
+        &#b {
+          --bg-alpha-value: 0.5;
+        }
+        &#c {
+          --bg-alpha-value: 0.3;
+        }
+      }
+
+      path#d {
+        --bg-alpha-value: 0.4;
+        @media (prefers-color-scheme: dark) {
+          --bg-alpha-value: 0.1;
+        }
+      }
+
+      foreignObject {
+        img {
+          max-width: 100%;
+          background-color: hsla(var(--#{components-base.$prefix}-green) / 0.5);
+          object-fit: cover;
+          object-position: 40% 50%;
+          @include components-base.media-breakpoint-down(xl) {
+            object-position: 60% 50%;
+          }
+        }
+      }
+    }
+
+    article, figure {
+      position: relative;
+    }
+
+    footer {
+      grid-column: 1 / -1;
+      grid-row: 3;
+      z-index: calc(var(--z-base, 1) + 3);
+      align-self: stretch;
+
+      @include components-base.inline-flex-menu(var(--#{components-base.$prefix}-padding-base), auto);
+
+      .#{components-base.$prefix}-usp {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: flex-start;
+
+        gap: calc(var(--grid-gap) / 2);
+
+        > svg {
+          width: calc(var(--nok-font-size-buttons) * var(--nok-body-line-height));
+          height: calc(var(--nok-font-size-buttons) * var(--nok-body-line-height));
+        }
+      }
+
+    }
+
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: calc(var(--nok-top-navigation-height, 4rem) - 1rem) auto var(--footer-height);
+
+    /* Mobile */
+    @include components-base.media-breakpoint-down(xxl) {
+      //grid-template-columns: 1fr auto auto;
+    }
+    @include components-base.media-breakpoint-down(xl) {
+      //grid-template-rows: 5rem auto var(--footer-height);
+      grid-template-columns: 6fr 2fr 8fr;
+      article {
+        grid-column: 1 / 3;
+      }
+    }
+    @include components-base.media-breakpoint-down(lg) {
+      grid-template-rows: 5rem 45vmax 3rem auto var(--footer-height); //third column (3rem) is overlap between article and figure
+      grid-template-columns: 1fr;
+      row-gap: 0;
+      //grid-template-rows: 45vmax 4rem auto 1fr;
+      //grid-template-rows: 50vw 25vw auto 1fr; //makes the first 2 rows take on a 4:3 ratio, for the figure
+      article, figure, footer, &-figure-mask {
+        grid-column: 1;
+      }
+      article {
+        grid-row: 3 / 5;
+        align-self: end;
+      }
+      figure {
+        grid-row: 2 / 4;
+        //mask-image: linear-gradient(to bottom, rgb(0, 0, 0) 50%, rgb(0 0 0 / 5%) 75%, rgb(0 0 0 / 0) 100%);
+        //mask-image: linear-gradient(to bottom, rgb(0, 0, 0) 70%, rgba(0, 0, 0, 0.5) 80%, rgba(255, 255, 255, 0) 100%);
+        mask-image: radial-gradient(100% 100% at 90% 0%, rgba(255, 255, 255, 1) 80%, rgba(255, 255, 255, 0) 100%);
+        justify-self: end;
+        max-width: 100%;
+      }
+      footer {
+        --bg-alpha-value: 0;
+        grid-row: 5;
+        flex-wrap: wrap;
+        justify-content: center;
+        flex-direction: column;
+      }
+    }
+    @include components-base.media-breakpoint-down(lg) {
+      button {
+        align-self: stretch;
+      }
+      article .#{components-base.$prefix}-button-group {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+      }
+    }
+  }
+}

@@ -3,8 +3,8 @@
 @use 'sass:map';
 
 @mixin nok-heading-font {
-  font-family: var(--nok25-heading-font-family, nok-variables.$heading-font-family);
-  font-size-adjust: var(--nok25-heading-font-size-adjust, nok-variables.$heading-font-size-adjust);
+  font-family: var(--nok-heading-font-family, nok-variables.$heading-font-family);
+  font-size-adjust: var(--nok-heading-font-size-adjust, nok-variables.$heading-font-size-adjust);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizelegibility;
@@ -13,8 +13,8 @@
   font-weight: 500;
 }
 @mixin nok-text-font {
-  font-family: var(--nok25-text-font-family, nok-variables.$text-font-family);
-  font-size-adjust: var(--nok25-text-font-size-adjust, nok-variables.$text-font-size-adjust);
+  font-family: var(--nok-text-font-family, nok-variables.$text-font-family);
+  font-size-adjust: var(--nok-text-font-size-adjust, nok-variables.$text-font-size-adjust);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizelegibility;
@@ -44,14 +44,14 @@
 // */
 @mixin nok-border-radius($size: 'default', $position: 'all') {
   // Determine border-radius based on size
-  $radius: var(--nok25-default-border-radius, 0.4rem);
+  $radius: var(--nok-default-border-radius, 0.4rem);
 
   @if $size == 'large' {
-    $radius: var(--nok25-default-border-radius--large, 1rem);
+    $radius: var(--nok-default-border-radius--large, 1rem);
   } @else if $size == 'x-large' {
-    $radius: calc(var(--nok25-default-border-radius--large, 1rem) * 2.5);
+    $radius: calc(var(--nok-default-border-radius--large, 1rem) * 2.5);
   } @else if $size == 'xx-large' {
-    $radius: calc(var(--nok25-default-border-radius--xx-large, 1rem) * 4);
+    $radius: calc(var(--nok-default-border-radius--xx-large, 1rem) * 4);
   }
 
   overflow: hidden;
@@ -71,7 +71,7 @@
 
 
 @mixin nok-focus-ring {
-  box-shadow: 0 0 0px 4px var(--nok25-yellow);
+  box-shadow: 0 0 0px 4px var(--nok-yellow);
   outline: 2px solid #FFF;
 }
 
@@ -105,7 +105,7 @@
   );
   -webkit-tap-highlight-color: transparent;
 
-  //font-size: var(--nok25-font-size-buttons, 1.25rem);
+  //font-size: var(--nok-font-size-buttons, 1.25rem);
   text-decoration: none;
   padding: .75ex 0;
 
@@ -146,7 +146,7 @@
   $scrollbarHeight: 6px,
   $scrollbarHandle: var(--text-color--contrast, #CCC),
   $scrollbarHandle_active: var(--text-color--hover, #FFF),
-  $scrollbarTrack: oklch(from var(--nok25-body) l c h / 0.25)
+  $scrollbarTrack: oklch(from var(--nok-body) l c h / 0.25)
 ) {
   &, + .fake-scrollbar {
     --scrollbar-height: #{$scrollbarHeight};
@@ -423,8 +423,11 @@
 
   gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
 
-  padding-top: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * .75);
-  padding-bottom: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * .75);
+  //padding-top: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * .75);
+  //padding-bottom: calc(var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)) * .75);
+
+  padding-top: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
+  padding-bottom: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
 
   > * {
     flex-shrink: 0;
