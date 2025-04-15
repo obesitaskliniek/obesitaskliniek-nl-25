@@ -12,8 +12,7 @@
   &-grid {
     display: grid;
     gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
-    grid-template-columns: repeat(var(--grid-columns, 1), 1fr);
-
+    grid-template-columns: repeat(var(--grid-columns, 1), var(--grid-column-size, 1fr));
 
     //default: cascade down at breakpoints
     //i.e: the column count set in the class is more of a maximum.
@@ -36,6 +35,18 @@
         --grid-columns: 1;
       }
     }
+    &__4-column {
+      --grid-columns: 4;
+      @include nok-mixins.media-breakpoint-down(xxxl) {
+        --grid-columns: 3;
+      }
+      @include nok-mixins.media-breakpoint-down(xxl) {
+        --grid-columns: 2;
+      }
+      @include nok-mixins.media-breakpoint-down(lg) {
+        --grid-columns: 1;
+      }
+    }
 
     //Layout patterns
     &.fill-one { //fills first child across columns, followed by a single column for the second element
@@ -48,16 +59,26 @@
       }
     }
     &.one-fill { //fills first child across 1 colum, followed by the second element spanning across columns
-      > :first-child {
-        grid-column-start: 1;
-        grid-column-end: span 1;
-      }
+      //> :first-child {
+      //  grid-column-start: 1;
+      //  grid-column-end: span 1;
+      //}
       > :last-child {
         grid-column-end: span max(1, calc(var(--grid-columns) - 1));
       }
     }
+    &.fill-last { //like one-fill, but more robust for 3+ column layouts
+      > :last-child {
+        grid-column-end: span max(1, calc(var(--grid-columns) - 2));
+      }
+
+    }
     //"fill-fill" is another layout pattern, which fills both children 50/50. See 2-column layout above; it's identical
 
+    /* Helpers */
+    &__span-all {
+      grid-column: 1 / -1;
+    }
   }
 
   &-flex {
@@ -76,6 +97,7 @@
 
 }
 
+/* Gap modifiers */
 .half-grid-gap {
   gap: calc(var(--grid-gap) / 2);
 }

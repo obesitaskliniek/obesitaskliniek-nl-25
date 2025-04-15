@@ -83,10 +83,7 @@ nok-navigation-menu-bar {
       }
 
       &-menu {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: calc(var(--grid-gap, var(--#{components-base.$prefix}-padding-base, 1.5rem)) / 2) 0;
+        align-self: flex-start;
       }
 
       h2 {

@@ -223,7 +223,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
             </div>
             <nok-nav-menu-bar-dropdown>
                 <div class="dropdown-contents nok-bg-white nok-dark-bg-darkerblue--darker nok-dark-text-contrast">
-                    <div class="dropdown-contents-menu">
+                    <div class="dropdown-contents-menu nok-ul-list nok-mt-0">
                         <h3>Behandeling</h3>
                         <div>Wat is obesitas?</div>
                         <div>Onze behandeling van obesitas</div>
@@ -365,6 +365,69 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
     </div>
 </nok-hero>
 
+<nok-page-footer class="nok-section">
+    <div class="nok-section__inner--stretched nok-my-0 nok-px-0 nok-border-radius-0
+    nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white">
+        <div class="nok-section__inner nok-page-footer__inner">
+            <div class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-center" style="--grid-gap: 3rem;">
+                <nok-square-block class="nok-bg-body nok-alpha-10">
+                    <div class="nok-square-block__heading">
+                        <h3 class="fw-bold">Vragen?</h3>
+                        <h3 class="fw-400">We helpen je graag</h3>
+                    </div>
+                    <p class="nok-square-block__text nok-fs-2">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos
+                        vero.
+                    </p>
+                    <button class="nok-button nok-justify-self-start
+                    nok-base-font nok-bg-darkblue nok-text-contrast" tabindex="0">
+                        Neem contact op
+                        <svg class="nok-text-yellow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25"
+                             width="25" height="25" fill="currentColor">
+                            <path d="m17.5 5.999-.707.707 5.293 5.293H1v1h21.086l-5.294 5.295.707.707L24 12.499l-6.5-6.5z"
+                                  data-name="Right"/>
+                        </svg>
+                    </button>
+                </nok-square-block>
+                <div class="nok-layout-grid nok-layout-grid__3-column" data-requires="./nok-accordion.mjs?cache=<?= time(); ?>" data-opened-at="lg">
+                    <div class="nok-accordion">
+                        <h4 class="nok-fs-2 fw-bold">Behandeling</h4>
+                        <ul class="nok-ul-list">
+                            <li>Advies over obesitas</li>
+                            <li>Behandeling met operatie</li>
+                            <li>Ons behandelprogramma</li>
+                            <li>Kosten van de behandeling</li>
+                            <li>Onze specialisten</li>
+                            <li>Verwijzers</li>
+                        </ul>
+                    </div>
+                    <div class="nok-accordion">
+                        <h4 class="nok-fs-2 fw-bold">Over NOK</h4>
+                        <ul class="nok-ul-list">
+                            <li>Over ons</li>
+                            <li>Ervaringen</li>
+                            <li>Kennisbank</li>
+                            <li>Werken bij</li>
+                            <li>Vestigingen</li>
+                            <li>Contact</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="nok-fs-2 fw-bold">Neem contact op</h4>
+                        <ul class="nok-ul-list">
+                            <li>info@obesitaskliniek.nl</li>
+                            <li>088 - 88 32 444</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="nok-layout-grid__span-all nok-layout-flex-row">
+                    <a href="#" class="nok-hyperlink">Privacy Policy</a>
+                    <a href="#" class="nok-hyperlink">Algemene voorwaarden</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nok-page-footer>
 
 </body>
 </html>
