@@ -40,7 +40,7 @@ h6, h5, h4, h3, h2, h1 {
   margin-top: 0;
   margin-bottom: 0;
   line-height: 1.2;
-  color: var(--nok-heading-color, var(--bg-color--contrast));
+  color: var(--text-color, var(--bg-color--contrast));
 }
 
 h1 {
@@ -1761,7 +1761,7 @@ h6 {
   );
   -webkit-tap-highlight-color: transparent;
   text-decoration: none;
-  padding: 0.75ex 0;
+  padding: 0.75ex 0.25ex;
   background-image: var(--gradient);
   background-size: 100% 200%;
   background-repeat: no-repeat;

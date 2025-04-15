@@ -53,6 +53,14 @@
   font-weight: 600;
 }
 
+.fw-500 {
+  font-weight: 500;
+}
+
+.fw-400 {
+  font-weight: 400;
+}
+
 .natural-fit-image {
   img {
     width: 100%;
@@ -401,6 +409,31 @@ $utilities: (
                 class: #{nok-variables.$prefix}-align-self,
                 values: (
                         stretch: (align-self: stretch, grid-column: "1 / -1")
+                )
+        ),
+        "align-items": (
+                responsive: false,
+                responsive-up-to: true,
+                property: align-items,
+                class: #{nok-variables.$prefix}-align-items,
+                values: (
+                        center: center,
+                        stretch: stretch,
+                        start: flex-start,
+                        end: flex-end,
+                )
+        ),
+        "justify-self": (
+                responsive: false,
+                responsive-up-to: true,
+                property: justify-self,
+                class: #{nok-variables.$prefix}-justify-self,
+                values: (
+                        center: center,
+                        stretch: stretch,
+                        start: flex-start,
+                        end: flex-end,
+
                 )
         ),
   //conceptual

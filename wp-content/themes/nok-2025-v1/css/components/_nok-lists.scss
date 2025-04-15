@@ -1,0 +1,23 @@
+@use "sass:map";
+@use "shared" as components-base;
+@use "../nok-variables";
+
+// Lists
+
+// Unordered list
+.nok-ul-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: nok-variables.$padding-base / 3;
+  margin-block: nok-variables.$padding-base / 3;
+
+  @at-root ul.nok-ul-list {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  > div, > li {
+    font-weight: 300;
+  }
+}

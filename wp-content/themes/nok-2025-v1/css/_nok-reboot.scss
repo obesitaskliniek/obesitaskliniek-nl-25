@@ -82,7 +82,7 @@ hr {
   margin-top: 0; // 1
   margin-bottom: 0;
   line-height: 1.2;
-  color: var(--#{nok-variables.$prefix}-heading-color, var(--bg-color--contrast));
+  color: var(--text-color, var(--bg-color--contrast));
 }
 
 h1 {

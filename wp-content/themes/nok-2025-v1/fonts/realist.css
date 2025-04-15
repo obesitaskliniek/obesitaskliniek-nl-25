@@ -1,68 +1,19 @@
-@font-face {
-    font-family: 'Realist';
-    src: url('realist-new/Realist-BoldItalic.woff2') format('woff2'),
-        url('realist-new/Realist-BoldItalic.woff') format('woff'),
-        url('realist-new/Realist-BoldItalic.ttf') format('truetype');
-    font-weight: bold;
-    font-style: italic;
-    font-display: swap;
-}
 
-@font-face {
-    font-family: 'Realist';
-    src: url('realist-new/Realist-Bold.woff2') format('woff2'),
-        url('realist-new/Realist-Bold.woff') format('woff'),
-        url('realist-new/Realist-Bold.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Realist';
-    src: url('realist-new/Realist-Regular.woff2') format('woff2'),
-        url('realist-new/Realist-Regular.woff') format('woff'),
-        url('realist-new/Realist-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Realist';
-    src: url('realist-new/Realist-Black.woff2') format('woff2'),
-        url('realist-new/Realist-Black.woff') format('woff'),
-        url('realist-new/Realist-Black.ttf') format('truetype');
-    font-weight: 900;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Realist';
-    src: url('realist-new/Realist-BlackItalic.woff2') format('woff2'),
-        url('realist-new/Realist-BlackItalic.woff') format('woff'),
-        url('realist-new/Realist-BlackItalic.ttf') format('truetype');
-    font-weight: 900;
-    font-style: italic;
-    font-display: swap;
-}
 
 @font-face {
     font-family: 'Realist';
     src: url('realist-new/Realist-Thin.woff2') format('woff2'),
-        url('realist-new/Realist-Thin.woff') format('woff'),
-        url('realist-new/Realist-Thin.ttf') format('truetype');
+    url('realist-new/Realist-Thin.woff') format('woff'),
+    url('realist-new/Realist-Thin.ttf') format('truetype');
     font-weight: 100;
     font-style: normal;
     font-display: swap;
 }
-
 @font-face {
     font-family: 'Realist';
     src: url('realist-new/Realist-ThinItalic.woff2') format('woff2'),
-        url('realist-new/Realist-ThinItalic.woff') format('woff'),
-        url('realist-new/Realist-ThinItalic.ttf') format('truetype');
+    url('realist-new/Realist-ThinItalic.woff') format('woff'),
+    url('realist-new/Realist-ThinItalic.ttf') format('truetype');
     font-weight: 100;
     font-style: italic;
     font-display: swap;
@@ -71,79 +22,18 @@
 @font-face {
     font-family: 'Realist';
     src: url('realist-new/Realist-Light.woff2') format('woff2'),
-        url('realist-new/Realist-Light.woff') format('woff'),
-        url('realist-new/Realist-Light.ttf') format('truetype');
-    font-weight: 300;
+    url('realist-new/Realist-Light.woff') format('woff'),
+    url('realist-new/Realist-Light.ttf') format('truetype');
+    font-weight: 200;
     font-style: normal;
     font-display: swap;
 }
-
-@font-face {
-    font-family: 'Realist';
-    src: url('realist-new/Realist-ExtraBoldItalic.woff2') format('woff2'),
-        url('realist-new/Realist-ExtraBoldItalic.woff') format('woff'),
-        url('realist-new/Realist-ExtraBoldItalic.ttf') format('truetype');
-    font-weight: bold;
-    font-style: italic;
-    font-display: swap;
-}
-
 @font-face {
     font-family: 'Realist';
     src: url('realist-new/Realist-LightItalic.woff2') format('woff2'),
-        url('realist-new/Realist-LightItalic.woff') format('woff'),
-        url('realist-new/Realist-LightItalic.ttf') format('truetype');
-    font-weight: 300;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Realist';
-    src: url('realist-new/Realist-MediumItalic.woff2') format('woff2'),
-        url('realist-new/Realist-MediumItalic.woff') format('woff'),
-        url('realist-new/Realist-MediumItalic.ttf') format('truetype');
-    font-weight: 500;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Realist';
-    src: url('realist-new/Realist-Medium.woff2') format('woff2'),
-        url('realist-new/Realist-Medium.woff') format('woff'),
-        url('realist-new/Realist-Medium.ttf') format('truetype');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Realist';
-    src: url('realist-new/Realist-ExtraBold.woff2') format('woff2'),
-        url('realist-new/Realist-ExtraBold.woff') format('woff'),
-        url('realist-new/Realist-ExtraBold.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Realist';
-    src: url('realist-new/Realist-RegularItalic.woff2') format('woff2'),
-        url('realist-new/Realist-RegularItalic.woff') format('woff'),
-        url('realist-new/Realist-RegularItalic.ttf') format('truetype');
-    font-weight: normal;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Realist';
-    src: url('realist-new/Realist-SemiLightItalic.woff2') format('woff2'),
-        url('realist-new/Realist-SemiLightItalic.woff') format('woff'),
-        url('realist-new/Realist-SemiLightItalic.ttf') format('truetype');
-    font-weight: 300;
+    url('realist-new/Realist-LightItalic.woff') format('woff'),
+    url('realist-new/Realist-LightItalic.ttf') format('truetype');
+    font-weight: 200;
     font-style: italic;
     font-display: swap;
 }
@@ -151,10 +41,113 @@
 @font-face {
     font-family: 'Realist';
     src: url('realist-new/Realist-SemiLight.woff2') format('woff2'),
-        url('realist-new/Realist-SemiLight.woff') format('woff'),
-        url('realist-new/Realist-SemiLight.ttf') format('truetype');
+    url('realist-new/Realist-SemiLight.woff') format('woff'),
+    url('realist-new/Realist-SemiLight.ttf') format('truetype');
     font-weight: 300;
     font-style: normal;
     font-display: swap;
 }
+@font-face {
+    font-family: 'Realist';
+    src: url('realist-new/Realist-SemiLightItalic.woff2') format('woff2'),
+    url('realist-new/Realist-SemiLightItalic.woff') format('woff'),
+    url('realist-new/Realist-SemiLightItalic.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
 
+@font-face {
+    font-family: 'Realist';
+    src: url('realist-new/Realist-RegularItalic.woff2') format('woff2'),
+    url('realist-new/Realist-RegularItalic.woff') format('woff'),
+    url('realist-new/Realist-RegularItalic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Realist';
+    src: url('realist-new/Realist-Regular.woff2') format('woff2'),
+    url('realist-new/Realist-Regular.woff') format('woff'),
+    url('realist-new/Realist-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Realist';
+    src: url('realist-new/Realist-Medium.woff2') format('woff2'),
+    url('realist-new/Realist-Medium.woff') format('woff'),
+    url('realist-new/Realist-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Realist';
+    src: url('realist-new/Realist-MediumItalic.woff2') format('woff2'),
+    url('realist-new/Realist-MediumItalic.woff') format('woff'),
+    url('realist-new/Realist-MediumItalic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Realist';
+    src: url('realist-new/Realist-Bold.woff2') format('woff2'),
+    url('realist-new/Realist-Bold.woff') format('woff'),
+    url('realist-new/Realist-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Realist';
+    src: url('realist-new/Realist-BoldItalic.woff2') format('woff2'),
+    url('realist-new/Realist-BoldItalic.woff') format('woff'),
+    url('realist-new/Realist-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Realist';
+    src: url('realist-new/Realist-ExtraBold.woff2') format('woff2'),
+    url('realist-new/Realist-ExtraBold.woff') format('woff'),
+    url('realist-new/Realist-ExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Realist';
+    src: url('realist-new/Realist-ExtraBoldItalic.woff2') format('woff2'),
+    url('realist-new/Realist-ExtraBoldItalic.woff') format('woff'),
+    url('realist-new/Realist-ExtraBoldItalic.ttf') format('truetype');
+    font-weight: 800;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Realist';
+    src: url('realist-new/Realist-Black.woff2') format('woff2'),
+    url('realist-new/Realist-Black.woff') format('woff'),
+    url('realist-new/Realist-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Realist';
+    src: url('realist-new/Realist-BlackItalic.woff2') format('woff2'),
+    url('realist-new/Realist-BlackItalic.woff') format('woff'),
+    url('realist-new/Realist-BlackItalic.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}

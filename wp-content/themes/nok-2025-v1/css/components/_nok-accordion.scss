@@ -1,0 +1,48 @@
+@use "sass:map";
+@use "shared" as components-base;
+@use "../nok-variables";
+
+// Collapsible accordion component
+
+.nok-accordion {
+  display: flex;
+  flex-direction: column;
+  &__horizontal {
+    flex-direction: row;
+  }
+  > :first-child {
+    flex: 0 0 auto;
+    cursor: pointer;
+  }
+  > :last-child {
+    flex: 0 1 auto;
+    overflow: hidden;
+    @include components-base.transition-properties(basis) {
+      transition: height var(--animation-duration--in, 750ms) cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  }
+  @each $breakpoint, $value in components-base.$grid-breakpoints {
+    @include components-base.media-breakpoint-up($breakpoint) {
+      &[data-opened-at="#{$breakpoint}"], [data-opened-at="#{$breakpoint}"] > & {
+        > :first-child {
+          pointer-events: none !important;
+          cursor: default !important;
+        }
+        > :last-child {
+          height: auto !important;
+          transition: none !important;
+        }
+      }
+    }
+    @include components-base.media-breakpoint-down($breakpoint) {
+      &[data-opened-at="#{$breakpoint}"], [data-opened-at="#{$breakpoint}"] > & {
+        border-bottom: 1px solid #8884;
+      }
+    }
+  }
+  &:not(.open) {
+    > :last-child {
+      height: 0;
+    }
+  }
+}

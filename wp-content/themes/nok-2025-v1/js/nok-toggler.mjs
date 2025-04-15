@@ -86,7 +86,7 @@ export function init(elements){
       const toggles = toggler.dataset.toggles;
       const autoHide = toggler.dataset.autohide ?? 0;
       let autoHideTimeout;
-      const target = toggler.dataset.target ? (toggler.dataset.target === '_self' ? toggler : document.querySelector(toggler.dataset.target)) : element;
+      const target = toggler.dataset.target ? (toggler.dataset.target === '_self' ? toggler : (toggler.dataset.target === 'parent' ? toggler.parentNode : document.querySelector(toggler.dataset.target))) : element;
       const hide = toggler.dataset.togglePermanent?.toLowerCase() !== "true";
 
       function handleClickOutside(event) {
