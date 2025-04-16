@@ -163,7 +163,7 @@ $alpha_values: ();
 
 @mixin extended_variables($type, $alpha_values) {
   --#{$type}-color--contrast: oklch(from var(--#{$type}-base-contrast) l c h / #{map.get($alpha_values, 'text')});
-  --#{$type}-color--hover: oklch(from var(--#{$type}-base) calc(l * 1.1) calc(c * 0.9) h / #{map.get($alpha_values, $type)});
+  --#{$type}-color--hover: oklch(from var(--#{$type}-base) calc(l * 1.25) calc(c * 0.9) h / #{map.get($alpha_values, $type)});
   --#{$type}-color--active: oklch(from var(--#{$type}-base) calc(l * 1.05) calc(c * 1.1) h / #{map.get($alpha_values, $type)});
   --#{$type}-color--grayscale: oklch(from var(--#{$type}-base) l 0 h / #{map.get($alpha_values, $type)});
 }

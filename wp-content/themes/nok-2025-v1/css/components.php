@@ -367,7 +367,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
 
 <nok-page-footer class="nok-section">
     <div class="nok-section__inner--stretched nok-my-0 nok-px-0 nok-border-radius-0
-    nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white">
+    nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue nok-dark-text-white">
         <div class="nok-section__inner nok-page-footer__inner">
             <div class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-center" style="--grid-gap: 3rem;">
                 <nok-square-block class="nok-bg-body nok-alpha-10">
