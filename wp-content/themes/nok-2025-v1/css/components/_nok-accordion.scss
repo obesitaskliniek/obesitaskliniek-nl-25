@@ -12,12 +12,38 @@
   }
   > :first-child {
     flex: 0 0 auto;
-    cursor: pointer;
+    cursor: pointer;// Accordion icon
+    display: flex;
+    justify-content: space-between;
+    &:hover {
+      color: var(--text-color--hover);
+    }
+    &::after {
+      justify-self: flex-end;
+      flex-shrink: 0;
+      width: components-base.$accordion-icon-width;
+      height: components-base.$accordion-icon-width;
+      margin-left: auto;
+      content: "";
+      @include components-base.accordion-button-icon(false);
+      mask-size: cover;
+      background-color: var(--text-color);
+      @include components-base.transition-properties(transform) {
+        transform-origin: center;
+        transition: transform .2s ease-in-out;
+      }
+    }
+  }
+  &.open > :first-child::after {
+    @include components-base.transition-properties(transform) {
+      transform: rotate(180deg);
+    }
+    @include components-base.accordion-button-icon(true);
   }
   > :last-child {
     flex: 0 1 auto;
     overflow: hidden;
-    @include components-base.transition-properties(basis) {
+    @include components-base.transition-properties(height) {
       transition: height var(--animation-duration--in, 750ms) cubic-bezier(0.16, 1, 0.3, 1);
     }
   }
@@ -27,6 +53,9 @@
         > :first-child {
           pointer-events: none !important;
           cursor: default !important;
+          &::after {
+            display: none;
+          }
         }
         > :last-child {
           height: auto !important;
@@ -36,7 +65,7 @@
     }
     @include components-base.media-breakpoint-down($breakpoint) {
       &[data-opened-at="#{$breakpoint}"], [data-opened-at="#{$breakpoint}"] > & {
-        border-bottom: 1px solid #8884;
+        border-bottom: 1px solid oklch(from var(--text-base) l c h / var(--global-text-alpha-value, 0.5));
       }
     }
   }
