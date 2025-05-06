@@ -150,6 +150,7 @@ dd {
 
 blockquote {
   margin: 0 0 1rem;
+  font-style: italic;
 }
 
 b,
@@ -1539,7 +1540,7 @@ nok-square-block > *,
 }
 .nok-usp-block__scroller.nok-draggable, .nok-usp-block__scroller.nok-draggable + .fake-scrollbar {
   --scrollbar-height: 10px;
-  --scrollbar-handle: var(--text-color--contrast, #CCC);
+  --scrollbar-handle: var(--text-color, #CCC);
   --scrollbar-handle--active: var(--text-color--hover, #FFF);
   --scrollbar-track: oklch(from var(--nok-body) l c h/0.25);
 }

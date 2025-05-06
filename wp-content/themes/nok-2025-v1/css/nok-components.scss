@@ -7,6 +7,7 @@
 @use "./components/nok-lists";
 @use "./components/nok-accordion";
 @use "./components/nok-square-block";
+@use "./components/nok-block-group";
 
 @use "./components/nok-screen-mask";
 @use "./components/nok-accessibility-helper";
@@ -29,6 +30,7 @@ body {
   @include nok-mixins.nok-text-font;
   min-height: 100vh; //warning: temp
 }
+
 @for $i from 1 through 6 {
   h#{$i} {
     @include nok-mixins.nok-heading-font;
@@ -40,6 +42,7 @@ body {
   background: linear-gradient(180deg, var(--#{nok-variables.$prefix}-body--darker), var(--#{nok-variables.$prefix}-body));
   @include nok-mixins.nok-text-font;
 }
+
 @for $i from 1 through 6 {
   h#{$i} {
     @include nok-mixins.nok-heading-font;

@@ -4220,5 +4220,4 @@ body .nok-text-contrast {
  * Only use local color alpha for alpha adjustments. Global color alpha is an override used only for the media query
  * 'prefers-reduced-transparency' and should not be overridden manually (as it's the other way round).
  */
-
 /*# sourceMappingURL=color_tests.css.map */

@@ -1,0 +1,53 @@
+@use "sass:map";
+@use "shared" as components-base;
+
+// Block group carousel
+
+nok-block-group {
+  display: block;
+
+  grid-column: 1 / -1;
+  
+  --grid-columns: 3;
+  @include components-base.media-breakpoint-down(xxl) {
+    --grid-columns: 2;
+  }
+  @include components-base.media-breakpoint-down(lg) {
+    --grid-columns: 1;
+  }
+
+  &.#{components-base.$prefix}-draggable {
+    .block_container {
+      .#{components-base.$prefix}-draggable-slider-item {
+        > *:not(a),
+        a::after {
+          pointer-events: none;
+        }
+      }
+    }
+  }
+  
+  .block_container {
+    --grid-gap: #{(1.5 * components-base.$padding-base)};
+    --grid-column-width: calc(
+            (100% - (var(--grid-gap, 1rem) * (var(--grid-columns, 1) - 1))) / var(--grid-columns, 1)
+    );
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    flex-basis: 100%;
+    gap: var(--grid-gap, var(--#{components-base.$prefix}-global-grid-gap));
+
+    > * {
+      flex-basis: var(--grid-column-width);
+      flex-shrink: 0;
+    }
+  }
+
+  padding-bottom: calc(var(--grid-gap, 1.5rem) * 2);
+
+  //@include components-base.javascript-properties {
+  //  padding-bottom:var(--grid-gap, 1.5rem); //removes one gap space if fake scrollbar is present
+  //}
+  
+}

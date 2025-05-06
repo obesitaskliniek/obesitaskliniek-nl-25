@@ -144,7 +144,7 @@
 // */
 @mixin nok-scrollbar-thin(
   $scrollbarHeight: 6px,
-  $scrollbarHandle: var(--text-color--contrast, #CCC),
+  $scrollbarHandle: var(--text-color, #CCC),
   $scrollbarHandle_active: var(--text-color--hover, #FFF),
   $scrollbarTrack: oklch(from var(--nok-body) l c h / 0.25)
 ) {
