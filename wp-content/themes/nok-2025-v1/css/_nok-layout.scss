@@ -104,3 +104,6 @@
 .half-flex-gap {
   gap: calc(var(--flex-gap) / 2);
 }
+.no-flex-gap {
+  gap: 0;
+}

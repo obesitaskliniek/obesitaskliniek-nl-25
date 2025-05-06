@@ -35,19 +35,6 @@
   }
 }
 
-/* Enable draggable cursor for non-touch devices */
-@media (pointer: fine) {
-  .#{nok-variables.$prefix}-draggable {
-    & {
-      cursor: grab;
-    }
-
-    &:active {
-      cursor: grabbing;
-      user-select: none;
-    }
-  }
-}
 
 .fw-bold {
   font-weight: 600;
@@ -262,35 +249,50 @@ $alphas: (
 }
 
 
-/* margin */
-@for $i from 1 through 5 {
-  .#{nok-variables.$prefix}-mr-#{$i} {
-    margin-right: #{($i * nok-variables.$padding-base)};
-  }
-  .#{nok-variables.$prefix}-mb-#{$i} {
-    margin-bottom: #{($i * nok-variables.$padding-base)};
-  }
-  .#{nok-variables.$prefix}-ml-#{$i} {
-    margin-left: #{($i * nok-variables.$padding-base)};
-  }
-}
-
+/* margin*/
+//@for $i from 1 through 5 {
+//  .#{nok-variables.$prefix}-mr-#{$i} {
+//    margin-right: #{($i * nok-variables.$padding-base)};
+//  }
+//  .#{nok-variables.$prefix}-mb-#{$i} {
+//    margin-bottom: #{($i * nok-variables.$padding-base)};
+//  }
+//  .#{nok-variables.$prefix}-ml-#{$i} {
+//    margin-left: #{($i * nok-variables.$padding-base)};
+//  }
+//}
 $padding-base-values: (
         0 : 0,
         grid-gap: var(--grid-gap),
         section-padding: var(--nok-padding-section-sides),
         1: #{(1 * nok-variables.$padding-base)},
-        2: #{(2 * nok-variables.$padding-base)},
-        3: #{(3 * nok-variables.$padding-base)},
-        4: #{(4 * nok-variables.$padding-base)},
-        5: #{(5 * nok-variables.$padding-base)},
+        //1_5: #{(1.5 * nok-variables.$padding-base)},
+        2: #{(1.5 * nok-variables.$padding-base)},
+        3: #{(2 * nok-variables.$padding-base)},
+        4: #{(3 * nok-variables.$padding-base)},
+        5: #{(4 * nok-variables.$padding-base)},
 );
 
 $utilities: (
-        "padding-top": (
-                property: padding-bottom,
+        "gap": (
+                css-var: true,
+                css-variable-name: grid-gap,
+                no-prefix: true,
                 responsive-up-to: true,
-                class: #{nok-variables.$prefix}-pb,
+                class: #{nok-variables.$prefix}-gap,
+                values: $padding-base-values
+        ),
+        "padding": (
+                property: padding,
+                responsive: true,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-p,
+                values: $padding-base-values
+        ),
+        "padding-top": (
+                property: padding-top,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-pt,
                 values: $padding-base-values
         ),
         "padding-right": (
@@ -318,6 +320,20 @@ $utilities: (
                 class: #{nok-variables.$prefix}-px,
                 values: $padding-base-values
         ),
+        "padding-y": (
+                property: padding-top padding-bottom,
+                responsive: true,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-py,
+                values: $padding-base-values
+        ),
+        "margin": (
+                property: margin,
+                responsive: true,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-m,
+                values: $padding-base-values
+        ),
         "margin-top": (
                 property: margin-top,
                 responsive: true,
@@ -333,7 +349,7 @@ $utilities: (
                 values: $padding-base-values
         ),
         "margin-bottom": (
-                property: margin-right,
+                property: margin-bottom,
                 responsive: true,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-mb,
@@ -344,13 +360,6 @@ $utilities: (
                 responsive: true,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-ms,
-                values: $padding-base-values
-        ),
-        "margin": (
-                property: margin,
-                responsive: true,
-                responsive-up-to: true,
-                class: #{nok-variables.$prefix}-m,
                 values: $padding-base-values
         ),
         "margin-x": (
@@ -457,3 +466,99 @@ $utilities: (
 
 //construct helpers
 @include nok-api.generate-helpers($utilities);
+
+
+
+
+
+.#{nok-variables.$prefix}-scrollable {
+  &__horizontal {
+    --flex-direction: row;
+    --overflow: auto hidden;
+  }
+  &__vertical {
+    --flex-direction: column;
+    --overflow: hidden auto;
+  }
+  &__horizontal,&__vertical {
+    .#{nok-variables.$prefix}-scrollable-container {
+      @include nok-mixins.nok-scrollbar-thin(5px, var(--nok-lightgrey--lighter));
+      flex-direction: var(--flex-direction, row);
+      overflow: var(--overflow, hidden auto);
+      scroll-snap-type: both mandatory;
+      scroll-snap-stop: normal;
+      display: flex;
+      flex-wrap: nowrap;
+      gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
+      .#{nok-variables.$prefix}-scrollable-slide {
+        flex-basis: 100%;
+        flex-shrink: 0;
+        scroll-snap-align: start;
+      }
+    }
+  }
+}
+
+
+
+
+/* Enable draggable cursor for non-touch devices */
+@media (pointer: fine) {
+  .#{nok-variables.$prefix}-draggable {
+    &__horizontal,&__vertical {
+      & {
+        cursor: grab;
+      }
+      &:active {
+        cursor: grabbing;
+        user-select: none;
+      }
+    }
+  }
+}
+.#{nok-variables.$prefix}-draggable {
+  &__horizontal {
+    --flex-direction: row;
+    --overflow: auto hidden;
+  }
+  &__vertical {
+    --flex-direction: column;
+    --overflow: hidden auto;
+  }
+  &__horizontal,&__vertical {
+    overflow: var(--overflow, hidden auto);
+
+    @include nok-mixins.nok-scrollbar-thin(10px);
+
+    &[data-scroll-snapping="true"] {
+      scroll-snap-type: both mandatory;
+      scroll-snap-stop: normal;
+      .#{nok-variables.$prefix}-draggable-slider-item {
+        scroll-snap-align: start;
+      }
+    }
+    &[data-scroll-snapping="false"] {
+      user-select: none !important;
+    }
+
+    will-change: scroll-position; /*seems to bump performance in firefox ever so slightly*/
+    //overflow-anchor: none !important;
+
+    .draggable-container {
+      --grid-gap: #{(1.5 * nok-variables.$padding-base)};
+      --grid-column-width: calc(
+              (100% - (var(--grid-gap, 1rem) * (var(--grid-columns, 1) - 1))) / var(--grid-columns, 1)
+      );
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      flex-basis: 100%;
+      gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
+
+      > * {
+        flex-basis: var(--grid-column-width);
+        flex-shrink: 0;
+      }
+    }
+  }
+}
