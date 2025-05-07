@@ -1,68 +1,11 @@
 /**
- * Mixin to apply border-radius with customizable size and position.
- * by hnldesign - 2025
- *
- * @param {String} $size - The size of the border-radius. Options: 'default', 'large', 'x-large', 'xx-large'.
- * @param {String} $position - The position to apply the border-radius. Options: 'all', 'bottom', 'top', 'left', 'right'.
- */
-/**
- * Mixin to style inline links with hover and focus effects.
- * for NOK by hnldesign - 2025
- *
- * This mixin applies various styles to inline links, including:
- * - Custom underline with gradient background
- * - Hover and active states
- * - Focus-visible state with border radius and focus ring
- *
- * Variables:
- * - --active-color: The color of the link when active.
- * - --hover-transition-time: The duration of the hover transition.
- * - --hover-color: The color of the link when hovered.
- * - --underline-height: The height of the underline.
- * - --gradient: The gradient background for the underline.
- */
-/**
- * Mixin to style scrollbars and optionally add a fake scrollbar with identical styles.
- * by hnldesign - 2025
- *
- * @param {Length} $scrollbarHeight - The height of the scrollbar.
- * @param {Color} $scrollbarHandle - The color of the scrollbar handle.
- * @param {Color} $scrollbarHandle_active - The color of the scrollbar handle when active.
- * @param {Color} $scrollbarTrack - The color of the scrollbar track.
- */
-/**
- * Mixin to apply transition properties conditionally based on user preferences.
- * By hnldesign - 2025
- *
- * This mixin checks if the user has a preference for reduced motion. If the user
- * does not prefer reduced motion, it applies the transition properties to the
- * specified elements when the `body` element has the `__enable-transitions` class.
- *
- * Usage:
- * @include transition-properties {
- *   transition: all 0.3s ease;
- * }
- */
-/**
- * Mixin to apply styles when JavaScript is disabled.
- * By hnldesign - 2025
- *
- * This mixin targets elements when the `body` element has the `no-js` class,
- * indicating that JavaScript is disabled, since it will be unset at docReady.
- *
- * Usage:
- * @include no-javascript-properties {
- *   // Your styles here
- * }
- */
-/**
  * hero unit
  */
-.nok25-hero {
-  --grid-gap: var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem));
+.nok-hero {
+  --grid-gap: var(--nok-padding-base, var(--nok-global-grid-gap, 1.5rem));
   position: relative;
   overflow: hidden;
-  border-radius: 0 0 calc(var(--nok25-default-border-radius--large, 1rem) * 2.5) calc(var(--nok25-default-border-radius--large, 1rem) * 2.5);
+  border-radius: 0 0 calc(var(--nok-default-border-radius--large, 1rem) * 2.5) calc(var(--nok-default-border-radius--large, 1rem) * 2.5);
   padding-right: 0;
   padding-left: 0;
   overflow: hidden;
@@ -72,11 +15,11 @@
   /* Mobile */
 }
 @media (max-width: 1399.98px) {
-  .nok25-hero {
+  .nok-hero {
     grid-template-columns: 4fr 1fr 3fr;
   }
 }
-.nok25-hero article {
+.nok-hero article {
   grid-row: 2/3;
   grid-column: 1/2;
   z-index: 2;
@@ -85,82 +28,82 @@
   flex-wrap: nowrap;
   justify-content: center;
   align-items: flex-start;
-  gap: var(--grid-gap, var(--nok25-global-grid-gap));
+  gap: var(--grid-gap, var(--nok-global-grid-gap));
 }
 @media (max-width: 1399.98px) {
-  .nok25-hero article {
+  .nok-hero article {
     grid-column: 1/3;
   }
 }
-.nok25-hero figure {
+.nok-hero figure {
   grid-row: 1/-1;
   grid-column: 2/3;
   z-index: 1;
   overflow: hidden;
   margin: 0;
-  --grad-1-1: var(--nok25-lightblue);
-  --grad-1-2: var(--nok25-green);
-  --grad-1-3: var(--nok25-yellow);
-  --base-layer: var(--nok25-body--darker);
+  --grad-1-1: var(--nok-lightblue);
+  --grad-1-2: var(--nok-green);
+  --grad-1-3: var(--nok-yellow);
+  --base-layer: var(--nok-body--darker);
 }
 @media (max-width: 1399.98px) {
-  .nok25-hero figure {
+  .nok-hero figure {
     grid-column: 2/4;
   }
 }
 @media (max-width: 991.98px) {
-  .nok25-hero figure {
-    padding-left: var(--nok25-padding-section-sides, 1.5rem);
+  .nok-hero figure {
+    padding-left: var(--nok-padding-section-sides, 1.5rem);
   }
 }
 @media (prefers-color-scheme: dark) {
-  .nok25-hero figure {
-    --grad-1-3: var(--nok25-lightblue);
-    --grad-1-1: var(--nok25-yellow);
-    --base-layer: var(--nok25-lightblue--darker);
+  .nok-hero figure {
+    --grad-1-3: var(--nok-lightblue);
+    --grad-1-1: var(--nok-yellow);
+    --base-layer: var(--nok-lightblue--darker);
   }
 }
-.nok25-hero figure svg {
+.nok-hero figure svg {
   min-height: 100%;
   min-width: 100%;
   max-width: -moz-fit-content;
   max-width: fit-content;
 }
-.nok25-hero figure linearGradient#a {
+.nok-hero figure linearGradient#a {
   --bg-alpha-value: 1;
 }
-.nok25-hero figure linearGradient#b {
+.nok-hero figure linearGradient#b {
   --bg-alpha-value: 0.5;
 }
-.nok25-hero figure linearGradient#c {
+.nok-hero figure linearGradient#c {
   --bg-alpha-value: 0.3;
 }
-.nok25-hero figure path#d {
+.nok-hero figure path#d {
   --bg-alpha-value: 0.4;
 }
 @media (prefers-color-scheme: dark) {
-  .nok25-hero figure path#d {
+  .nok-hero figure path#d {
     --bg-alpha-value: 0.1;
   }
 }
-.nok25-hero figure foreignObject img {
+.nok-hero figure foreignObject img {
   max-width: 100%;
   -o-object-fit: cover;
      object-fit: cover;
   -o-object-position: 40% 50%;
      object-position: 40% 50%;
-  background-color: hsla(var(--nok25-green)/0.5);
+  background-color: hsla(var(--nok-green)/0.5);
 }
 @media (max-width: 1199.98px) {
-  .nok25-hero figure foreignObject img {
+  .nok-hero figure foreignObject img {
     -o-object-position: 60% 50%;
        object-position: 60% 50%;
   }
 }
-.nok25-hero article, .nok25-hero figure {
+.nok-hero article, .nok-hero figure {
   position: relative;
 }
-.nok25-hero section {
+.nok-hero section {
   grid-column: 1/-1;
   grid-row: 3/4;
   z-index: 3;
@@ -170,15 +113,15 @@
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
-  padding-top: var(--nok25-padding-base, 1.5rem);
-  padding-bottom: var(--nok25-padding-base, 1.5rem);
+  padding-top: var(--nok-padding-base, 1.5rem);
+  padding-bottom: var(--nok-padding-base, 1.5rem);
 }
-.nok25-hero section > * {
+.nok-hero section > * {
   flex-shrink: 0;
   flex-grow: 1;
   flex-basis: max-content;
 }
-.nok25-hero section .nok25-usp {
+.nok-hero section .nok-usp {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -186,36 +129,36 @@
   justify-content: flex-start;
   gap: calc(var(--grid-gap) / 2);
 }
-.nok25-hero section .nok25-usp > svg {
+.nok-hero section .nok-usp > svg {
   width: calc(var(--nok25-font-size-buttons) * var(--nok25-body-line-height));
   height: calc(var(--nok25-font-size-buttons) * var(--nok25-body-line-height));
 }
-.nok25-hero section {
-  padding-right: var(--nok25-padding-section-sides, 1.5rem);
-  padding-left: var(--nok25-padding-section-sides, 1.5rem);
+.nok-hero section {
+  padding-right: var(--nok-padding-section-sides, 1.5rem);
+  padding-left: var(--nok-padding-section-sides, 1.5rem);
 }
-.nok25-hero article {
-  padding: var(--grid-gap) 0 var(--grid-gap) var(--nok25-padding-section-sides, 1.5rem);
+.nok-hero article {
+  padding: var(--grid-gap) 0 var(--grid-gap) var(--nok-padding-section-sides, 1.5rem);
 }
 @media (max-width: 991.98px) {
-  .nok25-hero {
+  .nok-hero {
     grid-template-columns: 1fr;
     grid-template-rows: 60vw 10vw auto 1fr;
   }
-  .nok25-hero article, .nok25-hero figure, .nok25-hero section, .nok25-hero-figure-mask {
+  .nok-hero article, .nok-hero figure, .nok-hero section, .nok-hero-figure-mask {
     grid-column: 1;
   }
-  .nok25-hero article {
+  .nok-hero article {
     grid-row: 2/4;
     align-self: end;
-    padding-right: var(--nok25-padding-section-sides, 1.5rem);
+    padding-right: var(--nok-padding-section-sides, 1.5rem);
   }
-  .nok25-hero figure {
+  .nok-hero figure {
     grid-row: 1/3;
     -webkit-mask-image: linear-gradient(to bottom, rgb(0, 0, 0) 70%, rgba(0, 0, 0, 0.5) 80%, rgba(255, 255, 255, 0) 95%);
             mask-image: linear-gradient(to bottom, rgb(0, 0, 0) 70%, rgba(0, 0, 0, 0.5) 80%, rgba(255, 255, 255, 0) 95%);
   }
-  .nok25-hero section {
+  .nok-hero section {
     --bg-alpha-value: 0;
     grid-row: 4/5;
     flex-wrap: wrap;
@@ -224,29 +167,17 @@
   }
 }
 @media (max-width: 767.98px) {
-  .nok25-hero button {
+  .nok-hero button {
     align-self: stretch;
   }
-  .nok25-hero article .nok25-horizontal-button-group {
+  .nok-hero article .nok-horizontal-button-group {
     grid-template-columns: 1fr;
   }
 }
 
 /* Typography */
-h1.nok25-hero__heading {
+h1.nok-hero__heading {
   font-weight: 500;
-  font-size: 4.4rem;
-  font-size: calc(1.565rem + 3.78vw);
   line-height: 1.05;
-}
-@media (min-width: 1200px) {
-  h1.nok25-hero__heading {
-    font-size: 4.4rem;
-  }
-}
-
-.nok25-hero__pre-heading {
-  font-size: 1.25rem;
-  font-size: 1.25rem;
 }
 /*# sourceMappingURL=nok-sections--hero.css.map */

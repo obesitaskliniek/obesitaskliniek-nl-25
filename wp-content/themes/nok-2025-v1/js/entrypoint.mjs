@@ -7,6 +7,7 @@ import {dynImports} from './modules/hnl.dynamicimports.mjs';
 import {hnlLogger} from './modules/hnl.logger.mjs';
 import {classToggler} from './modules/hnl.classtoggler.mjs';
 import {pageScrollPercentage} from "./modules/hnl.helpers.mjs";
+import {setupFakeScrollbar} from "./nok-scrollbar.mjs";
 
 const NAME = 'entryPoint';
 const BODY = document.body;
@@ -38,6 +39,9 @@ eventHandler.docReady(function(){
 
   //enable transitions once
   document.body.classList.add('__enable-transitions');
+
+  //scrollable
+  document.querySelectorAll('.nok-scrollable__horizontal, .nok-scrollable__vertical').forEach(setupFakeScrollbar);
 
   eventHandler.addListener('scroll', (e) => {
   //clear the url hash when scrolled back to top

@@ -5,13 +5,12 @@
 
 .nok-layout {
 
-  &-grid, &-flex {
-    --grid-gap: var(--#{nok-variables.$prefix}-padding-base, var(--#{nok-variables.$prefix}-global-grid-gap, 1.5rem));
-  }
-
   &-grid {
     display: grid;
-    gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
+
+    --grid-gap: var(--#{nok-variables.$prefix}-padding-base, var(--#{nok-variables.$prefix}-global-grid-gap, 1.5rem));
+    @include nok-mixins.nok-grid-gap;
+
     grid-template-columns: repeat(var(--grid-columns, 1), var(--grid-column-size, 1fr));
 
     //default: cascade down at breakpoints
@@ -75,22 +74,22 @@
     }
     //"fill-fill" is another layout pattern, which fills both children 50/50. See 2-column layout above; it's identical
 
-    /* Helpers */
-    &__span-all {
-      grid-column: 1 / -1;
-    }
   }
 
   &-flex {
+    --flex-gap: var(--#{nok-variables.$prefix}-padding-base, var(--#{nok-variables.$prefix}-global-grid-gap, 1.5rem));
+    @include nok-mixins.nok-flex-gap;
+
     &-row, &-column {
       display: flex;
-      gap: var(--flex-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
       align-items: center;
     }
-    &-row {
+    &-row { //might be confusing, but a flex-direction: row layout uses gaps that are similar to grid's COLUMN gaps
+      gap: var(--column-gap, var(--flex-gap, var(--#{nok-variables.$prefix}-global-grid-gap)));
       flex-direction: row;
     }
     &-column {
+      gap: var(--row-gap, var(--flex-gap, var(--#{nok-variables.$prefix}-global-grid-gap)));
       flex-direction: column;
     }
   }
@@ -104,6 +103,25 @@
 .half-flex-gap {
   gap: calc(var(--flex-gap) / 2);
 }
-.no-flex-gap {
-  gap: 0;
+.no {
+  &-gap {//note: will not unset the variable, so gap will still be inherited
+    gap: 0rem;
+  }
+  &-grid-gap {
+    --grid-gap: 0rem;
+  }
+  &-flex-gap {
+    --flex-gap: 0rem;
+  }
+  &-row-gap {
+    --row-gap: 0rem;
+  }
+  &-column-gap {
+    --row-gap: 0rem;
+  }
+}
+
+/* Helpers */
+.span-all-columns {
+  grid-column: 1 / -1;
 }

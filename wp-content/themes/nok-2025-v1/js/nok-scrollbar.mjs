@@ -1,4 +1,5 @@
 import eventHandler from './modules/hnl.eventhandler.mjs';
+import {isVisible} from "./modules/hnl.helpers.mjs";
 
 export const NAME = "scrollBarEmulator";
 
@@ -12,6 +13,43 @@ function RAFThrottle(callback) {
       ticking = false;
     });
   };
+}
+
+function disableSnapping(scrollElement) {
+  scrollElement.dataset.scrollSnapping = 'false';
+}
+function restoreSnapping(scrollElement) {
+  scrollElement.dataset.scrollSnapping = 'true';
+}
+
+function restoreSnappingGracefully(scrollElement) {
+  const { scrollWidth : scrollSize, scrollLeft : scrollPosition, offsetWidth : scrollerSize } = scrollElement;
+  const snapItem = scrollElement.children[0];
+  //note: this assumes all items are the same inline size
+  const gap = parseInt(window.getComputedStyle(snapItem.parentElement).columnGap, 10) || 0;
+  const slideItemSize = snapItem.offsetWidth + gap;
+  const closestSnap = Math.round(scrollPosition / slideItemSize);
+  const tolerance = 2;
+  let timeout = null;
+
+  function waitToRestoreSnapping() {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      restoreSnapping(scrollElement);
+      scrollElement.removeEventListener('scroll', waitToRestoreSnapping);
+    }, scrollPosition % slideItemSize ? 150 : 0);
+  }
+
+  if (Math.abs(scrollPosition) < tolerance || Math.abs(scrollPosition + scrollerSize - scrollSize) < tolerance) {
+    //restoreSnapping(scrollElement);
+    scrollElement.removeEventListener('scroll', waitToRestoreSnapping);
+  } else {
+    scrollElement.scrollTo({
+      left: closestSnap * slideItemSize,
+      behavior: 'smooth'
+    });
+    scrollElement.addEventListener('scroll', waitToRestoreSnapping);
+  }
 }
 
 export function setupFakeScrollbar(scrollElement) {
@@ -86,7 +124,7 @@ export function setupFakeScrollbar(scrollElement) {
     }
 
     // Update own extended dimensions
-    style.dimensions = scrollbarThumb.getBoundingClientRect();
+    //style.dimensions = scrollbarThumb.getBoundingClientRect();
   }
 
   // Throttle the update function
@@ -95,41 +133,20 @@ export function setupFakeScrollbar(scrollElement) {
   eventHandler.addListener('docShift', updateScrollbar);
   scrollElement.addEventListener('scroll', updateScrollbar, { passive: true });
 
-  function disableSnapping(scrollElement) {
-    scrollElement.dataset.scrollSnapping = 'false';
+  function handlePointerUp(el, pointerId, moveFn, upFn, snapping) {
+    if (SNAPPING) restoreSnappingGracefully(scrollElement);
+    scrollElement.style.scrollBehavior = '';
+    scrollElement.classList.remove('being-scrolled', 'grabbed-scrollbar');
+    el.releasePointerCapture(pointerId);
+    el.removeEventListener('pointermove', moveFn);
+    el.removeEventListener('pointerup',   upFn);
+    el.removeEventListener('pointercancel', upFn);
   }
-  function restoreSnapping(scrollElement) {
-    scrollElement.dataset.scrollSnapping = 'true';
-  }
 
-  function restoreSnappingGracefully(scrollElement) {
-    const { scrollWidth : scrollSize, scrollLeft : scrollPosition, offsetWidth : scrollerSize } = scrollElement;
-    const snapItem = scrollElement.children[0];
-    //note: this assumes all items are the same inline size
-    const gap = parseInt(window.getComputedStyle(snapItem.parentElement).columnGap, 10) || 0;
-    const slideItemSize = snapItem.offsetWidth + gap;
-    const closestSnap = Math.round(scrollPosition / slideItemSize);
-    const tolerance = 2;
-    let timeout = null;
-
-    function waitToRestoreSnapping() {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        restoreSnapping(scrollElement);
-        scrollElement.removeEventListener('scroll', waitToRestoreSnapping);
-      }, scrollPosition % slideItemSize ? 150 : 0);
-    }
-
-    if (Math.abs(scrollPosition) < tolerance || Math.abs(scrollPosition + scrollerSize - scrollSize) < tolerance) {
-      //restoreSnapping(scrollElement);
-      scrollElement.removeEventListener('scroll', waitToRestoreSnapping);
-    } else {
-      scrollElement.scrollTo({
-        left: closestSnap * slideItemSize,
-        behavior: 'smooth'
-      });
-      scrollElement.addEventListener('scroll', waitToRestoreSnapping);
-    }
+  function bindMoveEvents(el, move, cancel) {
+    el.addEventListener('pointermove',  move);
+    el.addEventListener('pointerup',    cancel);
+    el.addEventListener('pointercancel', cancel);
   }
 
   scrollbarTrack.addEventListener('pointerdown', (downEvt) => {
@@ -139,6 +156,8 @@ export function setupFakeScrollbar(scrollElement) {
     if (SNAPPING) { disableSnapping(scrollElement); }
     //stop smooth scrolling from messing up scrolling
     scrollElement.style.scrollBehavior = 'auto';
+    scrollElement.classList.add('being-scrolled');
+    scrollElement.classList.add('grabbed-scrollbar');
 
     // capture initial positions
     const startX = downEvt.clientX;
@@ -185,21 +204,16 @@ export function setupFakeScrollbar(scrollElement) {
     }
 
     function onPointerUp(upEvt) {
-      if (SNAPPING) restoreSnappingGracefully(scrollElement);
-      scrollElement.style.scrollBehavior = '';
-      track.releasePointerCapture(upEvt.pointerId);
-      track.removeEventListener('pointermove',  onPointerMove);
-      track.removeEventListener('pointerup',    onPointerUp);
-      track.removeEventListener('pointercancel', onPointerUp);
+      handlePointerUp(track, upEvt.pointerId, onPointerMove, onPointerUp, SNAPPING);
     }
 
-    track.addEventListener('pointermove',  onPointerMove);
-    track.addEventListener('pointerup',    onPointerUp);
-    track.addEventListener('pointercancel', onPointerUp);
+    bindMoveEvents(track, onPointerMove, onPointerUp);
   });
 
+
+
   // ────────────────────────────────────────────────────────────────────────────────
-  // “Draggable” mode: pretend the content itself is touch-draggable on desktop
+  // “Draggable” mode: makes the content itself touch-draggable on desktop
   // ────────────────────────────────────────────────────────────────────────────────
   if (scrollElement.dataset.draggable === 'true' && window.PointerEvent) {
     scrollElement.addEventListener('pointerdown', contentPointerDown, { passive: false });
@@ -214,38 +228,35 @@ export function setupFakeScrollbar(scrollElement) {
     if (SNAPPING) { disableSnapping(scrollElement); }
     //stop smooth scrolling from messing up scrolling
     scrollElement.style.scrollBehavior = 'auto';
+    scrollElement.classList.add('being-scrolled');
 
     const el          = scrollElement;
     const startX      = e.clientX;
-    const startScroll = el.scrollLeft;
+    const startScroll = scrollElement.scrollLeft;
 
     // capture moves on this element
-    el.setPointerCapture(e.pointerId);
+    scrollElement.setPointerCapture(e.pointerId);
 
     function onMove(moveEvt) {
       const deltaX = moveEvt.clientX - startX;
       // drag the content (invert because dragging right scrolls left)
-      el.scrollLeft = startScroll - deltaX;
-    }
-    function onUp(upEvt) {
-      if (SNAPPING) restoreSnappingGracefully(scrollElement);
-      scrollElement.style.scrollBehavior = '';
-      el.releasePointerCapture(upEvt.pointerId);
-      el.removeEventListener('pointermove', onMove);
-      el.removeEventListener('pointerup',   onUp);
-      el.removeEventListener('pointercancel',   onUp);
+      scrollElement.scrollLeft = startScroll - deltaX;
     }
 
-    el.addEventListener('pointermove', onMove);
-    el.addEventListener('pointerup',   onUp);
-    el.addEventListener('pointercancel',   onUp);
+    function onUp(upEvt) {
+      handlePointerUp(scrollElement, upEvt.pointerId, onMove, onUp, SNAPPING);
+    }
+
+    bindMoveEvents(scrollElement, onMove, onUp);
   }
+
+
 
   // ────────────────────────────────────────────────────────────────────────────────
   // “Autoscroll” mode: when idle, snap-scroll every N ms
   // ────────────────────────────────────────────────────────────────────────────────
   if (scrollElement.dataset.autoscroll === 'true') {
-    const INTERVAL   = Math.max(1000, +scrollElement.dataset.interval || 10000);
+    const interval   = Math.max(1000, +scrollElement.dataset.interval || 10000);
     const children   = Array.from(scrollElement.children);
     let   index      = 0;
     let   timerId       = null;
@@ -253,7 +264,7 @@ export function setupFakeScrollbar(scrollElement) {
 
     // whenever the user interacts, pause for 2×INTERVAL
     const pauseEvents = ['pointerdown','wheel','touchstart','mouseenter','keydown'];
-    const resumeEvents = ['touchend','mouseleave'];
+    const resumeEvents = ['mouseleave'];
     [scrollElement, scrollbarTrack].forEach(el => {
       pauseEvents.forEach(evt =>
           el.addEventListener(evt, () => { shouldRun = false }, { passive: true })
@@ -262,20 +273,28 @@ export function setupFakeScrollbar(scrollElement) {
           el.addEventListener(evt, () => { shouldRun = true }, { passive: true })
       );
     });
+    eventHandler.addListener('docShift', () => {
+      //will only restart autoscrolling when the user has scrolled past the element, and it has gone out of view
+      isVisible(scrollElement, function(visible) {
+        if (!shouldRun) {
+          shouldRun = !visible;
+        }
+      })
+    });
 
     function step() {
       if (shouldRun) {
-        children[index].scrollIntoView({
-          behavior: 'smooth',
-          block:    'nearest',
-          inline:   'nearest'
-        });
+        // grab the next child
+        const target = children[index];
+        // CSS will determine the smooth work via `scroll-behavior: smooth` on scrollElement, if required
+        scrollElement.scrollLeft = target.offsetLeft;
+        // advance the index and re-arm
         index = (index + 1) % children.length;
       }
-      timerId = setTimeout(step, INTERVAL);
+      timerId = setTimeout(step, interval);
     }
     // kick it off after the first idle period
-    timerId = setTimeout(step, INTERVAL);
+    timerId = setTimeout(step, interval);
   }
 
   updateScrollbar(); // Initial update
