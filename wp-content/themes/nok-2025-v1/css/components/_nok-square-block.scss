@@ -16,11 +16,12 @@ nok-square-block {
   //--background-color: var(--#{components-base.$prefix}-darkblue);
   position: relative;
   display: grid;
+  @include components-base.nok-grid-gap;
+
   //grid-template-rows: auto auto 1fr auto;
   grid-template-rows: auto;
   container-type: inline-size;
 
-  gap: (components-base.$padding-base);
   @include components-base.nok-border-radius('large');
   //line-height: var(--#{components-base.$prefix}-default-line-height, 1.25);
 

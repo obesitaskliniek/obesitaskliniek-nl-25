@@ -1,96 +1,40 @@
-/**
- * Mixin to apply border-radius with customizable size and position.
- * by hnldesign - 2025
- *
- * @param {String} $size - The size of the border-radius. Options: 'default', 'large', 'x-large', 'xx-large'.
- * @param {String} $position - The position to apply the border-radius. Options: 'all', 'bottom', 'top', 'left', 'right'.
- */
-/**
- * Mixin to style inline links with hover and focus effects.
- * for NOK by hnldesign - 2025
- *
- * This mixin applies various styles to inline links, including:
- * - Custom underline with gradient background
- * - Hover and active states
- * - Focus-visible state with border radius and focus ring
- *
- * Variables:
- * - --active-color: The color of the link when active.
- * - --hover-transition-time: The duration of the hover transition.
- * - --hover-color: The color of the link when hovered.
- * - --underline-height: The height of the underline.
- * - --gradient: The gradient background for the underline.
- */
-/**
- * Mixin to style scrollbars and optionally add a fake scrollbar with identical styles.
- * by hnldesign - 2025
- *
- * @param {Length} $scrollbarHeight - The height of the scrollbar.
- * @param {Color} $scrollbarHandle - The color of the scrollbar handle.
- * @param {Color} $scrollbarHandle_active - The color of the scrollbar handle when active.
- * @param {Color} $scrollbarTrack - The color of the scrollbar track.
- */
-/**
- * Mixin to apply transition properties conditionally based on user preferences.
- * By hnldesign - 2025
- *
- * This mixin checks if the user has a preference for reduced motion. If the user
- * does not prefer reduced motion, it applies the transition properties to the
- * specified elements when the `body` element has the `__enable-transitions` class.
- *
- * Usage:
- * @include transition-properties {
- *   transition: all 0.3s ease;
- * }
- */
-/**
- * Mixin to apply styles when JavaScript is disabled.
- * By hnldesign - 2025
- *
- * This mixin targets elements when the `body` element has the `no-js` class,
- * indicating that JavaScript is disabled, since it will be unset at docReady.
- *
- * Usage:
- * @include no-javascript-properties {
- *   // Your styles here
- * }
- */
-.nok25-section {
+.nok-section {
   display: flex;
   width: 100%;
   padding: 0;
   margin: 0;
+  gap: var(--grid-gap);
   flex-direction: column;
   flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
 }
-.nok25-section__inner {
+.nok-section__inner {
   width: 100%;
-  padding-right: var(--nok25-padding-section-sides, 3rem);
-  padding-left: var(--nok25-padding-section-sides, 3rem);
+  padding-right: var(--nok-padding-section-sides, 3rem);
+  padding-left: var(--nok-padding-section-sides, 3rem);
   margin: var(--nok25-spacing-section-ends, 1.5rem) auto;
 }
-.nok25-section__inner--stretched {
+.nok-section__inner--stretched {
   align-self: stretch;
 }
-.nok25-section__inner--collapsed {
+.nok-section__inner--collapsed {
   margin: 0 auto;
 }
-.nok25-section__inner--collapsed-top {
+.nok-section__inner--collapsed-top {
   margin-top: 0;
 }
-.nok25-section__inner--collapsed-bottom {
+.nok-section__inner--collapsed-bottom {
   margin-bottom: 0;
 }
-.nok25-section__inner--full-width {
+.nok-section__inner--full-width {
   --section-max-width: 100%;
 }
 @media (min-width: 576px) {
   :root {
     --section-max-width: 540px;
   }
-  .nok25-section__inner {
+  .nok-section__inner {
     width: 100%;
     max-width: var(--section-max-width, 540px);
   }
@@ -99,7 +43,7 @@
   :root {
     --section-max-width: 720px;
   }
-  .nok25-section__inner {
+  .nok-section__inner {
     width: 100%;
     max-width: var(--section-max-width, 720px);
   }
@@ -108,7 +52,7 @@
   :root {
     --section-max-width: 960px;
   }
-  .nok25-section__inner {
+  .nok-section__inner {
     width: 100%;
     max-width: var(--section-max-width, 960px);
   }
@@ -117,7 +61,7 @@
   :root {
     --section-max-width: 1140px;
   }
-  .nok25-section__inner {
+  .nok-section__inner {
     width: 100%;
     max-width: var(--section-max-width, 1140px);
   }
@@ -126,7 +70,7 @@
   :root {
     --section-max-width: 1320px;
   }
-  .nok25-section__inner {
+  .nok-section__inner {
     width: 100%;
     max-width: var(--section-max-width, 1320px);
   }
@@ -135,38 +79,38 @@
   :root {
     --section-max-width: 1572px;
   }
-  .nok25-section__inner {
+  .nok-section__inner {
     width: 100%;
     max-width: var(--section-max-width, 1572px);
   }
 }
-.nok25-section .pull-down {
+.nok-section .pull-down {
   margin-bottom: calc(-1 * var(--nok25-spacing-section-ends, 0));
 }
-.nok25-section .pull-down-compensation {
+.nok-section .pull-down-compensation {
   margin-top: var(--nok25-spacing-section-ends, 0);
 }
 
-.nok25-section p {
+.nok-section p {
   font-size: 1.1rem;
 }
 
-h1.nok25-section__heading {
+h1.nok-section__heading {
   font-size: 3.25rem;
   font-size: calc(1.45rem + 2.4vw);
 }
 @media (min-width: 1200px) {
-  h1.nok25-section__heading {
+  h1.nok-section__heading {
     font-size: 3.25rem;
   }
 }
 
-h2.nok25-section__heading {
+h2.nok-section__heading {
   font-size: 2.5rem;
   font-size: calc(1.375rem + 1.5vw);
 }
 @media (min-width: 1200px) {
-  h2.nok25-section__heading {
+  h2.nok-section__heading {
     font-size: 2.5rem;
   }
 }

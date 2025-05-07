@@ -1,65 +1,8 @@
 /**
- * Mixin to apply border-radius with customizable size and position.
- * by hnldesign - 2025
- *
- * @param {String} $size - The size of the border-radius. Options: 'default', 'large', 'x-large', 'xx-large'.
- * @param {String} $position - The position to apply the border-radius. Options: 'all', 'bottom', 'top', 'left', 'right'.
- */
-/**
- * Mixin to style inline links with hover and focus effects.
- * for NOK by hnldesign - 2025
- *
- * This mixin applies various styles to inline links, including:
- * - Custom underline with gradient background
- * - Hover and active states
- * - Focus-visible state with border radius and focus ring
- *
- * Variables:
- * - --active-color: The color of the link when active.
- * - --hover-transition-time: The duration of the hover transition.
- * - --hover-color: The color of the link when hovered.
- * - --underline-height: The height of the underline.
- * - --gradient: The gradient background for the underline.
- */
-/**
- * Mixin to style scrollbars and optionally add a fake scrollbar with identical styles.
- * by hnldesign - 2025
- *
- * @param {Length} $scrollbarHeight - The height of the scrollbar.
- * @param {Color} $scrollbarHandle - The color of the scrollbar handle.
- * @param {Color} $scrollbarHandle_active - The color of the scrollbar handle when active.
- * @param {Color} $scrollbarTrack - The color of the scrollbar track.
- */
-/**
- * Mixin to apply transition properties conditionally based on user preferences.
- * By hnldesign - 2025
- *
- * This mixin checks if the user has a preference for reduced motion. If the user
- * does not prefer reduced motion, it applies the transition properties to the
- * specified elements when the `body` element has the `__enable-transitions` class.
- *
- * Usage:
- * @include transition-properties {
- *   transition: all 0.3s ease;
- * }
- */
-/**
- * Mixin to apply styles when JavaScript is disabled.
- * By hnldesign - 2025
- *
- * This mixin targets elements when the `body` element has the `no-js` class,
- * indicating that JavaScript is disabled, since it will be unset at docReady.
- *
- * Usage:
- * @include no-javascript-properties {
- *   // Your styles here
- * }
- */
-/**
  * square block
  */
-.nok25-button {
-  --flex-gap: calc(var(--nok25-padding-base, 1.5rem) / 2);
+.nok-button {
+  --flex-gap: calc(var(--nok-padding-base, 1.5rem) / 2);
   --bg-alpha-value: 1;
   box-sizing: border-box;
   display: inline-flex;
@@ -70,8 +13,8 @@
   gap: var(--flex-gap, 0.75rem);
   white-space: nowrap;
   overflow: hidden;
-  font-family: var(--nok25-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
-  font-size-adjust: var(--nok25-heading-font-size-adjust, 0.525);
+  font-family: var(--nok-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
+  font-size-adjust: var(--nok-heading-font-size-adjust, 0.525);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   text-rendering: optimizelegibility;
@@ -79,12 +22,12 @@
   font-style: normal;
   font-weight: 500;
   font-weight: 500;
-  font-size: var(--nok25-font-size-buttons, 1.25rem);
+  font-size: var(--nok-font-size-buttons, 1.25rem);
   line-height: 1.5;
   text-decoration: none;
   color: var(--bg-color--contrast, var(--text-color, inherit));
   overflow: hidden;
-  border-radius: var(--nok25-default-border-radius, 0.4rem);
+  border-radius: var(--nok-default-border-radius, 0.4rem);
   border: 0 solid rgba(136, 136, 136, 0);
   outline: 0 none;
   cursor: pointer;
@@ -93,40 +36,41 @@
           user-select: none;
   touch-action: manipulation;
 }
-.nok25-button:not(.no-shadow) {
+.nok-button:not(.no-shadow) {
   box-shadow: 0 0 0 0 hsla(0, 0%, 0%, 0);
 }
-.nok25-button:not(.no-shadow):hover, .nok25-button:not(.no-shadow):focus {
+.nok-button:not(.no-shadow):hover, .nok-button:not(.no-shadow):focus {
   box-shadow: 0 0.4rem 0.1rem -0.3rem hsla(0, 0%, 50%, 0.15);
 }
-.nok25-button:hover, .nok25-button:focus, .nok25-button:active, .nok25-button.active, .nok25-button:focus-visible {
+.nok-button:hover, .nok-button:focus, .nok-button:active, .nok-button.active, .nok-button:focus-visible {
   border-color: rgba(136, 136, 136, 0.1333333333);
 }
-.nok25-button:hover {
+.nok-button:hover {
+  --text-alpha-value: 1;
   color: var(--bg-color--contrast, inherit);
   background-color: var(--bg-color--hover, inherit);
 }
-.nok25-button:focus {
+.nok-button:focus {
   outline: 2px solid hsl(var(--bg-color-hsl, 0deg 100% 50%)/0.25);
 }
-.nok25-button:focus-visible {
-  box-shadow: 0 0 0px 4px var(--nok25-yellow);
+.nok-button:focus-visible {
+  box-shadow: 0 0 0px 4px var(--nok-yellow);
   outline: 2px solid #FFF;
 }
-.nok25-button:active, .nok25-button.active {
+.nok-button:active, .nok-button.active {
   background-color: var(--bg-color--active, inherit);
 }
-.nok25-button:disabled, .nok25-button.disabled {
+.nok-button:disabled, .nok-button.disabled {
   --text-alpha-value: 0.65;
   opacity: 0.8;
   color: var(--text-color-button, var(--text-color--contrast, inherit));
   pointer-events: none;
 }
-.nok25-button--small {
-  --flex-gap: calc(var(--nok25-padding-base, 1.5rem) / 4);
-  font-size: calc(var(--nok25-font-size-buttons, 1.25rem) * 0.8);
+.nok-button--small {
+  --flex-gap: calc(var(--nok-padding-base, 1.5rem) / 4);
+  font-size: calc(var(--nok-font-size-buttons, 1.25rem) * 0.8);
 }
-.nok25-button-menu {
+.nok-button-menu {
   --bg-size: 55%;
   background-repeat: no-repeat;
   background-position: center;
@@ -135,25 +79,25 @@
   aspect-ratio: 1/1;
   position: relative;
 }
-.nok25-button-menu svg {
+.nok-button-menu svg {
   position: absolute;
   width: var(--bg-size);
   height: var(--bg-size);
 }
-.nok25-button-menu svg .closed {
+.nok-button-menu svg .closed {
   display: none;
 }
-.nok25-button-group {
+.nok-button-group {
   display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: 1fr 1fr;
   width: 100%;
-  gap: var(--grid-gap, var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem)));
+  gap: var(--grid-gap, var(--nok-padding-base, var(--nok-global-grid-gap, 1.5rem)));
   align-items: center;
   justify-items: center;
-  font-size: var(--nok25-font-size-buttons, 1.25rem);
+  font-size: var(--nok-font-size-buttons, 1.25rem);
 }
-.nok25-button-group > button.fill-group-column {
+.nok-button-group > button.fill-group-column {
   width: 100%;
 }
 /*# sourceMappingURL=nok-buttons.css.map */

@@ -447,3 +447,15 @@
   }
   mask-size: cover;
 }
+
+@mixin nok-grid-gap($fallback: var(--#{nok-variables.$prefix}-global-grid-gap)) {
+  gap:
+          var(--row-gap, var(--grid-gap, $fallback))
+          var(--column-gap, var(--grid-gap, $fallback));
+}
+
+@mixin nok-flex-gap($fallback: var(--#{nok-variables.$prefix}-global-grid-gap)) {
+  gap:
+          var(--row-gap, var(--flex-gap, $fallback))
+          var(--column-gap, var(--flex-gap, $fallback));
+}

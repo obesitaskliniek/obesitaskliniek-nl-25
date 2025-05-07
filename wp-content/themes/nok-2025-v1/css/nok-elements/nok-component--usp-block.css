@@ -1,75 +1,14 @@
 /**
- * Mixin to apply border-radius with customizable size and position.
- * by hnldesign - 2025
- *
- * @param {String} $size - The size of the border-radius. Options: 'default', 'large', 'x-large', 'xx-large'.
- * @param {String} $position - The position to apply the border-radius. Options: 'all', 'bottom', 'top', 'left', 'right'.
- */
-/**
- * Mixin to style inline links with hover and focus effects.
- * for NOK by hnldesign - 2025
- *
- * This mixin applies various styles to inline links, including:
- * - Custom underline with gradient background
- * - Hover and active states
- * - Focus-visible state with border radius and focus ring
- *
- * Variables:
- * - --active-color: The color of the link when active.
- * - --hover-transition-time: The duration of the hover transition.
- * - --hover-color: The color of the link when hovered.
- * - --underline-height: The height of the underline.
- * - --gradient: The gradient background for the underline.
- */
-/**
- * Mixin to style scrollbars and optionally add a fake scrollbar with identical styles.
- * by hnldesign - 2025
- *
- * @param {Length} $scrollbarHeight - The height of the scrollbar.
- * @param {Color} $scrollbarHandle - The color of the scrollbar handle.
- * @param {Color} $scrollbarHandle_active - The color of the scrollbar handle when active.
- * @param {Color} $scrollbarTrack - The color of the scrollbar track.
- */
-/**
- * Mixin to apply transition properties conditionally based on user preferences.
- * By hnldesign - 2025
- *
- * This mixin checks if the user has a preference for reduced motion. If the user
- * does not prefer reduced motion, it applies the transition properties to the
- * specified elements when the `body` element has the `__enable-transitions` class.
- *
- * Usage:
- * @include transition-properties(margin) {
- *   transition: margin 0.3s ease;
- * }
- * The optional property-hint lets the browser prepare for changes in the property specified,
- * as waiting for the body to assume __enable-transitions class state will create a slight stutter,
- * because the browser has not been able to prepare for this (as there's a race condition for the class being added
- * and the animation kicking off)
- */
-/**
- * Mixin to apply styles when JavaScript is disabled.
- * By hnldesign - 2025
- *
- * This mixin targets elements when the `body` element has the `no-js` class,
- * indicating that JavaScript is disabled, since it will be unset at docReady.
- *
- * Usage:
- * @include no-javascript-properties {
- *   // Your styles here
- * }
- */
-/**
  * square block
  */
-.nok25-usp-block {
+.nok-usp-block {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
 }
-.nok25-usp-block__inner {
-  --grid-gap: var(--nok25-padding-base, var(--nok25-global-grid-gap, 1.5rem));
+.nok-usp-block__inner {
+  --grid-gap: var(--nok-padding-base, var(--nok-global-grid-gap, 1.5rem));
   --grid-column-width: calc(
       (100% - (var(--grid-gap, 1) * (var(--grid-columns, 1) - 1))) / var(--grid-columns, 1)
   );
@@ -78,53 +17,53 @@
   align-items: stretch;
 }
 @media (max-width: 991.98px) {
-  .nok25-usp-block__inner {
+  .nok-usp-block__inner {
     -moz-column-gap: 0;
          column-gap: 0;
   }
 }
-.nok25-usp-block__scroller {
+.nok-usp-block__scroller {
   grid-column: 1/-1;
   overflow-x: scroll;
 }
-.nok25-usp-block__scroller.nok25-draggable {
+.nok-usp-block__scroller.nok-draggable {
   position: relative;
   will-change: scroll-position; /*seems to bump performance in firefox ever so slightly*/
 }
-.nok25-usp-block__scroller.nok25-draggable, .nok25-usp-block__scroller.nok25-draggable + .fake-scrollbar {
+.nok-usp-block__scroller.nok-draggable, .nok-usp-block__scroller.nok-draggable + .fake-scrollbar {
   --scrollbar-height: 10px;
-  --scrollbar-handle: var(--text-color--contrast, #CCC);
+  --scrollbar-handle: var(--text-color, #CCC);
   --scrollbar-handle--active: var(--text-color--hover, #FFF);
-  --scrollbar-track: oklch(from var(--nok25-body) l c h/0.25);
+  --scrollbar-track: oklch(from var(--nok-body) l c h/0.25);
 }
-.nok25-usp-block__scroller.nok25-draggable::-webkit-scrollbar {
+.nok-usp-block__scroller.nok-draggable::-webkit-scrollbar {
   height: var(--scrollbar-height, 6px);
 }
-.nok25-usp-block__scroller.nok25-draggable::-webkit-scrollbar-track {
+.nok-usp-block__scroller.nok-draggable::-webkit-scrollbar-track {
   background-color: var(--scrollbar-track, rgba(0, 0, 0, 0.5333333333));
   border-radius: 10px;
 }
-.nok25-usp-block__scroller.nok25-draggable::-webkit-scrollbar-thumb {
+.nok-usp-block__scroller.nok-draggable::-webkit-scrollbar-thumb {
   background-color: var(--scrollbar-handle, rgba(255, 255, 255, 0.9333333333));
   border: 1px solid var(--scrollbar-handle, rgba(255, 255, 255, 0.9333333333));
   border-radius: 10px;
 }
-.nok25-usp-block__scroller.nok25-draggable::-webkit-scrollbar-thumb:hover {
+.nok-usp-block__scroller.nok-draggable::-webkit-scrollbar-thumb:hover {
   background-color: var(--scrollbar-handle--active, white);
   border-color: var(--scrollbar-handle--active, white);
 }
-body.no-js .nok25-usp-block__scroller.nok25-draggable + .fake-scrollbar {
+body.no-js .nok-usp-block__scroller.nok-draggable + .fake-scrollbar {
   display: none;
   visibility: hidden;
 }
 
-body:not(.no-js) .nok25-usp-block__scroller.nok25-draggable:has(+ .fake-scrollbar) {
+body:not(.no-js) .nok-usp-block__scroller.nok-draggable:has(+ .fake-scrollbar) {
   scrollbar-width: none;
 }
-body:not(.no-js) .nok25-usp-block__scroller.nok25-draggable:has(+ .fake-scrollbar)::-webkit-scrollbar {
+body:not(.no-js) .nok-usp-block__scroller.nok-draggable:has(+ .fake-scrollbar)::-webkit-scrollbar {
   display: none;
 }
-body:not(.no-js) .nok25-usp-block__scroller.nok25-draggable + .fake-scrollbar {
+body:not(.no-js) .nok-usp-block__scroller.nok-draggable + .fake-scrollbar {
   touch-action: none;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -138,7 +77,7 @@ body:not(.no-js) .nok25-usp-block__scroller.nok25-draggable + .fake-scrollbar {
   border-radius: 10px;
   overflow: hidden;
 }
-body:not(.no-js) .nok25-usp-block__scroller.nok25-draggable + .fake-scrollbar .fake-scrollbar-thumb {
+body:not(.no-js) .nok-usp-block__scroller.nok-draggable + .fake-scrollbar .fake-scrollbar-thumb {
   touch-action: none;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -155,48 +94,49 @@ body:not(.no-js) .nok25-usp-block__scroller.nok25-draggable + .fake-scrollbar .f
   contain: strict;
   backface-visibility: hidden;
 }
-body:not(.no-js) .nok25-usp-block__scroller.nok25-draggable + .fake-scrollbar:hover .fake-scrollbar-thumb, body:not(.no-js) .nok25-usp-block__scroller.nok25-draggable:hover + .fake-scrollbar .fake-scrollbar-thumb, body:not(.no-js) .nok25-usp-block__scroller.nok25-draggable.grabbed-scrollbar + .fake-scrollbar .fake-scrollbar-thumb, body:not(.no-js) .nok25-usp-block__scroller.nok25-draggable.grabbed-direct + .fake-scrollbar .fake-scrollbar-thumb {
+body:not(.no-js) .nok-usp-block__scroller.nok-draggable + .fake-scrollbar:hover .fake-scrollbar-thumb, body:not(.no-js) .nok-usp-block__scroller.nok-draggable:hover + .fake-scrollbar .fake-scrollbar-thumb, body:not(.no-js) .nok-usp-block__scroller.nok-draggable.grabbed-scrollbar + .fake-scrollbar .fake-scrollbar-thumb, body:not(.no-js) .nok-usp-block__scroller.nok-draggable.grabbed-direct + .fake-scrollbar .fake-scrollbar-thumb {
   background-color: var(--scrollbar-handle--active, white);
 }
-body:not(.no-js) .nok25-usp-block__scroller.nok25-draggable.grabbed-scrollbar + .fake-scrollbar {
+body:not(.no-js) .nok-usp-block__scroller.nok-draggable.grabbed-scrollbar + .fake-scrollbar {
   overflow: visible;
 }
-body:not(.no-js) .nok25-usp-block__scroller.nok25-draggable.grabbed-scrollbar + .fake-scrollbar .fake-scrollbar-thumb {
+body:not(.no-js) .nok-usp-block__scroller.nok-draggable.grabbed-scrollbar + .fake-scrollbar .fake-scrollbar-thumb {
   cursor: grabbing;
   outline: 5px solid rgba(255, 255, 255, 0.5333333333);
 }
 
-.nok25-usp-block__scroller.nok25-draggable[data-scroll-snapping=true] {
+.nok-usp-block__scroller.nok-draggable[data-scroll-snapping=true] {
   scroll-snap-type: both mandatory;
   scroll-snap-stop: normal;
 }
-.nok25-usp-block__scroller.nok25-draggable[data-scroll-snapping=false] {
+.nok-usp-block__scroller.nok-draggable[data-scroll-snapping=false] {
   -webkit-user-select: none !important;
      -moz-user-select: none !important;
           user-select: none !important;
 }
-.nok25-usp-block__scroller.nok25-draggable[data-scroll-snapping=true] .nok25-draggable-slider-item {
+.nok-usp-block__scroller.nok-draggable[data-scroll-snapping=true] .nok-draggable-slider-item {
   scroll-snap-align: start;
 }
-.nok25-usp-block__scroller.nok25-draggable .nok25-draggable-slider-item > *:not(a),
-.nok25-usp-block__scroller.nok25-draggable .nok25-draggable-slider-item a::after {
+.nok-usp-block__scroller.nok-draggable .nok-draggable-slider-item > *:not(a),
+.nok-usp-block__scroller.nok-draggable .nok-draggable-slider-item a::after {
   pointer-events: none;
 }
-.nok25-usp-block__scroller .nok25-usp-block__blocks {
+.nok-usp-block__scroller .nok-usp-block__blocks {
   margin-bottom: calc(var(--grid-gap, 1.5rem) * 2);
 }
-body:not(.no-js) .nok25-usp-block:has(.fake-scrollbar) .nok25-usp-block__scroller .nok25-usp-block__blocks {
+body:not(.no-js) .nok-usp-block:has(.fake-scrollbar) .nok-usp-block__scroller .nok-usp-block__blocks {
   margin-bottom: var(--grid-gap, 1.5rem);
 }
 
-.nok25-usp-block__blocks {
+.nok-usp-block__blocks {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  gap: var(--grid-gap, var(--nok25-global-grid-gap));
+  gap: var(--grid-gap, var(--nok-global-grid-gap));
 }
-.nok25-usp-block__blocks > * {
+.nok-usp-block__blocks > * {
   flex-basis: var(--grid-column-width);
   flex-shrink: 0;
 }
+
 /*# sourceMappingURL=nok-component--usp-block.css.map */
