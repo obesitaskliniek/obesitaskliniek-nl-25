@@ -27,7 +27,6 @@ body {
   --#{nok-variables.$prefix}-body-text-color: var(--#{nok-variables.$prefix}-darkerblue);
   background: linear-gradient(180deg, var(--#{nok-variables.$prefix}-body--darker), var(--#{nok-variables.$prefix}-body));
   @include nok-mixins.nok-text-font;
-  min-height: 100vh; //warning: temp
 }
 
 @for $i from 1 through 6 {

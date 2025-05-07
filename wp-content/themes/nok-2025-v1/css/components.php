@@ -380,7 +380,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                     reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit!
                 </p>
 
-                <div class="nok-mt-2 span-all-columns">
+                <div class="nok-mt-2 align-self-stretch">
                     <div class="nok-layout-grid nok-layout-grid__3-column
                 nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="true">
                         <?php $x = 6; while ($x--) : ?>

@@ -41,7 +41,6 @@ function restoreSnappingGracefully(scrollElement) {
   }
 
   if (Math.abs(scrollPosition) < tolerance || Math.abs(scrollPosition + scrollerSize - scrollSize) < tolerance) {
-    //restoreSnapping(scrollElement);
     scrollElement.removeEventListener('scroll', waitToRestoreSnapping);
   } else {
     scrollElement.scrollTo({
@@ -222,6 +221,15 @@ export function setupFakeScrollbar(scrollElement) {
   function contentPointerDown(e) {
     // only mice; leave real touch alone
     if (e.pointerType !== 'mouse') return;
+    // get the original hit target (works even through shadow DOM):
+    const origTgt = e.composedPath ? e.composedPath()[0] : e.target;
+    // just in case
+    if (!(origTgt instanceof Element)) return;
+    // look for the nearest <a> *or* <button> on or above it
+    const control = origTgt.closest('a, button');
+    // don't handle events that started on buttons or anchors.
+    if (control) return;
+
     e.preventDefault();
 
     //stop scroll snapping from messing up scrolling
