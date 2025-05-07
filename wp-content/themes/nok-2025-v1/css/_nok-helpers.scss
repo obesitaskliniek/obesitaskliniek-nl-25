@@ -290,6 +290,14 @@ $utilities: (
                 class: #{nok-variables.$prefix}-grid-gap,
                 values: $padding-base-values
         ),
+        "column-gap": (
+                css-var: true,
+                css-variable-name: column-gap,
+                no-prefix: true,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-column-gap,
+                values: $padding-base-values
+        ),
         "padding": (
                 property: padding,
                 responsive: true,

@@ -74,6 +74,12 @@
     }
     //"fill-fill" is another layout pattern, which fills both children 50/50. See 2-column layout above; it's identical
 
+    > * {
+      // see https://stackoverflow.com/questions/43311943/prevent-content-from-expanding-grid-items
+      //overflow: hidden;
+      min-width: 0;
+    }
+
   }
 
   &-flex {
@@ -119,9 +125,4 @@
   &-column-gap {
     --row-gap: 0rem;
   }
-}
-
-/* Helpers */
-.span-all-columns {
-  grid-column: 1 / -1;
 }
