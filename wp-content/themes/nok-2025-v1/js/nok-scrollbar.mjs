@@ -133,7 +133,7 @@ export function setupFakeScrollbar(scrollElement) {
   scrollElement.addEventListener('scroll', updateScrollbar, { passive: true });
 
   function handlePointerUp(el, pointerId, moveFn, upFn, snapping) {
-    if (SNAPPING) restoreSnappingGracefully(scrollElement);
+    if (snapping) restoreSnappingGracefully(scrollElement);
     scrollElement.style.scrollBehavior = '';
     scrollElement.classList.remove('being-scrolled', 'grabbed-scrollbar');
     el.releasePointerCapture(pointerId);
@@ -174,7 +174,7 @@ export function setupFakeScrollbar(scrollElement) {
       scrollElement.dataset.scrollSnapping = "false";
 
       const clickX     = downEvt.clientX - trackRect.left;
-      const clickY     = downEvt.clientY - trackRect.top; // (future use)
+      //const clickY     = downEvt.clientY - trackRect.top; // todo: make suitable for vertical scrolling
       const halfThumb  = thumbRect.width / 2;
       // clamp the thumb’s left edge inside [0, maxThumbOffset]:
       const thumbOff   = Math.min(
@@ -238,7 +238,6 @@ export function setupFakeScrollbar(scrollElement) {
     scrollElement.style.scrollBehavior = 'auto';
     scrollElement.classList.add('being-scrolled');
 
-    const el          = scrollElement;
     const startX      = e.clientX;
     const startScroll = scrollElement.scrollLeft;
 
