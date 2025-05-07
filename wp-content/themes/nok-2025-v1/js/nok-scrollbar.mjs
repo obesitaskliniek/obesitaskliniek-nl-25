@@ -1,62 +1,282 @@
-/*
-Embedded scroll menu handler (c)2025 Klaas Leussink / hnldesign
- */
+import eventHandler from './modules/hnl.eventhandler.mjs';
 
-//todo: this file is queued for deletion - now handled in hnl.draggable
+export const NAME = "scrollBarEmulator";
 
-export const NAME = 'carousel';
+function RAFThrottle(callback) {
+  let ticking = false;
+  return (...args) => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      callback(...args);
+      ticking = false;
+    });
+  };
+}
 
-export function init(elements){
-  elements.forEach(element => {
+export function setupFakeScrollbar(scrollElement) {
 
-    const carousel = element;
-    const scrollbarThumb = element.querySelector('.fake-scrollbar-thumb');
+  const SNAPPING = scrollElement.dataset.scrollSnapping === 'true';
 
-    function updateScrollbar() {
-      const scrollWidth = carousel.scrollWidth - carousel.clientWidth;
-      const scrollLeft = carousel.scrollLeft;
-      const thumbWidth = (carousel.clientWidth / carousel.scrollWidth) * 100;
-      const thumbPosition = (scrollLeft / scrollWidth) * (100 - thumbWidth);
+  // build the new nodes
+  const scrollbarTrack = document.createElement('div');
+  scrollbarTrack.className = 'fake-scrollbar align-self-stretch';
 
-      scrollbarThumb.style.width = `${thumbWidth}%`;
-      scrollbarThumb.style.left = `${thumbPosition}%`;
+  const scrollbarThumb = document.createElement('div');
+  scrollbarThumb.className = 'fake-scrollbar-thumb';
+
+  // assemble & insert
+  scrollbarTrack.appendChild(scrollbarThumb);
+  scrollElement.parentNode.insertBefore(
+      scrollbarTrack,
+      scrollElement.nextSibling
+  );
+
+  const cssSScrollStyle = window.getComputedStyle(scrollElement).overflowX;
+
+  if (cssSScrollStyle === 'hidden') {
+    scrollbarTrack.style.visibility = 'hidden';
+    return;
+  }
+
+  // Object to store styles and dimensions
+  const style = { width: null, transform: null, clientWidth: null, scrollWidth: null, scrollLeft: null };
+
+  function updateSelf() {
+    const { scrollWidth, clientWidth, scrollLeft } = scrollElement;
+
+    // Avoid unnecessary updates if dimensions haven't changed
+    if (style.clientWidth === clientWidth && style.scrollWidth === scrollWidth && style.scrollLeft === scrollLeft) {
+      return;
     }
 
-    carousel.addEventListener('scroll', updateScrollbar);
-    window.addEventListener('resize', updateScrollbar);
-    updateScrollbar(); // Initial update
+    // Hide thumb if nothing is overflowing (simulates native)
+    scrollbarThumb.style.visibility = (scrollWidth <= clientWidth) ? 'hidden' : '';
+    scrollbarTrack.style.visibility = (scrollWidth <= clientWidth) ? (cssSScrollStyle === 'auto' ? 'hidden' : '') : '';
 
+    style.clientWidth = clientWidth;
+    style.scrollWidth = scrollWidth;
 
-    // Drag Functionality
-    let isDragging = false;
-    let startX;
-    let startScrollLeft;
+    style.maxScroll = scrollWidth - clientWidth;
+    if (style.maxScroll <= 0) {
+      if (style.width !== "0px") {
+        scrollbarThumb.style.width = "0px"; // Hide if no overflow
+        style.width = "0px";
+      }
+      return;
+    }
 
-    scrollbarThumb.addEventListener('pointerdown', (e) => {
-      isDragging = true;
-      startX = e.clientX;
-      startScrollLeft = carousel.scrollLeft;
-      document.body.style.userSelect = 'none'; // Prevents text selection
-    });
+    const thumbWidth = Math.round((clientWidth / scrollWidth) * clientWidth);
+    const thumbPosition = Math.round(((scrollLeft / style.maxScroll) * (clientWidth - thumbWidth)) * 10) / 10;
+    const newStyles = {};
 
-    document.addEventListener('pointermove', (e) => {
-      if (!isDragging) return;
+    // Only update transform if scrollLeft changed
+    if (style.scrollLeft !== scrollLeft) {
+      style.scrollLeft = scrollLeft;
+      newStyles.transform = style.transform = `translate3d(${thumbPosition}px, 0, 0)`; // Use translate3d for better performance
+    }
 
-      const deltaX = e.clientX - startX;
-      const scrollWidth = carousel.scrollWidth - carousel.clientWidth;
-      const thumbWidth = scrollbarThumb.clientWidth;
-      const scrollbarWidth = scrollbarThumb.parentElement.clientWidth - thumbWidth;
-      const scrollDelta = (deltaX / scrollbarWidth) * scrollWidth;
+    // Only update width if necessary
+    if (style.width !== `${thumbWidth}px`) {
+      newStyles.width = style.width = `${thumbWidth}px`;
+    }
 
-      carousel.dataset.scrollSnapping = "false";
-      carousel.scrollLeft = startScrollLeft + scrollDelta;
-    });
+    if (Object.keys(newStyles).length > 0) {
+      Object.assign(scrollbarThumb.style, newStyles);
+    }
 
-    document.addEventListener('pointerup', () => {
-      isDragging = false;
-      carousel.dataset.scrollSnapping = 'true';
-      document.body.style.userSelect = ''; // Restore text selection
-    });
+    // Update own extended dimensions
+    style.dimensions = scrollbarThumb.getBoundingClientRect();
+  }
 
+  // Throttle the update function
+  const updateScrollbar = RAFThrottle(updateSelf);
+
+  eventHandler.addListener('docShift', updateScrollbar);
+  scrollElement.addEventListener('scroll', updateScrollbar, { passive: true });
+
+  function disableSnapping(scrollElement) {
+    scrollElement.dataset.scrollSnapping = 'false';
+  }
+  function restoreSnapping(scrollElement) {
+    scrollElement.dataset.scrollSnapping = 'true';
+  }
+
+  function restoreSnappingGracefully(scrollElement) {
+    const { scrollWidth : scrollSize, scrollLeft : scrollPosition, offsetWidth : scrollerSize } = scrollElement;
+    const snapItem = scrollElement.children[0];
+    //note: this assumes all items are the same inline size
+    const gap = parseInt(window.getComputedStyle(snapItem.parentElement).columnGap, 10) || 0;
+    const slideItemSize = snapItem.offsetWidth + gap;
+    const closestSnap = Math.round(scrollPosition / slideItemSize);
+    const tolerance = 2;
+    let timeout = null;
+
+    function waitToRestoreSnapping() {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        restoreSnapping(scrollElement);
+        scrollElement.removeEventListener('scroll', waitToRestoreSnapping);
+      }, scrollPosition % slideItemSize ? 150 : 0);
+    }
+
+    if (Math.abs(scrollPosition) < tolerance || Math.abs(scrollPosition + scrollerSize - scrollSize) < tolerance) {
+      //restoreSnapping(scrollElement);
+      scrollElement.removeEventListener('scroll', waitToRestoreSnapping);
+    } else {
+      scrollElement.scrollTo({
+        left: closestSnap * slideItemSize,
+        behavior: 'smooth'
+      });
+      scrollElement.addEventListener('scroll', waitToRestoreSnapping);
+    }
+  }
+
+  scrollbarTrack.addEventListener('pointerdown', (downEvt) => {
+    downEvt.preventDefault();             // don’t let native text-select or stray clicks interfere
+
+    //stop scroll snapping from messing up scrolling
+    if (SNAPPING) { disableSnapping(scrollElement); }
+    //stop smooth scrolling from messing up scrolling
+    scrollElement.style.scrollBehavior = 'auto';
+
+    // capture initial positions
+    const startX = downEvt.clientX;
+    let startScroll = scrollElement.scrollLeft;
+    const { scrollWidth, clientWidth } = scrollElement;
+
+    // compute the draggables’ ranges
+    const trackRect = scrollbarTrack.getBoundingClientRect();
+    const thumbRect = scrollbarThumb.getBoundingClientRect();
+    const maxScroll = scrollWidth - clientWidth;
+    const maxThumbOffset = trackRect.width - thumbRect.width;
+
+    if (scrollbarTrack === downEvt.target) {
+      //if track is clicked, immediately scroll to that position and continue dragging
+      scrollElement.dataset.scrollSnapping = "false";
+
+      const clickX     = downEvt.clientX - trackRect.left;
+      const clickY     = downEvt.clientY - trackRect.top; // (future use)
+      const halfThumb  = thumbRect.width / 2;
+      // clamp the thumb’s left edge inside [0, maxThumbOffset]:
+      const thumbOff   = Math.min(
+          Math.max(clickX - halfThumb, 0),
+          maxThumbOffset
+      );
+      const newScroll  = (thumbOff / maxThumbOffset) * maxScroll;
+      scrollElement.scrollLeft = startScroll = newScroll;
+    }
+
+    // capture subsequent moves on the track itself
+    const track = downEvt.currentTarget;
+    track.setPointerCapture(downEvt.pointerId);
+
+    // move handler: map deltaX → new scrollLeft
+    function onPointerMove(moveEvt) {
+      const deltaX = moveEvt.clientX - startX;
+      // where the thumb *would* be, clamped to [0 .. maxThumbOffset]
+      const thumbPos = Math.min(
+          Math.max((startScroll / maxScroll) * maxThumbOffset + deltaX, 0),
+          maxThumbOffset
+      );
+      // drive the real scroll
+      scrollElement.scrollLeft = (thumbPos / maxThumbOffset) * maxScroll;
+      // updateScrollbar() will fire via the scroll listener
+    }
+
+    function onPointerUp(upEvt) {
+      if (SNAPPING) restoreSnappingGracefully(scrollElement);
+      scrollElement.style.scrollBehavior = '';
+      track.releasePointerCapture(upEvt.pointerId);
+      track.removeEventListener('pointermove',  onPointerMove);
+      track.removeEventListener('pointerup',    onPointerUp);
+      track.removeEventListener('pointercancel', onPointerUp);
+    }
+
+    track.addEventListener('pointermove',  onPointerMove);
+    track.addEventListener('pointerup',    onPointerUp);
+    track.addEventListener('pointercancel', onPointerUp);
   });
+
+  // ────────────────────────────────────────────────────────────────────────────────
+  // “Draggable” mode: pretend the content itself is touch-draggable on desktop
+  // ────────────────────────────────────────────────────────────────────────────────
+  if (scrollElement.dataset.draggable === 'true' && window.PointerEvent) {
+    scrollElement.addEventListener('pointerdown', contentPointerDown, { passive: false });
+  }
+
+  function contentPointerDown(e) {
+    // only mice; leave real touch alone
+    if (e.pointerType !== 'mouse') return;
+    e.preventDefault();
+
+    //stop scroll snapping from messing up scrolling
+    if (SNAPPING) { disableSnapping(scrollElement); }
+    //stop smooth scrolling from messing up scrolling
+    scrollElement.style.scrollBehavior = 'auto';
+
+    const el          = scrollElement;
+    const startX      = e.clientX;
+    const startScroll = el.scrollLeft;
+
+    // capture moves on this element
+    el.setPointerCapture(e.pointerId);
+
+    function onMove(moveEvt) {
+      const deltaX = moveEvt.clientX - startX;
+      // drag the content (invert because dragging right scrolls left)
+      el.scrollLeft = startScroll - deltaX;
+    }
+    function onUp(upEvt) {
+      if (SNAPPING) restoreSnappingGracefully(scrollElement);
+      scrollElement.style.scrollBehavior = '';
+      el.releasePointerCapture(upEvt.pointerId);
+      el.removeEventListener('pointermove', onMove);
+      el.removeEventListener('pointerup',   onUp);
+      el.removeEventListener('pointercancel',   onUp);
+    }
+
+    el.addEventListener('pointermove', onMove);
+    el.addEventListener('pointerup',   onUp);
+    el.addEventListener('pointercancel',   onUp);
+  }
+
+  // ────────────────────────────────────────────────────────────────────────────────
+  // “Autoscroll” mode: when idle, snap-scroll every N ms
+  // ────────────────────────────────────────────────────────────────────────────────
+  if (scrollElement.dataset.autoscroll === 'true') {
+    const INTERVAL   = Math.max(1000, +scrollElement.dataset.interval || 10000);
+    const children   = Array.from(scrollElement.children);
+    let   index      = 0;
+    let   timerId       = null;
+    let   shouldRun = true;
+
+    // whenever the user interacts, pause for 2×INTERVAL
+    const pauseEvents = ['pointerdown','wheel','touchstart','mouseenter','keydown'];
+    const resumeEvents = ['touchend','mouseleave'];
+    [scrollElement, scrollbarTrack].forEach(el => {
+      pauseEvents.forEach(evt =>
+          el.addEventListener(evt, () => { shouldRun = false }, { passive: true })
+      );
+      resumeEvents.forEach(evt =>
+          el.addEventListener(evt, () => { shouldRun = true }, { passive: true })
+      );
+    });
+
+    function step() {
+      if (shouldRun) {
+        children[index].scrollIntoView({
+          behavior: 'smooth',
+          block:    'nearest',
+          inline:   'nearest'
+        });
+        index = (index + 1) % children.length;
+      }
+      timerId = setTimeout(step, INTERVAL);
+    }
+    // kick it off after the first idle period
+    timerId = setTimeout(step, INTERVAL);
+  }
+
+  updateScrollbar(); // Initial update
 }
