@@ -266,43 +266,54 @@ export function setupFakeScrollbar(scrollElement) {
   if (scrollElement.dataset.autoscroll === 'true') {
     const interval   = Math.max(1000, +scrollElement.dataset.interval || 10000);
     const children   = Array.from(scrollElement.children);
-    let   index      = 0;
-    let   timerId       = null;
-    let   shouldRun = true;
+    let timerId = null; let waitTimer = null;
 
-    // whenever the user interacts, pause for 2×INTERVAL
-    const pauseEvents = ['pointerdown','wheel','touchstart','mouseenter','keydown'];
-    const resumeEvents = ['mouseleave'];
+    function getNextChildIndex() {
+      //figure out where we are: get the first (left-most) visible child idx
+      const currentChildIndex = children.indexOf(children.find(child =>
+          child.offsetLeft + child.offsetWidth > scrollElement.scrollLeft
+      ));
+      return currentChildIndex + 1 <= children.length ? currentChildIndex + 1 : 0;
+    }
+
+    function go() {
+      clearInterval(timerId);
+      timerId = setInterval(() => {
+        isVisible(scrollElement, function(visible) {
+          if (visible && scrollElement.dataset.autoscroll === 'true') {
+            const reachedEnd = Math.abs(scrollElement.scrollLeft + scrollElement.offsetWidth - scrollElement.scrollWidth) < 10;
+            scrollElement.scrollLeft = reachedEnd ? 0 : children[getNextChildIndex()].offsetLeft;
+          }
+        })
+      }, interval);
+    }
+
     [scrollElement, scrollbarTrack].forEach(el => {
-      pauseEvents.forEach(evt =>
-          el.addEventListener(evt, () => { shouldRun = false }, { passive: true })
+      ['pointerdown', 'wheel', 'touchstart', 'mouseenter', 'keydown'].forEach(evt =>
+          el.addEventListener(evt, () => {
+            clearInterval(timerId);
+          }, { passive: true })
       );
-      resumeEvents.forEach(evt =>
-          el.addEventListener(evt, () => { shouldRun = true }, { passive: true })
+      ['mouseleave'].forEach(evt =>
+          el.addEventListener(evt, () => {
+            clearInterval(waitTimer);
+            waitTimer = setTimeout(go, interval);
+          }, { passive: true })
       );
-    });
+    })
     eventHandler.addListener('docShift', () => {
       //will only restart autoscrolling when the user has scrolled past the element, and it has gone out of view
       isVisible(scrollElement, function(visible) {
-        if (!shouldRun) {
-          shouldRun = !visible;
+        if (!timerId && !visible) {
+          clearInterval(waitTimer);
+          waitTimer = setTimeout(go, interval);
         }
       })
     });
 
-    function step() {
-      if (shouldRun) {
-        // grab the next child
-        const target = children[index];
-        // CSS will determine the smooth work via `scroll-behavior: smooth` on scrollElement, if required
-        scrollElement.scrollLeft = target.offsetLeft;
-        // advance the index and re-arm
-        index = (index + 1) % children.length;
-      }
-      timerId = setTimeout(step, interval);
-    }
-    // kick it off after the first idle period
-    timerId = setTimeout(step, interval);
+    //initialize run
+    go();
+
   }
 
   updateScrollbar(); // Initial update
