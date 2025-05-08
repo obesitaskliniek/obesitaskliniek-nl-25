@@ -471,15 +471,31 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                             </div>
                     </nok-square-block>
                 </div>
-                <div class="nok-layout-grid nok-layout-grid__1-column" data-requires="./nok-accordion.mjs?cache=<?= time(); ?>">
-                    <?php
-                    $x = 0;
-                    $specialisten = array('Arts', 'Internist', 'Diëtist', 'Psycholoog', 'Bewegingsdeskundige', 'Chirurg');
-                    foreach ($specialisten as $specialist) : ?>
-                        <div class="nok-accordion nok-bg-white nok-dark-bg-darkerblue nok-rounded-border nok-text-contrast nok-py-1 nok-px-2 <?= $x == 0 ? 'open' : ''; ?>">
-                            <h4><?= $specialist; ?></h4>
-                            <div>
-                                <p class="nok-my-1">
+
+                <div class="nok-layout-grid nok-layout-grid__1-column">
+
+                    <nok-accordions data-requires="./nok-accordion.mjs?cache=<?= time(); ?>">
+                        <details class="nok-bg-white nok-dark-bg-darkerblue nok-rounded-border nok-text-contrast">
+                            <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold">Solo</summary>
+                            <div class="accordion-content nok-p-2 nok-pt-0">
+                                <p class="nok-mb-1">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure
+                                    perspiciatis quod, quos vero. Architecto, blanditiis est exercitationem illo
+                                    iusto magni nihil nulla, quam quas, quia reprehenderit vel voluptatum.
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit!
+                                </p>
+                            </div>
+                        </details>
+
+                        <?php
+                        $x = 0;
+                        $accordion_group = 'accordion-group';
+                        $specialisten = array('Arts', 'Internist', 'Diëtist', 'Psycholoog', 'Bewegingsdeskundige', 'Chirurg');
+                        foreach ($specialisten as $specialist) : ?>
+                        <details class="nok-bg-white nok-dark-bg-darkerblue nok-rounded-border nok-text-contrast" name="<?= $accordion_group;?>" <?= $x == 0 ? 'open' : ''; ?>>
+                            <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold"><?= $specialist; ?></summary>
+                            <div class="accordion-content nok-p-2 nok-pt-0">
+                                <p class="nok-mb-1">
                                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure
                                     perspiciatis quod, quos vero. Architecto, blanditiis est exercitationem illo
                                     iusto magni nihil nulla, quam quas, quia reprehenderit vel voluptatum.
@@ -489,10 +505,12 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                                         tabindex="0">Over de <?= $specialist; ?>
                                 </button>
                             </div>
-                        </div>
-                    <?php $x++;
-                    endforeach;
-                    ?>
+                        </details>
+                            <?php $x++; endforeach; ?>
+
+
+                    </nok-accordions>
+
                 </div>
             </article>
         </div>

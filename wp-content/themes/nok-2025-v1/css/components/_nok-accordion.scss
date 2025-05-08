@@ -75,3 +75,80 @@
     }
   }
 }
+
+nok-accordions {
+  display: grid;
+  @include components-base.nok-grid-gap;
+
+  details, summary {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    overflow: clip;
+  }
+  details {
+    will-change: height;
+    summary {
+      display: flex;
+      flex-wrap: nowrap;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      &:hover {
+        color: var(--text-color--hover);
+      }
+      &::marker {
+        display: none;
+        visibility: collapse;
+      }
+      &::after {
+        justify-self: flex-end;
+        flex-shrink: 0;
+        width: components-base.$accordion-icon-width;
+        height: components-base.$accordion-icon-width;
+        margin-left: auto;
+        content: "";
+        @include components-base.accordion-button-icon(false);
+        mask-size: cover;
+        background-color: var(--text-color, var(--bg-color--contrast));
+        @include components-base.transition-properties(transform) {
+          transform-origin: center;
+          transition: transform calc(var(--animation-duration--in, 750ms) * .75) cubic-bezier(0.16, 1, 0.3, 1);
+        }
+      }
+    }
+    &::details-content {
+      padding: 0;
+      @include components-base.transition-properties(transform) {
+        transition: content-visibility var(--animation-duration--in, 750ms) cubic-bezier(0.16, 1, 0.3, 1),
+        height var(--animation-duration--in, 750ms) cubic-bezier(0.16, 1, 0.3, 1);
+        transition-behavior: allow-discrete;
+      }
+    }
+    &:not([open]) {
+      summary:hover, summary:focus {
+        background: var(--bg-color--hover, #f6f6f);
+        color: var(---text-color--hover, #454545);
+      }
+      &::details-content {
+        height: 0;
+      }
+    }
+    &[open]:not(.accordion-closing) {
+      // the .accordion-closing class is added in the polyfill as soon as collapsing starts,
+      // so we can kick off the animation for the closing marker in time
+      summary::after {
+        @include components-base.transition-properties(transform) {
+          transform: rotate(180deg);
+        }
+        @include components-base.accordion-button-icon(true);
+      }
+      &::details-content {
+        height: auto;
+      }
+    }
+  }
+}
