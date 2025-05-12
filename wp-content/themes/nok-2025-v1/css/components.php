@@ -472,44 +472,43 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                     </nok-square-block>
                 </div>
 
-                <div class="nok-layout-grid nok-layout-grid__1-column">
-
-                    <nok-accordions data-requires="./nok-accordion.mjs?cache=<?= time(); ?>">
-                        <details class="nok-bg-white nok-dark-bg-darkerblue nok-rounded-border nok-text-contrast">
-                            <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold">Solo</summary>
-                            <div class="accordion-content nok-p-2 nok-pt-0">
-                                <p class="nok-mb-1">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure
-                                    perspiciatis quod, quos vero. Architecto, blanditiis est exercitationem illo
-                                    iusto magni nihil nulla, quam quas, quia reprehenderit vel voluptatum.
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit!
-                                </p>
-                            </div>
-                        </details>
+                <div class="nok-layout-grid nok-layout-grid__1-column" data-requires="./nok-accordion.mjs?cache=<?= time(); ?>">
+                        <nok-accordion>
+                            <details class="nok-bg-white nok-dark-bg-darkerblue nok-rounded-border nok-text-contrast">
+                                <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold">Solo</summary>
+                                <div class="accordion-content nok-p-2 nok-pt-0">
+                                    <p class="nok-mb-1">
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure
+                                        perspiciatis quod, quos vero. Architecto, blanditiis est exercitationem illo
+                                        iusto magni nihil nulla, quam quas, quia reprehenderit vel voluptatum.
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit!
+                                    </p>
+                                </div>
+                            </details>
+                        </nok-accordion>
 
                         <?php
                         $x = 0;
                         $accordion_group = 'accordion-group';
                         $specialisten = array('Arts', 'Internist', 'Diëtist', 'Psycholoog', 'Bewegingsdeskundige', 'Chirurg');
                         foreach ($specialisten as $specialist) : ?>
-                        <details class="nok-bg-white nok-dark-bg-darkerblue nok-rounded-border nok-text-contrast" name="<?= $accordion_group;?>" <?= $x == 0 ? 'open' : ''; ?>>
-                            <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold"><?= $specialist; ?></summary>
-                            <div class="accordion-content nok-p-2 nok-pt-0">
-                                <p class="nok-mb-1">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure
-                                    perspiciatis quod, quos vero. Architecto, blanditiis est exercitationem illo
-                                    iusto magni nihil nulla, quam quas, quia reprehenderit vel voluptatum.
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit!
-                                </p>
-                                <button class="nok-button nok-base-font nok-text-contrast nok-bg-darkerblue nok-dark-bg-darkblue nok-visible-xs align-self-stretch"
-                                        tabindex="0">Over de <?= $specialist; ?>
-                                </button>
-                            </div>
-                        </details>
+                        <nok-accordion>
+                            <details class="nok-bg-white nok-dark-bg-darkerblue nok-rounded-border nok-text-contrast" name="<?= $accordion_group;?>" <?= $x == 0 ? 'open' : ''; ?>>
+                                <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold"><?= $specialist; ?></summary>
+                                <div class="accordion-content nok-p-2 nok-pt-0">
+                                    <p class="nok-mb-1">
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure
+                                        perspiciatis quod, quos vero. Architecto, blanditiis est exercitationem illo
+                                        iusto magni nihil nulla, quam quas, quia reprehenderit vel voluptatum.
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit!
+                                    </p>
+                                    <button class="nok-button nok-base-font nok-text-contrast nok-bg-darkerblue nok-dark-bg-darkblue nok-visible-xs align-self-stretch"
+                                            tabindex="0">Over de <?= $specialist; ?>
+                                    </button>
+                                </div>
+                            </details>
+                        </nok-accordion>
                             <?php $x++; endforeach; ?>
-
-
-                    </nok-accordions>
 
                 </div>
             </article>
@@ -541,29 +540,37 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                         </svg>
                     </button>
                 </nok-square-block>
-                <div class="nok-layout-grid nok-layout-grid__3-column" data-requires="./nok-accordion.mjs?cache=<?= time(); ?>" data-opened-at="lg">
-                    <div class="nok-accordion">
-                        <h4 class="nok-fs-2 fw-bold">Behandeling</h4>
-                        <ul class="nok-ul-list">
-                            <li>Advies over obesitas</li>
-                            <li>Behandeling met operatie</li>
-                            <li>Ons behandelprogramma</li>
-                            <li>Kosten van de behandeling</li>
-                            <li>Onze specialisten</li>
-                            <li>Verwijzers</li>
-                        </ul>
-                    </div>
-                    <div class="nok-accordion">
-                        <h4 class="nok-fs-2 fw-bold">Over NOK</h4>
-                        <ul class="nok-ul-list">
-                            <li>Over ons</li>
-                            <li>Ervaringen</li>
-                            <li>Kennisbank</li>
-                            <li>Werken bij</li>
-                            <li>Vestigingen</li>
-                            <li>Contact</li>
-                        </ul>
-                    </div>
+                <div class="nok-layout-grid nok-layout-grid__3-column" data-requires="./nok-accordion.mjs?cache=<?= time(); ?>">
+                    <nok-accordion class="nok-border-bottom-to-lg-1 nok-pt-to-lg-1 nok-pb-to-lg-0_5">
+                        <details data-opened-at="lg" name="footer-accordion-group">
+                            <summary class="nok-fs-2 nok-fs-to-lg-3 fw-bold nok-mb-0_5">Behandeling</summary>
+                            <div class="accordion-content">
+                                <ul class="nok-ul-list">
+                                    <li>Advies over obesitas</li>
+                                    <li>Behandeling met operatie</li>
+                                    <li>Ons behandelprogramma</li>
+                                    <li>Kosten van de behandeling</li>
+                                    <li>Onze specialisten</li>
+                                    <li>Verwijzers</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </nok-accordion>
+                    <nok-accordion class="nok-border-bottom-to-lg-1 ok-pt-to-lg-1 nok-pb-to-lg-0_5">
+                        <details data-opened-at="lg" name="footer-accordion-group">
+                            <summary class="nok-fs-2 nok-fs-to-lg-3 fw-bold nok-mb-0_5">Over de NOK</summary>
+                            <div class="accordion-content">
+                                <ul class="nok-ul-list">
+                                    <li>Over ons</li>
+                                    <li>Ervaringen</li>
+                                    <li>Kennisbank</li>
+                                    <li>Werken bij</li>
+                                    <li>Vestigingen</li>
+                                    <li>Contact</li>
+                                </ul>
+                            </div>
+                        </details>
+                    </nok-accordion>
                     <div>
                         <h4 class="nok-fs-2 fw-bold">Neem contact op</h4>
                         <ul class="nok-ul-list">

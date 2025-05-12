@@ -263,14 +263,15 @@ $alphas: (
 //}
 $padding-base-values: (
         0 : 0rem,
-        grid-gap: var(--grid-gap),
-        section-padding: var(--nok-padding-section-sides),
+        0_5: #{(.5 * nok-variables.$padding-base)},
         1: #{(1 * nok-variables.$padding-base)},
         //1_5: #{(1.5 * nok-variables.$padding-base)},
         2: #{(1.5 * nok-variables.$padding-base)},
         3: #{(2 * nok-variables.$padding-base)},
         4: #{(3 * nok-variables.$padding-base)},
         5: #{(4 * nok-variables.$padding-base)},
+        grid-gap: var(--grid-gap),
+        section-padding: var(--nok-padding-section-sides),
 );
 
 $utilities: (
@@ -392,6 +393,15 @@ $utilities: (
                 class: #{nok-variables.$prefix}-my,
                 values: $padding-base-values
         ),
+        "border-bottom": (
+                responsive: false,
+                responsive-up-to: true,
+                property: border-bottom,
+                class: #{nok-variables.$prefix}-border-bottom,
+                values: (
+                        1: 1px solid oklch(from var(--text-base) l c h / 0.25)
+                )
+        ),
         "border-radius": (
                 property: border-radius,
                 responsive-up-to: true,
@@ -458,7 +468,6 @@ $utilities: (
                         stretch: stretch,
                         start: flex-start,
                         end: flex-end,
-
                 )
         ),
   //conceptual

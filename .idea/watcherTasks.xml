@@ -22,7 +22,7 @@
       <envs />
     </TaskOptions>
     <TaskOptions isEnabled="true">
-      <option name="arguments" value="$FileName$ --replace  --map -u autoprefixer" />
+      <option name="arguments" value="$FileName$ --replace -u autoprefixer" />
       <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
@@ -42,7 +42,7 @@
       <envs />
     </TaskOptions>
     <TaskOptions isEnabled="true">
-      <option name="arguments" value="--comments none -i $FileName$ -o $FileNameWithoutExtension$.min.css" />
+      <option name="arguments" value="--comments none -i $FileName$ -s $FileNameWithoutExtension$.css.map -o $FileNameWithoutExtension$.min.css" />
       <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
