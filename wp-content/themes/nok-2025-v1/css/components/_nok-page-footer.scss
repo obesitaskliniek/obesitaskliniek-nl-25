@@ -3,6 +3,18 @@
 // Page Footer - Used throughout the site
 
 nok-page-footer {
+  .nok-section__inner--stretched {
+    background-image: url(#{components-base.$theme_root}/img/nok-beeldmerk.php?width=500&height=100&opacity=0.5&x=35%&rotation=15&rotationOffsetX=0%&rotationOffsetY=100%&x=20%);
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    background-size: map-get(components-base.$grid-breakpoints, 'xl');
+    @include components-base.media-breakpoint-down(xl) {
+      background-position: left bottom;
+    }
+    @media (prefers-color-scheme: dark) {
+      background-image: url(#{components-base.$theme_root}/img/nok-beeldmerk.php?width=500&height=100&opacity=0.7&rotation=195&x=85%&y=100%&variant=diapositief);
+    }
+  }
   .#{&}__inner {
   }
 }

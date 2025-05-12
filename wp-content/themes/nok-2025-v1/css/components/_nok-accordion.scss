@@ -2,90 +2,16 @@
 @use "shared" as components-base;
 @use "../nok-variables";
 
-// Collapsible accordion component
+// Collapsible accordion component using native <details> element
 
-.nok-accordion {
-  display: flex;
-  flex-direction: column;
-  &__horizontal {
-    flex-direction: row;
-  }
-  > :first-child {
-    flex: 0 0 auto;
-    cursor: pointer;// Accordion icon
-    display: flex;
-    justify-content: space-between;
-    &:hover {
-      color: var(--text-color--hover);
-    }
-    &::after {
-      justify-self: flex-end;
-      flex-shrink: 0;
-      width: components-base.$accordion-icon-width;
-      height: components-base.$accordion-icon-width;
-      margin-left: auto;
-      content: "";
-      @include components-base.accordion-button-icon(false);
-      mask-size: cover;
-      background-color: var(--text-color, var(--bg-color--contrast));
-      @include components-base.transition-properties(transform) {
-        transform-origin: center;
-        transition: transform calc(var(--animation-duration--in, 750ms) * .75) cubic-bezier(0.16, 1, 0.3, 1);
-      }
-    }
-  }
-  &.open > :first-child::after {
-    @include components-base.transition-properties(transform) {
-      transform: rotate(180deg);
-    }
-    @include components-base.accordion-button-icon(true);
-  }
-  > :last-child {
-    flex: 0 1 auto;
-    overflow: hidden;
-    @include components-base.transition-properties(height) {
-      transition: height var(--animation-duration--in, 750ms) cubic-bezier(0.16, 1, 0.3, 1);
-    }
-  }
-  @each $breakpoint, $value in components-base.$grid-breakpoints {
-    @include components-base.media-breakpoint-up($breakpoint) {
-      &[data-opened-at="#{$breakpoint}"], [data-opened-at="#{$breakpoint}"] > & {
-        > :first-child {
-          pointer-events: none !important;
-          cursor: default !important;
-          &::after {
-            display: none;
-          }
-        }
-        > :last-child {
-          height: auto !important;
-          transition: none !important;
-        }
-      }
-    }
-    @include components-base.media-breakpoint-down($breakpoint) {
-      &[data-opened-at="#{$breakpoint}"], [data-opened-at="#{$breakpoint}"] > & {
-        border-bottom: 1px solid oklch(from var(--text-base) l c h / var(--global-text-alpha-value, 0.5));
-      }
-    }
-  }
-  &:not(.open) {
-    > :last-child {
-      height: 0;
-    }
-  }
-}
-
-nok-accordions {
-  display: grid;
-  @include components-base.nok-grid-gap;
-
+nok-accordion {
   details, summary {
     margin: 0;
     padding: 0;
     border: none;
     background: none;
     overflow: clip;
+    align-self: self-start;
   }
   details {
     will-change: height;
@@ -148,6 +74,33 @@ nok-accordions {
       }
       &::details-content {
         height: auto;
+      }
+    }
+
+    //Breakpoint-related open states
+    @each $breakpoint, $value in components-base.$grid-breakpoints {
+      @include components-base.media-breakpoint-up($breakpoint) {
+        &[data-opened-at="#{$breakpoint}"] {
+          display: contents;
+          .accordion-content,
+          &::details-content {
+            height: auto;
+            display: contents;
+          }
+
+          summary {
+            pointer-events: none !important;
+            cursor: auto !important;
+            user-select: auto !important;
+
+            &::after {
+              display: none;
+              visibility: collapse;
+            }
+
+          }
+
+        }
       }
     }
   }

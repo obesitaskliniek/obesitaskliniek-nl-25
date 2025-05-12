@@ -4,6 +4,7 @@
 @use "tools/nok-rfs";
 
 $prefix : 'nok';
+$theme_root : "https://dev.obesitaskliniek.nl/wp-content/themes/nok-2025-v1/";
 $padding-base: 1.5rem;
 $default-border-radius: math.div(math.round((math.div($padding-base, 4)) * 10), 10);
 $default-border-radius--large: math.round($default-border-radius * 2);
