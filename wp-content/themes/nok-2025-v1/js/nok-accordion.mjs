@@ -1,151 +1,215 @@
+import {isVisibleNow} from "./modules/hnl.helpers.mjs";
+import {ViewportScroller} from "./helper.ensure-visibility.mjs";
+/**
+ * This is a polyfill for the <details> element,
+ * intended for browsers that don't support the CSS property `interpolate-size: allow-keywords`
+ *
+ * Taken from https://css-tricks.com/how-to-animate-the-details-element-using-waapi/
+ * Modified by hnldesign @ 5-2025
+ */
 export const NAME = 'accordion';
 
-const CSSSupport = typeof CSS !== 'undefined'
-    && CSS.supports('interpolate-size', 'allow-keywords');
+const CSSSupport = CSS ? CSS.supports('interpolate-size', 'allow-keywords') : false;
 
 const AccordionGroups = new Map();
-const transition = {
-  duration: 750,
-  easing: 'cubic-bezier(0.16, 1, 0.3, 1)'
-};
+const AccordionInstances = new WeakMap();
+const transitionDuration = 750;
+const transitionEasing = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+/**
+ * A group holds:
+ *  - busy:     boolean
+ *  - accordions: Set<HTMLElement>
+ */
+function makeGroup() {
+  return {
+    busy: false,
+    accordions: new Set(),
+  };
+}
 
 class Accordion {
-  constructor(detailsEl) {
-    this.el           = detailsEl;
-    this.summary      = detailsEl.querySelector('summary');
-    this.content      = detailsEl.querySelector('.accordion-content');
-    this.name         = detailsEl.getAttribute('name');        // original name, or null
-    this.groupKey     = this.name || detailsEl;
-    this.group        = this._getOrCreateGroup(this.groupKey);
-    this.animation    = null;
-    this.isBusy       = false;
-    this.forcedByBP   = false;                                 // track if we’re in “forced” mode
+  constructor(el) {
+    // Store the <details> element
+    this.el = el;
 
-    // register
-    this.group.add(this);
-    this.summary.addEventListener('click', e => this.toggle(e));
+    // Start observing the element
+    this._visibilityObserver = new ViewportScroller(el, {
+      behavior: 'smooth',    // or 'auto'
+      extraOffset: 10        // e.g. leave 10px of breathing room
+    });
 
-    // breakpoint-driven open/close
-    const bp = detailsEl.dataset.openedAt;
-    if (bp) {
-      document.addEventListener('breakPointChange', e => {
-        const shouldOpen = e.detail.matchesAll.includes(bp);
+    if (!CSSSupport) {
+      // Store the <summary> element
+      this.summary = el.querySelector('summary');
+      // Store the <div class="content"> element
+      this.content = el.querySelector('.accordion-content');
+      // Store the animation object (so we can cancel it if needed)
+      this.animation = null;
+      // Store if the element is closing
+      this.isClosing = false;
+      // Store if the element is expanding
+      this.isExpanding = false;
+      // Detect user clicks on the summary element
+      this.summary.addEventListener('click', (e) => this.toggle(e));
+      // Setup state object
+      AccordionInstances.set(this.el, this);
+      // Get the name, if any, of the accordion
+      this.name = this.el.getAttribute('name');
 
-        if (shouldOpen && !this.el.open) {
-          this._instantOpen();
-        }
-        if (!shouldOpen && this.forcedByBP) {
-          this._instantClose();
-        }
-      });
-
-      // initial kick-start based on the current global breakpoint snapshot
-      if (window.__BREAKPOINT__.matchesAll.includes(bp)) {
-        this._instantOpen();
+      // new, correct Map‐based code
+      this.groupRef = this.name || this.el;
+      let group = AccordionGroups.get(this.groupRef);
+      if (!group) {
+        group = makeGroup();
+        AccordionGroups.set(this.groupRef, group);
       }
+      group.accordions.add(this.el);
+      this.group = group;    // store ref for easy access later
+
+      // Track if the accordion has been opened after initialization
+      this.opened = this.el.open || false;
+    } else {
+      // Listen for native event to track if the accordion is fully visible
+      this.el.addEventListener('toggle', (e) => this.focus(e));
     }
   }
 
-  _getOrCreateGroup(key) {
-    if (!AccordionGroups.has(key)) AccordionGroups.set(key, new Set());
-    return AccordionGroups.get(key);
+  /**
+   * Handle native <details> toggle: after the open transition ends,
+   * scroll into view if needed, but cancel if the user scrolls first.
+   * @private
+   */
+  focus() {
+    if (!this.el.open) return;
+
+    const onTransitionEnd = () => {
+      this._visibilityObserver.ensureVisible();
+    };
+    const onScroll = () => {
+      this.el.removeEventListener('transitionend', onTransitionEnd);
+    };
+
+    // Listen once for transitionend on this element
+    this.el.addEventListener('transitionend', onTransitionEnd, { once: true });
+    // If user scrolls before transition completes, cancel the visibility ensure
+    window.addEventListener('scroll', onScroll, { once: true });
   }
 
-  _instantOpen() {
-    // remove native name to avoid mutual‐exclusion
-    if (this.name) this.el.removeAttribute('name');
-    this.forcedByBP = true;
-    this._finish(true);
-  }
-  _instantClose() {
-    this.forcedByBP = false;
-    this._finish(false);
-    // restore the original name so native behavior is back in play
-    if (this.name) this.el.setAttribute('name', this.name);
-  }
-
-  toggle(e) {
-    e.preventDefault();
-    if (this.groupBusy()) return;
-    this.el.style.overflow = 'hidden';
-
-    const isOpening = !this.el.open && !this.isBusy;
-    if (isOpening)     this._closeOthersThenOpen();
-    else               this._animate(false);
-
-  }
-
-  _closeOthersThenOpen() {
-    if (this.group.size > 1) {
-      // temporarily disable native mutual-exclusion
-      if (this.name) this.el.removeAttribute('name');
-      for (const other of this.group) {
-        if (other !== this && other.el.open) {
-          other._animate(false);
-        }
-      }
-    }
-    this._animate(true);
-  }
-
-  groupBusy() {
-    for (const acc of this.group) {
-      if (acc.isBusy) return true;
-    }
-    return false;
-  }
-
-  _animate(expand) {
-    // cancel any running animation
+  animateHeight(startH, endH, onfinish) {
+    // Stop any running animations
     this.animation?.finish();
-    this.isBusy = true;
-
-    // prepare heights
-    const startH = `${this.el.offsetHeight}px`;
-    if (expand) {
-      this.el.open = true;
-      // Force layout
-      this.content.offsetHeight;
-    }
-    const endH = expand
-        ? `${this.summary.offsetHeight + this.content.offsetHeight}px`
-        : `${this.summary.offsetHeight}px`;
-
+    // Set group or individual accordion as busy
+    this.group.busy = true;
+    // Start a WAAPI animation
     this.animation = this.el.animate(
-        { height: [ startH, endH ] },
-        { duration: transition.duration,
-          easing:   transition.easing,
-          fill:     'forwards' }
+        { height: [startH, endH] },
+        { duration: transitionDuration, easing: transitionEasing, fill: 'forwards' }
     );
-
     this.animation.onfinish = () => {
-      this._finish(expand);
+      // Set group or individual accordion as no longer busy
+      this.group.busy = false;
+      // Initiate callback
+      onfinish();
     };
   }
 
-  _finish(open) {
-    window.requestAnimationFrame(() =>{
-      this.el.open = open;
-      this.summary.setAttribute('aria-expanded', open);
-      this.el.style.height   = '';
-      this.el.style.overflow = '';
+  toggle(e) {
+    // Stop default behaviour from the browser
+    e.preventDefault();
+    // Early return if the group is busy
+    if (this.group.busy) return;
+    // Add an overflow on the <details> to avoid content overflowing
+    this.el.style.overflow = 'hidden';
+    // Check if the element is being closed or is already closed
+    if (this.isClosing || !this.el.open) {
+      this.open();
+      this.focus();
+      // Check if the element is being openned or is already open
+    } else if (this.isExpanding || this.el.open) {
+      this.collapse();
+    }
+  }
 
-      // only restore name when _not_ forced open
-      if (!this.forcedByBP && this.name) {
-        this.el.setAttribute('name', this.name);
+  open() {
+    // Check if there are siblings that need to be closed first
+    if (this.group.accordions.size > 1) {
+      if (this.name) {
+        // Temporarily remove name attribute to prevent native browser auto-closing
+        this.el.removeAttribute('name');
       }
+      for (const otherEl of this.group.accordions) {
+        if (otherEl !== this.el && otherEl.open) {
+          AccordionInstances.get(otherEl).collapse();
+        }
+      }
+    }
 
-      this.isBusy    = false;
-      this.animation = null;
-    })
+    // Apply a fixed height on the element
+    this.el.style.height = `${this.el.offsetHeight}px`;
+    // Force the [open] attribute on the details element
+    this.el.open = true;
+    // Defer expand to second frame to allow layout to update - twice, to fix a layout bug in safari
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => this.expand());
+    });
+  }
+
+  collapse() {
+    // Set the element as "being closed"
+    this.isClosing = true;
+    this.el.classList.add('accordion-closing');
+
+    // Store the current height of the element
+    const startHeight = `${this.el.offsetHeight}px`;
+    // Calculate the height of the summary
+    const endHeight = `${this.summary.offsetHeight}px`;
+
+    // Start a WAAPI animation
+    this.animateHeight(startHeight, endHeight, () => this.onAnimationFinish(false));
+  }
+
+  expand() {
+    // Set the element as "being expanding"
+    this.isExpanding = true;
+    this.el.classList.remove('accordion-closing');
+
+    const startHeight = `${this.el.offsetHeight}px`;
+    // Calculate the open height of the element (summary height + content height)
+    const endHeight = `${this.summary.offsetHeight + this.content.offsetHeight}px`;
+
+    // Start a WAAPI animation
+    this.animateHeight(startHeight, endHeight, () => this.onAnimationFinish(true));
+  }
+
+  onAnimationFinish(open) {
+    // Set the open attribute based on the parameter
+    this.el.open = open;
+    // Mirror the <details> state in aria-expanded on the <summary>
+    this.summary.setAttribute('aria-expanded', String(open));
+    // Clear the stored animation
+    this.animation = null;
+    // Reset isClosing & isExpanding
+    this.isClosing = false;
+    this.el.classList.remove('accordion-closing');
+    this.isExpanding = false;
+    // Remove the overflow hidden and the fixed height
+    this.el.style.height = this.el.style.overflow = '';
+    // Restore group name for native browser functionality
+    if (this.name) {
+      // Restore name attribute after allowing toggle (optional, for semantics)
+      this.el.setAttribute('name', this.name);
+    }
   }
 }
 
-export function init(elements) {
+export function init(elements){
+  elements.forEach(element => {
+    element.querySelectorAll('details').forEach((details) => {
+      new Accordion(details);
+    })
+  });
   if (CSSSupport) {
-    return 'Browser supports <details> natively—no script needed.';
+    return 'No need for polyfill - browser has native support.'
   }
-  elements.forEach(root =>
-      root.querySelectorAll('details').forEach(d => new Accordion(d))
-  );
 }
