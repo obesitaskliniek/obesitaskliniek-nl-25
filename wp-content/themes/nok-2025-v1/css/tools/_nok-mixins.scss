@@ -225,6 +225,7 @@
     &.grabbed-direct + .fake-scrollbar {
       .fake-scrollbar-thumb {
         background-color: var(--scrollbar-handle--active, #FFFF);
+        border-color: var(--scrollbar-handle--active, #FFFF);
       }
     }
     &.grabbed-scrollbar + .fake-scrollbar {

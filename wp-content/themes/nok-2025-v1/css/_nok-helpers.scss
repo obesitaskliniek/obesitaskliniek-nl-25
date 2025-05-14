@@ -261,18 +261,6 @@ $alphas: (
 //    margin-left: #{($i * nok-variables.$padding-base)};
 //  }
 //}
-$padding-base-values: (
-        0 : 0rem,
-        0_5: #{(.5 * nok-variables.$padding-base)},
-        1: #{(1 * nok-variables.$padding-base)},
-        //1_5: #{(1.5 * nok-variables.$padding-base)},
-        2: #{(1.5 * nok-variables.$padding-base)},
-        3: #{(2 * nok-variables.$padding-base)},
-        4: #{(3 * nok-variables.$padding-base)},
-        5: #{(4 * nok-variables.$padding-base)},
-        grid-gap: var(--grid-gap),
-        section-padding: var(--nok-padding-section-sides),
-);
 
 $utilities: (
         "gap": (
@@ -281,7 +269,7 @@ $utilities: (
                 no-prefix: true,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-gap,
-                values: $padding-base-values
+                values:nok-variables.$padding-base-values
         ),
         "grid-gap": (
                 css-var: true,
@@ -289,7 +277,7 @@ $utilities: (
                 no-prefix: true,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-grid-gap,
-                values: $padding-base-values
+                values:nok-variables.$padding-base-values
         ),
         "column-gap": (
                 css-var: true,
@@ -297,101 +285,101 @@ $utilities: (
                 no-prefix: true,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-column-gap,
-                values: $padding-base-values
+                values:nok-variables.$padding-base-values
         ),
         "padding": (
                 property: padding,
                 responsive: true,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-p,
-                values: $padding-base-values
+                values:nok-variables.$padding-base-values
         ),
         "padding-top": (
                 property: padding-top,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-pt,
-                values: $padding-base-values
+                values:nok-variables.$padding-base-values
         ),
         "padding-right": (
                 property: padding-right,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-pr,
-                values: $padding-base-values
+                values:nok-variables.$padding-base-values
         ),
         "padding-bottom": (
                 property: padding-bottom,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-pb,
-                values: $padding-base-values
+                values:nok-variables.$padding-base-values
         ),
         "padding-left": (
                 property: padding-left,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-pl,
-                values: $padding-base-values
+                values:nok-variables.$padding-base-values
         ),
         "padding-x": (
                 property: padding-right padding-left,
                 responsive: true,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-px,
-                values: $padding-base-values
+                values:nok-variables.$padding-base-values
         ),
         "padding-y": (
                 property: padding-top padding-bottom,
                 responsive: true,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-py,
-                values: $padding-base-values
+                values:nok-variables.$padding-base-values
         ),
         "margin": (
                 property: margin,
                 responsive: true,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-m,
-                values: $padding-base-values
+                values:nok-variables.$padding-base-values
         ),
         "margin-top": (
                 property: margin-top,
                 responsive: true,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-mt,
-                values: $padding-base-values
+                values:nok-variables.$padding-base-values
         ),
         "margin-end": (
                 property: margin-right,
                 responsive: true,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-me,
-                values: $padding-base-values
+                values:nok-variables.$padding-base-values
         ),
         "margin-bottom": (
                 property: margin-bottom,
                 responsive: true,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-mb,
-                values: $padding-base-values
+                values:nok-variables.$padding-base-values
         ),
         "margin-start": (
                 property: margin-left,
                 responsive: true,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-ms,
-                values: $padding-base-values
+                values:nok-variables.$padding-base-values
         ),
         "margin-x": (
                 property: margin-right margin-left,
                 responsive: true,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-mx,
-                values: $padding-base-values
+                values:nok-variables.$padding-base-values
         ),
         "margin-y": (
                 property: margin-top margin-bottom,
                 responsive: true,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-my,
-                values: $padding-base-values
+                values:nok-variables.$padding-base-values
         ),
         "border-bottom": (
                 responsive: false,

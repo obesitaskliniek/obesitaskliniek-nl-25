@@ -1,5 +1,4 @@
-import {isVisibleNow} from "./modules/hnl.helpers.mjs";
-import {ViewportScroller} from "./helper.ensure-visibility.mjs";
+import {ViewportScroller} from "./modules/helper.ensure-visibility.mjs";
 /**
  * This is a polyfill for the <details> element,
  * intended for browsers that don't support the CSS property `interpolate-size: allow-keywords`
@@ -13,8 +12,6 @@ const CSSSupport = CSS ? CSS.supports('interpolate-size', 'allow-keywords') : fa
 
 const AccordionGroups = new Map();
 const AccordionInstances = new WeakMap();
-const transitionDuration = 750;
-const transitionEasing = 'cubic-bezier(0.16, 1, 0.3, 1)';
 
 /**
  * A group holds:
@@ -33,10 +30,14 @@ class Accordion {
     // Store the <details> element
     this.el = el;
 
+    this.computedStyle = window.getComputedStyle(this.el);
+    this.transitionDuration = parseInt(this.computedStyle.getPropertyValue('--animation-duration')) || 750;
+    this.transitionEasing = this.computedStyle.getPropertyValue('--animation-timing') || 'cubic-bezier(0.16, 1, 0.3, 1)';
+
     // Start observing the element
-    this._visibilityObserver = new ViewportScroller(el, {
+    this._visibilityCorrector = new ViewportScroller(el, {
       behavior: 'smooth',    // or 'auto'
-      extraOffset: 10        // e.g. leave 10px of breathing room
+      extraOffset: 20        // e.g. leave 20px of breathing room
     });
 
     if (!CSSSupport) {
@@ -70,8 +71,8 @@ class Accordion {
       // Track if the accordion has been opened after initialization
       this.opened = this.el.open || false;
     } else {
-      // Listen for native event to track if the accordion is fully visible
-      this.el.addEventListener('toggle', (e) => this.focus(e));
+      // Handle visibility for native <details> elements
+      this.el.addEventListener('toggle', (e) => this.maintainVisibility());
     }
   }
 
@@ -80,20 +81,19 @@ class Accordion {
    * scroll into view if needed, but cancel if the user scrolls first.
    * @private
    */
-  focus() {
-    if (!this.el.open) return;
+  maintainVisibility() {
 
     const onTransitionEnd = () => {
-      this._visibilityObserver.ensureVisible();
+      if (!this.el.open) return;
+      this._visibilityCorrector.ensureVisible();
     };
-    const onScroll = () => {
-      this.el.removeEventListener('transitionend', onTransitionEnd);
-    };
-
     // Listen once for transitionend on this element
     this.el.addEventListener('transitionend', onTransitionEnd, { once: true });
+
     // If user scrolls before transition completes, cancel the visibility ensure
-    window.addEventListener('scroll', onScroll, { once: true });
+    window.addEventListener('scroll', () => {
+      this.el.removeEventListener('transitionend', onTransitionEnd);
+    }, { once: true });
   }
 
   animateHeight(startH, endH, onfinish) {
@@ -104,7 +104,7 @@ class Accordion {
     // Start a WAAPI animation
     this.animation = this.el.animate(
         { height: [startH, endH] },
-        { duration: transitionDuration, easing: transitionEasing, fill: 'forwards' }
+        { duration: this.transitionDuration, easing: this.transitionEasing, fill: 'forwards' }
     );
     this.animation.onfinish = () => {
       // Set group or individual accordion as no longer busy
@@ -124,7 +124,6 @@ class Accordion {
     // Check if the element is being closed or is already closed
     if (this.isClosing || !this.el.open) {
       this.open();
-      this.focus();
       // Check if the element is being openned or is already open
     } else if (this.isExpanding || this.el.open) {
       this.collapse();
@@ -132,6 +131,7 @@ class Accordion {
   }
 
   open() {
+    this.currentScrollY = window.scrollY;
     // Check if there are siblings that need to be closed first
     if (this.group.accordions.size > 1) {
       if (this.name) {
@@ -199,6 +199,10 @@ class Accordion {
     if (this.name) {
       // Restore name attribute after allowing toggle (optional, for semantics)
       this.el.setAttribute('name', this.name);
+    }
+    if (open && this.currentScrollY === window.scrollY) {
+      // Maintain visibility, if user hasn't scrolled in the meantime
+      this._visibilityCorrector.ensureVisible();
     }
   }
 }

@@ -16,6 +16,10 @@ hnlLogger.info(NAME, 'Starting up...');
 
 window.exports = "object" == typeof window.exports ? window.exports : {}; //hack for scripts loaded as modules (e.g. AOS)
 
+eventHandler.docLoaded(function(){
+  //enable transitions once everything's done, to prevent weird animation FOUCs
+  document.body.classList.add('__enable-transitions');
+})
 eventHandler.docReady(function(){
 
   //toggle classes
@@ -36,9 +40,6 @@ eventHandler.docReady(function(){
 
   //https://stackoverflow.com/questions/3885018/active-pseudo-class-doesnt-work-in-mobile-safari
   document.addEventListener('touchstart', function() {},false);
-
-  //enable transitions once
-  document.body.classList.add('__enable-transitions');
 
   //scrollable
   document.querySelectorAll('.nok-scrollable__horizontal, .nok-scrollable__vertical').forEach(setupFakeScrollbar);

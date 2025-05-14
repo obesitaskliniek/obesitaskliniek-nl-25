@@ -17,7 +17,7 @@ const NOK_THEME_ROOT = 'https://dev.obesitaskliniek.nl/wp-content/themes/nok-202
     <link rel="stylesheet" href="./color_tests-v2.css?cache=<?= time(); ?>" crossorigin="anonymous">
     <link rel="stylesheet" href="./nok-components.css?cache=<?= time(); ?>" crossorigin="anonymous">
 
-    <link rel="modulepreload" href="../js/mobileConsole/hnl.mobileconsole.js?cache=<?= time(); ?>">
+    <!--<link rel="modulepreload" href="../js/mobileConsole/hnl.mobileconsole.js?cache=<?= time(); ?>">
     <script src="../js/mobileConsole/hnl.mobileconsole.js?cache=<?= time(); ?>"></script><!--//-->
     <link rel="modulepreload" href="../js/entrypoint.min.mjs?cache=<?= time(); ?>">
     <script type="module" src="../js/entrypoint.min.mjs?cache=<?= time(); ?>" defer></script>
@@ -419,7 +419,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
 <nok-section>
     <div class="nok-section__inner--stretched">
         <div class="nok-section__inner">
-            <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start">
+            <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start nok-column-gap-3">
                 <div class="nok-layout-flex-column nok-align-items-stretch">
                     <h1>
                         Ons veelzijdige team van specialisten
@@ -456,19 +456,6 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                                 </div>
                             </div>
                         </div>
-                    </nok-square-block>
-
-                    <nok-square-block class="nok-p-2
-                    nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast">
-                            <blockquote class="nok-square-block__text">
-                                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos
-                                vero. Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas, quia
-                                reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit!"
-                            </blockquote>
-                            <div class="nok-layout-flex-column nok-align-items-start no-gap">
-                                <strong class="nok-fs-2">John Doe</strong>
-                                <p>Internist</p>
-                            </div>
                     </nok-square-block>
                 </div>
 
@@ -520,7 +507,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
     <div class="nok-section__inner--stretched nok-my-0 nok-px-0 nok-border-radius-0
     nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue nok-dark-text-white">
         <div class="nok-section__inner nok-page-footer__inner">
-            <div class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start">
+            <div class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start nok-column-gap-3">
                 <nok-square-block class="nok-bg-body nok-dark-bg-body--darker nok-alpha-10 nok-alpha-10">
                     <div class="nok-square-block__heading">
                         <h3 class="fw-bold">Vragen?</h3>
