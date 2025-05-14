@@ -87,3 +87,18 @@ $section-max-widths: (
     xxxl: 1572px
 ) !default;
 @include nok-utilities.assert-ascending($section-max-widths, "$section-max-widths");
+
+$padding-base-values: (
+        0 : 0rem,
+        0_5: #{(.5 * $padding-base)},
+        1: #{(1 * $padding-base)},
+    //1_5: #{(1.5 * $padding-base)},
+        2: #{(1.5 * $padding-base)},
+        3: #{(2 * $padding-base)},
+        4: #{(3 * $padding-base)},
+        5: #{(4 * $padding-base)},
+        gap: var(--gap),
+        grid-gap: var(--grid-gap),
+        column-gap: var(--column-gap),
+        section-padding: var(--nok-padding-section-sides),
+);

@@ -1,5 +1,5 @@
 import eventHandler from './modules/hnl.eventhandler.mjs';
-import {isVisibleNow} from "./modules/hnl.helpers.mjs";
+import {isVisible} from "./modules/hnl.helpers.mjs";
 
 export const NAME = "scrollBarEmulator";
 

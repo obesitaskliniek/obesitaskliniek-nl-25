@@ -25,7 +25,7 @@ nok-square-block {
   @include components-base.nok-border-radius('large');
   //line-height: var(--#{components-base.$prefix}-default-line-height, 1.25);
 
-  padding: var(--grid-gap, #{(1.5 * components-base.$padding-base)});
+  padding: #{map-get(components-base.$padding-base-values, 2)};
   //@include components-base.nok-subtle-shadow;
   background-color: var(--background-color);
 
