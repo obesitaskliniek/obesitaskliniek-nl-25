@@ -461,7 +461,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
 
                 <div class="nok-layout-grid nok-layout-grid__1-column" data-requires="./nok-accordion.mjs?cache=<?= time(); ?>">
                         <nok-accordion>
-                            <details class="nok-bg-white nok-dark-bg-darkerblue nok-rounded-border nok-text-contrast">
+                            <details class="nok-bg-white nok-dark-bg-darkerblue nok-dark-text-white nok-rounded-border nok-text-contrast">
                                 <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold">Solo</summary>
                                 <div class="accordion-content nok-p-2 nok-pt-0">
                                     <p class="nok-mb-1">
@@ -480,7 +480,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                         $specialisten = array('Arts', 'Internist', 'Diëtist', 'Psycholoog', 'Bewegingsdeskundige', 'Chirurg');
                         foreach ($specialisten as $specialist) : ?>
                         <nok-accordion>
-                            <details class="nok-bg-white nok-dark-bg-darkerblue nok-rounded-border nok-text-contrast" name="<?= $accordion_group;?>" <?= $x == 0 ? 'open' : ''; ?>>
+                            <details class="nok-bg-white nok-dark-bg-darkerblue nok-dark-text-white nok-rounded-border nok-text-contrast" name="<?= $accordion_group;?>" <?= $x == 0 ? 'open' : ''; ?>>
                                 <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold"><?= $specialist; ?></summary>
                                 <div class="accordion-content nok-p-2 nok-pt-0">
                                     <p class="nok-mb-1">

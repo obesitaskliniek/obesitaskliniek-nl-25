@@ -1,4 +1,5 @@
 @use "../nok-variables";
+@use "sass:math";
 @use 'sass:list';
 @use 'sass:map';
 
@@ -93,7 +94,7 @@
 // */
 @mixin nok-inline-link {
   --active-color: #000;
-  --hover-transition-time: 0.15s;
+  --hover-transition-time: math.div(nok-variables.$animation-duration,2);
   --hover-color: var(--text-color--hover, inherit);
   --underline-height: 0.25ex;
   //noinspection CssInvalidFunction
@@ -146,6 +147,7 @@
   $scrollbarHeight: 6px,
   $scrollbarHandle: var(--text-color, #CCC),
   $scrollbarHandle_active: var(--text-color--hover, #FFF),
+  $scrollbarHandle_active_outline: oklch(from var(--text-color--hover, #FFF) l c h / 0.5),
   $scrollbarTrack: oklch(from var(--nok-body) l c h / 0.25)
 ) {
   &, + .fake-scrollbar {
@@ -156,6 +158,17 @@
   }
   &::-webkit-scrollbar {
     height: var(--scrollbar-height, 6px);
+  }
+  @include transition-properties(opacity) {
+    + .fake-scrollbar {
+      transition: opacity nok-variables.$animation-duration ease-in-out;
+      opacity: 0.5;
+    }
+    &:hover + .fake-scrollbar,
+    + .fake-scrollbar:hover {
+      transition-duration: math.div(nok-variables.$animation-duration,2);
+      opacity: 1;
+    }
   }
 
   &::-webkit-scrollbar-track {
@@ -217,22 +230,19 @@
         will-change: transform;
         contain: strict; // Prevents Main Thread Overload
         backface-visibility: hidden;
-      }
-    }
-    + .fake-scrollbar:hover,
-    &:hover + .fake-scrollbar,
-    &.grabbed-scrollbar + .fake-scrollbar,
-    &.grabbed-direct + .fake-scrollbar {
-      .fake-scrollbar-thumb {
-        background-color: var(--scrollbar-handle--active, #FFFF);
-        border-color: var(--scrollbar-handle--active, #FFFF);
+        &:hover {
+          background-color: var(--scrollbar-handle--active, #FFFF);
+          border-color: var(--scrollbar-handle--active, #FFFF);
+        }
       }
     }
     &.grabbed-scrollbar + .fake-scrollbar {
       overflow: visible;
       .fake-scrollbar-thumb {
         cursor: grabbing;
-        outline: 5px solid #FFF8;
+        background-color: var(--scrollbar-handle--active, #FFFF);
+        border-color: var(--scrollbar-handle--active, #FFFF);
+        outline: 5px solid $scrollbarHandle_active_outline;
       }
     }
   }
@@ -381,9 +391,14 @@
     will-change: $property-hint;
   }
   @media (prefers-reduced-motion: no-preference) {
-    @at-root body.__enable-transitions & {
+    @at-root body.__enable-transitions &, body.no-js & {
       @content;
     }
+  }
+}
+@mixin no-transitions() {
+  @at-root body:not(.__enable-transitions) & {
+    @content;
   }
 }
 

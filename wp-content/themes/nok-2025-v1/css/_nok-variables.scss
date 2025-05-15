@@ -4,31 +4,33 @@
 @use "tools/nok-rfs";
 
 $prefix : 'nok';
-$theme_root : "https://dev.obesitaskliniek.nl/wp-content/themes/nok-2025-v1/";
-$padding-base: 1.5rem;
-$default-border-radius: math.div(math.round((math.div($padding-base, 4)) * 10), 10);
-$default-border-radius--large: math.round($default-border-radius * 2);
-$heading-font-family: "Realist", Arial, Helvetica, sans-serif;
-$heading-font-size-adjust: 0.525; //Realist as relative to Arial
-$text-font-family: "Inter", Arial, Helvetica, sans-serif;
-$text-font-size-adjust: 0.514; //Inter as relative to Arial
-$font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
+$theme_root :                   "https://dev.obesitaskliniek.nl/wp-content/themes/nok-2025-v1/";
+$padding-base:                  1.5rem;
+$default-border-radius:         math.div(math.round((math.div($padding-base, 4)) * 10), 10);
+$default-border-radius--large:  math.round($default-border-radius * 2);
+$heading-font-family:           "Realist", Arial, Helvetica, sans-serif;
+$heading-font-size-adjust:      0.525; //Realist as relative to Arial
+$text-font-family:              "Inter", Arial, Helvetica, sans-serif;
+$text-font-size-adjust:         0.514; //Inter as relative to Arial
+$font-family-monospace:         SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
 
-$default-line-height: 1.5;
-$default-heading-line-height: 1.25;
+$default-line-height:           1.5;
+$default-heading-line-height:   1.25;
 
-$font-size-base:              1rem !default;
-$h1-font-size:                $font-size-base * 2.5 !default;
-$h2-font-size:                $font-size-base * 2 !default;
-$h3-font-size:                $font-size-base * 1.75 !default;
-$h4-font-size:                $font-size-base * 1.5 !default;
-$h5-font-size:                $font-size-base * 1.25 !default;
-$h6-font-size:                $font-size-base !default;
-$font-size-buttons:           1.15rem;
+$font-size-base:                1rem !default;
+$h1-font-size:                  $font-size-base * 2.5 !default;
+$h2-font-size:                  $font-size-base * 2 !default;
+$h3-font-size:                  $font-size-base * 1.75 !default;
+$h4-font-size:                  $font-size-base * 1.5 !default;
+$h5-font-size:                  $font-size-base * 1.25 !default;
+$h6-font-size:                  $font-size-base !default;
+$font-size-buttons:             1.15rem;
 
 $z-stack-top: 100;
 
 $accordion-icon-width:          1.25rem !default;
+
+$animation-duration:            0.3s;
 
 $exposed-variables: (
     "html-font-size": 1em,
