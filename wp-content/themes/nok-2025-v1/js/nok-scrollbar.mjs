@@ -1,5 +1,6 @@
 import eventHandler from './modules/hnl.eventhandler.mjs';
 import {isVisible} from "./modules/hnl.helpers.mjs";
+import mediaInfo from "./modules/helper.media-info.mjs";
 
 export const NAME = "scrollBarEmulator";
 
@@ -262,7 +263,7 @@ export function setupFakeScrollbar(scrollElement) {
   // ────────────────────────────────────────────────────────────────────────────────
   // “Autoscroll” mode: when idle, snap-scroll every N ms
   // ────────────────────────────────────────────────────────────────────────────────
-  if (scrollElement.dataset.autoscroll === 'true') {
+  if (scrollElement.dataset.autoscroll === 'true' && !mediaInfo('prefers-reduced-motion')) {
     const interval   = Math.max(1000, +scrollElement.dataset.interval || 10000);
     const children   = Array.from(scrollElement.children);
     let timerId = null; let waitTimer = null;
