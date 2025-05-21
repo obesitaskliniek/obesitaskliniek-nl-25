@@ -91,17 +91,17 @@ nok-hero {
         }
       }
 
-      foreignObject {
-        img {
-          max-width: 100%;
-          background-color: hsla(var(--#{components-base.$prefix}-green) / 0.5);
-          object-fit: cover;
-          object-position: 40% 50%;
-          @include components-base.media-breakpoint-down(xl) {
-            object-position: 60% 50%;
-          }
-        }
-      }
+      //foreignObject {
+      //  img {
+      //    max-width: 100%;
+      //    background-color: hsla(var(--#{components-base.$prefix}-green) / 0.5);
+      //    object-fit: cover;
+      //    object-position: 40% 50%;
+      //    @include components-base.media-breakpoint-down(xl) {
+      //      object-position: 60% 50%;
+      //    }
+      //  }
+      //}
     }
 
     article, figure {
