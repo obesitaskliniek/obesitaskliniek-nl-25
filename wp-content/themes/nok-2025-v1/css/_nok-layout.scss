@@ -70,14 +70,65 @@
       > :last-child {
         grid-column-end: span max(1, calc(var(--grid-columns) - 2));
       }
-
     }
     //"fill-fill" is another layout pattern, which fills both children 50/50. See 2-column layout above; it's identical
+
+    &.overlap {
+      &-middle { //uneven column counts work best
+        --overlap: 1; //amount of columns overlap
+        //negative or positive --offset values shift the overlapping point left or right
+        --offset-final: clamp((-1 * var(--grid-columns)), var(--offset, 0), var(--grid-columns)); //clamp to avoid negative values
+        > :first-child {
+          grid-row: 1;
+          grid-column-start: 1;
+          grid-column-end: calc(((var(--grid-columns, 5) / 2) + var(--overlap)) + var(--offset-final));
+        }
+
+        > :last-child {
+          grid-row: 1;
+          grid-column-start: calc((var(--grid-columns, 5) / 2 - max(0, var(--overlap) - 1)) + var(--offset-final));
+          grid-column-end: -1;
+        }
+
+        &.overlap-2 {
+          --overlap: 2;
+        }
+
+        //&.offset-1 {
+        //  --offset: 1;
+        //}
+        //
+        //&.offset--1 {
+        //  --offset: -1;
+        //}
+
+        @include nok-mixins.media-breakpoint-down(xl) {
+          &.no-overlap-to-xl {
+            > :first-child, > :last-child {
+              grid-row: auto;
+              grid-column: 1/-1;
+            }
+          }
+        }
+        @include nok-mixins.media-breakpoint-down(lg) {
+          &.no-overlap-to-lg {
+            > :first-child, > :last-child {
+              grid-row: auto;
+              grid-column: 1/-1;
+            }
+          }
+        }
+      }
+    }
 
     > * {
       // see https://stackoverflow.com/questions/43311943/prevent-content-from-expanding-grid-items
       //overflow: hidden;
       min-width: 0;
+    }
+
+    .new-row {
+      grid-column-start: 1;
     }
 
   }

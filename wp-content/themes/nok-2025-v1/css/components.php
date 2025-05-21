@@ -181,7 +181,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
     </nok-navigation-mobile>
 
     <nok-navigation-desktop>
-        <nok-navigation-top-row class="nok-section__inner--stretched  nok-bg-body nok-dark-bg-darkestblue nok-dark-text-white  nok-z-2">
+        <nok-navigation-top-row class="nok-section__inner--stretched  nok-bg-body nok-dark-bg-darkestblue nok-dark-text-white nok-z-2">
             <div class="nok-navigation-top-row__inner
             nok-section__inner nok-my-0">
                 <div>
@@ -252,7 +252,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
 </nok-top-navigation>
 
 <nok-hero class="nok-section">
-    <div class="nok-section__inner nok-hero__inner nok-my-0 nok-px-0 nok-border-radius-to-sm-0
+    <div class="nok-section__inner nok-hero__inner nok-mt-0 nok-px-0 nok-border-radius-to-sm-0
     nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10">
 
         <article class="nok-pl-section-padding nok-px-to-lg-section-padding">
@@ -309,7 +309,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                         </g>
                     </mask>
                 </defs>
-                <foreignObject width="100%" height="100%" mask="url(#image-mask)">
+                <foreignObject width="100%" height="100%" mask="url(#image-mask)" class="cover-image">
                     <?php $testimg = 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%20' . str_pad(rand(1, 59), 2, 0, STR_PAD_LEFT); ?>
                     <img src="<?= $testimg; ?>:400x0-25-0-0-center-0.jpg" width="1920" height="1281"
                          srcset="<?= $testimg; ?>:1920x0-65-0-0-center-0.jpg 1920w,
@@ -366,6 +366,150 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
 </nok-hero>
 
 <nok-section>
+    <div class="nok-section__inner">
+
+        <article class="nok-layout-grid nok-layout-grid__1-column nok-justify-items-center nok-column-gap-3 text-center
+                        nok-text-darkblue">
+            <h1>
+                Ons behandeltraject
+            </h1>
+            <p class="nok-fs-2 nok-text-wrap-balance">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure
+                perspiciatis quod, quos vero. Architecto, blanditiis est exercitationem illo
+                iusto magni nihil nulla.
+            </p>
+
+            <!-- Component: plaatje met half overlappend kader -->
+            <div class="nok-my-2 align-self-stretch
+                        text-start
+                        nok-layout-grid overlap-middle offset--1 nok-columns-7 no-overlap-to-lg nok-column-offset-0 nok-column-offset-xl--1
+                        nok-align-items-center">
+                <nok-square-block class="nok-bg-white nok-alpha-10 nok-my-2 nok-my-to-lg-0" data-shadow="true">
+                    <div class="nok-square-block__heading">
+                        <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-3 nok-fs-to-md-2">Stap 1</h2>
+                        <h1>Voor de operatie</h1>
+                    </div>
+                    <p class="nok-square-block__text nok-fs-2">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure
+                        perspiciatis quod, quos vero. Architecto, blanditiis est exercitationem illo
+                        iusto magni nihil nulla, quam quas, quia reprehenderit vel voluptatum.
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit!
+                    </p>
+                    <button class="nok-button nok-justify-self-start
+                nok-base-font nok-bg-darkblue nok-text-contrast" tabindex="0">
+                        De operatie
+                        </svg>
+                    </button>
+                </nok-square-block>
+                <div class="cover-image nok-rounded-border-large nok-invisible-to-lg align-self-stretch">
+                    <?php $testimg = 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%20' . str_pad(rand(1, 59), 2, 0, STR_PAD_LEFT); ?>
+                    <img src="<?= $testimg; ?>:400x0-25-0-0-center-0.jpg" width="1920" height="1281"
+                         srcset="<?= $testimg; ?>:1920x0-65-0-0-center-0.jpg 1920w,
+                             <?= $testimg; ?>:768x0-65-0-0-center-0.jpg 768w,
+                             <?= $testimg; ?>:320x0-65-0-0-center-0.jpg 320w,
+                             <?= $testimg; ?>:150x0-65-0-0-center-0.jpg 150w" sizes="(max-width: 575px) 100vw,
+                                 (min-width: 575px) 75vw,
+                                 (min-width: 768px) 84vw,
+                                 (min-width: 996px) 84vw,
+                                 (min-width: 1200px) 84vw" loading="lazy">
+                </div>
+            </div>
+
+            <!-- Component: plaatje met half overlappend kader -->
+            <div class="nok-my-2 align-self-stretch
+                        text-start
+                        nok-layout-grid overlap-middle offset--1 nok-columns-7 no-overlap-to-lg nok-column-offset-0 nok-column-offset-xl-1
+                        nok-align-items-center">
+                <div class="cover-image nok-rounded-border-large nok-invisible-to-lg align-self-stretch">
+                    <?php $testimg = 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%20' . str_pad(rand(1, 59), 2, 0, STR_PAD_LEFT); ?>
+                    <img src="<?= $testimg; ?>:400x0-25-0-0-center-0.jpg" width="1920" height="1281"
+                         srcset="<?= $testimg; ?>:1920x0-65-0-0-center-0.jpg 1920w,
+                             <?= $testimg; ?>:768x0-65-0-0-center-0.jpg 768w,
+                             <?= $testimg; ?>:320x0-65-0-0-center-0.jpg 320w,
+                             <?= $testimg; ?>:150x0-65-0-0-center-0.jpg 150w" sizes="(max-width: 575px) 100vw,
+                                 (min-width: 575px) 75vw,
+                                 (min-width: 768px) 84vw,
+                                 (min-width: 996px) 84vw,
+                                 (min-width: 1200px) 84vw" loading="lazy">
+                </div>
+                <nok-square-block class="nok-bg-white nok-alpha-10 nok-my-2 nok-my-to-lg-0" data-shadow="true">
+                    <div class="nok-square-block__heading">
+                        <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-3 nok-fs-to-md-2">Stap 2</h2>
+                        <h1>Nu aan de rechterkant</h1>
+                    </div>
+                    <p class="nok-square-block__text nok-fs-2">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure
+                        perspiciatis quod, quos vero. Architecto, blanditiis est exercitationem illo
+                        iusto magni nihil nulla, quam quas, quia reprehenderit vel voluptatum.
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit!
+                    </p>
+                    <button class="nok-button nok-justify-self-start
+                nok-base-font nok-bg-darkblue nok-text-contrast" tabindex="0">
+                        De operatie
+                        </svg>
+                    </button>
+                </nok-square-block>
+            </div>
+        </article>
+    </div>
+</nok-section>
+
+<nok-section>
+    <div class="nok-section__inner--stretched
+    nok-bg-darkblue nok-text-white">
+        <div class="nok-section__inner">
+
+            <article class="nok-layout-grid nok-layout-grid__2-column nok-align-items-start">
+                <h1 class="nok-span-all-columns-to-xxl">
+                    Het multidisciplinaire team
+                </h1>
+                <p class="new-row nok-span-all-columns-to-xxl">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos
+                    vero. Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas, quia
+                    reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit!
+                </p>
+
+                <!-- Component: drag-scrollable blokkengroep -->
+                <div class="nok-mt-2 align-self-stretch">
+                    <div class="nok-layout-grid nok-layout-grid__4-column
+                nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="false">
+                        <?php
+                        $aantal = 6;
+                        $specialisten = array('Arts', 'Internist', 'Diëtist', 'Psycholoog', 'Bewegingsdeskundige', 'Chirurg');
+                        $people_dir = dirname(__DIR__) . '/img/people';
+                        $images = array();
+                        if (is_dir($people_dir)) {
+                            $images = glob($people_dir . '/*.png');
+                            shuffle($images);
+                            $images = array_slice($images, 0, $aantal);
+                            foreach ($images as $image) {
+                                $filename = basename($image);
+                                $persoon = pathinfo($filename)['filename'];
+                                $afbeelding = NOK_THEME_ROOT . '/img/people/' . $filename;
+                                $random_specialist = $specialisten[array_rand($specialisten)]; ?>
+                                <nok-square-block class="nok-p-0 nok-border-radius-0">
+                                    <div class="square-portrait-image nok-rounded-border-large nok-gradient-1">
+                                        <img src="<?= $afbeelding; ?>" loading="lazy">
+                                    </div>
+                                    <div>
+                                        <h3><?= $persoon; ?></h3>
+                                        <p class="fw-300"><?= $random_specialist; ?></p>
+                                    </div>
+                                </nok-square-block>
+                        <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+
+            </article>
+
+        </div>
+    </div>
+</nok-section>
+
+<nok-section>
     <div class="nok-section__inner--stretched
     nok-bg-darkerblue nok-text-white">
         <div class="nok-section__inner">
@@ -380,6 +524,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                     reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit!
                 </p>
 
+                <!-- Component: drag-scrollable blokkengroep -->
                 <div class="nok-mt-2 align-self-stretch">
                     <div class="nok-layout-grid nok-layout-grid__3-column
                 nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="true">
@@ -417,91 +562,102 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
 </nok-section>
 
 <nok-section>
-    <div class="nok-section__inner--stretched">
-        <div class="nok-section__inner">
-            <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start nok-column-gap-3">
-                <div class="nok-layout-flex-column nok-align-items-stretch">
-                    <h1>
-                        Ons veelzijdige team van specialisten
-                    </h1>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos
-                        vero. Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas, quia
-                        reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit!
-                    </p>
+    <div class="nok-section__inner">
+        <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start nok-column-gap-3">
+            <div class="nok-layout-flex-column nok-align-items-stretch">
+                <h1>
+                    Ons veelzijdige team van specialisten
+                </h1>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod,
+                    quos
+                    vero. Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas, quia
+                    reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit!
+                </p>
 
-                    <nok-square-block class="nok-p-2 no-gap
+                <nok-square-block class="nok-p-2 no-gap
                     nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast">
-                        <div class="nok-scrollable__horizontal" data-scroll-snapping="true" data-draggable="true" data-autoscroll="true">
-                            <div>
-                                <blockquote class="nok-square-block__text">
-                                    "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos
-                                    vero. Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas, quia
-                                    reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit!"
-                                </blockquote>
-                                <div class="nok-layout-flex-column nok-align-items-start no-gap">
-                                    <strong class="nok-fs-2">John Doe</strong>
-                                    <p>Internist</p>
-                                </div>
-                            </div>
-                            <div>
-                                <blockquote class="nok-square-block__text">
-                                    "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos
-                                    vero. Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas, quia
-                                    reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit!"
-                                </blockquote>
-                                <div class="nok-layout-flex-column nok-align-items-start no-gap">
-                                    <strong class="nok-fs-2">Jane Doe</strong>
-                                    <p>Di&euml;tist</p>
-                                </div>
+                    <div class="nok-scrollable__horizontal" data-scroll-snapping="true" data-draggable="true"
+                         data-autoscroll="true">
+                        <div>
+                            <blockquote class="nok-square-block__text">
+                                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure
+                                perspiciatis quod, quos
+                                vero. Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas,
+                                quia
+                                reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit!"
+                            </blockquote>
+                            <div class="nok-layout-flex-column nok-align-items-start no-gap">
+                                <strong class="nok-fs-2">John Doe</strong>
+                                <p>Internist</p>
                             </div>
                         </div>
-                    </nok-square-block>
-                </div>
+                        <div>
+                            <blockquote class="nok-square-block__text">
+                                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure
+                                perspiciatis quod, quos
+                                vero. Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas,
+                                quia
+                                reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit!"
+                            </blockquote>
+                            <div class="nok-layout-flex-column nok-align-items-start no-gap">
+                                <strong class="nok-fs-2">Jane Doe</strong>
+                                <p>Di&euml;tist</p>
+                            </div>
+                        </div>
+                    </div>
+                </nok-square-block>
+            </div>
 
-                <div class="nok-layout-grid nok-layout-grid__1-column" data-requires="./nok-accordion.mjs?cache=<?= time(); ?>">
-                        <nok-accordion>
-                            <details class="nok-bg-white nok-dark-bg-darkerblue nok-dark-text-white nok-rounded-border nok-text-contrast">
-                                <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold">Solo</summary>
-                                <div class="accordion-content nok-p-2 nok-pt-0">
-                                    <p class="nok-mb-1">
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure
-                                        perspiciatis quod, quos vero. Architecto, blanditiis est exercitationem illo
-                                        iusto magni nihil nulla, quam quas, quia reprehenderit vel voluptatum.
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit!
-                                    </p>
-                                </div>
-                            </details>
-                        </nok-accordion>
+            <!-- Component: accordion items -->
+            <div class="nok-layout-grid nok-layout-grid__1-column"
+                 data-requires="./nok-accordion.mjs?cache=<?= time(); ?>">
+                <nok-accordion>
+                    <details
+                            class="nok-bg-white nok-dark-bg-darkerblue nok-dark-text-white nok-rounded-border nok-text-contrast">
+                        <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold">Solo</summary>
+                        <div class="accordion-content nok-p-2 nok-pt-0">
+                            <p class="nok-mb-1">
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure
+                                perspiciatis quod, quos vero. Architecto, blanditiis est exercitationem illo
+                                iusto magni nihil nulla, quam quas, quia reprehenderit vel voluptatum.
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit!
+                            </p>
+                        </div>
+                    </details>
+                </nok-accordion>
 
-                        <?php
-                        $x = 0;
-                        $accordion_group = 'accordion-group';
-                        $specialisten = array('Arts', 'Internist', 'Diëtist', 'Psycholoog', 'Bewegingsdeskundige', 'Chirurg');
-                        foreach ($specialisten as $specialist) : ?>
-                        <nok-accordion>
-                            <details class="nok-bg-white nok-dark-bg-darkerblue nok-dark-text-white nok-rounded-border nok-text-contrast" name="<?= $accordion_group;?>" <?= $x == 0 ? 'open' : ''; ?>>
-                                <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold"><?= $specialist; ?></summary>
-                                <div class="accordion-content nok-p-2 nok-pt-0">
-                                    <p class="nok-mb-1">
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure
-                                        perspiciatis quod, quos vero. Architecto, blanditiis est exercitationem illo
-                                        iusto magni nihil nulla, quam quas, quia reprehenderit vel voluptatum.
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit!
-                                    </p>
-                                    <button class="nok-button nok-base-font nok-text-contrast nok-bg-darkerblue nok-dark-bg-darkblue nok-visible-xs align-self-stretch"
-                                            tabindex="0">Over de <?= $specialist; ?>
-                                    </button>
-                                </div>
-                            </details>
-                        </nok-accordion>
-                            <?php $x++; endforeach; ?>
+                <?php
+                $x = 0;
+                $accordion_group = 'accordion-group';
+                $specialisten = array('Arts', 'Internist', 'Diëtist', 'Psycholoog', 'Bewegingsdeskundige', 'Chirurg');
+                foreach ($specialisten as $specialist) : ?>
+                    <nok-accordion>
+                        <details
+                                class="nok-bg-white nok-dark-bg-darkerblue nok-dark-text-white nok-rounded-border nok-text-contrast"
+                                name="<?= $accordion_group; ?>" <?= $x == 0 ? 'open' : ''; ?>>
+                            <summary
+                                    class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold"><?= $specialist; ?></summary>
+                            <div class="accordion-content nok-p-2 nok-pt-0">
+                                <p class="nok-mb-1">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure
+                                    perspiciatis quod, quos vero. Architecto, blanditiis est exercitationem illo
+                                    iusto magni nihil nulla, quam quas, quia reprehenderit vel voluptatum.
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit!
+                                </p>
+                                <button class="nok-button nok-base-font nok-text-contrast nok-bg-darkerblue nok-dark-bg-darkblue nok-visible-xs align-self-stretch"
+                                        tabindex="0">Over de <?= $specialist; ?>
+                                </button>
+                            </div>
+                        </details>
+                    </nok-accordion>
+                    <?php $x++; endforeach; ?>
+            </div>
 
-                </div>
-            </article>
-        </div>
+        </article>
     </div>
 </nok-section>
+
 
 <nok-page-footer class="nok-section">
     <div class="nok-section__inner--stretched nok-my-0 nok-px-0 nok-border-radius-0

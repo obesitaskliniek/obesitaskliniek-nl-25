@@ -48,11 +48,35 @@
   font-weight: 400;
 }
 
+.fw-300 {
+  font-weight: 300;
+}
+
 .natural-fit-image {
   img {
     width: 100%;
     height: auto;
   }
+}
+.cover-image {
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.square-image {
+  aspect-ratio: 1 / 1;
+  @extend .cover-image;
+}
+
+.square-portrait-image {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  @extend .cover-image;
 }
 
 .w-100 {
@@ -102,6 +126,9 @@
 
 .text-center {
   text-align: center;
+}
+.text-start {
+  text-align: left;
 }
 
 .align-self-stretch {
@@ -394,7 +421,7 @@ $utilities: (
                 property: border-radius,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-border-radius,
-                values: 0 none
+                values: 0
         ),
         "invisible": (
                 property: display,
@@ -424,7 +451,7 @@ $utilities: (
                 no-prefix: true,
                 responsive-up-to: true,
                 class: #{nok-variables.$prefix}-columns,
-                values: 0 1 2 3 4 5
+                values: 0 1 2 3 4 5 6 7 8 9 10 11 12
         ),
         "align-self": (
                 responsive: false,
@@ -456,6 +483,66 @@ $utilities: (
                         stretch: stretch,
                         start: flex-start,
                         end: flex-end,
+                )
+        ),
+        "justify-items": (
+                responsive: false,
+                responsive-up-to: true,
+                property: justify-self,
+                class: #{nok-variables.$prefix}-justify-items,
+                values: (
+                        center: center,
+                        stretch: stretch,
+                        start: flex-start,
+                        end: flex-end,
+                )
+        ),
+        "text-wrap": (
+                responsive: false,
+                responsive-up-to: false,
+                property: text-wrap-style,
+                class: #{nok-variables.$prefix}-text-wrap,
+                values: (
+                      pretty,
+                      balance
+                )
+        ),
+        "column-start": (
+                responsive: false,
+                responsive-up-to: true,
+                property: grid-column-start,
+                class: #{nok-variables.$prefix}-column-start,
+                values: (
+                        start: 1,
+                        2: 2,
+                        3: 3,
+                        4: 4,
+                        end: -1,
+                )
+        ),
+        'offset': (
+                css-var: true,
+                css-variable-name: offset,
+                no-prefix: true,
+                responsive: true,
+                responsive-up-to: false,
+                class: #{nok-variables.$prefix}-column-offset,
+                values: (
+                        2,
+                        1,
+                        0,
+                        -1,
+                        -2,
+                )
+        ),
+        'span-all-columns': (
+                responsive: false,
+                responsive-up-to: true,
+                no-suffix: true,
+                property: grid-column,
+                class: #{nok-variables.$prefix}-span-all-columns,
+                values: (
+                      "1 / -1"
                 )
         ),
   //conceptual
