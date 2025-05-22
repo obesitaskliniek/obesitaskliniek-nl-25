@@ -474,32 +474,30 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                     <div class="nok-layout-grid nok-layout-grid__4-column
                 nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="false">
                         <?php
-                        $aantal = 6;
                         $specialisten = array('Arts', 'Internist', 'Diëtist', 'Psycholoog', 'Bewegingsdeskundige', 'Chirurg');
                         $people_dir = dirname(__DIR__) . '/img/people';
                         $images = array();
-                        if (is_dir($people_dir)) {
+                        if (is_dir($people_dir)) :
                             $images = glob($people_dir . '/*.png');
-                            shuffle($images);
-                            $images = array_slice($images, 0, $aantal);
-                            foreach ($images as $image) {
-                                $filename = basename($image);
-                                $persoon = pathinfo($filename)['filename'];
-                                $afbeelding = NOK_THEME_ROOT . '/img/people/' . $filename;
-                                $random_specialist = $specialisten[array_rand($specialisten)]; ?>
+                            shuffle($specialisten); 
+                            foreach ($specialisten as $specialist) :
+                                if (!empty($images)) :
+                                    $random_key = array_rand($images);
+                                    $image = $images[$random_key];
+                                    $filename = basename($image);
+                                    $persoon = str_replace('-transparant', '', pathinfo($filename)['filename']);
+                                    $afbeelding = NOK_THEME_ROOT . '/img/people/' . $filename;
+                                    unset($images[$random_key]); ?>
                                 <nok-square-block class="nok-p-0 nok-border-radius-0">
                                     <div class="square-portrait-image nok-rounded-border-large nok-gradient-1">
-                                        <img src="<?= $afbeelding; ?>" loading="lazy">
+                                        <img src="<?= $afbeelding; ?>" loading="lazy" style="filter:drop-shadow(30px 20px 30px rgba(var(--nok-darkerblue-rgb), 0.15))">
                                     </div>
                                     <div>
                                         <h3><?= $persoon; ?></h3>
-                                        <p class="fw-300"><?= $random_specialist; ?></p>
+                                        <p class="fw-300"><?= $specialist; ?></p>
                                     </div>
                                 </nok-square-block>
-                        <?php
-                            }
-                        }
-                        ?>
+                        <?php endif; endforeach; endif; ?>
                     </div>
                 </div>
 

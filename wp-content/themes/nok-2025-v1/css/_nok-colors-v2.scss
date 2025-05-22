@@ -110,21 +110,37 @@ $nok-base-colors: $nok-base-colors_light;
   }
 }
 
+@mixin set-color-variables($color-map) {
+  $oklch_variables: ();
+  @each $name, $color in $color-map {
+    $rgb_color: color.to-space($color, rgb);
+    $rgb_string: #{color.channel($rgb_color, 'red')}, #{color.channel($rgb_color, 'green')}, #{color.channel($rgb_color, 'blue')};
+    $rgb_color_contrast: color.to-space(nok-utilities.get-contrast-color($color, $color-contrast-light, $color-contrast-dark), rgb);
+    $rgb_string_contrast: #{color.channel($rgb_color_contrast, 'red')}, #{color.channel($rgb_color_contrast, 'green')}, #{color.channel($rgb_color_contrast, 'blue')};
+    --#{nok-variables.$prefix}-#{$name}-rgb: #{$rgb_string};
+    --#{nok-variables.$prefix}-#{$name}: rgba(var(--#{nok-variables.$prefix}-#{$name}-rgb), var(--alpha, 1));
+    --#{nok-variables.$prefix}-#{$name}-contrast: rgba(#{$rgb_string_contrast}, var(--alpha, 1));
+    $oklch_variables: map.merge($oklch_variables, (
+            "--#{nok-variables.$prefix}-#{$name}": $color,
+            "--#{nok-variables.$prefix}-#{$name}-contrast": nok-utilities.get-contrast-color($color, $color-contrast-light, $color-contrast-dark)
+    ));
+  }
+  @supports (color: oklch(0% 0 0)) {
+    @each $property, $value in $oklch_variables {
+      #{$property}: #{$value};
+    }
+  }
+}
+
 /* Normal (and dark unless overridden) mode color variables */
 :root {
-  @each $name, $color in $nok-base-colors_light {
-    --#{nok-variables.$prefix}-#{$name}: #{$color};
-    --#{nok-variables.$prefix}-#{$name}-contrast: #{nok-utilities.get-contrast-color($color, $color-contrast-light, $color-contrast-dark)};
-  }
+  @include set-color-variables($nok-base-colors_light);
 }
 
 /* Dark mode color variables */
 @media (prefers-color-scheme: dark) {
   :root {
-    @each $name, $color in $nok-base-colors_dark {
-      --#{nok-variables.$prefix}-#{$name}: #{$color};
-      --#{nok-variables.$prefix}-#{$name}-contrast: #{nok-utilities.get-contrast-color($color, $color-contrast-light, $color-contrast-dark)};
-    }
+    @include set-color-variables($nok-base-colors_dark);
   }
 }
 
@@ -238,15 +254,25 @@ body { //helps increase specificity
  * Gradients
  */
 .#{nok-variables.$prefix}-gradient-1 {
-  --base-color: #{map.get($nok-base-colors, 'darkblue')};
+  --color-from: rgba(var(--nok-darkblue--darker-rgb), 0.25);
+  --color-to: rgba(var(--nok-lightblue--darker-rgb), 0.15);
+
   background: radial-gradient(circle at 50% 100%,
-          oklch(from var(--base-color, inherit) 0.8 0.015 h/1),
-          oklch(from var(--base-color, inherit) 0.95 0.025 h/1) 75%
-  );
+          var(--color-from),
+          var(--color-to) 75%
+  ),  var(--nok-body);
+
   @media (prefers-color-scheme: dark) {
-    background: radial-gradient(circle at 50% 100%,
-            oklch(0.15 0.02 250.61),
-            oklch(0.27 0.04 252.45) 75%
-    );
+    --color-from: oklch(0.15 0.02 250.61);
+    --color-to: oklch(0.27 0.04 252.45);
+  }
+  @supports (color: oklch(0% 0 0)) {
+    --base-color: var(--nok-darkblue-rgb);
+    --color-from: oklch(from rgb(var(--base-color)) 0.8 0.025 h/1);
+    --color-to: oklch(from rgb(var(--base-color)) 0.95 0.035 h/1);
+    @media (prefers-color-scheme: dark) {
+      --color-from: oklch(0.15 0.02 250.61);
+      --color-to: oklch(0.27 0.04 252.45);
+    }
   }
 }
