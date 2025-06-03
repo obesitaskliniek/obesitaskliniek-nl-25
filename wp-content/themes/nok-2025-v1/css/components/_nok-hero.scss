@@ -67,9 +67,9 @@ nok-hero {
 
       svg {
         //min-width: 100%;
-        max-width: fit-content;
-        min-height: 100%;
-        height: 100%;
+        //max-width: fit-content;
+        //min-height: 100%;
+        //height: 100%;
       }
 
       linearGradient {
@@ -148,7 +148,7 @@ nok-hero {
       }
     }
     @include components-base.media-breakpoint-down(lg) {
-      grid-template-rows: 5rem 45vmax 3rem auto var(--footer-height); //third column (3rem) is overlap between article and figure
+      grid-template-rows: 5rem 100vmin 3rem auto var(--footer-height); //third column (3rem) is overlap between article and figure
       grid-template-columns: 1fr;
       row-gap: 0;
       //grid-template-rows: 45vmax 4rem auto 1fr;
@@ -164,9 +164,11 @@ nok-hero {
         grid-row: 2 / 4;
         //mask-image: linear-gradient(to bottom, rgb(0, 0, 0) 50%, rgb(0 0 0 / 5%) 75%, rgb(0 0 0 / 0) 100%);
         //mask-image: linear-gradient(to bottom, rgb(0, 0, 0) 70%, rgba(0, 0, 0, 0.5) 80%, rgba(255, 255, 255, 0) 100%);
-        mask-image: radial-gradient(100% 100% at 90% 0%, rgba(255, 255, 255, 1) 80%, rgba(255, 255, 255, 0) 100%);
-        justify-self: end;
-        max-width: 100%;
+        mask-image: radial-gradient(100% 100% at 80% 0%, rgb(255, 255, 255) 80%, rgba(255, 255, 255, 0) 90%);
+        //justify-self: end;
+        //max-width: 100%;
+        justify-self: stretch;
+        align-self: stretch;
       }
       footer {
         --bg-alpha-value: 0;

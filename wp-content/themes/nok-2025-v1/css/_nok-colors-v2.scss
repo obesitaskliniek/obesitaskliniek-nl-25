@@ -151,6 +151,7 @@ $alpha_values: ();
   $alpha_values: map.set($alpha_values, $type, var(--global-#{$type}-alpha-value, var(--#{$type}-alpha-value, 1)));
 }
 
+$dark_mode_rules: ();
 @each $name, $color in $nok-base-colors {
   @each $type, $selector in $selectors {
     @if (map.get($generate_classes, $type)) {
@@ -160,13 +161,22 @@ $alpha_values: ();
         --#{$type}-base: var(--#{nok-variables.$prefix}-#{$name});
         --#{$type}-base-contrast: var(--#{nok-variables.$prefix}-#{$name}-contrast);
       }
-      @media (prefers-color-scheme: dark) {
-        body { //helps increase specificity when overriding
-          .#{nok-variables.$prefix}-dark-#{$type}-#{$name} {
-            --#{$type}-base: var(--#{nok-variables.$prefix}-#{$name});
-            --#{$type}-base-contrast: var(--#{nok-variables.$prefix}-#{$name}-contrast);
-          }
-        }
+      $dark_mode_rules: map.merge($dark_mode_rules, (
+              "body .#{nok-variables.$prefix}-dark-#{$type}-#{$name}": (
+                      "--#{$type}-base": "var(--#{nok-variables.$prefix}-#{$name})",
+                      "--#{$type}-base-contrast": "var(--#{nok-variables.$prefix}-#{$name}-contrast)"
+              )
+      ));
+    }
+  }
+}
+
+// Make sure we output the dark mode rules in one go, for clarity
+@media (prefers-color-scheme: dark) {
+  @each $selector, $properties in $dark_mode_rules {
+    #{$selector} {
+      @each $property, $value in $properties {
+        #{$property}: #{$value};
       }
     }
   }

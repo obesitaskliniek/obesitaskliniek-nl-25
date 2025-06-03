@@ -15,7 +15,7 @@
 
     //default: cascade down at breakpoints
     //i.e: the column count set in the class is more of a maximum.
-    //Override behaviour with the nok25-columns-x helpers
+    //Override behaviour with the nok-columns-x and nok-columns-to-<breakpoint>-x helpers
     &__1-column {
       --grid-columns: 1;
     }
@@ -27,7 +27,7 @@
     }
     &__3-column {
       --grid-columns: 3;
-      @include nok-mixins.media-breakpoint-down(xxl) {
+      @include nok-mixins.media-breakpoint-down(xl) {
         --grid-columns: 2;
       }
       @include nok-mixins.media-breakpoint-down(lg) {
@@ -36,10 +36,10 @@
     }
     &__4-column {
       --grid-columns: 4;
-      @include nok-mixins.media-breakpoint-down(xxxl) {
+      @include nok-mixins.media-breakpoint-down(xxl) {
         --grid-columns: 3;
       }
-      @include nok-mixins.media-breakpoint-down(xxl) {
+      @include nok-mixins.media-breakpoint-down(xl) {
         --grid-columns: 2;
       }
       @include nok-mixins.media-breakpoint-down(lg) {
