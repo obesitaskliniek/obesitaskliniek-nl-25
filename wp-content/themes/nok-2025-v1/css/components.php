@@ -130,8 +130,8 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
         </nok-navigation-top-row>
 
         <nok-navigation-drawer class="nok-z-2">
-            <div class="nok-section__inner--stretched nok-nav-carousel 
-            nok-bg-white--darker nok-dark-bg-darkerblue nok-dark-text-white 
+            <div class="nok-section__inner--stretched nok-nav-carousel
+            nok-bg-white--darker nok-dark-bg-darkerblue nok-dark-text-white
             nok-z-2"
                  data-scroll-snapping="true" data-requires="./nok-menu-carousel.mjs">
                 <div class="nok-nav-carousel__inner nok-text-darkerblue nok-dark-text-white">
@@ -275,8 +275,9 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
         </article>
 
         <figure>
+            <?php $w = 900; $h = 1060; $offset = 200; ?>
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                 viewBox="0 0 1200 1000">
+                 viewBox="0 0 <?=$w;?> <?=$h;?>">
                 <defs>
                     <linearGradient id="c" x1="899.81" x2="1920.52" y1="1367.93" y2="-128.38"
                                     gradientTransform="rotate(-45 802.663 961.106)" gradientUnits="userSpaceOnUse">
@@ -296,31 +297,18 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                         <stop offset=".5" stop-color="oklch(from var(--grad-1-2) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1))"></stop>
                         <stop offset="1" stop-color="oklch(from var(--grad-1-1) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1))"></stop>
                     </linearGradient>
-
-                    <filter id="luminosity-noclip" x="-234.9" y="-148" width="1685.7" height="1213.5"
+                    <filter id="luminosity-noclip"
                             color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
                         <feFlood flood-color="#fff" result="bg"/>
                         <feBlend in="SourceGraphic" in2="bg"/>
                     </filter>
-                    <mask id="image-mask" x="-234.9" y="-148" width="1685.7" height="1213.5" maskUnits="userSpaceOnUse">
+                    <mask id="image-mask" maskUnits="userSpaceOnUse">
                         <g style="filter: url(#luminosity-noclip)">
                             <path id="mask-path"
                                   d="M418-143.6c2.7-1.6,5.5-3,8.2-4.4-2.8,1.4-5.6,2.8-8.3,4.2l-.5-1-652.3,2.5v1207.8h1685.7v-65.4c-283.3-.3-530.7-.6-529.9-.9-.8.2-1.7.5-2.4.7h0c-1.6.4-3.2.9-4.8,1.3-3.6,1-7.2,2-10.8,2.8-210.2,51.2-429-87.2-581.7-408.1C154.1,245.1,205.1-25.5,418-143.6Z"/>
                         </g>
                     </mask>
                 </defs>
-                <foreignObject width="100%" height="100%" mask="url(#image-mask)" class="cover-image">
-                    <?php $testimg = 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%20' . str_pad(rand(1, 59), 2, 0, STR_PAD_LEFT); ?>
-                    <img src="<?= $testimg; ?>:400x0-25-0-0-center-0.jpg" width="1920" height="1281"
-                         srcset="<?= $testimg; ?>:1920x0-65-0-0-center-0.jpg 1920w,
-                                 <?= $testimg; ?>:768x0-65-0-0-center-0.jpg 768w,
-                                 <?= $testimg; ?>:320x0-65-0-0-center-0.jpg 320w,
-                                 <?= $testimg; ?>:150x0-65-0-0-center-0.jpg 150w" sizes="(max-width: 575px) 100vw,
-                                     (min-width: 575px) 75vw,
-                                     (min-width: 768px) 84vw,
-                                     (min-width: 996px) 84vw,
-                                     (min-width: 1200px) 84vw" loading="lazy">
-                </foreignObject>
                 <path id="d" fill="oklch(from var(--base-layer) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1))"
                       d="M137.3,682.5C-22.9,346.2,75,36.7,415.1-141.8,30.2,58.5-79.7,385.6,75.6,711.9c151.5,318,459.6,442.1,846.1,287.2-.8.2-1.7.5-2.4.7-340.4,131.3-626.9,8.6-782.1-317.3h0Z"/>
                 <path id="c" fill="url(#c)"
@@ -329,6 +317,20 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                       d="M260.6,623.8C90.7,267.3,165-7.5,416.1-142.3c-.2,0-.3.2-.5.2C120,14.6,33.9,306.8,198.9,653.2c158.1,332,422.1,454,715.7,347.9-3.6,1-7.2,2-10.8,2.8-245.8,76.4-484.1-46.2-643.3-380.1h0Z"/>
                 <path id="a" fill="url(#a)"
                       d="M260.6,623.8c159.1,334.1,397.5,456.5,643.3,380.1-210.2,51.2-429-87.2-581.7-408.1C152.9,240.6,207.4-32.3,427.1-148c-3.6,1.9-7.3,3.7-11,5.6C165-7.5,90.7,267.3,260.6,623.8Z"/>
+                <g mask="url(#image-mask)" class="">
+                    <?php $testimg = 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%20' . str_pad(rand(1, 59), 2, 0, STR_PAD_LEFT); ?>
+                    <foreignObject height="<?=$h;?>" width="<?= ($w - $offset);?>" x="<?=$offset;?>">
+                        <img src="<?= $testimg; ?>:100x0-25-0-0-center-0.jpg"
+                             srcset="<?= $testimg; ?>:1920x0-65-0-0-center-0.jpg 1920w,
+                                 <?= $testimg; ?>:768x0-65-0-0-center-0.jpg 768w,
+                                 <?= $testimg; ?>:320x0-65-0-0-center-0.jpg 320w,
+                                 <?= $testimg; ?>:150x0-65-0-0-center-0.jpg 150w" sizes="(max-width: 575px) 100vw,
+                                     (min-width: 575px) 75vw,
+                                     (min-width: 768px) 84vw,
+                                     (min-width: 996px) 84vw,
+                                     (min-width: 1200px) 84vw" loading="lazy" style="width:100%;height:100%;object-fit:cover;"/>
+                    </foreignObject>
+                </g>
             </svg>
 
         </figure>
@@ -471,7 +473,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
 
                 <!-- Component: drag-scrollable blokkengroep -->
                 <div class="nok-mt-2 align-self-stretch">
-                    <div class="nok-layout-grid nok-layout-grid__4-column
+                    <div class="nok-layout-grid nok-layout-grid__4-column nok-columns-to-lg-2
                 nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="false">
                         <?php
                         $specialisten = array('Arts', 'Internist', 'Diëtist', 'Psycholoog', 'Bewegingsdeskundige', 'Chirurg');
