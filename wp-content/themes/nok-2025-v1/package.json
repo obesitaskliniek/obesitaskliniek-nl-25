@@ -1,0 +1,13 @@
+{
+  "name": "nok-2025-v1",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "wp-scripts build",
+    "postbuild": "xcopy build\\*.* . /E /H /Y",
+    "start": "wp-scripts start"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^30.19.0"
+  }
+}
