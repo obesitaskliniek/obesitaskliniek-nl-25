@@ -46,7 +46,7 @@ spl_autoload_register( function( $class ) {
 
 
 // 3) Initialize your main theme class
-add_action( 'after_setup_theme', [ \NOK2025\V1\Theme::class, 'get_instance' ] );
+add_action( 'after_setup_theme', [ NOK2025\V1\Theme::class, 'get_instance' ] );
 
 //register page parts custom post type
 add_action( 'init', function() {

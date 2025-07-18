@@ -15,5 +15,7 @@
     }
   },
   "editorScript": "file:./index.js",
-  "render": "file:./render.php"
+  "render": "file:./render.php",
+  "editorStyle": "nok-components-css",
+  "style": "nok-components-css"
 }

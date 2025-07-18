@@ -19,7 +19,8 @@ final class Theme {
 
     private function setup_hooks(): void {
         add_action( 'after_setup_theme', [ $this, 'theme_supports' ] );
-        add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_assets' ] );
+        //add_action( 'wp_enqueue_scripts', [ $this, 'register_assets' ] );
+        add_action( 'enqueue_block_assets', [ $this, 'register_assets' ] );
         add_action( 'customize_register', [ $this, 'register_customizer' ] );
         // ...other hooks
     }
@@ -32,19 +33,12 @@ final class Theme {
         // Optionally: block editor settings via theme.json (WP 5.8+)
     }
 
-    public function enqueue_assets(): void {
-        wp_enqueue_style(
-            'mytheme-style',
-            THEME_URI . '/assets/css/main.css',
+    public function register_assets(): void {
+        wp_register_style(
+            'nok-components-css',
+            THEME_ROOT . '/assets/css/nok-components.css',
             [],
-            THEME_VERSION
-        );
-        wp_enqueue_script(
-            'mytheme-script',
-            THEME_URI . '/assets/js/main.js',
-            ['jquery'],
-            THEME_VERSION,
-            true
+            filemtime( THEME_ROOT . '/assets/css/nok-components.css')
         );
     }
 
