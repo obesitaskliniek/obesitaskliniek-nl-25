@@ -2,6 +2,7 @@
 @use "./tools/nok-mixins";
 @use "nok-reboot";
 @use "nok-layout";
+
 @use "./components/nok-buttons";
 @use "./components/nok-links";
 @use "./components/nok-lists";
@@ -16,6 +17,10 @@
 @use "./components/nok-page-footer";
 
 //Todo: move everything below to something that makes more sense
+
+:root {
+  @include nok-variables.parsed-variables;
+}
 
 /* custom elements */
 article, aside, section,

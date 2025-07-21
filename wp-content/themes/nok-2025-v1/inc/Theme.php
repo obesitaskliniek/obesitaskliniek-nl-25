@@ -14,9 +14,6 @@ final class Theme {
     public function __construct() {
         // ensure CPTs are registered
         new PostTypes();
-
-        // … your existing setup_hooks() call …
-        $this->setup_hooks();
     }
 
     public static function get_instance(): Theme {
@@ -30,12 +27,11 @@ final class Theme {
     private function setup_hooks(): void {
         add_action( 'after_setup_theme', [ $this, 'theme_supports' ] );
 
-        add_action( 'wp_enqueue_scripts', [ $this, 'register_assets' ] );
-        add_action( 'enqueue_block_assets', [ $this, 'register_page_parts_and_styles' ] );
+        add_action( 'wp_enqueue_scripts', [ $this, 'frontend_assets'] );
+        add_action( 'enqueue_block_editor_assets', [ $this, 'backend_assets'] );
 
         add_action( 'customize_register', [ $this, 'register_customizer' ] );
         // ...other hooks
-        //add_action( 'init', [ $this, 'register_page_parts_and_styles' ] );
 
         add_action( 'add_meta_boxes',          [ $this, 'add_design_meta_box' ] );
         add_action( 'save_post_page_part',     [ $this, 'save_design_meta' ], 10, 2 );
@@ -50,12 +46,18 @@ final class Theme {
         // Optionally: block editor settings via theme.json (WP 5.8+)
     }
 
-    public function register_assets(): void {
+    public function frontend_assets(): void {
         wp_register_style(
             'nok-components-css',
             THEME_ROOT . '/assets/css/nok-components.css',
             [],
             filemtime( THEME_ROOT_ABS . '/assets/css/nok-components.css')
+        );
+        wp_register_style(
+            'nok-colors-css',
+            THEME_ROOT . '/assets/css/color_tests-v2.css',
+            [],
+            filemtime( THEME_ROOT_ABS . '/assets/css/color_tests-v2.css')
         );
     }
 
@@ -70,13 +72,22 @@ final class Theme {
     }
 
     /**
+     * Registry of page part templates.
+     * Lazy-loaded on first access.
+     */
+    private ?array $part_registry = null;
+
+    /**
      * Scan all page‑part templates and pull their metadata.
      *
      * @return array Array of [ slug => [ 'name' => ..., 'description' => ..., 'icon' => ..., 'css' => ... ] ]
      */
     private function get_page_part_registry(): array {
+        if ( $this->part_registry !== null ) {
+            return $this->part_registry;
+        }
         $files = glob( THEME_ROOT_ABS . '/template-parts/page-parts/*.php' );
-        $registry = [];
+        $this->part_registry = [];
 
         foreach ( $files as $file ) {
             $data = get_file_data( $file, [
@@ -96,13 +107,13 @@ final class Theme {
                 $data['css'] = "page-part-{$data['slug']}";
             }
 
-            $registry[ $data['slug'] ] = $data;
+            $this->part_registry[ $data['slug'] ] = $data;
         }
 
-        return $registry;
+        return $this->part_registry;
     }
 
-    public function register_page_parts_and_styles(): void {
+    public function backend_assets(): void {
         $parts = $this->get_page_part_registry();
 
         foreach ( $parts as $slug => $meta ) {

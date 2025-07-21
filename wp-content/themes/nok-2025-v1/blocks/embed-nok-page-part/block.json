@@ -16,6 +16,12 @@
   },
   "editorScript": "file:./index.js",
   "render": "file:./render.php",
-  "editorStyle": "nok-components-css",
-  "style": "nok-components-css"
+  "editorStyle": [
+    "nok-components-css",
+    "nok-colors-css"
+  ],
+  "style": [
+    "nok-components-css",
+    "nok-colors-css"
+  ]
 }
