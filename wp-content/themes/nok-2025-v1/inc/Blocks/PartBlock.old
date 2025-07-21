@@ -1,0 +1,44 @@
+<?php
+namespace NOK2025\V1\Blocks;
+
+class PartBlock {
+    public static function register(): void {
+        register_block_type( THEME_ROOT_ABS . '/build/blocks/template', [
+            'render_callback' => [ self::class, 'render' ],
+            'attributes'      => [
+                'partId' => [ 'type' => 'integer' ],
+            ],
+        ] );
+    }
+
+    public static function render( array $attrs ): string {
+        // 1) Get the Page Part post
+        $part_id = $attrs['partId'] ?? 0;
+        if ( ! $part_id || ! $post = get_post( $part_id ) ) {
+            return '';
+        }
+
+        // 2) Determine which design to use
+        $design = get_post_meta( $part_id, 'design_slug', true ) ?: 'header-top-level';
+
+        // 3) Enqueue the matching CSS handle (must match what register_page_parts_and_styles gave you)
+        $handle = "page-part-{$design}";
+        if ( wp_style_is( $handle, 'registered' ) ) {
+            wp_enqueue_style( $handle );
+        }
+
+        // 4) Use the WordPress template system to pull in your partial
+        //    and pass the $post along in $args.
+        ob_start();
+        get_template_part(
+            "template-parts/page-parts/{$design}",
+            null,
+            [ 'post' => $post ]
+        );
+        return ob_get_clean();
+    }
+
+}
+
+// Hook it up in your Theme class after_setup_theme or init
+add_action( 'init', [ \NOK2025\V1\Blocks\PartBlock::class, 'register' ] );
