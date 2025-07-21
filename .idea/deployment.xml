@@ -55,8 +55,8 @@
             <excludedPath local="true" path="node_modules/" />
             <excludedPath local="true" path="$PROJECT_DIR$/node_modules" />
             <excludedPath local="true" path="$PROJECT_DIR$/wp-content/themes/nok-2025-v1/node_modules" />
-            <excludedPath local="true" path="build/" />
-            <excludedPath local="true" path="src/" />
+            <excludedPath local="true" path="$PROJECT_DIR$/wp-content/themes/nok-2025-v1/build/" />
+            <excludedPath local="true" path="$PROJECT_DIR$/wp-content/themes/nok-2025-v1/src" />
           </excludedPaths>
         </serverdata>
       </paths>

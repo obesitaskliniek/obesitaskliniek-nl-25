@@ -48,27 +48,24 @@ spl_autoload_register( function( $class ) {
 // 3) Initialize your main theme class
 add_action( 'after_setup_theme', [ NOK2025\V1\Theme::class, 'get_instance' ] );
 
-//register page parts custom post type
-add_action( 'init', function() {
-    register_post_type( 'page_part', [
-        'label'               => __( 'NOK Page Parts', THEME_TEXT_DOMAIN ),
-        'public'              => true,
-        'show_in_rest'        => true,
-        'has_archive'         => false,
-        'hierarchical'        => false,
-        'supports'            => [ 'title', 'editor' ],
-        'show_in_nav_menus'   => false,
-        'menu_icon'           => 'welcome-widgets-menus',
-        'rewrite'             => [ 'slug' => 'parts' ],
-    ] );
-} );
 
 //register blocks
 add_action( 'init', function() {
     foreach ( glob( THEME_ROOT_ABS . '/blocks/*', GLOB_ONLYDIR ) as $dir ) {
-        register_block_type( $dir );
+        $args = [];
+
+        $render_file = $dir . '/render.php';
+        if ( file_exists( $render_file ) ) {
+            $render_cb = require $render_file;
+            if ( is_callable( $render_cb ) ) {
+                $args['render_callback'] = $render_cb;
+            }
+        }
+
+        register_block_type( $dir, $args );
     }
 } );
+
 
 use NOK2025\V1\Helpers;
 define( 'NONCE',         hash('sha256', Helpers::makeRandomString()));
