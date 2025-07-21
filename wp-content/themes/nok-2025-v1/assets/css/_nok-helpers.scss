@@ -4,12 +4,6 @@
 @use "tools/nok-mixins";
 @use "tools/nok-api";
 
-:root {
-  @each $key, $value in nok-variables.$exposed-variables {
-    --#{nok-variables.$prefix}-#{$key}: #{$value};
-  }
-}
-
 .#{nok-variables.$prefix}-heading-font {
   @include nok-mixins.nok-heading-font;
 }

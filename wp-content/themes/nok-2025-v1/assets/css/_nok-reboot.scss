@@ -1,5 +1,6 @@
 @use "nok-variables";
 @use "tools/nok-rfs";
+@use "nok-reboot-body";
 //@use "nok-colors";
 
 // stylelint-disable declaration-no-important, selector-no-qualifying-type, property-no-vendor-prefix
@@ -43,18 +44,7 @@ html {
 
 // scss-docs-start reboot-body-rules
 body {
-  margin: 0; // 1
-  font-family: var(--#{nok-variables.$prefix}-body-font-family);
-  @include nok-rfs.font-size(var(--#{nok-variables.$prefix}-body-font-size));
-  font-weight: var(--#{nok-variables.$prefix}-body-font-weight);
-  font-size-adjust: var(--#{nok-variables.$prefix}-body-font-size-adjust);
-  line-height: var(--#{nok-variables.$prefix}-body-line-height, 1.5);
-  color: var(--#{nok-variables.$prefix}-body-text-color);
-  text-align: var(--#{nok-variables.$prefix}-body-text-align);
-  background-color: var(--#{nok-variables.$prefix}-body-bg);
-  -webkit-text-size-adjust: 100%;
-  -webkit-font-smoothing: antialiased;
-  //-webkit-tap-highlight-color: rgba(nok-colors.$black, 0); // 4
+  @include nok-reboot-body.nok-body-properties;
 }
 // scss-docs-end reboot-body-rules
 

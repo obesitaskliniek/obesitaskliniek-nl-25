@@ -34,6 +34,7 @@ $animation-duration:            0.3s;
 
 $exposed-variables: (
     "html-font-size": 1em,
+    "body-font-family": $text-font-family,
     "body-font-size": $font-size-base,
     "body-font-size-adjust": $text-font-size-adjust,
     "body-line-height": $default-line-height,
@@ -104,3 +105,9 @@ $padding-base-values: (
         column-gap: var(--column-gap),
         section-padding: var(--nok-padding-section-sides),
 );
+
+@mixin parsed-variables {
+    @each $key, $value in $exposed-variables {
+        --#{$prefix}-#{$key}: #{$value};
+    }
+}
