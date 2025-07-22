@@ -5,20 +5,15 @@
  * CSS: header-top-level
  */
 
-/** @var \WP_Post|null $post */
+/** @var \WP_Post $post */
+global $post;
 $post = $args['post'] ?? null;
+setup_postdata( $post );        // set up all “in-the-loop” globals
+var_dump($post);
 
-if ( ! ( $post instanceof \WP_Post ) ) {
-    echo '<p><em>Ongeldig Page Part</em></p>';
-    return;
-}
-
-setup_postdata($args['post']);
-
-print get_the_title($post->ID);
-
-echo wpautop( $post->post_content );
+use NOK2025\V1\Helpers;
 ?>
+
 <div class="page-part page-part--header-top-level">
 
 
@@ -28,14 +23,8 @@ echo wpautop( $post->post_content );
             <div class="nok-section__inner">
 
                 <article class="nok-layout-grid nok-layout-grid__2-column nok-align-items-start">
-                    <h1 class="nok-span-all-columns-to-xxl">
-                        Het multidisciplinaire team
-                    </h1>
-                    <p class="new-row nok-span-all-columns-to-xxl">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos
-                        vero. Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas, quia
-                        reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit!
-                    </p>
+                    <?php the_title('<h1 class="nok-span-all-columns-to-xxl">', '</h1>'); ?>
+                    <div class="new-row nok-span-all-columns-to-xxl"><?php the_content(); ?></div>
 
                     <!-- Component: drag-scrollable blokkengroep -->
                     <div class="nok-mt-2 align-self-stretch">
@@ -75,5 +64,7 @@ echo wpautop( $post->post_content );
         </div>
     </nok-section>
     </div>
+
+
 <?php
-wp_reset_postdata();
+wp_reset_postdata();            // restore global $post & loop state

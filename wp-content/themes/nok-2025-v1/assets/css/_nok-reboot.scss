@@ -1,6 +1,7 @@
 @use "nok-variables";
 @use "tools/nok-rfs";
 @use "nok-reboot-body";
+@use "nok-wordpress-quirks";
 //@use "nok-colors";
 
 // stylelint-disable declaration-no-important, selector-no-qualifying-type, property-no-vendor-prefix

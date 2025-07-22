@@ -23,8 +23,6 @@ define( 'WP_ROOT', function_exists('get_home_path') ? get_home_path() : dirname(
 define( 'SITE_BASE_URI', 'https://dev.obesitaskliniek.nl');
 define( 'SITE_LIVE', false);
 
-
-
 // 2) PSR‑4 autoloader
 spl_autoload_register( function( $class ) {
     $prefix   = 'NOK2025\\V1\\';
