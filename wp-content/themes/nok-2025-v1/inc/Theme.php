@@ -67,6 +67,7 @@ final class Theme {
                             get_stylesheet_directory_uri() . '/assets/css/nok-components.css',
                             get_stylesheet_directory_uri() . '/assets/css/color_tests-v2.css',
                             get_stylesheet_directory_uri() . "/template-parts/page-parts/{$design}.css",
+	                        get_stylesheet_directory_uri() . '/assets/css/nok-page-parts-editor-styles.css',
                         ];
 
                         // build your CSS‑links + $html body exactly as above…
@@ -75,7 +76,12 @@ final class Theme {
                         foreach ( $css_uris as $uri ) {
                             $html .= '<link rel="stylesheet" href="' . esc_url( $uri ) . '">';
                         }
-                        $html .= '</head><body>';
+						//In the REST callback context, WordPress doesn’t think the current user can't edit.
+	                    $edit_link = admin_url( "post.php?post={$id}&action=edit" );
+	                    $html      .= '</head><body>
+							<nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkerblue--darker nok-z-1 halign-center valign-center">
+							<a href="' . $edit_link . '" type="button" target="_blank" class="nok-button nok-align-self-to-sm-stretch fill-group-column nok-bg-darkerblue nok-text-contrast no-shadow" tabindex="0">Bewerken</a>
+                            </nok-screen-mask>';
                         ob_start();
                         include get_theme_file_path( "template-parts/page-parts/{$design}.php" );
                         $html .= ob_get_clean();

@@ -1,0 +1,39 @@
+@use "components/shared" as components-base;
+
+body nok-screen-mask {
+  .nok-button {
+    display: none;
+    @include components-base.nok-subtle-shadow;
+  }
+}
+@media (prefers-reduced-transparency) {
+  body nok-screen-mask {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  body nok-screen-mask {
+    transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out;
+    .nok-button {
+      animation: fade--in 250ms var(--animation-easing-out, cubic-bezier(.85, 0, .15, 1));
+      animation-fill-mode: forwards;
+    }
+  }
+}
+body:hover {
+  touch-action: none;
+}
+body:hover > nok-screen-mask {
+  backdrop-filter: blur(5px);
+  --bg-alpha-value: 0.5;
+  pointer-events: all;
+  .nok-button {
+    pointer-events: all;
+    display: block;
+  }
+}
+@media (prefers-reduced-transparency) {
+  body:hover > nok-screen-mask {
+    display: none;
+  }
+}
