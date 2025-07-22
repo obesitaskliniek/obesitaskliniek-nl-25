@@ -12,8 +12,9 @@ final class Theme {
     private array $settings = [];
 
     public function __construct() {
-        // ensure CPTs are registered
-        new PostTypes();
+
+	    // ensure CPTs are registered
+	    new PostTypes();
     }
 
     public static function get_instance(): Theme {
@@ -25,7 +26,7 @@ final class Theme {
     }
 
     private function setup_hooks(): void {
-        add_action( 'after_setup_theme', [ $this, 'theme_supports' ] );
+        add_action( 'init', [ $this, 'theme_supports' ] );
 
         add_action( 'wp_enqueue_scripts', [ $this, 'frontend_assets'] );
         add_action( 'enqueue_block_editor_assets', [ $this, 'backend_assets'] );
@@ -79,7 +80,7 @@ final class Theme {
 						//In the REST callback context, WordPress doesn’t think the current user can't edit.
 	                    $edit_link = admin_url( "post.php?post={$id}&action=edit" );
 	                    $html      .= '</head><body>
-							<nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkerblue--darker nok-z-1 halign-center valign-center">
+							<nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkerblue--darker nok-z-top halign-center valign-center">
 							<a href="' . $edit_link . '" type="button" target="_blank" class="nok-button nok-align-self-to-sm-stretch fill-group-column nok-bg-darkerblue nok-text-contrast no-shadow" tabindex="0">Bewerken</a>
                             </nok-screen-mask>';
                         ob_start();
@@ -92,7 +93,6 @@ final class Theme {
                 ]
             );
         } );
-
     }
 
     public function theme_supports(): void {
@@ -157,11 +157,11 @@ final class Theme {
 
             if ( empty( $data['slug'] ) ) {
                 // fallback to filename if slug header missing
-                $data['slug'] = basename( $file, '.php' );
+                $data['slug'] = sanitize_title($data['name'] ?? basename( $file, '.php' ));
             }
-            // ensure CSS handle; default: page-part-<slug>
+            // ensure CSS handle; default: <slug>
             if ( empty( $data['css'] ) ) {
-                $data['css'] = "page-part-{$data['slug']}";
+                $data['css'] = "{$data['slug']}";
             }
 
             $this->part_registry[ $data['slug'] ] = $data;
@@ -183,7 +183,7 @@ final class Theme {
                     [],
                     filemtime( $css_file )
                 );
-            } else {
+            } else if ( file_exists (THEME_ROOT_ABS . "/template-parts/page-parts/{$slug}.css" ) ){
                 // Fallback to a default CSS if not found
                 wp_enqueue_style(
                     $slug,
@@ -231,10 +231,10 @@ final class Theme {
         wp_nonce_field( 'save_page_part_design', '_page_part_design_nonce' );
 
         echo '<label for="page_part_design_slug">'
-            . __( 'Select a design template', 'your-text-domain' )
+            . __( 'Select a design template', THEME_TEXT_DOMAIN )
             . "</label>\n";
         echo '<select name="page_part_design_slug" id="page_part_design_slug" style="width:100%;">';
-        echo '<option value="">' . esc_html__( '&mdash; Select &mdash;', 'your-text-domain' ) . '</option>';
+        echo '<option value="">' . esc_html__( '&mdash; Select &mdash;', THEME_TEXT_DOMAIN ) . '</option>';
 
         foreach ( $registry as $slug => $data ) {
             printf(
