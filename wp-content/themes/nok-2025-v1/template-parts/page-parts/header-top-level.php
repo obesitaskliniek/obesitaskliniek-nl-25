@@ -5,18 +5,16 @@
  * CSS: header-top-level
  */
 
+use NOK2025\V1\Helpers;
+
 /** @var \WP_Post $post */
 global $post;
 $post = $args['post'] ?? null;
 setup_postdata( $post );        // set up all “in-the-loop” globals
-var_dump($post);
 
-use NOK2025\V1\Helpers;
 ?>
 
 <div class="page-part page-part--header-top-level">
-
-
     <nok-section>
         <div class="nok-section__inner--stretched
         nok-bg-darkblue nok-text-white">
