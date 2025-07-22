@@ -20,6 +20,7 @@ eventHandler.docLoaded(function(){
   //enable transitions once everything's done, to prevent weird animation FOUCs
   document.body.classList.add('__enable-transitions');
 })
+
 eventHandler.docReady(function(){
 
   //toggle classes
@@ -43,6 +44,16 @@ eventHandler.docReady(function(){
 
   //scrollable
   document.querySelectorAll('.nok-scrollable__horizontal, .nok-scrollable__vertical').forEach(setupFakeScrollbar);
+
+  eventHandler.addListener('breakPointChange', (e) => {
+    document.querySelectorAll('foreignObject > img').forEach((img) => {
+      //fixes the bug where foreignObject responsive (lazy loaded) images do not update their src
+      img.style.display = 'none';
+      requestAnimationFrame(() => {
+        img.style.display = 'block';
+      })
+    })
+  });
 
   eventHandler.addListener('scroll', (e) => {
   //clear the url hash when scrolled back to top

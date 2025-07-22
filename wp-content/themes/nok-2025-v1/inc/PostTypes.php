@@ -16,10 +16,12 @@ class PostTypes {
         ];
         $args = [
             'labels'             => $labels,
-            'public'             => false,
+            'public'             => true,
             'show_ui'            => true,
             'show_in_rest'       => true,
-            'supports'           => [ 'title', 'editor', 'thumbnail' ],
+	        'menu_position'      => 5,
+            'supports'           => [ 'title', 'editor', 'thumbnail', 'excerpt', 'revisions', 'custom-fields' ],
+	        'taxonomies'         => [ 'category', 'post_tag' ],
             'menu_icon'          => 'dashicons-layout',
             'has_archive'        => false,
         ];

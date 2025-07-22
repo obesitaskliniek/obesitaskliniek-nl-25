@@ -14,7 +14,7 @@ export default function Edit( { attributes, setAttributes } ) {
             label={ __( 'Select Post', textDomain ) }
             value={ attributes.postId }
             options={ [
-                { label: __( '— Select —', textDomain ), value: 0 },
+                { label: __( '— Selecteer vormgeving —', textDomain ), value: 0 },
                 ...parts.map( (p) => ( { label: p.title.rendered, value: p.id } ) ),
             ] }
             onChange={ ( postId ) => setAttributes( { postId: parseInt( postId ) } ) }
