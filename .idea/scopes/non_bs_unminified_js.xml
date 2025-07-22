@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="non-bs-unminified-js" pattern="file[obesitaskliniek-nl-25]:wp-content/themes/nok-2025-v1/assets/js/*.js&amp;&amp;!file:*.min.*&amp;&amp;!file[obesitaskliniek-nl-25]:assets/js/bs/*.js&amp;&amp;!file:*.min.*||file[obesitaskliniek-nl-25]:wp-content/themes/nok-2025-v1/assets/js/modules//*.js&amp;&amp;!file:*.min.*" />
+</component>

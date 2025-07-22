@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="vasil-ams.servebolt.cloud" id="77fdcb19-0fe2-47e7-a23a-0b3eba60f83d" port="22" nameFormat="DESCRIPTIVE" username="obesit_26476" useOpenSSHConfig="true" />
+    </configs>
+  </component>
+</project>
