@@ -36,6 +36,57 @@ final class Theme {
         add_action( 'add_meta_boxes',          [ $this, 'add_design_meta_box' ] );
         add_action( 'save_post_page_part',     [ $this, 'save_design_meta' ], 10, 2 );
         add_action( 'init',                    [ $this, 'register_design_meta' ] );
+
+        add_filter( 'the_content', function( $content ) {
+            $content = str_replace(
+                '<p>',
+                '<p class="wp-block-paragraph">',
+                $content
+            );
+            return $content;
+        } );
+
+        add_action( 'rest_api_init', function() {
+            register_rest_route(
+                'nok-2025-v1/v1',
+                '/embed-page-part/(?P<id>\d+)',
+                [
+                    'methods'  => 'GET',
+                    'permission_callback' => '__return_true',
+                    'callback'            => function( \WP_REST_Request $request ) {
+                        $id   = (int) $request->get_param( 'id' );
+                        $post = get_post( $id );
+                        if ( ! $post || $post->post_type !== 'page_part' ) {
+                            status_header(404);
+                            exit;
+                        }
+
+                        $args = [ 'post' => $post ];
+                        $design = get_post_meta( $id, 'design_slug', true ) ?: 'header-top-level';
+                        $css_uris = [
+                            get_stylesheet_directory_uri() . '/assets/css/nok-components.css',
+                            get_stylesheet_directory_uri() . '/assets/css/color_tests-v2.css',
+                            get_stylesheet_directory_uri() . "/template-parts/page-parts/{$design}.css",
+                        ];
+
+                        // build your CSS‑links + $html body exactly as above…
+                        header( 'Content-Type: text/html; charset=utf-8' );
+                        $html = '<!doctype html><html><head><meta charset="utf-8">';
+                        foreach ( $css_uris as $uri ) {
+                            $html .= '<link rel="stylesheet" href="' . esc_url( $uri ) . '">';
+                        }
+                        $html .= '</head><body>';
+                        ob_start();
+                        include get_theme_file_path( "template-parts/page-parts/{$design}.php" );
+                        $html .= ob_get_clean();
+                        $html .= '</body></html>';
+                        print $html;
+                        exit;
+                    },
+                ]
+            );
+        } );
+
     }
 
     public function theme_supports(): void {
