@@ -1,4 +1,6 @@
 node_modules/
+wp-includes/
+wp-admin/
 /wp-content/themes/nok-2022-v1/
 /wp-content/themes/nok-2025-v1/js/modules/
 /wp-content/themes/nok-2025-v1/js/mobileConsole/

@@ -26,6 +26,9 @@ final class Theme {
     }
 
     private function setup_hooks(): void {
+
+		// Actions
+
         add_action( 'init', [ $this, 'theme_supports' ] );
 
         add_action( 'wp_enqueue_scripts', [ $this, 'frontend_assets'] );
@@ -37,15 +40,6 @@ final class Theme {
         add_action( 'add_meta_boxes',          [ $this, 'add_design_meta_box' ] );
         add_action( 'save_post_page_part',     [ $this, 'save_design_meta' ], 10, 2 );
         add_action( 'init',                    [ $this, 'register_design_meta' ] );
-
-        add_filter( 'the_content', function( $content ) {
-            $content = str_replace(
-                '<p>',
-                '<p class="wp-block-paragraph">',
-                $content
-            );
-            return $content;
-        } );
 
         add_action( 'rest_api_init', function() {
             register_rest_route(
@@ -112,6 +106,24 @@ final class Theme {
 			    $asset['version']
 		    );
 	    });
+
+		// Filters
+
+	    add_filter( 'the_content', function( $content ) {
+		    $content = str_replace(
+			    '<p>',
+			    '<p class="wp-block-paragraph">',
+			    $content
+		    );
+		    return $content;
+	    } );
+	    add_filter( 'show_admin_bar', function( $show ) {
+		    // if our preview iframe asked to hide it, turn it off
+		    if ( isset( $_GET['hide_adminbar'] ) ) {
+			    return false;
+		    }
+		    return $show;
+	    } );
 	}
 
     public function theme_supports(): void {
@@ -212,6 +224,21 @@ final class Theme {
                 );
             }
         }
+
+	    $asset = require get_theme_file_path( '/assets/js/nok-page-part-design-selector.asset.php' );
+	    wp_enqueue_script(
+		    'nok-page-part-design-selector',
+		    get_stylesheet_directory_uri() . '/assets/js/nok-page-part-design-selector.js',
+		    $asset['dependencies'],
+		    $asset['version']
+	    );
+	    wp_localize_script(
+		    'nok-page-part-design-selector',
+		    'PagePartDesignSettings',
+		    [
+			    'registry' => $parts,
+		    ]
+	    );
     }
 
     /**
@@ -231,14 +258,22 @@ final class Theme {
      * Add a dropdown meta-box under "Page Attributes" for selecting the design.
      */
     public function add_design_meta_box(): void {
-        add_meta_box(
-            'page_part_design',
-            __( 'Page Part Design', THEME_TEXT_DOMAIN ),
-            [ $this, 'render_design_meta_box' ],
-            'page_part',
-            'side',
-            'default'
-        );
+	    $screen = get_current_screen();
+		$is_block_editor = (
+			method_exists( $screen, 'is_block_editor' )
+			&& $screen->is_block_editor()
+		);
+	    // only on the block editor screen for page_part
+	    if ( !$is_block_editor ) {
+		    add_meta_box(
+			    'page_part_design',
+			    __( 'NOK - Page Part Design', THEME_TEXT_DOMAIN ),
+			    [ $this, 'render_design_meta_box' ],
+			    'page_part',
+			    'side',
+			    'default'
+		    );
+	    }
 		//live preview
 	    add_meta_box(
 		    'gutenberg-embedded-preview',
@@ -256,7 +291,7 @@ final class Theme {
 
 		// container for our React app
 		echo '<button id="nok-page-part-preview-button" type="button" class="button button-primary">' . esc_html__( 'Refresh Preview', THEME_TEXT_DOMAIN ) . '</button>
-		<div><p>Let op: Page Parts zijn niet afzonderlijk publiek benaderbaar en zijn ontworpen om onderdeel van een pagina te zijn.</p></div>
+		<div><p>Let op: Page Parts zijn niet afzonderlijk publiek benaderbaar (of indexeerbaar) en zijn ontworpen om onderdeel van een pagina te zijn.</p></div>
 	    
 	    <div id="nok-page-part-preview-root" style="border:1px solid #ddd; min-height:300px"></div>';
 	}
@@ -295,11 +330,6 @@ final class Theme {
         if ( empty( $_POST['_page_part_design_nonce'] )
             || ! wp_verify_nonce( wp_unslash( $_POST['_page_part_design_nonce'] ), 'save_page_part_design' )
         ) {
-            return;
-        }
-
-        // Only on autosave.
-        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
             return;
         }
 
