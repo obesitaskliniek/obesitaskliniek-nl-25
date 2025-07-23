@@ -5,6 +5,7 @@ namespace NOK2025\V1;
 class PostTypes {
 	public function __construct() {
 		add_action( 'init', [ $this, 'register_post_types' ] );
+		add_action( 'init', [ $this, 'register_design_meta' ] );
 		add_action( 'template_redirect', [ $this, 'protect_post_types' ] );
 	}
 
@@ -30,6 +31,38 @@ class PostTypes {
 			'has_archive'        => false,
 		];
 		register_post_type( 'page_part', $args );
+	}
+
+
+	/**
+	 * Register our meta so it’s in the REST API (and Gutenberg can save it).
+	 */
+	public function register_design_meta(): void {
+		// Ensure post type exists
+		if ( ! post_type_exists( 'page_part' ) ) {
+			error_log( 'Cannot register meta: page_part post type does not exist yet' );
+			return; // Just return, don't add another hook
+		}
+
+		// Check if already registered to prevent duplicate registrations
+		if ( registered_meta_key_exists( 'post', 'design_slug', 'page_part' ) ) {
+			return;
+		}
+
+		$result = register_post_meta( 'page_part', 'design_slug', [
+			'type'              => 'string',
+			'single'            => true,
+			'show_in_rest'      => true,
+			//'default'           => '',
+			'sanitize_callback' => 'sanitize_key',
+			'auth_callback'     => function ( $allowed, $meta_key, $post_id ) {
+				return current_user_can( 'edit_post', $post_id );
+			}
+		] );
+
+		if ( ! $result ) {
+			error_log( 'Failed to register design_slug meta for page_part post type' );
+		}
 	}
 
 	public function protect_post_types() {
@@ -76,5 +109,4 @@ class PostTypes {
 			exit;
 		}
 	}
-
 }
