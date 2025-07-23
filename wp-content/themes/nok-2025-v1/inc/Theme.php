@@ -6,284 +6,311 @@ namespace NOK2025\V1;
 use NOK2025\V1\PostTypes;
 
 final class Theme {
-    private static ?Theme $instance = null;
+	private static ?Theme $instance = null;
 
-    // Settings store (can hold customizer values)
-    private array $settings = [];
+	// Settings store (can hold customizer values)
+	private array $settings = [];
 
-    public function __construct() {
+	public function __construct() {
 
-	    // ensure CPTs are registered
-	    new PostTypes();
-    }
+		// ensure CPTs are registered
+		new PostTypes();
+	}
 
-    public static function get_instance(): Theme {
-        if ( self::$instance === null ) {
-            self::$instance = new self();
-            self::$instance->setup_hooks();
-        }
-        return self::$instance;
-    }
+	public static function get_instance(): Theme {
+		if ( self::$instance === null ) {
+			self::$instance = new self();
+			self::$instance->setup_hooks();
+		}
 
-    private function setup_hooks(): void {
+		return self::$instance;
+	}
 
+	private function setup_hooks(): void {
 		// Actions
 
-        add_action( 'init', [ $this, 'theme_supports' ] );
+		add_action( 'init', [ $this, 'theme_supports' ] );
 
-        add_action( 'wp_enqueue_scripts', [ $this, 'frontend_assets'] );
-        add_action( 'enqueue_block_editor_assets', [ $this, 'backend_assets'] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'frontend_assets' ] );
+		add_action( 'enqueue_block_editor_assets', [ $this, 'backend_assets' ] );
+		// ...other hooks
+		add_action( 'init', [ $this, 'register_design_meta' ], 15 );
 
-        add_action( 'customize_register', [ $this, 'register_customizer' ] );
-        // ...other hooks
+		add_action( 'add_meta_boxes', [ $this, 'add_design_meta_box' ] );
 
-        add_action( 'add_meta_boxes',          [ $this, 'add_design_meta_box' ] );
-        add_action( 'save_post_page_part',     [ $this, 'save_design_meta' ], 10, 2 );
-        add_action( 'init',                    [ $this, 'register_design_meta' ] );
+		add_action( 'rest_api_init', function () {
+			register_rest_route(
+				'nok-2025-v1/v1',
+				'/embed-page-part/(?P<id>\d+)',
+				[
+					'methods'             => 'GET',
+					'permission_callback' => '__return_true',
+					'callback'            => function ( \WP_REST_Request $request ) {
+						$id   = (int) $request->get_param( 'id' );
+						$post = get_post( $id );
+						if ( ! $post || $post->post_type !== 'page_part' ) {
+							status_header( 404 );
+							exit;
+						}
 
-        add_action( 'rest_api_init', function() {
-            register_rest_route(
-                'nok-2025-v1/v1',
-                '/embed-page-part/(?P<id>\d+)',
-                [
-                    'methods'  => 'GET',
-                    'permission_callback' => '__return_true',
-                    'callback'            => function( \WP_REST_Request $request ) {
-                        $id   = (int) $request->get_param( 'id' );
-                        $post = get_post( $id );
-                        if ( ! $post || $post->post_type !== 'page_part' ) {
-                            status_header(404);
-                            exit;
-                        }
+						$args     = [ 'post' => $post ];
+						$design   = get_post_meta( $id, 'design_slug', true ) ?: 'header-top-level';
+						$css_uris = [
+							get_stylesheet_directory_uri() . '/assets/css/nok-components.css',
+							get_stylesheet_directory_uri() . '/assets/css/color_tests-v2.css',
+							get_stylesheet_directory_uri() . "/template-parts/page-parts/{$design}.css",
+							get_stylesheet_directory_uri() . '/assets/css/nok-page-parts-editor-styles.css',
+						];
 
-                        $args = [ 'post' => $post ];
-                        $design = get_post_meta( $id, 'design_slug', true ) ?: 'header-top-level';
-                        $css_uris = [
-                            get_stylesheet_directory_uri() . '/assets/css/nok-components.css',
-                            get_stylesheet_directory_uri() . '/assets/css/color_tests-v2.css',
-                            get_stylesheet_directory_uri() . "/template-parts/page-parts/{$design}.css",
-	                        get_stylesheet_directory_uri() . '/assets/css/nok-page-parts-editor-styles.css',
-                        ];
-
-                        // build your CSS‑links + $html body exactly as above…
-                        header( 'Content-Type: text/html; charset=utf-8' );
-                        $html = '<!doctype html><html><head><meta charset="utf-8">';
-                        foreach ( $css_uris as $uri ) {
-                            $html .= '<link rel="stylesheet" href="' . esc_url( $uri ) . '">';
-                        }
+						// build your CSS‑links + $html body exactly as above…
+						header( 'Content-Type: text/html; charset=utf-8' );
+						$html = '<!doctype html><html><head><meta charset="utf-8">';
+						foreach ( $css_uris as $uri ) {
+							$html .= '<link rel="stylesheet" href="' . esc_url( $uri ) . '">';
+						}
 						//In the REST callback context, WordPress doesn’t think the current user can't edit.
-	                    $edit_link = admin_url( "post.php?post={$id}&action=edit" );
-	                    $html      .= '</head><body>
+						$edit_link = admin_url( "post.php?post={$id}&action=edit" );
+						$html      .= '</head><body>
 							<nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkerblue--darker nok-z-top halign-center valign-center">
 							<a href="' . $edit_link . '" type="button" target="_blank" class="nok-button nok-align-self-to-sm-stretch fill-group-column nok-bg-darkerblue nok-text-contrast no-shadow" tabindex="0">Bewerken</a>
                             </nok-screen-mask>';
-                        ob_start();
-                        include get_theme_file_path( "template-parts/page-parts/{$design}.php" );
-                        $html .= ob_get_clean();
-                        $html .= '</body></html>';
-                        print $html;
-                        exit;
-                    },
-                ]
-            );
-        } );
+						ob_start();
+						include get_theme_file_path( "template-parts/page-parts/{$design}.php" );
+						$html .= ob_get_clean();
+						$html .= '</body></html>';
+						print $html;
+						exit;
+					},
+				]
+			);
+		} );
 
-	    add_action( 'admin_enqueue_scripts', function( $hook ) {
-		    if ( 'post.php' !== $hook && 'post-new.php' !== $hook ) {
-			    return;
-		    }
-		    // only load on our CPT
-		    $screen = get_current_screen();
-		    if ( $screen->post_type !== 'page_part' ) {
-			    return;
-		    }
+		add_action( 'admin_enqueue_scripts', function ( $hook ) {
+			if ( 'post.php' !== $hook && 'post-new.php' !== $hook ) {
+				return;
+			}
+			// only load on our CPT
+			$screen = get_current_screen();
+			if ( $screen->post_type !== 'page_part' ) {
+				return;
+			}
 
-		    $asset = require get_theme_file_path( '/assets/js/nok-page-part-preview.asset.php' );
-		    wp_enqueue_script(
-			    'nok-page-part-live-preview',
-			    get_stylesheet_directory_uri() . '/assets/js/nok-page-part-preview.js',
-			    $asset['dependencies'],
-			    $asset['version']
-		    );
-	    });
+			$asset = require get_theme_file_path( '/assets/js/nok-page-part-preview.asset.php' );
+			wp_enqueue_script(
+				'nok-page-part-live-preview',
+				get_stylesheet_directory_uri() . '/assets/js/nok-page-part-preview.js',
+				$asset['dependencies'],
+				$asset['version']
+			);
+		} );
 
 		// Filters
 
-	    add_filter( 'the_content', function( $content ) {
-		    $content = str_replace(
-			    '<p>',
-			    '<p class="wp-block-paragraph">',
-			    $content
-		    );
-		    return $content;
-	    } );
-	    add_filter( 'show_admin_bar', function( $show ) {
-		    // if our preview iframe asked to hide it, turn it off
-		    if ( isset( $_GET['hide_adminbar'] ) ) {
-			    return false;
-		    }
-		    return $show;
-	    } );
+		add_filter( 'the_content', function ( $content ) {
+			$content = str_replace(
+				'<p>',
+				'<p class="wp-block-paragraph">',
+				$content
+			);
+
+			return $content;
+		} );
+		add_filter( 'show_admin_bar', function ( $show ) {
+			// if our preview iframe asked to hide it, turn it off
+			if ( isset( $_GET['hide_adminbar'] ) ) {
+				return false;
+			}
+
+			return $show;
+		} );
+		add_action('admin_head', [$this, 'custom_editor_inline_styles']);
 	}
 
-    public function theme_supports(): void {
-        // Add support for post thumbnails, title tag, custom logo…
-        add_theme_support( 'title-tag' );
-        add_theme_support( 'post-thumbnails' );
-        add_theme_support( 'html5', [ 'search-form', 'comment-form' ] );
-        // Optionally: block editor settings via theme.json (WP 5.8+)
-    }
+	public function custom_editor_inline_styles(): void {
+			$screen = get_current_screen();
+			if ( $screen && $screen->is_block_editor() ) {
+				echo '<style>
+			        .editor-styles-wrapper {
+			            min-height: 35vh !important;
+			        }
+			        .editor-styles-wrapper::after {
+			            height: 0 !important;
+			        }
+			    </style>';
+			}
+	}
 
-    public function frontend_assets(): void {
-        wp_register_style(
-            'nok-components-css',
-            THEME_ROOT . '/assets/css/nok-components.css',
-            [],
-            filemtime( THEME_ROOT_ABS . '/assets/css/nok-components.css')
-        );
-        wp_register_style(
-            'nok-colors-css',
-            THEME_ROOT . '/assets/css/color_tests-v2.css',
-            [],
-            filemtime( THEME_ROOT_ABS . '/assets/css/color_tests-v2.css')
-        );
-    }
+	public function theme_supports(): void {
+		// Add support for post thumbnails, title tag, custom logo…
+		add_theme_support( 'title-tag' );
+		add_theme_support( 'post-thumbnails' );
+		add_theme_support( 'html5', [ 'search-form', 'comment-form' ] );
+		// Optionally: block editor settings via theme.json (WP 5.8+)
+	}
 
-    public function register_customizer( \WP_Customize_Manager $wp_customize ): void {
-        // Delegate to inc/customizer.php
-        \NOK2025\V1\Customizer::register( $wp_customize );
-    }
+	public function frontend_assets(): void {
+		wp_register_style(
+			'nok-components-css',
+			THEME_ROOT . '/assets/css/nok-components.css',
+			[],
+			filemtime( THEME_ROOT_ABS . '/assets/css/nok-components.css' )
+		);
+		wp_register_style(
+			'nok-colors-css',
+			THEME_ROOT . '/assets/css/color_tests-v2.css',
+			[],
+			filemtime( THEME_ROOT_ABS . '/assets/css/color_tests-v2.css' )
+		);
+	}
 
-    // Helper to get a “global” setting: wraps get_theme_mod()
-    public function get_setting( string $key, $default = null ) {
-        return get_theme_mod( $key, $default );
-    }
+	// Helper to get a “global” setting: wraps get_theme_mod()
+	public function get_setting( string $key, $default = null ) {
+		return get_theme_mod( $key, $default );
+	}
 
-    /**
-     * Registry of page part templates.
-     * Lazy-loaded on first access.
-     */
-    private ?array $part_registry = null;
+	/**
+	 * Registry of page part templates.
+	 * Lazy-loaded on first access.
+	 */
+	private ?array $part_registry = null;
 
-    /**
-     * Scan all page‑part templates and pull their metadata.
-     *
-     * @return array Array of [ slug => [ 'name' => ..., 'description' => ..., 'icon' => ..., 'css' => ... ] ]
-     */
-    private function get_page_part_registry(): array {
-        if ( $this->part_registry !== null ) {
-            return $this->part_registry;
-        }
-        $files = glob( THEME_ROOT_ABS . '/template-parts/page-parts/*.php' );
-        $this->part_registry = [];
+	/**
+	 * Scan all page‑part templates and pull their metadata.
+	 *
+	 * @return array Array of [ slug => [ 'name' => ..., 'description' => ..., 'icon' => ..., 'css' => ... ] ]
+	 */
+	private function get_page_part_registry(): array {
+		if ( $this->part_registry !== null ) {
+			return $this->part_registry;
+		}
+		$files               = glob( THEME_ROOT_ABS . '/template-parts/page-parts/*.php' );
+		$this->part_registry = [];
 
-        foreach ( $files as $file ) {
-            $data = get_file_data( $file, [
-                'name'        => 'Template Name',
-                'description' => 'Description',
-                'slug'        => 'Slug',
-                'icon'        => 'Icon',
-                'css'         => 'CSS',
-            ] );
+		foreach ( $files as $file ) {
+			$data = get_file_data( $file, [
+				'name'        => 'Template Name',
+				'description' => 'Description',
+				'slug'        => 'Slug',
+				'icon'        => 'Icon',
+				'css'         => 'CSS',
+			] );
 
-            if ( empty( $data['slug'] ) ) {
-                // fallback to filename if slug header missing
-                $data['slug'] = sanitize_title($data['name'] ?? basename( $file, '.php' ));
-            }
-            // ensure CSS handle; default: <slug>
-            if ( empty( $data['css'] ) ) {
-                $data['css'] = "{$data['slug']}";
-            }
+			if ( empty( $data['slug'] ) ) {
+				// fallback to filename if slug header missing
+				$data['slug'] = sanitize_title( $data['name'] ?? basename( $file, '.php' ) );
+			}
+			// ensure CSS handle; default: <slug>
+			if ( empty( $data['css'] ) ) {
+				$data['css'] = "{$data['slug']}";
+			}
 
-            $this->part_registry[ $data['slug'] ] = $data;
-        }
+			$this->part_registry[ $data['slug'] ] = $data;
+		}
 
-        return $this->part_registry;
-    }
+		return $this->part_registry;
+	}
 
-    public function backend_assets(): void {
-        $parts = $this->get_page_part_registry();
+	public function backend_assets(): void {
+		$parts = $this->get_page_part_registry();
 
-        foreach ( $parts as $slug => $meta ) {
-            // 1) register CSS
-            $css_file = THEME_ROOT_ABS . "/template-parts/page-parts/{$meta['css']}.css";
-            if ( file_exists( $css_file ) ) {
-                wp_enqueue_style(
-                    $meta['css'],
-                    THEME_ROOT . "/template-parts/page-parts/{$meta['css']}.css",
-                    [],
-                    filemtime( $css_file )
-                );
-            } else if ( file_exists (THEME_ROOT_ABS . "/template-parts/page-parts/{$slug}.css" ) ){
-                // Fallback to a default CSS if not found
-                wp_enqueue_style(
-                    $slug,
-                    THEME_ROOT . "/template-parts/page-parts/{$slug}.css",
-                    [],
-                    filemtime( THEME_ROOT_ABS . "/template-parts/page-parts/{$slug}.css" )
-                );
-            }
-        }
+		foreach ( $parts as $slug => $meta ) {
+			// 1) register CSS
+			$css_file = THEME_ROOT_ABS . "/template-parts/page-parts/{$meta['css']}.css";
+			if ( file_exists( $css_file ) ) {
+				wp_enqueue_style(
+					$meta['css'],
+					THEME_ROOT . "/template-parts/page-parts/{$meta['css']}.css",
+					[],
+					filemtime( $css_file )
+				);
+			} else if ( file_exists( THEME_ROOT_ABS . "/template-parts/page-parts/{$slug}.css" ) ) {
+				// Fallback to a default CSS if not found
+				wp_enqueue_style(
+					$slug,
+					THEME_ROOT . "/template-parts/page-parts/{$slug}.css",
+					[],
+					filemtime( THEME_ROOT_ABS . "/template-parts/page-parts/{$slug}.css" )
+				);
+			}
+		}
 
-	    $asset = require get_theme_file_path( '/assets/js/nok-page-part-design-selector.asset.php' );
-	    wp_enqueue_script(
-		    'nok-page-part-design-selector',
-		    get_stylesheet_directory_uri() . '/assets/js/nok-page-part-design-selector.js',
-		    $asset['dependencies'],
-		    $asset['version']
-	    );
-	    wp_localize_script(
-		    'nok-page-part-design-selector',
-		    'PagePartDesignSettings',
-		    [
-			    'registry' => $parts,
-		    ]
-	    );
-    }
+		$asset = require get_theme_file_path( '/assets/js/nok-page-part-design-selector.asset.php' );
+		wp_enqueue_script(
+			'nok-page-part-design-selector',
+			get_stylesheet_directory_uri() . '/assets/js/nok-page-part-design-selector.js',
+			$asset['dependencies'],
+			$asset['version']
+		);
+		wp_localize_script(
+			'nok-page-part-design-selector',
+			'PagePartDesignSettings',
+			[
+				'registry' => $parts,
+			]
+		);
+	}
 
-    /**
-     * Register our meta so it’s in the REST API (and Gutenberg can save it).
-     */
-    public function register_design_meta(): void {
-        register_post_meta( 'page_part', 'design_slug', [
-            'type'              => 'string',
-            'show_in_rest'      => true,
-            'single'            => true,
-            'sanitize_callback' => 'sanitize_key',
-            'default'           => '',
-        ] );
-    }
+	/**
+	 * Register our meta so it’s in the REST API (and Gutenberg can save it).
+	 */
+	public function register_design_meta(): void {
+		// Ensure post type exists
+		if ( ! post_type_exists( 'page_part' ) ) {
+			error_log( 'Cannot register meta: page_part post type does not exist yet' );
+			return; // Just return, don't add another hook
+		}
 
-    /**
-     * Add a dropdown meta-box under "Page Attributes" for selecting the design.
-     */
-    public function add_design_meta_box(): void {
-	    $screen = get_current_screen();
+		// Check if already registered to prevent duplicate registrations
+		if ( registered_meta_key_exists( 'post', 'design_slug', 'page_part' ) ) {
+			return;
+		}
+
+		$result = register_post_meta( 'page_part', 'design_slug', [
+			'type'              => 'string',
+			'single'            => true,
+			'show_in_rest'      => true,
+			'default'           => '',
+			'sanitize_callback' => 'sanitize_key',
+			'auth_callback'     => function ( $allowed, $meta_key, $post_id ) {
+				return current_user_can( 'edit_post', $post_id );
+			}
+		] );
+
+		if ( ! $result ) {
+			error_log( 'Failed to register design_slug meta for page_part post type' );
+		}
+	}
+
+	/**
+	 * Add a dropdown meta-box under "Page Attributes" for selecting the design.
+	 */
+	public function add_design_meta_box(): void {
+		$screen          = get_current_screen();
 		$is_block_editor = (
 			method_exists( $screen, 'is_block_editor' )
 			&& $screen->is_block_editor()
 		);
-	    // only on the block editor screen for page_part
-	    if ( !$is_block_editor ) {
-		    add_meta_box(
-			    'page_part_design',
-			    __( 'NOK - Page Part Design', THEME_TEXT_DOMAIN ),
-			    [ $this, 'render_design_meta_box' ],
-			    'page_part',
-			    'side',
-			    'default'
-		    );
-	    }
+		// only on the block editor screen for page_part
+		if ( ! $is_block_editor ) {
+			add_meta_box(
+				'page_part_design',
+				__( 'NOK - Page Part Design', THEME_TEXT_DOMAIN ),
+				[ $this, 'render_design_meta_box' ],
+				'page_part',
+				'side',
+				'default'
+			);
+		}
 		//live preview
-	    add_meta_box(
-		    'gutenberg-embedded-preview',
-		    __( 'NOK - Live Page Part Preview', THEME_TEXT_DOMAIN ),
-		    [ $this, 'gep_render_preview_box'],
-		    [ 'page_part' ],     // your CPT slug(s)
-		    'normal',            // under the editor
-		    'high'
-	    );
-    }
+		add_meta_box(
+			'gutenberg-embedded-preview',
+			__( 'NOK - Live Page Part Preview', THEME_TEXT_DOMAIN ),
+			[ $this, 'gep_render_preview_box' ],
+			[ 'page_part' ],     // your CPT slug(s)
+			'normal',            // under the editor
+			'high'
+		);
+	}
 
 	public function gep_render_preview_box( \WP_Post $post ) {
 		// nonce for future REST calls (if you need to save/fetch autosaves)
@@ -297,54 +324,58 @@ final class Theme {
 	}
 
 	/**
-     * Output the <select> of available templates.
-     */
-    public function render_design_meta_box( \WP_Post $post ): void {
-        $registry     = $this->get_page_part_registry();
-        $current_slug = get_post_meta( $post->ID, 'design_slug', true );
-        wp_nonce_field( 'save_page_part_design', '_page_part_design_nonce' );
+	 * Output the <select> of available templates.
+	 */
+	public function render_design_meta_box( \WP_Post $post ): void {
+		$registry     = $this->get_page_part_registry();
+		$current_slug = get_post_meta( $post->ID, 'design_slug', true );
+		wp_nonce_field( 'save_page_part_design', '_page_part_design_nonce' );
 
-        echo '<label for="page_part_design_slug">'
-            . __( 'Select a design template', THEME_TEXT_DOMAIN )
-            . "</label>\n";
-        echo '<select name="page_part_design_slug" id="page_part_design_slug">';
-        echo '<option value="">' . esc_html__( '&mdash; Select &mdash;', THEME_TEXT_DOMAIN ) . '</option>';
+		echo '<label for="page_part_design_slug">'
+		     . __( 'Select a design template', THEME_TEXT_DOMAIN )
+		     . "</label>\n";
+		echo '<select name="page_part_design_slug" id="page_part_design_slug">';
+		echo '<option value="">' . esc_html__( '&mdash; Select &mdash;', THEME_TEXT_DOMAIN ) . '</option>';
 
-        foreach ( $registry as $slug => $data ) {
-            printf(
-                "<option value=\"%1\$s\" %2\$s>%3\$s</option>\n",
-                esc_attr( $slug ),
-                selected( $current_slug, $slug, false ),
-                esc_html( $data['name'] )
-            );
-        }
+		foreach ( $registry as $slug => $data ) {
+			printf(
+				"<option value=\"%1\$s\" %2\$s>%3\$s</option>\n",
+				esc_attr( $slug ),
+				selected( $current_slug, $slug, false ),
+				esc_html( $data['name'] )
+			);
+		}
 
-        echo '</select>';
-    }
+		echo '</select>';
+	}
 
-    /**
-     * Save the selected design when the post is saved.
-     */
-    public function save_design_meta( int $post_id,\WP_Post $post ): void {
-        // Verify nonce
-        if ( empty( $_POST['_page_part_design_nonce'] )
-            || ! wp_verify_nonce( wp_unslash( $_POST['_page_part_design_nonce'] ), 'save_page_part_design' )
-        ) {
-            return;
-        }
+	/**
+	 * Save the selected design when the post is saved.
+	 */
+	public function save_design_meta( int $post_id, \WP_Post $post ): void {
+		// Skip manual saving when Gutenberg (REST) is doing its own thing.
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			return;
+		}
+		// Verify nonce
+		if ( empty( $_POST['_page_part_design_nonce'] )
+		     || ! wp_verify_nonce( wp_unslash( $_POST['_page_part_design_nonce'] ), 'save_page_part_design' )
+		) {
+			return;
+		}
 
-        // Check permissions.
-        if ( ! current_user_can( 'edit_post', $post_id ) ) {
-            return;
-        }
+		// Check permissions.
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
 
-        // Sanitize and update.
-        $new = isset( $_POST['page_part_design_slug'] )
-            ? sanitize_key( wp_unslash( $_POST['page_part_design_slug'] ) )
-            : '';
+		// Sanitize and update.
+		$new = isset( $_POST['page_part_design_slug'] )
+			? sanitize_key( wp_unslash( $_POST['page_part_design_slug'] ) )
+			: '';
 
-        update_post_meta( $post_id, 'design_slug', $new );
-    }
+		update_post_meta( $post_id, 'design_slug', $new );
+	}
 
 
 }
