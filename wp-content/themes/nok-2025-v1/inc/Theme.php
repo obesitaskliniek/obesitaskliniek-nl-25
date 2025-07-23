@@ -93,7 +93,26 @@ final class Theme {
                 ]
             );
         } );
-    }
+
+	    add_action( 'admin_enqueue_scripts', function( $hook ) {
+		    if ( 'post.php' !== $hook && 'post-new.php' !== $hook ) {
+			    return;
+		    }
+		    // only load on our CPT
+		    $screen = get_current_screen();
+		    if ( $screen->post_type !== 'page_part' ) {
+			    return;
+		    }
+
+		    $asset = require get_theme_file_path( '/assets/js/nok-page-part-preview.asset.php' );
+		    wp_enqueue_script(
+			    'nok-page-part-live-preview',
+			    get_stylesheet_directory_uri() . '/assets/js/nok-page-part-preview.js',
+			    $asset['dependencies'],
+			    $asset['version']
+		    );
+	    });
+	}
 
     public function theme_supports(): void {
         // Add support for post thumbnails, title tag, custom logo…
@@ -214,15 +233,35 @@ final class Theme {
     public function add_design_meta_box(): void {
         add_meta_box(
             'page_part_design',
-            __( 'Page Part Design', 'your-text-domain' ),
+            __( 'Page Part Design', THEME_TEXT_DOMAIN ),
             [ $this, 'render_design_meta_box' ],
             'page_part',
             'side',
             'default'
         );
+		//live preview
+	    add_meta_box(
+		    'gutenberg-embedded-preview',
+		    __( 'NOK - Live Page Part Preview', THEME_TEXT_DOMAIN ),
+		    [ $this, 'gep_render_preview_box'],
+		    [ 'page_part' ],     // your CPT slug(s)
+		    'normal',            // under the editor
+		    'high'
+	    );
     }
 
-    /**
+	public function gep_render_preview_box( \WP_Post $post ) {
+		// nonce for future REST calls (if you need to save/fetch autosaves)
+		wp_nonce_field( 'gep_preview_nonce', 'gep_preview_nonce' );
+
+		// container for our React app
+		echo '<button id="nok-page-part-preview-button" type="button" class="button button-primary">' . esc_html__( 'Refresh Preview', THEME_TEXT_DOMAIN ) . '</button>
+		<div><p>Let op: Page Parts zijn niet afzonderlijk publiek benaderbaar en zijn ontworpen om onderdeel van een pagina te zijn.</p></div>
+	    
+	    <div id="nok-page-part-preview-root" style="border:1px solid #ddd; min-height:300px"></div>';
+	}
+
+	/**
      * Output the <select> of available templates.
      */
     public function render_design_meta_box( \WP_Post $post ): void {
@@ -233,7 +272,7 @@ final class Theme {
         echo '<label for="page_part_design_slug">'
             . __( 'Select a design template', THEME_TEXT_DOMAIN )
             . "</label>\n";
-        echo '<select name="page_part_design_slug" id="page_part_design_slug" style="width:100%;">';
+        echo '<select name="page_part_design_slug" id="page_part_design_slug">';
         echo '<option value="">' . esc_html__( '&mdash; Select &mdash;', THEME_TEXT_DOMAIN ) . '</option>';
 
         foreach ( $registry as $slug => $data ) {
