@@ -4,7 +4,9 @@
  * Allows front‑end preview of each part in isolation.
  */
 get_header();
+?>
 
+<?php
 // Get the design slug
 $design = get_post_meta( get_the_ID(), 'design_slug', true ) ?: '';
 
@@ -22,6 +24,7 @@ if ( ! $design || ! locate_template( "template-parts/page-parts/{$design}.php" )
         null,
         [ 'post' => get_post() ]
     );
-}
+} ?>
 
+<?php
 get_footer();

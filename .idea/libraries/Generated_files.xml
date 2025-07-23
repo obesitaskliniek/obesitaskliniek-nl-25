@@ -2,15 +2,11 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
-        <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/entrypoint.min.mjs" />
-        <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/modules/hnl.breakpoints.min.mjs" />
-        <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/modules/hnl.classtoggler.min.mjs" />
+        <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-page-part-preview.min.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/entrypoint.min.mjs" />
-      <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/modules/hnl.breakpoints.min.mjs" />
-      <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/modules/hnl.classtoggler.min.mjs" />
+      <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-page-part-preview.min.js" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
