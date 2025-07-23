@@ -9,10 +9,14 @@ module.exports = {
     entry: {
         ...defaultConfig.entry,
 
-        // 2) …and add one more, keyed to the folder you want:
         'assets/js/nok-page-part-preview': path.resolve(
             __dirname,
             'src/nok-page-part-preview.js'
+        ),
+
+        'assets/js/nok-page-part-design-selector': path.resolve(
+            __dirname,
+            'src/nok-page-part-design-selector.js'
         ),
     },
 
