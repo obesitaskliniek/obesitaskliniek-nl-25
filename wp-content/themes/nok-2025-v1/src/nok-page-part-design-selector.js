@@ -1,40 +1,53 @@
-import { registerPlugin }               from '@wordpress/plugins';
-import { PluginDocumentSettingPanel }   from '@wordpress/edit-post';
-import { SelectControl }                from '@wordpress/components';
-import { useEntityProp }                from '@wordpress/core-data';
-import { jsx }                          from '@wordpress/element';
+(() => {
+    const {registerPlugin} = wp.plugins;
+    const {PluginDocumentSettingPanel} = wp.editPost;
+    const {SelectControl} = wp.components;
+    const {useSelect, useDispatch, select, dispatch, subscribe} = wp.data;
+    const apiFetch                       = wp.apiFetch;
 
-function DesignSlugPanel() {
-    const [ meta, setMeta ] = useEntityProp( 'postType', 'page_part', 'meta' );
+    function DesignSlugPanel() {
+        // ← no deps array here: subscribe to EVERY editor change
+        const meta = useSelect(
+            select => select('core/editor').getEditedPostAttribute('meta') || {}
+        );
 
-    // pull in your PHP‑localized registry
-    const registry = window.PagePartDesignSettings?.registry || {};
+        const {editPost} = useDispatch('core/editor');
+        const postId        = useSelect( ( select ) =>
+            select( 'core/editor' ).getCurrentPostId()
+        );
 
-    // turn it into WP‑style options
-    const options = [
-        { label: '— Select —', value: '' },
-        ...Object.entries( registry ).map( ( [ slug, data ] ) => ( {
-            label: data.name,
-            value: slug,
-        } ) ),
-    ];
+        // your localized PHP registry
+        const registry = window.PagePartDesignSettings?.registry || {};
 
-    return (
-        <PluginDocumentSettingPanel
-            name="page-part-design"
-            title="Page Part Design"
-            className="page-part-design-panel"
-        >
-            <SelectControl
-                label="Design template"
-                value={ meta.design_slug || '' }
-                options={ options }
-                onChange={ ( value ) =>
-                    setMeta( { ...meta, design_slug: value } )
-                }
-            />
-        </PluginDocumentSettingPanel>
-    );
-}
+        const options = [
+            {label: '— Select —', value: ''},
+            ...Object.entries(registry).map(([slug, data]) => ({
+                label: data.name,
+                value: slug,
+            })),
+        ];
 
-registerPlugin( 'page-part-design-slug', { render: DesignSlugPanel } );
+        return (
+            <PluginDocumentSettingPanel name="page-part-design" title="Select a design template">
+                <SelectControl
+                    label="Design template"
+                    value={meta.design_slug || ''}
+                    options={options}
+                    onChange={newSlug => {
+                        // pushes into core/editor store – this is what Gutenberg saves
+                        editPost({meta: {...meta, design_slug: newSlug}});
+                        apiFetch({
+                            path: `/wp/v2/page_part/${ postId }`,
+                            method: 'POST',
+                            data: { meta: { design_slug: newSlug } },
+                        }).catch( ( err ) => {
+                            console.error( 'Failed to save design_slug:', err );
+                        });
+                    }}
+                />
+            </PluginDocumentSettingPanel>
+        );
+    }
+    registerPlugin('page-part-design-slug', {render: DesignSlugPanel});
+
+})();

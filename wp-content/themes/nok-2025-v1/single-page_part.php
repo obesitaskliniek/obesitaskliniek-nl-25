@@ -26,5 +26,8 @@ if ( ! $design || ! locate_template( "template-parts/page-parts/{$design}.php" )
     );
 } ?>
 
+
+
 <?php
+
 get_footer();
