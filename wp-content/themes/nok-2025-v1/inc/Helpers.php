@@ -14,6 +14,31 @@ class Helpers {
         return $return;
     }
 
+	/**
+	 * Show field value or placeholder when editing
+	 *
+	 * @param string $value The field value
+	 * @return string
+	 */
+	public static function show_placeholder( string $value, ): string {
+		if ( ! empty( $value ) ) {
+			return '<span style="color: #999; font-style: italic;">Vul "'.$value.'" in onder "Design template"</span>';
+		} else {
+			return '';
+		}
+	}
+
+	/**
+	 * Check if we're in preview/editing mode
+	 *
+	 * @param int|null $post_id Post ID to check permissions for
+	 * @return bool
+	 */
+	public static function is_editing_mode( ?int $post_id = null ): bool {
+		$post_id = $post_id ?: get_the_ID();
+		return is_preview() || ( is_user_logged_in() && current_user_can( 'edit_post', $post_id ) );
+	}
+
 }
 
 /**

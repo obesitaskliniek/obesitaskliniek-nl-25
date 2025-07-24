@@ -3,6 +3,7 @@
  * Template Name: Portrait Carousel
  * Slug: portrait-carousel
  * CSS: portrait-carousel
+ * Custom Fields: team_members:repeater
  */
 
 use NOK2025\V1\Helpers;

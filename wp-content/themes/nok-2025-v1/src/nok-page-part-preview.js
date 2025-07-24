@@ -87,15 +87,52 @@ domReady(() => {
         hnlLogger.warn(NAME, 'Update button not found, continuing with frame only');
     }
 
-    /**
-     * Update the preview iframe with current content and design_slug
-     */
-    const updateFrame = () => {
+    // Add initialization state tracking
+    let isInitializing = true;
+    let userInitiatedChange = false;
+    let hasLoadedInitialPreview = false;
+
+    // Function to load initial preview
+    const loadInitialPreview = () => {
+        if (!hasLoadedInitialPreview) {
+            hnlLogger.info(NAME, 'Loading initial preview');
+
+            const postId = wp.data.select('core/editor').getCurrentPostId();
+            const previewLink = wp.data.select('core/editor').getEditedPostPreviewLink();
+
+            if (previewLink && !previewLink.includes('auto-draft')) {
+                iframe.removeAttribute('srcdoc');
+                iframe.src = `${previewLink}&hide_adminbar=1`;
+                hasLoadedInitialPreview = true;
+            }
+        }
+    };
+
+    // Enhanced updateFrame function that tracks user vs system changes
+    const enhancedUpdateFrame = (isUserInitiated = false) => {
+        if (isUserInitiated) {
+            userInitiatedChange = true;
+            hnlLogger.info(NAME, 'User-initiated preview update');
+        }
+
+        // Call the original updateFrame logic
         const postId = wp.data.select('core/editor').getCurrentPostId();
         const meta = wp.data.select('core/editor').getEditedPostAttribute('meta') || {};
         const currentDesignSlug = meta.design_slug || '';
 
         hnlLogger.info(NAME, `About to autosave with design_slug: ${currentDesignSlug}`);
+        hnlLogger.info(NAME, `All meta:`);
+        hnlLogger.info(NAME, meta);
+
+        // Prepare all meta fields for storage
+        const formData = new URLSearchParams({
+            action: 'store_preview_meta',
+            post_id: postId,
+            design_slug: currentDesignSlug
+        });
+
+        // Add all meta fields
+        formData.append('all_meta', JSON.stringify(meta));
 
         // Store the meta value via AJAX
         fetch(ajaxurl, {
@@ -103,11 +140,7 @@ domReady(() => {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: new URLSearchParams({
-                action: 'store_preview_meta',
-                post_id: postId,
-                design_slug: currentDesignSlug
-            })
+            body: formData
         })
             .then(response => response.json())
             .then(data => {
@@ -120,7 +153,6 @@ domReady(() => {
             .then(() => {
                 hnlLogger.info(NAME, 'Autosave completed');
 
-                // Get the preview URL and update iframe
                 const previewLink = wp.data
                     .select('core/editor')
                     .getEditedPostPreviewLink();
@@ -133,28 +165,74 @@ domReady(() => {
             });
     };
 
-    // Expose updateFrame globally so React component can use it
-    window.nokUpdatePreview = updateFrame;
+    // Expose enhanced function globally
+    window.nokUpdatePreview = enhancedUpdateFrame;
 
-    // Button click handler
+    // Button click handler uses the enhanced function
     if (button) {
-        button.addEventListener('click', updateFrame);
+        button.addEventListener('click', () => enhancedUpdateFrame(true)); // Mark button clicks as user-initiated
     }
 
     // Auto-update on window resize
     window.addEventListener('resize', debounceThis((e) => {
-        updateFrame();
+        enhancedUpdateFrame(true); // Mark resize as user-initiated
     }));
 
-    // Watch for design_slug changes in the editor store
+    setTimeout(() => {
+        isInitializing = false;
+        loadInitialPreview(); // Load preview after initialization
+        hnlLogger.info(NAME, 'Preview system initialized, updates now enabled');
+    }, 2000);
+
+    // Enhanced subscribe function with autosave detection
     let lastSlug = select("core/editor").getEditedPostAttribute("meta")?.design_slug;
+    let lastMeta = select("core/editor").getEditedPostAttribute("meta") || {};
+
     subscribe(() => {
+        // Skip all updates during initialization
+        if (isInitializing) {
+            return;
+        }
+
         const meta = select("core/editor").getEditedPostAttribute("meta") || {};
         const currentSlug = meta.design_slug;
+
+        // Check if this is likely an autosave (meta changed but no user action in last 2 seconds)
+        const isLikelyAutosave = !userInitiatedChange;
+
+        // Reset the user flag after checking
+        if (userInitiatedChange) {
+            // Keep the flag for 2 seconds, then reset
+            setTimeout(() => {
+                userInitiatedChange = false;
+            }, 2000);
+        }
+
+        // Check if design_slug changed
         if (currentSlug !== lastSlug) {
             lastSlug = currentSlug;
-            hnlLogger.info(NAME, `Design slug changed to: ${currentSlug}`);
-            updateFrame();
+
+            if (!isLikelyAutosave) {
+                hnlLogger.info(NAME, `Design slug changed to: ${currentSlug}`);
+                enhancedUpdateFrame();
+            } else {
+                hnlLogger.info(NAME, `Design slug changed via autosave, skipping preview update`);
+            }
+            return;
+        }
+
+        // Check if any custom fields changed
+        const hasMetaChanged = JSON.stringify(meta) !== JSON.stringify(lastMeta);
+        if (hasMetaChanged) {
+            lastMeta = {...meta};
+
+            if (!isLikelyAutosave) {
+                hnlLogger.info(NAME, `Custom fields changed, updating preview`);
+                enhancedUpdateFrame();
+            } else {
+                hnlLogger.info(NAME, `Custom fields changed via autosave, skipping preview update`);
+            }
         }
     });
+
 });
