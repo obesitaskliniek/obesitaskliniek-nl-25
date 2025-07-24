@@ -18,6 +18,7 @@ if ( ! $design || ! locate_template( "template-parts/page-parts/{$design}.php" )
     wp_enqueue_style( 'nok-components-css' );
     wp_dequeue_style( $design );
 
+    $id = get_the_ID(); var_dump(get_transient( "preview_design_slug_{$id}" ));
     // Pull in your part template, passing the post
     get_template_part(
         "template-parts/page-parts/{$design}",

@@ -93,35 +93,61 @@ domReady(() => {
 
     // single update function
     const updateFrame = () => {
-        wp.data.dispatch('core/editor').autosave().then(() => {
-            // 2) once saved, grab the exact preview URL
-            const previewLink = wp.data
-                .select('core/editor')
-                .getEditedPostPreviewLink();
+        // 1) Get the current select value
+        const designSelect = document.querySelector('select[name="page_part_design_slug"]');
+        const currentDesignSlug = designSelect ? designSelect.value : '';
+        console.log('About to autosave with design_slug:', currentDesignSlug);
 
-            // 3) update our iframe
-            iframe.removeAttribute('srcdoc')
-            iframe.src = `${previewLink}&hide_adminbar=1`;
+        // 2) Store the meta value directly via AJAX
+        const postId = wp.data.select('core/editor').getCurrentPostId();
+
+        fetch(ajaxurl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                action: 'store_preview_meta',
+                post_id: postId,
+                design_slug: currentDesignSlug
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Meta stored:', data);
+
+                // 3) Now perform autosave (for content changes)
+                return wp.data.dispatch('core/editor').autosave();
+            })
+            .then(() => {
+                console.log('Autosave completed');
+                // 4) once saved, grab the exact preview URL
+                const previewLink = wp.data
+                    .select('core/editor')
+                    .getEditedPostPreviewLink();
+
+                // 5) update our iframe
+                iframe.removeAttribute('srcdoc')
+                iframe.src = `${previewLink}&hide_adminbar=1`;
+            });
+    }
+
+    // Auto-update when design select changes
+    const designSelect = document.querySelector('select[name="page_part_design_slug"]');
+    if (designSelect) {
+        designSelect.addEventListener('change', function() {
+            console.log('Design slug changed to:', this.value);
+            updateFrame();
         });
+    } else {
+        console.warn('Design select dropdown not found');
     }
 
     if (button) {
         button.addEventListener('click', updateFrame);
     }
 
-    window.addEventListener('resize', debounceThis((e)=> {
+    window.addEventListener('resize', debounceThis((e) => {
         updateFrame();
     }));
-
-    // store last known slug so we can see if the select has actually changed.
-    let lastSlug = select("core/editor").getEditedPostAttribute("meta")?.design_slug;
-    subscribe(() => {
-        const meta = select("core/editor").getEditedPostAttribute("meta") || {};
-        const currentSlug = meta.design_slug;
-        if (currentSlug !== lastSlug) {
-            lastSlug = currentSlug;
-            // trigger the same autosave + iframe refresh - this will auto kick-off on looad (bonus)
-            updateFrame();
-        }
-    });
 });

@@ -44,6 +44,9 @@ final class Theme {
 			    remove_meta_box( 'page-part-design', 'page_part', 'side' );
 		    }
 	    });
+	    add_action( 'init', [ $this, 'handle_preview_meta' ] );
+	    add_action( 'init', [ $this, 'handle_preview_rendering' ] );
+
         add_action( 'save_post_page_part',     [ $this, 'save_design_meta' ], 10, 2 );
         add_action( 'init',                    [ $this, 'register_design_meta' ] );
 
@@ -63,7 +66,10 @@ final class Theme {
                         }
 
                         $args = [ 'post' => $post ];
-                        $design = get_post_meta( $id, 'design_slug', true ) ?: 'header-top-level';
+
+	                    // Check for temporary preview meta first
+	                    $design = get_post_meta( $id, 'design_slug', true ) ?: 'header-top-level';
+
                         $css_uris = [
                             get_stylesheet_directory_uri() . '/assets/css/nok-components.css',
                             get_stylesheet_directory_uri() . '/assets/css/color_tests-v2.css',
@@ -112,6 +118,8 @@ final class Theme {
 			    $asset['version']
 		    );
 	    });
+
+		add_action('admin_head', [$this, 'custom_editor_inline_styles']);
 
 		// Filters
 
@@ -164,6 +172,20 @@ final class Theme {
     public function get_setting( string $key, $default = null ) {
         return get_theme_mod( $key, $default );
     }
+
+	public function custom_editor_inline_styles(): void {
+		$screen = get_current_screen();
+		if ( $screen && $screen->is_block_editor() ) {
+			echo '<style>
+			        .editor-styles-wrapper {
+			            min-height: 35vh !important;
+			        }
+			        .editor-styles-wrapper::after {
+			            height: 0 !important;
+			        }
+			    </style>';
+		}
+	}
 
     /**
      * Registry of page part templates.
@@ -230,14 +252,6 @@ final class Theme {
                 );
             }
         }
-
-	    $asset = require get_theme_file_path( '/assets/js/nok-page-part-design-selector.asset.php' );
-	    wp_enqueue_script(
-		    'nok-page-part-live-design-selector',
-		    get_stylesheet_directory_uri() . '/assets/js/nok-page-part-design-selector.js',
-		    $asset['dependencies'],
-		    $asset['version']
-	    );
     }
 
     /**
@@ -252,6 +266,44 @@ final class Theme {
             'default'           => '',
         ] );
     }
+
+	public function handle_preview_meta(): void {
+		add_action( 'wp_ajax_store_preview_meta', function() {
+			$post_id = (int) $_POST['post_id'];
+			$design_slug = sanitize_key( $_POST['design_slug'] );
+
+			if ( $post_id && $design_slug ) {
+				set_transient( "preview_design_slug_{$post_id}", $design_slug, 300 );
+				wp_send_json_success( "Stored design_slug: {$design_slug}" );
+			} else {
+				wp_send_json_error( 'Missing data' );
+			}
+		});
+	}
+
+	/**
+	 * Modify preview rendering to use transient data
+	 */
+	public function handle_preview_rendering(): void {
+		add_action( 'template_redirect', function() {
+			// Only on preview pages for page_part posts
+			if ( is_preview() && get_post_type() === 'page_part' ) {
+				$post_id = get_the_ID();
+
+				// Check for temporary preview meta
+				$preview_design = get_transient( "preview_design_slug_{$post_id}" );
+				if ( $preview_design ) {
+					// Override the meta value for this request
+					add_filter( 'get_post_metadata', function( $value, $object_id, $meta_key ) use ( $post_id, $preview_design ) {
+						if ( $object_id == $post_id && $meta_key === 'design_slug' ) {
+							return [ $preview_design ];
+						}
+						return $value;
+					}, 10, 3 );
+				}
+			}
+		});
+	}
 
     /**
      * Add a dropdown meta-box under "Page Attributes" for selecting the design.
