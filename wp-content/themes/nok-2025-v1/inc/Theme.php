@@ -96,20 +96,13 @@ final class Theme {
 		$parts = $this->get_page_part_registry();
 
 		foreach ( $parts as $slug => $meta ) {
-			$css_file = THEME_ROOT_ABS . "/template-parts/page-parts/{$meta['css']}.css";
+			$css_file = THEME_ROOT_ABS . "/template-parts/page-parts/{$meta['slug']}.css";
 			if ( file_exists( $css_file ) ) {
 				wp_enqueue_style(
-					$meta['css'],
-					THEME_ROOT . "/template-parts/page-parts/{$meta['css']}.css",
+					$meta['slug'],
+					THEME_ROOT . "/template-parts/page-parts/{$meta['slug']}.css",
 					[],
 					filemtime( $css_file )
-				);
-			} else if ( file_exists( THEME_ROOT_ABS . "/template-parts/page-parts/{$slug}.css" ) ) {
-				wp_enqueue_style(
-					$slug,
-					THEME_ROOT . "/template-parts/page-parts/{$slug}.css",
-					[],
-					filemtime( THEME_ROOT_ABS . "/template-parts/page-parts/{$slug}.css" )
 				);
 			}
 		}
@@ -173,9 +166,9 @@ final class Theme {
 	// =============================================================================
 
 	/**
-	 * Scan all page-part templates and pull their metadata.
+	 * Scan all page-part templates and pull their metadata including custom fields.
 	 *
-	 * @return array Array of [ slug => [ 'name' => ..., 'description' => ..., 'icon' => ..., 'css' => ... ] ]
+	 * @return array Array of [ slug => [ 'name' => ..., 'description' => ..., 'icon' => ..., 'custom_fields' => [...] ] ]
 	 */
 	private function get_page_part_registry(): array {
 		if ( $this->part_registry !== null ) {
@@ -187,20 +180,19 @@ final class Theme {
 
 		foreach ( $files as $file ) {
 			$data = get_file_data( $file, [
-				'name'        => 'Template Name',
-				'description' => 'Description',
-				'slug'        => 'Slug',
-				'icon'        => 'Icon',
-				'css'         => 'CSS',
+				'name'          => 'Template Name',
+				'description'   => 'Description',
+				'slug'          => 'Slug',
+				'icon'          => 'Icon',
+				'custom_fields' => 'Custom Fields',
 			] );
 
 			if ( empty( $data['slug'] ) ) {
 				$data['slug'] = sanitize_title( $data['name'] ?? basename( $file, '.php' ) );
 			}
 
-			if ( empty( $data['css'] ) ) {
-				$data['css'] = $data['slug'];
-			}
+			// Parse custom fields
+			$data['custom_fields'] = $this->parse_custom_fields( $data['custom_fields'], $data['slug'] );
 
 			$this->part_registry[ $data['slug'] ] = $data;
 		}
@@ -208,14 +200,70 @@ final class Theme {
 		return $this->part_registry;
 	}
 
+	/**
+	 * Parse custom fields definition from template header
+	 *
+	 * @param string $fields_string Format: "field1:type,field2:type,field3:type"
+	 * @param string $template_slug Template slug for field prefixing
+	 * @return array Parsed field definitions
+	 */
+	private function parse_custom_fields( string $fields_string, string $template_slug ): array {
+		if ( empty( $fields_string ) ) {
+			return [];
+		}
+
+		$fields = [];
+		$field_definitions = explode( ',', $fields_string );
+
+		foreach ( $field_definitions as $definition ) {
+			$definition = trim( $definition );
+			if ( empty( $definition ) ) {
+				continue;
+			}
+
+			$parts = explode( ':', $definition );
+			if ( count( $parts ) !== 2 ) {
+				continue;
+			}
+
+			$field_name = trim( $parts[0] );
+			$field_type = trim( $parts[1] );
+
+			// Create prefixed meta key
+			$meta_key = $template_slug . '_' . $field_name;
+
+			$fields[] = [
+				'name'     => $field_name,
+				'type'     => $field_type,
+				'meta_key' => $meta_key,
+				'label'    => $this->generate_field_label( $field_name ),
+			];
+		}
+
+		return $fields;
+	}
+
+	/**
+	 * Generate a human-readable label from field name
+	 *
+	 * @param string $field_name
+	 * @return string
+	 */
+	private function generate_field_label( string $field_name ): string {
+		// Convert snake_case or kebab-case to Title Case
+		$label = str_replace( [ '_', '-' ], ' ', $field_name );
+		return ucwords( $label );
+	}
+
 	// =============================================================================
 	// PAGE PART META & PREVIEW SYSTEM
 	// =============================================================================
 
 	/**
-	 * Register design_slug meta field for REST API access
+	 * Register design_slug meta field and all custom fields for REST API access
 	 */
 	public function register_design_meta(): void {
+		// Register the main design_slug field
 		register_post_meta( 'page_part', 'design_slug', [
 			'type'              => 'string',
 			'show_in_rest'      => true,
@@ -223,6 +271,81 @@ final class Theme {
 			'sanitize_callback' => 'sanitize_key',
 			'default'           => '',
 		] );
+
+		// Register all custom fields from templates
+		$registry = $this->get_page_part_registry();
+
+		foreach ( $registry as $template_slug => $template_data ) {
+			if ( empty( $template_data['custom_fields'] ) ) {
+				continue;
+			}
+
+			foreach ( $template_data['custom_fields'] as $field ) {
+				$sanitize_callback = $this->get_sanitize_callback( $field['type'] );
+
+				register_post_meta( 'page_part', $field['meta_key'], [
+					'type'              => $this->get_meta_type( $field['type'] ),
+					'show_in_rest'      => true,
+					'single'            => true,
+					'sanitize_callback' => $sanitize_callback,
+					'default'           => $this->get_default_value( $field['type'] ),
+				] );
+			}
+		}
+	}
+
+	/**
+	 * Get appropriate sanitize callback for field type
+	 */
+	private function get_sanitize_callback( string $field_type ) {
+		switch ( $field_type ) {
+			case 'url':
+				return 'esc_url_raw';
+			case 'textarea':
+				return 'sanitize_textarea_field';
+			case 'repeater':
+				return [ $this, 'sanitize_json_field' ];
+			case 'text':
+			default:
+				return 'sanitize_text_field';
+		}
+	}
+
+	/**
+	 * Get meta type for WordPress registration
+	 */
+	private function get_meta_type( string $field_type ): string {
+		switch ( $field_type ) {
+			case 'repeater':
+				return 'string'; // JSON stored as string
+			default:
+				return 'string';
+		}
+	}
+
+	/**
+	 * Get default value for field type
+	 */
+	private function get_default_value( string $field_type ) {
+		switch ( $field_type ) {
+			case 'repeater':
+				return '[]'; // Empty JSON array
+			default:
+				return '';
+		}
+	}
+
+	/**
+	 * Sanitize JSON field data
+	 */
+	public function sanitize_json_field( $value ) {
+		if ( is_string( $value ) ) {
+			$decoded = json_decode( $value, true );
+			if ( json_last_error() === JSON_ERROR_NONE ) {
+				return wp_json_encode( $decoded );
+			}
+		}
+		return '[]';
 	}
 
 	/**
@@ -233,34 +356,76 @@ final class Theme {
 			$post_id = (int) $_POST['post_id'];
 			$design_slug = sanitize_key( $_POST['design_slug'] );
 
+			// Handle all custom fields meta - comes as JSON string from JavaScript
+			$all_meta_raw = $_POST['all_meta'] ?? '';
+
 			if ( $post_id && $design_slug ) {
+				// Store design_slug as before
 				set_transient( "preview_design_slug_{$post_id}", $design_slug, 300 );
-				wp_send_json_success( "Stored design_slug: {$design_slug}" );
+
+				// Store all custom fields meta after decoding JSON
+				if (!empty($all_meta_raw)) {
+					// Decode the JSON string that was sent from JavaScript
+					$all_meta = json_decode(stripslashes($all_meta_raw), true);
+
+					if (json_last_error() === JSON_ERROR_NONE && is_array($all_meta)) {
+						set_transient( "preview_all_meta_{$post_id}", $all_meta, 300 );
+						wp_send_json_success( "Stored design_slug: {$design_slug} and " . count($all_meta) . " meta fields" );
+					} else {
+						// Log the JSON error for debugging
+						error_log("JSON decode error: " . json_last_error_msg() . " | Raw data: " . $all_meta_raw);
+						wp_send_json_success( "Stored design_slug: {$design_slug} (custom fields failed to parse)" );
+					}
+				} else {
+					wp_send_json_success( "Stored design_slug: {$design_slug} (no custom fields)" );
+				}
 			} else {
 				wp_send_json_error( 'Missing data' );
 			}
 		});
 	}
 
+
 	/**
 	 * Override meta values during preview rendering using transient data
 	 */
 	public function handle_preview_rendering(): void {
-		add_action( 'template_redirect', function() {
+		// Hook earlier in the WordPress loading process
+		add_action( 'wp', function() {
+			// Only apply during preview of page_part posts
 			if ( is_preview() && get_post_type() === 'page_part' ) {
 				$post_id = get_the_ID();
 				$preview_design = get_transient( "preview_design_slug_{$post_id}" );
+				$preview_meta = get_transient( "preview_all_meta_{$post_id}" );
 
-				if ( $preview_design ) {
-					add_filter( 'get_post_metadata', function( $value, $object_id, $meta_key ) use ( $post_id, $preview_design ) {
-						if ( $object_id == $post_id && $meta_key === 'design_slug' ) {
-							return [ $preview_design ];
-						}
-						return $value;
-					}, 10, 3 );
+				// Debug logging
+				if ( $preview_design || $preview_meta ) {
+					error_log( "Preview rendering for post {$post_id}: design={$preview_design}, meta_count=" . ( is_array($preview_meta) ? count($preview_meta) : 'none' ) );
 				}
+
+				// Filter meta values during preview - use higher priority
+				add_filter( 'get_post_metadata', function( $value, $object_id, $meta_key ) use ( $post_id, $preview_design, $preview_meta ) {
+					// Only filter for the current post being previewed
+					if ( $object_id != $post_id ) {
+						return $value;
+					}
+
+					// Handle design_slug
+					if ( $meta_key === 'design_slug' && $preview_design ) {
+						error_log( "Filtering design_slug for preview: {$preview_design}" );
+						return [ $preview_design ];
+					}
+
+					// Handle custom fields from transient
+					if ( $preview_meta && is_array( $preview_meta ) && isset( $preview_meta[$meta_key] ) ) {
+						error_log( "Filtering {$meta_key} for preview: {$preview_meta[$meta_key]}" );
+						return [ $preview_meta[$meta_key] ];
+					}
+
+					return $value;
+				}, 5, 3 ); // Lower number = higher priority
 			}
-		});
+		}, 5 ); // Hook early in wp action
 	}
 
 	/**
@@ -298,18 +463,62 @@ final class Theme {
 			return;
 		}
 
-		// Check for transient value (from React component)
-		$transient_value = get_transient( "preview_design_slug_{$post_id}" );
-		if ( $transient_value ) {
-			update_post_meta( $post_id, 'design_slug', $transient_value );
+		// Check for transient values (from React component)
+		$transient_design = get_transient( "preview_design_slug_{$post_id}" );
+		$transient_meta = get_transient( "preview_all_meta_{$post_id}" );
+
+		// Save design_slug
+		if ( $transient_design ) {
+			update_post_meta( $post_id, 'design_slug', $transient_design );
 			delete_transient( "preview_design_slug_{$post_id}" );
+		}
+
+		// NEW: Save all custom fields from transient
+		if ( $transient_meta && is_array( $transient_meta ) ) {
+			$registry = $this->get_page_part_registry();
+
+			foreach ( $registry as $template_slug => $template_data ) {
+				if ( empty( $template_data['custom_fields'] ) ) {
+					continue;
+				}
+
+				foreach ( $template_data['custom_fields'] as $field ) {
+					$meta_key = $field['meta_key'];
+
+					if ( isset( $transient_meta[$meta_key] ) ) {
+						$sanitize_callback = $this->get_sanitize_callback( $field['type'] );
+						$sanitized_value = call_user_func( $sanitize_callback, $transient_meta[$meta_key] );
+						update_post_meta( $post_id, $meta_key, $sanitized_value );
+					}
+				}
+			}
+
+			delete_transient( "preview_all_meta_{$post_id}" );
 			return;
 		}
 
-		// Fallback: traditional form submission (if HTML select is used)
+		// Fallback: traditional form submission (if HTML form is used)
 		if ( isset( $_POST['page_part_design_slug'] ) ) {
 			$new = sanitize_key( wp_unslash( $_POST['page_part_design_slug'] ) );
 			update_post_meta( $post_id, 'design_slug', $new );
+		}
+
+		// NEW: Handle traditional form submission for custom fields
+		$registry = $this->get_page_part_registry();
+		foreach ( $registry as $template_slug => $template_data ) {
+			if ( empty( $template_data['custom_fields'] ) ) {
+				continue;
+			}
+
+			foreach ( $template_data['custom_fields'] as $field ) {
+				$form_field_name = 'page_part_' . $field['meta_key'];
+
+				if ( isset( $_POST[$form_field_name] ) ) {
+					$sanitize_callback = $this->get_sanitize_callback( $field['type'] );
+					$sanitized_value = call_user_func( $sanitize_callback, wp_unslash( $_POST[$form_field_name] ) );
+					update_post_meta( $post_id, $field['meta_key'], $sanitized_value );
+				}
+			}
 		}
 	}
 
@@ -344,7 +553,32 @@ final class Theme {
 			exit;
 		}
 
-		$design = get_post_meta( $id, 'design_slug', true ) ?: 'header-top-level';
+		// Check for preview data from transients first, then fall back to saved meta
+		$preview_design = get_transient( "preview_design_slug_{$id}" );
+		$preview_meta = get_transient( "preview_all_meta_{$id}" );
+
+		$design = $preview_design ?: get_post_meta( $id, 'design_slug', true ) ?: 'nok-hero';
+
+		// Set up meta filtering for the embed rendering if we have preview data
+		if ( $preview_design || $preview_meta ) {
+			add_filter( 'get_post_metadata', function( $value, $object_id, $meta_key ) use ( $id, $preview_design, $preview_meta ) {
+				if ( $object_id != $id ) {
+					return $value;
+				}
+
+				// Handle design_slug
+				if ( $meta_key === 'design_slug' && $preview_design ) {
+					return [ $preview_design ];
+				}
+
+				// Handle custom fields from transient
+				if ( $preview_meta && is_array( $preview_meta ) && isset( $preview_meta[$meta_key] ) ) {
+					return [ $preview_meta[$meta_key] ];
+				}
+
+				return $value;
+			}, 10, 3 );
+		}
 
 		$css_uris = [
 			get_stylesheet_directory_uri() . '/assets/css/nok-components.css',
@@ -362,14 +596,21 @@ final class Theme {
 
 		$edit_link = admin_url( "post.php?post={$id}&action=edit" );
 		$html .= '</head><body>
-            <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkerblue--darker nok-z-top halign-center valign-center">
-                <a href="' . $edit_link . '" type="button" target="_blank" class="nok-button nok-align-self-to-sm-stretch fill-group-column nok-bg-darkerblue nok-text-contrast no-shadow" tabindex="0">Bewerken</a>
-            </nok-screen-mask>';
+        <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkerblue--darker nok-z-top halign-center valign-center">
+            <a href="' . $edit_link . '" type="button" target="_blank" class="nok-button nok-align-self-to-sm-stretch fill-group-column nok-bg-darkerblue nok-text-contrast no-shadow" tabindex="0">Bewerken</a>
+        </nok-screen-mask>';
+
+		// Set up the global $post for the template
+		global $post;
+		$post = get_post( $id );
+		setup_postdata( $post );
 
 		ob_start();
 		include get_theme_file_path( "template-parts/page-parts/{$design}.php" );
 		$html .= ob_get_clean();
 		$html .= '</body></html>';
+
+		wp_reset_postdata();
 
 		print $html;
 		exit;

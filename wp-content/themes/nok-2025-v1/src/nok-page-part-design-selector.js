@@ -1,8 +1,9 @@
 import {useSelect, useDispatch} from '@wordpress/data';
 import {registerPlugin} from '@wordpress/plugins';
 import {PluginDocumentSettingPanel} from '@wordpress/edit-post';
-import {SelectControl} from '@wordpress/components';
+import {SelectControl, TextControl, TextareaControl} from '@wordpress/components';
 import {hnlLogger} from '../assets/js/modules/hnl.logger.mjs';
+import {Fragment, useRef, useState, useEffect} from '@wordpress/element';
 
 const NAME = 'nok-page-part-design-selector';
 
@@ -35,19 +36,36 @@ function DesignSlugPanel() {
         })),
     ];
 
-    // 5) Function to trigger preview update (same logic as HTML select)
-    const triggerPreviewUpdate = (newSlug) => {
-        // Store the meta value via AJAX (same as HTML version)
+    // 5) Get current template and its custom fields
+    const currentTemplate = meta?.design_slug || '';
+    const currentTemplateData = registry[currentTemplate] || {};
+    const customFields = currentTemplateData.custom_fields || [];
+
+    // 6) Enhanced function to trigger preview update with all meta
+    const triggerPreviewUpdate = (updatedMeta = null) => {
+        const metaToStore = updatedMeta || meta;
+        const currentSlug = metaToStore?.design_slug || '';
+
+        hnlLogger.log(NAME, 'Storing all meta:');
+        hnlLogger.log(NAME, metaToStore);
+
+        // Prepare form data
+        const formData = new URLSearchParams({
+            action: 'store_preview_meta',
+            post_id: postId,
+            design_slug: currentSlug
+        });
+
+        // Add all meta fields as JSON
+        formData.append('all_meta', JSON.stringify(metaToStore));
+
+        // Store the meta value via AJAX
         fetch(window.PagePartDesignSettings.ajaxurl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: new URLSearchParams({
-                action: 'store_preview_meta',
-                post_id: postId,
-                design_slug: newSlug
-            })
+            body: formData
         })
             .then(response => response.json())
             .then(data => {
@@ -60,22 +78,126 @@ function DesignSlugPanel() {
             .then(() => {
                 hnlLogger.log(NAME, 'Autosave completed via React');
 
-                // Find and update the iframe (same as HTML version)
-                const iframe = document.getElementById('nok-page-part-preview-iframe');
-                if (iframe) {
-                    const previewLink = wp.data
-                        .select('core/editor')
-                        .getEditedPostPreviewLink();
-
-                    iframe.removeAttribute('srcdoc');
-                    iframe.src = `${previewLink}&hide_adminbar=1`;
+                // Update preview if function exists - mark as user-initiated
+                if (typeof window.nokUpdatePreview === 'function') {
+                    window.nokUpdatePreview(true); // true = user initiated
                 }
+            })
+            .catch(error => {
+                hnlLogger.error(NAME, `Preview update failed: ${error}`);
             });
     };
 
-    // 6) Console‑log so we can see what's happening
-    hnlLogger.log(NAME, 'DesignSlugPanel meta:');
-    hnlLogger.log(NAME, meta);
+    // 7) Local state for immediate UI updates + debounced backend updates
+    const [localFieldValues, setLocalFieldValues] = useState({});
+    const [isInitialized, setIsInitialized] = useState(false);
+    const debounceRef = useRef({});
+
+    // Initialize local state from meta when meta changes (but not from our own updates)
+    useEffect(() => {
+        if (meta && customFields.length > 0) {
+            const initialValues = {};
+            customFields.forEach(field => {
+                const metaValue = meta[field.meta_key] || '';
+                initialValues[field.meta_key] = metaValue;
+            });
+            setLocalFieldValues(initialValues);
+
+            // Mark as initialized after a short delay to avoid initial flood
+            if (!isInitialized) {
+                setTimeout(() => setIsInitialized(true), 1000);
+            }
+        }
+    }, [currentTemplate, meta?.design_slug]); // Only sync when template changes, not on every meta change
+
+    const updateMetaField = (fieldName, value) => {
+        // Don't trigger updates during initialization
+        if (!isInitialized) {
+            hnlLogger.log(NAME, `Skipping update during initialization for ${fieldName}`);
+            return;
+        }
+
+        // Update local state immediately for responsive UI
+                setLocalFieldValues(prev => ({
+                    ...prev,
+            [fieldName]: value
+                }));
+
+        // Clear any existing timeout for this field
+        if (debounceRef.current[fieldName]) {
+            clearTimeout(debounceRef.current[fieldName]);
+        }
+
+        // Set new timeout for debounced backend update
+        debounceRef.current[fieldName] = setTimeout(() => {
+            hnlLogger.log(NAME, `Debounced update for ${fieldName}: ${value}`);
+
+            // Update the editor meta
+            const newMeta = {...meta, [fieldName]: value};
+            editPost({meta: newMeta});
+
+            // Trigger preview update
+            triggerPreviewUpdate(newMeta);
+
+            // Clean up timeout reference
+            delete debounceRef.current[fieldName];
+        }, 500);
+    };
+
+    // 8) Render field based on type
+    const renderField = (field) => {
+        // Use local state value for immediate UI updates, fallback to meta value
+        const fieldValue = localFieldValues[field.meta_key] ?? meta?.[field.meta_key] ?? '';
+
+        switch (field.type) {
+            case 'textarea':
+                return (
+                    <TextareaControl
+                        key={field.meta_key}
+                        label={field.label}
+                        value={fieldValue}
+                        onChange={(value) => updateMetaField(field.meta_key, value)}
+                        rows={3}
+                    />
+                );
+
+            case 'url':
+                return (
+                    <TextControl
+                        key={field.meta_key}
+                        label={field.label}
+                        type="url"
+                        value={fieldValue}
+                        onChange={(value) => updateMetaField(field.meta_key, value)}
+                        placeholder="https://..."
+                    />
+                );
+
+            case 'repeater':
+                // For now, show as textarea - we'll enhance this later
+                return (
+                    <TextareaControl
+                        key={field.meta_key}
+                        label={field.label + ' (JSON)'}
+                        value={fieldValue}
+                        onChange={(value) => updateMetaField(field.meta_key, value)}
+                        help="Enter JSON data for repeater field"
+                        rows={4}
+                    />
+                );
+
+            case 'text':
+            default:
+                return (
+                    <TextControl
+                        key={field.meta_key}
+                        label={field.label}
+                        value={fieldValue}
+                        onChange={(value) => updateMetaField(field.meta_key, value)}
+                    />
+                );
+        }
+    };
 
     return (
         <PluginDocumentSettingPanel
@@ -83,16 +205,29 @@ function DesignSlugPanel() {
             title="Design template"
         >
             <SelectControl
-                value={meta?.design_slug || ''}
+                label="Template"
+                value={currentTemplate}
                 options={options}
                 onChange={(newSlug) => {
                     hnlLogger.log(NAME, `→ setting design_slug to "${newSlug}"`);
                     // Update the editor meta
-                    editPost({meta: {...meta, design_slug: newSlug}});
-                    // Trigger preview update
-                    triggerPreviewUpdate(newSlug);
+                    const newMeta = {...meta, design_slug: newSlug};
+                    editPost({meta: newMeta});
+                    // Trigger preview update with the updated meta
+                    triggerPreviewUpdate(newMeta);
                 }}
             />
+
+            {/* Render custom fields for selected template */}
+            {customFields.length > 0 && (
+                <Fragment>
+                    <hr style={{margin: '16px 0'}}/>
+                    <h4 style={{margin: '0 0 12px 0', fontSize: '13px', fontWeight: '600'}}>
+                        Template Fields
+                    </h4>
+                    {customFields.map(renderField)}
+                </Fragment>
+            )}
         </PluginDocumentSettingPanel>
     );
 }
