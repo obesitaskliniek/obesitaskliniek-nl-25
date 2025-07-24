@@ -2,16 +2,16 @@ import '@wordpress/edit-post';          // ensure wp-editor is registered
 import domReady from '@wordpress/dom-ready';
 import {render, createElement, useRef, useState, useEffect} from '@wordpress/element';
 import {select, dispatch, subscribe} from '@wordpress/data';
-import {Notice} from '@wordpress/components';
 import {debounceThis} from "../assets/js/modules/hnl.debounce.mjs";
+import {hnlLogger} from '../assets/js/modules/hnl.logger.mjs';
 
+const NAME = 'nok-page-part-preview';
 const prefix = `nok-page-part-preview`;
 
 function IframePreview() {
-    // we only need a ref for the iframe
     const iframeRef = useRef(null);
-    // Refs & state for dynamic height
     const [height, setHeight] = useState(400);
+
     // Initial content for the iframe
     const placeholder = `
       <div style="
@@ -22,7 +22,7 @@ function IframePreview() {
         color:#777;
         font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen-Sans,Ubuntu,Cantarell,'Helvetica Neue',sans-serif;
       ">
-        Klik “Refresh Preview” om de preview te laden.
+        Klik "Refresh Preview" om de preview te laden.
       </div>
     `;
 
@@ -31,8 +31,6 @@ function IframePreview() {
         if (!iframe) {
             return;
         }
-
-        let mo; // mutation observer
 
         const updateHeight = () => {
             try {
@@ -48,7 +46,7 @@ function IframePreview() {
         };
 
         const onLoad = () => {
-            // don’t touch height when it’s just the srcdoc placeholder
+            // don't touch height when it's just the srcdoc placeholder
             if (iframe.srcdoc) {
                 return;
             }
@@ -57,13 +55,11 @@ function IframePreview() {
 
         iframe.addEventListener('load', onLoad);
 
-        // cleanup
         return () => {
             iframe.removeEventListener('load', onLoad);
         };
     }, []);
 
-    // render just an empty iframe — src will be set on button click
     return createElement('iframe', {
         ref: iframeRef,
         id: `${prefix}-iframe`,
@@ -73,34 +69,35 @@ function IframePreview() {
 }
 
 domReady(() => {
-    // mount the iframe
+    // Mount the iframe
     const root = document.getElementById(`${prefix}-root`);
     if (root) {
         render(createElement(IframePreview), root);
     }
 
-    // get elements
+    // Get elements
     const button = document.getElementById(`${prefix}-button`);
     const iframe = document.getElementById(`${prefix}-iframe`);
 
     if (!iframe) {
-        console.error('Failed to load iframe');
+        hnlLogger.error(NAME, 'Failed to load iframe');
         return;
     }
     if (!button) {
-        console.warn('Update button not found, continuing with frame only');
+        hnlLogger.warn(NAME, 'Update button not found, continuing with frame only');
     }
 
-    // single update function
+    /**
+     * Update the preview iframe with current content and design_slug
+     */
     const updateFrame = () => {
-        // 1) Get the current select value
-        const designSelect = document.querySelector('select[name="page_part_design_slug"]');
-        const currentDesignSlug = designSelect ? designSelect.value : '';
-        console.log('About to autosave with design_slug:', currentDesignSlug);
-
-        // 2) Store the meta value directly via AJAX
         const postId = wp.data.select('core/editor').getCurrentPostId();
+        const meta = wp.data.select('core/editor').getEditedPostAttribute('meta') || {};
+        const currentDesignSlug = meta.design_slug || '';
 
+        hnlLogger.info(NAME, `About to autosave with design_slug: ${currentDesignSlug}`);
+
+        // Store the meta value via AJAX
         fetch(ajaxurl, {
             method: 'POST',
             headers: {
@@ -114,40 +111,50 @@ domReady(() => {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('Meta stored:', data);
+                hnlLogger.info(NAME, 'Meta stored:');
+                hnlLogger.info(NAME, data);
 
-                // 3) Now perform autosave (for content changes)
+                // Perform autosave (for content changes)
                 return wp.data.dispatch('core/editor').autosave();
             })
             .then(() => {
-                console.log('Autosave completed');
-                // 4) once saved, grab the exact preview URL
+                hnlLogger.info(NAME, 'Autosave completed');
+
+                // Get the preview URL and update iframe
                 const previewLink = wp.data
                     .select('core/editor')
                     .getEditedPostPreviewLink();
 
-                // 5) update our iframe
-                iframe.removeAttribute('srcdoc')
+                iframe.removeAttribute('srcdoc');
                 iframe.src = `${previewLink}&hide_adminbar=1`;
+            })
+            .catch(error => {
+                hnlLogger.error(NAME, `Preview update failed: ${error}`);
             });
-    }
+    };
 
-    // Auto-update when design select changes
-    const designSelect = document.querySelector('select[name="page_part_design_slug"]');
-    if (designSelect) {
-        designSelect.addEventListener('change', function() {
-            console.log('Design slug changed to:', this.value);
-            updateFrame();
-        });
-    } else {
-        console.warn('Design select dropdown not found');
-    }
+    // Expose updateFrame globally so React component can use it
+    window.nokUpdatePreview = updateFrame;
 
+    // Button click handler
     if (button) {
         button.addEventListener('click', updateFrame);
     }
 
+    // Auto-update on window resize
     window.addEventListener('resize', debounceThis((e) => {
         updateFrame();
     }));
+
+    // Watch for design_slug changes in the editor store
+    let lastSlug = select("core/editor").getEditedPostAttribute("meta")?.design_slug;
+    subscribe(() => {
+        const meta = select("core/editor").getEditedPostAttribute("meta") || {};
+        const currentSlug = meta.design_slug;
+        if (currentSlug !== lastSlug) {
+            lastSlug = currentSlug;
+            hnlLogger.info(NAME, `Design slug changed to: ${currentSlug}`);
+            updateFrame();
+        }
+    });
 });
