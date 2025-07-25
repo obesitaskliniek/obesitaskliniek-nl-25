@@ -3,8 +3,14 @@
  * Template Name: NOK Hero
  * Description: A hero unit for the top of the main (first level) pages.
  * Slug: nok-hero
- * CSS: nok-hero
- * Custom Fields: tagline:text,button_text:text,button_url:url,link_text:text,link_url:url
+ * Custom Fields:
+ * - tagline:text,
+ * - button_blauw_text:text,
+ * - button_blauw_url:url,
+ * - button_transparant_text:text,
+ * - button_transparant_url:url,
+ * - link_text:text,
+ * - link_url:url,
  */
 
 $this_slug = 'nok-hero';
@@ -171,9 +177,9 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                     </svg>
                     Samenwerking met de beste ziekenhuizen
                 </div>
-                <button class="nok-button nok-base-font nok-bg-white nok-text-darkerblue nok-visible-xs align-self-stretch"
+                <a role="button" href="#" class="nok-button nok-base-font nok-bg-white nok-text-darkerblue nok-visible-xs align-self-stretch"
                         tabindex="0">Vind een vestiging
-                </button>
+                </a>
             </footer>
         </div>
     </nok-hero>
