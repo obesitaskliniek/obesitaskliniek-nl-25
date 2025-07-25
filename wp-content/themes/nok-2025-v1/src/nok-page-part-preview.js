@@ -117,6 +117,8 @@ domReady(() => {
 
         // Call the original updateFrame logic
         const postId = wp.data.select('core/editor').getCurrentPostId();
+
+        /*
         const meta = wp.data.select('core/editor').getEditedPostAttribute('meta') || {};
         const currentDesignSlug = meta.design_slug || '';
 
@@ -133,25 +135,43 @@ domReady(() => {
 
         // Add all meta fields
         formData.append('all_meta', JSON.stringify(meta));
+         */
+
+        // Collect complete editor state
+        const completeEditorState = {
+            title: wp.data.select('core/editor').getEditedPostAttribute('title') || '',
+            content: wp.data.select('core/editor').getEditedPostAttribute('content') || '',
+            excerpt: wp.data.select('core/editor').getEditedPostAttribute('excerpt') || '',
+            meta: wp.data.select('core/editor').getEditedPostAttribute('meta') || {}
+        };
+
+        // Prepare for storage
+        const formData = new URLSearchParams({
+            action: 'store_preview_state',
+            post_id: postId,
+            nonce: window.PagePartDesignSettings.nonce  // Add this line
+        });
+
+        // Add complete state
+        formData.append('editor_state', JSON.stringify(completeEditorState));
+
 
         // Store the meta value via AJAX
         fetch(ajaxurl, {
-            method: 'POST',
-            headers: {
+            method: 'POST', headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: formData
+            }, body: formData
         })
             .then(response => response.json())
             .then(data => {
                 hnlLogger.info(NAME, 'Meta stored:');
                 hnlLogger.info(NAME, data);
 
-                // Perform autosave (for content changes)
+                // Perform autosave (for content changes) - RETURN the promise
                 return wp.data.dispatch('core/editor').autosave();
             })
-            .then(() => {
-                hnlLogger.info(NAME, 'Autosave completed');
+            .then(autosaveResult => {
+                hnlLogger.info(NAME, 'Autosave completed:', autosaveResult);
 
                 const previewLink = wp.data
                     .select('core/editor')

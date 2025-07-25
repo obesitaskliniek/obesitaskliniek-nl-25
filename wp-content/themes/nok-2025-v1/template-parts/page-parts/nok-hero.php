@@ -6,6 +6,7 @@
  * CSS: nok-hero
  * Custom Fields: tagline:text,button_text:text,button_url:url,link_text:text,link_url:url
  */
+
 $this_slug = 'nok-hero';
 
 use NOK2025\V1\Helpers;
@@ -13,8 +14,7 @@ use NOK2025\V1\Helpers;
 /** @var \WP_Post $post */
 global $post;
 $post = $args['post'] ?? null;
-setup_postdata( $post );        // set up all “in-the-loop” globals
-
+setup_postdata( $post );        // set up all "in-the-loop" globals
 
 // Check if we're in preview/editing mode
 $is_editing = Helpers::is_editing_mode();
@@ -27,11 +27,12 @@ if ($all_meta) {
 	foreach ( $all_meta as $meta_key => $meta_value ) {
 		if ( str_starts_with( $meta_key, $this_slug ) ) {
 			$short_field_name                      = substr( $meta_key, strlen( $this_slug ) + 1 );
-			$page_part_fields[ $short_field_name ] = empty( $meta_value[0] ) ?
+			$actual_meta_value                     = get_post_meta( get_the_ID(), $meta_key, true);
+			$page_part_fields[ $short_field_name ] = empty( $actual_meta_value ) ?
 				( $is_editing ?
 					Helpers::show_placeholder( $short_field_name ) :
 					'' ) :
-				get_post_meta( get_the_ID(), $meta_key, true);
+				$actual_meta_value;
 		}
 	}
 }
