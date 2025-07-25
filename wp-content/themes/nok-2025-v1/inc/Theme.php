@@ -24,6 +24,7 @@ final class Theme {
 			self::$instance = new self();
 			self::$instance->setup_hooks();
 		}
+
 		return self::$instance;
 	}
 
@@ -33,19 +34,19 @@ final class Theme {
 		add_action( 'init', [ $this, 'register_design_meta' ] );
 
 		// Assets
-		add_action( 'wp_enqueue_scripts', [ $this, 'frontend_assets'] );
-		add_action( 'enqueue_block_editor_assets', [ $this, 'backend_assets'] );
-		add_action( 'admin_enqueue_scripts', [ $this, 'admin_assets'] );
-		add_action( 'admin_head', [ $this, 'custom_editor_inline_styles'] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'frontend_assets' ] );
+		add_action( 'enqueue_block_editor_assets', [ $this, 'backend_assets' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'admin_assets' ] );
+		add_action( 'admin_head', [ $this, 'custom_editor_inline_styles' ] );
 
 		// Customizer
 		add_action( 'customize_register', [ $this, 'register_customizer' ] );
 
 		// Page part preview system
-		add_action( 'init', [ $this, 'handle_preview_meta' ] );
+		add_action( 'init', [ $this, 'handle_preview_state' ] );
 		add_action( 'init', [ $this, 'handle_preview_rendering' ] );
 		add_action( 'add_meta_boxes', [ $this, 'add_preview_meta_box' ] );
-		add_action( 'save_post_page_part', [ $this, 'save_design_meta' ], 10, 2 );
+		add_action( 'save_post_page_part', [ $this, 'save_editor_state' ], 10, 2 );
 
 		// REST API endpoints
 		add_action( 'rest_api_init', [ $this, 'register_rest_routes' ] );
@@ -82,13 +83,13 @@ final class Theme {
 			'nok-components-css',
 			THEME_ROOT . '/assets/css/nok-components.css',
 			[],
-			filemtime( THEME_ROOT_ABS . '/assets/css/nok-components.css')
+			filemtime( THEME_ROOT_ABS . '/assets/css/nok-components.css' )
 		);
 		wp_register_style(
 			'nok-colors-css',
 			THEME_ROOT . '/assets/css/color_tests-v2.css',
 			[],
-			filemtime( THEME_ROOT_ABS . '/assets/css/color_tests-v2.css')
+			filemtime( THEME_ROOT_ABS . '/assets/css/color_tests-v2.css' )
 		);
 	}
 
@@ -142,16 +143,8 @@ final class Theme {
 			'PagePartDesignSettings',
 			[
 				'registry' => $this->get_page_part_registry(),
-				'ajaxurl' => admin_url( 'admin-ajax.php' )
-			]
-		);
-		wp_localize_script(
-			'nok-page-part-design-selector',
-			'PagePartDesignSettings',
-			[
-				'registry' => $this->get_page_part_registry(),
-				'ajaxurl' => admin_url( 'admin-ajax.php' ),
-				'nonce' => wp_create_nonce( 'nok_preview_state_nonce' )  // Add this line
+				'ajaxurl'  => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'nok_preview_state_nonce' )
 			]
 		);
 	}
@@ -184,11 +177,11 @@ final class Theme {
 			return $this->part_registry;
 		}
 
-		$files = glob( THEME_ROOT_ABS . '/template-parts/page-parts/*.php' );
+		$files               = glob( THEME_ROOT_ABS . '/template-parts/page-parts/*.php' );
 		$this->part_registry = [];
 
 		foreach ( $files as $file ) {
-			$data = get_file_data( $file, [
+			$data = $this->get_custom_file_data( $file, [
 				'name'          => 'Template Name',
 				'description'   => 'Description',
 				'slug'          => 'Slug',
@@ -209,11 +202,55 @@ final class Theme {
 		return $this->part_registry;
 	}
 
+	private function get_custom_file_data( string $file, array $headers ): array {
+		$file_content = file_get_contents( $file );
+		if ( ! $file_content ) {
+			return array_fill_keys( array_keys( $headers ), '' );
+		}
+
+		// Extract only the comment block at the top
+		if ( ! preg_match('/^<\?php\s*\/\*\*(.*?)\*\//s', $file_content, $matches) ) {
+			return array_fill_keys( array_keys( $headers ), '' );
+		}
+
+		$comment_block = $matches[1];
+		$result = [];
+
+		foreach ( $headers as $key => $header_name ) {
+			if ( $header_name === 'Custom Fields' ) {
+				// Find the Custom Fields header line
+				if ( preg_match('/^\s*\*\s*' . preg_quote( $header_name, '/' ) . '\s*:\s*$/m', $comment_block, $matches, PREG_OFFSET_CAPTURE) ) {
+					$start_pos = $matches[0][1] + strlen($matches[0][0]);
+					$remaining_content = substr($comment_block, $start_pos);
+
+					// Find all lines that start with "* -" until we hit another header or end
+					preg_match_all('/^\s*\*\s*-\s*([^,\n]+)(?:,\s*)?$/m', $remaining_content, $field_matches);
+
+					$result[ $key ] = implode( ',', array_map('trim', $field_matches[1]) );
+				} else {
+					$result[ $key ] = '';
+				}
+			} else {
+				// Standard single-line header parsing
+				$pattern = '/^\s*\*\s*' . preg_quote( $header_name, '/' ) . '\s*:\s*(.+)$/m';
+
+				if ( preg_match( $pattern, $comment_block, $header_matches ) ) {
+					$result[ $key ] = trim( $header_matches[1] );
+				} else {
+					$result[ $key ] = '';
+				}
+			}
+		}
+
+		return $result;
+	}
+
 	/**
 	 * Parse custom fields definition from template header
 	 *
 	 * @param string $fields_string Format: "field1:type,field2:type,field3:type"
 	 * @param string $template_slug Template slug for field prefixing
+	 *
 	 * @return array Parsed field definitions
 	 */
 	private function parse_custom_fields( string $fields_string, string $template_slug ): array {
@@ -222,10 +259,14 @@ final class Theme {
 		}
 
 		$fields = [];
-		$field_definitions = explode( ',', $fields_string );
+
+		// Split by both commas and newlines to handle both formats
+		$field_definitions = preg_split( '/[,\n\r]+/', $fields_string );
 
 		foreach ( $field_definitions as $definition ) {
-			$definition = trim( $definition );
+			// Remove asterisks and whitespace from comment blocks
+			$definition = trim( $definition, " \t\n\r\0\x0B*" );
+
 			if ( empty( $definition ) ) {
 				continue;
 			}
@@ -256,11 +297,13 @@ final class Theme {
 	 * Generate a human-readable label from field name
 	 *
 	 * @param string $field_name
+	 *
 	 * @return string
 	 */
 	private function generate_field_label( string $field_name ): string {
 		// Convert snake_case or kebab-case to Title Case
 		$label = str_replace( [ '_', '-' ], ' ', $field_name );
+
 		return ucwords( $label );
 	}
 
@@ -354,56 +397,49 @@ final class Theme {
 				return wp_json_encode( $decoded );
 			}
 		}
+
 		return '[]';
 	}
 
 	/**
-	 * Handle AJAX requests for storing preview meta in transients
+	 * Handle AJAX requests for storing complete editor state in transients
 	 */
-	public function handle_preview_meta(): void {
-		add_action( 'wp_ajax_store_preview_state', function() {
+	public function handle_preview_state(): void {
+		add_action( 'wp_ajax_store_preview_state', function () {
 			// Verify nonce first
-			if ( !wp_verify_nonce( $_POST['nonce'] ?? '', 'nok_preview_state_nonce' ) ) {
+			if ( ! wp_verify_nonce( $_POST['nonce'] ?? '', 'nok_preview_state_nonce' ) ) {
 				wp_send_json_error( 'Invalid nonce' );
+
 				return;
 			}
 
-			$post_id = (int) $_POST['post_id'];
+			$post_id          = (int) $_POST['post_id'];
 			$editor_state_raw = $_POST['editor_state'] ?? '';
 
-			if ( $post_id && !empty($editor_state_raw) ) {
+			if ( $post_id && ! empty( $editor_state_raw ) ) {
 				// Decode the complete editor state
-				$editor_state = json_decode(stripslashes($editor_state_raw), true);
+				$editor_state = json_decode( stripslashes( $editor_state_raw ), true );
 
-				if (json_last_error() === JSON_ERROR_NONE && is_array($editor_state)) {
+				if ( json_last_error() === JSON_ERROR_NONE && is_array( $editor_state ) ) {
 					// Sanitize the complete state
 					$sanitized_state = [
-						'title' => sanitize_text_field($editor_state['title'] ?? ''),
-						'content' => wp_kses_post($editor_state['content'] ?? ''),
-						'excerpt' => sanitize_textarea_field($editor_state['excerpt'] ?? ''),
-						'meta' => $this->sanitize_meta_fields($editor_state['meta'] ?? [])
+						'title'   => sanitize_text_field( $editor_state['title'] ?? '' ),
+						'content' => wp_kses_post( $editor_state['content'] ?? '' ),
+						'excerpt' => sanitize_textarea_field( $editor_state['excerpt'] ?? '' ),
+						'meta'    => $this->sanitize_meta_fields( $editor_state['meta'] ?? [] )
 					];
 
 					// Store in single transient
 					set_transient( "preview_editor_state_{$post_id}", $sanitized_state, 300 );
 
-					// DEBUG: Dump transient to log file
-					$log_file = THEME_ROOT_ABS . '/debug-transient.log';
-					$timestamp = date('Y-m-d H:i:s');
-					$log_entry = "\n--- {$timestamp} - Post ID: {$post_id} ---\n";
-					$log_entry .= print_r($sanitized_state, true);
-					$log_entry .= "\n--- End Entry ---\n";
-					file_put_contents($log_file, $log_entry, FILE_APPEND | LOCK_EX);
-
 					wp_send_json_success( "Stored complete editor state for post {$post_id}" );
 				} else {
-					error_log("JSON decode error: " . json_last_error_msg());
 					wp_send_json_error( 'Invalid editor state data' );
 				}
 			} else {
 				wp_send_json_error( 'Missing post ID or editor state' );
 			}
-		});
+		} );
 	}
 
 	/**
@@ -411,7 +447,7 @@ final class Theme {
 	 */
 	private function sanitize_meta_fields( array $meta_fields ): array {
 		$sanitized = [];
-		$registry = $this->get_page_part_registry();
+		$registry  = $this->get_page_part_registry();
 
 		foreach ( $meta_fields as $meta_key => $meta_value ) {
 			// Find the field definition to get proper sanitization
@@ -423,17 +459,17 @@ final class Theme {
 
 				foreach ( $template_data['custom_fields'] as $field ) {
 					if ( $field['meta_key'] === $meta_key ) {
-						$sanitize_callback = $this->get_sanitize_callback( $field['type'] );
-						$sanitized[$meta_key] = call_user_func( $sanitize_callback, $meta_value );
-						$field_found = true;
+						$sanitize_callback      = $this->get_sanitize_callback( $field['type'] );
+						$sanitized[ $meta_key ] = call_user_func( $sanitize_callback, $meta_value );
+						$field_found            = true;
 						break 2; // Break out of both loops
 					}
 				}
 			}
 
 			// If field not found in registry, use default sanitization
-			if ( !$field_found ) {
-				$sanitized[$meta_key] = sanitize_text_field( $meta_value );
+			if ( ! $field_found ) {
+				$sanitized[ $meta_key ] = sanitize_text_field( $meta_value );
 			}
 		}
 
@@ -441,50 +477,47 @@ final class Theme {
 	}
 
 	/**
-	 * Override meta values during preview rendering using transient data
+	 * Override post data during preview rendering using unified transient data
 	 */
 	public function handle_preview_rendering(): void {
 		// Hook earlier in the WordPress loading process
-		add_action( 'wp', function() {
+		add_action( 'wp', function () {
 			// Only apply during preview of page_part posts
 			if ( is_preview() && get_post_type() === 'page_part' ) {
-				$post_id = get_the_ID();
+				$post_id       = get_the_ID();
 				$preview_state = get_transient( "preview_editor_state_{$post_id}" );
 
 				if ( $preview_state && is_array( $preview_state ) ) {
-					error_log( "Preview rendering for post {$post_id} with unified state" );
-
 					// Filter meta values during preview
-					add_filter( 'get_post_metadata', function( $value, $object_id, $meta_key ) use ( $post_id, $preview_state ) {
+					add_filter( 'get_post_metadata', function ( $value, $object_id, $meta_key ) use ( $post_id, $preview_state ) {
 						// Only filter for the current post being previewed
 						if ( $object_id != $post_id ) {
 							return $value;
 						}
 
 						// Check if this meta key exists in our preview state
-						if ( isset( $preview_state['meta'][$meta_key] ) ) {
-							error_log( "Filtering {$meta_key} for preview: {$preview_state['meta'][$meta_key]}" );
-							return [ $preview_state['meta'][$meta_key] ];
+						if ( isset( $preview_state['meta'][ $meta_key ] ) ) {
+							return [ $preview_state['meta'][ $meta_key ] ];
 						}
 
 						return $value;
 					}, 5, 3 );
 
 					// Filter title during preview
-					add_filter( 'the_title', function( $title, $post_id_filter ) use ( $post_id, $preview_state ) {
+					add_filter( 'the_title', function ( $title, $post_id_filter ) use ( $post_id, $preview_state ) {
 						if ( $post_id_filter == $post_id && isset( $preview_state['title'] ) ) {
-							error_log( "Filtering title for preview: {$preview_state['title']}" );
 							return $preview_state['title'];
 						}
+
 						return $title;
 					}, 5, 2 );
 
 					// Filter content during preview
-					add_filter( 'the_content', function( $content ) use ( $post_id, $preview_state ) {
+					add_filter( 'the_content', function ( $content ) use ( $post_id, $preview_state ) {
 						if ( get_the_ID() == $post_id && isset( $preview_state['content'] ) ) {
-							error_log( "Filtering content for preview" );
 							return $preview_state['content'];
 						}
+
 						return $content;
 					}, 5 );
 				}
@@ -521,9 +554,17 @@ final class Theme {
 	/**
 	 * Save editor state from unified transient or fallback methods
 	 */
-	public function save_design_meta( int $post_id, \WP_Post $post ): void {
+	public function save_editor_state( int $post_id, \WP_Post $post ): void {
+		// Prevent infinite recursion
+		static $saving = [];
+		if ( isset( $saving[$post_id] ) ) {
+			return;
+		}
+		$saving[$post_id] = true;
+
 		// Let WordPress REST API handle saves automatically
 		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			unset( $saving[$post_id] );
 			return;
 		}
 
@@ -531,19 +572,20 @@ final class Theme {
 		$preview_state = get_transient( "preview_editor_state_{$post_id}" );
 
 		if ( $preview_state && is_array( $preview_state ) ) {
-			// Save title and content
+			// Prepare post updates
+			$post_updates = ['ID' => $post_id];
+
 			if ( isset( $preview_state['title'] ) ) {
-				wp_update_post([
-					'ID' => $post_id,
-					'post_title' => $preview_state['title']
-				]);
+				$post_updates['post_title'] = $preview_state['title'];
 			}
 
 			if ( isset( $preview_state['content'] ) ) {
-				wp_update_post([
-					'ID' => $post_id,
-					'post_content' => $preview_state['content']
-				]);
+				$post_updates['post_content'] = $preview_state['content'];
+			}
+
+			// Single database update if we have changes
+			if ( count( $post_updates ) > 1 ) {
+				wp_update_post( $post_updates );
 			}
 
 			// Save all meta fields
@@ -555,10 +597,19 @@ final class Theme {
 
 			// Clean up transient
 			delete_transient( "preview_editor_state_{$post_id}" );
+			unset( $saving[$post_id] );
 			return;
 		}
 
-		// Fallback: traditional form submission (keep existing logic for compatibility)
+		// Fallback: traditional form submission for compatibility
+		$this->handle_legacy_form_submission( $post_id );
+		unset( $saving[$post_id] );
+	}
+
+	/**
+	 * Handle legacy form submission for backward compatibility
+	 */
+	private function handle_legacy_form_submission( int $post_id ): void {
 		if ( isset( $_POST['page_part_design_slug'] ) ) {
 			$new = sanitize_key( wp_unslash( $_POST['page_part_design_slug'] ) );
 			update_post_meta( $post_id, 'design_slug', $new );
@@ -574,9 +625,9 @@ final class Theme {
 			foreach ( $template_data['custom_fields'] as $field ) {
 				$form_field_name = 'page_part_' . $field['meta_key'];
 
-				if ( isset( $_POST[$form_field_name] ) ) {
+				if ( isset( $_POST[ $form_field_name ] ) ) {
 					$sanitize_callback = $this->get_sanitize_callback( $field['type'] );
-					$sanitized_value = call_user_func( $sanitize_callback, wp_unslash( $_POST[$form_field_name] ) );
+					$sanitized_value   = call_user_func( $sanitize_callback, wp_unslash( $_POST[ $form_field_name ] ) );
 					update_post_meta( $post_id, $field['meta_key'], $sanitized_value );
 				}
 			}
@@ -614,31 +665,41 @@ final class Theme {
 			exit;
 		}
 
-		// Check for preview data from transients first, then fall back to saved meta
-		$preview_design = get_transient( "preview_design_slug_{$id}" );
-		$preview_meta   = get_transient( "preview_all_meta_{$id}" );
-
-		$design = $preview_design ?: get_post_meta( $id, 'design_slug', true ) ?: 'nok-hero';
+		// Check for unified preview state
+		$preview_state = get_transient( "preview_editor_state_{$id}" );
+		$design        = $preview_state['meta']['design_slug'] ?? get_post_meta( $id, 'design_slug', true ) ?: 'nok-hero';
 
 		// Set up meta filtering for the embed rendering if we have preview data
-		if ( $preview_design || $preview_meta ) {
-			add_filter( 'get_post_metadata', function ( $value, $object_id, $meta_key ) use ( $id, $preview_design, $preview_meta ) {
+		if ( $preview_state && is_array( $preview_state ) ) {
+			add_filter( 'get_post_metadata', function ( $value, $object_id, $meta_key ) use ( $id, $preview_state ) {
 				if ( $object_id != $id ) {
 					return $value;
 				}
 
-				// Handle design_slug
-				if ( $meta_key === 'design_slug' && $preview_design ) {
-					return [ $preview_design ];
-				}
-
-				// Handle custom fields from transient
-				if ( $preview_meta && is_array( $preview_meta ) && isset( $preview_meta[ $meta_key ] ) ) {
-					return [ $preview_meta[ $meta_key ] ];
+				// Handle custom fields from unified preview state
+				if ( isset( $preview_state['meta'][ $meta_key ] ) ) {
+					return [ $preview_state['meta'][ $meta_key ] ];
 				}
 
 				return $value;
 			}, 10, 3 );
+
+			// Filter title and content for preview
+			add_filter( 'the_title', function ( $title, $post_id_filter ) use ( $id, $preview_state ) {
+				if ( $post_id_filter == $id && isset( $preview_state['title'] ) ) {
+					return $preview_state['title'];
+				}
+
+				return $title;
+			}, 5, 2 );
+
+			add_filter( 'the_content', function ( $content ) use ( $id, $preview_state ) {
+				if ( get_the_ID() == $id && isset( $preview_state['content'] ) ) {
+					return $preview_state['content'];
+				}
+
+				return $content;
+			}, 5 );
 		}
 
 		$css_uris = [
@@ -663,40 +724,40 @@ final class Theme {
 
 		// Store original state
 		global $post, $wp_query;
-		$original_post = $post;
+		$original_post     = $post;
 		$original_wp_query = $wp_query;
 
-        // FIXED: Properly set up the post and pass it to template via $args
+		// Set up the post and pass it to template via $args
 		$post = get_post( $id );
 
-	    // Set up a proper WordPress query context
-	    $wp_query = new \WP_Query( [
-		    'post_type'      => 'page_part',
-		    'p'              => $id,
-		    'posts_per_page' => 1
-	    ] );
+		// Set up a proper WordPress query context
+		$wp_query = new \WP_Query( [
+			'post_type'      => 'page_part',
+			'p'              => $id,
+			'posts_per_page' => 1
+		] );
 
-	    // Make sure we have the post in the loop
-	    if ( $wp_query->have_posts() ) {
-		    $wp_query->the_post(); // This sets up all the globals properly
+		// Make sure we have the post in the loop
+		if ( $wp_query->have_posts() ) {
+			$wp_query->the_post(); // This sets up all the globals properly
 
-		    ob_start();
+			ob_start();
 
-		    // FIXED: Pass the post object to the template via $args
-		    $args = [ 'post' => $post ];
+			// Pass the post object to the template via $args
+			$args = [ 'post' => $post ];
 
-		    // Include with the proper args
-		    include get_theme_file_path( "template-parts/page-parts/{$design}.php" );
-		    $html .= ob_get_clean();
+			// Include with the proper args
+			include get_theme_file_path( "template-parts/page-parts/{$design}.php" );
+			$html .= ob_get_clean();
 
-		    wp_reset_postdata();
-	    } else {
-		    $html .= '<p style="color: red; padding: 20px;">Error: Could not load page part data</p>';
-	    }
+			wp_reset_postdata();
+		} else {
+			$html .= '<p style="color: red; padding: 20px;">Error: Could not load page part data</p>';
+		}
 
-	    // Restore original state
-	    $post     = $original_post;
-	    $wp_query = $original_wp_query;
+		// Restore original state
+		$post     = $original_post;
+		$wp_query = $original_wp_query;
 
 		$html .= '</body></html>';
 
@@ -722,6 +783,7 @@ final class Theme {
 		if ( isset( $_GET['hide_adminbar'] ) ) {
 			return false;
 		}
+
 		return $show;
 	}
 }
