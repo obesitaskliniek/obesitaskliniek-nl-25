@@ -4,13 +4,16 @@
  * Slug: nok-portrait-carousel
  * Custom Fields:
  * - team_members:repeater
+ * - colors:select(Blauw::nok-bg-darkblue nok-text-white|Wit::nok-bg-white nok-text-darkblue)
  */
+
+$default_colors = 'nok-bg-darkblue nok-text-white';
+$colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors'] : $default_colors;
 
 ?>
 
 <nok-section>
-    <div class="nok-section__inner--stretched
-    nok-bg-darkblue nok-text-white">
+    <div class="nok-section__inner--stretched <?= $colors;?>">
         <div class="nok-section__inner">
 
             <article class="nok-layout-grid nok-layout-grid__2-column nok-align-items-start">

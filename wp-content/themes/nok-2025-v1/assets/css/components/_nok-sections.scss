@@ -59,6 +59,11 @@
   .pull-down-compensation {
     margin-top: var(--nok-spacing-section-ends, 0);
   }*/
+  &.collapse-bottom {
+    .nok-section__inner {
+      margin-bottom: 0 !important;
+    }
+  }
 }
 
 .nok-section,
