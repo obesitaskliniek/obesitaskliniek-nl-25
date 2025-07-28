@@ -4,6 +4,9 @@
  *
  * @return callable
  */
+
+use NOK2025\V1\Theme;
+
 return function( array $attributes ): string {
     $post_id = absint( $attributes['postId'] ?? 0 );
     if ( ! $post_id || get_post_type( $post_id ) !== 'page_part' ) {
@@ -30,7 +33,14 @@ return function( array $attributes ): string {
             ) . '</p>';
     }
 
-    $args = [ 'post' => $post ];
+	$theme_instance = Theme::get_instance();
+
+	$page_part_fields = $theme_instance->get_page_part_fields( $post_id, $design, false );
+
+	$args = [
+		'post' => $post,
+		'page_part_fields' => $page_part_fields
+	];
     ob_start();
     include $tpl;
     return ob_get_clean();

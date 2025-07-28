@@ -20,26 +20,8 @@ $design = get_post_meta( get_the_ID(), 'design_slug', true ) ?: '';
 $is_editing = Helpers::is_editing_mode();
 
 // Get all custom field values
-$registry = $theme_instance->get_page_part_registry();
-$current_template_data = $registry[$design] ?? [];
-$expected_fields = $current_template_data['custom_fields'] ?? [];
+$page_part_fields = $theme_instance->get_page_part_fields( get_the_ID(), $design, $is_editing );
 
-$default_fields = [
-    'text' => '(leeg)',
-    'url' => '#',
-];
-
-foreach ( $expected_fields as $field ) {
-    $meta_key = $field['meta_key'];
-    $short_field_name = $field['name'];
-    $is_text_based = in_array( $field['type'], [ 'text', 'textarea' ], true );
-
-    $actual_meta_value = get_post_meta( get_the_ID(), $meta_key, true);
-    $page_part_fields[ $short_field_name ] = empty( $actual_meta_value ) ?
-        ($is_editing ?
-            ($is_text_based ? Helpers::show_placeholder( $short_field_name ) : ($default_fields[$field['type']] ?? '')) : '') :
-        $actual_meta_value;
-}
 // Fallback to a default template if none selected
 if ( ! $design || ! locate_template( "template-parts/page-parts/{$design}.php" ) ) {
     echo '<p>' . esc_html__( 'No design template found for this Page Part.', THEME_TEXT_DOMAIN ) . '</p>';
