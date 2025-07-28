@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: NOK Hero
+ * Template Name: Hero
  * Description: A hero unit for the top of the main (first level) pages.
  * Slug: nok-hero
  * Custom Fields:
@@ -13,35 +13,11 @@
  * - link_url:url,
  */
 
-$this_slug = 'nok-hero';
-
-use NOK2025\V1\Helpers;
-
 /** @var \WP_Post $post */
 global $post;
 $post = $args['post'] ?? null;
+$page_part_fields = $args['page_part_fields'] ?? [];
 setup_postdata( $post );        // set up all "in-the-loop" globals
-
-// Check if we're in preview/editing mode
-$is_editing = Helpers::is_editing_mode();
-
-// Get all custom field values
-$page_part_fields = [];
-$all_meta         = get_post_meta( get_the_ID() );
-
-if ($all_meta) {
-	foreach ( $all_meta as $meta_key => $meta_value ) {
-		if ( str_starts_with( $meta_key, $this_slug ) ) {
-			$short_field_name                      = substr( $meta_key, strlen( $this_slug ) + 1 );
-			$actual_meta_value                     = get_post_meta( get_the_ID(), $meta_key, true);
-			$page_part_fields[ $short_field_name ] = empty( $actual_meta_value ) ?
-				( $is_editing ?
-					Helpers::show_placeholder( $short_field_name ) :
-					'' ) :
-				$actual_meta_value;
-		}
-	}
-}
 
 $featuredImage = '<img src="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:100x0-25-0-0-center-0.jpg" 
 srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:1920x0-65-0-0-center-0.jpg 1920w,

@@ -172,7 +172,7 @@ final class Theme {
 	 *
 	 * @return array Array of [ slug => [ 'name' => ..., 'description' => ..., 'icon' => ..., 'custom_fields' => [...] ] ]
 	 */
-	private function get_page_part_registry(): array {
+	public function get_page_part_registry(): array {
 		if ( $this->part_registry !== null ) {
 			return $this->part_registry;
 		}
@@ -248,9 +248,8 @@ final class Theme {
 	/**
 	 * Parse custom fields definition from template header
 	 *
-	 * @param string $fields_string Format: "field1:type,field2:type,field3:type"
+	 * @param string $fields_string Format: comma-separated with bracket options
 	 * @param string $template_slug Template slug for field prefixing
-	 *
 	 * @return array Parsed field definitions
 	 */
 	private function parse_custom_fields( string $fields_string, string $template_slug ): array {
@@ -260,34 +259,55 @@ final class Theme {
 
 		$fields = [];
 
-		// Split by both commas and newlines to handle both formats
-		$field_definitions = preg_split( '/[,\n\r]+/', $fields_string );
+		// Split by commas, but not commas inside brackets
+		// This regex matches commas that are NOT inside square brackets
+		$field_definitions = preg_split('/,(?![^\(]*\))/', $fields_string);
 
 		foreach ( $field_definitions as $definition ) {
-			// Remove asterisks and whitespace from comment blocks
-			$definition = trim( $definition, " \t\n\r\0\x0B*" );
+			// Remove asterisks, whitespace, and dashes from comment blocks
+			$definition = trim( $definition, " \t\n\r\0\x0B*-" );
 
 			if ( empty( $definition ) ) {
 				continue;
 			}
 
-			$parts = explode( ':', $definition );
-			if ( count( $parts ) !== 2 ) {
-				continue;
+			// Check for select field with bracket notation: "position:select(left|right)"
+			if ( preg_match('/^([^:]+):select\(([^\)]+)\)$/', $definition, $matches) ) {
+				$field_name = trim( $matches[1] );
+				$options_string = trim( $matches[2] );
+				$options = array_map('trim', explode( '|', $options_string ));
+
+				$meta_key = $template_slug . '_' . $field_name;
+
+				$fields[] = [
+					'name'     => $field_name,
+					'type'     => 'select',
+					'meta_key' => $meta_key,
+					'label'    => $this->generate_field_label( $field_name ),
+					'options'  => $options,
+				];
 			}
+			// Handle regular fields: "field_name:type"
+			else {
+				$parts = explode( ':', $definition );
+				if ( count( $parts ) < 2 ) {
+					continue;
+				}
 
-			$field_name = trim( $parts[0] );
-			$field_type = trim( $parts[1] );
+				$field_name = trim( $parts[0] );
+				$field_type = trim( $parts[1] );
 
-			// Create prefixed meta key
-			$meta_key = $template_slug . '_' . $field_name;
+				// Create prefixed meta key
+				$meta_key = $template_slug . '_' . $field_name;
 
-			$fields[] = [
-				'name'     => $field_name,
-				'type'     => $field_type,
-				'meta_key' => $meta_key,
-				'label'    => $this->generate_field_label( $field_name ),
-			];
+				$fields[] = [
+					'name'     => $field_name,
+					'type'     => $field_type,
+					'meta_key' => $meta_key,
+					'label'    => $this->generate_field_label( $field_name ),
+					'options'  => [], // Empty for non-select fields
+				];
+			}
 		}
 
 		return $fields;
@@ -357,6 +377,8 @@ final class Theme {
 				return 'sanitize_textarea_field';
 			case 'repeater':
 				return [ $this, 'sanitize_json_field' ];
+			case 'select':
+				return 'sanitize_text_field';
 			case 'text':
 			default:
 				return 'sanitize_text_field';
@@ -495,9 +517,14 @@ final class Theme {
 							return $value;
 						}
 
-						// Check if this meta key exists in our preview state
-						if ( isset( $preview_state['meta'][ $meta_key ] ) ) {
-							return [ $preview_state['meta'][ $meta_key ] ];
+						// Handle custom fields from unified preview state
+						if ( isset( $preview_state['meta'][$meta_key] ) ) {
+							return [ $preview_state['meta'][$meta_key] ];
+						}
+
+						// For page part fields that don't exist in DB yet, return empty to trigger fallback
+						if ( preg_match('/^[a-z-]+_[a-z_]+$/', $meta_key) ) {
+							return [ '' ];
 						}
 
 						return $value;

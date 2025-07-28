@@ -51,7 +51,7 @@ function DesignSlugPanel() {
 
         // Prepare form data
         const formData = new URLSearchParams({
-            action: 'store_preview_meta',
+            action: 'store_preview_state',
             post_id: postId,
             design_slug: currentSlug
         });
@@ -183,6 +183,24 @@ function DesignSlugPanel() {
                         onChange={(value) => updateMetaField(field.meta_key, value)}
                         help="Enter JSON data for repeater field"
                         rows={4}
+                    />
+                );
+
+            case 'select':
+                const selectOptions = field.options || [];
+                return (
+                    <SelectControl
+                        key={field.meta_key}
+                        label={field.label}
+                        value={fieldValue}
+                        options={[
+                            { label: '— Select —', value: '' },
+                            ...selectOptions.map(option => ({
+                                label: option,
+                                value: option
+                            }))
+                        ]}
+                        onChange={(value) => updateMetaField(field.meta_key, value)}
                     />
                 );
 

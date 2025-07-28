@@ -1,17 +1,16 @@
 <?php
 /**
  * Template Name: Portrait Carousel
- * Slug: portrait-carousel
+ * Slug: nok-portrait-carousel
  * Custom Fields:
  * - team_members:repeater
  */
 
-use NOK2025\V1\Helpers;
-
 /** @var \WP_Post $post */
 global $post;
 $post = $args['post'] ?? null;
-setup_postdata( $post );        // set up all “in-the-loop” globals
+$page_part_fields = $args['page_part_fields'] ?? [];
+setup_postdata( $post );        // set up all "in-the-loop" globals
 
 ?>
 
