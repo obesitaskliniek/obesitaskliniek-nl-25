@@ -4,6 +4,7 @@
 namespace NOK2025\V1;
 
 use NOK2025\V1\PostTypes;
+use NOK2025\V1\Helpers;
 
 final class Theme {
 	private static ?Theme $instance = null;
@@ -200,6 +201,33 @@ final class Theme {
 		}
 
 		return $this->part_registry;
+	}
+
+	public function get_page_part_fields( int $post_id, string $design, bool $is_editing = false ): array {
+		$registry = $this->get_page_part_registry();
+		$current_template_data = $registry[$design] ?? [];
+		$expected_fields = $current_template_data['custom_fields'] ?? [];
+
+		$default_fields = [
+			'text' => '(leeg)',
+			'url' => '#',
+		];
+
+		$page_part_fields = [];
+
+		foreach ( $expected_fields as $field ) {
+			$meta_key = $field['meta_key'];
+			$short_field_name = $field['name'];
+			$is_text_based = in_array( $field['type'], [ 'text', 'textarea' ], true );
+
+			$actual_meta_value = get_post_meta( $post_id, $meta_key, true);
+			$page_part_fields[ $short_field_name ] = empty( $actual_meta_value ) ?
+				($is_editing ?
+					($is_text_based ? Helpers::show_placeholder( $short_field_name ) : ($default_fields[$field['type']] ?? '')) : '') :
+				$actual_meta_value;
+		}
+
+		return $page_part_fields;
 	}
 
 	private function get_custom_file_data( string $file, array $headers ): array {
@@ -770,8 +798,14 @@ final class Theme {
 
 			ob_start();
 
-			// Pass the post object to the template via $args
-			$args = [ 'post' => $post ];
+			// Get processed page part fields
+			$page_part_fields = $this->get_page_part_fields( $id, $design, false );
+
+			// Pass the post object and fields to the template via $args
+			$args = [
+				'post' => $post,
+				'page_part_fields' => $page_part_fields
+			];
 
 			// Include with the proper args
 			include get_theme_file_path( "template-parts/page-parts/{$design}.php" );
