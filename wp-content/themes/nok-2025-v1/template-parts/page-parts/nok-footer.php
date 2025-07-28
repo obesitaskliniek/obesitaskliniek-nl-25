@@ -12,14 +12,6 @@
  * - link_text:text,
  * - link_url:url,
  */
-
-/** @var \WP_Post $post */
-global $post;
-$post = $args['post'] ?? null;
-$page_part_fields = $args['page_part_fields'] ?? [];
-setup_postdata( $post );        // set up all "in-the-loop" globals
-
-echo $page_part_fields['tagline'] ?? '';
 ?>
 
 <nok-page-footer class="nok-section">
@@ -93,4 +85,4 @@ echo $page_part_fields['tagline'] ?? '';
     </div>
 </nok-page-footer>
 
-<?php wp_reset_postdata();            // restore global $post & loop state
+<?php

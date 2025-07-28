@@ -19,20 +19,6 @@ return function( array $attributes ): string {
 
     $design = get_post_meta( $post_id, 'design_slug', true ) ?: 'header-top-level';
 
-    // Enqueue the per‑design CSS
-    /*
-    if ( wp_style_is( $design, 'registered' ) ) {
-        wp_enqueue_style( $design );
-    }*/
-
-    $tpl = get_theme_file_path( "template-parts/page-parts/{$design}.php" );
-    if ( ! file_exists( $tpl ) ) {
-        return '<p>' . sprintf(
-                esc_html__( 'Template for "%s" not found.', THEME_TEXT_DOMAIN ),
-                esc_html( $design )
-            ) . '</p>';
-    }
-
 	$theme_instance = Theme::get_instance();
 
 	$page_part_fields = $theme_instance->get_page_part_fields( $post_id, $design, false );
@@ -41,7 +27,10 @@ return function( array $attributes ): string {
 		'post' => $post,
 		'page_part_fields' => $page_part_fields
 	];
-    ob_start();
-    include $tpl;
-    return ob_get_clean();
+	ob_start();
+	$theme_instance->include_page_part_template( $design, [
+		'post' => $post,
+		'page_part_fields' => $page_part_fields
+	] );
+	return ob_get_clean();
 };

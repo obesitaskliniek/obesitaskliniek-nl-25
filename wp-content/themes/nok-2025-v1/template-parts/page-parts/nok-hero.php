@@ -9,15 +9,13 @@
  * - button_blauw_url:url,
  * - button_transparant_text:text,
  * - button_transparant_url:url,
- * - link_text:text,
+ * - usp_1_text:text,
+ * - usp_2_text:text,
+ * - usp_3_text:text,
  * - link_url:url,
+ *  - button_vestiging_text:text,
+ *  - button_vestiging_url:url,
  */
-
-/** @var \WP_Post $post */
-global $post;
-$post = $args['post'] ?? null;
-$page_part_fields = $args['page_part_fields'] ?? [];
-setup_postdata( $post );        // set up all "in-the-loop" globals
 
 $featuredImage = '<img src="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:100x0-25-0-0-center-0.jpg" 
 srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:1920x0-65-0-0-center-0.jpg 1920w,
@@ -53,18 +51,21 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 
             <article class="nok-pl-section-padding nok-px-to-lg-section-padding">
                 <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-2 nok-fs-to-md-1">
-					<?php echo $page_part_fields['tagline'] ?? ''; ?>
+					<?= $page_part_fields['tagline']; ?>
                 </h2>
 				<?php the_title( '<h1 class="nok-fs-6">', '</h1>' ); ?>
                 <div>
 					<?php the_content(); ?>
                 </div>
-                <div class="nok-button-group">
-                    <button class="nok-button nok-align-self-to-sm-stretch fill-group-column nok-bg-darkerblue nok-text-contrast"
-                            tabindex="0">De
-                        behandeling
-                    </button>
-                    <a class="nok-hyperlink nok-align-self-to-sm-stretch fw-bold" href="#">Kom ik in aanmerking?</a>
+                <div class="nok-button-group nok-justify-items-start">
+                    <a role="button" href="<?= $page_part_fields['button_blauw_url']; ?>"
+                       class="nok-button nok-align-self-to-sm-stretch fill-group-column nok-bg-darkerblue nok-text-contrast" tabindex="0">
+	                    <?= $page_part_fields['button_blauw_text']; ?>
+                    </a>
+                    <a role="button" href="<?= $page_part_fields['button_transparant_url']; ?>"
+                       class="nok-hyperlink nok-align-self-to-sm-stretch fw-bold">
+                        <?= $page_part_fields['button_transparant_text']; ?>
+                    </a>
                 </div>
             </article>
 
@@ -134,7 +135,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                          class="nok-text-lightblue" viewBox="0 0 16 16">
                         <path d="M4 9.42h1.063C5.4 12.323 7.317 14 10.34 14c.622 0 1.167-.068 1.659-.185v-1.3c-.484.119-1.045.17-1.659.17-2.1 0-3.455-1.198-3.775-3.264h4.017v-.928H6.497v-.936q-.002-.165.008-.329h4.078v-.927H6.618c.388-1.898 1.719-2.985 3.723-2.985.614 0 1.175.05 1.659.177V2.194A6.6 6.6 0 0 0 10.341 2c-2.928 0-4.82 1.569-5.244 4.3H4v.928h1.01v1.265H4v.928z"></path>
                     </svg>
-                    Vergoed door je zorgverzekering
+	                <?= $page_part_fields['usp_1_text']; ?>
                 </div>
                 <div class="nok-fs-buttons nok-usp nok-invisible-to-xl">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
@@ -143,7 +144,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                         <rect width=".7" height=".6" x="5.1" y="11" rx="0" ry="0"></rect>
                         <path d="M5.7 11.8h-.6V14c0 .3 0 .3-.2.3h-.1v.5h.3c.5 0 .8-.3.8-.8v-2.2Zm1.2-.1c-.4 0-.7.1-.9.4l.2.4c0-.1.3-.2.5-.2s.4.1.4.4h-.3c-.6 0-.9.3-.9.7s.2.7.7.7.5-.1.6-.2v.2h.5v-1.2c0-.6-.3-1-.9-1Zm.3 1.4v.2s-.1.1-.4.1-.2 0-.2-.2.1-.2.4-.2h.2ZM9 11.7c-.4 0-.7.1-.9.4l.2.4c0-.1.3-.2.5-.2s.4.1.4.4h-.3c-.6 0-.9.3-.9.7s.2.7.7.7.5-.1.6-.2v.2h.5v-1.2c0-.6-.3-1-.9-1Zm.3 1.4v.2s-.1.1-.4.1-.2 0-.2-.2.1-.2.4-.2h.2Zm2.2-1.4c-.4 0-.5.1-.6.3v-.2h-.5v2.1h.6v-1.4c0-.2.3-.3.5-.3v-.5Z"></path>
                     </svg>
-                    Meer dan 30 jaar ervaring
+	                <?= $page_part_fields['usp_2_text']; ?>
                 </div>
                 <div class="nok-fs-buttons nok-usp nok-invisible-to-xxxl">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -151,13 +152,13 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                         <path d="M8.5 5.034v1.1l.953-.55.5.867L9 7l.953.55-.5.866-.953-.55v1.1h-1v-1.1l-.953.55-.5-.866L7 7l-.953-.55.5-.866.953.55v-1.1zM13.25 9a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25zM13 11.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm.25 1.75a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25zm-11-4a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5A.25.25 0 0 0 3 9.75v-.5A.25.25 0 0 0 2.75 9zm0 2a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25zM2 13.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25z"></path>
                         <path d="M5 1a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1a1 1 0 0 1 1 1v4h3a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h3V3a1 1 0 0 1 1-1zm2 14h2v-3H7zm3 0h1V3H5v12h1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1zm0-14H6v1h4zm2 7v7h3V8zm-8 7V8H1v7z"></path>
                     </svg>
-                    Samenwerking met de beste ziekenhuizen
+	                <?= $page_part_fields['usp_3_text']; ?>
                 </div>
-                <a role="button" href="#" class="nok-button nok-base-font nok-bg-white nok-text-darkerblue nok-visible-xs align-self-stretch"
-                        tabindex="0">Vind een vestiging
+                <a role="button" href="<?= $page_part_fields['button_vestiging_url']; ?>" class="nok-button nok-base-font nok-bg-white nok-text-darkerblue nok-visible-xs align-self-stretch"
+                        tabindex="0"><?= $page_part_fields['button_vestiging_text']; ?>
                 </a>
             </footer>
         </div>
     </nok-hero>
 
-<?php wp_reset_postdata();            // restore global $post & loop state
+<?php

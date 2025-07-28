@@ -6,12 +6,6 @@
  * - team_members:repeater
  */
 
-/** @var \WP_Post $post */
-global $post;
-$post = $args['post'] ?? null;
-$page_part_fields = $args['page_part_fields'] ?? [];
-setup_postdata( $post );        // set up all "in-the-loop" globals
-
 ?>
 
 <nok-section>
@@ -63,4 +57,3 @@ setup_postdata( $post );        // set up all "in-the-loop" globals
 
 
 <?php
-wp_reset_postdata();            // restore global $post & loop state

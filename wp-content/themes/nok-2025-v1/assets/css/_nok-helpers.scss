@@ -127,8 +127,13 @@
 .text-center {
   text-align: center;
 }
-.text-start {
+.text-start,
+.text-left {
   text-align: left;
+}
+.text-end,
+.text-right {
+  text-align: right;
 }
 
 .align-self-stretch {
@@ -488,7 +493,7 @@ $utilities: (
         "justify-items": (
                 responsive: false,
                 responsive-up-to: true,
-                property: justify-self,
+                property: justify-items,
                 class: #{nok-variables.$prefix}-justify-items,
                 values: (
                         center: center,

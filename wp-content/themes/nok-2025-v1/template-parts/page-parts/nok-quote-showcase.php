@@ -3,22 +3,18 @@
  * Template Name: Quote Showcase
  * Slug: nok-quote-showcase
  * Custom Fields:
+ *  - layout:select(left|right)
  */
 
-/** @var \WP_Post $post */
-global $post;
-$post = $args['post'] ?? null;
-$page_part_fields = $args['page_part_fields'] ?? [];
-setup_postdata( $post );        // set up all "in-the-loop" globals
-
+$left = ( $page_part_fields['layout'] ?? 'left' ) == 'left';
 ?>
 
 <nok-section>
     <div class="nok-section__inner">
         <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start nok-column-gap-3">
-            <div class="nok-layout-flex-column nok-align-items-stretch">
+            <div class="nok-layout-flex-column nok-align-items-stretch" style="order:<?= $left ? '1' : '2'; ?>">
 	            <?php the_title('<h1>', '</h1>'); ?>
-	            <p><?php the_content(); ?></p>
+	            <div><?php the_content(); ?></div>
 
                 <nok-square-block class="nok-p-2 no-gap
                 nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast">
@@ -56,11 +52,11 @@ setup_postdata( $post );        // set up all "in-the-loop" globals
 
             <!-- Component: accordion items -->
             <div class="nok-layout-grid nok-layout-grid__1-column"
-                 data-requires="./nok-accordion.mjs?cache=<?= time(); ?>">
+                 data-requires="./nok-accordion.mjs?cache=<?= time(); ?>" style="order:<?= $left ? '2' : '1'; ?>">
                 <nok-accordion>
                     <details
                             class="nok-bg-white nok-dark-bg-darkerblue nok-dark-text-white nok-rounded-border nok-text-contrast">
-                        <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold">Solo</summary>
+                        <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold">Los blok (niet onderdeel van accordion)</summary>
                         <div class="accordion-content nok-p-2 nok-pt-0">
                             <p class="nok-mb-1">
                                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure
@@ -105,4 +101,3 @@ setup_postdata( $post );        // set up all "in-the-loop" globals
 
 
 <?php
-wp_reset_postdata();            // restore global $post & loop state
