@@ -1,6 +1,6 @@
 <?php
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
-const NOK_THEME_ROOT = 'https://dev.obesitaskliniek.nl/wp-content/themes/nok-2025-v1'; ?>
+const THEME_ROOT = 'https://dev.obesitaskliniek.nl/wp-content/themes/nok-2025-v1'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -463,7 +463,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
 
             <article class="nok-layout-grid nok-layout-grid__2-column nok-align-items-start">
                 <h1 class="nok-span-all-columns-to-xxl">
-                    Het multidisciplinaire team
+                    Het multidisciplinaire team (portrait-carousel)
                 </h1>
                 <p class="new-row nok-span-all-columns-to-xxl">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos
@@ -488,7 +488,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                                     $image = $images[$random_key];
                                     $filename = basename($image);
                                     $persoon = str_replace('-transparant', '', pathinfo($filename)['filename']);
-                                    $afbeelding = THEME_ROOT . '/img/people/' . $filename;
+                                    $afbeelding = THEME_ROOT . '/assets/img/people/' . $filename;
                                     unset($images[$random_key]); ?>
                                 <nok-square-block class="nok-p-0 nok-border-radius-0">
                                     <div class="square-portrait-image nok-rounded-border-large nok-gradient-1">
@@ -516,7 +516,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
 
             <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start">
                 <h1>
-                    Een titel voor deze sectie
+                    Een titel voor deze sectie (block-carousel)
                 </h1>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos
@@ -566,7 +566,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
         <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start nok-column-gap-3">
             <div class="nok-layout-flex-column nok-align-items-stretch">
                 <h1>
-                    Ons veelzijdige team van specialisten
+                    Ons veelzijdige team van specialisten (quote-showcase)
                 </h1>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod,
