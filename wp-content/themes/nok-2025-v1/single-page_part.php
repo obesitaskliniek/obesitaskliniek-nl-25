@@ -31,14 +31,10 @@ if ( ! $design || ! locate_template( "template-parts/page-parts/{$design}.php" )
     wp_dequeue_style( $design );
 
     // Pull in your part template, passing the post
-    get_template_part(
-        "template-parts/page-parts/{$design}",
-        null,
-        [
-            'post' => get_post(),
-            'page_part_fields' => $page_part_fields
-        ]
-    );
+    $theme_instance->include_page_part_template( $design, [
+        'post' => get_post(),
+        'page_part_fields' => $page_part_fields
+    ] );
 } ?>
 
 

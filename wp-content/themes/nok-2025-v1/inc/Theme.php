@@ -53,8 +53,12 @@ final class Theme {
 		add_action( 'rest_api_init', [ $this, 'register_rest_routes' ] );
 
 		// Content filters
-		add_filter( 'the_content', [ $this, 'enhance_paragraph_classes' ] );
+		add_filter( 'the_content', [ $this, 'enhance_paragraph_classes' ], 1 );
 		add_filter( 'show_admin_bar', [ $this, 'maybe_hide_admin_bar' ] );
+
+		// Page parts Admin columns
+		add_filter( 'manage_page_part_posts_columns', [ $this, 'add_page_part_columns' ] );
+		add_action( 'manage_page_part_posts_custom_column', [ $this, 'render_page_part_column' ], 10, 2 );
 	}
 
 	// =============================================================================
@@ -158,7 +162,7 @@ final class Theme {
                     min-height: 35vh !important;
                 }
                 .editor-styles-wrapper::after {
-                    height: 0 !important;
+                    height: 60px !important;
                 }
             </style>';
 		}
@@ -348,7 +352,7 @@ final class Theme {
 	 *
 	 * @return string
 	 */
-	private function generate_field_label( string $field_name ): string {
+	public function generate_field_label( string $field_name ): string {
 		// Convert snake_case or kebab-case to Title Case
 		$label = str_replace( [ '_', '-' ], ' ', $field_name );
 
@@ -449,6 +453,31 @@ final class Theme {
 		}
 
 		return '[]';
+	}
+
+	/**
+	 * Include a page part template with standardized setup
+	 */
+	public function include_page_part_template( string $design, array $args = [] ) {
+		// Standardized setup that every template needs
+		global $post;
+		$post = $args['post'] ?? null;
+		$page_part_fields = $args['page_part_fields'] ?? [];
+		setup_postdata( $post );
+
+		// Include the actual template
+		$template_path = get_theme_file_path( "template-parts/page-parts/{$design}.php" );
+		if ( ! file_exists( $template_path ) ) {
+			print '<p class="nok-bg-error nok-p-3">Error: ' . sprintf(
+					esc_html__( 'Template for "%s" not found!', THEME_TEXT_DOMAIN ),
+					esc_html( $design )
+				) . '</p>';
+		}
+		if ( file_exists( $template_path ) ) {
+			include $template_path;
+		}
+
+		wp_reset_postdata();
 	}
 
 	/**
@@ -662,6 +691,38 @@ final class Theme {
 	}
 
 	/**
+	 * Add custom columns to page_part post list
+	 */
+	public function add_page_part_columns( array $columns ): array {
+		// Insert template column after title
+		$new_columns = [];
+		foreach ( $columns as $key => $value ) {
+			$new_columns[$key] = $value;
+			if ( $key === 'title' ) {
+				$new_columns['design_template'] = __( 'Template', THEME_TEXT_DOMAIN );
+			}
+		}
+		return $new_columns;
+	}
+
+	/**
+	 * Render custom column content for page_part posts
+	 */
+	public function render_page_part_column( string $column_name, int $post_id ): void {
+		if ( $column_name === 'design_template' ) {
+			$design_slug = get_post_meta( $post_id, 'design_slug', true );
+
+			if ( $design_slug ) {
+				$registry = $this->get_page_part_registry();
+				$template_name = $registry[$design_slug]['name'] ?? $design_slug;
+				echo esc_html( $template_name );
+			} else {
+				echo '<em>' . esc_html__( 'No template', THEME_TEXT_DOMAIN ) . '</em>';
+			}
+		}
+	}
+
+	/**
 	 * Handle legacy form submission for backward compatibility
 	 */
 	private function handle_legacy_form_submission( int $post_id ): void {
@@ -801,15 +862,11 @@ final class Theme {
 			// Get processed page part fields
 			$page_part_fields = $this->get_page_part_fields( $id, $design, false );
 
-			// Pass the post object and fields to the template via $args
-			$args = [
+			$theme_instance = Theme::get_instance();
+			$theme_instance->include_page_part_template( $design, [
 				'post' => $post,
 				'page_part_fields' => $page_part_fields
-			];
-
-			// Include with the proper args
-			include get_theme_file_path( "template-parts/page-parts/{$design}.php" );
-			$html .= ob_get_clean();
+			] );
 
 			wp_reset_postdata();
 		} else {

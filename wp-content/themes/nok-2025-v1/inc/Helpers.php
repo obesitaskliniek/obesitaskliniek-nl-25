@@ -21,8 +21,9 @@ class Helpers {
 	 * @return string
 	 */
 	public static function show_placeholder( string $value, ): string {
+		$theme_instance = Theme::get_instance();
 		if ( ! empty( $value ) ) {
-			return '<span style="color: #999; font-style: italic;">Vul "'.$value.'" in onder "Design template"</span>';
+			return '<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#999;font-style:italic;max-width: 100cqi;font-size:14px;">Vul "'. $theme_instance->generate_field_label($value) .'" in</span>';
 		} else {
 			return '';
 		}

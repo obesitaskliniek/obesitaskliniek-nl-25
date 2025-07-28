@@ -2,20 +2,13 @@
 /**
  * Template Name: Step Visual
  * Description: A split-content page part for representing a step with a visual
- * Slug: step-visual
+ * Slug: nok-step-visual
  * Custom Fields:
  * - tagline:text,
  * - button_blauw_text:text,
  * - button_blauw_url:url,
  * - layout:select(left|right)
  */
-
-/** @var \WP_Post $post */
-global $post;
-$post             = $args['post'] ?? null;
-$page_part_fields = $args['page_part_fields'] ?? [];
-setup_postdata( $post );        // set up all "in-the-loop" globals
-
 
 $featuredImage = '<img src="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:100x0-25-0-0-center-0.jpg" 
 srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:1920x0-65-0-0-center-0.jpg 1920w,
@@ -100,4 +93,4 @@ $left = ( $page_part_fields['layout'] ?? 'left' ) == 'left';
         </div>
     </nok-section>
 
-<?php wp_reset_postdata();            // restore global $post & loop state
+<?php

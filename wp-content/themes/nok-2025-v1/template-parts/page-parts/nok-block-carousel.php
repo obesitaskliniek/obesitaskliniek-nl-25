@@ -6,13 +6,6 @@
  * - blocks:repeater
  * - read_more:text
  */
-
-/** @var \WP_Post $post */
-global $post;
-$post = $args['post'] ?? null;
-$page_part_fields = $args['page_part_fields'] ?? [];
-setup_postdata( $post );        // set up all "in-the-loop" globals
-
 ?>
 
 <nok-section>
@@ -22,7 +15,7 @@ nok-bg-darkerblue nok-text-white">
 
             <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start">
 	            <?php the_title('<h1>', '</h1>'); ?>
-                <p><?php the_content(); ?></p>
+                <div><?php the_content(); ?></div>
 
                 <!-- Component: drag-scrollable blokkengroep -->
                 <div class="nok-mt-2 align-self-stretch">
@@ -63,4 +56,3 @@ nok-bg-darkerblue nok-text-white">
 
 
 <?php
-wp_reset_postdata();            // restore global $post & loop state
