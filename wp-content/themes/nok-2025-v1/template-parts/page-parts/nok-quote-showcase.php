@@ -4,12 +4,15 @@
  * Slug: nok-quote-showcase
  * Custom Fields:
  *  - layout:select(left|right)
+ *  - colors:select(Transparant::nok-bg-body|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue)
  */
 
+$default_colors = '';
+$colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors'] : $default_colors;
 $left = ( $page_part_fields['layout'] ?? 'left' ) == 'left';
 ?>
 
-<nok-section>
+<nok-section class="<?= $colors;?>">
     <div class="nok-section__inner">
         <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start nok-column-gap-3">
             <div class="nok-layout-flex-column nok-align-items-stretch" style="order:<?= $left ? '1' : '2'; ?>">

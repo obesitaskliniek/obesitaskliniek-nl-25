@@ -188,6 +188,8 @@ function DesignSlugPanel() {
 
             case 'select':
                 const selectOptions = field.options || [];
+                const selectLabels = field.option_labels || selectOptions; // Fallback to options if no labels
+
                 return (
                     <SelectControl
                         key={field.meta_key}
@@ -195,8 +197,8 @@ function DesignSlugPanel() {
                         value={fieldValue}
                         options={[
                             { label: '— Select —', value: '' },
-                            ...selectOptions.map(option => ({
-                                label: option,
+                            ...selectOptions.map((option, index) => ({
+                                label: selectLabels[index] || option,
                                 value: option
                             }))
                         ]}

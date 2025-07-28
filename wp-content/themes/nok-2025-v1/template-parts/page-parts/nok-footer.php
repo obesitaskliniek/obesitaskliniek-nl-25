@@ -11,14 +11,20 @@
  * - button_transparant_url:url,
  * - link_text:text,
  * - link_url:url,
+ *  - colors:select(Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue nok-dark-text-white|Donkerblauw::nok-bg-darkestblue nok-text-white--darker)
  */
+
+$default_colors = 'nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue nok-dark-text-white';
+$colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors'] : $default_colors;
+$left = ( $page_part_fields['layout'] ?? 'left' ) == 'left';
 ?>
 
-<nok-page-footer class="nok-section">
-    <div class="nok-section__inner--stretched nok-my-0 nok-px-0 nok-border-radius-0 nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue nok-dark-text-white">
+<nok-page-footer class="nok-section <?= $colors; ?>">
+    <div class="nok-section__inner--stretched nok-my-0 nok-px-0 nok-border-radius-0 ">
         <div class="nok-section__inner nok-page-footer__inner">
             <div class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start nok-column-gap-3">
-                <nok-square-block class="nok-bg-body nok-dark-bg-body--darker nok-alpha-10 nok-alpha-10">
+                <?php $block_colors = str_contains($colors, 'nok-bg-darkestblue') ? 'nok-bg-darkblue nok-bg-alpha-6 nok-alpha-10' : 'nok-bg-body nok-dark-bg-body--darker nok-alpha-10 nok-alpha-10'; ?>
+                <nok-square-block class="<?= $block_colors; ?>">
                     <div class="nok-square-block__heading">
                         <h3 class="fw-bold">Vragen?</h3>
                         <h3 class="fw-400">We helpen je graag</h3>

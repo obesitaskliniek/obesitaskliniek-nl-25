@@ -307,16 +307,32 @@ final class Theme {
 			if ( preg_match('/^([^:]+):select\(([^\)]+)\)$/', $definition, $matches) ) {
 				$field_name = trim( $matches[1] );
 				$options_string = trim( $matches[2] );
-				$options = array_map('trim', explode( '|', $options_string ));
+				$raw_options = array_map('trim', explode( '|', $options_string ));
+
+				// Parse options with optional nice names (label::value or just value)
+				$options = [];
+				$option_labels = [];
+
+				foreach ($raw_options as $raw_option) {
+					if (strpos($raw_option, '::') !== false) {
+						list($label, $value) = array_map('trim', explode('::', $raw_option, 2));
+						$options[] = $value;
+						$option_labels[] = $label;
+					} else {
+						$options[] = $raw_option;
+						$option_labels[] = $raw_option; // Use value as label if no label provided
+					}
+				}
 
 				$meta_key = $template_slug . '_' . $field_name;
 
 				$fields[] = [
-					'name'     => $field_name,
-					'type'     => 'select',
-					'meta_key' => $meta_key,
-					'label'    => $this->generate_field_label( $field_name ),
-					'options'  => $options,
+					'name'          => $field_name,
+					'type'          => 'select',
+					'meta_key'      => $meta_key,
+					'label'         => $this->generate_field_label( $field_name ),
+					'options'       => $options,        // Actual values
+					'option_labels' => $option_labels,  // Display labels
 				];
 			}
 			// Handle regular fields: "field_name:type"
