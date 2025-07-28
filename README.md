@@ -37,7 +37,7 @@ The basic idea of this theme is to build pages using reusable components called 
 - Live preview with real-time updates
 - Title/content changes properly reflected in preview
 - Performance optimized (fixed 5-10 second save delays)
-- Support for field types: text, textarea, url, repeater (JSON)
+- Support for field types: text, textarea, url, repeater (JSON), select, checkbox
 
 ## TODO List
 
@@ -59,16 +59,19 @@ The basic idea of this theme is to build pages using reusable components called 
 - [ ] Create cache invalidation hook: page part saves → clear cache for registered pages only
 - [ ] Benefits: Performance improvement, usage tracking, cleanup warnings
 
-### 3. Bug Fixes
+### 3. Various (MEDIUM PRIORITY)
+- [ ] Work out how JSON string is populated by the user in repeater fields.
+
+### 4. Bug Fixes
 - [x] ~~Fixed: Memory exhaustion during save (infinite recursion in `save_editor_state`)~~
 - [x] ~~Fixed: Preview not updating when reverting title/content to original values~~
 - [x] ~~Fixed: Multiline custom field definitions not working~~
+- [ ] Fix: autosave warning keeps coming up, because we're using it to update the preview frame. This could lead to confusion about which version is the "real" one, and it's annoying.
 
-### 4. Technical Debt
+### 5. Technical Debt
 - [x] ~~Cleaned up duplicate `wp_localize_script()` calls~~
 - [x] ~~Updated `embed_page_part_callback()` to use unified transient system~~
 - [x] ~~Removed debug logging for production~~
-- [ ] Consider removing debug transient logging (`debug-transient.log`)
 
 ## Technical Architecture
 
@@ -84,6 +87,8 @@ The basic idea of this theme is to build pages using reusable components called 
 - `textarea`: Multi-line text input
 - `url`: URL input with validation
 - `repeater`: JSON array storage (displayed as textarea for now)
+- `select`: Dropdown selection with optional nice names for each option
+- `checkbox`: Checkbox input (1 or 0)
 
 ### Performance Features
 - 500ms debouncing on field changes

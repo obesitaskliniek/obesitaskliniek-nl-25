@@ -1,7 +1,7 @@
 import {useSelect, useDispatch} from '@wordpress/data';
 import {registerPlugin} from '@wordpress/plugins';
 import {PluginDocumentSettingPanel} from '@wordpress/edit-post';
-import {SelectControl, TextControl, TextareaControl} from '@wordpress/components';
+import {SelectControl, TextControl, TextareaControl, CheckboxControl} from '@wordpress/components';
 import {hnlLogger} from '../assets/js/modules/hnl.logger.mjs';
 import {Fragment, useRef, useState, useEffect} from '@wordpress/element';
 
@@ -206,6 +206,16 @@ function DesignSlugPanel() {
                     />
                 );
 
+            case 'checkbox':
+                return (
+                    <CheckboxControl
+                        key={field.meta_key}
+                        label={field.label}
+                        checked={fieldValue === '1' || fieldValue === true}
+                        onChange={(checked) => updateMetaField(field.meta_key, checked ? '1' : '0')}
+                    />
+                );
+
             case 'text':
             default:
                 return (
@@ -222,7 +232,7 @@ function DesignSlugPanel() {
     return (
         <PluginDocumentSettingPanel
             name="page-part-design"
-            title="Design template"
+            title="NOK Design template"
         >
             <SelectControl
                 label="Template"
@@ -243,7 +253,7 @@ function DesignSlugPanel() {
                 <Fragment>
                     <hr style={{margin: '16px 0'}}/>
                     <h4 style={{margin: '0 0 12px 0', fontSize: '13px', fontWeight: '600'}}>
-                        Template Fields
+                        Template options
                     </h4>
                     {customFields.map(renderField)}
                 </Fragment>

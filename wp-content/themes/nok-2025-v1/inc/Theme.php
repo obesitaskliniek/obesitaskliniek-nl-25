@@ -427,6 +427,8 @@ final class Theme {
 				return [ $this, 'sanitize_json_field' ];
 			case 'select':
 				return 'sanitize_text_field';
+			case 'checkbox':
+				return [ $this, 'sanitize_checkbox_field' ];
 			case 'text':
 			default:
 				return 'sanitize_text_field';
@@ -452,6 +454,8 @@ final class Theme {
 		switch ( $field_type ) {
 			case 'repeater':
 				return '[]'; // Empty JSON array
+			case 'checkbox':
+				return '0';
 			default:
 				return '';
 		}
@@ -469,6 +473,13 @@ final class Theme {
 		}
 
 		return '[]';
+	}
+
+	/**
+	 * Sanitize checkbox field - convert to '1' or '0'
+	 */
+	public function sanitize_checkbox_field( $value ) {
+		return $value ? '1' : '0';
 	}
 
 	/**
