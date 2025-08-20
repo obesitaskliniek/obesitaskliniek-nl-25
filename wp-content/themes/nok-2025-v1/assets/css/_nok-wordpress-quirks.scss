@@ -1,3 +1,6 @@
 .wp-block-paragraph {
   display: contents !important;
 }
+p:empty {
+  display: none !important;
+}

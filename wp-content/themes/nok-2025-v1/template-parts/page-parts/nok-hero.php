@@ -51,7 +51,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 
             <article class="nok-pl-section-padding nok-px-to-lg-section-padding">
                 <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-2 nok-fs-to-md-1">
-					<?= $page_part_fields['tagline']; ?>
+	                <?php echo $page_part_fields['tagline'] ?? ''; ?>
                 </h2>
 				<?php the_title( '<h1 class="nok-fs-6">', '</h1>' ); ?>
                 <div>

@@ -1,0 +1,20 @@
+
+.nok-section__inner:hover{
+  %outline {
+    outline-width: 2px;
+    outline-style: dashed;
+    outline-offset: -2px;
+  }
+  .nok-text-content, p, span, h1, h2, h3, h4, h5, h6 {
+    @extend %outline;
+    outline-color: cornflowerblue;
+  }
+  img {
+    @extend %outline;
+    outline-color: darkmagenta;
+  }
+  a, button {
+    @extend %outline;
+    outline-color: #ffaa00;
+  }
+}

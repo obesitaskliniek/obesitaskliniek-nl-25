@@ -132,6 +132,10 @@
     @include nok-border-radius;
     @include nok-focus-ring;
   }
+
+  svg, img {
+    display: inline;
+  }
 }
 
 ///**

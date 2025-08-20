@@ -195,7 +195,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                     <div>Agenda</div>
                     <div>Verwijzers</div>
                     <div>
-                        <button class="nok-button nok-base-font nok-bg-yellow" tabindex="0">Gratis
+                        <button class="nok-button nok-base-font nok-bg-yellow nok-text-contrast" tabindex="0">Gratis
                             voorlichtingsavond
                         </button>
                     </div>

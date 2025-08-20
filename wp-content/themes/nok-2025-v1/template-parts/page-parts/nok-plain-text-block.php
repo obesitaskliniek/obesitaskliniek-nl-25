@@ -15,7 +15,7 @@ $layout = ( $page_part_fields['layout'] ?? 'center' ) === "" ? 'center' : $page_
     <nok-section <?= ($page_part_fields['collapse_bottom'] === "1") ? 'class="collapse-bottom"' : ''; ?>>
         <div class="nok-section__inner">
             <article class="nok-layout-grid nok-layout-grid__1-column nok-justify-items-<?= $layout;?> nok-column-gap-3 text-<?= $layout;?>
-                        nok-text-darkblue">
+                        nok-text-darkblue nok-dark-text-white">
 	            <?php the_title( '<h1>', '</h1>' ); ?>
                 <div class="nok-fs-2 nok-text-wrap-balance"><?php the_content(); ?></div>
             </article>
