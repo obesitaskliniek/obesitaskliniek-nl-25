@@ -98,17 +98,20 @@ function DesignSlugPanel() {
         if (meta && customFields.length > 0) {
             const initialValues = {};
             customFields.forEach(field => {
-                const metaValue = meta[field.meta_key] || '';
-                initialValues[field.meta_key] = metaValue;
+                const metaValue = meta[field.meta_key];
+                // Use field default if meta value is empty/undefined
+                const effectiveValue = (metaValue !== undefined && metaValue !== '')
+                    ? metaValue
+                    : (field.default || '');
+                initialValues[field.meta_key] = effectiveValue;
             });
             setLocalFieldValues(initialValues);
 
-            // Mark as initialized after a short delay to avoid initial flood
             if (!isInitialized) {
                 setTimeout(() => setIsInitialized(true), 1000);
             }
         }
-    }, [currentTemplate, meta?.design_slug]); // Only sync when template changes, not on every meta change
+    }, [currentTemplate, meta?.design_slug]);
 
     const updateMetaField = (fieldName, value) => {
         // Don't trigger updates during initialization

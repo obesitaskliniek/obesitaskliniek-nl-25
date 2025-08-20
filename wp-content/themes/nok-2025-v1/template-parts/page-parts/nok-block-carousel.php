@@ -18,7 +18,7 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
 
             <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start">
 	            <?php the_title('<h1>', '</h1>'); ?>
-                <div><?php the_content(); ?></div>
+                <div class="nok-text-content"><?php the_content(); ?></div>
 
                 <!-- Component: drag-scrollable blokkengroep -->
                 <div class="nok-mt-2 align-self-stretch">

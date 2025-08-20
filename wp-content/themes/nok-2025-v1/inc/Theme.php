@@ -96,6 +96,13 @@ final class Theme {
 			[],
 			filemtime( THEME_ROOT_ABS . '/assets/css/color_tests-v2.css' )
 		);
+
+		wp_register_style(
+			'nok-backend-css',
+			THEME_ROOT . '/assets/css/nok-backend-css.css',
+			[],
+			filemtime( THEME_ROOT_ABS . '/assets/css/nok-backend-css.css' )
+		);
 	}
 
 	public function backend_assets(): void {
@@ -304,9 +311,13 @@ final class Theme {
 			}
 
 			// Check for select field with bracket notation: "position:select(left|right)"
-			if ( preg_match('/^([^:]+):select\(([^\)]+)\)$/', $definition, $matches) ) {
+			if ( preg_match('/^([^:]+):select\((.*)$/', $definition, $matches) ) {
 				$field_name = trim( $matches[1] );
-				$options_string = trim( $matches[2] );
+				$content_with_trailing = trim( $matches[2] );
+
+				// Remove the trailing ) that closes the select() function
+				$options_string = rtrim($content_with_trailing, ')');
+
 				$raw_options = array_map('trim', explode( '|', $options_string ));
 
 				// Parse options with optional nice names (label::value or just value)
@@ -333,6 +344,26 @@ final class Theme {
 					'label'         => $this->generate_field_label( $field_name ),
 					'options'       => $options,        // Actual values
 					'option_labels' => $option_labels,  // Display labels
+				];
+			}
+			// Check for checkbox field with optional default: "field_name:checkbox(true)"
+			elseif ( preg_match('/^([^:]+):checkbox(?:\(([^)]+)\))?$/', $definition, $matches) ) {
+				$field_name = trim( $matches[1] );
+				$default_value = isset( $matches[2] ) ? trim( $matches[2] ) : 'false';
+
+				// Convert string to boolean, then to our storage format
+				$is_default_checked = in_array( strtolower( $default_value ), [ 'true', '1', 'yes', 'on' ], true );
+				$default_storage_value = $is_default_checked ? '1' : '0';
+
+				$meta_key = $template_slug . '_' . $field_name;
+
+				$fields[] = [
+					'name'     => $field_name,
+					'type'     => 'checkbox',
+					'meta_key' => $meta_key,
+					'label'    => $this->generate_field_label( $field_name ),
+					'default'  => $default_storage_value,
+					'options'  => [], // Empty for checkbox fields
 				];
 			}
 			// Handle regular fields: "field_name:type"
@@ -408,7 +439,7 @@ final class Theme {
 					'show_in_rest'      => true,
 					'single'            => true,
 					'sanitize_callback' => $sanitize_callback,
-					'default'           => $this->get_default_value( $field['type'] ),
+					'default'           => $this->get_default_value( $field['type'], $field ),
 				] );
 			}
 		}
@@ -451,6 +482,10 @@ final class Theme {
 	 * Get default value for field type
 	 */
 	private function get_default_value( string $field_type ) {
+		// Use field-specific default if provided
+		if ( isset( $field_data['default'] ) ) {
+			return $field_data['default'];
+		}
 		switch ( $field_type ) {
 			case 'repeater':
 				return '[]'; // Empty JSON array

@@ -9,7 +9,7 @@
 
 $default_colors = '';
 $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors'] : $default_colors;
-$left = ( $page_part_fields['layout'] ?? 'left' ) == 'left';
+$left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'left';
 ?>
 
 <nok-section class="<?= $colors;?>">

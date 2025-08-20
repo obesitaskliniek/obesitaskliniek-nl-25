@@ -28,6 +28,7 @@ if ( ! $design || ! locate_template( "template-parts/page-parts/{$design}.php" )
 } else {
     // Enqueue the monolithic front‑end CSS bundle (if not already)
     wp_enqueue_style( 'nok-components-css' );
+    wp_enqueue_style( 'nok-backend-css' );
     wp_dequeue_style( $design );
 
     // Pull in your part template, passing the post

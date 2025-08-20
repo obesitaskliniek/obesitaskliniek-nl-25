@@ -16,7 +16,7 @@
 
 $default_colors = 'nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue nok-dark-text-white';
 $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors'] : $default_colors;
-$left = ( $page_part_fields['layout'] ?? 'left' ) == 'left';
+$left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'left';
 ?>
 
 <nok-page-footer class="nok-section <?= $colors; ?>">

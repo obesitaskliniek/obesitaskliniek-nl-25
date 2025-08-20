@@ -131,6 +131,13 @@
       grid-column-start: 1;
     }
 
+    /* Weirdos */
+    .stick-to-left-viewport-side { /* Only works properly for first column! */
+      margin-left: calc(-1 * ((100vw - (var(--section-max-width) - (var(--nok-padding-section-sides) * 2))) / 2));
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      max-height: 50vb;
+    }
   }
 
   &-flex {
@@ -150,7 +157,6 @@
       flex-direction: column;
     }
   }
-
 }
 
 /* Gap modifiers */
