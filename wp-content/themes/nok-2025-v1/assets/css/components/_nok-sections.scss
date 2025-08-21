@@ -21,19 +21,6 @@
     &--stretched {
       align-self: stretch;
     }
-    &--unpadded {
-      padding-left: 0;
-      padding-right: 0;
-    }
-    &--collapsed {
-      margin: 0 auto;
-      &-top {
-        margin-top: 0;
-      }
-      &-bottom {
-        margin-bottom: 0;
-      }
-    }
     &--full-width {
       --section-max-width: 100%;
     }
@@ -58,7 +45,11 @@
     .pull-down-correction {
       margin-bottom: calc(2 * var(--nok-spacing-section-ends, 0));
     }
-    + nok-section > .nok-section__inner {
+    + nok-section > .nok-section__inner,
+    + nok-section > .nok-section__inner--unpadded,
+    + nok-section > .nok-section__inner--collapsed,
+    + nok-section > .nok-section__inner--full-width,
+    + nok-section > .nok-section__inner--stretched {
         padding-top: calc(var(--nok-spacing-section-ends, 0));
     }
   }

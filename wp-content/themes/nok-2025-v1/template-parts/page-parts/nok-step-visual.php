@@ -20,9 +20,9 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
     <nok-section>
         <div class="nok-section__inner">
 			<?php if ( $left ) : ?>
-                <div class="nok-my-2 align-self-stretch
+                <div class="nok-my-2 nok-align-self-stretch
                             text-start
-                        nok-layout-grid overlap-middle offset--1 nok-columns-7 no-overlap-to-lg nok-column-offset-0 nok-column-offset-xl--1
+                            nok-layout-grid overlap-middle offset--1 nok-columns-6 no-overlap-to-lg nok-column-offset-0
                             nok-align-items-center">
                     <nok-square-block class="nok-bg-white nok-alpha-10 nok-my-2 nok-my-to-lg-0" data-shadow="true">
                         <div class="nok-square-block__heading">
@@ -38,16 +38,16 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
                             </svg>
                         </a>
                     </nok-square-block>
-                    <div class="cover-image nok-rounded-border-large nok-invisible-to-lg align-self-stretch">
+                    <div class="cover-image nok-rounded-border-large nok-invisible-to-lg nok-h-100">
 	                    <?= $featuredImage; ?>
                     </div>
                 </div>
 			<?php else : ?>
-                <div class="nok-my-2 align-self-stretch
+                <div class="nok-my-2 nok-align-self-stretch
                         text-start
-                        nok-layout-grid overlap-middle offset--1 nok-columns-7 no-overlap-to-lg nok-column-offset-0 nok-column-offset-xl-1
+                        nok-layout-grid overlap-middle offset--1 nok-columns-6 no-overlap-to-lg nok-column-offset-1
                         nok-align-items-center">
-                    <div class="cover-image nok-rounded-border-large nok-invisible-to-lg align-self-stretch">
+                    <div class="cover-image nok-rounded-border-large nok-invisible-to-lg nok-h-100">
 	                    <?= $featuredImage; ?>
                     </div>
                     <nok-square-block class="nok-bg-white nok-alpha-10 nok-my-2 nok-my-to-lg-0" data-shadow="true">

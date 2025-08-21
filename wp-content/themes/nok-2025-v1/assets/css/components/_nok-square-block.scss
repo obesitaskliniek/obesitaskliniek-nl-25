@@ -21,6 +21,38 @@ nok-square-block {
   //grid-template-rows: auto auto 1fr auto;
   grid-template-rows: auto;
   container-type: inline-size;
+  @include components-base.media-breakpoint-up(components-base.$mobile-breakpoint) {
+    &.layout-left {
+      grid-template-columns: 2fr 3fr;
+    }
+    &.layout-balanced {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  &.horizontal {
+    align-items: stretch;
+    justify-items: start;
+    .nok-square-block {
+      &__icon {
+        grid-column: 1;
+        grid-row: 2;
+      }
+
+      &__heading {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      &__icon {
+        svg {
+          width: 8em;
+          height: auto;
+          stroke-width: 0.025rem;
+        }
+      }
+    }
+  }
+
 
   @include components-base.nok-border-radius('large');
   //line-height: var(--#{components-base.$prefix}-default-line-height, 1.25);
@@ -44,7 +76,7 @@ nok-square-block {
       svg {
         width: 3em;
         height: 3em;
-        aspect-ratio: 1;
+        //aspect-ratio: 1;
       }
     }
 
