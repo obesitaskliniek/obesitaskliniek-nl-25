@@ -154,7 +154,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                     </svg>
 	                <?= $page_part_fields['usp_3_text']; ?>
                 </div>
-                <a role="button" href="<?= $page_part_fields['button_vestiging_url']; ?>" class="nok-button nok-base-font nok-bg-white nok-text-darkerblue nok-visible-xs align-self-stretch"
+                <a role="button" href="<?= $page_part_fields['button_vestiging_url']; ?>" class="nok-button nok-base-font nok-bg-white nok-text-darkerblue nok-visible-xs nok-align-self-stretch"
                         tabindex="0"><?= $page_part_fields['button_vestiging_text']; ?>
                 </a>
             </footer>

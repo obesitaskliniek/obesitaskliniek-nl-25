@@ -89,6 +89,9 @@
           grid-column-start: calc((var(--grid-columns, 5) / 2 - max(0, var(--overlap) - 1)) + var(--offset-final));
           grid-column-end: -1;
         }
+        //@include nok-mixins.media-breakpoint-down(xl) {
+        //  --overlap: 2;
+        //}
 
         &.overlap-2 {
           --overlap: 2;
@@ -132,10 +135,16 @@
     }
 
     /* Weirdos */
-    .stick-to-left-viewport-side { /* Only works properly for first column! */
+    .stick-to-left-viewport-side { /* Only works properly for FIRST column! */
       margin-left: calc(-1 * ((100vw - (var(--section-max-width) - (var(--nok-padding-section-sides) * 2))) / 2));
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
+      max-height: 50vb;
+    }
+    .stick-to-right-viewport-side { /* Only works properly for LAST column! */
+      margin-right: calc(-1 * ((100vw - (var(--section-max-width) - (var(--nok-padding-section-sides) * 2))) / 2));
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
       max-height: 50vb;
     }
   }

@@ -21,7 +21,7 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
                 <div class="new-row nok-span-all-columns-to-xxl"><?php the_content(); ?></div>
 
                 <!-- Component: drag-scrollable blokkengroep -->
-                <div class="nok-mt-2 align-self-stretch">
+                <div class="nok-mt-2 nok-align-self-stretch">
                     <div class="nok-layout-grid nok-layout-grid__4-column nok-columns-to-lg-2
                 nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="false">
                         <?php

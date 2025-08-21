@@ -68,7 +68,6 @@ $columns: (
 
 .#{nok-variables.$prefix}-grid {
   &__wrapper {
-    $mobile: lg;
     --grid-gap: var(--#{nok-variables.$prefix}-padding-base, 1.5rem);
     display: grid;
     grid-template-columns: repeat(var(--grid-columns), 1fr);
@@ -100,7 +99,7 @@ $columns: (
       grid-column: calc(var(--grid-columns, 2) - 1) / -1;
     }
 
-    @include nok-mixins.media-breakpoint-down($mobile) {
+    @include nok-mixins.media-breakpoint-down(nok-variables.$mobile-breakpoint) {
       --grid-columns-override: 1;
       .tuck-under {
         grid-row: auto;

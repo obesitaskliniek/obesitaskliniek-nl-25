@@ -89,7 +89,7 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
                                     iusto magni nihil nulla, quam quas, quia reprehenderit vel voluptatum.
                                     Lorem ipsum dolor sit amet, consectetur adipisicing elit!
                                 </p>
-                                <button class="nok-button nok-base-font nok-text-contrast nok-bg-darkerblue nok-dark-bg-darkblue nok-visible-xs align-self-stretch"
+                                <button class="nok-button nok-base-font nok-text-contrast nok-bg-darkerblue nok-dark-bg-darkblue nok-visible-xs nok-align-self-stretch"
                                         tabindex="0">Over de <?= $specialist; ?>
                                 </button>
                             </div>
