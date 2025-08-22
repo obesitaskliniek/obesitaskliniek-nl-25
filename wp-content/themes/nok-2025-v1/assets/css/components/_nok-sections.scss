@@ -18,6 +18,13 @@
     padding-left: var(--#{components-base.$prefix}-padding-section-sides, (components-base.$padding-base * 2));
     margin: var(--nok-spacing-section-ends, components-base.$padding-base) auto;
 
+    &.double-margin {
+      margin: calc(2 * var(--nok-spacing-section-ends, components-base.$padding-base)) auto;
+    }
+    &.triple-margin {
+      margin: calc(3 * var(--nok-spacing-section-ends, components-base.$padding-base)) auto;
+    }
+
     &--stretched {
       align-self: stretch;
     }
@@ -58,8 +65,39 @@
       margin-bottom: 0 !important;
     }
   }
+  /* Cosmetics */
+
   &.gradient-background {
     background-image: radial-gradient(circle at 100% 50%, rgba(var(--nok-darkerblue-rgb), 0.1) 0%, transparent 100%);
+  }
+
+  &.circle {
+    position: relative;
+    overflow: hidden;
+    &:after {
+      content: "";
+      background: var(--circle-background-color);
+      clip-path: circle(50%);
+      aspect-ratio: 1;
+      position: absolute;
+      top: var(--nok-spacing-section-ends, 1.5rem);
+      right: -10%;
+      bottom: -50%;
+      z-index: -1;
+      min-height: 90vh;
+    }
+    &.circle-right {
+      &:after {
+        right: -10%;
+        left: auto;
+      }
+    }
+    &.circle-left {
+      &:after {
+        left: -10%;
+        right: auto;
+      }
+    }
   }
 }
 

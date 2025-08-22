@@ -9,14 +9,16 @@
  * - button_url:url,
  * - layout:select(left|right)
  * - colors:select(Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Transparant::nok-text-darkerblue)
- * - circle_color:select(Blauw::var(--nok-darkerblue)|Automatisch::var(--text-color--contrast)|Uit::transparent)
+ * - circle_color:select(Blauw::var(--nok-darkerblue)|Automatisch::var(--nok-body--lighter)|Uit::transparent)
  * - pull_down:checkbox(true)
  */
 
 use NOK2025\V1\Helpers;
 $featuredImage = Helpers::get_featured_image();
 
-$left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'left';
+$page_part_fields['layout'] = empty($page_part_fields['layout']) ? 'left' : $page_part_fields['layout'];
+
+$left = $page_part_fields['layout'] === 'left';
 $collapse             = !empty($page_part_fields['pull_down']) || $page_part_fields['pull_down'] === '1';
 
 $default_circle_color = 'var(--text-color--contrast)';
@@ -25,17 +27,15 @@ $circle_color         = ( $page_part_fields['circle_color'] ?? "") !== "" ? $pag
 $default_colors = 'nok-text-darkerblue';
 $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors'] : $default_colors;
 ?>
-
-    <nok-section class="<?= $colors; ?>
-    <?= $collapse ? 'collapse-bottom pull-down' : ''; ?>"
-    style="background-image: radial-gradient(circle at <?= $left ? '75% 50vmax' : '25% 50vmax';?>, <?=$circle_color;?> 50%, transparent 50%); overflow: hidden;">
-        <div class="nok-section__inner">
+    <nok-section class="circle circle-<?=$left ? 'right' : 'left';?> <?= $collapse ? 'collapse-bottom pull-down' : ''; ?>"
+    style="--circle-background-color:<?=$circle_color;?>;">
+        <div class="nok-section__inner <?= $colors; ?>">
             <article class=" <?= $collapse ? 'nok-mt-2' : 'nok-my-2'; ?> nok-align-self-stretch
                         text-start
                         nok-layout-grid
                         nok-columns-8 nok-columns-to-lg-1 nok-column-gap-3
                         nok-align-items-start">
-                <div class="nok-align-self-to-lg-stretch nok-column-start-to-5 nok-mb-section-padding">
+                <div class="nok-align-self-to-lg-stretch nok-column-first-5 nok-mb-section-padding">
                     <?php if (!empty($page_part_fields['tagline'])) : ?>
                         <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-4 nok-mb-0_5">
 		                    <?= $page_part_fields['tagline']; ?>
@@ -44,8 +44,8 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
 	                <?php the_title(str_contains($page_part_fields['circle_color'], 'dark') ? '<h1 class="nok-text-white">' : '<h1>', '</h1>'); ?>
                 </div>
                 <?php if ( $left ) : ?>
-                    <div class="nok-column-start-to-lg-5
-                    stick-to-left-viewport-side
+                    <div class="nok-column-first-lg-4
+                    stick-to-left-viewport-side nok-h-100
                     cover-image nok-rounded-border-large nok-order-0">
                         <?= $featuredImage; ?>
                     </div>
@@ -70,7 +70,7 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
                     <div class="nok-layout-grid nok-layout-grid__1-column
                         pull-down-correction
                         <?= str_contains($page_part_fields['circle_color'], 'dark') ? 'nok-text-white' : '';?>
-                        nok-column-start-to-lg-4
+                        nok-column-first-lg-2
                         nok-fs-2 nok-text-wrap-balance nok-order-0"><?php the_content(); ?>
                         <div>
 			                <?php if (!empty($page_part_fields['button_url'])) : ?>
@@ -87,7 +87,7 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
                     </div>
                     <div class="
                     nok-column-last-lg-4
-                    stick-to-right-viewport-side
+                    stick-to-right-viewport-side nok-h-100
                     cover-image nok-rounded-border-large nok-order-1">
 		                <?= $featuredImage; ?>
                     </div>

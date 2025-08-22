@@ -19,9 +19,16 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
 	            <?php the_title('<h1>', '</h1>'); ?>
 	            <div><?php the_content(); ?></div>
 
+                Testknopjes:
+                <div class="nok-layout-flex-row nok-column-gap-1">
+                <button data-scroll-target="quote-showcase-scroller" data-scroll-action="2">Slide 3</button>
+                <button data-scroll-target="quote-showcase-scroller" data-scroll-action="first">eerste</button>
+                <button data-scroll-target="quote-showcase-scroller" data-scroll-action="next">volgende</button>
+                </div>
+
                 <nok-square-block class="nok-p-2 no-gap
                 nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast">
-                    <div class="nok-scrollable__horizontal" data-scroll-snapping="true" data-draggable="true"
+                    <div class="nok-scrollable__horizontal" id="quote-showcase-scroller" data-scroll-snapping="true" data-draggable="true"
                          data-autoscroll="true">
                         <div>
                             <blockquote class="nok-square-block__text">
@@ -47,6 +54,19 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
                             <div class="nok-layout-flex-column nok-align-items-start no-gap">
                                 <strong class="nok-fs-2">Jane Doe</strong>
                                 <p>Di&euml;tist</p>
+                            </div>
+                        </div>
+                        <div>
+                            <blockquote class="nok-square-block__text">
+                                "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure
+                                perspiciatis quod, quos
+                                vero. Architecto, blanditiis est exercitationem illo iusto magni nihil nulla, quam quas,
+                                quia
+                                reprehenderit vel voluptatum. Lorem ipsum dolor sit amet, consectetur adipisicing elit!"
+                            </blockquote>
+                            <div class="nok-layout-flex-column nok-align-items-start no-gap">
+                                <strong class="nok-fs-2">Foo Bar</strong>
+                                <p>Bewegingsdeskundige</p>
                             </div>
                         </div>
                     </div>

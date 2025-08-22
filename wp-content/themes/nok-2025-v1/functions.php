@@ -68,3 +68,9 @@ add_action( 'init', function() {
 use NOK2025\V1\Helpers;
 define( 'NONCE',         hash('sha256', Helpers::makeRandomString()));
 define( 'CACHE_URI_STRING',    (SITE_LIVE ? '' : '?cache=' . hash('sha256', Helpers::makeRandomString())));
+
+// ACF settings
+add_action('acf/init', 'my_acf_init');
+function my_acf_init() {
+	acf_update_setting('remove_wp_meta_box', false);
+}

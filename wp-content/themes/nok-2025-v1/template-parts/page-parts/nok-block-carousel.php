@@ -12,8 +12,8 @@ $default_colors = 'nok-bg-darkerblue nok-text-white';
 $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors'] : $default_colors;
 ?>
 
-<nok-section class="<?= $colors;?>">
-    <div class="nok-section__inner--stretched">
+<nok-section>
+    <div class="nok-section__inner--stretched <?= $colors;?>">
         <div class="nok-section__inner">
 
             <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start">
@@ -40,10 +40,9 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
                                     blandit lorem vel mattis. Pellentesque ultrices velit at nisl placerat faucibus.
                                 </p>
                                 <a class="nok-square-block__link" href="#"><?php echo $page_part_fields['read_more'] ?? 'Lees verder'; ?>
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" width="25" height="25"
-                                         fill="currentColor">
-                                        <path d="m17.5 5.999-.707.707 5.293 5.293H1v1h21.086l-5.294 5.295.707.707L24 12.499l-6.5-6.5z"
-                                              data-name="Right"/>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 35 12" width="35" height="12" stroke="currentColor"
+                                         style="stroke-linecap: round; stroke-linejoin: round;">
+                                        <path d="M 33,5 L 0,5 M 33,5 L 27,10 M 33,5 L 27,0" data-name="Right"></path>
                                     </svg>
                                 </a>
                             </nok-square-block>

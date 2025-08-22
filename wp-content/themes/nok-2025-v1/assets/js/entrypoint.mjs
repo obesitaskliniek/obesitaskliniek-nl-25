@@ -7,7 +7,7 @@ import {dynImports} from './modules/hnl.dynamicimports.mjs';
 import {hnlLogger} from './modules/hnl.logger.mjs';
 import {classToggler} from './modules/hnl.classtoggler.mjs';
 import {pageScrollPercentage} from "./modules/hnl.helpers.mjs";
-import {setupFakeScrollbar} from "./nok-scrollbar.mjs";
+import {setupScrollbarControl, setupFakeScrollbar} from "./nok-scrollbar.mjs";
 
 const NAME = 'entryPoint';
 const BODY = document.body;
@@ -44,6 +44,7 @@ eventHandler.docReady(function(){
 
   //scrollable
   document.querySelectorAll('.nok-scrollable__horizontal, .nok-scrollable__vertical').forEach(setupFakeScrollbar);
+  document.querySelectorAll('[data-scroll-target]').forEach(setupScrollbarControl);
 
   eventHandler.addListener('breakPointChange', (e) => {
     document.querySelectorAll('foreignObject > img').forEach((img) => {

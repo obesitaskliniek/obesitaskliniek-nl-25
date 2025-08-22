@@ -25,9 +25,9 @@ if ( $page_part_fields['colors'] === "Blauw op donkerblauw" ) {
 
 ?>
 
-    <nok-section class="<?= $section_colors ? : ''?>">
-        <div class="nok-section__inner">
-            <nok-square-block class="horizontal layout-<?= $layout;?> <?= $block_colors; ?>">
+    <nok-section>
+        <div class="nok-section__inner <?= $section_colors ? : ''?>">
+            <nok-square-block class="horizontal layout-<?= $layout;?> <?= $block_colors; ?>" data-shadow="true">
                 <div class="nok-square-block__icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 35 12" width="35" height="12" stroke="currentColor"
                          style="stroke-linecap: round; stroke-linejoin: round;">

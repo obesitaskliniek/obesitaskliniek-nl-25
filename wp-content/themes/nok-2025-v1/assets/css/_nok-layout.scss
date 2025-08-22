@@ -150,6 +150,7 @@
   }
 
   &-flex {
+    display: flex;
     --flex-gap: var(--#{nok-variables.$prefix}-padding-base, var(--#{nok-variables.$prefix}-global-grid-gap, 1.5rem));
     @include nok-mixins.nok-flex-gap;
 
@@ -160,6 +161,9 @@
     &-row { //might be confusing, but a flex-direction: row layout uses gaps that are similar to grid's COLUMN gaps
       gap: var(--column-gap, var(--flex-gap, var(--#{nok-variables.$prefix}-global-grid-gap)));
       flex-direction: row;
+      &.space-between {
+        justify-content: space-between;
+      }
     }
     &-column {
       gap: var(--row-gap, var(--flex-gap, var(--#{nok-variables.$prefix}-global-grid-gap)));

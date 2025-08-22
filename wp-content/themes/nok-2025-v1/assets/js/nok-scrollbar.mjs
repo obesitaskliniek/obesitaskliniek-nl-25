@@ -1,3 +1,29 @@
+/*
+  Scrollbar emulator for horizontal scrolling elements.
+  This module creates a custom scrollbar for elements with horizontal overflow,
+  allowing for better user interaction and visual consistency across browsers.
+
+  It supports features like snapping, autoscrolling, and pointer-based dragging.
+
+  Also, you can control a scroll container using data-scroll-target and data-scroll-action attributes:
+
+  <!-- Basic navigation buttons -->
+  <button data-scroll-target="my-scrollcontainer" data-scroll-action="forward">→</button>
+  <button data-scroll-target="my-scrollcontainer" data-scroll-action="backward">←</button>
+
+  <!-- More specific actions -->
+  <a href="#" data-scroll-target="gallery" data-scroll-action="next">Next Image</a>
+  <a href="#" data-scroll-target="gallery" data-scroll-action="first">First Image</a>
+  <a href="#" data-scroll-target="gallery" data-scroll-action="last">Last Image</a>
+
+  <!-- Jump to specific slide (for snapping containers) -->
+  <button data-scroll-target="carousel" data-scroll-action="0">Slide 1</button>
+  <button data-scroll-target="carousel" data-scroll-action="2">Slide 3</button>
+
+  <!-- Disable smooth scrolling for instant movement -->
+  <button data-scroll-target="list" data-scroll-action="forward" data-scroll-smooth="false">Skip →</button>
+ */
+
 import eventHandler from './modules/hnl.eventhandler.mjs';
 import {isVisible} from "./modules/hnl.helpers.mjs";
 import mediaInfo from "./modules/helper.media-info.mjs";
@@ -52,7 +78,150 @@ function restoreSnappingGracefully(scrollElement) {
   }
 }
 
+// Simple registry to track scroll containers by ID
+const scrollContainers = new Map();
+
+// New function to setup scroll controls
+export function setupScrollbarControl(controlElement) {
+  const targetId = controlElement.dataset.scrollTarget;
+  const action = controlElement.dataset.scrollAction || 'forward';
+  const smooth = controlElement.dataset.scrollSmooth !== 'false';
+
+  if (!targetId) {
+    console.warn(controlElement, 'Control element missing data-scroll-target attribute');
+    return;
+  }
+
+  controlElement.addEventListener('click', (e) => {
+    e.preventDefault();
+    handleScrollAction(targetId, action, smooth);
+  });
+
+  // Add keyboard support for buttons
+  if (controlElement.tagName === 'BUTTON') {
+    controlElement.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleScrollAction(targetId, action, smooth);
+      }
+    });
+  }
+}
+
+// Handle the actual scrolling logic
+function handleScrollAction(targetId, action, smooth) {
+  const container = scrollContainers.get(targetId);
+  if (!container) {
+    console.warn(`Scroll container with ID "${targetId}" not found`);
+    return;
+  }
+
+  const { element: scrollElement, isSnapping } = container;
+  const { scrollWidth, clientWidth, scrollLeft } = scrollElement;
+  const maxScroll = scrollWidth - clientWidth;
+
+  let targetScroll;
+
+  if (isSnapping) {
+    // Calculate snap positions
+    const children = Array.from(scrollElement.children);
+    if (children.length === 0) return;
+
+    const firstChild = children[0];
+    const gap = parseInt(window.getComputedStyle(firstChild.parentElement).columnGap, 10) || 0;
+    const slideItemSize = firstChild.offsetWidth + gap;
+    const currentIndex = Math.round(scrollLeft / slideItemSize);
+
+    switch (action) {
+      case 'forward':
+      case 'next':
+        const nextIndex = currentIndex + 1 >= children.length ? 0 : currentIndex + 1;
+        targetScroll = nextIndex * slideItemSize;
+        break;
+      case 'backward':
+      case 'prev':
+      case 'previous':
+        const prevIndex = currentIndex <= 0 ? children.length - 1 : currentIndex - 1;
+        targetScroll = prevIndex * slideItemSize;
+        break;
+      case 'first':
+        targetScroll = 0;
+        break;
+      case 'last':
+        targetScroll = (children.length - 1) * slideItemSize;
+        break;
+      default:
+        // Numeric index
+        const index = parseInt(action, 10);
+        if (!isNaN(index) && index >= 0 && index < children.length) {
+          targetScroll = index * slideItemSize;
+        }
+    }
+  } else {
+    // Non-snapping: scroll by percentage of visible width
+    const scrollAmount = clientWidth * 0.8;
+
+    switch (action) {
+      case 'forward':
+      case 'next':
+        targetScroll = scrollLeft + scrollAmount;
+        if (targetScroll >= maxScroll) targetScroll = 0; // Loop to start
+        break;
+      case 'backward':
+      case 'prev':
+      case 'previous':
+        targetScroll = scrollLeft - scrollAmount;
+        if (targetScroll <= 0) targetScroll = maxScroll; // Loop to end
+        break;
+      case 'first':
+        targetScroll = 0;
+        break;
+      case 'last':
+        targetScroll = maxScroll;
+        break;
+      default:
+        // Numeric scroll position
+        const position = parseInt(action, 10);
+        if (!isNaN(position)) {
+          targetScroll = Math.min(position, maxScroll);
+        }
+    }
+  }
+
+  if (targetScroll !== undefined) {
+    // Handle snapping behavior during programmatic scroll
+    if (isSnapping) {
+      disableSnapping(scrollElement);
+    }
+
+    scrollElement.scrollTo({
+      left: Math.max(0, Math.min(targetScroll, maxScroll)),
+      behavior: smooth ? 'smooth' : 'auto'
+    });
+
+    // Restore snapping after scroll
+    if (isSnapping && smooth) {
+      setTimeout(() => {
+        restoreSnapping(scrollElement);
+      }, 500);
+    } else if (isSnapping) {
+      restoreSnapping(scrollElement);
+    }
+  }
+}
+
+// Optional: Export for programmatic control
+export function controlScroll(targetId, action, smooth = true) {
+  handleScrollAction(targetId, action, smooth);
+}
+
 export function setupFakeScrollbar(scrollElement) {
+  if (scrollElement.id) {
+    scrollContainers.set(scrollElement.id, {
+      element: scrollElement,
+      isSnapping: scrollElement.dataset.scrollSnapping === 'true'
+    });
+  }
 
   const SNAPPING = scrollElement.dataset.scrollSnapping === 'true';
 
