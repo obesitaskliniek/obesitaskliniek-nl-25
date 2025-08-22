@@ -87,6 +87,10 @@
   }
 }
 
+.nok-subtle-shadow {
+  @include nok-mixins.nok-subtle-shadow;
+}
+
 /* Stacking */
 
 .#{nok-variables.$prefix}-sticky {
@@ -557,23 +561,26 @@ $utilities: (
                 property: grid-column,
                 class: #{nok-variables.$prefix}-column-last,
                 values: (
+                        6: "span 6 / -1",
                         5: "span 5 / -1",
                         4: "span 4 / -1",
                         3: "span 3 / -1",
                         2: "span 2 / -1",
+                        1: "span 1 / -1",
                 )
         ),
-        "column-start-to": (
+        "column-first-x": (
                 responsive: true,
                 responsive-up-to: false,
                 property: grid-column,
-                class: #{nok-variables.$prefix}-column-start-to,
+                class: #{nok-variables.$prefix}-column-first,
                 values: (
-                        end: "1 / -1",
-                        5: "1 / 5",
-                        4: "1 / 4",
-                        3: "1 / 3",
-                        2: "1 / 2",
+                        6: "1 / 7",
+                        5: "1 / 6",
+                        4: "1 / 5",
+                        3: "1 / 4",
+                        2: "1 / 3",
+                        1: "1 / 2",
                 )
         ),
         "font-size": (
@@ -614,7 +621,13 @@ $utilities: (
   &__horizontal,&__vertical {
 
     @include nok-mixins.nok-scrollbar-thin($scrollbar_thickness);
-    padding-bottom: $scrollbar_thickness * 2;
+
+    padding: var(--shadow-size, 0px) var(--shadow-size, 0px) calc(var(--shadow-size, 0px) + $scrollbar_thickness * 2);
+    margin: calc(-1 * var(--shadow-size, 0px));
+
+    &.nok-subtle-shadow-compensation {
+      --shadow-size: 5px;
+    }
 
     /* Enable draggable cursor for non-touch devices */
     @media (pointer: fine) {
@@ -643,20 +656,24 @@ $utilities: (
     &[data-scroll-snapping="true"] {
       scroll-snap-type: both mandatory;
       scroll-snap-stop: normal;
-      scroll-snap-align: start;
+      scroll-snap-align: center;
     }
 
     > * {
       flex: 0 0 calc(
         (100% - (var(--flex-gap, 0rem) * (var(--slides-in-view, 1) - 1))) / var(--slides-in-view, 1)
       );
-      scroll-snap-align: start;
+      scroll-snap-align: center;
     }
 
     nok-square-block {
-      > *:not(a),
-      a::after {
-        pointer-events: none;
+      .nok-square-block {
+        &__icon,
+        &__heading,
+        &__text,
+        &__link::after {
+          pointer-events: none;
+        }
       }
     }
 

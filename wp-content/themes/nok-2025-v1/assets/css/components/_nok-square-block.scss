@@ -128,5 +128,14 @@ nok-square-block {
       }
     }
 
+    &__thumbnail {
+      border-radius: 50%;
+      overflow: hidden;
+      aspect-ratio: 1;
+      flex-shrink: 0;
+      height: 100px;
+      width: 100px;
+    }
+
   }
 }

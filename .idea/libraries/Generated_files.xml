@@ -8,6 +8,7 @@
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-page-part-design-selector.min.js" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-page-part-preview.min.js" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-page-part-preview_DESKTOP-FTIE59D_jul-25-103842-2025_conflict_current.min.js" />
+        <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-scrollbar.min.mjs" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
@@ -17,6 +18,7 @@
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-page-part-design-selector.min.js" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-page-part-preview.min.js" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-page-part-preview_DESKTOP-FTIE59D_jul-25-103842-2025_conflict_current.min.js" />
+      <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-scrollbar.min.mjs" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
