@@ -679,3 +679,25 @@ $utilities: (
 
   }
 }
+
+%pull-up {
+  margin-top: calc((-1 * var(--pull-amount, 4)) * var(--nok-spacing-section-ends, 0));
+}
+.pull-up {
+  &-1 {
+    --pull-amount: 1;
+    @extend %pull-up;
+  }
+  &-2 {
+    --pull-amount: 2;
+    @extend %pull-up;
+  }
+  &-3 {
+    --pull-amount: 3;
+    @extend %pull-up;
+  }
+  &-4 {
+    --pull-amount: 4;
+    @extend %pull-up;
+  }
+}

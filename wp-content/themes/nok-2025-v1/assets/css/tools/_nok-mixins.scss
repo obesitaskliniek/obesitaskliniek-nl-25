@@ -47,7 +47,9 @@
   // Determine border-radius based on size
   $radius: var(--nok-default-border-radius, 0.4rem);
 
-  @if $size == 'large' {
+  @if $size == 'small' {
+    $radius: calc(var(--nok-default-border-radius, 0.4rem) * .75);
+  }@else if $size == 'large' {
     $radius: var(--nok-default-border-radius--large, 1rem);
   } @else if $size == 'x-large' {
     $radius: calc(var(--nok-default-border-radius--large, 1rem) * 2.5);
@@ -74,6 +76,9 @@
 @mixin nok-focus-ring {
   box-shadow: 0 0 0px 4px var(--nok-yellow);
   outline: 2px solid #FFF;
+  @include transition-properties(box-shadow) {
+    transition: box-shadow (nok-variables.$animation-duration * 2) cubic-bezier(0.16, 1, 0.3, 1);
+  }
 }
 
 ///**
@@ -108,7 +113,7 @@
 
   //font-size: var(--nok-font-size-buttons, 1.25rem);
   text-decoration: none;
-  padding: .75ex .25ex;
+  padding: .35ex;
 
   background-image: var(--gradient);
   background-size: 100% 200%;
@@ -478,4 +483,102 @@
   gap:
           var(--row-gap, var(--flex-gap, $fallback))
           var(--column-gap, var(--flex-gap, $fallback));
+}
+
+/*!
+Baseline Grid CSS v1.1.1 - 14-3-2022
+ * Copyright (c) 2022 hnldesign. All rights reserved.
+ See https://hnldesign.hashnode.dev/setting-a-flexible-baseline-grid-in-css
+ */
+
+//some tools
+@function strip-units($number) {
+  @return math.div($number, ($number * 0 + 1));
+}
+@function getUnit($value) {
+  @return str-slice($value * 0 + "", 2, -1);
+}
+
+//some base variables
+$hnl-base-grid-font-size:   1.1rem;
+$line-height-base:          1.75;
+$hnl-base-grid-unit:        $hnl-base-grid-font-size * $line-height-base;
+$hnl-base-grid-unit-px:     floor(strip-units($hnl-base-grid-unit) * 16);
+
+//baseline ratios, taken from https://designmeme.github.io/finding-baseline/baseline-calculator/
+$baseline-ratios: ("Open Sans": 0.113, "Roboto": 0.159, "Slabo 27px": 0.186, "Oswald": 0.049, "Lato": 0.114, "Source Sans Pro": 0.147, "Montserrat": 0.144, "Raleway": 0.148, "PT Sans": 0.130, "Roboto Condensed": 0.159, "Open Sans Condensed": 0.113, "Lora": 0.164, "Droid Sans": 0.156, "Ubuntu": 0.130, "Merriweather": 0.147, "Droid Serif": 0.156, "Roboto Slab": 0.113, "Titillium Web": 0.129, "PT Sans Narrow": 0.130, "Indie Flower": 0.259, "Fjalla One": 0.121, "Oxygen": 0.106, "Anton": 0.096, "Arvo": 0.144, "Playfair Display": 0.086, "Lobster": 0.130, "Arimo": 0.155, "Nunito": 0.172, "Libre Baskerville": 0.151, "PT Serif": 0.125, "Bree Serif": 0.102, "Noto Sans": 0.113, "Josefin Sans": 0.248, "Merriweather Sans": 0.147, "Abril Fatface": 0.118, "Muli": 0.121, "Gloria Hallelujah": 0.087, "Abel": 0.159, "Poppins": 0.206, "Bitter": 0.166, "Roboto Mono": 0.159, "Inconsolata": 0.168, "Ubuntu Condensed": 0.130, "Dosis": 0.107, "Pacifico": 0.076, "Quicksand": 0.130, "Hind": 0.247, "Karla": 0.168, "Rubik": 0.158, "Amatic SC": 0.115, "Cabin": 0.142, "Dancing Script": 0.181, "Archivo Narrow": 0.139, "Noto Serif": 0.113, "Signika": 0.177, "Crimson Text": 0.272, "Questrial": 0.197, "Cuprum": 0.184, "Work Sans": 0.158, "Fira Sans": 0.166, "Francois One": 0.121, "Alegreya": 0.165, "Catamaran": 0.222, "Vollkorn": 0.246, "Exo": 0.160, "Yanone Kaffeesatz": 0.233, "Pathway Gothic One": 0.123, "EB Garamond": 0.146, "Maven Pro": 0.124, "Exo 2": 0.107, "Source Code Pro": 0.147, "Orbitron": 0.248, "Acme": 0.175, "Ropa Sans": 0.197, "Josefin Slab": 0.248, "Asap": 0.141, "Satisfy": 0.279, "Russo One": 0.177, "Alegreya Sans": 0.200, "Source Serif Pro": 0.151, "Cinzel": 0.201, "Varela Round": 0.186, "Architects Daughter": 0.209, "Comfortaa": 0.177, "Play": 0.143, "Righteous": 0.137, "Libre Franklin": 0.141, "Old Standard TT": 0.234, "Noticia Text": 0.108, "Quattrocento Sans": 0.207, "Monda": 0.114, "Shadows Into Light": 0.129, "Sanchez": 0.134, "Hammersmith One": 0.226, "Kaushan Script": 0.143, "PT Sans Caption": 0.130, "Rajdhani": 0.208, "Courgette": 0.150, "Quattrocento": 0.207, "Rokkitt": 0.253, "Yellowtail": 0.166, "Pontano Sans": 0.154, "Permanent Marker": 0.105, "Kanit": 0.149, "BenchNine": 0.184, "Istok Web": 0.213, "Chewy": 0.163, "Arapey": 0.181, "Patua One": 0.138, "Tinos": 0.164, "Crete Round": 0.150, "Philosopher": 0.162, "Cardo": 0.188, "Armata": 0.150, "Khand": 0.216, "News Cycle": 0.067, "Teko": 0.260, "Playfair Display SC": 0.086, "Kalam": 0.235, "Yantramanav": 0.211, "Cantarell": 0.115, "Antic Slab": 0.155, "Great Vibes": 0.276, "Alfa Slab One": 0.149, "Audiowide": 0.150, "Lobster Two": 0.130, "Amiri": 0.257, "Coming Soon": 0.231, "Baloo Bhaina": 0.322, "Bevan": 0.150, "Playball": 0.176, "ABeeZee": 0.172, "Didact Gothic": 0.110, "Kreon": 0.157, "Passion One": 0.217, "Concert One": "-0.089", "Bad Script": 0.164, "Domine": 0.171, "Archivo Black": 0.105, "Sigmar One": 0.149, "Voltaire": 0.138, "Rock Salt": 0.094, "Damion": 0.178, "Gudea": 0.147, "Rochester": 0.115, "Days One": 0.145, "Cabin Condensed": 0.142, "Glegoo": 0.130, "Julius Sans One": 0.183, "Poiret One": 0.124, "Copse": 0.133, "Actor": 0.163, "Amaranth": 0.131, "Heebo": 0.187, "Bangers": 0.150, "Sarala": 0.145, "Cormorant Garamond": 0.183, "Oleo Script": 0.186, "Changa One": 0.151, "Luckiest Guy": 0.293, "Lusitana": 0.193, "Hind Siliguri": 0.195, "Economica": 0.126, "Signika Negative": 0.177, "Cookie": 0.266, "Nobile": 0.219, "Antic": 0.158, "Frank Ruhl Libre": 0.190, "Clicker Script": 0.235, "Gochi Hand": 0.319, "Share": 0.179, "Shrikhand": 0.204, "Alegreya Sans SC": 0.200, "Ruda": 0.188, "Parisienne": 0.267, "Special Elite": 0.293, "Cantata One": 0.144, "Rancho": 0.213, "Unica One": 0.175, "Handlee": 0.235, "Syncopate": 0.226, "Cairo": 0.135, "Droid Sans Mono": 0.109, "PT Mono": 0.175, "Neucha": 0.259, "Tangerine": 0.248, "VT323": 0.198, "Cousine": 0.236, "Basic": 0.121, "Ek Mukta": 0.202, "Limelight": 0.199, "Boogaloo": 0.152, "Caveat": 0.171, "Pragati Narrow": 0.189, "Vidaloka": 0.168, "Aldrich": 0.247, "Shadows Into Light Two": 0.107, "Graduate": 0.117, "Allura": 0.327, "Neuton": 0.106, "Ubuntu Mono": 0.167, "Ceviche One": 0.217, "Contrail One": 0.180, "Sintony": 0.160, "Jaldi": 0.199, "Reenie Beanie": 0.248, "Monoton": 0.124, "Volkhov": 0.175, "Nunito Sans": 0.172, "Patrick Hand": 0.136, "Fredoka One": 0.132, "Viga": 0.157, "Freckle Face": 0.166, "Press Start 2P": 0.000, "Forum": 0.197, "Hind Vadodara": 0.127, "Coda": 0.174, "Palanquin": 0.087, "Marck Script": 0.262, "Spinnaker": 0.152, "Nixie One": 0.143, "Khula": 0.309, "Marmelad": 0.126, "Candal": 0.063, "Overlock": 0.145, "Sorts Mill Goudy": 0.260, "Marvel": 0.155, "Gentium Book Basic": 0.206, "Telex": 0.158, "Marcellus": 0.154, "Average Sans": 0.122, "Black Ops One": 0.213, "Rufina": 0.174, "Covered By Your Grace": 0.202, "Montserrat Alternates": 0.144, "Cabin Sketch": 0.214, "Sacramento": 0.301, "Lustria": 0.187, "Sue Ellen Francisco": 0.146, "Halant": 0.199, "Jura": 0.128, "Jockey One": 0.121, "Varela": 0.135, "Homenaje": 0.157, "Rammetto One": 0.154, "Alice": 0.164, "Slabo 13px": 0.193, "Grand Hotel": 0.234, "Nothing You Could Do": 0.231, "Adamina": 0.110, "Goudy Bookletter 1911": 0.176, "Paytone One": 0.086, "Petit Formal Script": 0.135, "Assistant": 0.134, "Reem Kufi": 0.150, "Cutive": 0.277, "Homemade Apple": 0.276, "Magra": 0.140, "Gentium Basic": 0.206, "Quantico": 0.154, "Changa": 0.178, "Anonymous Pro": 0.179, "Carrois Gothic": 0.176, "Leckerli One": 0.141, "Scada": 0.168, "Carter One": 0.165, "Rambla": 0.184, "Aclonica": 0.220, "Martel": 0.220, "Ranga": 0.238, "Annie Use Your Telescope": 0.193, "Hind Guntur": 0.330, "Alegreya SC": 0.165, "Schoolbell": 0.192, "Tauri": 0.133, "Eczar": 0.246, "Revalia": "-0.116", "Cambo": 0.183, "Squada One": 0.169, "Port Lligat Slab": 0.177, "Alex Brush": 0.302, "Italianno": 0.327, "Rosario": 0.130, "Enriqueta": 0.092, "Love Ya Like A Sister": 0.204, "Metrophobic": 0.109, "Cinzel Decorative": 0.199, "Berkshire Swash": 0.142, "Racing Sans One": 0.155, "Gilda Display": 0.197, "Lalezar": 0.306, "Anaheim": 0.184, "Prata": 0.187, "Karma": 0.283, "Molengo": 0.158, "Andika": 0.086, "Give You Glory": 0.311, "Arsenal": 0.133, "Kameron": 0.204, "Electrolize": 0.183, "Ultra": 0.133, "Just Another Hand": 0.293, "Kelly Slab": 0.144, "Allan": 0.131, "PT Serif Caption": 0.125, "Martel Sans": 0.263, "Slackey": 0.146, "Oregano": 0.182, "Montez": 0.261, "Happy Monkey": 0.153, "The Girl Next Door": 0.310, "Pinyon Script": 0.261, "Waiting for the Sunrise": 0.208, "Cambay": 0.320, "Quando": 0.136, "Calligraffitti": 0.316, "Mako": 0.110, "Carme": 0.152, "Zeyada": 0.377, "Fira Sans Extra Condensed": 0.166, "Merienda One": 0.121, "Fugaz One": 0.189, "Wire One": 0.162, "Lekton": 0.248, "Average": 0.156, "Averia Serif Libre": 0.168, "Londrina Solid": 0.147, "Cherry Cream Soda": 0.131, "Duru Sans": 0.141, "Brawler": 0.139, "Niconne": 0.180, "Pompiere": 0.166, "Short Stack": 0.183, "Delius": 0.144, "Crushed": 0.175, "Allerta": 0.108, "Carrois Gothic SC": 0.176, "IM Fell Double Pica": 0.188, "Marcellus SC": 0.154, "Baumans": 0.150, "Mate": 0.153, "Michroma": 0.056, "Alike": 0.144, "Mr De Haviland": 0.285, "Convergence": 0.145, "Unkempt": 0.145, "Gravitas One": 0.191, "Oleo Script Swash Caps": 0.186, "Chivo": 0.155, "Just Me Again Down Here": 0.182, "Advent Pro": 0.135, "Itim": 0.150, "Ovo": 0.199, "Poly": 0.131, "Alef": 0.172, "Fauna One": 0.130, "Orienta": 0.139, "Bubblegum Sans": 0.231, "Oxygen Mono": 0.173, "Palanquin Dark": 0.087, "Yeseva One": 0.164, "Arizonia": 0.226, "Space Mono": 0.123, "Gabriela": 0.157, "Aladin": 0.209, "Allerta Stencil": 0.108, "Finger Paint": 0.141, "Lily Script One": 0.172, "Bentham": 0.198, "Fontdiner Swanky": 0.237, "Prociono": 0.102, "Qwigley": 0.374, "Fanwood Text": 0.238, "Headland One": 0.134, "Biryani": 0.274, "Oranienbaum": 0.184, "Mallanna": 0.156, "Sniglet": 0.168, "La Belle Aurore": 0.350, "Arbutus Slab": 0.145, "Bowlby One": 0.173, "Gafata": 0.142, "Delius Unicase": 0.111, "Skranji": 0.196, "Shojumaru": 0.177, "Unna": 0.194, "Yesteryear": 0.258, "Frijole": 0.141, "Prompt": 0.167, "Bilbo Swash Caps": 0.275, "Ruslan Display": 0.356, "Corben": 0.049, "Sail": 0.218, "Patrick Hand SC": 0.136, "Fira Sans Condensed": 0.166, "Imprima": 0.160, "Federo": 0.171, "Titan One": 0.103, "Kurale": 0.145, "Cherry Swash": 0.139, "Radley": 0.170, "Arima Madurai": 0.245, "IM Fell DW Pica": 0.215, "Stardos Stencil": 0.216, "Crafty Girls": 0.238, "Ramabhadra": 0.123, "Scheherazade": 0.333, "Pridi": 0.176, "Dorsa": 0.173, "Fondamento": 0.185, "Fira Mono": 0.166, "Stalemate": 0.337, "Vast Shadow": 0.212, "Rouge Script": 0.249, "Sumana": 0.046, "Poller One": 0.159, "Salsa": 0.141, "Denk One": 0.092, "Doppio One": 0.119, "Meddon": 0.159, "Cormorant": 0.183, "IM Fell English SC": 0.230, "Coustard": 0.180, "Suranna": 0.185, "Italiana": 0.161, "Walter Turncoat": 0.132, "Baloo Paaji": 0.225, "Merienda": 0.121, "Kotta One": 0.188, "Shanti": 0.156, "Dawning of a New Day": 0.183, "Fenix": 0.180, "Julee": 0.196, "Mandali": 0.114, "Averia Sans Libre": 0.128, "Puritan": 0.195, "Engagement": 0.220, "Iceland": 0.238, "Sofia": 0.151, "Life Savers": 0.138, "Delius Swash Caps": 0.144, "Fredericka the Great": 0.136, "Macondo": 0.203, "Taviraj": 0.182, "Podkova": 0.195, "Medula One": 0.159, "Aguafina Script": 0.308, "Mr Dafoe": 0.219, "Lateef": 0.276, "Suez One": 0.168, "Chonburi": 0.150, "Inder": 0.133, "Cedarville Cursive": 0.201, "Caveat Brush": 0.171, "Esteban": 0.155, "Mitr": 0.136, "Six Caps": 0.053, "Sunshiney": 0.156, "Lemonada": 0.156, "Harmattan": 0.304, "Geo": 0.210, "Cutive Mono": 0.223, "Kadwa": 0.191, "Rasa": 0.270, "Faster One": 0.135, "Kite One": 0.130, "Mate SC": 0.153, "Spirax": 0.172, "Dynalight": 0.210, "Buenard": 0.121, "Baloo Tamma": 0.313, "Rosarivo": 0.224, "Vesper Libre": 0.310, "Quintessential": 0.124, "Aref Ruqaa": 0.011, "Flamenco": 0.218, "Caudex": 0.154, "Chicle": 0.191, "Donegal One": 0.150, "IM Fell DW Pica SC": 0.215, "Condiment": 0.380, "Lilita One": 0.150, "Montserrat Subrayada": 0.144, "Gruppo": 0.183, "Metamorphous": 0.164, "Maiden Orange": 0.293, "Vampiro One": 0.170, "Secular One": 0.206, "Tenor Sans": 0.165, "Numans": 0.183, "Trocchi": 0.133, "Krona One": 0.136, "Belleza": 0.149, "Yrsa": 0.270, "Share Tech": 0.179, "Mukta Vaani": 0.202, "Rozha One": 0.217, "Text Me One": 0.160, "Artifika": 0.141, "Chelsea Market": 0.130, "Capriola": 0.154, "Paprika": 0.066, "Asar": 0.181, "Maitree": 0.174, "Stint Ultra Expanded": 0.167, "Amatica SC": 0.036, "Elsie": 0.199, "Stint Ultra Condensed": 0.172, "Rubik Mono One": 0.188, "Kranky": 0.168, "Tulpen One": 0.183, "Sarpanch": 0.151, "Antic Didone": 0.155, "Trirong": 0.169, "Mrs Saint Delafield": 0.358, "Prosto One": 0.178, "Sancreek": 0.168, "Baloo Chettan": 0.171, "Sonsie One": 0.143, "Kavoon": 0.141, "Mouse Memoirs": 0.138, "Overpass": 0.248, "Judson": 0.174, "Meie Script": 0.249, "Diplomata SC": 0.180, "Almendra": 0.197, "Joti One": 0.162, "Nova Round": 0.145, "Sriracha": 0.166, "Belgrano": 0.147, "Asul": 0.159, "Offside": 0.139, "Strait": 0.148, "Glass Antiqua": 0.183, "Herr Von Muellerhoff": 0.286, "Athiti": 0.152, "Overlock SC": 0.145, "Fascinate Inline": 0.127, "Dekko": 0.306, "IM Fell English": 0.230, "Trade Winds": 0.235, "Hind Madurai": 0.209, "Bigshot One": 0.157, "Lemon": 0.135, "UnifrakturCook": 0.125, "Henny Penny": 0.253, "Bungee": 0.137, "Scope One": 0.265, "Bungee Inline": 0.137, "Trochut": 0.122, "Emilys Candy": 0.155, "Autour One": 0.145, "Bowlby One SC": 0.166, "Amiko": 0.240, "Abhaya Libre": 0.251, "Jolly Lodger": 0.145, "Galindo": 0.225, "Knewave": 0.109, "Monsieur La Doulaise": 0.234, "Monofett": 0.088, "Redressed": 0.156, "Andada": 0.121, "Baloo Thambi": 0.219, "Trykker": 0.140, "Bubbler One": 0.183, "Megrim": 0.161, "Iceberg": 0.175, "Nova Slim": 0.145, "Lovers Quarrel": 0.339, "Montaga": 0.140, "Pirata One": 0.136, "Plaster": 0.150, "Piedra": 0.178, "Share Tech Mono": 0.179, "Snippet": 0.187, "Farsan": 0.285, "Irish Grover": 0.150, "Ramaraja": 0.370, "Pangolin": 0.188, "Londrina Outline": 0.147, "Kenia": 0.248, "Sansita": 0.081, "Chau Philomene One": 0.153, "Modern Antiqua": 0.182, "UnifrakturMaguntia": 0.236, "Griffy": 0.215, "Cormorant SC": 0.183, "Holtwood One SC": 0.116, "Lancelot": 0.275, "Cormorant Infant": 0.183, "Germania One": 0.170, "Galdeano": 0.206, "Nova Square": 0.145, "Fresca": 0.209, "Loved by the King": 0.193, "Mirza": 0.450, "Kristi": 0.230, "Ranchers": 0.082, "Original Surfer": 0.135, "Sahitya": 0.172, "Smythe": 0.158, "Molle": 0.221, "Seaweed Script": 0.233, "Almendra SC": 0.197, "Mountains of Christmas": 0.154, "Euphoria Script": 0.272, "Keania One": 0.121, "Jacques Francois": 0.138, "Norican": 0.182, "Atomic Age": 0.151, "Miltonian Tattoo": 0.180, "Amethysta": 0.146, "Astloch": 0.154, "Averia Gruesa Libre": 0.145, "Underdog": 0.171, "Chango": 0.114, "Rakkas": 0.201, "Wendy One": 0.210, "Asset": 0.164, "Jacques Francois Shadow": 0.138, "Diplomata": 0.180, "Nova Script": 0.145, "Ribeye Marrow": 0.144, "Voces": 0.161, "Chathura": 0.292, "Uncial Antiqua": 0.173, "Habibi": 0.150, "Princess Sofia": 0.288, "Expletus Sans": 0.251, "Tillana": 0.164, "Elsie Swash Caps": 0.199, "Simonetta": 0.164, "Londrina Shadow": 0.147, "Seymour One": 0.147, "Londrina Sketch": 0.147, "Miltonian": 0.180, "Nova Cut": 0.145, "Goblin One": 0.188, "Over the Rainbow": 0.142, "Rationale": 0.173, "Sevillana": 0.172, "Geostar Fill": 0.153, "Ravi Prakash": 0.379, "Modak": 0.262, "Miss Fajardose": 0.266, "Arbutus": 0.145, "Macondo Swash Caps": 0.203, "Nova Mono": 0.116, "Kumar One": 0.253, "Federant": 0.172, "Inknut Antiqua": 0.087, "Galada": 0.280, "Tienne": 0.182, "Sree Krushnadevaraya": "-0.002", "Mogra": 0.248, "Yatra One": 0.250, "Bonbon": 0.243, "Atma": 0.209, "Butterfly Kids": 0.202, "Ledger": 0.134, "Geostar": 0.153, "Almendra Display": 0.197, "Raleway Dots": 0.149, "Aubrey": 0.192, "Ruge Boogie": 0.251, "Coiny": 0.119, "Gidugu": 0.277, "Risque": 0.175, "Balthazar": 0.214, "Bigelow Rules": 0.174, "Barrio": 0.184, "Butcherman": 0.198, "Chela One": 0.148, "New Rocker": 0.170, "Englebert": 0.344, "Mr Bedfort": 0.322, "Emblema One": 0.171, "Bungee Hairline": 0.137, "Mada": 0.200, "Cormorant Unicase": 0.183, "McLaren": 0.137, "Amarante": 0.141, "Baloo Da": 0.248, "Fruktur": 0.141, "Rye": 0.141, "Meera Inimai": 0.198, "Hanalei Fill": 0.115, "Gurajada": 0.274, "Hanalei": 0.115, "Bahiana": 0.175, "Fjord One": 0.179, "Dhurjati": 0.161, "Peddana": 0.377, "Kavivanar": 0.177, "Suravaram": 0.246, "Mystery Quest": 0.217, "Creepster": 0.134, "Kumar One Outline": 0.253, "League Script": 0.338, "Miriam Libre": 0.188, "Codystar": 0.160, "Averia Libre": 0.145, "Inika": 0.145, "Pavanam": 0.194, "NTR": 0.297, "Cantora One": 0.130, "David Libre": 0.239, "IM Fell French Canon": 0.173, "Timmana": 0.425, "Baloo": 0.238, "Baloo 2": 0.110, "Coda Caption": 0.094, "Milonga": 0.137, "Stoke": 0.136, "Vibur": 0.215, "Wallpoet": 0.192, "Junge": 0.181, "Alike Angular": 0.144, "Bungee Shade": 0.137, "Ruluko": 0.165, "IM Fell French Canon SC": 0.173, "Buda": 0.230, "Pattaya": 0.186, "IM Fell Great Primer": 0.164, "Bilbo": 0.275, "Ribeye": 0.144, "Cagliostro": 0.183, "El Messiri": 0.263, "Linden Hill": 0.288, "Swanky and Moo Moo": 0.263, "Sarina": 0.190, "Nova Oval": 0.145, "IM Fell Double Pica SC": 0.188, "Nosifer": 0.279, "Port Lligat Sans": 0.177, "Croissant One": 0.138, "Arya": 0.141, "Miniver": 0.237, "Akronim": 0.266, "IM Fell Great Primer SC": 0.164, "Della Respira": 0.113, "Proza Libre": 0.209, "Ruthie": 0.327, "Peralta": 0.170, "Laila": 0.178, "Eagle Lake": 0.136, "Wellfleet": 0.141, "MedievalSharp": 0.201, "Oldenburg": 0.141, "Jomhuria": 0.383, "Purple Purse": 0.213, "BioRhyme": 0.149, "Petrona": 0.206, "Spicy Rice": 0.169, "Nova Flat": 0.145, "Sura": 0.139, "Rhodium Libre": 0.256, "Amita": 0.179, "Snowburst One": 0.090, "Passero One": 0.208, "Dr Sugiyama": 0.221, "Margarine": 0.159, "Ewert": 0.178, "Rum Raisin": 0.163, "Mrs Sheppards": 0.210, "Caesar Dressing": 0.116, "Jim Nightshade": 0.305, "Gorditas": 0.154, "Fascinate": 0.127, "Cormorant Upright": 0.183, "Felipa": 0.177, "Warnes": 0.161, "Smokum": 0.140, "Romanesco": 0.164, "Sofadi One": 0.228, "Devonshire": 0.227, "Metal Mania": 0.178, "Baloo Bhai": 0.249, "Combo": 0.182, "Marko One": 0.186, "Sirin Stencil": 0.068, "Erica One": 0.094, "Flavors": 0.149, "Eater": 0.017, "Stalinist One": 0.202, "Tenali Ramakrishna": 0.402, "Supermercado One": 0.160, "Unlock": 0.163, "Katibeh": 0.506, "Lakki Reddy": 0.416, "Overpass Mono": 0.248, "Padauk": 0.253, "Bungee Outline": 0.137, "BioRhyme Expanded": 0.149);
+
+//Aggregator to bundle some font info
+@function get-font-properties($font) {
+  @if ($font == 'Baloo 2') {
+    @return (
+            family: ('Baloo 2', serif),
+            baseline-ratio: map-get($baseline-ratios, $font)
+    );
+  } @else if ($font == 'Roboto') {
+    @return (
+            family: ('Roboto', sans-serif),
+            baseline-ratio: map-get($baseline-ratios, $font)
+    );
+  } @else if ($font == 'Oxygen') {
+    @return (
+            family: ('Oxygen', sans-serif),
+            baseline-ratio: map-get($baseline-ratios, $font)
+    );
+  } @else {
+    @return (
+            family: (system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"),
+            baseline-ratio: 0.25
+    )
+  }
+}
+
+//the mixin
+@mixin alignToGrid($font-size:16px, $lines-tmargin:0, $lines-bmargin:0, $font:'', $override-baseline-ratio:'') {
+
+  $default_grid-base: 30;
+  $font-size-px: $font-size;
+  @if (getUnit($font-size) == 'rem') { //convert to px if passed as rem
+    $font-size-px: (strip-units($font-size) * 16);
+  } @else { //strip 'px' if passed as px
+    $font-size-px: strip-units($font-size);
+  }
+  $font-props:            get-font-properties($font);
+  $baseline-ratio:        map-get($font-props, baseline-ratio);
+  $lh-base:               $hnl-base-grid-unit-px;
+  $multiplier:            ceil(math.div($font-size-px, $lh-base));
+  $line-height:           $lh-base * $multiplier + px;
+
+  @if ($font-size-px <= 8) {
+    $multiplier: 0.5; //microscopic text is allowed to have two lines in one grid line
+  }
+  @if ($override-baseline-ratio != '') {
+    $baseline-ratio: $override-baseline-ratio;
+  }
+
+
+  //dynamic values
+  --nok-grid-base-multiplier: #{$multiplier};
+  --nok-grid-base-for-font:   calc(var(--nok-grid-base, #{$default_grid-base}px) * var(--nok-grid-base-multiplier, 1));
+  --font-size:            #{$font-size-px}px;
+  --font-size-int:        #{$font-size-px};
+  --font-baseline-ratio:  #{$baseline-ratio};
+  --baseline-offset:      calc(var(--font-size) * var(--font-baseline-ratio));
+  --baseline:             calc(((var(--nok-grid-base-for-font) - var(--baseline-offset) - 1ex) / 2));
+  --line-padding-after:   #{$lines-bmargin};
+  --line-padding-before:  #{$lines-tmargin};
+
+  //fixed values
+  font-family:            map-get($font-props, family);
+  font-size:              var(--font-size);
+  line-height:            var(--nok-grid-base-for-font);
+  margin-top:             calc(var(--nok-grid-base, #{$default_grid-base}px) * var(--line-padding-before));
+  margin-bottom:          calc(var(--nok-grid-base, #{$default_grid-base}px) - var(--baseline) + (var(--nok-grid-base, #{$default_grid-base}px) * var(--line-padding-after)));
+  padding-top:            var(--baseline);
+
+  //experimental (see https://code.hnldesign.nl/baseline-grid/#explain_recalc)
+  body.css-custom-property & {
+    --hnl-ceil-value:       calc((var(--font-size-int) / var(--nok-grid-base-int, #{$default_grid-base})) + .5); //experimental css ceil rounding
+    --nok-grid-base-multiplier: var(--hnl-ceil-value, #{$multiplier});
+  }
 }
