@@ -6,6 +6,10 @@ nok-hero {
   --grid-gap: var(--#{components-base.$prefix}-padding-base, var(--#{components-base.$prefix}-global-grid-gap, 1.5rem));
   --footer-height: 6rem;
 
+  &:not(:has(footer)) {
+    --footer-height: 0;
+  }
+
   .#{&}__inner {
     display: grid;
     row-gap: var(--nok-padding-section-sides, var(--grid-gap));

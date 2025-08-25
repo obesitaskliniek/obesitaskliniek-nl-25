@@ -102,7 +102,7 @@ button,
 
     font-size: var(--#{components-base.$prefix}-font-size-buttons, 1.25rem);
 
-    > button.fill-group-column {
+    > .fill-group-column {
       width: 100%;
     }
   }

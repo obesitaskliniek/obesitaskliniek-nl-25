@@ -17,32 +17,10 @@
  *  - button_vestiging_url:url,
  */
 
-$featuredImage = '<img src="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:100x0-25-0-0-center-0.jpg" 
-srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:1920x0-65-0-0-center-0.jpg 1920w,
-                             https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:768x0-65-0-0-center-0.jpg 768w,
-                             https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:320x0-65-0-0-center-0.jpg 320w,
-                             https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:150x0-65-0-0-center-0.jpg 150w" sizes="(max-width: 575px) 100vw,
-                                 (min-width: 575px) 75vw,
-                                 (min-width: 768px) 84vw,
-                                 (min-width: 996px) 84vw,
-                                 (min-width: 1200px) 84vw" loading="eager" decoding="async">';
+use NOK2025\V1\Helpers;
+$featuredImage = Helpers::get_featured_image();
 
-if ( has_post_thumbnail() ) {
-	// Output <img> with srcset, sizes, width/height, alt, AND loading="lazy"
-	$featuredImage = wp_get_attachment_image(
-		get_post_thumbnail_id(),  // attachment ID
-		'large',                   // size slug: 'thumbnail', 'medium', 'large', 'full', or your custom size
-		false,                    // icon? false = normal image
-		[
-			'loading'  => 'eager', //eager since we are at the top of the page anyway
-			'decoding' => 'async', // async decoding for better performance
-			// These attributes get added to the <img> tag
-			'class'    => 'featured-image',       // your CSS hook
-			// size hint: “100vw up to 1200px wide, then cap at 1200px”
-			'sizes'    => '(max-width: 1200px) 100vw, 1200px',
-		]
-	);
-}
+
 ?>
 
     <nok-hero class="nok-section">
@@ -59,11 +37,11 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                 </div>
                 <div class="nok-button-group nok-justify-items-start">
                     <a role="button" href="<?= $page_part_fields['button_blauw_url']; ?>"
-                       class="nok-button nok-align-self-to-sm-stretch fill-group-column nok-bg-darkerblue nok-text-contrast" tabindex="0">
+                       class="nok-button nok-justify-self-center fill-group-column nok-bg-darkerblue nok-text-contrast" tabindex="0">
 	                    <?= $page_part_fields['button_blauw_text']; ?>
                     </a>
                     <a role="button" href="<?= $page_part_fields['button_transparant_url']; ?>"
-                       class="nok-hyperlink nok-align-self-to-sm-stretch fw-bold">
+                       class="nok-hyperlink nok-justify-self-center fw-bold">
                         <?= $page_part_fields['button_transparant_text']; ?>
                     </a>
                 </div>

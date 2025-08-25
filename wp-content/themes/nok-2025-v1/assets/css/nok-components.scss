@@ -1,5 +1,6 @@
 @use "nok-variables";
 @use "./tools/nok-mixins";
+@use "./tools/nok-rfs";
 @use "nok-reboot";
 @use "nok-layout";
 
@@ -8,6 +9,7 @@
 @use "./components/nok-lists";
 @use "./components/nok-accordion";
 @use "./components/nok-square-block";
+@use "./components/nok-forms";
 
 @use "./components/nok-screen-mask";
 @use "./components/nok-accessibility-helper";
@@ -16,7 +18,7 @@
 @use "./components/nok-hero";
 @use "./components/nok-page-footer";
 
-//Todo: move everything below to something that makes more sense
+//Todo: move everything below to something that makes more sense - something like layout, or text-layout
 
 :root {
   @include nok-variables.parsed-variables;
@@ -49,6 +51,12 @@ body {
 @for $i from 1 through 6 {
   h#{$i} {
     @include nok-mixins.nok-heading-font;
+  }
+}
+
+.body-copy {
+  p, ul, ol {
+    @include nok-mixins.alignToGrid(1rem, 0, 0, 'Inter');
   }
 }
 
