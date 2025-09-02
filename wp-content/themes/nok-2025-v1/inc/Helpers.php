@@ -3,6 +3,9 @@
 namespace NOK2025\V1;
 
 
+use DateInterval;
+use IntlDateFormatter;
+
 class Helpers {
 	public static function makeRandomString( $bits = 256 ): string {
 		#generates nonce (for Google Tag Manager etc)
@@ -73,6 +76,41 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 		}
 
 		return $featuredImage;
+	}
+
+	/**
+	 * @throws \Exception
+	 */
+	public static function getDateParts($date, int $minutes = 0): array
+	{
+		$formatter = new IntlDateFormatter('nl_NL', IntlDateFormatter::NONE, IntlDateFormatter::NONE);
+
+		// Calculate end time by adding minutes
+		$endDate = clone $date;
+		$endDate->add(new DateInterval('PT' . abs($minutes) . 'M'));
+		if ($minutes < 0) {
+			$endDate = clone $date;
+			$endDate->sub(new DateInterval('PT' . abs($minutes) . 'M'));
+		}
+
+		return [
+			'day_number' => $date->format('J'),
+			'day_name' => $formatter->setPattern('EEEE') ? $formatter->format($date) : null,
+			'day_short' => $formatter->setPattern('EEE') ? $formatter->format($date) : null,
+			'month_number' => $date->format('n'),
+			'month_name' => $formatter->setPattern('MMMM') ? $formatter->format($date) : null,
+			'month_short' => $formatter->setPattern('MMM') ? $formatter->format($date) : null,
+			'year' => $date->format('Y'),
+			'hour' => $date->format('G'),
+			'minute' => $date->format('i'),
+			'niceDateFull' => $formatter->setPattern('EEEE d MMMM') ? $formatter->format($date) : null,
+			'start_time' => $date->format('G:i'),
+			'end_time' => $endDate->format('G:i')
+		];
+	}
+
+	public static function classFirstP(string $string, string $class): string {
+		return preg_replace('/<p(\s[^>]*)?>/i', '<p$1 class="' . htmlspecialchars($class, ENT_QUOTES) . '">', $string, 1);
 	}
 }
 

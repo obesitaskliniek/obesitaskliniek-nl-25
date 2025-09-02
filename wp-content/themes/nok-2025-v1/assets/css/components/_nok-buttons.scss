@@ -4,6 +4,7 @@
 // Buttons
 
 button,
+.gform_button,
 .nok-button {
   --flex-gap: calc(var(--#{components-base.$prefix}-padding-base, 1.5rem) / 2);
   --bg-alpha-value: 1;
@@ -25,6 +26,7 @@ button,
   line-height: 1.5;
   text-decoration: none;
 
+  background-color: var(--bg-color, inherit);
   color: var(--bg-color--contrast, var(--text-color, inherit));
   @include components-base.nok-border-radius;
   &:not(.no-shadow) {
