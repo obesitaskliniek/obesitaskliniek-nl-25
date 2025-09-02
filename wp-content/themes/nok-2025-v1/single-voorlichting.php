@@ -55,10 +55,13 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                 <div class="body-copy nok-order-1 nok-order-lg-0">
                     <?= Helpers::classFirstP( $eventData['intro_lang'], "fw-bold nok-fs-2" ); ?>
                     <?php if (!empty($eventData['onderwerpen'])) : ?>
+                    <p>De <?= $eventData['soort'];?> start om <?= $eventDate['start_time']; ?> en duurt ongeveer <?= Helpers::minutesToDutchRounded(intval ( $hubspotData['duur'][0] )); ?>, tot <?= $eventDate['end_time']; ?> uur.
+                    </p>
                     <h2>Onderwerpen</h2>
                     <p>Wat kunt u verwachten van deze voorlichting?</p>
                     <?= $eventData['onderwerpen']; ?>
                     <?php endif; ?>
+                    <h2>Wanneer?</h2>
                     <h2>Kosten</h2>
                     <p>
                         Deze voorlichting is gratis.

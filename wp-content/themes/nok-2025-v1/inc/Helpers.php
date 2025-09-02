@@ -109,6 +109,44 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 		];
 	}
 
+	public static function minutesToTime(int $minutes): string
+	{
+		$hours = intval($minutes / 60);
+		$mins = $minutes % 60;
+		return sprintf('%d:%02d', $hours, $mins);
+	}
+
+	public static function minutesToDutchRounded(int $minutes): string
+	{
+		// Round to nearest 30 minutes
+		$roundedMinutes = round($minutes / 30) * 30;
+		// Cap at 8 hours (480 minutes)
+		$roundedMinutes = min($roundedMinutes, 480);
+
+		$hours = $roundedMinutes / 60;
+
+		return match($hours) {
+			0.0 => '0 minuten',
+			0.5 => 'een half uur',
+			1.0 => 'een uur',
+			1.5 => 'anderhalf uur',
+			2.0 => 'twee uur',
+			2.5 => 'twee en een half uur',
+			3.0 => 'drie uur',
+			3.5 => 'drie en een half uur',
+			4.0 => 'vier uur',
+			4.5 => 'vier en een half uur',
+			5.0 => 'vijf uur',
+			5.5 => 'vijf en een half uur',
+			6.0 => 'zes uur',
+			6.5 => 'zes en een half uur',
+			7.0 => 'zeven uur',
+			7.5 => 'zeven en een half uur',
+			8.0 => 'acht uur',
+			default => 'acht uur'
+		};
+	}
+
 	public static function classFirstP(string $string, string $class): string {
 		return preg_replace('/<p(\s[^>]*)?>/i', '<p$1 class="' . htmlspecialchars($class, ENT_QUOTES) . '">', $string, 1);
 	}
