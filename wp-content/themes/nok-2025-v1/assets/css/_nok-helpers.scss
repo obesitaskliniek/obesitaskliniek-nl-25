@@ -32,12 +32,16 @@
 
 .fw-bold {
   font-weight: 600;
+  > b, strong {
+    font-weight: 600;
+  }
 }
 
 .fw-500 {
   font-weight: 500;
 }
 
+.fw-normal,
 .fw-400 {
   font-weight: 400;
 }
@@ -599,8 +603,24 @@ $utilities: (
                 values: (
                         100: 100%
                 )
-        )
+        ),
+        "pull-up": (
+            css-var: true,
+            css-variable-name: pull-amount,
+            no-prefix: true,
+            responsive: true,
+            responsive-up-to: false,
+            class: #{nok-variables.$prefix}-pull-up,
+            values: 1 2 3 4
+        ),
 );
+
+%pull-up {
+  margin-top: calc((-1 * var(--pull-amount, 0)) * var(--nok-spacing-section-ends, 0));
+}
+[class*="#{nok-variables.$prefix}-pull-up"] {
+  @extend %pull-up;
+}
 
 //construct helpers
 @include nok-api.generate-helpers($utilities);
@@ -680,24 +700,11 @@ $utilities: (
   }
 }
 
-%pull-up {
-  margin-top: calc((-1 * var(--pull-amount, 4)) * var(--nok-spacing-section-ends, 0));
-}
-.pull-up {
-  &-1 {
-    --pull-amount: 1;
-    @extend %pull-up;
-  }
-  &-2 {
-    --pull-amount: 2;
-    @extend %pull-up;
-  }
-  &-3 {
-    --pull-amount: 3;
-    @extend %pull-up;
-  }
-  &-4 {
-    --pull-amount: 4;
-    @extend %pull-up;
-  }
+//
+// Visually hidden
+//
+
+.visually-hidden,
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+  @include nok-mixins.visually-hidden();
 }

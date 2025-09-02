@@ -22,7 +22,9 @@ nok-bg-alpha-10 nok-dark-bg-alpha-10 nok-subtle-shadow">
                 </h2>
 				<?php the_title( '<h1 class="nok-fs-6">', '</h1>' ); ?>
                 <div class="">
-					<?php the_content(); ?>
+					<?php
+                    //the_content();
+                    ?>
                 </div>
             </article>
 
@@ -35,7 +37,7 @@ nok-bg-alpha-10 nok-dark-bg-alpha-10 nok-subtle-shadow">
             <article class="nok-layout-grid nok-layout-grid__3-column fill-one nok-column-gap-3
                         nok-text-darkblue">
 
-                <div class="body-copy">
+                <div class="body-copy nok-order-1 nok-order-lg-0">
                     <p class="fw-bold nok-fs-2">
                         Heeft u te maken met ernstig overgewicht en overweegt u een maagverkleining? Dan is het goed om
                         te weten wat u allemaal te wachten staat. Als u in
@@ -54,16 +56,11 @@ nok-bg-alpha-10 nok-dark-bg-alpha-10 nok-subtle-shadow">
                         Wat kunt u verwachten van deze voorlichting?
                     </p>
                     <ul>
-                        <li>Criteria om voor behandeling in aanmerking te komen
-                        </li>
-                        <li>Multidisciplinaire behandeling; wat betekent dit?
-                        </li>
-                        <li>Traject voor de operatie, operatie, traject na de operatie
-                        </li>
-                        <li>Operatietechnieken
-                        </li>
-                        <li>Vergoeding &amp; kosten
-                        </li>
+                        <li>Criteria om voor behandeling in aanmerking te komen</li>
+                        <li>Multidisciplinaire behandeling; wat betekent dit?</li>
+                        <li>Traject voor de operatie, operatie, traject na de operatie</li>
+                        <li>Operatietechnieken</li>
+                        <li>Vergoeding &amp; kosten</li>
                     </ul>
                     <h2>Kosten</h2>
                     <p>
@@ -71,14 +68,19 @@ nok-bg-alpha-10 nok-dark-bg-alpha-10 nok-subtle-shadow">
                     </p>
                     <h2>Aanmelden</h2>
 
-
+                    <?php
+                    if (function_exists('gravity_form')) {
+	                    gravity_form(1, false, false);
+                    }
+                    ?>
                     <form class="nok-form">
                         <div class="nok-form-element">
                             <input type="text" name="input_field" id="input_field" placeholder="" />
                             <label for="input_field">Naam</label>
                         </div>
                         <div class="nok-form-element">
-                            <input type="text" name="input_field" id="input_field" placeholder="Geen label" />
+                            <input type="email" name="input_field_2" id="input_field_2" placeholder="" />
+                            <label for="input_field_2">E-mail adres</label>
                         </div>
                         <div class="nok-form-element">
                             <select id="input-aantal" name="input-aantal">
@@ -100,11 +102,10 @@ nok-bg-alpha-10 nok-dark-bg-alpha-10 nok-subtle-shadow">
 
                 </div>
 
-                <div class="nok-column-last-1">
-                    <nok-square-block class="nok-bg-white nok-alpha-10 pull-up-3" data-shadow="true">
+                <div class="nok-column-last-1 nok-order-0 nok-order-lg-1">
+                    <nok-square-block class="nok-bg-white nok-alpha-10 nok-pull-up-lg-3" data-shadow="true">
                         <div class="nok-square-block__heading">
-                            <h2 class="nok-text-lightblue nok-dark-text-yellow nok-fs-2 nok-fs-to-md-2">Voorlichting
-                                (online)</h2>
+                            <h2 class="nok-text-lightblue nok-dark-text-yellow nok-fs-2 nok-fs-to-md-2">Voorlichting (online)</h2>
                             <h2>Dinsdag 14 januari</h2>
                         </div>
                         <div class="nok-square-block__text nok-fs-1">

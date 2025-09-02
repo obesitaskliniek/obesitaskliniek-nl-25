@@ -9,12 +9,12 @@ $padding-base:                  1.5rem;
 $default-border-radius:         math.div(math.round((math.div($padding-base, 4)) * 10), 10);
 $default-border-radius--large:  math.round($default-border-radius * 2);
 $heading-font-family:           "Realist", Arial, Helvetica, sans-serif;
-$heading-font-size-adjust:      0.525; //Realist as relative to Arial
+$heading-font-size-adjust:      0.444; //Realist - see https://clagnut.com/sandbox/font-size-adjust-ex.html
 $text-font-family:              "Inter", Arial, Helvetica, sans-serif;
-$text-font-size-adjust:         0.514; //Inter as relative to Arial
+$text-font-size-adjust:         0.549; //Inter - see https://clagnut.com/sandbox/font-size-adjust-ex.html
 $font-family-monospace:         SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
 
-$default-line-height:           1.5;
+$default-line-height:           1.7;
 $default-heading-line-height:   1.25;
 
 $font-size-base:                1rem !default;
@@ -46,7 +46,6 @@ $exposed-variables: (
     "default-line-height": $default-line-height,
     "default-heading-line-height": $default-heading-line-height,
     "padding-base": $padding-base,
-    "grid-base": 30px,
     "global-grid-gap": $padding-base,
     "padding-section-sides": min(6vw, $padding-base * 3),
     "spacing-section-ends": min(12vw, $padding-base * 3),

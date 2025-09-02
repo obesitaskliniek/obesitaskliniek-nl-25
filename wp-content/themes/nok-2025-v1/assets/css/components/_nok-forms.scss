@@ -1,0 +1,271 @@
+@use "sass:map";
+@use "shared" as components-base;
+
+%errors {
+  border: 1px solid var(--nok-error--darker);
+  @include components-base.nok-border-radius;
+  padding: var(--form-element-padding, 1ex) calc(var(--form-element-padding, 1ex) * 1.5);
+  font-size: .8em;
+  font-weight: normal;
+  line-height: inherit;
+  margin: 1em 0;
+}
+
+.nok-form {
+  $dur_in: 550ms;
+  $dur_out: 750ms;
+
+  --animation-duration--in: #{$dur_in};
+  --animation-duration--out: #{$dur_out};
+  --form-element-padding: 1ex;
+
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+
+  align-self: stretch;
+  width: 100%;
+
+  &-element {
+    display: flex;
+    position: relative;
+    margin: 0 0 calc((var(--nok-grid-base, 30px) - var(--form-element-padding, 1ex)) / 2);
+    z-index: 1;
+
+    input + label {
+      display: none;
+      z-index: 2;
+      align-items: center;
+      position: absolute;
+      pointer-events: none;
+      left: calc(var(--form-element-padding, 1ex) * 1.5);
+      top: var(--form-element-padding, 1ex);
+      padding: 0;
+      margin: 0;
+      transform-origin: left top;
+      @include components-base.transition-properties(transform) {
+        transition: transform var(--animation-duration--in) cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      opacity: 0.7;
+      color: var(--text-color--grayscale);
+
+      &::placeholder {
+        display: none;
+      }
+    }
+
+    input:placeholder-shown,
+    input:not([placeholder]):invalid {
+      & + label {
+        display: flex;
+      }
+    }
+
+    select,
+    input:not([type="checkbox"], [type="radio"]) {
+      z-index: 1;
+      display: flex;
+      flex-basis: 50%;
+
+      @include components-base.nok-border-radius;
+      padding: var(--form-element-padding, 1ex) calc(var(--form-element-padding, 1ex) * 1.5);
+      margin: 0;
+
+      border: 1px inset #8882;
+      outline: 0 none;
+      opacity: 0.9;
+
+      &:focus {
+        &::placeholder,
+        & + label {
+          top: 0;
+          transform: scale(50%);
+          opacity: 0.6;
+        }
+      }
+
+      @media (hover: hover) {
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+
+    input[type="checkbox"],
+    input[type="radio"] {
+      margin: var(--form-element-padding, 1ex);
+
+      + label {
+        display: flex;
+        align-items: center;
+        padding: var(--form-element-padding, 1ex) calc(var(--form-element-padding, 1ex) * 1.5);
+        margin: 0;
+      }
+    }
+
+
+    select,
+    input, {
+      &:focus,
+      &:focus-visible { // focus state by other input method than mouse
+        opacity: 1;
+        @include components-base.nok-focus-ring;
+      }
+
+      &:invalid {
+        @include components-base.nok-invalid-ring;
+      }
+    }
+
+    select {
+      --arrow-down: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+      background-image: var(--arrow-down, none);
+      background-repeat: no-repeat;
+      background-position: right var(--form-element-padding, 1ex) center;
+      background-size: 2ex;
+      appearance: none;
+    }
+
+  }
+
+  /* GRAVITY FORMS */
+
+  @at-root &_wrapper.gform_wrapper {
+    div.gform_validation_errors {
+      @extend %errors;
+      padding-inline-start: 48px;
+      h2 {
+        font-family: inherit;
+        font-size: 1rem;
+        font-weight: normal;
+        line-height: inherit;
+      }
+    }
+
+    .gfield_required {
+      color: var(--nok-lightgrey--darker) !important;
+    }
+  }
+
+  @at-root &_wrapper.gform_wrapper & {
+
+    .gfield {
+
+      .validation_message {
+        @extend %errors;
+      }
+
+      > .ginput_container {
+
+        select,
+        input {
+          --bg-base: var(--nok-body--lighter);
+          --bg-base-contrast: var(--nok-body--lighter-contrast);
+
+          --bg-color: oklch(from var(--bg-base) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1)));
+          --bg-color--contrast: oklch(from var(--bg-base-contrast) l c h / var(--global-text-alpha-value, var(--text-alpha-value, 1)));
+          --bg-color--hover: oklch(from var(--bg-base) calc(l * 1.25) calc(c * 0.9) h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1)));
+          --bg-color--active: oklch(from var(--bg-base) calc(l * 1.05) calc(c * 1.1) h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1)));
+          --bg-color--grayscale: oklch(from var(--bg-base) l 0 h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1)));
+
+          &:focus,
+          &:focus-visible { // focus state by other input method than mouse
+            opacity: 1;
+            @include components-base.nok-focus-ring(false);
+          }
+        }
+
+        select,
+        input:not([type="checkbox"], [type="radio"]) {
+          background-color: oklch(from var(--bg-color, inherit) l c h/var(--global-bg-alpha-value, var(--bg-alpha-value, 1)));
+          color: var(--text-color, oklch(from var(--bg-color--contrast, inherit) l c h/var(--global-bg-alpha-value, var(--bg-alpha-value, 1))));
+
+          z-index: 1;
+          display: flex;
+          flex-basis: 50%;
+
+          @include components-base.nok-border-radius;
+          padding: var(--form-element-padding, 1ex) calc(var(--form-element-padding, 1ex) * 1.5);
+          margin: 0;
+
+          border: 1px inset #8882;
+          outline: 0 none;
+          opacity: 0.9;
+
+          @media (hover: hover) {
+            &:hover {
+              opacity: 1;
+            }
+          }
+
+          &:invalid {
+            @include components-base.nok-invalid-ring(false);
+          }
+        }
+      }
+
+      &:has(legend) input:not([type="checkbox"], [type="radio"]) + label {
+        visibility: collapse;
+        @include components-base.visually-hidden();
+      }
+
+      &.gfield_error .gfield_required,
+      &:has(.ginput_container input:invalid) .gfield_required {
+        color: var(--nok-error);
+      }
+
+    }
+  }
+
+  input[type="radio"] {
+    /* Add if not using autoprefixer */
+    -webkit-appearance: none;
+    /* Remove most all native input styles */
+    appearance: none;
+    /* For iOS < 15 */
+    background-color: oklch(from var(--bg-color, inherit) l c h/var(--global-bg-alpha-value, var(--bg-alpha-value, 1)));
+    /* Not removed via appearance */
+    margin: 0;
+
+    font: inherit;
+    color: currentColor;
+    width: 1em;
+    height: 1em;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+
+    display: grid;
+    place-content: center;
+
+    &::before {
+      display: block;
+      content: "";
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      transform: scale(0);
+      @include components-base.transition-properties(transform) {
+        transition: transform var(--animation-duration--in) cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      box-shadow: inset 1em 1em var(--nok-lightblue);
+      background-color: CanvasText;
+    }
+
+    &:checked + label {
+      font-weight: 600;
+    }
+    &:focus,
+    &:focus-visible { // focus state by other input method than mouse
+      + label {
+        @include components-base.nok-focus-ring(false);
+        @include components-base.nok-border-radius;
+      }
+    }
+    &:checked::before {
+      transform: scale(1);
+    }
+  }
+
+}

@@ -74,3 +74,14 @@ add_action('acf/init', 'my_acf_init');
 function my_acf_init() {
 	acf_update_setting('remove_wp_meta_box', false);
 }
+
+// GRAVITY FORMS settings
+add_filter( 'gform_submit_button', 'gravity_button_css', 10, 2 );
+function gravity_button_css( $button, $form ) {
+	$fragment = WP_HTML_Processor::create_fragment( $button );
+	$fragment->next_token();
+	$fragment->add_class( 'nok-bg-darkerblue' );
+	$fragment->add_class( 'nok-text-contrast' );
+
+	return $fragment->get_updated_html();
+}

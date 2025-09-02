@@ -42,21 +42,27 @@ body {
   }
 }
 
-body {
-  --#{nok-variables.$prefix}-body-text-color: var(--#{nok-variables.$prefix}-darkerblue);
-  background: linear-gradient(180deg, var(--#{nok-variables.$prefix}-body--darker), var(--#{nok-variables.$prefix}-body));
-  @include nok-mixins.nok-text-font;
-}
-
-@for $i from 1 through 6 {
-  h#{$i} {
-    @include nok-mixins.nok-heading-font;
-  }
-}
-
 .body-copy {
-  p, ul, ol {
-    @include nok-mixins.alignToGrid(1rem, 0, 0, 'Inter');
+  //p, ul, ol {
+  //  @include nok-mixins.alignToGrid(1rem, 0, 0, 'Inter');
+  //}
+  //h2 {
+  //  @include nok-mixins.alignToGrid(2rem, 0, 0, 'Inter');
+  //}
+  //h3 {
+  //  @include nok-mixins.alignToGrid(1.75rem, 0, 0, 'Inter');
+  //}
+
+  @include nok-mixins.baseline-grid;
+
+  @at-root body:not(.no-debug) & {
+    --grid-base: var(--lh-px, 24px);
+    text-size-adjust: none;
+    position: relative;
+    background-image: linear-gradient(transparent 0px, transparent calc(var(--grid-base) - 1px), rgba(125, 125, 125, 0.15) calc(var(--grid-base) - 1px));
+    background-size: var(--grid-base) var(--grid-base);
+    background-position: 0 0;
+    background-origin: content-box;
   }
 }
 
