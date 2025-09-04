@@ -64,10 +64,10 @@ button,
 
   &:disabled,
   &.disabled {
-    --text-alpha-value: 0.65;
-    opacity: 0.8;
-    color: var(--text-color-button, var(--text-color--contrast, inherit));
+    --text-alpha-value: 0.5;
+    opacity: 0.3;
     pointer-events: none;
+    background: #EEE;
   }
 
   &--small {

@@ -522,6 +522,8 @@
     margin-top: 0;
     margin-bottom: 0;
 
+    height: var(--grid-height);
+
     line-height: var(--lh-final, 24px);
   }
   //list-style-type: disc; messes up vertical sizing in Firefox.

@@ -85,3 +85,7 @@ function gravity_button_css( $button, $form ) {
 
 	return $fragment->get_updated_html();
 }
+
+add_filter( 'gform_required_legend', function( $legend, $form ) {
+	return '<small>Velden met een <span class="gfield_required">*</span> zijn verplicht.</small>';
+}, 10, 2 );

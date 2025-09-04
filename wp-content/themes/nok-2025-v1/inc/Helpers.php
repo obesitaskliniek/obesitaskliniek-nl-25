@@ -4,7 +4,10 @@ namespace NOK2025\V1;
 
 
 use DateInterval;
+use DateTime;
+use DateTimeZone;
 use IntlDateFormatter;
+use WP_Query;
 
 class Helpers {
 	public static function makeRandomString( $bits = 256 ): string {
@@ -148,8 +151,92 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 	}
 
 	public static function classFirstP(string $string, string $class): string {
+		// Check if string contains any <p> tags
+		if (!preg_match('/<p(\s[^>]*)?>/i', $string)) {
+			// No paragraph tags found - wrap entire content in <p> with class
+			return '<p class="' . htmlspecialchars($class, ENT_QUOTES) . '">' . $string . '</p>';
+		}
+
+		// Paragraph tags exist - apply class to first one using original logic
 		return preg_replace('/<p(\s[^>]*)?>/i', '<p$1 class="' . htmlspecialchars($class, ENT_QUOTES) . '">', $string, 1);
 	}
+
+	/**
+	 * Query and loop through the last n posts from a custom post type
+	 *
+	 * @param string $post_type Custom post type slug
+	 * @param int    $count     Number of posts to retrieve
+	 * @param array  $meta_query Optional meta query parameters
+	 * @param array  $tax_query  Optional taxonomy query parameters
+	 * @return WP_Query|false   Query object or false on failure
+	 */
+	public static function get_latest_custom_posts($post_type, $count, $meta_query = [], $tax_query = [], $timestamp_field = null): WP_Query|bool {
+		// Validate post type exists
+		if (!post_type_exists($post_type)) {
+			return false;
+		}
+
+		$args = [
+			'post_type'      => $post_type,
+			'posts_per_page' => absint($count),
+			'post_status'    => 'publish',
+			'no_found_rows'  => true,           // Skip pagination count query
+			'update_post_meta_cache' => false,  // Skip meta cache if not needed
+			'update_post_term_cache' => false,  // Skip term cache if not needed
+		];
+
+		// Add timestamp filtering and sorting if field is provided
+		if ($timestamp_field) {
+			$args['orderby'] = 'meta_value_num';
+			$args['meta_key'] = $timestamp_field;
+			$args['order'] = 'ASC';
+			$args['meta_query'] = array_merge([
+				[
+					'key'     => $timestamp_field,
+					'value'   => current_time('timestamp'),
+					'compare' => '>='
+				]
+			], $meta_query);
+		} else {
+			// Default sorting by post date
+			$args['orderby'] = 'date';
+			$args['order'] = 'DESC';
+			if (!empty($meta_query)) {
+				$args['meta_query'] = $meta_query;
+			}
+		}
+
+		// Add taxonomy query if provided
+		if (!empty($tax_query)) {
+			$args['tax_query'] = $tax_query;
+		}
+
+		return new WP_Query($args);
+	}
+
+	public static function setup_hubspot_metadata( $postID ) {
+
+		$hubspotData = get_post_meta( $postID );
+		$eventDate   = Helpers::getDateParts( new DateTime( $hubspotData['aanvangsdatum_en_tijd'][0], new DateTimeZone( 'Europe/Amsterdam' ) ), intval( $hubspotData['duur'][0] ) );
+		$eventData   = array(
+			'data_raw'      => $hubspotData,
+			'timestamp'     => $eventDate,
+			'timestamp_raw' => $hubspotData['aanvangsdatum_en_tijd'][0],
+			'soort'         => get_post_type(),
+			'type'          => strtolower( $hubspotData['type'][0] ),
+			'locatie'       => $hubspotData['vestiging'][0],
+			'duur'          => intval( $hubspotData['duur'][0] ),
+			'intro'         => $hubspotData['intro_kort'][0] ?? '',
+			'intro_lang'    => $hubspotData['intro_lang'][0] ?? '',
+			'onderwerpen'   => $hubspotData['onderwerpen'][0] ?? '',
+			'open'          => strtolower( $hubspotData['inschrijvingsstatus'][0] ) === 'open',
+			'status'        => strtolower( $hubspotData['inschrijvingsstatus'][0] )
+		);
+
+		//inschrijvingsstatus = open, gesloten, vol en geannuleerd
+		return $eventData;
+	}
+
 }
 
 /**

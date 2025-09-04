@@ -1,4 +1,5 @@
 @use "nok-variables";
+@use "./libs/hnl-baseline-grid";
 @use "./tools/nok-mixins";
 @use "./tools/nok-rfs";
 @use "nok-reboot";
@@ -42,27 +43,11 @@ body {
   }
 }
 
-.body-copy {
-  //p, ul, ol {
-  //  @include nok-mixins.alignToGrid(1rem, 0, 0, 'Inter');
-  //}
-  //h2 {
-  //  @include nok-mixins.alignToGrid(2rem, 0, 0, 'Inter');
-  //}
-  //h3 {
-  //  @include nok-mixins.alignToGrid(1.75rem, 0, 0, 'Inter');
-  //}
-
-  @include nok-mixins.baseline-grid;
+.baseline-grid {
+  @include hnl-baseline-grid.baseline-grid;
 
   @at-root body:not(.no-debug) & {
-    --grid-base: var(--lh-px, 24px);
-    text-size-adjust: none;
-    position: relative;
-    background-image: linear-gradient(transparent 0px, transparent calc(var(--grid-base) - 1px), rgba(125, 125, 125, 0.15) calc(var(--grid-base) - 1px));
-    background-size: var(--grid-base) var(--grid-base);
-    background-position: 0 0;
-    background-origin: content-box;
+    @include hnl-baseline-grid.baseline-grid-debug;
   }
 }
 
@@ -72,6 +57,12 @@ html {
   @include nok-mixins.media-breakpoint-down(md) {
     font-size: calc(var(--font-size-base) * .9);
   }
+}
+
+.#{nok-variables.$prefix}-alert {
+  border-width: 1px;
+  border-style: solid;
+  @include nok-mixins.nok-subtle-shadow;
 }
 
 //as helpers contain overrides, include them last
