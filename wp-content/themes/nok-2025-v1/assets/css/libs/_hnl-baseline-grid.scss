@@ -1,0 +1,111 @@
+@use "sass:math";
+
+/*!
+ * Baseline Grid CSS v2.0.0 - 26-8-2025
+ * Mixin to apply a baseline grid to an element and its children
+ * Copyright (c) 2022-2025 hnldesign. All rights reserved.
+ * See https://hnldesign.hashnode.dev/setting-a-flexible-baseline-grid-in-css
+ *
+ * You can set --fs-threshold-ratio (per element) to determine the point at which the baseline doubles (or triples etc) in size.
+ * The default is at 0.8, which means that if the font-size is over 80% of the line-height, the baseline will double.
+ * Valid values are between 0 and 1 (will be clamped).
+ * Consulted sources:
+ *
+ */
+@mixin baseline-grid {
+  --font-bl-ratio: 0.113; //based on "Inter" font
+  --line-height: var(--baseline-grid-line-height, 1.7);
+  --line-height-px: var(--baseline-grid-line-height-px, round(nearest, (1rem * var(--line-height, 1.7)), 1px));
+  --min-interline-spacing: 2px; //The minimum spacing between a descender and an ascender of the next line - you can set this to negative values if you want to allow some overlap for stylistic reasons
+  @at-root {
+    :root {
+      --lh-fallback: 1lh;
+    }
+  }
+
+  .conform-to-baseline,
+  > *:not(.no-conform-to-baseline):not(.baseline-grid) {
+    --required-height: calc(1em + var(--min-interline-spacing, 2px));
+    --calculated-line-height: round(up, var(--required-height), var(--line-height-px, var(--lh-fallback, 24px)));
+    --baseline-padding: round(nearest, ((var(--calculated-line-height, var(--lh-fallback, 24px)) - 1ex) / 2) - (1em * var(--font-bl-ratio, 0)), 1px);
+    --bottom-padding-correction: calc(var(--line-height-px, var(--lh-fallback, 24px)) - var(--baseline-padding, 4px));
+
+    margin-top: 0;
+    margin-bottom: 0;
+    height: var(--grid-height, auto) !important;
+
+    line-height: var(--calculated-line-height, var(--lh-fallback, 24px)); //setting unitless line-height would make the grid baseline larger for larger fonts, leading to inconsistencies
+
+    &:not(.use-margin) {
+      padding-top: var(--baseline-padding, 4px);
+      padding-bottom: var(--bottom-padding-correction);
+    }
+    &.use-margin { //helper-class which switches positioning to margin instead of padding
+      margin-top: var(--baseline-padding, 4px);
+      margin-bottom: var(--bottom-padding-correction);
+    }
+  }
+
+  //list-style-type: disc; messes up vertical sizing in Firefox.
+  li::marker {
+    line-height: 1;
+  }
+
+  //todo: fallback styles need updating
+  @supports not (width: round(up, 1px, 1px)) {
+    --line-height-px: calc(1rem * var(--line-height, 1.7));
+    > * {
+      --calculated-line-height: var(--line-height-px, var(--lh-fallback, 24px));
+      --baseline-padding: calc(((var(--calculated-line-height, var(--lh-fallback, 24px)) - 1ex) / 2) - (1em * var(--font-bl-ratio, 0)));
+    }
+  }
+
+  .conform-block-to-baseline,
+  & > .baseline-grid {
+    height: var(--grid-height, auto) !important;
+  }
+
+}
+
+@mixin baseline-grid-debug {
+  //debug stuff
+
+  .conform-to-baseline,
+  > *:not(.no-conform-to-baseline) {
+    --hue: calc(1deg * (var(--line-height, 1) * 220)); //map the line height to a unique color for better distinction
+    --color: oklch(0.5 1 var(--hue) / 40%);
+    position: relative;
+    &::before {
+      display: none;
+      content: "";
+      position: absolute;
+      inset: 0 calc(-0.5 * var(--column-gap, 0rem));
+      border: 0;
+      margin: 0;
+    }
+  }
+  .use-margin {
+    &::before {
+      top: calc(-1 * var(--baseline-padding, 0px));
+      bottom: calc(-1 * var(--bottom-padding-correction, 0px));
+    }
+  }
+
+  .conform-to-baseline,
+  > *:not(.no-conform-to-baseline) {
+    &::before {
+      display: block;
+      z-index: -1;
+      --grid-base: var(--line-height-px, var(--lh-fallback, 24px));
+      text-size-adjust: none;
+      //background-image: linear-gradient(transparent 0px, transparent calc(var(--grid-base) - 1px), var(--color) calc(var(--grid-base) - 1px));
+      background-image: linear-gradient(transparent 0px, transparent calc(var(--grid-base) - 1px), var(--color) calc(var(--grid-base) - 1px)),
+      linear-gradient(to right, transparent 0px, transparent calc(var(--grid-base) - 1px), #8883 calc(var(--grid-base) - 1px));
+      background-size: var(--grid-base) var(--grid-base);
+      background-position: 0 0;
+      background-origin: content-box;
+      background-clip: content-box;
+      background-repeat: repeat;
+    }
+  }
+}

@@ -3,44 +3,38 @@
 
 get_header();
 
-
+use NOK2025\V1\Assets;
 use NOK2025\V1\Helpers;
 
 $featuredImage = Helpers::get_featured_image();
-
-$into_lang_default = '<p>Heeft u te maken met ernstig overgewicht en overweegt u een maagverkleining? Dan is het goed om te weten wat u allemaal te wachten staat. Als u in aanmerking komt voor behandeling, verandert er veel in uw leven. Betrouwbare, actuele informatie is erg belangrijk. Daarom organiseren wij maandelijks een informatiebijeenkomst over de behandeling van ernstig overgewicht met behulp van een maagverkleinende operatie.</p>
-<p>Tijdens de voorlichting vertellen we u meer over het hele traject en de operatie en beantwoorden we graag al uw vragen. Ook uw partner, vrienden of familie zijn van harte uitgenodigd om een bijeenkomst bij te wonen.</p>';
-
-$hubspotData = get_post_meta( get_the_ID() );
-$eventDate   = Helpers::getDateParts( new DateTime( $hubspotData['aanvangsdatum_en_tijd'][0], new DateTimeZone( 'Europe/Amsterdam' ) ), intval ( $hubspotData['duur'][0] ) );
-$eventData   = array(
-        'soort'       => get_post_type(),
-        'type'        => strtolower( $hubspotData['type'][0] ),
-        'locatie'     => $hubspotData['vestiging'][0],
-        'duur'        => intval($hubspotData['duur'][0]),
-        'intro'       => $hubspotData['intro_kort'][0] ?? '',
-        'intro_lang'  => $hubspotData['intro_lang'][0] ?? $into_lang_default,
-        'onderwerpen' => $hubspotData['onderwerpen'][0] ?? '',
-        'open'        => strtolower($hubspotData['inschrijvingsstatus'][0] ) === 'open',
-);
-$ws          = ' ';
+$hubspotData   = Helpers::setup_hubspot_metadata( get_the_ID() );
 
 ?>
 
     <nok-hero class="nok-section">
         <div class="nok-section__inner nok-hero__inner nok-m-0 nok-border-radius-to-sm-0
+        nok-layout-grid nok-layout-grid__3-column one-fill nok-column-gap-3
 nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10">
 
             <article>
                 <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-2 nok-fs-to-md-1">
-                    Kruimelpad
+                    kruimelpad (todo)
                 </h2>
-                <h1 class="nok-fs-6">
-                    <?= ucfirst( $eventData['soort'] . $ws . ucfirst( $eventData['locatie'] ) ); ?> (<?= $eventData['type']; ?>)
-                </h1>
-                <div class="">
-                    <?= ucfirst( $eventData['intro'] ); ?>
+                <?php printf( '<h1 class="nok-fs-6">%s %s (%s)</h1>',
+                        ucfirst( $hubspotData['soort'] ),
+                        $hubspotData['locatie'],
+                        $hubspotData['type'] );
+                ?>
+                <div>
+                    <?= ucfirst( $hubspotData['intro'] ); ?>
                 </div>
+                <?php
+                if (!$hubspotData['open']) {
+                    echo "<div class='nok-alert nok-bg-greenyellow--lighter nok-p-1 nok-mb-1 nok-rounded-border nok-bg-alpha-10' role='alert'>
+                                <p>Helaas, deze voorlichting is {$hubspotData['status']}! Aanmelden is daarom niet (meer) mogelijk. Kijk bij de alternatieven, of ga naar onze agenda voor meer voorlichtingen.</p>
+                              </div>";
+                }
+                ?>
             </article>
 
         </div>
@@ -52,24 +46,24 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
             <article class="nok-layout-grid nok-layout-grid__3-column fill-one nok-column-gap-3
                         nok-text-darkblue">
 
-                <div class="body-copy nok-order-1 nok-order-lg-0">
-                    <?= Helpers::classFirstP( $eventData['intro_lang'], "fw-bold nok-fs-2" ); ?>
-                    <?php if (!empty($eventData['onderwerpen'])) : ?>
-                    <p>De <?= $eventData['soort'];?> start om <?= $eventDate['start_time']; ?> en duurt ongeveer <?= Helpers::minutesToDutchRounded(intval ( $hubspotData['duur'][0] )); ?>, tot <?= $eventDate['end_time']; ?> uur.
-                    </p>
+                <div class="body-copy baseline-grid nok-order-1 nok-order-lg-0" data-requires="./hnl-baseline-grid.mjs?cache=<?= time(); ?>">
+                    <?= Helpers::classFirstP( $hubspotData['intro_lang'], "fw-bold nok-fs-2" ); ?>
+                    <p>De <?= $hubspotData['soort'];?> start om <?= $hubspotData['timestamp']['start_time']; ?> en duurt ongeveer <?= Helpers::minutesToDutchRounded(intval ( $hubspotData['duur'] )); ?>, tot <?= $hubspotData['timestamp']['end_time']; ?> uur.</p>
+                    <?php if (!empty($hubspotData['onderwerpen'])) : ?>
                     <h2>Onderwerpen</h2>
                     <p>Wat kunt u verwachten van deze voorlichting?</p>
-                    <?= $eventData['onderwerpen']; ?>
+                    <?= $hubspotData['onderwerpen']; ?>
                     <?php endif; ?>
-                    <h2>Wanneer?</h2>
                     <h2>Kosten</h2>
                     <p>
                         Deze voorlichting is gratis.
                     </p>
                     <h2 id="aanmelden">Aanmelden</h2>
                     <?php
-                    if ( function_exists( 'gravity_form' ) ) {
+                    if ( function_exists( 'gravity_form' ) && $hubspotData['open'] ) {
                         gravity_form( 1, false, false );
+                    } else {
+                        echo "<p>Helaas, deze voorlichting is {$hubspotData['status']}! Aanmelden is daarom niet (meer) mogelijk. Kijk bij de alternatieven, of ga naar onze agenda voor meer voorlichtingen.</p>";
                     }
                     ?>
 
@@ -78,22 +72,33 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                 <div class="nok-column-last-1 nok-order-0 nok-order-lg-1 nok-gap-1 nok-layout-flex nok-layout-flex-column nok-align-items-stretch">
                     <nok-square-block class="nok-bg-darkerblue nok-text-contrast nok-alpha-10 nok-pull-up-lg-3" data-shadow="true">
                         <div class="nok-square-block__heading">
-                            <h2 class="nok-text-yellow nok-dark-text-yellow nok-fs-2 nok-fs-to-md-2"><?= ucfirst( $eventData['soort'] ); ?>
-                                (<?= $eventData['type']; ?>)</h2>
-                            <h2><?= $eventDate['niceDateFull']; ?></h2>
-                            <h3 class="fw-normal"><?= $eventDate['start_time'] . ' - ' . $eventDate['end_time']; ?> uur</h3>
+                            <?php
+                            printf('<h2 class="nok-text-yellow nok-dark-text-yellow nok-fs-2 nok-fs-to-md-2">%s (%s)</p>',
+                                    ucfirst( $hubspotData['soort'] ),
+                                    $hubspotData['type']);
+                            printf('<h2>%s %s</h2>',
+                                    Assets::getIcon('calendar'),
+                                    $hubspotData['timestamp']['niceDateFull']);
+                            printf('<h3 class="fw-normal">%s %s</h2>',
+                                    Assets::getIcon('location'),
+                                    ucfirst( $hubspotData['locatie'] ));
+                            printf('<h3 class="fw-normal">%s %s - %s uur</h2>',
+                                    Assets::getIcon('time'),
+                                    $hubspotData['timestamp']['start_time'],
+                                    $hubspotData['timestamp']['end_time']);
+                            ?>
                         </div>
                         <div class="nok-square-block__text nok-fs-1">
 
                             <address>
-                                <span class="location" title="Nederlandse Obesitas Kliniek Venlo" id="location-name">Vestiging <?= ucfirst( $eventData['locatie'] ); ?></span>
+                                <span class="location" title="Nederlandse Obesitas Kliniek Venlo" id="location-name">Vestiging <?= ucfirst( $hubspotData['locatie'] ); ?></span>
                                 <span class="street" id="street">Noorderpoort 9B</span>
                                 <span class="postal-code" id="zipcode">5916 PJ Venlo</span>
                                 <span class="phone" id="phone"><a href="tel:077 - 303 06 30" class="nok-hyperlink">077 - 303 06 30</a></span>
                             </address>
                         </div>
                         <a role="button" href="#aanmelden" class="nok-button nok-justify-self-start w-100
-                nok-base-font nok-bg-yellow nok-text-contrast" tabindex="0">
+                nok-base-font nok-bg-yellow nok-text-contrast <?= $hubspotData['open'] ? '' : 'disabled'; ?>" tabindex="0">
                             Aanmelden
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 12 12" width="12" height="12"
                                  stroke="currentColor"
@@ -102,7 +107,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                             </svg>
                         </a>
                         <a role="button" href="" class="nok-button nok-justify-self-start w-100
-                nok-base-font nok-bg-lightgrey--lighter nok-text-contrast" tabindex="0">
+                nok-base-font nok-bg-lightgrey--lighter nok-text-contrast <?= $hubspotData['open'] ? '' : 'disabled'; ?>" tabindex="0">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 12 12" width="12" height="12"
                                  stroke="currentColor"
                                  style="stroke-linecap: round; stroke-linejoin: round;">
@@ -123,5 +128,17 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
     </nok-section>
 
 <?php
+print '<pre style="max-height: 20vh; overflow: scroll; font-size:0.7rem; line-height: 1;">';
+var_dump($hubspotData['data_raw']);
+print '</pre>';
+?>
+
+<?php
+
+get_template_part( 'template-parts/post-parts/nok-voorlichtingen-carousel', null, $args = array(
+        'colors' => 'nok-bg-darkblue nok-text-white nok-dark-bg-darkerblue',
+) );
+
 get_footer();
+
 ?>

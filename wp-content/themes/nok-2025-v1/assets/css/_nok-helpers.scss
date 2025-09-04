@@ -618,6 +618,7 @@ $utilities: (
 %pull-up {
   margin-top: calc((-1 * var(--pull-amount, 0)) * var(--nok-spacing-section-ends, 0));
 }
+
 [class*="#{nok-variables.$prefix}-pull-up"] {
   @extend %pull-up;
 }

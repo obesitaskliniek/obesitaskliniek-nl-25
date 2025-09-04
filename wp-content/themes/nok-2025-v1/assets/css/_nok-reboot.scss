@@ -338,9 +338,16 @@ img,
 svg {
   vertical-align: middle;
 }
+h1,h2,h3,h4,h5,h6,p,span {
+  > svg {
+    width: 1rem;
+    height: 1rem;
+    vertical-align: middle;
+  }
+}
 
 /* Improve media defaults */
-img, picture, video, canvas, svg {
+img, picture, video, canvas {
   display: block;
   max-width: 100%;
 }
