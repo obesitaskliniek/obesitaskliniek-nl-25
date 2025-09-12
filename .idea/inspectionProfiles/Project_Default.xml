@@ -15,7 +15,7 @@
     <inspection_tool class="HtmlUnknownTag" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="39">
+          <list size="44">
             <item index="0" class="java.lang.String" itemvalue="nobr" />
             <item index="1" class="java.lang.String" itemvalue="noembed" />
             <item index="2" class="java.lang.String" itemvalue="comment" />
@@ -55,6 +55,11 @@
             <item index="36" class="java.lang.String" itemvalue="nok-block-group" />
             <item index="37" class="java.lang.String" itemvalue="nok-accordions" />
             <item index="38" class="java.lang.String" itemvalue="nok-accordion" />
+            <item index="39" class="java.lang.String" itemvalue="nok-popup" />
+            <item index="40" class="java.lang.String" itemvalue="nok-popup-header" />
+            <item index="41" class="java.lang.String" itemvalue="nok-popup-title" />
+            <item index="42" class="java.lang.String" itemvalue="nok-popup-body" />
+            <item index="43" class="java.lang.String" itemvalue="nok-bmi-calculator" />
           </list>
         </value>
       </option>

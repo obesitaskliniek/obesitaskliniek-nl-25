@@ -4,7 +4,7 @@
 
 // Collapsible accordion component using native <details> element
 $timing: 0,1,.9,1;
-$duration: 500ms;
+$duration: components-base.$animation-duration;
 
 nok-accordion {
   --animation-timing: cubic-bezier(#{$timing});
