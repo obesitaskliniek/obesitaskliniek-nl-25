@@ -76,9 +76,9 @@ nok-top-navigation {
     }
   }
 
-  /* Open state */
+  /* Open states */
 
-  &.open {
+  &.open, &.popup-open {
     touch-action: none;
 
     nok-screen-mask {
@@ -89,7 +89,14 @@ nok-top-navigation {
       --bg-alpha-value: 0.5;
       pointer-events: all;
     }
+  }
+  &.popup-open {
+    nok-screen-mask {
+      --z-base: #{components-base.$z-stack-top - 1};
+    }
+  }
 
+  &.open {
     .nok-nav-menu-toggler.nok-button-menu {
       svg {
         transform: rotate(-180deg);

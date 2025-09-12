@@ -31,7 +31,8 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                 <?php
                 if (!$hubspotData['open']) {
                     echo "<div class='nok-alert nok-bg-greenyellow--lighter nok-p-1 nok-mb-1 nok-rounded-border nok-bg-alpha-10' role='alert'>
-                                <p>Helaas, deze voorlichting is {$hubspotData['status']}! Aanmelden is daarom niet (meer) mogelijk. Kijk bij de alternatieven, of ga naar onze agenda voor meer voorlichtingen.</p>
+                                <p>Helaas, deze voorlichting is {$hubspotData['status']}! Aanmelden is daarom niet (meer) mogelijk. Kijk bij de <a class='nok-hyperlink' href='#alternatieven'>alternatieven</a>, 
+                                of ga naar onze <a class='nok-hyperlink' href='#'>agenda</a> <a href='#'>agenda</a> <a href='#'>agenda</a> voor meer voorlichtingen.</p>
                               </div>";
                 }
                 ?>
@@ -43,10 +44,9 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
     <nok-section>
         <div class="nok-section__inner">
 
-            <article class="nok-layout-grid nok-layout-grid__3-column fill-one nok-column-gap-3
-                        nok-text-darkblue">
+            <article class="nok-layout-grid nok-layout-grid__3-column fill-one nok-column-gap-3">
 
-                <div class="body-copy baseline-grid nok-order-1 nok-order-lg-0" data-requires="./hnl-baseline-grid.mjs?cache=<?= time(); ?>">
+                <div class="body-copy baseline-grid nok-order-1 nok-order-lg-0" data-requires="./modules/hnl.baseline-grid.mjs?cache=<?= time(); ?>">
                     <?= Helpers::classFirstP( $hubspotData['intro_lang'], "fw-bold nok-fs-2" ); ?>
                     <p>De <?= $hubspotData['soort'];?> start om <?= $hubspotData['timestamp']['start_time']; ?> en duurt ongeveer <?= Helpers::minutesToDutchRounded(intval ( $hubspotData['duur'] )); ?>, tot <?= $hubspotData['timestamp']['end_time']; ?> uur.</p>
                     <?php if (!empty($hubspotData['onderwerpen'])) : ?>
@@ -63,7 +63,8 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                     if ( function_exists( 'gravity_form' ) && $hubspotData['open'] ) {
                         gravity_form( 1, false, false );
                     } else {
-                        echo "<p>Helaas, deze voorlichting is {$hubspotData['status']}! Aanmelden is daarom niet (meer) mogelijk. Kijk bij de alternatieven, of ga naar onze agenda voor meer voorlichtingen.</p>";
+                        echo "<p>Helaas, deze voorlichting is {$hubspotData['status']}! Aanmelden is daarom niet (meer) mogelijk. Kijk bij de <a class='nok-hyperlink' href='#alternatieven'>alternatieven</a>, 
+                        of ga naar onze <a class='nok-hyperlink' href='#'>agenda</a> voor meer voorlichtingen.</p>";
                     }
                     ?>
 

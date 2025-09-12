@@ -1,0 +1,96 @@
+@use "shared" as components-base;
+
+// Screen Mask - Used to 'dim' the background when a modal/menu is open
+
+nok-bmi-calculator {
+
+  --color-1: #FFC425;
+  --color-2: #4CAF50;
+  --color-3: #CDDC39;
+  --color-4: #FF9800;
+  --color-5: #D32F2F;
+
+  .calculator-input label {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+
+
+
+    /********** Range Input Styles **********/
+
+    input[type="range"] {
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+      width: 100%;
+      flex-basis: 100%;
+
+      /*
+      &:focus {
+        outline: none;
+      }
+
+      @mixin track() {
+        background-color: #053a5f;
+        border-radius: 0.5rem;
+        height: 0.5rem;
+      }
+      @mixin thumb() {
+        @include components-base.nok-border-radius($overflowHidden: false);
+        box-shadow: 4px 3px 0 0 hsl(0deg 0% 0% / 7%);
+        background-color: #FFF;
+        height: 2rem;
+        width: 1rem;
+      }
+      @mixin focusThumb() {
+        background-color: #FFF8;
+        @include components-base.nok-focus-ring;
+      }
+
+      //Chrome, Safari, Opera and Edge Chromium track
+      &::-webkit-slider-runnable-track {
+        @include track();
+      }
+      &#BMISlider::-webkit-slider-runnable-track {
+        background-image: var(--bmi-gradient);
+      }
+
+      //Firefox track
+      &::-moz-range-track {
+        @include track();
+      }
+      &#BMISlider::-moz-range-track {
+        background-image: var(--bmi-gradient);
+      }
+
+      //Chrome, Safari, Opera and Edge Chromium thumb
+      &::-webkit-slider-thumb {
+        appearance: none;
+        margin-top: -12px;
+        @include thumb();
+      }
+
+      &:focus::-webkit-slider-thumb {
+        @include focusThumb();
+      }
+
+      //Firefox thumb
+      &::-moz-range-thumb {
+        border: none;
+        border-radius: 0;
+        @include thumb();
+      }
+
+      &:focus::-moz-range-thumb {
+        @include focusThumb();
+      }
+      //*/
+    }
+    //*/
+
+
+  }
+}

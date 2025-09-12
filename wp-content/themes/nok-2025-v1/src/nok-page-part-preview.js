@@ -98,10 +98,11 @@ domReady(() => {
     // Function to load initial preview
     const loadInitialPreview = () => {
         if (!hasLoadedInitialPreview) {
-            hnlLogger.info(NAME, 'Loading initial preview');
-
             const postId = wp.data.select('core/editor').getCurrentPostId();
             const previewLink = wp.data.select('core/editor').getEditedPostPreviewLink();
+
+            hnlLogger.info(NAME, 'Loading initial preview');
+            hnlLogger.info(NAME, `src: ${previewLink}`);
 
             if (previewLink && !previewLink.includes('auto-draft')) {
                 iframe.removeAttribute('srcdoc');

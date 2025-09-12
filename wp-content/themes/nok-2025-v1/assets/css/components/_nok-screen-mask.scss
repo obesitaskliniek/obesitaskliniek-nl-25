@@ -3,6 +3,12 @@
 // Screen Mask - Used to 'dim' the background when a modal/menu is open
 
 nok-screen-mask {
+  z-index: var(--z-base);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
   position: fixed;
   z-index: 1;
   pointer-events: none;
@@ -12,7 +18,9 @@ nok-screen-mask {
     display: none;
   }
   @include components-base.transition-properties(opacity) {
-    //animation: fade--in .5s ease-in-out;
-    transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out;
+    transition:
+      background #{components-base.$animation-duration} ease-in-out,
+      backdrop-filter #{components-base.$animation-duration} ease-in-out;
+
   }
 }

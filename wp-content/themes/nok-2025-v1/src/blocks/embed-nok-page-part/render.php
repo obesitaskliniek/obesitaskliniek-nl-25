@@ -27,7 +27,15 @@ return function( array $attributes ): string {
 		'post' => $post,
 		'page_part_fields' => $page_part_fields
 	];
+
+	//Enqueue any part-specific CSS files we find
+	$css_uri = "/template-parts/page-parts/{$design}.css";
+	if ( file_exists( THEME_ROOT_ABS . $css_uri ) ) {
+		wp_enqueue_style( $design, THEME_ROOT . $css_uri, array(), filemtime(THEME_ROOT_ABS . $css_uri), false);
+	}
+
 	ob_start();
+	//This is the actual frontend rendering!
 	$theme_instance->include_page_part_template( $design, [
 		'post' => $post,
 		'page_part_fields' => $page_part_fields

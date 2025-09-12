@@ -36,7 +36,7 @@ final class Theme {
 
 		// Assets
 		add_action( 'wp_enqueue_scripts', [ $this, 'frontend_assets' ] );
-		add_action( 'enqueue_block_editor_assets', [ $this, 'backend_assets' ] );
+		//add_action( 'enqueue_block_editor_assets', [ $this, 'backend_assets' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_assets' ] );
 		add_action( 'admin_head', [ $this, 'custom_editor_inline_styles' ] );
 
@@ -108,12 +108,14 @@ final class Theme {
 	public function backend_assets(): void {
 		$parts = $this->get_page_part_registry();
 
+		//Slated for removal: any assets queued here will not affect anything shown in the page part preview frames!
 		foreach ( $parts as $slug => $meta ) {
-			$css_file = THEME_ROOT_ABS . "/template-parts/page-parts/{$meta['slug']}.css";
+			$css_file = THEME_ROOT_ABS . "/template-parts/page-parts/{$meta['slug']}.preview.css";
 			if ( file_exists( $css_file ) ) {
+				var_dump($css_file);
 				wp_enqueue_style(
 					$meta['slug'],
-					THEME_ROOT . "/template-parts/page-parts/{$meta['slug']}.css",
+					THEME_ROOT . "/template-parts/page-parts/{$meta['slug']}.preview.css",
 					[],
 					filemtime( $css_file )
 				);
@@ -833,6 +835,7 @@ final class Theme {
 
 	/**
 	 * REST API callback for embedding page parts
+	 * Only runs in the backend when editing a PAGE, embedding page parts
 	 */
 	public function embed_page_part_callback( \WP_REST_Request $request ) {
 		$id   = (int) $request->get_param( 'id' );
@@ -881,17 +884,19 @@ final class Theme {
 		}
 
 		$css_uris = [
-			get_stylesheet_directory_uri() . '/assets/css/nok-components.css',
-			get_stylesheet_directory_uri() . '/assets/css/color_tests-v2.css',
-			get_stylesheet_directory_uri() . "/template-parts/page-parts/{$design}.css",
-			get_stylesheet_directory_uri() . '/assets/css/nok-page-parts-editor-styles.css',
+			'/assets/css/nok-components.css',
+			'/assets/css/color_tests-v2.css',
+			"/template-parts/page-parts/{$design}.preview.css",
+			'/assets/css/nok-page-parts-editor-styles.css',
 		];
 
 		header( 'Content-Type: text/html; charset=utf-8' );
 
 		$html = '<!doctype html><html><head><meta charset="utf-8">';
 		foreach ( $css_uris as $uri ) {
-			$html .= '<link rel="stylesheet" href="' . esc_url( $uri ) . '">';
+			if ( file_exists( THEME_ROOT_ABS . $uri ) ) {
+				$html .= '<link rel="stylesheet" href="' . esc_url( THEME_ROOT . $uri ) . '">';
+			}
 		}
 
 		$edit_link = admin_url( "post.php?post={$id}&action=edit" );

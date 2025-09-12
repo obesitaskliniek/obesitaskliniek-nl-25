@@ -24,7 +24,6 @@ button,
   font-weight: 500;
   font-size: var(--#{components-base.$prefix}-font-size-buttons, 1.25rem);
   line-height: 1.5;
-  text-decoration: none;
 
   background-color: var(--bg-color, inherit);
   color: var(--bg-color--contrast, var(--text-color, inherit));
@@ -39,6 +38,9 @@ button,
   user-select: none;
   touch-action: manipulation; //prevents double tap zoom on mobile
 
+  &, &:hover, &:focus, &:active, &.active, &:focus-visible {
+    text-decoration: none;
+  }
   &:hover, &:focus, &:active, &.active, &:focus-visible {
     border-color: #8882;
   }

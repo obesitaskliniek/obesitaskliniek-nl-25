@@ -46,7 +46,7 @@
 // * @param {String} $size - The size of the border-radius. Options: 'default', 'large', 'x-large', 'xx-large'.
 // * @param {String} $position - The position to apply the border-radius. Options: 'all', 'bottom', 'top', 'left', 'right'.
 // */
-@mixin nok-border-radius($size: 'default', $position: 'all') {
+@mixin nok-border-radius($size: 'default', $position: 'all', $overflowHidden: true) {
   // Determine border-radius based on size
   $radius: var(--nok-default-border-radius, 0.4rem);
 
@@ -60,7 +60,9 @@
     $radius: calc(var(--nok-default-border-radius--xx-large, 1rem) * 4);
   }
 
-  overflow: hidden;
+  @if $overflowHidden {
+    overflow: hidden;
+  }
   // Apply border-radius based on position
   @if $position == 'all' {
     border-radius: $radius;
@@ -83,6 +85,7 @@
     transition: box-shadow (nok-variables.$animation-duration * 2) cubic-bezier(0.16, 1, 0.3, 1);
   }
 }
+
 @mixin nok-invalid-ring($outline: true, $width: 2px) {
   box-shadow: 0 0 0px if($outline, $width * 2, $width) var(--nok-error);
   outline: if($outline, $width solid #FFF, none);
@@ -109,9 +112,10 @@
 // */
 @mixin nok-inline-link {
   --active-color: #000;
-  --hover-transition-time: math.div(nok-variables.$animation-duration, 2);
-  --hover-color: var(--text-color--hover, inherit);
+  --hover-transition-time: #{math.div(nok-variables.$animation-duration, 2)};
+  --hover-color: var(--text-color--hover, var(--bg-color--contrast, inherit));
   --underline-height: 0.25ex;
+  --padding: 0.35ex;
   //noinspection CssInvalidFunction
   --gradient: linear-gradient(
                   transparent 0%,
@@ -123,19 +127,26 @@
 
   //font-size: var(--nok-font-size-buttons, 1.25rem);
   text-decoration: none;
-  padding: .35ex;
+  text-decoration-line: none;
+
+  position: relative;
+  padding: var(--padding);
+  margin: auto calc(-1 * var(--padding));
+  bottom: calc(-0.25 * (var(--padding)));
 
   background-image: var(--gradient);
   background-size: 100% 200%;
   background-repeat: no-repeat;
   background-position: 0 0;
 
-  transition: background-position var(--hover-transition-time) ease-out;
-
+  @include transition-properties(background-position) {
+    transition: background-position var(--hover-transition-time) ease-out;
+  }
   &:hover {
     --underline-color: var(--hover-color);
     color: var(--hover-color);
     background-position: 0 calc(-1 * var(--underline-height));
+    text-decoration-line: none;
   }
   &:active,
   &:hover:focus:not(:focus-visible) {
@@ -150,6 +161,103 @@
 
   svg, img {
     display: inline;
+  }
+}
+
+//V2 iteration, using native text-underline and text-decoration properties
+//if $underline-grow-inverse is true, the underline 'grows' upwards instead of downwards
+@mixin nok-inline-link-v2($underline-grow-inverse: false) {
+
+  @at-root {
+    @property --text-decoration-thickness {
+      syntax: '<length>';
+      inherits: false;
+      initial-value: 0px;
+    }
+  }
+
+  --padding: 0.4ex;
+  --underline-offset: 0.1ex;
+
+  --transition-time: #{math.div(nok-variables.$animation-duration, 2)};
+  --padding-y: calc(.75 * var(--padding));
+  --underline-color: var(--text-color, var(--bg-color--contrast, inherit));
+  --underline-color--active: var(--text-color--contrast, var(--bg-color, inherit));
+  --text-decoration-thickness: .25ex;
+  --text-decoration-thickness-hover: .5ex;
+
+  padding: var(--padding-y) var(--padding);
+  margin: auto calc(-1 * var(--padding));
+
+  @if ($underline-grow-inverse) {
+    text-underline-offset: calc((var(--padding-y) - var(--text-decoration-thickness)) + var(--underline-offset));
+  } @else {
+    text-underline-offset: calc((var(--padding-y) - var(--text-decoration-thickness-hover)) + var(--underline-offset));
+  }
+  text-decoration-line: underline;
+  text-decoration-skip-ink: auto;
+  text-underline-position: under;
+
+  background-image: linear-gradient(var(--underline-color), var(--underline-color));
+  background-size: 100% 200%;
+  background-repeat: no-repeat;
+  background-position: 0 -200%;
+
+  &, &:hover {
+    text-decoration-thickness: var(--text-decoration-thickness);
+  }
+
+  &:hover {
+    --text-decoration-thickness: var(--text-decoration-thickness-hover);
+    text-decoration-line: underline;
+    text-decoration-skip-ink: none;
+    @supports not (background: paint(something)) {
+      text-decoration-thickness: var(--text-decoration-thickness-hover);
+    }
+  }
+
+  &:active,
+  &:hover:focus:not(:focus-visible) {
+    color: var(--underline-color--active);
+    text-decoration: none;
+    background-position: 0 0;
+    @include nok-border-radius;
+  }
+
+  &:focus-visible { // focus state by other input method than mouse
+    @include nok-border-radius;
+    @include nok-focus-ring;
+  }
+
+  svg, img {
+    display: inline;
+  }
+
+  @include transition-properties {
+    @supports not (background: paint(something)) {
+      @if ($underline-grow-inverse) {
+        transition: text-decoration-thickness var(--transition-time) ease-in-out,
+        text-underline-offset var(--transition-time) ease-in-out,
+        background-position var(--transition-time) ease-out,
+        color var(--transition-time) ease-out;
+      } @else {
+        transition: text-decoration-thickness var(--transition-time) ease-in-out,
+        background-position var(--transition-time) ease-out,
+        color var(--transition-time) ease-out;
+      }
+    }
+    @supports (background: paint(something)) {
+      @if ($underline-grow-inverse) {
+        transition: --text-decoration-thickness var(--transition-time) ease-in-out,
+        text-underline-offset var(--transition-time) ease-in-out,
+        background-position var(--transition-time) ease-out,
+        color var(--transition-time) ease-out;
+      } @else {
+        transition: --text-decoration-thickness var(--transition-time) ease-in-out,
+        background-position var(--transition-time) ease-out,
+        color var(--transition-time) ease-out;
+      }
+    }
   }
 }
 
@@ -411,7 +519,7 @@
 // */
 @mixin transition-properties($property-hint: null) {
   @if ($property-hint) {
-    will-change: $property-hint;
+    will-change: unquote($property-hint);
   }
   @media (prefers-reduced-motion: no-preference) {
     @at-root body.__enable-transitions &, body.no-js & {

@@ -109,11 +109,13 @@
 
 @for $i from 1 through 9 {
   .#{nok-variables.$prefix}-z-#{$i} {
-    z-index: #{$i};
+    --z-base: #{$i};
+    z-index: var(--z-base, $i);
   }
 }
 
 .#{nok-variables.$prefix}-z-top {
+  --z-base: #{nok-variables.$z-stack-top};
   z-index: nok-variables.$z-stack-top;
 }
 
