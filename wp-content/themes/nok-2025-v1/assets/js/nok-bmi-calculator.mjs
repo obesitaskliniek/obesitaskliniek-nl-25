@@ -34,6 +34,7 @@
  */
 
 import {debouncedEvent} from "./modules/hnl.debounce.mjs";
+
 /**
  * BMI cutoff values for classification.
  * Adults use WHO standard thresholds, children use IOTF age-specific percentiles.
@@ -46,7 +47,7 @@ import {debouncedEvent} from "./modules/hnl.debounce.mjs";
  * @property {Object} children.boys - BMI cutoffs for boys aged 2-18
  */
 const CUTOFFS = {
-    adults: [18.5, 25, 30, 40],
+    adults: [18.5, 25, 30, 35, 40],
     children: {
         girls: {
             2: [14.74, 18, 19.8, 23.4], 3: [14.38, 17.6, 19.4, 23.2], 4: [14.15, 17.3, 19.2, 23.5],
@@ -70,15 +71,15 @@ const CUTOFFS = {
 const BOUNDS = {
     height: {
         min: 80,
-        max: 250
+        max: 220
     },
     weight: {
         min: 10,
-        max: 500
+        max: 300
     },
     bmi: {
-        min: 10,
-        max: 80
+        min: 15,
+        max: 60
     },
 }
 
@@ -118,7 +119,7 @@ function validateInputs(params) {
     }
 
     if (params.bmi !== undefined) {
-        if (params.bmi <  BOUNDS.bmi.min) {
+        if (params.bmi < BOUNDS.bmi.min) {
             warnings.push(`BMI ${params.bmi.toFixed(1)} below clinical range (min: ${BOUNDS.bmi.min})`);
         }
         if (params.bmi > BOUNDS.bmi.max) {
@@ -166,10 +167,12 @@ function validateInputs(params) {
  * console.log(`Min healthy weight: ${underweight.healthyWeightRange.min.toFixed(1)}kg`);
  */
 function calculate(height, weight, bmi = null) {
-    validateInputs({ height: height, weight: weight });
+    validateInputs({height: height, weight: weight});
     bmi = bmi ?? weight / Math.pow(height / 100, 2);
 
-    const round = (int) => { return Math.round(int * 10) / 10; }
+    const round = (int) => {
+        return Math.round(int * 10) / 10;
+    }
     return {
         height: round(height),
         weight: round(bmi ? weightFromBMI(bmi, height) : weight),
@@ -218,7 +221,7 @@ function healthyWeightRange(height, cutoffs, currentWeight) {
     const min = cutoffs[0] * heightM2;
     const max = cutoffs[1] * heightM2;
 
-    const result = { min: min, max: max };
+    const result = {min: min, max: max};
 
     if (currentWeight !== null) {
         result.current = currentWeight;
@@ -260,12 +263,13 @@ function healthyWeightRange(height, cutoffs, currentWeight) {
  */
 function classify(bmi) {
     const cutoffs = CUTOFFS.adults;
-    const labels = ['Underweight', 'Normal', 'Overweight', 'Obese Class I', 'Obese Class II+'];
-    const risks = ['low', 'normal', 'increased', 'high', 'very-high'];
+    const labels = ['Ondergewicht', 'Normal', 'Overgewicht', 'Obesitas Klasse I', 'Obesitas Klasse II', 'Obesitas Klasse III'];
+    const risks = ['matig verhoogd', 'normaal', 'licht verhoogd', 'matig verhoogd', 'sterk verhoogd', 'extreem verhoogd'];
+    const classifications = ['ondergewicht', 'een normaal gewicht', 'overgewicht', 'obesitas (klasse I)', 'ernstige obesitas (klasse II)', 'zeer ernstige obesitas (klasse III)'];
 
     let index = -1;
     for (let i = 0; i < cutoffs.length; i++) {
-        if (bmi < cutoffs[i]) {
+        if (bmi <= cutoffs[i]) {
             index = i;
             break;
         }
@@ -276,6 +280,7 @@ function classify(bmi) {
         index: index,
         label: labels[index],
         risk: risks[index],
+        classification: classifications[index],
         nearBoundary: isNearBoundary(bmi, cutoffs, index)
     };
 }
@@ -340,13 +345,13 @@ function checkTreatmentEligibility(bmi) {
 function isNearBoundary(bmi, cutoffs, currentIndex) {
     const lower = currentIndex > 0 &&
         (bmi - cutoffs[currentIndex - 1] <= 1) &&
-        (bmi > cutoffs[currentIndex - 1]);
+        (bmi >= cutoffs[currentIndex - 1]);
 
     const upper = currentIndex < cutoffs.length &&
         (cutoffs[currentIndex] - bmi <= 1) &&
-        (bmi < cutoffs[currentIndex]);
+        (bmi <= cutoffs[currentIndex]);
 
-    return { lower: lower, upper: upper };
+    return {lower: lower, upper: upper};
 }
 
 /**
@@ -400,7 +405,7 @@ function getChildCutoffs(age, gender) {
  * console.log(bmi.toFixed(1)); // "22.9"
  */
 function calculateBMI(height, weight) {
-    validateInputs({ height: height, weight: weight });
+    validateInputs({height: height, weight: weight});
     return weight / Math.pow(height / 100, 2);
 }
 
@@ -416,7 +421,7 @@ function calculateBMI(height, weight) {
  * console.log(targetWeight.toFixed(1)); // "71.3"
  */
 function weightFromBMI(bmi, height) {
-    validateInputs({ bmi: bmi, height: height });
+    validateInputs({bmi: bmi, height: height});
     return bmi * Math.pow(height / 100, 2);
 }
 
@@ -432,48 +437,54 @@ function weightFromBMI(bmi, height) {
  * console.log(targetHeight.toFixed(1)); // "178.9"
  */
 function heightFromBMI(bmi, weight) {
-    validateInputs({ bmi: bmi, weight: weight });
+    validateInputs({bmi: bmi, weight: weight});
     return Math.sqrt(weight / bmi) * 100;
 }
 
 
+const BMIColors = [
+    'var(--color-1, #FFC425)', // Underweight (< 18.5)
+    'var(--color-2, #4CAF50)', // Normal (18.5 - 25)
+    'var(--color-3, #CDDC39)', // Overweight (25 - 30)
+    'var(--color-4, #FF9800)', // Obese Class I (30 - 40)
+    'var(--color-5, #ff6f00)', // Obese Class II (35 - 40)
+    'var(--color-6, #D32F2F)'  // Obese Class III (> 40)
+];
+
+function maptoBMIRange(arr, value) {
+    const index = arr.findIndex(element => element >= value);
+    return index === -1 ? arr.length : index;
+}
+
 /**
  * Generate CSS linear gradient based on BMI cutoffs and color palette
  * @param {number[]} cutoffs - BMI cutoff values
- * @param {string[]} colors - Color palette to map across cutoffs
  * @returns {string} CSS linear gradient string
  */
 function generateBMIGradient(container, cutoffs = CUTOFFS.adults, minBMI = 15, maxBMI = 45) {
-    const colors = [
-        'var(--color-1, #FFC425)', // Underweight (< 18.5)
-        'var(--color-2, #4CAF50)', // Normal (18.5 - 25)
-        'var(--color-3, #CDDC39)', // Overweight (25 - 30)
-        'var(--color-4, #FF9800)', // Obese Class I (30 - 40)
-        'var(--color-5, #D32F2F)'  // Obese Class II+ (> 40)
-    ];
 
-    maxBMI = parseInt(maxBMI) - 2; //slight compensation for thumb alignment
+    //maxBMI = parseInt(maxBMI) - 2; //slight compensation for thumb alignment
     const range = maxBMI - minBMI;
     const gradientStops = [];
 
     // Start with first color from beginning
-    gradientStops.push(`${colors[0]} 0%`);
+    gradientStops.push(`${BMIColors[0]} 0%`);
 
     // Create sharp transitions at each cutoff
     cutoffs.forEach((cutoff, index) => {
         const percentage = ((cutoff - minBMI) / range * 100).toFixed(2);
 
         // End current color just before cutoff
-        gradientStops.push(`${colors[index]} ${percentage}%`);
+        gradientStops.push(`${BMIColors[index]} ${percentage}%`);
 
         // Start next color immediately at cutoff
-        if (index + 1 < colors.length) {
-            gradientStops.push(`${colors[index + 1]} ${percentage}%`);
+        if (index + 1 < BMIColors.length) {
+            gradientStops.push(`${BMIColors[index + 1]} ${percentage}%`);
         }
     });
 
     // End with final color
-    gradientStops.push(`${colors[colors.length - 1]} 100%`);
+    gradientStops.push(`${BMIColors[BMIColors.length - 1]} 100%`);
 
     container.style.setProperty('--bmi-gradient', `linear-gradient(to right, ${gradientStops.join(', ')})`);
     return true;
@@ -489,7 +500,9 @@ function createGUIController(container) {
     let isUpdating = false;
     let lastResults = {}; // Cache for comparison
 
-    const updateInputs = (result) => {
+    let updateQueue = Promise.resolve();
+
+    const updateInputs = (result, finalUpdate) => {
         ['height', 'weight', 'bmi'].forEach(type => {
             const group = state.get(type);
             const newValue = result[type];
@@ -499,65 +512,261 @@ function createGUIController(container) {
 
             if (group && group.inputs) {
                 group.inputs.forEach(input => {
+                    if (type === 'bmi') {
+                        container.style.setProperty('--bmi-classification-color', BMIColors[maptoBMIRange(CUTOFFS.adults, newValue)])
+                    }
                     if (parseFloat(input.value) !== newValue) {
                         input.value = newValue;
                     }
                 });
             }
         });
-        lastResults = { ...result }; // Cache for next comparison
+
+        container.classList.toggle('calculating', !finalUpdate);
+
+        if (finalUpdate) {
+            console.log(result);
+            // Update container classes based on BMI category and treatment eligibility
+            updateContainerClasses(container, result);
+
+            // Update health range display elements
+            updateConclusionEntries(container, result);
+        }
+
+        lastResults = {...result}; // Cache for next comparison
     };
 
-    const updateCalculation = (changedType) => {
-        if (isUpdating) return;
-        isUpdating = true;
-
-        try {
-            const values = {
-                height: state.get('height')?.value || 0,
-                weight: state.get('weight')?.value || 0,
-                bmi: state.get('bmi')?.value || 0
-            };
-
-            const validValue = (val) => val && !isNaN(val) && isFinite(val) && val > 0;
-
-            // Validation logic
-            const heightValid = validValue(values.height);
-            const weightValid = validValue(values.weight);
-            const bmiValid = validValue(values.bmi);
-
-            const canCalculate = changedType === 'bmi'
-                ? bmiValid && (heightValid || weightValid)
-                : heightValid && weightValid;
-
-            if (canCalculate) {
-                const result = calculate(
-                    values.height,
-                    values.weight,
-                    changedType !== 'bmi' ? null : values.bmi
-                );
-
-                // Update state
-                ['height', 'weight', 'bmi'].forEach(type => {
-                    const group = state.get(type);
-                    if (group && validValue(result[type])) {
-                        group.value = result[type];
-                    }
-                });
-
-                updateInputs(result);
-                container.classList.remove('invalid-inputs');
-                return result; // Return for external use
-            } else {
-                container.classList.add('invalid-inputs');
-                return null;
+    const updateCalculation = (changedType, finalUpdate = false) => {
+        // Queue this update to prevent race conditions
+        updateQueue = updateQueue.then(async () => {
+            if (isUpdating) {
+                // Wait briefly and retry instead of dropping
+                await new Promise(resolve => setTimeout(resolve, 10));
+                return updateCalculation(changedType, finalUpdate);
             }
-        } finally {
-            isUpdating = false;
-        }
+
+            isUpdating = true;
+
+            try {
+                const values = {
+                    height: state.get('height')?.value || 0,
+                    weight: state.get('weight')?.value || 0,
+                    bmi: state.get('bmi')?.value || 0
+                };
+
+                const validValue = (val) => val && !isNaN(val) && isFinite(val) && val > 0;
+
+                const heightValid = validValue(values.height);
+                const weightValid = validValue(values.weight);
+                const bmiValid = validValue(values.bmi);
+
+                const canCalculate = changedType === 'bmi'
+                    ? bmiValid && (heightValid || weightValid)
+                    : heightValid && weightValid;
+
+                if (canCalculate) {
+                    const result = calculate(
+                        values.height,
+                        values.weight,
+                        changedType !== 'bmi' ? null : values.bmi
+                    );
+
+                    // Update state
+                    ['height', 'weight', 'bmi'].forEach(type => {
+                        const group = state.get(type);
+                        if (group && validValue(result[type])) {
+                            group.value = result[type];
+                        }
+                    });
+
+                    // Update GUI, with optional flag for final update
+                    updateInputs(result, finalUpdate);
+
+                    container.classList.remove('invalid-inputs');
+                    return result;
+                } else {
+                    container.classList.add('invalid-inputs');
+                    return null;
+                }
+            } finally {
+                isUpdating = false;
+            }
+        });
+
+        return updateQueue;
     };
 
     return { state, updateCalculation, isUpdating: () => isUpdating };
+}
+
+/**
+ * Update container CSS classes based on calculation results
+ * @param {HTMLElement} container - Container element
+ * @param {Object} result - Calculation result object
+ */
+function updateContainerClasses(container, result) {
+    const { category, treatmentEligible } = result;
+
+    // Remove existing category classes
+    container.classList.remove(
+        'bmi-ondergewicht', 'bmi-normaal', 'bmi-overgewicht',
+        'bmi-obesitas-1', 'bmi-obesitas-2', 'bmi-obesitas-3', 'bmi-ongeldig'
+    );
+
+    // Remove existing treatment classes
+    container.classList.remove('behandeling-nok-clinics', 'behandeling-nok-regulier');
+
+    // Add current category class
+    const categoryClasses = [
+        'bmi-ondergewicht',  // index 0
+        'bmi-normaal',       // index 1
+        'bmi-overgewicht',   // index 2
+        'bmi-obesitas-1',      // index 3
+        'bmi-obesitas-2',      // index 4
+        'bmi-obesitas-3'       // index 5
+    ];
+
+    if (category && categoryClasses[category.index]) {
+        container.classList.add(categoryClasses[category.index]);
+    } else {
+        container.classList.add('bmi-ongeldig');
+    }
+
+    // Add treatment eligibility classes
+    if (treatmentEligible?.nokClinics) {
+        container.classList.add('behandeling-nok-clinics');
+    }
+    if (treatmentEligible?.regular) {
+        container.classList.add('behandeling-nok-regulier');
+    }
+    //container.classList.toggle(`near-lower-boundary-for-${categoryClasses[category.index]}`, category?.nearBoundary.lower);
+    //container.classList.toggle(`near-upper-boundary-for-${categoryClasses[category.index]}`, category?.nearBoundary.upper);
+    container.classList.toggle(`near-lower-boundary`, category?.nearBoundary.lower);
+    container.classList.toggle(`near-upper-boundary`, category?.nearBoundary.upper);
+}
+
+/**
+ * Get nested object value using dot notation path
+ * @param {Object} obj - Source object
+ * @param {string} path - Dot notation path (e.g., "category.label")
+ * @returns {*} Value at path or undefined if not found
+ */
+function getNestedValue(obj, path) {
+    return path.split('.').reduce((current, key) => {
+        return current?.[key];
+    }, obj);
+}
+
+/**
+ * Format value for display based on type and context
+ * @param {*} value - Raw value to format
+ * @param {string} property - Property name for context-specific formatting
+ * @param {string} suffix - Optional suffix to append
+ * @returns {string} Formatted display value
+ */
+function formatDisplayValue(value, property, suffix = '') {
+    if (value === null || value === undefined) {
+        return '';
+    }
+
+    // Handle numbers with appropriate precision
+    if (typeof value === 'number') {
+        // Special case for excess weight - hide zero values
+        if (property.endsWith('.excess') && value === 0) {
+            return '';
+        }
+
+        // Format decimals to 1 place for weight/BMI values
+        if (property.includes('weight') || property.includes('bmi') || property.includes('min') || property.includes('max')) {
+            value = value.toFixed(1);
+        } else {
+            // Round other numbers appropriately
+            value = Number.isInteger(value) ? value.toString() : value.toFixed(1);
+        }
+    }
+
+    // Convert to string and apply suffix
+    const stringValue = String(value);
+    return stringValue !== '' && suffix ? `${stringValue}${suffix}` : stringValue;
+}
+
+/**
+ * Update all conclusion/display elements based on calculation results
+ * Handles nested object properties using dot notation in data-input-for attributes
+ * @param {HTMLElement} container - Container element
+ * @param {Object} results - Complete calculation results object
+ */
+function updateConclusionEntries(container, results) {
+    // Find all elements with data-input-for attributes
+    const conclusionElements = container.querySelectorAll('[data-input-for]');
+
+    conclusionElements.forEach(element => {
+        const dataFor = element.dataset.inputFor;
+        const suffix = element.dataset.valueSuffix || '';
+
+        // Get nested value using dot notation
+        const value = getNestedValue(results, dataFor);
+
+        if (value !== undefined) {
+            // Format the value for display
+            const displayValue = formatDisplayValue(value, dataFor, suffix);
+
+            // Update element content
+            element.textContent = displayValue;
+
+            // Handle special cases for conditional visibility/styling
+            handleSpecialCases(element, dataFor, value, displayValue);
+        }
+    });
+}
+
+/**
+ * Handle special styling and visibility cases for specific data types
+ * @param {HTMLElement} element - Target element
+ * @param {string} property - Property path
+ * @param {*} rawValue - Unformatted value
+ * @param {string} displayValue - Formatted display value
+ */
+function handleSpecialCases(element, property, rawValue, displayValue) {
+    // Handle excess weight visibility
+    if (property.endsWith('.excess')) {
+        const hasExcess = displayValue !== '' && parseFloat(displayValue) > 0;
+        element.parentElement?.classList.toggle('has-excess', hasExcess);
+    }
+
+    // Handle BMI category-based styling
+    if (property === 'category.index' && element.classList.contains('category-indicator')) {
+        // Remove existing category classes
+        element.classList.remove('underweight', 'normal', 'overweight', 'obese-1', 'obese-2');
+
+        // Add current category class
+        const categoryClassMap = ['underweight', 'normal', 'overweight', 'obese-1', 'obese-2'];
+        if (categoryClassMap[rawValue]) {
+            element.classList.add(categoryClassMap[rawValue]);
+        }
+    }
+
+    // Handle risk level styling
+    if (property === 'category.risk' && element.classList.contains('risk-indicator')) {
+        // Remove existing risk classes
+        element.classList.remove('risk-low', 'risk-normal', 'risk-increased', 'risk-high', 'risk-very-high');
+
+        // Add current risk class
+        if (rawValue) {
+            element.classList.add(`risk-${rawValue}`);
+        }
+    }
+
+    // Handle treatment eligibility indicators
+    if (property.startsWith('treatmentEligible.')) {
+        element.classList.toggle('eligible', rawValue === true);
+        element.classList.toggle('not-eligible', rawValue === false);
+    }
+
+    // Handle boundary proximity indicators
+    if (property.startsWith('category.nearBoundary.')) {
+        element.classList.toggle('near-boundary', rawValue === true);
+    }
 }
 
 /**
@@ -586,34 +795,34 @@ function applyBounds(input, type) {
 function registerGUIInput(controller, type, element) {
     let group = controller.state.get(type);
     if (!group) {
-        group = { type, value: parseFloat(element.value) || 0, inputs: new Set() };
+        group = {type, value: parseFloat(element.value) || 0, inputs: new Set()};
         controller.state.set(type, group);
     }
     group.inputs.add(element);
 
-    const handleChange = (e) => {
-        if (controller.isUpdating()) return;
-
-        const newValue = parseFloat(e.target.value) || 0;
-        if (group.value === newValue) return; // Skip if unchanged
-
-        group.value = newValue;
-        const result = controller.updateCalculation(type);
-
-        // Dispatch completion event for external handlers
-        if (result && ['pointerup', 'mouseup', 'blur', 'change'].includes(e.type)) {
-            element.dispatchEvent(new CustomEvent('bmi-input-completed', {
-                detail: { type, value: newValue, calculationResult: result }
-            }));
+    const handleChange = async (e) => {
+        const newValue = parseFloat(e.originalEvent.target.value) || 0;
+        if (group.value !== newValue) {
+            group.value = newValue;
         }
+
+        // Chain the calculation and handle completion
+        // Only update GUI on final debounce state
+        controller.updateCalculation(type, e.debounceStateFinal).then(result => {
+            if (e.debounceStateFinal) {
+                element.dispatchEvent(new CustomEvent('bmi-input-completed', {
+                    detail: { type, value: newValue, calculationResult: result }
+                }));
+            }
+        });
     };
 
     const events = element.type === 'range'
-        ? 'input, pointerup, mouseup, change'
-        : 'input, keydown, change, blur';
+        ? 'input'
+        : 'input, change, keydown, blur';
 
     // Store cleanup function to prevent memory leaks
-    const cleanup = debouncedEvent(element, events, handleChange, 150, true, true);
+    const cleanup = debouncedEvent(element, events, handleChange, 33, true, true);
     element._bmiCleanup = cleanup; // Store for later cleanup
 }
 
@@ -626,31 +835,31 @@ function initGUI(elements) {
         const controller = createGUIController(container);
 
         // Process all calculator inputs
-        container.querySelectorAll('input[data-input-for]').forEach(input => {
+        container.querySelectorAll('[data-input-for]').forEach(uxContainer => {
             // Clean up existing listeners
-            if (input._bmiCleanup) input._bmiCleanup();
-            const inputType = input.dataset.inputFor.toLowerCase();
+            if (uxContainer._bmiCleanup) uxContainer._bmiCleanup();
+            const inputType = uxContainer.dataset.inputFor.toLowerCase();
 
             if (['height', 'weight', 'bmi'].includes(inputType)) {
                 // Apply bounds and default values
-                applyBounds(input, inputType);
+                applyBounds(uxContainer, inputType);
 
                 if (inputType === 'bmi') {
                     // Generate and apply BMI gradient
-                    generateBMIGradient(container, CUTOFFS.adults, input.min ?? 10, input.max ?? 80);
+                    generateBMIGradient(container, CUTOFFS.adults, uxContainer.min ?? 10, uxContainer.max ?? 80);
                 }
 
-                if (input.dataset.default) {
-                    input.value = input.dataset.default;
+                if (uxContainer.dataset.default) {
+                    uxContainer.value = uxContainer.dataset.default;
                 }
 
                 // Register the input
-                registerGUIInput(controller, inputType, input);
+                registerGUIInput(controller, inputType, uxContainer);
             }
         });
 
-        // Perform initial calculation
-        controller.updateCalculation('height');
+        // Perform initial calculation with GUI update
+        controller.updateCalculation('height', true);
     });
 }
 

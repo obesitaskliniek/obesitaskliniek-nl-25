@@ -1,14 +1,44 @@
 @use "shared" as components-base;
+@use "sass:list";
 
-// Screen Mask - Used to 'dim' the background when a modal/menu is open
+$bmi_value_classes: (
+  'bmi-ondergewicht',  // index 0
+  'bmi-normaal',       // index 1
+  'bmi-overgewicht',   // index 2
+  'bmi-obesitas-1',      // index 3
+  'bmi-obesitas-2',      // index 4
+  'bmi-obesitas-3'       // index 5
+);
 
 nok-bmi-calculator {
 
-  --color-1: #FFC425;
-  --color-2: #4CAF50;
-  --color-3: #CDDC39;
+  --color-1: #c8b726;
+  --color-2: #388a3c;
+  --color-3: color-mix(in srgb, #388a3c 25%, #FF9800);
   --color-4: #FF9800;
-  --color-5: #D32F2F;
+  --color-5: color-mix(in srgb, #FF9800, #D32F2F);
+  --color-6: #D32F2F;
+
+  $all_selectors: '';
+  @each $bmi_value_class in $bmi_value_classes {
+    @if $all_selectors != '' {
+      $all_selectors: $all_selectors + ', ';
+    }
+
+    $selectors: '&.#{$bmi_value_class} .show-not-#{$bmi_value_class}, ' +
+                '&:not(.#{$bmi_value_class}) .show-#{$bmi_value_class}, ' +
+                '&.near-upper-boundary.#{$bmi_value_class} .show-not-near-upper-boundary-for-#{$bmi_value_class}, ' +
+                '&:not(.near-upper-boundary.#{$bmi_value_class}) .show-near-upper-boundary-for-#{$bmi_value_class}, ' +
+                '&.near-lower-boundary.#{$bmi_value_class} .show-not-near-lower-boundary-for-#{$bmi_value_class}, ' +
+                '&:not(.near-lower-boundary.#{$bmi_value_class}) .show-near-lower-boundary-for-#{$bmi_value_class}, ' +
+                '&:not(.near-upper-boundary) .show-near-upper-boundary';
+
+    $all_selectors: $all_selectors + $selectors;
+  }
+
+  #{$all_selectors} {
+    display: none;
+  }
 
   .calculator-input label {
     display: flex;
@@ -17,18 +47,16 @@ nok-bmi-calculator {
     align-items: center;
     justify-content: space-between;
 
-
-
     /********** Range Input Styles **********/
 
     input[type="range"] {
+      /*
       appearance: none;
       background: transparent;
       cursor: pointer;
       width: 100%;
       flex-basis: 100%;
 
-      /*
       &:focus {
         outline: none;
       }
