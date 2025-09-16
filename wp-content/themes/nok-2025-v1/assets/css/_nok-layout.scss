@@ -73,6 +73,13 @@
     }
     //"fill-fill" is another layout pattern, which fills both children 50/50. See 2-column layout above; it's identical
 
+    &.auto-1fr{
+      grid-template-columns: auto 1fr;
+    }
+    &.auto-auto-1fr {
+      grid-template-columns: auto auto 1fr;
+    }
+
     &.overlap {
       &-middle { //uneven column counts work best
         --overlap: 1; //amount of columns overlap

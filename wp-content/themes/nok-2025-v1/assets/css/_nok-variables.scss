@@ -68,7 +68,6 @@ $font-sizes: ();
             $i: var(--nok-font-size-#{($i)})
     ));
 }
-@debug $font-sizes;
 
 $grid-breakpoints: (
     xs: 0,

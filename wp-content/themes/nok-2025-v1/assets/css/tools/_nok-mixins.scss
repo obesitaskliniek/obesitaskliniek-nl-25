@@ -682,3 +682,33 @@
     @include visually-hidden();
   }
 }
+
+/// Joins a list of items with full control over separators and item formatting.
+/// Unlike Sass's built-in join(), this preserves all characters including dots
+/// and provides prefix/suffix wrapping for each item.
+///
+/// @param {List} $list - List of items to join
+/// @param {String} $separator [', '] - String to place between items
+/// @param {String} $prefix [''] - String to prepend to each item
+/// @param {String} $suffix [''] - String to append to each item
+/// @return {String} - Joined string with formatting applied
+///
+/// @example scss - CSS class negation selector
+///   $classes: ('active', 'disabled');
+///   $selector: ':not(#{join-with($classes, ', ', '.')})';
+///   // Result: ":not(.active, .disabled)"
+///
+/// @example scss - Data attribute list
+///   $attrs: ('loading', 'error');
+///   $selectors: join-with($attrs, ', ', '[data-', ']');
+///   // Result: "[data-loading], [data-error]"
+@function join-with($list, $separator: ', ', $prefix: '', $suffix: '') {
+  $result: '';
+  @each $item in $list {
+    @if $result != '' {
+      $result: $result + $separator;
+    }
+    $result: $result + $prefix + $item + $suffix;
+  }
+  @return $result;
+}

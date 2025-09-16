@@ -210,6 +210,7 @@ strong {
 //
 // Add the correct font size in all browsers
 
+.small,
 small {
   @include nok-rfs.font-size(.875em);
 }

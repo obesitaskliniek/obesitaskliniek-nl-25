@@ -140,3 +140,7 @@ nok-square-block {
 
   }
 }
+
+.nok-square-block {
+  @extend nok-square-block;
+}
