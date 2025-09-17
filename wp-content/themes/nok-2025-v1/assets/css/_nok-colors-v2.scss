@@ -57,6 +57,15 @@ $nok-dark-contrast-overrides: (
     'body':           #cdd9ed,
 );
 
+@function oklch-with-custom-alpha($color, $alpha: 'var(--alpha, 1)') {
+  $oklch: color.to-space($color, oklch);
+  $l: color.channel($oklch, 'lightness');
+  $c: color.channel($oklch, 'chroma');
+  $h: color.channel($oklch, 'hue');
+
+  @return unquote('oklch(#{$l} #{$c} #{$h} / #{$alpha})');
+}
+
 /**
  * Generates color variations for a given color.
  *
@@ -84,6 +93,7 @@ $nok-dark-contrast-overrides: (
 @each $name, $color in $nok-base-colors {
   $saturation: color.channel(color.to-space($color, hsl), "saturation", $space: hsl);
   $color: color.to-space($color, oklch);
+
   $nok-base-colors_light: map.merge($nok-base-colors_light, map.merge(
           ($name: $color),
           generate-color-variations($color, $name, $saturation)
@@ -117,10 +127,11 @@ $nok-base-colors: $nok-base-colors_light;
     $rgb_string: #{color.channel($rgb_color, 'red')}, #{color.channel($rgb_color, 'green')}, #{color.channel($rgb_color, 'blue')};
     $rgb_color_contrast: color.to-space(nok-utilities.get-contrast-color($color, $color-contrast-light, $color-contrast-dark), rgb);
     $rgb_string_contrast: #{color.channel($rgb_color_contrast, 'red')}, #{color.channel($rgb_color_contrast, 'green')}, #{color.channel($rgb_color_contrast, 'blue')};
-    --#{nok-variables.$prefix}-#{$name}-rgb: #{$rgb_string};
-    --#{nok-variables.$prefix}-#{$name}: rgba(var(--#{nok-variables.$prefix}-#{$name}-rgb), var(--alpha, 1));
+    --#{nok-variables.$prefix}-#{$name}: rgb(#{$rgb_string});
+    --#{nok-variables.$prefix}-#{$name}-rgba: rgba(var(--#{nok-variables.$prefix}-#{$name}), var(--alpha, 1));
     --#{nok-variables.$prefix}-#{$name}-contrast: rgba(#{$rgb_string_contrast}, var(--alpha, 1));
     $oklch_variables: map.merge($oklch_variables, (
+            "--#{nok-variables.$prefix}-#{$name}-rgb": $rgb_string,
             "--#{nok-variables.$prefix}-#{$name}": $color,
             "--#{nok-variables.$prefix}-#{$name}-contrast": nok-utilities.get-contrast-color($color, $color-contrast-light, $color-contrast-dark)
     ));
@@ -226,6 +237,9 @@ $dark_mode_rules: ();
  * Additional general color class helpers
  */
 body { //helps increase specificity
+  .#{nok-variables.$prefix}-text-universal-contrast {
+    color: #888E !important;
+  }
   .#{nok-variables.$prefix}-text-contrast {
     --text-color: var(--bg-color--contrast, inherit) !important;
   }
