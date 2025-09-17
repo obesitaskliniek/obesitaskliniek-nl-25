@@ -93,6 +93,7 @@ $section-max-widths: (
 
 $padding-base-values: (
         0 : 0rem,
+        0_25: #{(.25 * $padding-base)},
         0_5: #{(.5 * $padding-base)},
         1: #{(1 * $padding-base)},
     //1_5: #{(1.5 * $padding-base)},

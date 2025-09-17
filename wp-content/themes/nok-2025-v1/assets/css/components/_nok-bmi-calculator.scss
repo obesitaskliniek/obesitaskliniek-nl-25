@@ -2,15 +2,56 @@
 @use "sass:list";
 
 $bmi_value_classes: (
-  'bmi-ondergewicht',  // index 0
-  'bmi-normaal',       // index 1
-  'bmi-overgewicht',   // index 2
-  'bmi-obesitas-1',      // index 3
-  'bmi-obesitas-2',      // index 4
-  'bmi-obesitas-3'       // index 5
+  'bmi-ondergewicht',
+  'bmi-normaal',
+  'bmi-overgewicht',
+  'bmi-obesitas-1',
+  'bmi-obesitas-2',
+  'bmi-obesitas-3',
+  'behandeling-nok-clinics',
+  'behandeling-nok-regulier'
 );
 
+$all_selectors: '';
+@each $bmi_value_class in $bmi_value_classes {
+  @if $all_selectors != '' {
+    $all_selectors: $all_selectors + ', ';
+  }
+
+  $selectors: '&.#{$bmi_value_class} .show-not-#{$bmi_value_class}, ' +
+                '&:not(.#{$bmi_value_class}) .show-#{$bmi_value_class}, ' +
+                '&.near-upper-boundary.#{$bmi_value_class} .show-not-near-upper-boundary-for-#{$bmi_value_class}, ' +
+                '&:not(.near-upper-boundary.#{$bmi_value_class}) .show-near-upper-boundary-for-#{$bmi_value_class}, ' +
+                '&.near-lower-boundary.#{$bmi_value_class} .show-not-near-lower-boundary-for-#{$bmi_value_class}, ' +
+                '&:not(.near-lower-boundary.#{$bmi_value_class}) .show-near-lower-boundary-for-#{$bmi_value_class}, ' +
+                '&:not(.near-upper-boundary) .show-near-upper-boundary';
+
+  $all_selectors: $all_selectors + $selectors;
+}
+
+@mixin range-thumb {
+  height: var(--thumb-size);
+  width: var(--thumb-size);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--thumb-fill-color);
+  box-shadow: 0 0 0 var(--_b,var(--thumb-line-thickness)) inset var(--thumb-border-color);
+  border-image: linear-gradient(90deg, var(--active-range-color) 50%, var(--track-color) 0)
+  0 1/calc(50% - var(--track-line-thickness)/2) 100vw/0 calc(100vw + var(--thumb-gap));
+  -webkit-appearance: none;
+  appearance: none;
+  transition: .3s ease-in-out;
+}
+
 nok-bmi-calculator {
+
+  --grid-template-columns: 3fr 4fr;
+  @include components-base.media-breakpoint-down(xxl) {
+    --grid-template-columns: 1fr 1fr;
+  }
+  @include components-base.media-breakpoint-down(lg) {
+    --grid-template-columns: 1fr;
+  }
 
   --color-1: #c8b726;
   --color-2: #388a3c;
@@ -19,106 +60,146 @@ nok-bmi-calculator {
   --color-5: color-mix(in srgb, #FF9800, #D32F2F);
   --color-6: #D32F2F;
 
-  $all_selectors: '';
-  @each $bmi_value_class in $bmi_value_classes {
-    @if $all_selectors != '' {
-      $all_selectors: $all_selectors + ', ';
+  --track-color: var(--nok-lightgrey--lighter);
+  --active-range-color: var(--nok-lightblue);
+  --thumb-border-color: var(--nok-lightblue);
+  --thumb-fill-color: transparent;
+  --thumb-hover-color: var(--nok-greenblue);
+  --track-line-thickness: round(0.5em,1px);
+  --thumb-line-thickness: round(0.5em,1px);
+  --thumb-gap: round(.5em,1px);
+  --thumb-size: round(2.2em,1px);
+
+  /*
+  @include components-base.transition-properties(height) {
+    .calculator-conclusion {
+      transition: height components-base.$animation-duration var(--animation-easing-out, cubic-bezier(.85, 0, .15, 1));
+      interpolate-size: allow-keywords;
     }
+  }*/
 
-    $selectors: '&.#{$bmi_value_class} .show-not-#{$bmi_value_class}, ' +
-                '&:not(.#{$bmi_value_class}) .show-#{$bmi_value_class}, ' +
-                '&.near-upper-boundary.#{$bmi_value_class} .show-not-near-upper-boundary-for-#{$bmi_value_class}, ' +
-                '&:not(.near-upper-boundary.#{$bmi_value_class}) .show-near-upper-boundary-for-#{$bmi_value_class}, ' +
-                '&.near-lower-boundary.#{$bmi_value_class} .show-not-near-lower-boundary-for-#{$bmi_value_class}, ' +
-                '&:not(.near-lower-boundary.#{$bmi_value_class}) .show-near-lower-boundary-for-#{$bmi_value_class}, ' +
-                '&:not(.near-upper-boundary) .show-near-upper-boundary';
 
-    $all_selectors: $all_selectors + $selectors;
+  @include components-base.transition-properties(opacity) {
+    .calculator-conclusion {
+      h1, div.conclusion-text {
+        animation: fade--in components-base.$animation-duration var(--animation-easing-out, cubic-bezier(.85, 0, .15, 1));
+        animation-fill-mode: forwards;
+      }
+    }
+    &.calculating .calculator-conclusion {
+      h1, div.conclusion-text {
+        animation: fade--out 0.1s var(--animation-easing-out, cubic-bezier(.85, 0, .15, 1));
+        animation-fill-mode: forwards;
+      }
+    }
+  }
+
+  @include components-base.no-transitions {
+    &.calculating .calculator-conclusion {
+      h1, div.conclusion-text {
+        opacity: 0;
+      }
+    }
   }
 
   #{$all_selectors} {
     display: none;
   }
 
-  .calculator-input label {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-
-    /********** Range Input Styles **********/
-
-    input[type="range"] {
-      /*
-      appearance: none;
-      background: transparent;
-      cursor: pointer;
-      width: 100%;
-      flex-basis: 100%;
-
-      &:focus {
-        outline: none;
-      }
-
-      @mixin track() {
-        background-color: #053a5f;
-        border-radius: 0.5rem;
-        height: 0.5rem;
-      }
-      @mixin thumb() {
-        @include components-base.nok-border-radius($overflowHidden: false);
-        box-shadow: 4px 3px 0 0 hsl(0deg 0% 0% / 7%);
-        background-color: #FFF;
-        height: 2rem;
-        width: 1rem;
-      }
-      @mixin focusThumb() {
-        background-color: #FFF8;
-        @include components-base.nok-focus-ring;
-      }
-
-      //Chrome, Safari, Opera and Edge Chromium track
-      &::-webkit-slider-runnable-track {
-        @include track();
-      }
-      &#BMISlider::-webkit-slider-runnable-track {
-        background-image: var(--bmi-gradient);
-      }
-
-      //Firefox track
-      &::-moz-range-track {
-        @include track();
-      }
-      &#BMISlider::-moz-range-track {
-        background-image: var(--bmi-gradient);
-      }
-
-      //Chrome, Safari, Opera and Edge Chromium thumb
-      &::-webkit-slider-thumb {
-        appearance: none;
-        margin-top: -12px;
-        @include thumb();
-      }
-
-      &:focus::-webkit-slider-thumb {
-        @include focusThumb();
-      }
-
-      //Firefox thumb
-      &::-moz-range-thumb {
-        border: none;
-        border-radius: 0;
-        @include thumb();
-      }
-
-      &:focus::-moz-range-thumb {
-        @include focusThumb();
-      }
-      //*/
-    }
-    //*/
-
-
+  .calculator-inputs {
+    grid-template-columns: 6fr 3fr;
   }
+
+  .calculator-conclusion {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    align-self: stretch;
+    .conclusion-footer {
+      align-self: end;
+      p {
+        margin-top: calc(var(--row-gap, var(--grid-gap, var(--nok-global-grid-gap))) / 2);
+      }
+    }
+  }
+
+  label {
+    grid-column: 1 / -1;
+  }
+
+  input {
+    &[type="range" i] {
+      grid-column: 1;
+      width: 100%;
+      height: var(--thumb-size);
+      appearance :none;
+      background: none;
+      cursor: pointer;
+      overflow: hidden;
+      font-size: inherit;
+      &:active,
+      &:focus-visible{
+        --_b: var(--thumb-size);
+        --thumb-border-color: var(--thumb-hover-color);
+      }
+      &::-moz-range-thumb {
+        @include range-thumb;
+      }
+      &::-webkit-slider-thumb {
+        @include range-thumb;
+      }
+      &#BMISlider {
+        --thumb-gap: 0px;
+        --thumb-fill-color: var(--track-color);
+        --thumb-border-color: var(--bmi-classification-color);
+        --active-range-color: transparent;
+        background-image: var(--bmi-gradient), var(--bmi-gradient);
+        background-size: calc(100% - var(--thumb-size)) var(--track-line-thickness), 100% var(--track-line-thickness);
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+      }
+    }
+    &[type="number"] {
+      grid-column: 2;
+      align-self: stretch;
+      grid-row-end: span 2;
+      line-height: 1;
+      field-sizing: content;
+      min-width: 5ex;
+      -webkit-appearance: none;
+      appearance: none;
+      border: 0 none;
+      outline: 0 none;
+      margin: 0;
+      padding: 0 .5rem;
+      background: transparent;
+      text-align: end;
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          color: var(--nok-darkblue);
+          background: rgba(var(--nok-lightblue--lighter-rgb), 0.1);
+          @include components-base.nok-border-radius('large');
+        }
+      }
+    }
+  }
+
+  label[for="heightNumber"],
+  input#heightNumber {
+    grid-row-start: 1;
+  }
+
+  label[for="weightNumber"],
+  input#weightNumber {
+    grid-row-start: 3;
+  }
+
+  label[for="BMINumber"],
+  input#BMINumber {
+    grid-row-start: 5;
+  }
+
+  .bmi-class-color {
+    color: var(--bmi-classification-color);
+  }
+
 }

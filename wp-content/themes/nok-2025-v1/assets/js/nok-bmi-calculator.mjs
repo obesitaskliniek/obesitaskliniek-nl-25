@@ -33,7 +33,7 @@
  * });
  */
 
-import {debouncedEvent} from "./modules/hnl.debounce.mjs";
+import {debounceThis, debouncedEvent} from "./modules/hnl.debounce.mjs";
 
 /**
  * BMI cutoff values for classification.
@@ -497,8 +497,10 @@ function generateBMIGradient(container, cutoffs = CUTOFFS.adults, minBMI = 15, m
  */
 function createGUIController(container) {
     const state = new Map();
+    const conclusionContainer = container.querySelector('.calculator-conclusion');
     let isUpdating = false;
     let lastResults = {}; // Cache for comparison
+    let classRemovalTimeout = null; // Add timeout tracker
 
     let updateQueue = Promise.resolve();
 
@@ -522,15 +524,32 @@ function createGUIController(container) {
             }
         });
 
-        container.classList.toggle('calculating', !finalUpdate);
-
         if (finalUpdate) {
-            console.log(result);
             // Update container classes based on BMI category and treatment eligibility
             updateContainerClasses(container, result);
 
+            // Clear any existing timeout to extend the delay
+            if (classRemovalTimeout) {
+                clearTimeout(classRemovalTimeout);
+            }
+
+            // Set new timeout for class removal
+            classRemovalTimeout = setTimeout(() => {
+                //conclusionContainer.style.height = '';
+                container.classList.remove('calculating');
+                classRemovalTimeout = null; // Clean up reference
+            }, 250);
+
             // Update health range display elements
             updateConclusionEntries(container, result);
+        } else {
+            container.classList.add('calculating');
+            //conclusionContainer.style.height = `${Math.ceil(conclusionContainer.offsetHeight)}px`;
+            // Cancel pending class removal if we're calculating again
+            if (classRemovalTimeout) {
+                clearTimeout(classRemovalTimeout);
+                classRemovalTimeout = null;
+            }
         }
 
         lastResults = {...result}; // Cache for next comparison

@@ -11,7 +11,11 @@
     --grid-gap: var(--#{nok-variables.$prefix}-padding-base, var(--#{nok-variables.$prefix}-global-grid-gap, 1.5rem));
     @include nok-mixins.nok-grid-gap;
 
-    grid-template-columns: repeat(var(--grid-columns, 1), var(--grid-column-size, 1fr));
+    grid-template-columns: var(--grid-template-columns, repeat(var(--grid-columns, 1), var(--grid-column-size, 1fr)));
+
+    @include nok-mixins.transition-properties {
+      transition: grid-template-columns nok-variables.$animation-duration ease;
+    }
 
     //default: cascade down at breakpoints
     //i.e: the column count set in the class is more of a maximum.
@@ -58,10 +62,6 @@
       }
     }
     &.one-fill { //fills first child across 1 colum, followed by the second element spanning across columns
-      //> :first-child {
-      //  grid-column-start: 1;
-      //  grid-column-end: span 1;
-      //}
       > :last-child {
         grid-column-end: span max(1, calc(var(--grid-columns) - 1));
       }
@@ -183,6 +183,9 @@
 .half-grid-gap {
   gap: calc(var(--grid-gap) / 2);
 }
+.half-column-gap {
+  column-gap: calc(var(--column-gap, var(--grid-gap)) / 2);
+}
 .half-flex-gap {
   gap: calc(var(--flex-gap) / 2);
 }
@@ -200,6 +203,6 @@
     --row-gap: 0rem;
   }
   &-column-gap {
-    --row-gap: 0rem;
+    --column-gap: 0rem;
   }
 }
