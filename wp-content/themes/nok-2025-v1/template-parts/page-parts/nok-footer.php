@@ -14,6 +14,8 @@
  *  - colors:select(Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue nok-dark-text-white|Donkerblauw::nok-bg-darkestblue nok-text-white--darker)
  */
 
+use NOK2025\V1\Assets;
+
 $default_colors = 'nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue nok-dark-text-white';
 $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors'] : $default_colors;
 $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'left';
@@ -34,13 +36,8 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
                         vero.
                     </p>
                     <button class="nok-button nok-justify-self-start
-                nok-base-font nok-bg-darkblue nok-text-contrast" tabindex="0">
-                        Neem contact op
-                        <svg class="nok-text-yellow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25"
-                             width="25" height="25" fill="currentColor">
-                            <path d="m17.5 5.999-.707.707 5.293 5.293H1v1h21.086l-5.294 5.295.707.707L24 12.499l-6.5-6.5z"
-                                  data-name="Right"/>
-                        </svg>
+                nok-bg-darkblue nok-text-contrast" tabindex="0">
+                        Neem contact op <?= Assets::getIcon('arrow-right-long', 'nok-text-yellow'); ?>
                     </button>
                 </nok-square-block>
                 <div class="nok-layout-grid nok-layout-grid__3-column" data-requires="./nok-accordion.mjs?cache=<?= time(); ?>">

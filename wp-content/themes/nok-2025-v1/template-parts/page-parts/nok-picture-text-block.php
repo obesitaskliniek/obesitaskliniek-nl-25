@@ -13,6 +13,7 @@
  * - pull_down:checkbox(true)
  */
 
+use NOK2025\V1\Assets;
 use NOK2025\V1\Helpers;
 $featuredImage = Helpers::get_featured_image();
 
@@ -57,11 +58,7 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
 	                        <?php if (!empty($page_part_fields['button_url'])) : ?>
                             <a role="button" href="<?= $page_part_fields['button_url']; ?>"
                                class="nok-button nok-align-self-to-sm-stretch fill-group-column nok-bg-yellow nok-text-contrast">
-		                        <?= $page_part_fields['button_text']; ?>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 22 18" width="25" height="25" stroke="currentColor"
-                                     style="stroke-width: .1rem; stroke-linecap: round; stroke-linejoin: round;">
-                                    <path d="M 20,8 L 0,8 M 20,8 L 14,13 M 20,8 L 14,3" data-name="Right"></path>
-                                </svg>
+		                        <?= $page_part_fields['button_text']; ?> <?= Assets::getIcon('arrow-right-long'); ?>
                             </a>
 	                        <?php endif; ?>
                         </div>
@@ -76,11 +73,7 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
 			                <?php if (!empty($page_part_fields['button_url'])) : ?>
                                 <a role="button" href="<?= $page_part_fields['button_url']; ?>"
                                    class="nok-button nok-align-self-to-sm-stretch fill-group-column nok-bg-yellow nok-text-contrast">
-					                <?= $page_part_fields['button_text']; ?>
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 22 18" width="25" height="25" stroke="currentColor"
-                                         style="stroke-width: .1rem; stroke-linecap: round; stroke-linejoin: round;">
-                                        <path d="M 20,8 L 0,8 M 20,8 L 14,13 M 20,8 L 14,3" data-name="Right"></path>
-                                    </svg>
+					                <?= $page_part_fields['button_text']; ?> <?= Assets::getIcon('arrow-right-long'); ?>
                                 </a>
 			                <?php endif; ?>
                         </div>

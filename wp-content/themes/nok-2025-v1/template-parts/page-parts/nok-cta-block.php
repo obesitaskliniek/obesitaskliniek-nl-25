@@ -10,6 +10,8 @@
  * - button_url:url,
  */
 
+use NOK2025\V1\Assets;
+
 $layout = ( $page_part_fields['layout_offset'] ?? 'left' ) === "" ? 'left' : $page_part_fields['layout_offset'];
 
 //default colors
@@ -29,10 +31,7 @@ if ( $page_part_fields['colors'] === "Blauw op donkerblauw" ) {
         <div class="nok-section__inner <?= $section_colors ? : ''?>">
             <nok-square-block class="horizontal layout-<?= $layout;?> <?= $block_colors; ?>" data-shadow="true">
                 <div class="nok-square-block__icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 35 12" width="35" height="12" stroke="currentColor"
-                         style="stroke-linecap: round; stroke-linejoin: round;">
-                        <path d="M 33,5 L 0,5 M 33,5 L 27,10 M 33,5 L 27,0" data-name="Right"></path>
-                    </svg>
+                    <?= Assets::getIcon('arrow-right-long'); ?>
                 </div>
 	            <?php the_title('<h2 class="nok-square-block__heading">', '</h2>'); ?>
                 <div class="nok-square-block__text"><?php the_content(); ?></div>

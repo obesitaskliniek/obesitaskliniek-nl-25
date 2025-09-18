@@ -61,7 +61,7 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
                             </div>
                             <div class="nok-layout-flex-row space-between">
                                 <a role="button" href="#"
-                                   class="nok-button nok-justify-self-start nok-base-font nok-bg-darkblue nok-text-contrast" tabindex="0">
+                                   class="nok-button nok-justify-self-start nok-bg-darkblue nok-text-contrast" tabindex="0">
                                     Lees het verhaal
                                     </svg>
                                 </a>
@@ -80,7 +80,7 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
                             </div>
                             <div class="nok-layout-flex-row space-between">
                                 <a role="button" href="#"
-                                   class="nok-button nok-justify-self-start nok-base-font nok-bg-darkblue nok-text-contrast" tabindex="0">
+                                   class="nok-button nok-justify-self-start nok-bg-darkblue nok-text-contrast" tabindex="0">
                                     Lees het verhaal
                                     </svg>
                                 </a>
@@ -99,7 +99,7 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
                             </div>
                             <div class="nok-layout-flex-row space-between">
                                 <a role="button" href="#"
-                                   class="nok-button nok-justify-self-start nok-base-font nok-bg-darkblue nok-text-contrast" tabindex="0">
+                                   class="nok-button nok-justify-self-start nok-bg-darkblue nok-text-contrast" tabindex="0">
                                     Lees het verhaal
                                     </svg>
                                 </a>

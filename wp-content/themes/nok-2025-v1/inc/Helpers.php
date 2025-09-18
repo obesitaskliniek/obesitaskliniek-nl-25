@@ -226,9 +226,9 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 			'type'          => strtolower( $hubspotData['type'][0] ),
 			'locatie'       => $hubspotData['vestiging'][0],
 			'duur'          => intval( $hubspotData['duur'][0] ),
-			'intro'         => $hubspotData['intro_kort'][0] ?? '',
-			'intro_lang'    => $hubspotData['intro_lang'][0] ?? '',
-			'onderwerpen'   => $hubspotData['onderwerpen'][0] ?? '',
+			'intro'         => esc_html($hubspotData['intro_kort'][0] ?? ''),
+			'intro_lang'    => esc_html($hubspotData['intro_lang'][0] ?? ''),
+			'onderwerpen'   => esc_html($hubspotData['onderwerpen'][0] ?? ''),
 			'open'          => strtolower( $hubspotData['inschrijvingsstatus'][0] ) === 'open',
 			'status'        => strtolower( $hubspotData['inschrijvingsstatus'][0] )
 		);

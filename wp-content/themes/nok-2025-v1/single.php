@@ -118,7 +118,7 @@ nok-bg-alpha-10 nok-dark-bg-alpha-10 nok-subtle-shadow">
                             </address>
                         </div>
                         <a role="button" href="" class="nok-button nok-justify-self-start w-100
-                nok-base-font nok-bg-yellow nok-text-contrast" tabindex="0">
+                nok-bg-yellow nok-text-contrast" tabindex="0">
                             Aanmelden
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 12 12" width="12" height="12"
                                  stroke="currentColor"
@@ -127,7 +127,7 @@ nok-bg-alpha-10 nok-dark-bg-alpha-10 nok-subtle-shadow">
                             </svg>
                         </a>
                         <a role="button" href="" class="nok-button nok-justify-self-start w-100
-                nok-base-font nok-bg-lightgrey--lighter nok-text-contrast" tabindex="0">
+                nok-bg-lightgrey--lighter nok-text-contrast" tabindex="0">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 12 12" width="12" height="12"
                                  stroke="currentColor"
                                  style="stroke-linecap: round; stroke-linejoin: round;">

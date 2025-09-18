@@ -53,7 +53,7 @@ if ( ! empty( $args ) ) {
                                                 $hubspotData['timestamp']['end_time']);
                                         ?>
                                     </div>
-                                    <a role="button" href="<?php the_permalink(); ?>" class="nok-button nok-justify-self-start w-100 nok-base-font nok-bg-yellow nok-text-contrast" tabindex="0">
+                                    <a role="button" href="<?php the_permalink(); ?>" class="nok-button nok-justify-self-start w-100 nok-bg-yellow nok-text-contrast" tabindex="0">
                                         Bekijken
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 22 18" width="25" height="25" stroke="currentColor"
                                              style="stroke-width: .1rem; stroke-linecap: round; stroke-linejoin: round;">

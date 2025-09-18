@@ -49,7 +49,7 @@ nok-bmi-calculator {
   @include components-base.media-breakpoint-down(xxl) {
     --grid-template-columns: 1fr 1fr;
   }
-  @include components-base.media-breakpoint-down(lg) {
+  @include components-base.media-breakpoint-down(xl) {
     --grid-template-columns: 1fr;
   }
 
@@ -108,6 +108,102 @@ nok-bmi-calculator {
 
   .calculator-inputs {
     grid-template-columns: 6fr 3fr;
+
+    label {
+      grid-column: 1 / -1;
+    }
+
+    input {
+      color: var(--text-color);
+      &[type="range" i] {
+        grid-column: 1;
+        @include components-base.media-breakpoint-down(xxl) {
+          grid-column: span 2;
+        }
+        width: 100%;
+        height: var(--thumb-size);
+        appearance :none;
+        background: none;
+        cursor: pointer;
+        overflow: hidden;
+        font-size: inherit;
+        &:active,
+        &:focus-visible{
+          --_b: var(--thumb-size);
+          --thumb-border-color: var(--thumb-hover-color);
+        }
+        &::-moz-range-thumb {
+          @include range-thumb;
+        }
+        &::-webkit-slider-thumb {
+          @include range-thumb;
+        }
+        &#BMISlider {
+          --thumb-gap: 0px;
+          --thumb-fill-color: var(--track-color);
+          --thumb-border-color: var(--bmi-classification-color);
+          --active-range-color: transparent;
+          background-image: var(--bmi-gradient), var(--bmi-gradient);
+          background-size: calc(100% - var(--thumb-size)) var(--track-line-thickness), 100% var(--track-line-thickness);
+          background-repeat: no-repeat;
+          background-position: 50% 50%;
+        }
+      }
+      &[type="number"] {
+        grid-column: 2;
+        align-self: stretch;
+        grid-row-end: span 2;
+        @include components-base.media-breakpoint-down(xxl) {
+          grid-row-end: span 1;
+        }
+        line-height: 1;
+        field-sizing: content;
+        min-width: 5ex;
+        -webkit-appearance: none;
+        appearance: none;
+        border: 0 none;
+        outline: 0 none;
+        margin: 0;
+        padding: 0 .5rem;
+        background: transparent;
+        text-align: end;
+        @include components-base.nok-border-radius('large');
+        @media (hover: hover) and (pointer: fine) {
+          &:hover {
+            @media (prefers-color-scheme: dark) {
+              color: var(--text-color--link--hover);
+              background: var(--text-color--link, rgba(var(--nok-lightblue--lighter-rgb), 0.1));
+            }
+            color: var(--nok-lightblue);
+            background: rgba(var(--nok-lightblue--lighter-rgb), 0.1);
+          }
+        }
+        &:focus,
+        &:focus-visible {
+          @include components-base.nok-focus-ring;
+        }
+
+        &:invalid {
+          @include components-base.nok-invalid-ring;
+        }
+      }
+    }
+
+    label[for="heightNumber"],
+    input#heightNumber {
+      grid-row-start: 1;
+    }
+
+    label[for="weightNumber"],
+    input#weightNumber {
+      grid-row-start: 3;
+    }
+
+    label[for="BMINumber"],
+    input#BMINumber {
+      grid-row-start: 5;
+    }
+
   }
 
   .calculator-conclusion {
@@ -122,81 +218,6 @@ nok-bmi-calculator {
     }
   }
 
-  label {
-    grid-column: 1 / -1;
-  }
-
-  input {
-    &[type="range" i] {
-      grid-column: 1;
-      width: 100%;
-      height: var(--thumb-size);
-      appearance :none;
-      background: none;
-      cursor: pointer;
-      overflow: hidden;
-      font-size: inherit;
-      &:active,
-      &:focus-visible{
-        --_b: var(--thumb-size);
-        --thumb-border-color: var(--thumb-hover-color);
-      }
-      &::-moz-range-thumb {
-        @include range-thumb;
-      }
-      &::-webkit-slider-thumb {
-        @include range-thumb;
-      }
-      &#BMISlider {
-        --thumb-gap: 0px;
-        --thumb-fill-color: var(--track-color);
-        --thumb-border-color: var(--bmi-classification-color);
-        --active-range-color: transparent;
-        background-image: var(--bmi-gradient), var(--bmi-gradient);
-        background-size: calc(100% - var(--thumb-size)) var(--track-line-thickness), 100% var(--track-line-thickness);
-        background-repeat: no-repeat;
-        background-position: 50% 50%;
-      }
-    }
-    &[type="number"] {
-      grid-column: 2;
-      align-self: stretch;
-      grid-row-end: span 2;
-      line-height: 1;
-      field-sizing: content;
-      min-width: 5ex;
-      -webkit-appearance: none;
-      appearance: none;
-      border: 0 none;
-      outline: 0 none;
-      margin: 0;
-      padding: 0 .5rem;
-      background: transparent;
-      text-align: end;
-      @media (hover: hover) and (pointer: fine) {
-        &:hover {
-          color: var(--nok-darkblue);
-          background: rgba(var(--nok-lightblue--lighter-rgb), 0.1);
-          @include components-base.nok-border-radius('large');
-        }
-      }
-    }
-  }
-
-  label[for="heightNumber"],
-  input#heightNumber {
-    grid-row-start: 1;
-  }
-
-  label[for="weightNumber"],
-  input#weightNumber {
-    grid-row-start: 3;
-  }
-
-  label[for="BMINumber"],
-  input#BMINumber {
-    grid-row-start: 5;
-  }
 
   .bmi-class-color {
     color: var(--bmi-classification-color);

@@ -298,14 +298,9 @@ function createToggleHandler(toggler, defaultTarget) {
    * Main toggle click handler
    */
   function handleToggleClick() {
-    // Only handle direct clicks on the toggler itself
-    if (event.target !== toggler) {
-      // Exception: allow clicks on child elements that are themselves togglers
-      if (event.target.dataset.toggles || event.target.dataset.untoggles) {
-        console.log(event.target)
-        return; // Let the child toggler handle its own event
-      }
-      // Block all other child clicks
+    const childClick = toggler.contains(event.target) && event.target !== toggler;
+    //Only direct clicks, or if 'data-no-children="true"' and click is on a child
+    if (!toggler.contains(event.target) || (toggler.dataset.noChildren && childClick)) {
       return;
     }
 
