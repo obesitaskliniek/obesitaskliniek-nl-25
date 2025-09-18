@@ -124,14 +124,15 @@ $nok-base-colors: $nok-base-colors_light;
   $oklch_variables: ();
   @each $name, $color in $color-map {
     $rgb_color: color.to-space($color, rgb);
-    $rgb_string: #{color.channel($rgb_color, 'red')}, #{color.channel($rgb_color, 'green')}, #{color.channel($rgb_color, 'blue')};
+    $rgb_string: nok-utilities.round_to_decimals(color.channel($rgb_color, 'red')), nok-utilities.round_to_decimals(color.channel($rgb_color, 'green')), nok-utilities.round_to_decimals(color.channel($rgb_color, 'blue'));
     $rgb_color_contrast: color.to-space(nok-utilities.get-contrast-color($color, $color-contrast-light, $color-contrast-dark), rgb);
-    $rgb_string_contrast: #{color.channel($rgb_color_contrast, 'red')}, #{color.channel($rgb_color_contrast, 'green')}, #{color.channel($rgb_color_contrast, 'blue')};
-    --#{nok-variables.$prefix}-#{$name}: rgb(#{$rgb_string});
-    --#{nok-variables.$prefix}-#{$name}-rgba: rgba(var(--#{nok-variables.$prefix}-#{$name}), var(--alpha, 1));
+    $rgb_string_contrast: nok-utilities.round_to_decimals(color.channel($rgb_color_contrast, 'red')), nok-utilities.round_to_decimals(color.channel($rgb_color_contrast, 'green')), nok-utilities.round_to_decimals(color.channel($rgb_color_contrast, 'blue'));
+
+    --#{nok-variables.$prefix}-#{$name}: rgb(var(--#{nok-variables.$prefix}-#{$name}-rgb));
+    --#{nok-variables.$prefix}-#{$name}-rgb: #{$rgb_string};
     --#{nok-variables.$prefix}-#{$name}-contrast: rgba(#{$rgb_string_contrast}, var(--alpha, 1));
+
     $oklch_variables: map.merge($oklch_variables, (
-            "--#{nok-variables.$prefix}-#{$name}-rgb": $rgb_string,
             "--#{nok-variables.$prefix}-#{$name}": $color,
             "--#{nok-variables.$prefix}-#{$name}-contrast": nok-utilities.get-contrast-color($color, $color-contrast-light, $color-contrast-dark)
     ));
@@ -238,7 +239,7 @@ $dark_mode_rules: ();
  */
 body { //helps increase specificity
   .#{nok-variables.$prefix}-text-universal-contrast {
-    color: #888E !important;
+    color: #89AD !important;
   }
   .#{nok-variables.$prefix}-text-contrast {
     --text-color: var(--bg-color--contrast, inherit) !important;

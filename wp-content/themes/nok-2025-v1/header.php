@@ -19,4 +19,4 @@
 
     </head>
 
-    <body>
+    <body class="no-js nok-bg-body nok-text-contrast">

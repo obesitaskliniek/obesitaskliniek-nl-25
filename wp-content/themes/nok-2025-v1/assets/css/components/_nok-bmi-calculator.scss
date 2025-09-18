@@ -140,8 +140,8 @@ nok-bmi-calculator {
         }
         &#BMISlider {
           --thumb-gap: 0px;
-          --thumb-fill-color: var(--track-color);
-          --thumb-border-color: var(--bmi-classification-color);
+          --thumb-fill-color: rgba(var(--nok-lightgrey--lighter-rgb), 0.65);
+          --thumb-border-color: var(--bmi-classification-color-for-slider-handle);
           --active-range-color: transparent;
           background-image: var(--bmi-gradient), var(--bmi-gradient);
           background-size: calc(100% - var(--thumb-size)) var(--track-line-thickness), 100% var(--track-line-thickness);

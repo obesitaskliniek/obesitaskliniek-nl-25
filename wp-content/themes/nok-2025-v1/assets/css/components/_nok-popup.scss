@@ -3,6 +3,10 @@
 
 // Universal popup for overlaying full screen popups
 
+body:has(.popup-open) {
+  overflow: hidden !important;
+}
+
 nok-popup {
   --bg-alpha-value: 1;
   --row-gap: #{map-get(components-base.$padding-base-values, 2)};
@@ -41,6 +45,10 @@ nok-popup {
     grid-column: 2;
     padding: 0;
     overflow: hidden auto;
+  }
+  .hidden-in-popup {
+    display: none;
+    visibility: collapse;
   }
 }
 .popup-open nok-popup {

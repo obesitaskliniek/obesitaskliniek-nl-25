@@ -19,7 +19,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
     <nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs?cache=<?= time(); ?>">
         <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkerblue--darker nok-z-1" data-untoggles="open,popup-open" data-no-children="true">
 
-            <nok-popup class="nok-bg-body nok-dark-bg-body--lighter nok-subtle-shadow nok-align-items-stretch">
+            <nok-popup class="nok-bg-body nok-dark-bg-darkerblue nok-subtle-shadow nok-align-items-stretch">
                 <nok-popup-header>
                     <nok-popup-title>BMI Calculator</nok-popup-title>
                     <button class="nok-button--small" data-untoggles="popup-open" data-target="nok-top-navigation">
@@ -29,7 +29,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                     </button>
                 </nok-popup-header>
                 <nok-popup-body>
-                    <?php ( Theme::get_instance() )->embed_page_part_template('nok-bmi-calculator', true); ?>
+                    <?php ( Theme::get_instance() )->embed_page_part_template('nok-bmi-calculator', array(), true); ?>
                 </nok-popup-body>
             </nok-popup>
 

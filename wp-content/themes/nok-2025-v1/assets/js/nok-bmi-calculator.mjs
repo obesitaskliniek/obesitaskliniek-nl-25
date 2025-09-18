@@ -515,7 +515,7 @@ function createGUIController(container) {
             if (group && group.inputs) {
                 group.inputs.forEach(input => {
                     if (type === 'bmi') {
-                        container.style.setProperty('--bmi-classification-color', BMIColors[maptoBMIRange(CUTOFFS.adults, newValue)])
+                        container.style.setProperty('--bmi-classification-color-for-slider-handle', BMIColors[maptoBMIRange(CUTOFFS.adults, newValue)])
                     }
                     if (parseFloat(input.value) !== newValue) {
                         input.value = newValue;
@@ -525,8 +525,6 @@ function createGUIController(container) {
         });
 
         if (finalUpdate) {
-            // Update container classes based on BMI category and treatment eligibility
-            updateContainerClasses(container, result);
 
             // Clear any existing timeout to extend the delay
             if (classRemovalTimeout) {
@@ -535,13 +533,18 @@ function createGUIController(container) {
 
             // Set new timeout for class removal
             classRemovalTimeout = setTimeout(() => {
-                //conclusionContainer.style.height = '';
-                container.classList.remove('calculating');
-                classRemovalTimeout = null; // Clean up reference
-            }, 250);
+                // Update container classes based on BMI category and treatment eligibility
+                updateContainerClasses(container, result);
+                // Update health range display elements
+                updateConclusionEntries(container, result);
 
-            // Update health range display elements
-            updateConclusionEntries(container, result);
+                container.style.setProperty('--bmi-classification-color', BMIColors[maptoBMIRange(CUTOFFS.adults, result['bmi'])]);
+                // Remove calculating state class
+                container.classList.remove('calculating');
+
+                // Clean up reference
+                classRemovalTimeout = null;
+            }, 250);
         } else {
             container.classList.add('calculating');
             //conclusionContainer.style.height = `${Math.ceil(conclusionContainer.offsetHeight)}px`;
@@ -711,16 +714,16 @@ function formatDisplayValue(value, property, suffix = '') {
 
 /**
  * Update all conclusion/display elements based on calculation results
- * Handles nested object properties using dot notation in data-input-for attributes
+ * Handles nested object properties using dot notation in data-output-for attributes
  * @param {HTMLElement} container - Container element
  * @param {Object} results - Complete calculation results object
  */
 function updateConclusionEntries(container, results) {
-    // Find all elements with data-input-for attributes
-    const conclusionElements = container.querySelectorAll('[data-input-for]');
+    // Find all elements with data-output-for attributes
+    const conclusionElements = container.querySelectorAll('[data-output-for]');
 
     conclusionElements.forEach(element => {
-        const dataFor = element.dataset.inputFor;
+        const dataFor = element.dataset.outputFor;
         const suffix = element.dataset.valueSuffix || '';
 
         // Get nested value using dot notation
@@ -819,6 +822,15 @@ function registerGUIInput(controller, type, element) {
     }
     group.inputs.add(element);
 
+    if (element.type === 'number') {
+        element.addEventListener('focusin', () => {
+            element.dataset.original = element.value; element.select();
+        })
+        element.addEventListener('blur', () => {
+            if (!element.value) element.value = element.dataset.original;
+        })
+    }
+
     const handleChange = async (e) => {
         const newValue = parseFloat(e.originalEvent.target.value) || 0;
         if (group.value !== newValue) {
@@ -854,26 +866,26 @@ function initGUI(elements) {
         const controller = createGUIController(container);
 
         // Process all calculator inputs
-        container.querySelectorAll('[data-input-for]').forEach(uxContainer => {
+        container.querySelectorAll('[data-output-for]').forEach(inputContainer => {
             // Clean up existing listeners
-            if (uxContainer._bmiCleanup) uxContainer._bmiCleanup();
-            const inputType = uxContainer.dataset.inputFor.toLowerCase();
+            if (inputContainer._bmiCleanup) inputContainer._bmiCleanup();
+            const inputType = inputContainer.dataset.outputFor.toLowerCase();
 
             if (['height', 'weight', 'bmi'].includes(inputType)) {
                 // Apply bounds and default values
-                applyBounds(uxContainer, inputType);
+                applyBounds(inputContainer, inputType);
 
                 if (inputType === 'bmi') {
                     // Generate and apply BMI gradient
-                    generateBMIGradient(container, CUTOFFS.adults, uxContainer.min ?? 10, uxContainer.max ?? 80);
+                    generateBMIGradient(container, CUTOFFS.adults, inputContainer.min ?? 10, inputContainer.max ?? 80);
                 }
 
-                if (uxContainer.dataset.default) {
-                    uxContainer.value = uxContainer.dataset.default;
+                if (inputContainer.dataset.default) {
+                    inputContainer.value = inputContainer.dataset.default;
                 }
 
                 // Register the input
-                registerGUIInput(controller, inputType, uxContainer);
+                registerGUIInput(controller, inputType, inputContainer);
             }
         });
 
