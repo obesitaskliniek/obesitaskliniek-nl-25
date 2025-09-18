@@ -1,6 +1,12 @@
 @use 'sass:list';
 @use 'sass:map';
+@use 'sass:math';
 @use 'sass:color';
+
+@function round_to_decimals($what, $how_many_decimals: 0) {
+  $multiplier: math.pow(10, $how_many_decimals);
+  @return math.max(0, math.div(math.round($what * $multiplier), $multiplier));
+}
 
 // Ascending
 // Used to evaluate Sass maps like our grid breakpoints.

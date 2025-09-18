@@ -526,17 +526,27 @@ final class Theme {
 		// Standardized setup that every template needs
 		global $post;
 		$post = $args['post'] ?? null;
-		$page_part_fields = $args['page_part_fields'] ?? [];
 		setup_postdata( $post );
 
 		// Include the actual template
-		$this->embed_page_part_template($design);
+		$this->embed_page_part_template($design, $args['page_part_fields'] ?? []);
 
 		wp_reset_postdata();
 	}
 
-	public function embed_page_part_template(string $design, bool $register_css = false): void {
+	/**
+	 * @param string $design
+	 * @param array $fields
+	 * @param bool $register_css
+	 *
+	 * @return void
+	 *
+	 * Embed a page part template. Used internally (by include_page_part_template),
+	 * and externally (e.g. for manual embeds -> Pass custom $page_part_fields if required/supported by the page parge).
+	 */
+	public function embed_page_part_template(string $design, array $fields, bool $register_css = false): void {
 
+		$page_part_fields = $fields; //make sure this persists
 		$template_path = get_theme_file_path( "template-parts/page-parts/{$design}.php" );
 		if ( ! file_exists( $template_path ) ) {
 			print '<p class="nok-bg-error nok-p-3">Error: ' . sprintf(
