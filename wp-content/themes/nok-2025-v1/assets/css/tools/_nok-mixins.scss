@@ -112,9 +112,9 @@
 // */
 @mixin nok-inline-link {
   --active-color: #000;
-  --hover-transition-time: #{math.div(nok-variables.$animation-duration, 2)};
+  --hover-transition-time: #{math.div(nok-variables.$animation-duration, 3)};
   --hover-color: var(--text-color--hover, var(--bg-color--contrast, inherit));
-  --underline-height: 0.25ex;
+  --underline-height: 0.2ex;
   --padding: 0.35ex;
   //noinspection CssInvalidFunction
   --gradient: linear-gradient(
@@ -130,8 +130,8 @@
   text-decoration-line: none;
 
   position: relative;
-  padding: var(--padding);
-  margin: auto calc(-1 * var(--padding));
+  padding: var(--padding) 0;
+  //margin: auto calc(-1 * var(--padding));
   bottom: calc(-0.25 * (var(--padding)));
 
   background-image: var(--gradient);
@@ -140,7 +140,7 @@
   background-position: 0 0;
 
   @include transition-properties(background-position) {
-    transition: background-position var(--hover-transition-time) ease-out;
+    transition: background-position var(--hover-transition-time) ease-out, color var(--hover-transition-time) ease-out;
   }
   &:hover {
     --underline-color: var(--hover-color);
@@ -150,6 +150,8 @@
   }
   &:active,
   &:hover:focus:not(:focus-visible) {
+    padding: var(--padding);
+    margin: auto calc(-1 * var(--padding));
     color: var(--underline-color--active);
     background-position: 0 100%;
   }

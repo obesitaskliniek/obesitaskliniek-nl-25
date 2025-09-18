@@ -33,7 +33,7 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
 							<?php the_content(); ?>
                         </div>
                         <a role="button" href="<?php echo $page_part_fields['button_blauw_url'] ?? '#'; ?>" class="nok-button nok-justify-self-start
-                nok-base-font nok-bg-darkblue nok-text-contrast" tabindex="0">
+                nok-bg-darkblue nok-text-contrast" tabindex="0">
 		                    <?php echo $page_part_fields['button_blauw_text'] ?? ''; ?>
                             </svg>
                         </a>
@@ -59,7 +59,7 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
 	                        <?php the_content(); ?>
                         </div>
                         <a role="button" href="<?php echo $page_part_fields['button_blauw_url'] ?? '#'; ?>" class="nok-button nok-justify-self-start
-                nok-base-font nok-bg-darkblue nok-text-contrast" tabindex="0">
+                nok-bg-darkblue nok-text-contrast" tabindex="0">
 	                        <?php echo $page_part_fields['button_blauw_text'] ?? ''; ?>
                             </svg>
                         </a>

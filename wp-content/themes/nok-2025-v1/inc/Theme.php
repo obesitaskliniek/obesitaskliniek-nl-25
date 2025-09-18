@@ -530,6 +530,13 @@ final class Theme {
 		setup_postdata( $post );
 
 		// Include the actual template
+		$this->embed_page_part_template($design);
+
+		wp_reset_postdata();
+	}
+
+	public function embed_page_part_template(string $design, bool $register_css = false): void {
+
 		$template_path = get_theme_file_path( "template-parts/page-parts/{$design}.php" );
 		if ( ! file_exists( $template_path ) ) {
 			print '<p class="nok-bg-error nok-p-3">Error: ' . sprintf(
@@ -538,10 +545,16 @@ final class Theme {
 				) . '</p>';
 		}
 		if ( file_exists( $template_path ) ) {
+			if ($register_css) {
+				//Enqueue any part-specific CSS files we find
+				$css_uri = "/template-parts/page-parts/nok-bmi-calculator.css";
+				if ( file_exists( THEME_ROOT_ABS . $css_uri ) ) {
+					wp_enqueue_style( 'nok-bmi-calculator', THEME_ROOT . $css_uri, array(), filemtime(THEME_ROOT_ABS . $css_uri), false);
+				}
+			}
 			include $template_path;
 		}
 
-		wp_reset_postdata();
 	}
 
 	/**

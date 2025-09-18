@@ -5,20 +5,23 @@
  * Slug: nok-header-main
  * Custom Fields:
  */
+
+use NOK2025\V1\Assets;
+use NOK2025\V1\Theme;
+
 ?>
 
 
 
-<?php $star = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-</svg>';
+<?php $star = Assets::getIcon('star');
 $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg') .'</nok-logo>'; ?>
 
     <nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs?cache=<?= time(); ?>">
-        <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkerblue--darker nok-z-1" data-untoggles="open,popup-open">
-            <nok-popup class="nok-bg-body nok-dark-bg-body nok-subtle-shadow nok-align-items-stretch">
+        <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkerblue--darker nok-z-1" data-untoggles="open,popup-open" data-no-children="true">
+
+            <nok-popup class="nok-bg-body nok-dark-bg-body--lighter nok-subtle-shadow nok-align-items-stretch">
                 <nok-popup-header>
-                    <nok-popup-title>Popup Title</nok-popup-title>
+                    <nok-popup-title>BMI Calculator</nok-popup-title>
                     <button class="nok-button--small" data-untoggles="popup-open" data-target="nok-top-navigation">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
                             <path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="0.8" d="M2.4 2.8c-.2-.2-.2-.5 0-.7.2-.2.5-.2.7 0l5.1 5.1 5.1-5.1c.2-.2.5-.2.7 0 .2.2.2.5 0 .7L8.9 7.9 14 13c.2.2.2.5 0 .7s-.5.2-.7 0L8.2 8.6l-5.1 5.1c-.2.2-.5.2-.7 0-.2-.2-.2-.5 0-.7l5.1-5.1-5.1-5.1Z"></path>
@@ -26,19 +29,10 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                     </button>
                 </nok-popup-header>
                 <nok-popup-body>
-                    <h1>Test Popup</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Proin ac consequat arcu. Morbi ut blandit risus. Donec mollis nec tellus et rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque et dui id justo finibus sollicitudin at et metus.
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Proin ac consequat arcu. Morbi ut blandit risus. Donec mollis nec tellus et rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque et dui id justo finibus sollicitudin at et metus.
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Proin ac consequat arcu. Morbi ut blandit risus. Donec mollis nec tellus et rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque et dui id justo finibus sollicitudin at et metus.
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Proin ac consequat arcu. Morbi ut blandit risus. Donec mollis nec tellus et rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque et dui id justo finibus sollicitudin at et metus.
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Proin ac consequat arcu. Morbi ut blandit risus. Donec mollis nec tellus et rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque et dui id justo finibus sollicitudin at et metus.
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Proin ac consequat arcu. Morbi ut blandit risus. Donec mollis nec tellus et rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque et dui id justo finibus sollicitudin at et metus.
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Proin ac consequat arcu. Morbi ut blandit risus. Donec mollis nec tellus et rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque et dui id justo finibus sollicitudin at et metus.
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Proin ac consequat arcu. Morbi ut blandit risus. Donec mollis nec tellus et rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque et dui id justo finibus sollicitudin at et metus.
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Proin ac consequat arcu. Morbi ut blandit risus. Donec mollis nec tellus et rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque et dui id justo finibus sollicitudin at et metus.
-                    </p>
+                    <?php ( Theme::get_instance() )->embed_page_part_template('nok-bmi-calculator', true); ?>
                 </nok-popup-body>
             </nok-popup>
+
         </nok-screen-mask>
 
         <nok-accessibility-helper class="nok-bg-body nok-text-darkerblue nok-dark-text-contrast nok-nav-control-dropdown" data-requires="./nok-user-prefs.mjs?cache=<?= time(); ?>">
@@ -64,7 +58,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
         <nok-navigation-mobile>
             <nok-navigation-top-row class="nok-section__inner--stretched  nok-bg-white nok-dark-bg-darkestblue nok-text-contrast nok-fill-contrast  nok-z-3">
                 <?= $logo; ?>
-                <button class="nok-button nok-button--small nok-base-font nok-bg-yellow nok-text-contrast nok-invisible-to-sm"
+                <button class="nok-button nok-button--small nok-bg-yellow nok-text-contrast nok-invisible-to-sm"
                         tabindex="0">Gratis voorlichtingsavond
                 </button>
                 <button class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
@@ -150,7 +144,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                         <a href="#" class="nok-nav-menu-item">Kennisbank</a>
                         <a href="#" class="nok-nav-menu-item">Mijn NOK</a>
                         <a href="#" class="nok-nav-menu-item">NOK App</a>
-                        <button class="nok-button nok-button--small nok-base-font nok-bg-yellow nok-mt-1 nok-invisible-sm"
+                        <button class="nok-button nok-button--small nok-bg-yellow nok-mt-1 nok-invisible-sm"
                                 tabindex="0">Gratis voorlichtingsavond
                         </button>
                     </div>
@@ -194,7 +188,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                     <div>Agenda</div>
                     <div>Verwijzers</div>
                     <div>
-                        <button class="nok-button nok-base-font nok-bg-yellow nok-text-contrast" tabindex="0">Gratis
+                        <button class="nok-button nok-bg-yellow nok-text-contrast" tabindex="0">Gratis
                             voorlichtingsavond
                         </button>
                     </div>
@@ -211,15 +205,11 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                         </div>
                         <nok-square-block class="nok-bg-darkerblue">
                             <h3 class="nok-square-block__heading">
-                                Vragen of behoefte aan persoonlijk advies?
+                                Vragen, of behoefte aan persoonlijk advies?
                             </h3>
-                            <button class="nok-button nok-base-font nok-bg-darkblue nok-text-contrast" tabindex="0">
+                            <button class="nok-button nok-bg-darkblue nok-text-contrast" tabindex="0">
                                 Neem contact op
-                                <svg class="nok-text-yellow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25"
-                                     width="25" height="25" fill="currentColor">
-                                    <path d="m17.5 5.999-.707.707 5.293 5.293H1v1h21.086l-5.294 5.295.707.707L24 12.499l-6.5-6.5z"
-                                          data-name="Right"/>
-                                </svg>
+	                            <?= Assets::getIcon('arrow-right', 'nok-text-yellow'); ?>
                             </button>
                         </nok-square-block>
                     </div>

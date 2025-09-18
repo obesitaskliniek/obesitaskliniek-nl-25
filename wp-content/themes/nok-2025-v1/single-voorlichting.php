@@ -1,7 +1,7 @@
 <?php
 /* Template Name: Event */
 
-get_header();
+get_header('voorlichting');
 
 use NOK2025\V1\Assets;
 use NOK2025\V1\Helpers;
@@ -31,8 +31,9 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                 <?php
                 if (!$hubspotData['open']) {
                     echo "<div class='nok-alert nok-bg-greenyellow--lighter nok-p-1 nok-mb-1 nok-rounded-border nok-bg-alpha-10' role='alert'>
-                                <p>Helaas, deze voorlichting is {$hubspotData['status']}! Aanmelden is daarom niet (meer) mogelijk. Kijk bij de <a class='nok-hyperlink' href='#alternatieven'>alternatieven</a>, 
-                                of ga naar onze <a class='nok-hyperlink' href='#'>agenda</a> <a href='#'>agenda</a> <a href='#'>agenda</a> voor meer voorlichtingen.</p>
+                                <p>Helaas, deze voorlichting is {$hubspotData['status']}! Aanmelden is daarom niet (meer) mogelijk. 
+                                Kijk bij de <a class='nok-hyperlink' href='#alternatieven'>alternatieven</a>, 
+                                of ga naar onze <a href='#'>agenda</a> voor meer voorlichtingen.</p>
                               </div>";
                 }
                 ?>
@@ -51,7 +52,6 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                     <p>De <?= $hubspotData['soort'];?> start om <?= $hubspotData['timestamp']['start_time']; ?> en duurt ongeveer <?= Helpers::minutesToDutchRounded(intval ( $hubspotData['duur'] )); ?>, tot <?= $hubspotData['timestamp']['end_time']; ?> uur.</p>
                     <?php if (!empty($hubspotData['onderwerpen'])) : ?>
                     <h2>Onderwerpen</h2>
-                    <p>Wat kunt u verwachten van deze voorlichting?</p>
                     <?= $hubspotData['onderwerpen']; ?>
                     <?php endif; ?>
                     <h2>Kosten</h2>
@@ -98,29 +98,52 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                                 <span class="phone" id="phone"><a href="tel:077 - 303 06 30" class="nok-hyperlink">077 - 303 06 30</a></span>
                             </address>
                         </div>
-                        <a role="button" href="#aanmelden" class="nok-button nok-justify-self-start w-100
-                nok-base-font nok-bg-yellow nok-text-contrast <?= $hubspotData['open'] ? '' : 'disabled'; ?>" tabindex="0">
-                            Aanmelden
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 12 12" width="12" height="12"
-                                 stroke="currentColor"
-                                 style="stroke-linecap: round; stroke-linejoin: round;">
-                                <path d="M 5,0 L 5,10 M 5,10 L 0,4 M 5,10 L 10,4" data-name="Down"></path>
-                            </svg>
+                        <a role="button" href="#aanmelden" class="nok-button nok-button--large nok-justify-self-start w-100
+                nok-bg-yellow nok-text-contrast <?= $hubspotData['open'] ? '' : 'disabled'; ?>" tabindex="0">
+                            Aanmelden <?= Assets::getIcon('arrow-down'); ?>
                         </a>
                         <a role="button" href="" class="nok-button nok-justify-self-start w-100
-                nok-base-font nok-bg-lightgrey--lighter nok-text-contrast <?= $hubspotData['open'] ? '' : 'disabled'; ?>" tabindex="0">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 12 12" width="12" height="12"
-                                 stroke="currentColor"
-                                 style="stroke-linecap: round; stroke-linejoin: round;">
-                                <path d="M 5,0 L 5,10 M 0,5 L 10,5" data-name="Plus"></path>
-                            </svg>
-                            Voeg toe aan agenda
+                nok-bg-lightgrey--lighter nok-text-contrast <?= $hubspotData['open'] ? '' : 'disabled'; ?>" tabindex="0">
+	                        <?= Assets::getIcon('plus'); ?> Voeg toe aan agenda
                         </a>
                     </nok-square-block>
 
                     <nok-square-block class="nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10" data-shadow="true">
                         <div class="nok-square-block__heading">
                             <h2>Alternatieven</h2>
+                        </div>
+                        <div class="nok-square-block__text">
+                            <div class="nok-layout nok-layout-grid nok-grid-gap-0_25 nok-column-gap-0_25 nok-mb-1" style="--grid-template-columns: 1fr auto auto auto;">
+
+	                            <?php
+	                            $limit = 4;
+	                            $raw_ids = explode(';', $hubspotData['data_raw']['related_voorlichtingen'][0]);
+	                            $related_ids = array_map('intval', array_slice($raw_ids, 0, $limit));
+
+	                            $posts = get_posts([
+		                            'post__in' => $related_ids,
+		                            'post_type' => 'voorlichting',
+		                            'orderby' => 'post__in',
+		                            'numberposts' => count($related_ids),
+		                            'post_status' => 'publish'
+	                            ]);
+
+	                            foreach ($posts as $post) {
+		                            $hubspotData   = Helpers::setup_hubspot_metadata( $post->ID );
+		                            printf(
+			                            '<span class="nok-justify-self-start"><a class="nok-hyperlink" href="%s">%s</a></span><span class="nok-justify-self-start">%s</span><span class="nok-justify-self-center">-</span><span class="nok-justify-self-end">%s</span>',
+			                            get_permalink($post->ID),
+			                            $hubspotData['timestamp']['niceDateFull'],
+			                            $hubspotData['timestamp']['start_time'],
+			                            $hubspotData['timestamp']['end_time']
+		                            );
+	                            }
+	                            ?>
+                            </div>
+                            <a role="button" href="#aanmelden" class="nok-button nok-button nok-justify-self-start w-100
+                                nok-bg-body--darker nok-text-contrast <?= $hubspotData['open'] ? '' : 'disabled'; ?>" tabindex="0">
+                                Bekijk volledige agenda <?= Assets::getIcon('calendar-full'); ?>
+                            </a>
                         </div>
                     </nok-square-block>
                 </div>
@@ -129,13 +152,9 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
     </nok-section>
 
 <?php
-print '<pre style="max-height: 20vh; overflow: scroll; font-size:0.7rem; line-height: 1;">';
-var_dump($hubspotData['data_raw']);
-print '</pre>';
-?>
-
-<?php
-
+//print '<pre style="max-height: 20vh; overflow: scroll; font-size:0.7rem; line-height: 1;">';
+//var_dump($hubspotData['data_raw']);
+//print '</pre>';
 get_template_part( 'template-parts/post-parts/nok-voorlichtingen-carousel', null, $args = array(
         'colors' => 'nok-bg-darkblue nok-text-white nok-dark-bg-darkerblue',
 ) );

@@ -1,10 +1,11 @@
 @use "sass:map";
+@use "sass:math";
 @use "shared" as components-base;
 @use "../nok-variables";
 
 // Collapsible accordion component using native <details> element
 $timing: 0,1,.9,1;
-$duration: components-base.$animation-duration;
+$duration: math.div(components-base.$animation-duration, 1.5);
 
 nok-accordion {
   --animation-timing: cubic-bezier(#{$timing});

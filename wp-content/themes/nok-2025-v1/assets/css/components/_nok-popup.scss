@@ -31,7 +31,7 @@ nok-popup {
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-between;
-    padding: #{map-get(components-base.$padding-base-values, 0_5)};
+    padding: #{map-get(components-base.$padding-base-values, 1)};
     &:has(nok-popup-title:empty) {
       padding-bottom: 0;
     }

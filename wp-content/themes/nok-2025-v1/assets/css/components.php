@@ -86,7 +86,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
     <nok-navigation-mobile>
         <nok-navigation-top-row class="nok-section__inner--stretched  nok-bg-white nok-dark-bg-darkestblue nok-text-contrast nok-fill-contrast  nok-z-3">
             <?= $logo; ?>
-            <button class="nok-button nok-button--small nok-base-font nok-bg-yellow nok-text-contrast nok-invisible-to-sm"
+            <button class="nok-button nok-button--small nok-bg-yellow nok-text-contrast nok-invisible-to-sm"
                     tabindex="0">Gratis voorlichtingsavond
             </button>
             <button class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
@@ -172,7 +172,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                     <a href="#" class="nok-nav-menu-item">Kennisbank</a>
                     <a href="#" class="nok-nav-menu-item">Mijn NOK</a>
                     <a href="#" class="nok-nav-menu-item">NOK App</a>
-                    <button class="nok-button nok-button--small nok-base-font nok-bg-yellow nok-mt-1 nok-invisible-sm"
+                    <button class="nok-button nok-button--small nok-bg-yellow nok-mt-1 nok-invisible-sm"
                             tabindex="0">Gratis voorlichtingsavond
                     </button>
                 </div>
@@ -216,7 +216,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                 <div>Agenda</div>
                 <div>Verwijzers</div>
                 <div>
-                    <button class="nok-button nok-base-font nok-bg-yellow" tabindex="0">Gratis
+                    <button class="nok-button nok-bg-yellow" tabindex="0">Gratis
                         voorlichtingsavond
                     </button>
                 </div>
@@ -235,7 +235,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                         <h3 class="nok-square-block__heading">
                             Vragen of behoefte aan persoonlijk advies?
                         </h3>
-                        <button class="nok-button nok-base-font nok-bg-darkblue nok-text-contrast" tabindex="0">
+                        <button class="nok-button nok-bg-darkblue nok-text-contrast" tabindex="0">
                             Neem contact op
                             <svg class="nok-text-yellow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25"
                                  width="25" height="25" fill="currentColor">
@@ -360,7 +360,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                 </svg>
                 Samenwerking met de beste ziekenhuizen
             </div>
-            <button class="nok-button nok-base-font nok-bg-white nok-text-darkerblue nok-visible-xs align-self-stretch"
+            <button class="nok-button nok-bg-white nok-text-darkerblue nok-visible-xs align-self-stretch"
                     tabindex="0">Vind een vestiging
             </button>
         </footer>
@@ -398,7 +398,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit!
                     </p>
                     <button class="nok-button nok-justify-self-start
-                nok-base-font nok-bg-darkblue nok-text-contrast" tabindex="0">
+                nok-bg-darkblue nok-text-contrast" tabindex="0">
                         De operatie
                         </svg>
                     </button>
@@ -446,7 +446,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit!
                     </p>
                     <button class="nok-button nok-justify-self-start
-                nok-base-font nok-bg-darkblue nok-text-contrast" tabindex="0">
+                nok-bg-darkblue nok-text-contrast" tabindex="0">
                         De operatie
                         </svg>
                     </button>
@@ -645,7 +645,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                                     iusto magni nihil nulla, quam quas, quia reprehenderit vel voluptatum.
                                     Lorem ipsum dolor sit amet, consectetur adipisicing elit!
                                 </p>
-                                <button class="nok-button nok-base-font nok-text-contrast nok-bg-darkerblue nok-dark-bg-darkblue nok-visible-xs align-self-stretch"
+                                <button class="nok-button nok-text-contrast nok-bg-darkerblue nok-dark-bg-darkblue nok-visible-xs align-self-stretch"
                                         tabindex="0">Over de <?= $specialist; ?>
                                 </button>
                             </div>
@@ -674,7 +674,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                         vero.
                     </p>
                     <button class="nok-button nok-justify-self-start
-                    nok-base-font nok-bg-darkblue nok-text-contrast" tabindex="0">
+                    nok-bg-darkblue nok-text-contrast" tabindex="0">
                         Neem contact op
                         <svg class="nok-text-yellow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25"
                              width="25" height="25" fill="currentColor">

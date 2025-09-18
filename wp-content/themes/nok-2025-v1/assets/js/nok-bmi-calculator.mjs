@@ -75,7 +75,7 @@ const BOUNDS = {
     },
     weight: {
         min: 10,
-        max: 300
+        max: 250
     },
     bmi: {
         min: 15,

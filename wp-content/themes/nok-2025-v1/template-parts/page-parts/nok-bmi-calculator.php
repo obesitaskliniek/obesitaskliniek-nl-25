@@ -11,9 +11,9 @@
     <nok-section>
         <div class="nok-section__inner">
 
-            <nok-bmi-calculator class="nok-layout-grid nok-grid-gap-3 nok-align-items-start
-            " data-requires="./nok-bmi-calculator.mjs?cache=<?= time(); ?>">
-                <nok-square-block class="nok-bg-white nok-alpha-10 calculator-inputs nok-layout-grid nok-layout-grid__2-column nok-grid-gap-0_25 nok-align-items-center" data-shadow="true">
+            <nok-bmi-calculator class="nok-layout-grid nok-grid-gap-3 nok-align-items-start" data-requires="./nok-bmi-calculator.mjs?cache=<?= time(); ?>">
+                <nok-square-block class="calculator-inputs nok-layout-grid nok-layout-grid__2-column half-grid-gap nok-align-items-center
+                    nok-bg-white nok-dark-bg-darkestblue nok-text-contrast" data-shadow="true">
                     <?php $calculatorInputs = array(
                             'Lengte (cm)' => array('name' => 'height', 'default' => 195),
                             'Gewicht (kg)' => array('name' => 'weight', 'default' => 80),
@@ -26,7 +26,8 @@
                         <input type='range' id='{$id['name']}Slider' data-input-for='{$id['name']}' min='50' max='250' step='0.1' value='{$id['default']}' data-default='{$id['default']}'>";
                      endforeach; ?>
                 </nok-square-block>
-                <nok-square-block class="nok-bg-white nok-alpha-10 calculator-conclusion nok-layout nok-layout-grid half-grid-gap" data-shadow="true">
+                <nok-square-block class="calculator-conclusion nok-layout nok-layout-grid half-grid-gap
+                    nok-bg-white nok-dark-bg-darkestblue nok-text-contrast nok-alpha-10" data-shadow="true">
                     <h1 class="bmi-class-color">U heeft <span data-input-for="category.classification"></span></h1>
                     <div class="conclusion-text">
                         <p>
