@@ -155,10 +155,12 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 //print '<pre style="max-height: 20vh; overflow: scroll; font-size:0.7rem; line-height: 1;">';
 //var_dump($hubspotData['data_raw']);
 //print '</pre>';
-get_template_part( 'template-parts/post-parts/nok-voorlichtingen-carousel', null, $args = array(
-        'colors' => 'nok-bg-darkblue nok-text-white nok-dark-bg-darkerblue',
-) );
+
+// With this:
+use NOK2025\V1\Theme;
+$theme = Theme::get_instance();
+$theme->embed_post_part_template('nok-voorlichtingen-carousel', [
+	'colors' => 'nok-bg-darkblue nok-text-white nok-dark-bg-darkerblue',
+]);
 
 get_footer();
-
-?>
