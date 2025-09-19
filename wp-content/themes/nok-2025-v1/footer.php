@@ -1,5 +1,7 @@
 <?php
+use NOK2025\V1\Theme;
 
-get_template_part( 'template-parts/page-parts/nok-footer', null );
+$theme = Theme::get_instance();
+$theme->embed_page_part_template('nok-footer', []);
 
 wp_footer();

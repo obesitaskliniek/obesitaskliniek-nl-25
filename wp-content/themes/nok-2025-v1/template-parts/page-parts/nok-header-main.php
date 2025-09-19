@@ -29,7 +29,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                     </button>
                 </nok-popup-header>
                 <nok-popup-body>
-                    <?php ( Theme::get_instance() )->embed_page_part_template('nok-bmi-calculator', array(), true); ?>
+                    <?php ( Theme::get_instance() )->embed_post_part_template('nok-bmi-calculator', array(), true); ?>
                 </nok-popup-body>
             </nok-popup>
 

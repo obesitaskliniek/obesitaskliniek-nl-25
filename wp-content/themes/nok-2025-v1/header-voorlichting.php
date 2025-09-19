@@ -1,7 +1,6 @@
 <?php
-
 get_header();
 
-get_template_part( './template-parts/page-parts/nok-header', 'main' );
-
-?>
+use NOK2025\V1\Theme;
+$theme = Theme::get_instance();
+$theme->embed_page_part_template('nok-header', []);

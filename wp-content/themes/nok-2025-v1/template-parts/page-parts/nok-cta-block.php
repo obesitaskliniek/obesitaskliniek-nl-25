@@ -27,8 +27,8 @@ if ( $page_part_fields['colors'] === "Blauw op donkerblauw" ) {
 
 ?>
 
-    <nok-section>
-        <div class="nok-section__inner <?= $section_colors ? : ''?>">
+    <nok-section class=" <?= $section_colors ? : ''?>">
+        <div class="nok-section__inner">
             <nok-square-block class="horizontal layout-<?= $layout;?> <?= $block_colors; ?>" data-shadow="true">
                 <div class="nok-square-block__icon">
                     <?= Assets::getIcon('arrow-right-long'); ?>

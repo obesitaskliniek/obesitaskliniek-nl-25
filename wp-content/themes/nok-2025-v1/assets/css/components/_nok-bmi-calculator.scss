@@ -44,6 +44,7 @@ $all_selectors: '';
 }
 
 nok-bmi-calculator {
+  font-size: 1rem;
 
   --grid-template-columns: 3fr 4fr;
   @include components-base.media-breakpoint-down(xxl) {
