@@ -45,9 +45,8 @@ nok-square-block {
 
       &__icon {
         svg {
-          width: 8em;
-          height: auto;
-          stroke-width: 0.025rem;
+          width: 5em;
+          height: 5em;
         }
       }
     }
@@ -58,6 +57,9 @@ nok-square-block {
   //line-height: var(--#{components-base.$prefix}-default-line-height, 1.25);
 
   padding: #{map-get(components-base.$padding-base-values, 2)};
+  &.double-padding {
+    padding: #{map-get(components-base.$padding-base-values, 4)};
+  }
   background-color: var(--background-color);
 
   &[data-shadow="true"] {

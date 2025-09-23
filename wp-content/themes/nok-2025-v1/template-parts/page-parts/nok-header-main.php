@@ -17,9 +17,9 @@ use NOK2025\V1\Theme;
 $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg') .'</nok-logo>'; ?>
 
     <nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs?cache=<?= time(); ?>">
-        <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkerblue--darker nok-z-1" data-untoggles="open,popup-open" data-no-children="true">
+        <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkestblue--darker nok-z-1" data-untoggles="open,popup-open" data-no-children="true">
 
-            <nok-popup class="nok-bg-body nok-dark-bg-darkerblue nok-subtle-shadow nok-align-items-stretch">
+            <nok-popup class="nok-bg-body nok-dark-bg-darkerblue nok-align-items-stretch">
                 <nok-popup-header>
                     <nok-popup-title>BMI Calculator</nok-popup-title>
                     <button class="nok-button--small" data-untoggles="popup-open" data-target="nok-top-navigation">

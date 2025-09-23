@@ -28,16 +28,16 @@ $featuredImage = Helpers::get_featured_image();
 nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10">
 
             <article class="nok-pl-section-padding nok-px-to-lg-section-padding">
-                <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-2 nok-fs-to-md-1">
+                <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading">
 	                <?php echo $page_part_fields['tagline'] ?? ''; ?>
                 </h2>
-				<?php the_title( '<h1 class="nok-fs-6">', '</h1>' ); ?>
+				<?php the_title( '<h1 class="nok-fs-giant">', '</h1>' ); ?>
                 <div>
 					<?php the_content(); ?>
                 </div>
                 <div class="nok-button-group nok-justify-items-start">
                     <a role="button" href="<?= $page_part_fields['button_blauw_url']; ?>"
-                       class="nok-button nok-justify-self-center fill-group-column nok-bg-darkerblue nok-text-contrast" tabindex="0">
+                       class="nok-button nok-justify-self-center nok-bg-darkerblue nok-text-contrast fill-group-column" tabindex="0">
 	                    <?= $page_part_fields['button_blauw_text']; ?>
                     </a>
                     <a role="button" href="<?= $page_part_fields['button_transparant_url']; ?>"

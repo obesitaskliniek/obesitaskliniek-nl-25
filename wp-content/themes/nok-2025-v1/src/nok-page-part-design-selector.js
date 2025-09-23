@@ -7,6 +7,156 @@ import {Fragment, useRef, useState, useEffect} from '@wordpress/element';
 
 const NAME = 'nok-page-part-design-selector';
 
+const RepeaterField = ({ field, value, onChange }) => {
+    const [items, setItems] = useState(() => {
+        try {
+            return JSON.parse(value || '[]');
+        } catch {
+            return [];
+        }
+    });
+
+    const updateItems = (newItems) => {
+        setItems(newItems);
+        onChange(JSON.stringify(newItems));
+    };
+
+    const addItem = () => {
+        const newItems = [...items, { title: '', content: '', button_text: '' }];
+        updateItems(newItems);
+    };
+
+    const removeItem = (index) => {
+        const newItems = items.filter((_, i) => i !== index);
+        updateItems(newItems);
+    };
+
+    const updateItem = (index, key, itemValue) => {
+        const newItems = [...items];
+        newItems[index] = { ...newItems[index], [key]: itemValue };
+        updateItems(newItems);
+    };
+
+    return (
+        <div style={{ border: '1px solid #ddd', borderRadius: '4px', padding: '12px', marginTop: '8px' }}>
+            <div style={{ marginBottom: '12px', fontSize: '13px', fontWeight: '600' }}>
+                {field.label}
+            </div>
+
+            {items.map((item, index) => (
+                <div key={index} style={{
+                    border: '1px solid #e0e0e0',
+                    borderRadius: '4px',
+                    marginBottom: '10px',
+                    overflow: 'hidden'
+                }}>
+                    <div style={{
+                        background: '#f8f9fa',
+                        padding: '8px 12px',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        borderBottom: '1px solid #e0e0e0'
+                    }}>
+                        <span style={{ fontSize: '12px', fontWeight: '600' }}>
+                            Item {index + 1}
+                        </span>
+                        <button
+                            type="button"
+                            onClick={() => removeItem(index)}
+                            style={{
+                                background: 'none',
+                                border: 'none',
+                                color: '#d63638',
+                                cursor: 'pointer',
+                                fontSize: '12px'
+                            }}
+                        >
+                            Remove
+                        </button>
+                    </div>
+
+                    <div style={{ padding: '12px' }}>
+                        <div style={{ marginBottom: '8px' }}>
+                            <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px' }}>
+                                Title:
+                            </label>
+                            <input
+                                type="text"
+                                value={item.title || ''}
+                                onChange={(e) => updateItem(index, 'title', e.target.value)}
+                                placeholder="e.g., Arts, Internist"
+                                style={{
+                                    width: '100%',
+                                    padding: '6px 8px',
+                                    border: '1px solid #ddd',
+                                    borderRadius: '3px',
+                                    fontSize: '13px'
+                                }}
+                            />
+                        </div>
+
+                        <div style={{ marginBottom: '8px' }}>
+                            <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px' }}>
+                                Content:
+                            </label>
+                            <textarea
+                                value={item.content || ''}
+                                onChange={(e) => updateItem(index, 'content', e.target.value)}
+                                placeholder="Description text..."
+                                rows="3"
+                                style={{
+                                    width: '100%',
+                                    padding: '6px 8px',
+                                    border: '1px solid #ddd',
+                                    borderRadius: '3px',
+                                    fontSize: '13px',
+                                    resize: 'vertical'
+                                }}
+                            />
+                        </div>
+
+                        <div>
+                            <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px' }}>
+                                Button Text:
+                            </label>
+                            <input
+                                type="text"
+                                value={item.button_text || ''}
+                                onChange={(e) => updateItem(index, 'button_text', e.target.value)}
+                                placeholder="e.g., Over de Arts"
+                                style={{
+                                    width: '100%',
+                                    padding: '6px 8px',
+                                    border: '1px solid #ddd',
+                                    borderRadius: '3px',
+                                    fontSize: '13px'
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            ))}
+
+            <button
+                type="button"
+                onClick={addItem}
+                style={{
+                    background: '#0073aa',
+                    color: 'white',
+                    border: 'none',
+                    padding: '6px 12px',
+                    borderRadius: '3px',
+                    cursor: 'pointer',
+                    fontSize: '12px'
+                }}
+            >
+                Add Item
+            </button>
+        </div>
+    );
+};
+
 function DesignSlugPanel() {
     // 1) Grab the current post type
     const postType = useSelect((select) =>
@@ -176,7 +326,7 @@ function DesignSlugPanel() {
                     />
                 );
 
-            case 'repeater':
+            /*case 'repeater':
                 // For now, show as textarea - we'll enhance this later
                 return (
                     <TextareaControl
@@ -186,6 +336,16 @@ function DesignSlugPanel() {
                         onChange={(value) => updateMetaField(field.meta_key, value)}
                         help="Enter JSON data for repeater field"
                         rows={4}
+                    />
+                );*/
+
+            case 'repeater':
+                return (
+                    <RepeaterField
+                        key={field.meta_key}
+                        field={field}
+                        value={fieldValue}
+                        onChange={(value) => updateMetaField(field.meta_key, value)}
                     />
                 );
 

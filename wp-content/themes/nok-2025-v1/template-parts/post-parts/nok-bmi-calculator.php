@@ -1,7 +1,9 @@
 <?php
+$rand_id = rand( 1000, 9999 );
 ?>
-    <nok-bmi-calculator class="nok-layout-grid nok-grid-gap-3 nok-align-items-start calculating"
-                        data-requires="./nok-bmi-calculator.mjs?cache=<?= time(); ?>">
+    <nok-bmi-calculator class="nok-layout-grid nok-grid-gap-3 nok-align-items-start calculating loading"
+                        data-requires="./nok-bmi-calculator.mjs?cache=<?= $rand_id ?>">
+        <form id="<?= $rand_id; ?>" style="display: contents;">
         <nok-square-block class="calculator-inputs nok-layout-grid nok-layout-grid__2-column half-grid-gap nok-align-items-center
                 nok-bg-white nok-dark-bg-darkestblue nok-text-contrast" data-shadow="true">
 			<?php $calculatorInputs = array(
@@ -16,6 +18,7 @@
                     <input type='range' id='{$id['name']}Slider' data-output-for='{$id['name']}' min='50' max='250' step='0.1' value='{$id['default']}' data-default='{$id['default']}'>";
 			endforeach; ?>
         </nok-square-block>
+        </form>
         <nok-square-block class="calculator-conclusion nok-layout nok-layout-grid half-grid-gap
                 nok-bg-white nok-dark-bg-darkestblue nok-text-contrast nok-alpha-10" data-shadow="true">
             <h1 class="bmi-class-color">U heeft <span data-output-for="category.classification"></span></h1>

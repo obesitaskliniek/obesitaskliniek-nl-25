@@ -21,6 +21,5 @@ nok-screen-mask {
     transition:
       background #{components-base.$animation-duration} ease-in-out,
       backdrop-filter #{components-base.$animation-duration} ease-in-out;
-
   }
 }

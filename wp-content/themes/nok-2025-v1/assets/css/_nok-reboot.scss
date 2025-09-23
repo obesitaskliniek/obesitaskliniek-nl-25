@@ -73,7 +73,14 @@ hr {
   margin-top: 0; // 1
   margin-bottom: 0;
   line-height: 1.2;
+  line-height: var(--#{nok-variables.$prefix}-default-heading-line-height, 1.1);
   color: var(--text-color, var(--bg-color--contrast));
+  /* Avoid text overflows */
+  overflow-wrap: break-word;
+  text-wrap: balance;
+  + p {
+    margin-top: 1em;
+  }
 }
 
 h1 {
@@ -109,25 +116,23 @@ h6 {
 
 // Reset margins on paragraphs
 //
-// Similarly, the top margin on `<p>`s get reset. However, we also reset the
-// bottom margin to use `rem` units instead of `em`.
 
 p {
+  /* Avoid text overflows */
+  overflow-wrap: break-word;
+  /* Improve line wrapping */
+  text-wrap: pretty;
   margin-top: 0;
   margin-bottom: 0;
-}
+  & + p {
+    margin-top: 1em;
+  }
 
-/* Avoid text overflows */
-p, h1, h2, h3, h4, h5, h6 {
-  overflow-wrap: break-word;
-}
-
-/* Improve line wrapping */
-p {
-  text-wrap: pretty;
-}
-h1, h2, h3, h4, h5, h6 {
-  text-wrap: balance;
+  @for $i from 1 through 6 {
+    & + h#{$i} {
+      margin-top: 1em;
+    }
+  }
 }
 
 // Abbreviations

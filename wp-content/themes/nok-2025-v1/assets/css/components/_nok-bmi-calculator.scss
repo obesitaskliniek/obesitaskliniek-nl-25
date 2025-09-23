@@ -71,36 +71,9 @@ nok-bmi-calculator {
   --thumb-gap: round(.5em,1px);
   --thumb-size: round(2.2em,1px);
 
-  /*
-  @include components-base.transition-properties(height) {
-    .calculator-conclusion {
-      transition: height components-base.$animation-duration var(--animation-easing-out, cubic-bezier(.85, 0, .15, 1));
-      interpolate-size: allow-keywords;
-    }
-  }*/
-
-
-  @include components-base.transition-properties(opacity) {
-    .calculator-conclusion {
-      h1, div.conclusion-text {
-        animation: fade--in components-base.$animation-duration var(--animation-easing-out, cubic-bezier(.85, 0, .15, 1));
-        animation-fill-mode: forwards;
-      }
-    }
-    &.calculating .calculator-conclusion {
-      h1, div.conclusion-text {
-        animation: fade--out 0.1s var(--animation-easing-out, cubic-bezier(.85, 0, .15, 1));
-        animation-fill-mode: forwards;
-      }
-    }
-  }
-
-  @include components-base.no-transitions {
-    &.calculating .calculator-conclusion {
-      h1, div.conclusion-text {
-        opacity: 0;
-      }
-    }
+  &.loading .calculator-inputs,
+  &.calculating .calculator-conclusion {
+    @include components-base.animating-placeholder;
   }
 
   #{$all_selectors} {

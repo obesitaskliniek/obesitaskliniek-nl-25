@@ -35,13 +35,8 @@ nok-hero {
       p {
         @include components-base.rfs(1.1rem, font-size);
       }
-      h1 {
-        font-size: 3.25rem;
-        @include components-base.rfs(3.25rem, font-size);
-      }
       h2 {
-        font-size: 2.5rem;
-        @include components-base.rfs(2.5rem, font-size);
+        @include components-base.rfs((components-base.$h2-font-size * 1.25), font-size);
       }
     }
   

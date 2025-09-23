@@ -889,6 +889,7 @@ function initGUI(elements) {
             }
         });
 
+        container.classList.remove('loading');
         // Perform initial calculation with GUI update
         controller.updateCalculation('height', true);
     });

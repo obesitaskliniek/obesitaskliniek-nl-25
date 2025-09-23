@@ -32,8 +32,7 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
                         <h3 class="fw-400">We helpen je graag</h3>
                     </div>
                     <p class="nok-square-block__text nok-fs-2">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos
-                        vero.
+                        Wil je meer weten over de behandeling? Bel of mail ons dan gerust.
                     </p>
                     <button class="nok-button nok-justify-self-start
                 nok-bg-darkblue nok-text-contrast" tabindex="0">

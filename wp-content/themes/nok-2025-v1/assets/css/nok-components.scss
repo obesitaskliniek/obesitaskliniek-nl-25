@@ -43,6 +43,9 @@ body {
     @include nok-mixins.nok-heading-font;
   }
 }
+.#{nok-variables.$prefix}-fs-giant {
+  @include nok-rfs.rfs((nok-variables.$h1-font-size * 1.5), font-size);
+}
 
 .baseline-grid {
   @include hnl-baseline-grid.baseline-grid;

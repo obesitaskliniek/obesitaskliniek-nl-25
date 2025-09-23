@@ -22,9 +22,8 @@ $circle_color         = ( $page_part_fields['circle_color'] ?? "") !== "" ? $pag
 $default_colors = 'nok-text-darkerblue';
 $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors'] : $default_colors;
 ?>
-    <nok-section class="circle circle-<?=$page_part_fields['layout'];?>"
-    style="--circle-background-color:<?=$circle_color;?>;">
-        <div class="nok-section__inner triple-margin <?= $colors; ?>">
+    <nok-section class="circle circle-<?=$page_part_fields['layout'];?> <?= $colors; ?>" style="--circle-background-color:<?=$circle_color;?>;">
+        <div class="nok-section__inner triple-margin">
             <article class="nok-layout-grid nok-columns-6 nok-align-items-center nok-column-gap-3">
                 <div class="nok-column-first-2 nok-layout-flex-column nok-align-items-stretch nok-fs-2">
 	                <?php the_title(str_contains($page_part_fields['circle_color'], 'dark') ? '<h1 class="nok-text-white">' : '<h1>', '</h1>'); ?>

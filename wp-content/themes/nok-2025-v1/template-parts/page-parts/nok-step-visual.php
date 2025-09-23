@@ -17,7 +17,7 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
 
 ?>
 
-    <nok-section>
+    <nok-section class="linked">
         <div class="nok-section__inner">
 			<?php if ( $left ) : ?>
                 <div class="nok-my-2 nok-align-self-stretch
@@ -29,7 +29,7 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
                             <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-3 nok-fs-to-md-2"><?php echo $page_part_fields['tagline'] ?? ''; ?></h2>
 							<?php the_title( '<h1>', '</h1>' ); ?>
                         </div>
-                        <div class="nok-square-block__text nok-fs-2">
+                        <div class="nok-square-block__text">
 							<?php the_content(); ?>
                         </div>
                         <a role="button" href="<?php echo $page_part_fields['button_blauw_url'] ?? '#'; ?>" class="nok-button nok-justify-self-start
@@ -55,7 +55,7 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
                             <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-3 nok-fs-to-md-2"><?php echo $page_part_fields['tagline'] ?? ''; ?></h2>
 	                        <?php the_title( '<h1>', '</h1>' ); ?>
                         </div>
-                        <div class="nok-square-block__text nok-fs-2">
+                        <div class="nok-square-block__text">
 	                        <?php the_content(); ?>
                         </div>
                         <a role="button" href="<?php echo $page_part_fields['button_blauw_url'] ?? '#'; ?>" class="nok-button nok-justify-self-start
