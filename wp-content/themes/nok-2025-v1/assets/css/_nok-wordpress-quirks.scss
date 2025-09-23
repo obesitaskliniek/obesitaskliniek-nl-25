@@ -1,5 +1,7 @@
-.wp-block-paragraph {
-  display: contents !important;
+.kill-wp-block-paragraphs {
+  .wp-block-paragraph {
+    display: contents !important;
+  }
 }
 p:empty {
   display: none !important;

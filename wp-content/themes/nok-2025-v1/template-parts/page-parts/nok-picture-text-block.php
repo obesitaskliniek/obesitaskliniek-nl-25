@@ -9,7 +9,7 @@
  * - button_url:url,
  * - layout:select(left|right)
  * - colors:select(Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Transparant::nok-text-darkerblue)
- * - circle_color:select(Blauw::var(--nok-darkerblue)|Automatisch::var(--nok-body--lighter)|Uit::transparent)
+ * - circle_color:select(Blauw::var(--nok-darkerblue)|Automatisch::var(--bg-color--hover)|Uit::transparent)
  * - pull_down:checkbox(true)
  */
 
@@ -28,9 +28,9 @@ $circle_color         = ( $page_part_fields['circle_color'] ?? "") !== "" ? $pag
 $default_colors = 'nok-text-darkerblue';
 $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors'] : $default_colors;
 ?>
-    <nok-section class="circle circle-<?=$left ? 'right' : 'left';?> <?= $collapse ? 'collapse-bottom pull-down' : ''; ?>"
+    <nok-section class="circle circle-<?=$left ? 'right' : 'left';?> <?= $collapse ? 'collapse-bottom pull-down' : ''; ?> <?= $colors; ?>"
     style="--circle-background-color:<?=$circle_color;?>;">
-        <div class="nok-section__inner <?= $colors; ?>">
+        <div class="nok-section__inner">
             <article class=" <?= $collapse ? 'nok-mt-2' : 'nok-my-2'; ?> nok-align-self-stretch
                         text-start
                         nok-layout-grid
@@ -42,7 +42,7 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
 		                    <?= $page_part_fields['tagline']; ?>
                         </h2>
                     <?php endif; ?>
-	                <?php the_title(str_contains($page_part_fields['circle_color'], 'dark') ? '<h1 class="nok-text-white">' : '<h1>', '</h1>'); ?>
+	                <?php the_title(str_contains($page_part_fields['circle_color'], 'dark') ? '<h1 class="nok-fs-giant nok-text-white">' : '<h1 class="nok-fs-giant">', '</h1>'); ?>
                 </div>
                 <?php if ( $left ) : ?>
                     <div class="nok-column-first-lg-4
@@ -53,11 +53,11 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
                     <div class="nok-layout-grid nok-layout-grid__1-column
                         pull-down-correction
                         <?= str_contains($page_part_fields['circle_color'], 'dark') ? 'nok-text-white' : '';?>
-                        nok-column-last-lg-3 nok-fs-2 nok-text-wrap-balance nok-order-1"><?php the_content(); ?>
+                        nok-column-last-lg-3 nok-text-wrap-balance nok-order-1"><?php the_content(); ?>
                         <div>
 	                        <?php if (!empty($page_part_fields['button_url'])) : ?>
                             <a role="button" href="<?= $page_part_fields['button_url']; ?>"
-                               class="nok-button nok-align-self-to-sm-stretch fill-group-column nok-bg-yellow nok-text-contrast">
+                               class="nok-button nok-align-self-to-sm-stretch nok-bg-yellow nok-text-contrast">
 		                        <?= $page_part_fields['button_text']; ?> <?= Assets::getIcon('arrow-right-long'); ?>
                             </a>
 	                        <?php endif; ?>
@@ -67,12 +67,12 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
                     <div class="nok-layout-grid nok-layout-grid__1-column
                         pull-down-correction
                         <?= str_contains($page_part_fields['circle_color'], 'dark') ? 'nok-text-white' : '';?>
-                        nok-column-first-lg-2
-                        nok-fs-2 nok-text-wrap-balance nok-order-0"><?php the_content(); ?>
+                        nok-column-first-lg-3
+                        nok-text-wrap-balance nok-order-0"><?php the_content(); ?>
                         <div>
 			                <?php if (!empty($page_part_fields['button_url'])) : ?>
                                 <a role="button" href="<?= $page_part_fields['button_url']; ?>"
-                                   class="nok-button nok-align-self-to-sm-stretch fill-group-column nok-bg-yellow nok-text-contrast">
+                                   class="nok-button nok-align-self-to-sm-stretch nok-bg-yellow nok-text-contrast">
 					                <?= $page_part_fields['button_text']; ?> <?= Assets::getIcon('arrow-right-long'); ?>
                                 </a>
 			                <?php endif; ?>

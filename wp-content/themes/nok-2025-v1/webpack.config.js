@@ -18,6 +18,11 @@ module.exports = {
             __dirname,
             'src/nok-page-part-design-selector.js'
         ),
+
+        'blocks/embed-nok-page-part/index': path.resolve(
+            __dirname,
+            'src/blocks/embed-nok-page-part/index.js'
+        ),
     },
 
     // 3) keep the default filename pattern

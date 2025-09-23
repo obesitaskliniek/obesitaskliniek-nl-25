@@ -146,10 +146,11 @@
   text-align: right;
 }
 
+/*
 .nok-align-self-stretch {
   align-self: stretch;
   grid-column: 1 / -1;
-}
+}*/
 
 .nok-align-self-end {
   align-self: end;
@@ -158,7 +159,7 @@
 /* Rounded borders */
 
 .#{nok-variables.$prefix}-rounded-border {
-  @include nok-mixins.nok-border-radius();
+  @include nok-mixins.nok-border-radius;
 
   $border-sizes: 'default', 'large', 'x-large', 'xx-large';
   $border-positions: 'top', 'right', 'left', 'bottom';
@@ -225,6 +226,17 @@
     }
     to {
       opacity: 0;
+    }
+  }
+
+  @keyframes pop--in {
+    from {
+      opacity: 0;
+      transform: scale3d(0, 0, 0);
+    }
+    to {
+      opacity: 1;
+      transform: scale3d(1, 1, 1);
     }
   }
 }
@@ -702,7 +714,6 @@ $utilities: (
 
   }
 }
-
 //
 // Visually hidden
 //

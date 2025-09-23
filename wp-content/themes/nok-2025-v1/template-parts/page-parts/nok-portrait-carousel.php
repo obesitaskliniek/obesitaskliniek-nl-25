@@ -3,23 +3,33 @@
  * Template Name: Portrait Carousel
  * Slug: nok-portrait-carousel
  * Custom Fields:
+ *  - button_text:text,
+ *  - button_url:url,
  * - team_members:repeater
  * - colors:select(Blauw::nok-bg-darkblue nok-text-white|Wit::nok-bg-white nok-text-darkblue)
  */
+
+use NOK2025\V1\Assets;
 
 $default_colors = 'nok-bg-darkblue nok-text-white';
 $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors'] : $default_colors;
 
 ?>
 
-<nok-section>
-    <div class="nok-section__inner--stretched <?= $colors;?>">
+<nok-section class="<?= $colors;?>">
+    <div class="nok-section__inner--stretched">
         <div class="nok-section__inner">
 
-            <article class="nok-layout-grid nok-layout-grid__2-column nok-align-items-start">
-                <?php the_title('<h1 class="nok-span-all-columns-to-xxl">', '</h1>'); ?>
-                <div class="new-row nok-span-all-columns-to-xxl"><?php the_content(); ?></div>
+            <article class="nok-layout-grid nok-layout-grid__3-column nok-align-items-start">
+                <?php the_title('<h1 class="nok-column-first-2 nok-span-all-columns-to-xxl">', '</h1>'); ?>
+                <div class="new-row nok-column-first-2 nok-span-all-columns-to-xxl"><?php the_content(); ?></div>
 
+                <?php if (!empty($page_part_fields['button_url'])) : ?>
+                <a role="button" href="<?= $page_part_fields['button_url']; ?>"
+                   class="nok-button nok-column-last-1 nok-bg-darkestblue nok-text-contrast">
+                    <?= $page_part_fields['button_text']; ?> <?= Assets::getIcon('arrow-right-long'); ?>
+                </a>
+                <?php endif; ?>
                 <!-- Component: drag-scrollable blokkengroep -->
                 <div class="nok-mt-2 nok-align-self-stretch">
                     <div class="nok-layout-grid nok-layout-grid__4-column nok-columns-to-lg-2

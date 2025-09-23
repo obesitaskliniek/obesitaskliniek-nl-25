@@ -14,12 +14,12 @@ $default_colors = 'nok-bg-darkerblue nok-text-white';
 $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors'] : $default_colors;
 ?>
 
-<nok-section>
-    <div class="nok-section__inner--stretched <?= $colors;?>">
+<nok-section class="<?= $colors;?>">
+    <div class="nok-section__inner--stretched">
         <div class="nok-section__inner">
 
             <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start">
-	            <?php the_title('<h1>', '</h1>'); ?>
+	            <?php the_title('<h1 class="nok-fs-giant">', '</h1>'); ?>
                 <div class="nok-text-content"><?php the_content(); ?></div>
 
                 <!-- Component: drag-scrollable blokkengroep -->

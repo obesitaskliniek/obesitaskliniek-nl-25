@@ -23,10 +23,10 @@ nok-popup {
 
   z-index: calc(var(--z-base, 2) + 1);
 
+  @include components-base.nok-shadow(16px, 0.3);
   @include components-base.nok-border-radius($size: 'large', $overflowHidden: false);
   @include components-base.transition-properties(opacity) {
-    animation: fade--in components-base.$animation-duration ease-in-out;
-    //transition: opacity components-base.$animation-duration ease-in-out;
+    animation: pop--in components-base.$animation-duration cubic-bezier(0.77,0.59,0.34,1.27);
   }
 
   &-header {

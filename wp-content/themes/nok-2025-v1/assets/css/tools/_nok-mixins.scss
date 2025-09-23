@@ -24,8 +24,12 @@
   font-style: normal;
 }
 
+@mixin nok-shadow($size: 8px, $opacity: 0.1) {
+  box-shadow: 0 ($size / 2) $size rgba(0, 0, 0, $opacity);
+}
+
 @mixin nok-subtle-shadow {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  @include nok-shadow;
 }
 
 @mixin nok-subtle-shadow-menu {
@@ -713,4 +717,52 @@
     $result: $result + $prefix + $item + $suffix;
   }
   @return $result;
+}
+
+@mixin animating-placeholder {
+  > * {
+    --darker-color: rgb(211,211,211);
+    --lighter-color: rgba(255, 255, 255, 0.5);
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: rgb(211,211,211) !important;
+    z-index: 1;
+    @include nok-border-radius;
+    &::after{
+      content: "";
+      position: absolute;
+      left: -200%;
+      height: 100%;
+      width: 300%;
+      top: 0;
+      bottom: 0;
+      background-color: var(--darker-color);
+      background-image: linear-gradient(to right, transparent 0%, var(--lighter-color) 50%, transparent 100%);
+      animation: loading 1s infinite;
+      animation-timing-function: ease-out;
+      background-repeat: no-repeat;
+      background-size: 100cqi 100%;
+      background-position: 50% 100%;
+      z-index: 2;
+    }
+    @media (prefers-color-scheme: dark) {
+      --darker-color: rgb(var(--nok-darkerblue-rgb));
+      --lighter-color: rgba(var(--nok-darkblue-rgb), 0.5);
+    }
+  }
+  > input:not([type="range"]) {
+    visibility: hidden;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes loading {
+      0%{
+        left: -200%;
+      }
+      100%{
+        left: 0%;
+      }
+    }
+  }
 }
