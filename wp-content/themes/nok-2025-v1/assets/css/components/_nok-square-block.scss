@@ -57,9 +57,7 @@ nok-square-block {
   //line-height: var(--#{components-base.$prefix}-default-line-height, 1.25);
 
   padding: #{map-get(components-base.$padding-base-values, 2)};
-  &.double-padding {
-    padding: #{map-get(components-base.$padding-base-values, 4)};
-  }
+
   background-color: var(--background-color);
 
   &[data-shadow="true"] {

@@ -1,5 +1,5 @@
 /**
- * Universal single click toggler (c)2025 Klaas Leussink / hnldesign
+ * Universal single click toggler (c) 2025 Klaas Leussink / hnldesign
  *
  * @fileoverview Provides universal toggle functionality with click handling,
  * auto-hide timers, outside-click dismissal, and swipe-to-close gestures.

@@ -20,7 +20,7 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
     <nok-section class="linked">
         <div class="nok-section__inner">
 			<?php if ( $left ) : ?>
-                <div class="nok-my-2 nok-align-self-stretch
+                <div class="nok-align-self-stretch
                             text-start
                             nok-layout-grid overlap-middle offset--1 nok-columns-6 no-overlap-to-lg nok-column-offset-0
                             nok-align-items-center">
@@ -43,7 +43,7 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
                     </div>
                 </div>
 			<?php else : ?>
-                <div class="nok-my-2 nok-align-self-stretch
+                <div class="nok-align-self-stretch
                         text-start
                         nok-layout-grid overlap-middle offset--1 nok-columns-6 no-overlap-to-lg nok-column-offset-1
                         nok-align-items-center">

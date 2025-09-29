@@ -21,8 +21,8 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
 $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'left';
 ?>
 
-<nok-page-footer class="nok-section <?= $colors; ?>">
-    <div class="nok-section__inner--stretched nok-my-0 nok-px-0 nok-border-radius-0 ">
+<nok-page-footer class="nok-section">
+    <div class="nok-section__inner--stretched nok-my-0 nok-px-0 nok-border-radius-0 <?= $colors; ?>">
         <div class="nok-section__inner nok-page-footer__inner">
             <div class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start nok-column-gap-3">
                 <?php $block_colors = str_contains($colors, 'nok-bg-darkestblue') ? 'nok-bg-darkblue nok-bg-alpha-6 nok-alpha-10' : 'nok-bg-body nok-dark-bg-body--darker nok-alpha-10 nok-alpha-10'; ?>

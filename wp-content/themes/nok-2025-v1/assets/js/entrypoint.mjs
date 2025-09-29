@@ -6,8 +6,9 @@ import eventHandler from './modules/hnl.eventhandler.mjs';
 import {dynImports} from './modules/hnl.dynamicimports.mjs';
 import {hnlLogger} from './modules/hnl.logger.mjs';
 import {classToggler} from './modules/hnl.classtoggler.mjs';
-import {pageScrollPercentage} from "./modules/hnl.helpers.mjs";
+import {isVisible, pageScrollPercentage, watchVisibility} from "./modules/hnl.helpers.mjs";
 import {setupScrollbarControl, setupFakeScrollbar} from "./nok-scrollbar.mjs";
+import AOS from './nok-aos.mjs';
 
 const NAME = 'entryPoint';
 const BODY = document.body;
@@ -21,6 +22,7 @@ eventHandler.docLoaded(function(){
   document.body.classList.add('__enable-transitions');
 })
 
+
 eventHandler.docReady(function(){
 
   //toggle classes
@@ -29,14 +31,6 @@ eventHandler.docReady(function(){
   //handle all dynamic module imports
   dynImports(function(e){
     hnlLogger.info(NAME, 'Ready.');
-  });
-
-  //universally stop href="#" links from scrolling to top
-  document.addEventListener("click", function(event) {
-    const link = event.target.closest("a[href='#']");
-    if (link) {
-      event.preventDefault(); // Prevents page from jumping to the top
-    }
   });
 
   //https://stackoverflow.com/questions/3885018/active-pseudo-class-doesnt-work-in-mobile-safari
@@ -56,6 +50,14 @@ eventHandler.docReady(function(){
     })
   });
 
+  //universally stop href="#" links from scrolling to top
+  document.addEventListener("click", function(event) {
+    const link = event.target.closest("a[href='#']");
+    if (link) {
+      event.preventDefault(); // Prevents page from jumping to the top
+    }
+  });
+
   eventHandler.addListener('scroll', (e) => {
   //clear the url hash when scrolled back to top
     if (window.scrollY === 0) {
@@ -70,5 +72,14 @@ eventHandler.docReady(function(){
     document.documentElement.style.setProperty('--doc-scrolled', `${(scrolled)}%`);
     document.documentElement.style.setProperty('--doc-scrolled-float', `${scrolled / 100}`);
   })();
+
+
+  const aos = AOS.init({
+    selector: 'nok-section',
+    duration: 600,
+    threshold: 0.25,
+    once: true
+  });
+
 });
 

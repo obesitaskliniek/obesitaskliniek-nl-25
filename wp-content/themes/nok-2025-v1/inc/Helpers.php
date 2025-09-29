@@ -50,7 +50,7 @@ class Helpers {
 		return is_preview() || ( is_user_logged_in() && current_user_can( 'edit_post', $post_id ) );
 	}
 
-	public static function get_featured_image(): string {
+	public static function get_featured_image($class = null): string {
 		if ( has_post_thumbnail() ) {
 			// Output <img> with srcset, sizes, width/height, alt, AND loading="lazy"
 			$featuredImage = wp_get_attachment_image(
@@ -61,13 +61,13 @@ class Helpers {
 					'loading'  => 'eager', //eager since we are at the top of the page anyway
 					'decoding' => 'async', // async decoding for better performance
 					// These attributes get added to the <img> tag
-					'class'    => 'featured-image',       // your CSS hook
+					'class'    => trim(($class ?? '') . " featured-image"),      // your CSS hook
 					// size hint: “100vw up to 1200px wide, then cap at 1200px”
 					'sizes'    => '(max-width: 1200px) 100vw, 1200px',
 				]
 			);
 		} else {
-			$featuredImage = '<img src="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:100x0-25-0-0-center-0.jpg" 
+			$featuredImage = '<img '. ($class ? "class='{$class}'" : '') .' src="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:100x0-25-0-0-center-0.jpg" 
 srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:1920x0-65-0-0-center-0.jpg 1920w,
                              https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:768x0-65-0-0-center-0.jpg 768w,
                              https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:320x0-65-0-0-center-0.jpg 320w,

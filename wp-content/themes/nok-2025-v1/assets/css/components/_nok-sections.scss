@@ -12,6 +12,16 @@
   justify-content: center;
   align-items: center;
 
+  overflow-x: clip;
+
+  //descending z-index cascade
+  @for $i from 1 through 20 {
+    &:nth-child(#{$i}) {
+      --section-index: #{$i};
+    }
+  }
+  z-index: calc(#{components-base.$z-stack-top} - var(--section-index));
+
   &__inner {
     width: 100%;
     padding-right: var(--#{components-base.$prefix}-padding-section-sides, (components-base.$padding-base * 2));
@@ -21,9 +31,11 @@
     &.double-margin {
       margin: calc(2 * var(--nok-spacing-section-ends, components-base.$padding-base)) auto;
     }
+
     &.triple-margin {
       margin: calc(3 * var(--nok-spacing-section-ends, components-base.$padding-base)) auto;
     }
+
     @at-root nok-popup-body &,
     &.condensed {
       margin: calc(.5 * var(--nok-spacing-section-ends, components-base.$padding-base)) auto;
@@ -34,6 +46,7 @@
     &--stretched {
       align-self: stretch;
     }
+
     &--full-width {
       --section-max-width: 100%;
     }
@@ -52,26 +65,34 @@
 
   }
 
+  @include components-base.media-breakpoint-up(components-base.$mobile-breakpoint) {
+    &.pull-down {
+      --pull-amount: calc(1 * var(--nok-spacing-section-ends, 0));
 
-  &.pull-down {
-    margin-bottom: calc(-1 * var(--nok-spacing-section-ends, 0));
-    overflow-x: hidden;
-    .pull-down-correction {
-      margin-bottom: calc(2 * var(--nok-spacing-section-ends, 0));
-    }
-    + nok-section > .nok-section__inner,
-    + .nok-section > .nok-section__inner,
-    + nok-section > .nok-section__inner--unpadded,
-    + .nok-section > .nok-section__inner--unpadded,
-    + nok-section > .nok-section__inner--collapsed,
-    + .nok-section > .nok-section__inner--collapsed,
-    + nok-section > .nok-section__inner--full-width,
-    + .nok-section > .nok-section__inner--full-width,
-    + nok-section > .nok-section__inner--stretched,
-    + .nok-section > .nok-section__inner--stretched {
+      .pullee {
+        position: relative;
+        overflow: visible;
+
+        > * {
+          position: absolute;
+          right: 0;
+          top: 0;
+          left: 0;
+          height: calc(100% + (2 * var(--pull-amount)));
+        }
+      }
+
+      .pull-down-correction {
+        //margin-bottom: calc(2 * var(--nok-spacing-section-ends, 0));
+      }
+
+      + nok-section > [class^="nok-section__inner"],
+      + .nok-section > [class^="nok-section__inner"] {
         padding-top: calc(var(--nok-spacing-section-ends, 0));
+      }
     }
   }
+
   &.collapse-bottom {
     .nok-section__inner {
       margin-bottom: 0 !important;
@@ -83,57 +104,57 @@
     background-image: radial-gradient(circle at 100% 50%, rgba(var(--nok-darkerblue-rgb), 0.1) 0%, transparent 100%);
   }
 
-  /*
-  &.circle {
-    position: relative;
-    overflow: hidden;
-    &:after {
-      content: "";
-      background: var(--circle-background-color);
-      clip-path: circle(50%);
-      aspect-ratio: 1;
-      position: absolute;
-      top: var(--nok-spacing-section-ends, 1.5rem);
-      right: -10%;
-      bottom: -50%;
-      z-index: 1;
-      min-height: 90vh;
-    }
-    .nok-section__inner {
-      z-index: 2;
-    }
-    &.circle-right {
-      &:after {
-        right: -10%;
-        left: auto;
+  @include components-base.media-breakpoint-up(components-base.$mobile-breakpoint) {
+    @include components-base.domready {
+      &.circle {
+        &::after {
+          content: "";
+          position: absolute;
+          top: calc(2 * var(--nok-spacing-section-ends, 1.5rem));
+          left: var(--circle-offset, 75%);
+          transform: translateX(-50%);
+          z-index: -1;
+          opacity: 1;
+          aspect-ratio: 2 / 1;
+          border-radius: 200cqi 200cqi 0 0;
+          background: white;
+          bottom: 0;
+          background: var(--circle-background-color, oklch(from var(--nok-darkblue) calc(l * .5) c h / 10%));
+          @media (prefers-color-scheme: dark) {
+            background: var(--circle-background-color, oklch(from var(--nok-darkblue) calc(l * 2) c h / 10%));
+          }
+        }
       }
     }
-    &.circle-left {
-      &:after {
-        left: -10%;
-        right: auto;
-      }
-    }
-  }*/
+  }
 
-  &.linked + &.linked {
+  &.linked:has(+ &.linked) {
     position: relative;
-    &::before {
+
+    &::after {
       content: "";
       width: 2px;
       height: calc(2 * var(--nok-spacing-section-ends, 1.5rem));
-      background: var(--bg-color--contrast, --nok-darkerblue);
+      background: oklch(from var(--bg-color--contrast, --nok-darkerblue) l c h / 30%);
       display: block;
       position: absolute;
-      top: calc(-1 * var(--nok-spacing-section-ends, 1.5rem));
-      opacity: 0.3;
+      bottom: calc(-1 * var(--nok-spacing-section-ends, 1.5rem));
       z-index: -1;
+      opacity: 0;
+    }
+  }
+  &.linked:has(+ &[data-visible="true"]) {
+    &::after {
+      opacity: 0;
+      @include components-base.transition-properties("opacity") {
+        animation: slide--down 3s ease-out forwards;
+      }
     }
   }
 }
 
 .nok-section,
 nok-section {
-  @include nok-section;
+@include nok-section;
 }
 
