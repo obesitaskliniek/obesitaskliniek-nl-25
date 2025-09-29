@@ -540,6 +540,24 @@
   }
 }
 
+/**
+    * Mixin to apply styles when the DOM is fully loaded.
+    * By hnldesign - 2025
+    *
+    * This mixin targets elements when the `body` element has the `domready` class,
+    * indicating that the DOM is fully loaded and parsed.
+    *
+    * Usage:
+    * @include domready {
+    *   // Your styles here
+    * }
+ */
+@mixin domready() {
+    @at-root body.domready & {
+        @content;
+    }
+}
+
 ///**
 // * Mixin to apply styles when JavaScript is disabled.
 // * By hnldesign - 2025

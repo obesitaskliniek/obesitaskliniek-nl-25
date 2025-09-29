@@ -1,5 +1,5 @@
 /*
-Embedded scroll menu handler (c)2025 Klaas Leussink / hnldesign
+Embedded scroll menu handler (c) 2025 Klaas Leussink / hnldesign
  */
 import {singleClick} from "./modules/hnl.clickhandlers.mjs";
 

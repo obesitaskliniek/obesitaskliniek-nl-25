@@ -187,7 +187,6 @@
 
 
 /* animations */
-//todo: are these used?
 @media (prefers-reduced-motion: no-preference) {
   @keyframes slide--in {
     from {
@@ -211,12 +210,34 @@
     }
   }
 
+  @keyframes slide--down {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
   @keyframes fade--in {
     from {
       opacity: 0;
     }
     to {
       opacity: 1;
+    }
+  }
+
+  @keyframes fade--up {
+    from {
+      opacity: 0;
+      transform: translateY(10vh);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 
@@ -721,4 +742,16 @@ $utilities: (
 .visually-hidden,
 .visually-hidden-focusable:not(:focus):not(:focus-within) {
   @include nok-mixins.visually-hidden();
+}
+
+/* Animate on scroll */
+
+.nok-aos {
+  @include nok-mixins.transition-properties("transform,opacity") {
+    opacity: 0;
+    &[data-visible="true"] {
+      animation: fade--up (nok-variables.$animation-duration * 3) ease forwards;
+      position: relative;
+    }
+  }
 }

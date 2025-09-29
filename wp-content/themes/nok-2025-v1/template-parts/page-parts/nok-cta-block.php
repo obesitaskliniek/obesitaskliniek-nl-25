@@ -28,8 +28,8 @@ if ( $page_part_fields['colors'] === "Blauw op donkerblauw" ) {
 ?>
 
     <nok-section class=" <?= $section_colors ? : ''?>">
-        <div class="nok-section__inner double-margin">
-            <nok-square-block class="horizontal double-padding layout-<?= $layout;?> <?= $block_colors; ?>" data-shadow="true">
+        <div class="nok-section__inner ">
+            <nok-square-block class="horizontal nok-p-xl-4 layout-<?= $layout;?> <?= $block_colors; ?>" data-shadow="true">
                 <div class="nok-square-block__icon">
                     <?= Assets::getIcon('arrow-right-long'); ?>
                 </div>

@@ -8,30 +8,34 @@
  * - button_text:text,
  * - button_url:url,
  * - layout:select(left|right)
- * - colors:select(Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Transparant::nok-text-darkerblue)
- * - circle_color:select(Blauw::var(--nok-darkerblue)|Automatisch::var(--bg-color--hover)|Uit::transparent)
+ * - achtergrondkleur:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue|Transparant::)
+ * - tekstkleur:select(Standaard::nok-text-contrast|Wit::nok-text-white|Zwart::nok-text-black)
+ * - circle_color:select(Blauw::var(--nok-darkerblue)|Automatisch::|Uit::transparent)
  * - pull_down:checkbox(true)
  */
 
 use NOK2025\V1\Assets;
 use NOK2025\V1\Helpers;
-$featuredImage = Helpers::get_featured_image();
 
 $page_part_fields['layout'] = empty($page_part_fields['layout']) ? 'left' : $page_part_fields['layout'];
 
 $left = $page_part_fields['layout'] === 'left';
-$collapse             = !empty($page_part_fields['pull_down']) || $page_part_fields['pull_down'] === '1';
+$pull_down             = !empty($page_part_fields['pull_down']) || $page_part_fields['pull_down'] === '1';
 
-$default_circle_color = 'var(--text-color--contrast)';
+$default_circle_color = '';
 $circle_color         = ( $page_part_fields['circle_color'] ?? "") !== "" ? $page_part_fields['circle_color'] : $default_circle_color;
+$circle_color =         $circle_color !== '' ? '--circle-background-color:'.$circle_color : '';
 
-$default_colors = 'nok-text-darkerblue';
-$colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors'] : $default_colors;
+$default_colors = '';
+$colors = ($page_part_fields['achtergrondkleur'] ?? "") !== "" ? $page_part_fields['achtergrondkleur'] : $default_colors;
+
+$featuredImage = Helpers::get_featured_image($pull_down ? ($left ? 'nok-rounded-border-large-right' : 'nok-rounded-border-large-left') : null);
 ?>
-    <nok-section class="circle circle-<?=$left ? 'right' : 'left';?> <?= $collapse ? 'collapse-bottom pull-down' : ''; ?> <?= $colors; ?>"
-    style="--circle-background-color:<?=$circle_color;?>;">
+    <nok-section class="circle circle-<?=$left ? 'right' : 'left';?> <?= $pull_down ? 'pull-down' : ''; ?> <?= $colors; ?>"
+    style="<?=$circle_color;?>;--circle-offset:<?= $left ? 'calc(50vw + (var(--section-max-width) * 0.25))' : 'calc(50vw - (var(--section-max-width) * 0.25))'; ?>;">
         <div class="nok-section__inner">
-            <article class=" <?= $collapse ? 'nok-mt-2' : 'nok-my-2'; ?> nok-align-self-stretch
+            <article class="nok-align-self-stretch
+                        <?= $page_part_fields['tekstkleur'] ;?>
                         text-start
                         nok-layout-grid
                         nok-columns-8 nok-columns-to-lg-1 nok-column-gap-3
@@ -42,18 +46,18 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
 		                    <?= $page_part_fields['tagline']; ?>
                         </h2>
                     <?php endif; ?>
-	                <?php the_title(str_contains($page_part_fields['circle_color'], 'dark') ? '<h1 class="nok-fs-giant nok-text-white">' : '<h1 class="nok-fs-giant">', '</h1>'); ?>
+	                <?php the_title('<h1 class="nok-fs-giant">', '</h1>'); ?>
                 </div>
                 <?php if ( $left ) : ?>
                     <div class="nok-column-first-lg-4
+                    pullee
                     stick-to-left-viewport-side nok-h-100
                     cover-image nok-rounded-border-large nok-order-0">
                         <?= $featuredImage; ?>
                     </div>
                     <div class="nok-layout-grid nok-layout-grid__1-column
                         pull-down-correction
-                        <?= str_contains($page_part_fields['circle_color'], 'dark') ? 'nok-text-white' : '';?>
-                        nok-column-last-lg-3 nok-text-wrap-balance nok-order-1"><?php the_content(); ?>
+                        nok-column-last-xl-3 nok-column-last-lg-4 nok-text-wrap-balance nok-order-1"><?php the_content(); ?>
                         <div>
 	                        <?php if (!empty($page_part_fields['button_url'])) : ?>
                             <a role="button" href="<?= $page_part_fields['button_url']; ?>"
@@ -66,8 +70,7 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
                 <?php else : ?>
                     <div class="nok-layout-grid nok-layout-grid__1-column
                         pull-down-correction
-                        <?= str_contains($page_part_fields['circle_color'], 'dark') ? 'nok-text-white' : '';?>
-                        nok-column-first-lg-3
+                        nok-column-first-xl-3 nok-column-first-lg-4
                         nok-text-wrap-balance nok-order-0"><?php the_content(); ?>
                         <div>
 			                <?php if (!empty($page_part_fields['button_url'])) : ?>
@@ -80,6 +83,7 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
                     </div>
                     <div class="
                     nok-column-last-lg-4
+                    pullee
                     stick-to-right-viewport-side nok-h-100
                     cover-image nok-rounded-border-large nok-order-1">
 		                <?= $featuredImage; ?>
