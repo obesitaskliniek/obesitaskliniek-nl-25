@@ -22,3 +22,60 @@
     font-weight: 300;
   }
 }
+
+
+ul.wp-block-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: nok-variables.$padding-base / 3;
+  padding-block: nok-variables.$padding-base / 3;
+  margin-block: 0;
+  padding-inline: 0;
+
+  li {
+    display: flex;
+    list-style: none;
+    align-items: flex-start;
+
+    &:before {
+      --size: 1ex;
+      display: flex;
+      margin-right: 1em;
+      line-height: 1;
+      border-radius: 50%;
+
+      margin-block: 0;
+      content: " ";
+      background: var(--nok-greenblue--lighter);
+      aspect-ratio: 1 / 1;
+      font-size: 1.25rem;
+      width: 0.5em;
+      height: 0.5em;
+      margin-blocK: 0.5em;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+  }
+
+  &.checkmarks {
+    li {
+      &:before {
+        margin-block: 0;
+        margin-right: .5em;
+        content: "\2713";
+        background: transparent;
+        border: 2px solid var(--nok-green);
+        color: var(--nok-green);
+        aspect-ratio: 1 / 1;
+        font-size: 1.25rem;
+        width: 1.5em;
+        height: 1.5em;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+      }
+    }
+  }
+}
