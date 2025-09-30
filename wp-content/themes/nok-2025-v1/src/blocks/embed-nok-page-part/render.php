@@ -21,12 +21,23 @@ return function( array $attributes ): string {
 
 	$theme_instance = Theme::get_instance();
 
+    // Get default page part fields
 	$page_part_fields = $theme_instance->get_page_part_fields( $post_id, $design, false );
 
-	$args = [
-		'post' => $post,
-		'page_part_fields' => $page_part_fields
-	];
+    // Merge overrides - block attributes take precedence
+    if ( ! empty( $overrides ) && is_array( $overrides ) ) {
+        // Get registry to map meta_key to field name
+        $registry = $theme_instance->get_page_part_registry();
+        $template_data = $registry[$design] ?? [];
+        $custom_fields = $template_data['custom_fields'] ?? [];
+
+        foreach ( $custom_fields as $field ) {
+            if ( isset( $overrides[$field['meta_key']] ) && $overrides[$field['meta_key']] !== '' ) {
+                // Override exists and is not empty - use it
+                $page_part_fields[$field['name']] = $overrides[$field['meta_key']];
+            }
+        }
+    }
 
 	//Enqueue any part-specific CSS files we find
 	$css_uri = "/template-parts/page-parts/{$design}.css";

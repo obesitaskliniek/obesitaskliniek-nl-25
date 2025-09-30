@@ -12,6 +12,10 @@
     "postId": {
       "type": "number",
       "default": 0
+    },
+    "overrides": {
+      "type": "object",
+      "default": {}
     }
   },
   "editorScript": "file:./index.js",

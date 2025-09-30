@@ -110,6 +110,14 @@ class Registry {
 				continue;
 			}
 
+			// Check for page-editable flag and extract it
+			$is_page_editable = false;
+			if ( str_contains( $definition, '!page-editable' ) ) {
+				$is_page_editable = true;
+				$definition = preg_replace('/!page-editable\s*,?\s*/', '', $definition);
+				$definition = trim($definition);
+			}
+
 			// Check for select field with bracket notation: "position:select(left|right)"
 			if (preg_match('/^([^:]+):select\((.*)$/', $definition, $matches)) {
 				$field_name = trim($matches[1]);
@@ -144,6 +152,7 @@ class Registry {
 					'label'         => $this->generate_field_label($field_name),
 					'options'       => $options,        // Actual values
 					'option_labels' => $option_labels,  // Display labels
+					'page_editable' => $is_page_editable, // Whether field is editable in page context
 				];
 			}
 			// Check for checkbox field with optional default: "field_name:checkbox(true)"
@@ -164,6 +173,7 @@ class Registry {
 					'label'    => $this->generate_field_label($field_name),
 					'default'  => $default_storage_value,
 					'options'  => [], // Empty for checkbox fields
+					'page_editable' => $is_page_editable, // Whether field is editable in page context
 				];
 			}
 			elseif (preg_match('/^([^:]+):repeater\((.+)\)$/', $definition, $matches)) {
@@ -182,7 +192,8 @@ class Registry {
 					'type' => 'repeater',
 					'meta_key' => $template_slug . '_' . $field_name,
 					'label' => $this->generate_field_label($field_name),
-					'schema' => $schema
+					'schema' => $schema,
+					'page_editable' => $is_page_editable, // Whether field is editable in page context
 				];
 			}
 			// Handle regular fields: "field_name:type"
@@ -204,6 +215,7 @@ class Registry {
 					'meta_key' => $meta_key,
 					'label'    => $this->generate_field_label($field_name),
 					'options'  => [], // Empty for non-select fields
+					'page_editable' => $is_page_editable, // Whether field is editable in page context
 				];
 			}
 		}
