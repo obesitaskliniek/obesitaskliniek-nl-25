@@ -668,15 +668,15 @@ $utilities: (
     --flex-gap: var(--column-gap, var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)));
     --flex-direction: row;
     --overflow: auto hidden;
+    @include nok-mixins.nok-scrollbar-thin($scrollbar_thickness, false);
   }
   &__vertical {
     --flex-gap: var(--row-gap, var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)));
     --flex-direction: column;
     --overflow: hidden auto;
+    @include nok-mixins.nok-scrollbar-thin($scrollbar_thickness, true);
   }
   &__horizontal,&__vertical {
-
-    @include nok-mixins.nok-scrollbar-thin($scrollbar_thickness);
 
     padding: var(--shadow-size, 0px) var(--shadow-size, 0px) calc(var(--shadow-size, 0px) + $scrollbar_thickness * 2);
     margin: calc(-1 * var(--shadow-size, 0px));
@@ -747,7 +747,7 @@ $utilities: (
 /* Animate on scroll */
 
 .nok-aos {
-  @include nok-mixins.transition-properties("transform,opacity") {
+  @include nok-mixins.transition-properties {
     opacity: 0;
     &[data-visible="true"] {
       animation: fade--up (nok-variables.$animation-duration * 3) ease forwards;

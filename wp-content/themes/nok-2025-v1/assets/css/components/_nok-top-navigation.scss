@@ -66,7 +66,7 @@ nok-top-navigation {
     &.nok-nav-menu-toggler.nok-button-menu {
       svg {
         transform: rotate(0deg);
-        @include components-base.transition-properties(transform) {
+        @include components-base.transition-properties {
           transition: transform var(--animation-duration--in) cubic-bezier(0.16, 1, 0.3, 1);
         }
         .closed {
@@ -78,7 +78,7 @@ nok-top-navigation {
 
   /* Open states */
 
-  &.open, &.popup-open {
+  &.sidebar-open, &.popup-open {
     touch-action: none;
 
     nok-screen-mask {
@@ -96,7 +96,7 @@ nok-top-navigation {
     }
   }
 
-  &.open {
+  &.sidebar-open {
     .nok-nav-menu-toggler.nok-button-menu {
       svg {
         transform: rotate(-180deg);

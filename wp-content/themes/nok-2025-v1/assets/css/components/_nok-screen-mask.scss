@@ -17,7 +17,7 @@ nok-screen-mask {
   @media (prefers-reduced-transparency) {
     display: none;
   }
-  @include components-base.transition-properties(opacity) {
+  @include components-base.transition-properties {
     transition:
       background #{components-base.$animation-duration} ease-in-out,
       backdrop-filter #{components-base.$animation-duration} ease-in-out;

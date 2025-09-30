@@ -45,7 +45,7 @@
       padding: 0;
       margin: 0;
       transform-origin: left top;
-      @include components-base.transition-properties(transform) {
+      @include components-base.transition-properties {
         transition: transform var(--animation-duration--in) cubic-bezier(0.16, 1, 0.3, 1);
       }
       opacity: 0.7;
@@ -246,7 +246,7 @@
       height: 100%;
       border-radius: 50%;
       transform: scale(0);
-      @include components-base.transition-properties(transform) {
+      @include components-base.transition-properties {
         transition: transform var(--animation-duration--in) cubic-bezier(0.16, 1, 0.3, 1);
       }
       box-shadow: inset 1em 1em var(--nok-lightblue);

@@ -215,6 +215,26 @@ export function controlScroll(targetId, action, smooth = true) {
   handleScrollAction(targetId, action, smooth);
 }
 
+function getOrientation(scrollElement) {
+  // Determine orientation based on actual overflow
+  let hasVerticalOverflow = scrollElement.scrollHeight > scrollElement.clientHeight;
+  let hasHorizontalOverflow = scrollElement.scrollWidth > scrollElement.clientWidth;
+
+  // Special case: body or html elements compare against viewport
+  const isViewportElement = scrollElement === document.body || scrollElement === document.documentElement;
+
+  if (isViewportElement) {
+    hasVerticalOverflow = scrollElement.scrollHeight > window.innerHeight;
+    hasHorizontalOverflow = scrollElement.scrollWidth > window.innerWidth;
+  }
+
+  return hasVerticalOverflow && !hasHorizontalOverflow
+      ? 'vertical'
+      : (hasVerticalOverflow && hasHorizontalOverflow
+          ? 'vertical' //go for vertical if both
+          : 'horizontal');
+}
+
 export function setupFakeScrollbar(scrollElement) {
   if (scrollElement.id) {
     scrollContainers.set(scrollElement.id, {
@@ -223,11 +243,12 @@ export function setupFakeScrollbar(scrollElement) {
     });
   }
 
+  const ORIENTATION = getOrientation(scrollElement);
   const SNAPPING = scrollElement.dataset.scrollSnapping === 'true';
 
   // build the new nodes
   const scrollbarTrack = document.createElement('div');
-  scrollbarTrack.className = 'fake-scrollbar align-self-stretch';
+  scrollbarTrack.className = `fake-scrollbar align-self-stretch fake-scrollbar-${ORIENTATION}`;
 
   const scrollbarThumb = document.createElement('div');
   scrollbarThumb.className = 'fake-scrollbar-thumb';
@@ -239,61 +260,50 @@ export function setupFakeScrollbar(scrollElement) {
       scrollElement.nextSibling
   );
 
-  const cssSScrollStyle = window.getComputedStyle(scrollElement).overflowX;
+  const cssSScrollStyle = (ORIENTATION === 'horizontal' )
+      ? window.getComputedStyle(scrollElement).overflowX
+      : window.getComputedStyle(scrollElement).overflowY;
 
   if (cssSScrollStyle === 'hidden') {
     scrollbarTrack.style.visibility = 'hidden';
     return;
   }
 
-  // Object to store styles and dimensions
-  const style = { width: null, transform: null, clientWidth: null, scrollWidth: null, scrollLeft: null };
-
   function updateSelf() {
-    const { scrollWidth, clientWidth, scrollLeft } = scrollElement;
+    //const { scrollWidth, clientWidth, scrollLeft, scrollHeight, clientHeight, scrollTop } = scrollElement;
 
-    // Avoid unnecessary updates if dimensions haven't changed
-    if (style.clientWidth === clientWidth && style.scrollWidth === scrollWidth && style.scrollLeft === scrollLeft) {
-      return;
+    let totalSize, visibleSize, scrollPosition, maxScroll, overflow = false;
+
+    if (ORIENTATION === 'horizontal') {
+      ({ scrollWidth: totalSize, clientWidth: visibleSize, scrollLeft: scrollPosition } = scrollElement);
+    } else {
+      ({ scrollHeight: totalSize, clientHeight: visibleSize, scrollTop: scrollPosition } = scrollElement);
     }
+
+    //check if element is body or html, else we need to compare against viewport size as client size always equals scroll size for these elements
+    visibleSize = (scrollElement === document.body || scrollElement === document.documentElement) ? window.innerHeight : visibleSize;
+    //determine max scroll position
+    maxScroll = totalSize - visibleSize;
+    //check if anything is overflowing at all
+    overflow = visibleSize <= totalSize;
 
     // Hide thumb if nothing is overflowing (simulates native)
-    scrollbarThumb.style.visibility = (scrollWidth <= clientWidth) ? 'hidden' : '';
-    scrollbarTrack.style.visibility = (scrollWidth <= clientWidth) ? (cssSScrollStyle === 'auto' ? 'hidden' : '') : '';
+    scrollbarThumb.style.visibility = !overflow ? 'hidden' : '';
+    scrollbarTrack.style.visibility = !overflow ? (cssSScrollStyle === 'auto' ? 'hidden' : '') : '';
 
-    style.clientWidth = clientWidth;
-    style.scrollWidth = scrollWidth;
-
-    style.maxScroll = scrollWidth - clientWidth;
-    if (style.maxScroll <= 0) {
-      if (style.width !== "0px") {
-        scrollbarThumb.style.width = "0px"; // Hide if no overflow
-        style.width = "0px";
-      }
+    if (maxScroll <= 0 || !overflow) {
+      scrollbarTrack.style.setProperty('--scrollbar-thumb-size', '0px');
       return;
     }
 
-    const thumbWidth = Math.round((clientWidth / scrollWidth) * clientWidth);
-    const thumbPosition = Math.round(((scrollLeft / style.maxScroll) * (clientWidth - thumbWidth)) * 10) / 10;
+    const thumbSize = Math.round((visibleSize / totalSize) * visibleSize);
+    const thumbPosition = Math.round(((scrollPosition / maxScroll) * (visibleSize - thumbSize)) * 10) / 10;
     const newStyles = {};
 
-    // Only update transform if scrollLeft changed
-    if (style.scrollLeft !== scrollLeft) {
-      style.scrollLeft = scrollLeft;
-      newStyles.transform = style.transform = `translate3d(${thumbPosition}px, 0, 0)`; // Use translate3d for better performance
-    }
+    //set positions and dimensions for thumb
+    scrollbarTrack.style.setProperty('--scrollbar-thumb-size', `${thumbSize}px`);
+    scrollbarTrack.style.setProperty('--scrollbar-thumb-position', `${thumbPosition}px`);
 
-    // Only update width if necessary
-    if (style.width !== `${thumbWidth}px`) {
-      newStyles.width = style.width = `${thumbWidth}px`;
-    }
-
-    if (Object.keys(newStyles).length > 0) {
-      Object.assign(scrollbarThumb.style, newStyles);
-    }
-
-    // Update own extended dimensions
-    //style.dimensions = scrollbarThumb.getBoundingClientRect();
   }
 
   // Throttle the update function

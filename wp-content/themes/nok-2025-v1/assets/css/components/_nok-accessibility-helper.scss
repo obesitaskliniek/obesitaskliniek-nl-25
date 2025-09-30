@@ -64,7 +64,7 @@ nok-accessibility-helper {
       cursor: grabbing;
     }
   }
-  @include components-base.transition-properties(transform) {
+  @include components-base.transition-properties {
     transition: transform var(--animation-duration--out) var(--animation-easing-out), box-shadow var(--animation-duration--out) var(--animation-easing-out);
   }
 
@@ -76,7 +76,7 @@ nok-accessibility-helper {
 
     touch-action: none;
     -webkit-touch-callout: none;
-    @include components-base.transition-properties(transform) {
+    @include components-base.transition-properties {
       transition-timing-function: var(--animation-easing-in);
       transition-duration: var(--animation-duration--in);
     }

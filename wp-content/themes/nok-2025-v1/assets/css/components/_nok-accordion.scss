@@ -44,7 +44,7 @@ nok-accordion {
         @include components-base.accordion-button-icon(false);
         mask-size: cover;
         background-color: var(--text-color, var(--bg-color--contrast));
-        @include components-base.transition-properties(transform) {
+        @include components-base.transition-properties {
           transform-origin: center;
           transition: transform calc(var(--animation-duration--in, var(--animation-duration, $duration)) * .75) var(--animation-timing, cubic-bezier(#{$timing}));
         }
@@ -52,7 +52,7 @@ nok-accordion {
     }
     &::details-content {
       padding: 0;
-      @include components-base.transition-properties(height) {
+      @include components-base.transition-properties {
         transition: content-visibility var(--animation-duration--in, var(--animation-duration, $duration)) var(--animation-timing, cubic-bezier(#{$timing})),
         height var(--animation-duration--in, var(--animation-duration, $duration)) var(--animation-timing, cubic-bezier(#{$timing}));
         transition-behavior: allow-discrete;
@@ -71,7 +71,7 @@ nok-accordion {
       // the .accordion-closing class is added in the polyfill as soon as collapsing starts,
       // so we can kick off the animation for the closing marker in time
       summary::after {
-        @include components-base.transition-properties(transform) {
+        @include components-base.transition-properties {
           transform: rotate(180deg);
         }
         @include components-base.accordion-button-icon(true);

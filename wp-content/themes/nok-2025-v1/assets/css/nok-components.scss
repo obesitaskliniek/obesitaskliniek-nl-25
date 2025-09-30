@@ -28,14 +28,15 @@
 
 /* custom elements */
 article, aside, section,
-#{nok-variables.$prefix}-logo, #{nok-variables.$prefix}-mobile-nav, #{nok-variables.$prefix}-desktop-nav {
+nok-logo, nok-mobile-nav, nok-desktop-nav {
   display: contents;
 }
 
 body {
-  --#{nok-variables.$prefix}-body-text-color: var(--#{nok-variables.$prefix}-darkerblue);
-  background: linear-gradient(180deg, var(--#{nok-variables.$prefix}-body--darker), var(--#{nok-variables.$prefix}-body));
+  --nok-body-text-color: var(--nok-darkerblue);
+  background: linear-gradient(180deg, var(--nok-body--darker), var(--nok-body));
   @include nok-mixins.nok-text-font;
+  @include nok-mixins.nok-scrollbar-style(true, 10px, transparent, #0008);
 }
 
 @for $i from 1 through 6 {
@@ -43,7 +44,7 @@ body {
     @include nok-mixins.nok-heading-font;
   }
 }
-.#{nok-variables.$prefix}-fs-giant {
+.nok-fs-giant {
   @include nok-rfs.rfs((nok-variables.$h1-font-size * 1.5), font-size);
 }
 
@@ -56,14 +57,14 @@ body {
 }
 
 html {
-  --font-size-base: var(--#{nok-variables.$prefix}-html-font-size, 1em);
+  --font-size-base: var(--nok-html-font-size, 1em);
   font-size: var(--font-size-base, 1em);
   @include nok-mixins.media-breakpoint-down(md) {
     font-size: calc(var(--font-size-base) * .9);
   }
 }
 
-.#{nok-variables.$prefix}-alert {
+.nok-alert {
   border-width: 1px;
   border-style: solid;
   @include nok-mixins.nok-subtle-shadow;

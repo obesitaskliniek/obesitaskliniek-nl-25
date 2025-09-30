@@ -11,7 +11,7 @@ nok-navigation-drawer {
   flex-direction: column;
   min-height: 0;
   transform: translate3d(100%, 0%, 0);
-  @include components-base.transition-properties(transform) {
+  @include components-base.transition-properties {
     transition: transform var(--animation-duration--out) var(--animation-easing-out);
   }
   @include components-base.media-breakpoint-down(md) {
@@ -142,7 +142,7 @@ nok-navigation-drawer {
   }
 }
 
-nok-top-navigation.open {
+nok-top-navigation.sidebar-open {
 
   nok-navigation-drawer {
     user-select: none;
@@ -152,7 +152,7 @@ nok-top-navigation.open {
     -webkit-touch-callout: none;
     @include components-base.nok-subtle-shadow-menu;
 
-    @include components-base.transition-properties(transform) {
+    @include components-base.transition-properties {
       transition-timing-function: var(--animation-easing-in, cubic-bezier(.07,1.01,.36,1));
       transition-duration: var(--animation-duration--in, 750ms);
     }
