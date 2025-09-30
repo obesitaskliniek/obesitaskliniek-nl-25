@@ -43,12 +43,15 @@ class AssetManager {
 		}
 
 		$screen = get_current_screen();
-		if ($screen->post_type !== 'page_part') {
-			return;
+
+		if ($screen->post_type === 'page_part') {
+			$this->load_preview_assets();
 		}
 
-		$this->load_preview_assets();
-		$this->localize_preview_data();
+		// Localize for both page_part and page editors
+		if (in_array($screen->post_type, ['page_part', 'page'])) {
+			$this->localize_preview_data();
+		}
 	}
 
 	private function load_preview_assets(): void {
@@ -72,18 +75,25 @@ class AssetManager {
 	}
 
 	private function localize_preview_data(): void {
-		// Get registry from Theme instance
 		$theme = \NOK2025\V1\Theme::get_instance();
+		$registry = $theme->get_page_part_registry();
 
-		wp_localize_script(
-			'nok-page-part-design-selector',
-			'PagePartDesignSettings',
-			[
-				'registry' => $theme->get_page_part_registry(),
-				'ajaxurl'  => admin_url('admin-ajax.php'),
-				'nonce'    => wp_create_nonce('nok_preview_state_nonce')
-			]
-		);
+		$data = [
+			'registry' => $registry,
+			'ajaxurl'  => admin_url('admin-ajax.php'),
+			'nonce'    => wp_create_nonce('nok_preview_state_nonce')
+		];
+
+		// For page_part editor
+		if (wp_script_is('nok-page-part-design-selector', 'enqueued')) {
+			wp_localize_script('nok-page-part-design-selector', 'PagePartDesignSettings', $data);
+		}
+
+		// For block editor (pages)
+		$block_handle = 'nok2025-embed-nok-page-part-editor-script';
+		if (wp_script_is($block_handle, 'enqueued') || wp_script_is($block_handle, 'registered')) {
+			wp_localize_script($block_handle, 'PagePartDesignSettings', $data);
+		}
 	}
 
 	public function custom_editor_inline_styles(): void {

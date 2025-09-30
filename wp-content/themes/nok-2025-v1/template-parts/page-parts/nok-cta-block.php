@@ -5,7 +5,7 @@
  * Slug: nok-cta-block
  * Custom Fields:
  * - layout_offset:select(left|balanced),
- * - colors:select(Blauw op transparant|Blauw op donkerblauw),
+ * - colors:select(Blauw op transparant|Blauw op donkerblauw)!page-editable,
  * - button_text:text,
  * - button_url:url,
  */
@@ -24,7 +24,6 @@ if ( $page_part_fields['colors'] === "Blauw op donkerblauw" ) {
     $section_colors = 'nok-bg-darkerblue';
     $block_colors = 'nok-bg-darkblue nok-text-white';
 }
-
 ?>
 
     <nok-section class=" <?= $section_colors ? : ''?>">

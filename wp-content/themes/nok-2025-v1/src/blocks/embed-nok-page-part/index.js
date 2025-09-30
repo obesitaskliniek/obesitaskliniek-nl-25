@@ -36,7 +36,7 @@ const CustomPagePartSelector = ({value, options, onChange}) => {
                       }}/>
                 {
                     selectedOption ?
-                        <span dangerouslySetInnerHTML={{__html: `Template: ${selectedOption.template}`}}
+                        <span dangerouslySetInnerHTML={{__html: `${selectedOption.template}`}}
                               style={{
                                   padding: '2px 6px',
                                   backgroundColor: '#f0f0f1',
@@ -98,7 +98,7 @@ const CustomPagePartSelector = ({value, options, onChange}) => {
                             >
                                 <span dangerouslySetInnerHTML={{__html: option.label}}/>
                                 {option.value ?
-                                    <span dangerouslySetInnerHTML={{__html: `Template: ${option.template}`}}
+                                    <span dangerouslySetInnerHTML={{__html: `${option.template}`}}
                                           style={{
                                               padding: '2px 6px',
                                               backgroundColor: '#f0f0f1',
@@ -117,7 +117,7 @@ const CustomPagePartSelector = ({value, options, onChange}) => {
 
 registerBlockType(blockName, {
     edit: ({attributes, setAttributes}) => {
-        const {postId} = attributes;
+        const {postId, overrides} = attributes;
         const parts = useSelect(
             select => select('core').getEntityRecords('postType', 'page_part', {
                 per_page: -1,
@@ -130,6 +130,12 @@ registerBlockType(blockName, {
         const registry = (typeof window !== 'undefined' && window.PagePartDesignSettings)
             ? window.PagePartDesignSettings.registry || {}
             : {};
+
+        // Get selected page part and its template data
+        const selectedPart = parts.find(p => p.id === postId);
+        const designSlug = selectedPart?.meta?.design_slug || '';
+        const templateData = registry[designSlug] || {};
+        const pageEditableFields = (templateData.custom_fields || []).filter(f => f.page_editable);
 
         // Build dropdown options with template names
         const dropdownOptions = [
@@ -149,6 +155,66 @@ registerBlockType(blockName, {
                 };
             }).sort((a, b) => a.label.localeCompare(b.label))
         ];
+
+        // Render override control based on field type
+        const renderOverrideControl = (field) => {
+            const overrideValue = overrides[field.meta_key] || '';
+
+            const updateOverride = (value) => {
+                const newOverrides = {...overrides};
+                if (value === '' || value === null) {
+                    delete newOverrides[field.meta_key];
+                } else {
+                    newOverrides[field.meta_key] = value;
+                }
+                setAttributes({overrides: newOverrides});
+            };
+
+            switch (field.type) {
+                case 'select':
+                    const selectOptions = field.options || [];
+                    const selectLabels = field.option_labels || selectOptions;
+
+                    return (
+                        <SelectControl
+                            key={field.meta_key}
+                            label={`Override ${field.label}`}
+                            value={overrideValue}
+                            options={[
+                                {label: '— Gebruik de ingestelde waarde —', value: ''},
+                                ...selectOptions.map((option, index) => ({
+                                    label: selectLabels[index] || option,
+                                    value: option
+                                }))
+                            ]}
+                            onChange={updateOverride}
+                        />
+                    );
+
+                case 'checkbox':
+                    return (
+                        <CheckboxControl
+                            key={field.meta_key}
+                            label={`Override ${field.label}`}
+                            checked={overrideValue === '1'}
+                            onChange={(checked) => updateOverride(checked ? '1' : '0')}
+                        />
+                    );
+
+                case 'text':
+                default:
+                    return (
+                        <TextControl
+                            key={field.meta_key}
+                            label={`Override ${field.label}`}
+                            value={overrideValue}
+                            onChange={updateOverride}
+                            placeholder="Gebruik de ingestelde waarde"
+                        />
+                    );
+            }
+        };
+
 
         // Build the iframe src
         const src = postId ? `/wp-json/nok-2025-v1/v1/embed-page-part/${postId}` : '';
@@ -213,11 +279,21 @@ registerBlockType(blockName, {
                             options={dropdownOptions}
                             onChange={val => setAttributes({postId: parseInt(val, 10)})}
                         />
+
+                        {pageEditableFields.length > 0 && postId !== 0 && (
+                            <PanelBody title={__('Pagina-afhankelijke overrides', textDomain)} initialOpen={false}>
+                                <p style={{fontSize: '12px', color: '#666', marginBottom: '12px'}}>
+                                    Deze page part biedt de mogelijkheid om enkele instellingen specifek voor deze pagina te overschrijven/herdefinieren:
+                                </p>
+                                {pageEditableFields.map(renderOverrideControl)}
+                            </PanelBody>
+                        )}
                     </PanelBody>
 
                     {postId ? (
                         <div style={{position: 'relative', width: '100%'}}>
                             <iframe
+                                key={`${postId}-${JSON.stringify(overrides)}`} // force reload when overrides change
                                 ref={iframeRef}
                                 title={__('Embedded NOK Page Part', textDomain)}
                                 src={src}

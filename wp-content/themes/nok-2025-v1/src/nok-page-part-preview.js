@@ -122,25 +122,6 @@ domReady(() => {
         // Call the original updateFrame logic
         const postId = wp.data.select('core/editor').getCurrentPostId();
 
-        /*
-        const meta = wp.data.select('core/editor').getEditedPostAttribute('meta') || {};
-        const currentDesignSlug = meta.design_slug || '';
-
-        hnlLogger.info(NAME, `About to autosave with design_slug: ${currentDesignSlug}`);
-        hnlLogger.info(NAME, `All meta:`);
-        hnlLogger.info(NAME, meta);
-
-        // Prepare all meta fields for storage
-        const formData = new URLSearchParams({
-            action: 'store_preview_meta',
-            post_id: postId,
-            design_slug: currentDesignSlug
-        });
-
-        // Add all meta fields
-        formData.append('all_meta', JSON.stringify(meta));
-         */
-
         // Collect complete editor state
         const completeEditorState = {
             title: wp.data.select('core/editor').getEditedPostAttribute('title') || '',
