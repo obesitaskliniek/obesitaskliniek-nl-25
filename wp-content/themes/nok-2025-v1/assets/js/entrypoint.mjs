@@ -36,8 +36,9 @@ eventHandler.docReady(function(){
   //https://stackoverflow.com/questions/3885018/active-pseudo-class-doesnt-work-in-mobile-safari
   document.addEventListener('touchstart', function() {},false);
 
-  //scrollable
+  // sets up fake scrollbars
   document.querySelectorAll('.nok-scrollable__horizontal, .nok-scrollable__vertical').forEach(setupFakeScrollbar);
+  // sets up scrollbars as controllers for scrolling
   document.querySelectorAll('[data-scroll-target]').forEach(setupScrollbarControl);
 
   eventHandler.addListener('breakPointChange', (e) => {
@@ -77,7 +78,7 @@ eventHandler.docReady(function(){
   const aos = AOS.init({
     selector: 'nok-section',
     duration: 600,
-    threshold: 0.25,
+    threshold: 0.35,
     once: true
   });
 

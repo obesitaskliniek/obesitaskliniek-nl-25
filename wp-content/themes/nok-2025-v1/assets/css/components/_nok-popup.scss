@@ -2,15 +2,21 @@
 @use "sass:map";
 
 // Universal popup for overlaying full screen popups
-
 body:has(.popup-open) {
   overflow: hidden !important;
+  scrollbar-gutter: stable;
 }
 
 nok-popup {
   --bg-alpha-value: 1;
   --row-gap: #{map-get(components-base.$padding-base-values, 2)};
-  display: none !important;
+  //display: none !important;
+  display: grid;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
   margin: map.get(components-base.$exposed-variables, "padding-section-sides");
   padding:  0;
   column-gap: 0;
@@ -25,8 +31,9 @@ nok-popup {
 
   @include components-base.nok-shadow(16px, 0.3);
   @include components-base.nok-border-radius($size: 'large', $overflowHidden: false);
-  @include components-base.transition-properties(opacity) {
-    animation: pop--in components-base.$animation-duration cubic-bezier(0.77,0.59,0.34,1.27);
+  @include components-base.transition-properties {
+    transition: opacity components-base.$animation-duration, visibility components-base.$animation-duration;
+    transition-timing-function: cubic-bezier(0.77, 0.59, 0.34, 1.27);
   }
 
   &-header {
@@ -51,6 +58,12 @@ nok-popup {
     visibility: collapse;
   }
 }
-.popup-open nok-popup {
-  display: grid !important;
+.popup-open nok-popup[data-state="open"] {
+  //display: grid !important;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  @include components-base.transition-properties {
+    animation: pop--in (components-base.$animation-duration * 2) cubic-bezier(0.77, 0.59, 0.34, 1.27);
+  }
 }

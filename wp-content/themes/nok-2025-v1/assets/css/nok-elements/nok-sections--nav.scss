@@ -93,7 +93,7 @@ $component-name: #{nok-variables.$prefix}-nav;
       //  animation: fade--in .5s ease-in-out;
       //}
     }
-    @include nok-mixins.transition-properties(opacity) {
+    @include nok-mixins.transition-properties {
       animation: fade--in .5s ease-in-out;
       transition: background 500ms ease-in-out, backdrop-filter 500ms ease-in-out;
     }
@@ -175,7 +175,7 @@ $component-name: #{nok-variables.$prefix}-nav;
   &-dropdown,
   &-control-dropdown {
     transform: translate3d(0%, -100%, 0);
-    @include nok-mixins.transition-properties(transform) {
+    @include nok-mixins.transition-properties {
       transition: transform var(--animation-duration--out) var(--animation-easing-out), box-shadow var(--animation-duration--out) var(--animation-easing-out);
     }
   }
@@ -183,7 +183,7 @@ $component-name: #{nok-variables.$prefix}-nav;
   &.open &-dropdown,
   &-control-dropdown.open  {
     transform: translate3d(0%, 0%, 0);
-    @include nok-mixins.transition-properties(transform) {
+    @include nok-mixins.transition-properties {
       transition-duration: var(--animation-duration--in);
       transition-timing-function: var(--animation-easing-in);
     }
@@ -201,7 +201,7 @@ $component-name: #{nok-variables.$prefix}-nav;
   &-menu-toggler.#{nok-variables.$prefix}-button-menu {
     svg {
       transform: rotate(0deg);
-      @include nok-mixins.transition-properties(transform) {
+      @include nok-mixins.transition-properties {
         transition: transform var(--animation-duration--in) cubic-bezier(0.16, 1, 0.3, 1);
       }
       .closed {
@@ -244,7 +244,7 @@ $component-name: #{nok-variables.$prefix}-nav;
       transform: translate3d(0%, 0%, 0);
       @include nok-mixins.nok-subtle-shadow-menu;
 
-      @include nok-mixins.transition-properties(transform) {
+      @include nok-mixins.transition-properties {
         transition-duration: var(--animation-duration--in);
         transition-timing-function: var(--animation-easing-in);
       }
@@ -419,7 +419,7 @@ $component-name: #{nok-variables.$prefix}-nav;
 
       &-drawer {
         transform: translate3d(100%, 0%, 0);
-        @include nok-mixins.transition-properties(transform) {
+        @include nok-mixins.transition-properties {
           transition: transform var(--animation-duration--out) var(--animation-easing-out);
         }
 

@@ -102,12 +102,12 @@ nok-navigation-menu-bar {
         list-style-type: none;
       }
     }
-    @include components-base.transition-properties(transform) {
+    @include components-base.transition-properties {
       transition: transform var(--animation-duration--out) var(--animation-easing-out), box-shadow var(--animation-duration--out) var(--animation-easing-out);
     }
-    @at-root nok-top-navigation.open nok-nav-menu-bar-dropdown {
+    @at-root nok-top-navigation.sidebar-open nok-nav-menu-bar-dropdown {
       transform: translate3d(0%, 0%, 0);
-      @include components-base.transition-properties(transform) {
+      @include components-base.transition-properties {
         transition-duration: var(--animation-duration--in);
         transition-timing-function: var(--animation-easing-in);
       }

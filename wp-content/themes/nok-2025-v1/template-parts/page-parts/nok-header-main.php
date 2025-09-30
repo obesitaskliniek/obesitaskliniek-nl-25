@@ -17,12 +17,14 @@ use NOK2025\V1\Theme;
 $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg') .'</nok-logo>'; ?>
 
     <nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs?cache=<?= time(); ?>">
-        <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkestblue--darker nok-z-1" data-untoggles="open,popup-open" data-no-children="true">
+        <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkestblue--darker nok-z-1"
+                         data-untoggles-class="sidebar-open,popup-open" data-untoggles-attribute="state" data-untoggles-attribute-value="open" data-no-children="true">
 
-            <nok-popup class="nok-bg-body nok-dark-bg-darkerblue nok-align-items-stretch">
+            <nok-popup class="nok-bg-body nok-dark-bg-darkerblue nok-align-items-stretch" id="popup-bmi-calculator">
                 <nok-popup-header>
                     <nok-popup-title>BMI Calculator</nok-popup-title>
-                    <button class="nok-button--small" data-untoggles="popup-open" data-target="nok-top-navigation">
+                    <button title="Klik om te sluiten" class="nok-button--small" data-untoggles-class="popup-open" data-class-target="nok-top-navigation"
+                    data-untoggles-attribute="state" data-untoggles-attribute-value="open" data-attribute-target="#popup-bmi-calculator">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
                             <path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="0.8" d="M2.4 2.8c-.2-.2-.2-.5 0-.7.2-.2.5-.2.7 0l5.1 5.1 5.1-5.1c.2-.2.5-.2.7 0 .2.2.2.5 0 .7L8.9 7.9 14 13c.2.2.2.5 0 .7s-.5.2-.7 0L8.2 8.6l-5.1 5.1c-.2.2-.5.2-.7 0-.2-.2-.2-.5 0-.7l5.1-5.1-5.1-5.1Z"></path>
                         </svg>
@@ -79,7 +81,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                 </button>
                 <button class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
                         tabindex="0"
-                        data-toggles="open" data-target=".nok-nav-control-dropdown"
+                        data-toggles-class="open" data-class-target=".nok-nav-control-dropdown"
                         data-swipe-close=".nok-nav-control-dropdown" data-autohide="10">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
                         <path stroke="currentColor"
@@ -87,9 +89,9 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                               d='M11.7 3.7H9.9l-3.3 8.6-2.3-5.7H3.1L.8 12.3H2l.5-1.3h2.3l.5 1.3h3.1l.7-2h3.4l.8 2h1.9l-3.4-8.6ZM2.9 10l.8-2.1.8 2.1H2.9Zm6.7-1.1 1.2-3.2L12 8.9H9.7Z'/>
                     </svg>
                 </button>
-                <button class="nok-button nok-button-menu nok-nav-menu-toggler nok-dark-bg-darkerblue nok-text-contrast no-shadow nok-fill-yellow"
+                <button class="nok-button nok-button-menu nok-nav-menu-toggler nok-dark-bg-darkerblue nok-text-contrast no-shadow"
                         tabindex="0"
-                        data-toggles="open">
+                        data-toggles="sidebar-open" data-class-target="nok-top-navigation">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
                         <path class="open" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10"
                               stroke-width="1.5" d="M2.7 3.9h11m-11 4h11m-11 4h11"/>
@@ -141,10 +143,11 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                 <div class="nok-section__inner--stretched nok-nav-footer nok-text-contrast nok-bg-darkerblue nok-dark-bg-darkestblue nok-z-1">
                     <div class="nok-nav-menu-items nok-nav-menu-items--compact">
                         <a href="#" class="nok-nav-menu-item nok-nav-menu-item--active">Werken bij</a>
-                        <a href="#" class="nok-nav-menu-item">Kennisbank</a>
+                        <a href="#" class="nok-nav-menu-item nok-popup-trigger" data-toggles-class="popup-open" data-class-target="nok-top-navigation"
+                           data-toggles-attribute="state" data-toggles-attribute-value="open" data-attribute-target="#popup-bmi-calculator">BMI berekenen</a>
                         <a href="#" class="nok-nav-menu-item">Mijn NOK</a>
                         <a href="#" class="nok-nav-menu-item">NOK App</a>
-                        <button class="nok-button nok-button--small nok-bg-yellow nok-mt-1 nok-invisible-sm"
+                        <button class="nok-button nok-button--small nok-bg-yellow nok-text-contrast nok-invisible-sm"
                                 tabindex="0">Gratis voorlichtingsavond
                         </button>
                     </div>
@@ -163,7 +166,9 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                         </small>
                     </div>
                     <div>Werken bij</div>
-                    <div>Kennisbank</div>
+                    <div><a href="#" class="nok-nav-menu-item nok-popup-trigger"
+                            data-toggles-class="popup-open" data-class-target="nok-top-navigation"
+                            data-toggles-attribute="state" data-toggles-attribute-value="open" data-attribute-target="#popup-bmi-calculator">BMI berekenen</a></div>
                     <div>Mijn NOK</div>
                     <div>NOK App</div>
                     <div>+31 12345678</div>
@@ -179,7 +184,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
             <nok-navigation-menu-bar class="nok-section__inner nok-my-0 nok-z-3">
                 <div class="nok-navigation-menu-bar__inner
             nok-bg-white nok-dark-bg-darkerblue nok-dark-text-contrast"
-                     data-toggles="open">
+                     data-toggles="sidebar-open">
                     <div>
                         <?= $logo; ?>
                     </div>
