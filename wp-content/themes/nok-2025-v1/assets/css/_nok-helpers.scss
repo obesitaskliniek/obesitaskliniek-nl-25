@@ -241,6 +241,15 @@
     }
   }
 
+  @keyframes slide--up {
+    from {
+      transform: translateY(5%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
   @keyframes fade--out {
     from {
       opacity: 1;
@@ -719,7 +728,7 @@ $utilities: (
       flex: 0 0 calc(
         (100% - (var(--flex-gap, 0rem) * (var(--slides-in-view, 1) - 1))) / var(--slides-in-view, 1)
       );
-      scroll-snap-align: start;
+      //scroll-snap-align: start;
     }
 
     nok-square-block {
@@ -744,14 +753,25 @@ $utilities: (
   @include nok-mixins.visually-hidden();
 }
 
+.hide-when-empty {
+    &:empty {
+        display: none !important;
+    }
+}
+
 /* Animate on scroll */
 
 .nok-aos {
   @include nok-mixins.transition-properties {
     opacity: 0;
     &[data-visible="true"] {
-      animation: fade--up (nok-variables.$animation-duration * 3) ease forwards;
+      animation: fade--up (nok-variables.$animation-duration * 3) ease-out forwards;
       position: relative;
+      nok-square-block,
+      nok-accordion {
+        transform: translateY(5%);
+        animation: slide--up (nok-variables.$animation-duration * 5.5) ease-out forwards;
+      }
     }
   }
 }

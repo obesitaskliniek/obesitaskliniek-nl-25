@@ -267,6 +267,78 @@
   }
 }
 
+@mixin native-scrollbar-styling(
+  $scrollbarVertical: true,
+  $scrollbarSize: 6px,
+  $scrollbarTrackColor: oklch(from var(--nok-body) l c h / 0.25),
+  $scrollbarHandleColor: #FFFE,
+  $scrollbarHandleColorActive: #FFFF
+) {
+  // CSS variables at mixin root for runtime theming
+  --scrollbar-size: #{$scrollbarSize};
+  --scrollbar-track-color: #{$scrollbarTrackColor};
+  --scrollbar-handle-color: #{$scrollbarHandleColor};
+  --scrollbar-handle-color-active: #{$scrollbarHandleColorActive};
+
+  // Reserve space for scrollbar to prevent layout shift
+  // Works with classic scrollbars, ignored by overlay scrollbars
+  scrollbar-gutter: stable;
+
+  // Standard properties (Firefox, Chrome 121+, Safari 18.2+ partial)
+  // These take precedence in Chrome 121+ when set to non-auto values
+  @supports (scrollbar-color: auto) {
+    scrollbar-color: var(--scrollbar-handle-color) var(--scrollbar-track-color);
+    scrollbar-width: auto;
+  }
+
+  // Webkit pseudo-elements (Chrome, Safari, Edge)
+  // Isolated with @supports to prevent Chrome 121+ override issues
+  @supports selector(::-webkit-scrollbar) {
+    &::-webkit-scrollbar {
+      @if $scrollbarVertical {
+        width: var(--scrollbar-size);
+        height: 0;
+      } @else {
+        width: 0;
+        height: var(--scrollbar-size);
+      }
+    }
+
+    &::-webkit-scrollbar-track {
+      background: var(--scrollbar-track-color);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-handle-color);
+      border-radius: calc(var(--scrollbar-size) / 2);
+
+      &:hover {
+        background: var(--scrollbar-handle-color-active);
+      }
+
+      &:active {
+        background: var(--scrollbar-handle-color-active);
+      }
+    }
+
+    // Hide the unused axis completely
+    @if $scrollbarVertical {
+      &::-webkit-scrollbar:horizontal {
+        display: none;
+      }
+    } @else {
+      &::-webkit-scrollbar:vertical {
+        display: none;
+      }
+    }
+
+    // Style corner for bidirectional cases (defensive)
+    &::-webkit-scrollbar-corner {
+      background: var(--scrollbar-track-color);
+    }
+  }
+}
+
 @mixin nok-scrollbar-style(
   $scrollbarVertical: true,
   $scrollbarSize: 6px,
@@ -339,7 +411,7 @@
     }
   }
 
-  @include nok-scrollbar-style($scrollbarVertical, $scrollbarSize, $scrollbarTrackColor, $scrollbarHandleColor, $scrollbarHandleColorActive);
+  @include native-scrollbar-styling($scrollbarVertical, $scrollbarSize, $scrollbarTrackColor, $scrollbarHandleColor, $scrollbarHandleColorActive);
 
   position: relative;
 

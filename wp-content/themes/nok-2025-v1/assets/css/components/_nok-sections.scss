@@ -13,7 +13,11 @@
   align-items: center;
 
   overflow-x: clip;
+  font-size: 1.1rem;
 
+  //&:nth-child(even):not([class^="nok-bg"]) {
+  //  background-color: var(--nok-body--darker);
+  //}
   //descending z-index cascade
   @for $i from 1 through 20 {
     &:nth-child(#{$i}) {
@@ -109,7 +113,7 @@
       &.circle {
         &::after {
           content: "";
-          position: absolute;
+          position: fixed;
           top: calc(2 * var(--nok-spacing-section-ends, 1.5rem));
           left: var(--circle-offset, 75%);
           transform: translateX(-50%);
@@ -150,7 +154,7 @@
     &::after {
       opacity: 0;
       @include components-base.transition-properties {
-        animation: slide--down (4 * components-base.$animation-duration) ease-out forwards;
+        animation: slide--down (5.5 * components-base.$animation-duration) ease-out forwards;
       }
     }
   }

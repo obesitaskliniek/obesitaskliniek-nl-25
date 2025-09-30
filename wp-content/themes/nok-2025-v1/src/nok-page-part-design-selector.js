@@ -7,7 +7,7 @@ import {Fragment, useRef, useState, useEffect} from '@wordpress/element';
 
 const NAME = 'nok-page-part-design-selector';
 
-const RepeaterField = ({ field, value, onChange }) => {
+const RepeaterField = ({ field, schema, value, onChange }) => {
     const [items, setItems] = useState(() => {
         try {
             return JSON.parse(value || '[]');
@@ -16,13 +16,22 @@ const RepeaterField = ({ field, value, onChange }) => {
         }
     });
 
+    // Create empty item structure from schema
+    const createEmptyItem = () => {
+        const emptyItem = {};
+        schema.forEach(schemaField => {
+            emptyItem[schemaField.name] = '';
+        });
+        return emptyItem;
+    };
+
     const updateItems = (newItems) => {
         setItems(newItems);
         onChange(JSON.stringify(newItems));
     };
 
     const addItem = () => {
-        const newItems = [...items, { title: '', content: '', button_text: '' }];
+        const newItems = [...items, createEmptyItem()];
         updateItems(newItems);
     };
 
@@ -35,6 +44,70 @@ const RepeaterField = ({ field, value, onChange }) => {
         const newItems = [...items];
         newItems[index] = { ...newItems[index], [key]: itemValue };
         updateItems(newItems);
+    };
+
+    // Render field based on schema type
+    const renderSchemaField = (schemaField, item, index) => {
+        const fieldKey = schemaField.name;
+        const fieldValue = item[fieldKey] || '';
+        const label = schemaField.name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+        const fieldStyle = {
+            width: '100%',
+            padding: '6px 8px',
+            border: '1px solid #ddd',
+            borderRadius: '3px',
+            fontSize: '13px'
+        };
+
+        switch (schemaField.type) {
+            case 'textarea':
+                return (
+                    <div key={fieldKey} style={{ marginBottom: '8px' }}>
+                        <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px' }}>
+                            {label}:
+                        </label>
+                        <textarea
+                            value={fieldValue}
+                            onChange={(e) => updateItem(index, fieldKey, e.target.value)}
+                            rows="3"
+                            style={{ ...fieldStyle, resize: 'vertical' }}
+                        />
+                    </div>
+                );
+
+            case 'url':
+                return (
+                    <div key={fieldKey} style={{ marginBottom: '8px' }}>
+                        <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px' }}>
+                            {label}:
+                        </label>
+                        <input
+                            type="url"
+                            value={fieldValue}
+                            onChange={(e) => updateItem(index, fieldKey, e.target.value)}
+                            placeholder="https://..."
+                            style={fieldStyle}
+                        />
+                    </div>
+                );
+
+            case 'text':
+            default:
+                return (
+                    <div key={fieldKey} style={{ marginBottom: '8px' }}>
+                        <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px' }}>
+                            {label}:
+                        </label>
+                        <input
+                            type="text"
+                            value={fieldValue}
+                            onChange={(e) => updateItem(index, fieldKey, e.target.value)}
+                            style={fieldStyle}
+                        />
+                    </div>
+                );
+        }
     };
 
     return (
@@ -77,63 +150,7 @@ const RepeaterField = ({ field, value, onChange }) => {
                     </div>
 
                     <div style={{ padding: '12px' }}>
-                        <div style={{ marginBottom: '8px' }}>
-                            <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px' }}>
-                                Title:
-                            </label>
-                            <input
-                                type="text"
-                                value={item.title || ''}
-                                onChange={(e) => updateItem(index, 'title', e.target.value)}
-                                placeholder="e.g., Arts, Internist"
-                                style={{
-                                    width: '100%',
-                                    padding: '6px 8px',
-                                    border: '1px solid #ddd',
-                                    borderRadius: '3px',
-                                    fontSize: '13px'
-                                }}
-                            />
-                        </div>
-
-                        <div style={{ marginBottom: '8px' }}>
-                            <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px' }}>
-                                Content:
-                            </label>
-                            <textarea
-                                value={item.content || ''}
-                                onChange={(e) => updateItem(index, 'content', e.target.value)}
-                                placeholder="Description text..."
-                                rows="3"
-                                style={{
-                                    width: '100%',
-                                    padding: '6px 8px',
-                                    border: '1px solid #ddd',
-                                    borderRadius: '3px',
-                                    fontSize: '13px',
-                                    resize: 'vertical'
-                                }}
-                            />
-                        </div>
-
-                        <div>
-                            <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px' }}>
-                                Button Text:
-                            </label>
-                            <input
-                                type="text"
-                                value={item.button_text || ''}
-                                onChange={(e) => updateItem(index, 'button_text', e.target.value)}
-                                placeholder="e.g., Over de Arts"
-                                style={{
-                                    width: '100%',
-                                    padding: '6px 8px',
-                                    border: '1px solid #ddd',
-                                    borderRadius: '3px',
-                                    fontSize: '13px'
-                                }}
-                            />
-                        </div>
+                        {schema.map(schemaField => renderSchemaField(schemaField, item, index))}
                     </div>
                 </div>
             ))}
@@ -325,30 +342,24 @@ function DesignSlugPanel() {
                         placeholder="https://..."
                     />
                 );
-
-            /*case 'repeater':
-                // For now, show as textarea - we'll enhance this later
-                return (
-                    <TextareaControl
-                        key={field.meta_key}
-                        label={field.label + ' (JSON)'}
-                        value={fieldValue}
-                        onChange={(value) => updateMetaField(field.meta_key, value)}
-                        help="Enter JSON data for repeater field"
-                        rows={4}
-                    />
-                );*/
-
             case 'repeater':
+                // Add safety check for schema
+                if (!field.schema || field.schema.length === 0) {
+                    return (
+                        <div key={field.meta_key} style={{ padding: '12px', background: '#fff3cd', border: '1px solid #ffc107', borderRadius: '4px' }}>
+                            <strong>Warning:</strong> Repeater field "{field.label}" has no schema defined.
+                        </div>
+                    );
+                }
                 return (
                     <RepeaterField
                         key={field.meta_key}
                         field={field}
+                        schema={field.schema}
                         value={fieldValue}
                         onChange={(value) => updateMetaField(field.meta_key, value)}
                     />
                 );
-
             case 'select':
                 const selectOptions = field.options || [];
                 const selectLabels = field.option_labels || selectOptions; // Fallback to options if no labels

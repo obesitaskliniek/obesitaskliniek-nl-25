@@ -26,8 +26,8 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
 
                 <?php if (!empty($page_part_fields['button_url'])) : ?>
                 <a role="button" href="<?= $page_part_fields['button_url']; ?>"
-                   class="nok-button nok-column-last-1 nok-bg-darkestblue nok-text-contrast">
-                    <?= $page_part_fields['button_text']; ?> <?= Assets::getIcon('arrow-right-long'); ?>
+                   class="nok-button nok-column-last-1 nok-bg-darkestblue nok-text-contrast fill-mobile">
+                    <?= $page_part_fields['button_text']; ?> <?= Assets::getIcon('arrow-right-long', 'nok-text-yellow'); ?>
                 </a>
                 <?php endif; ?>
                 <!-- Component: drag-scrollable blokkengroep -->

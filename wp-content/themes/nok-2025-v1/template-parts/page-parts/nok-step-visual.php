@@ -10,6 +10,7 @@
  * - layout:select(left|right)
  */
 
+use NOK2025\V1\Assets;
 use NOK2025\V1\Helpers;
 $featuredImage = Helpers::get_featured_image();
 
@@ -33,8 +34,8 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
 							<?php the_content(); ?>
                         </div>
                         <a role="button" href="<?php echo $page_part_fields['button_blauw_url'] ?? '#'; ?>" class="nok-button nok-justify-self-start
-                nok-bg-darkblue nok-text-contrast" tabindex="0">
-		                    <?php echo $page_part_fields['button_blauw_text'] ?? ''; ?>
+                nok-bg-darkblue nok-text-contrast fill-mobile" tabindex="0">
+		                    <?php echo $page_part_fields['button_blauw_text'] ?? ''; ?> <?= Assets::getIcon('arrow-right-long', 'nok-text-yellow'); ?>
                             </svg>
                         </a>
                     </nok-square-block>
@@ -59,8 +60,8 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
 	                        <?php the_content(); ?>
                         </div>
                         <a role="button" href="<?php echo $page_part_fields['button_blauw_url'] ?? '#'; ?>" class="nok-button nok-justify-self-start
-                nok-bg-darkblue nok-text-contrast" tabindex="0">
-	                        <?php echo $page_part_fields['button_blauw_text'] ?? ''; ?>
+                nok-bg-darkblue nok-text-contrast fill-mobile" tabindex="0">
+	                        <?php echo $page_part_fields['button_blauw_text'] ?? ''; ?> <?= Assets::getIcon('arrow-right-long', 'nok-text-yellow'); ?>
                             </svg>
                         </a>
                     </nok-square-block>

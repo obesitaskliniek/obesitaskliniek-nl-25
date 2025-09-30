@@ -63,7 +63,8 @@ class Registry {
 					$remaining_content = substr($comment_block, $start_pos);
 
 					// Find all lines that start with "* -" until we hit another header or end
-					preg_match_all('/^\s*\*\s*-\s*([^,\n]+)(?:,\s*)?$/m', $remaining_content, $field_matches);
+					//old regex: preg_match_all('/^\s*\*\s*-\s*([^,\n]+)(?:,\s*)?$/m', $remaining_content, $field_matches);
+					preg_match_all('/^\s*\*\s*-\s*(.+)$/m', $remaining_content, $field_matches);
 
 					$result[$key] = implode(',', array_map('trim', $field_matches[1]));
 				} else {
@@ -163,6 +164,25 @@ class Registry {
 					'label'    => $this->generate_field_label($field_name),
 					'default'  => $default_storage_value,
 					'options'  => [], // Empty for checkbox fields
+				];
+			}
+			elseif (preg_match('/^([^:]+):repeater\((.+)\)$/', $definition, $matches)) {
+				$field_name = trim($matches[1]);
+				$schema_string = trim($matches[2]);
+
+				// Parse schema: "title:text,content:textarea,button_text:text"
+				$schema = [];
+				foreach (explode(',', $schema_string) as $field_def) {
+					list($name, $type) = explode(':', $field_def);
+					$schema[] = ['name' => trim($name), 'type' => trim($type)];
+				}
+
+				$fields[] = [
+					'name' => $field_name,
+					'type' => 'repeater',
+					'meta_key' => $template_slug . '_' . $field_name,
+					'label' => $this->generate_field_label($field_name),
+					'schema' => $schema
 				];
 			}
 			// Handle regular fields: "field_name:type"

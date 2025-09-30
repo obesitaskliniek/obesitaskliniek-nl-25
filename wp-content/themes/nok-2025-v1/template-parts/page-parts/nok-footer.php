@@ -34,7 +34,7 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
                     <p class="nok-square-block__text nok-fs-2">
                         Wil je meer weten over de behandeling? Bel of mail ons dan gerust.
                     </p>
-                    <button class="nok-button nok-justify-self-start
+                    <button class="nok-button nok-justify-self-start fill-mobile
                 nok-bg-darkblue nok-text-contrast" tabindex="0">
                         Neem contact op <?= Assets::getIcon('arrow-right-long', 'nok-text-yellow'); ?>
                     </button>

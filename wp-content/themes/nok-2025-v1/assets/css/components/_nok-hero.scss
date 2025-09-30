@@ -147,7 +147,7 @@ nok-hero {
       }
     }
     @include components-base.media-breakpoint-down(lg) {
-      grid-template-rows: 5rem 100vmin 3rem auto var(--footer-height); //third column (3rem) is overlap between article and figure
+      grid-template-rows: 5rem var(--section-max-width, 85vw) 3rem auto var(--footer-height); //third column (3rem) is overlap between article and figure
       grid-template-columns: 1fr;
       row-gap: 0;
       //grid-template-rows: 45vmax 4rem auto 1fr;

@@ -32,11 +32,25 @@ nok-logo, nok-mobile-nav, nok-desktop-nav {
   display: contents;
 }
 
+html {
+  --font-size-base: var(--nok-html-font-size, 1em);
+  font-size: var(--font-size-base, 1em);
+  @include nok-mixins.media-breakpoint-down(md) {
+    font-size: calc(var(--font-size-base) * .9);
+  }
+  @include nok-mixins.native-scrollbar-styling(
+          $scrollbarVertical: true,
+          $scrollbarSize: 15px,
+          $scrollbarTrackColor: #FFF3,
+          $scrollbarHandleColor: #0003,
+          $scrollbarHandleColorActive: #000E
+  );
+}
+
 body {
   --nok-body-text-color: var(--nok-darkerblue);
   background: linear-gradient(180deg, var(--nok-body--darker), var(--nok-body));
   @include nok-mixins.nok-text-font;
-  @include nok-mixins.nok-scrollbar-style(true, 10px, transparent, #0008);
 }
 
 @for $i from 1 through 6 {
@@ -53,14 +67,6 @@ body {
 
   @at-root body:not(.no-debug) & {
     @include hnl-baseline-grid.baseline-grid-debug;
-  }
-}
-
-html {
-  --font-size-base: var(--nok-html-font-size, 1em);
-  font-size: var(--font-size-base, 1em);
-  @include nok-mixins.media-breakpoint-down(md) {
-    font-size: calc(var(--font-size-base) * .9);
   }
 }
 
