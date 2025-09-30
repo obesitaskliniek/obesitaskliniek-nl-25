@@ -73,6 +73,12 @@ button,
     background: #EEE;
   }
 
+  @include components-base.media-breakpoint-down(components-base.$mobile-breakpoint) {
+    &.fill-mobile {
+      width: 100%;
+    }
+  }
+
   &--small {
     --size-factor: .5;
   }

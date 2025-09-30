@@ -72,6 +72,7 @@ eventHandler.docReady(function(){
     const scrolled = Math.round(pageScrollPercentage());
     document.documentElement.style.setProperty('--doc-scrolled', `${(scrolled)}%`);
     document.documentElement.style.setProperty('--doc-scrolled-float', `${scrolled / 100}`);
+    document.documentElement.style.setProperty('--scrollbar-width', `${Math.max(0, (window.innerWidth - document.documentElement.clientWidth))}px`);
   })();
 
 

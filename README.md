@@ -99,6 +99,7 @@ $fields = $theme->get_page_part_fields($post_id, $design);
 - ✅ Repeater field UI improvements
 
 **TODO - High Priority:**
+- [ ] Parameter overriding for page parts inside the page editor
 - [ ] SEO integration (Gutenberg blocks for page parts)
 - [ ] Cache invalidation when page parts change
 

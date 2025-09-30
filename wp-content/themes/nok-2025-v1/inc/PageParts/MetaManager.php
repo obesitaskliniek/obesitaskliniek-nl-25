@@ -286,9 +286,18 @@ class MetaManager {
 	 */
 	public function sanitize_json_field($value) {
 		if (is_string($value)) {
+			// First, try to decode it
 			$decoded = json_decode($value, true);
-			if (json_last_error() === JSON_ERROR_NONE) {
-				return wp_json_encode($decoded);
+
+			// If decode failed, the string might be double-encoded
+			if (json_last_error() !== JSON_ERROR_NONE) {
+				// Try decoding again (handles double-encoding)
+				$decoded = json_decode(stripslashes($value), true);
+			}
+
+			if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+				// Re-encode with proper UTF-8 handling
+				return wp_json_encode($decoded, JSON_UNESCAPED_UNICODE);
 			}
 		}
 

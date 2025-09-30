@@ -5,7 +5,7 @@
  * Custom Fields:
  *  - layout:select(left|right)
  *  - colors:select(Transparant::nok-bg-body|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue)
- *  - accordion-items:repeater
+ *  - accordion-items:repeater(title:text,content:textarea,button_text:text,button_url:url)
  */
 
 $default_colors = '';
@@ -80,8 +80,8 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
                     if (empty($accordion_data)) {
                         // Fallback to hardcoded array for demo/development
                         $accordion_data = [
-                                ['title' => 'Titel', 'content' => 'Tekst', 'button_text' => 'Button tekst'],
-                                ['title' => 'Titel', 'content' => 'Tekst', 'button_text' => 'Button tekst']
+                                ['title' => 'Titel 1', 'content' => 'Tekst 1', 'button_text' => 'Button tekst', 'button_url' => '#'],
+                                ['title' => 'Titel 2', 'content' => 'Tekst 2', 'button_text' => 'Button tekst', 'button_url' => '#']
                         ];
                     }
 
@@ -91,10 +91,12 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
                                      name="<?= $accordion_group; ?>" <?= $index == 0 ? 'open' : ''; ?>>
                                 <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold"><?= esc_html($specialist['title']); ?></summary>
                                 <div class="accordion-content nok-p-2 nok-pt-0">
-                                    <p class="nok-mb-1"><?= wp_kses_post($specialist['content']); ?></p>
-                                    <button class="nok-button nok-text-contrast nok-bg-darkerblue nok-dark-bg-darkblue nok-visible-xs nok-align-self-stretch" tabindex="0">
-                                        <?= esc_html($specialist['button_text']); ?>
-                                    </button>
+                                    <p class="<?= isset($specialist['button_url']) ? 'nok-mb-1' : '';?>"><?= wp_kses_post($specialist['content']); ?></p>
+                                    <?php if (isset($specialist['button_url'])) : ?>
+                                    <a href="<?= $specialist['button_url']; ?>" role="button" class="nok-button nok-text-contrast nok-bg-darkerblue nok-dark-bg-darkblue nok-visible-xs nok-align-self-stretch fill-mobile" tabindex="0">
+                                        <?= esc_html(trim($specialist['button_text']) !== '' ? trim($specialist['button_text']) : 'Lees meer'); ?>
+                                    </a>
+                                    <?php endif; ?>
                                 </div>
                             </details>
                         </nok-accordion>

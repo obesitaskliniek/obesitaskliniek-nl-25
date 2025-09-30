@@ -31,7 +31,7 @@ $colors = ($page_part_fields['achtergrondkleur'] ?? "") !== "" ? $page_part_fiel
 
 $featuredImage = Helpers::get_featured_image($pull_down ? ($left ? 'nok-rounded-border-large-right' : 'nok-rounded-border-large-left') : null);
 ?>
-    <nok-section class="circle circle-<?=$left ? 'right' : 'left';?> <?= $pull_down ? 'pull-down' : ''; ?> <?= $colors; ?>"
+    <nok-section class="circle <?= $pull_down ? 'pull-down' : ''; ?> <?= $colors; ?>"
     style="<?=$circle_color;?>;--circle-offset:<?= $left ? 'calc(50vw + (var(--section-max-width) * 0.25))' : 'calc(50vw - (var(--section-max-width) * 0.25))'; ?>;">
         <div class="nok-section__inner">
             <article class="nok-align-self-stretch
@@ -61,8 +61,8 @@ $featuredImage = Helpers::get_featured_image($pull_down ? ($left ? 'nok-rounded-
                         <div>
 	                        <?php if (!empty($page_part_fields['button_url'])) : ?>
                             <a role="button" href="<?= $page_part_fields['button_url']; ?>"
-                               class="nok-button nok-align-self-to-sm-stretch nok-bg-yellow nok-text-contrast">
-		                        <?= $page_part_fields['button_text']; ?> <?= Assets::getIcon('arrow-right-long'); ?>
+                               class="nok-button nok-align-self-to-sm-stretch nok-bg-darkblue nok-text-contrast fill-mobile">
+		                        <?= $page_part_fields['button_text']; ?> <?= Assets::getIcon('arrow-right-long', 'nok-text-yellow'); ?>
                             </a>
 	                        <?php endif; ?>
                         </div>
@@ -75,8 +75,8 @@ $featuredImage = Helpers::get_featured_image($pull_down ? ($left ? 'nok-rounded-
                         <div>
 			                <?php if (!empty($page_part_fields['button_url'])) : ?>
                                 <a role="button" href="<?= $page_part_fields['button_url']; ?>"
-                                   class="nok-button nok-align-self-to-sm-stretch nok-bg-yellow nok-text-contrast">
-					                <?= $page_part_fields['button_text']; ?> <?= Assets::getIcon('arrow-right-long'); ?>
+                                   class="nok-button nok-align-self-to-sm-stretch nok-bg-darkblue nok-text-contrast fill-mobile">
+					                <?= $page_part_fields['button_text']; ?> <?= Assets::getIcon('arrow-right-long', 'nok-text-yellow'); ?>
                                 </a>
 			                <?php endif; ?>
                         </div>
