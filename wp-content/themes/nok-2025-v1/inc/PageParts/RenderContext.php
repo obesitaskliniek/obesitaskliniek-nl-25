@@ -23,6 +23,11 @@ class RenderContext {
 	 * Detect the current rendering context
 	 */
 	private function detect_context(): string {
+		// AJAX requests aren't editor contexts
+		if (wp_doing_ajax()) {
+			return self::CONTEXT_FRONTEND;
+		}
+
 		// REST API request (page part preview in page editor)
 		if (wp_is_serving_rest_request()) {
 			return self::CONTEXT_REST_EMBED;

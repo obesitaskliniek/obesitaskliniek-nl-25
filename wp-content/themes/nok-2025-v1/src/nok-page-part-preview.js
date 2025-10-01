@@ -149,14 +149,16 @@ domReady(() => {
         })
             .then(response => response.json())
             .then(data => {
-                hnlLogger.info(NAME, 'Meta stored:');
+                hnlLogger.info(NAME, 'Meta stored intransient.');
                 hnlLogger.info(NAME, data);
 
                 // Perform autosave (for content changes) - RETURN the promise
                 return wp.data.dispatch('core/editor').autosave();
             })
             .then(autosaveResult => {
-                hnlLogger.info(NAME, 'Autosave completed:', autosaveResult);
+                hnlLogger.info(NAME, 'Autosave completed.');
+                // Dismiss the autosave notice immediately
+                wp.data.dispatch('core/notices').removeNotice('autosave-exists');
 
                 const previewLink = wp.data
                     .select('core/editor')
@@ -178,11 +180,6 @@ domReady(() => {
         button.addEventListener('click', () => enhancedUpdateFrame(true)); // Mark button clicks as user-initiated
     }
 
-    // Auto-update on window resize
-    window.addEventListener('resize', debounceThis((e) => {
-        enhancedUpdateFrame(true); // Mark resize as user-initiated
-    }));
-
     setTimeout(() => {
         isInitializing = false;
         loadInitialPreview(); // Load preview after initialization
@@ -202,27 +199,11 @@ domReady(() => {
         const meta = select("core/editor").getEditedPostAttribute("meta") || {};
         const currentSlug = meta.design_slug;
 
-        // Check if this is likely an autosave (meta changed but no user action in last 2 seconds)
-        const isLikelyAutosave = !userInitiatedChange;
-
-        // Reset the user flag after checking
-        if (userInitiatedChange) {
-            // Keep the flag for 2 seconds, then reset
-            setTimeout(() => {
-                userInitiatedChange = false;
-            }, 2000);
-        }
-
         // Check if design_slug changed
         if (currentSlug !== lastSlug) {
             lastSlug = currentSlug;
-
-            if (!isLikelyAutosave) {
                 hnlLogger.info(NAME, `Design slug changed to: ${currentSlug}`);
                 enhancedUpdateFrame();
-            } else {
-                hnlLogger.info(NAME, `Design slug changed via autosave, skipping preview update`);
-            }
             return;
         }
 
@@ -230,13 +211,8 @@ domReady(() => {
         const hasMetaChanged = JSON.stringify(meta) !== JSON.stringify(lastMeta);
         if (hasMetaChanged) {
             lastMeta = {...meta};
-
-            if (!isLikelyAutosave) {
                 hnlLogger.info(NAME, `Custom fields changed, updating preview`);
                 enhancedUpdateFrame();
-            } else {
-                hnlLogger.info(NAME, `Custom fields changed via autosave, skipping preview update`);
-            }
         }
     });
 

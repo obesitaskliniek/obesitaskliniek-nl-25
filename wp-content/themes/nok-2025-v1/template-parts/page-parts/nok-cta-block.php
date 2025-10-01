@@ -36,7 +36,7 @@ if ( $page_part_fields['colors'] === "Blauw op donkerblauw" ) {
                 <div class="nok-square-block__text"><?php the_content(); ?></div>
 
                 <?php if (!empty($page_part_fields['button_url'])) : ?>
-                <a role="button" href="<?= $page_part_fields['button_url']; ?>" class="nok-button nok-align-self-end nok-bg-white nok-text-darkblue fill-mobile"><?= $page_part_fields['button_text']; ?></a>
+                <a role="button" href="<?= $page_part_fields['button_url']; ?>" class="nok-button nok-align-self-end nok-bg-white nok-text-darkblue fill-mobile"><?= $page_part_fields['button_text']; ?> <?= Assets::getIcon('arrow-right-long', 'nok-text-lightblue'); ?></a>
                 <?php endif; ?>
             </nok-square-block>
         </div>

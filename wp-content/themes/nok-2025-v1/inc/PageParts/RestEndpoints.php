@@ -35,26 +35,29 @@ class RestEndpoints {
 	 * REST API callback for embedding page parts
 	 * Only runs in the backend when editing a PAGE, embedding page parts
 	 */
-	public function embed_page_part_callback(\WP_REST_Request $request) {
-		$id = (int) $request->get_param('id');
-		$post = get_post($id);
+	public function embed_page_part_callback( \WP_REST_Request $request ) {
+		$id   = (int) $request->get_param( 'id' );
+		$post = get_post( $id );
 
-		if (!$post || $post->post_type !== 'page_part') {
-			status_header(404);
+		if ( ! $post || $post->post_type !== 'page_part' ) {
+			status_header( 404 );
 			exit;
 		}
 
-		// Check for unified preview state
-		$preview_state = get_transient("preview_editor_state_{$id}");
-		$design = $preview_state['meta']['design_slug'] ?? get_post_meta($id, 'design_slug', true) ?: 'nok-hero';
+		// Get all query parameters as potential overrides
+		$query_params = $request->get_query_params();
+		unset( $query_params['_locale'] ); // Remove WordPress internals
+
+		$preview_state = get_transient( "preview_editor_state_{$id}" );
+		$design        = $preview_state['meta']['design_slug'] ?? get_post_meta( $id, 'design_slug', true ) ?: 'nok-hero';
 
 		// Set up meta filtering for the embed rendering if we have preview data
-		if ($preview_state && is_array($preview_state)) {
-			$this->setup_preview_filters($id, $preview_state);
+		if ( $preview_state && is_array( $preview_state ) ) {
+			$this->setup_preview_filters( $id, $preview_state );
 		}
 
-		// Output complete HTML response
-		$this->output_embed_html($id, $design);
+		// Pass overrides to rendering
+		$this->output_embed_html( $id, $design, $query_params );
 	}
 
 	/**
@@ -95,7 +98,7 @@ class RestEndpoints {
 	/**
 	 * Output the complete HTML response for the embed
 	 */
-	private function output_embed_html(int $id, string $design): void {
+	private function output_embed_html(int $id, string $design, array $overrides = []): void {
 		$css_uris = [
 			'/assets/css/nok-components.css',
 			'/assets/css/color_tests-v2.css',
@@ -118,9 +121,9 @@ class RestEndpoints {
             <a href="' . $edit_link . '" type="button" target="_blank" class="nok-button nok-align-self-to-sm-stretch fill-group-column nok-bg-darkerblue nok-text-contrast no-shadow" tabindex="0">Bewerken</a>
         </nok-screen-mask>';
 
-		$html .= $this->render_page_part_content($id, $design);
+		$html .= $this->render_page_part_content($id, $design, $overrides);
 		$html .= '</body></html>';
-
+;
 		print $html;
 		exit;
 	}
@@ -128,7 +131,7 @@ class RestEndpoints {
 	/**
 	 * Render the page part content within proper WordPress context
 	 */
-	private function render_page_part_content(int $id, string $design): string {
+	private function render_page_part_content(int $id, string $design, array $overrides = []): string {
 		// Store original state
 		global $post, $wp_query;
 		$original_post = $post;
@@ -148,15 +151,35 @@ class RestEndpoints {
 
 		// Make sure we have the post in the loop
 		if ($wp_query->have_posts()) {
-			$wp_query->the_post(); // This sets up all the globals properly
+			$wp_query->the_post();
 
 			ob_start();
 
-			// Get processed page part fields
+			// Get base page part fields
 			$page_part_fields = $this->meta_manager->get_page_part_fields($id, $design, false);
 
-            // Use render_page_part for REST context (handles CSS properly)
-            $this->renderer->render_page_part($design, $page_part_fields);
+			// Apply overrides from query parameters
+			if (!empty($overrides)) {
+				$registry = \NOK2025\V1\Theme::get_instance()->get_page_part_registry();
+				$template_data = $registry[$design] ?? [];
+				$custom_fields = $template_data['custom_fields'] ?? [];
+
+				foreach ($custom_fields as $field) {
+					if ($field['page_editable']
+					    && isset($overrides[$field['meta_key']])
+					    && $overrides[$field['meta_key']] !== '') {
+
+						// Sanitize based on field type
+						$sanitize_callback = $this->meta_manager->get_sanitize_callback($field['type']);
+						$page_part_fields[$field['name']] = call_user_func(
+							$sanitize_callback,
+							$overrides[$field['meta_key']]
+						);
+					}
+				}
+			}
+
+			$this->renderer->render_page_part($design, $page_part_fields);
 
 			$output = ob_get_clean();
 			wp_reset_postdata();

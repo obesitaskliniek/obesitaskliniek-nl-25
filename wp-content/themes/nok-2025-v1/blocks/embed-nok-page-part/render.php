@@ -24,26 +24,25 @@ return function( array $attributes ): string {
     // Get default page part fields
 	$page_part_fields = $theme_instance->get_page_part_fields( $post_id, $design, false );
 
-    // Merge overrides - block attributes take precedence
-    if ( ! empty( $overrides ) && is_array( $overrides ) ) {
-        // Get registry to map meta_key to field name
-        $registry = $theme_instance->get_page_part_registry();
-        $template_data = $registry[$design] ?? [];
-        $custom_fields = $template_data['custom_fields'] ?? [];
+	// Apply overrides from block attributes
+	if (!empty($attributes['overrides']) && is_array($attributes['overrides'])) {
+		$registry = $theme_instance->get_page_part_registry();
+		$template_data = $registry[$design] ?? [];
+		$custom_fields = $template_data['custom_fields'] ?? [];
 
-        foreach ( $custom_fields as $field ) {
-            if ( isset( $overrides[$field['meta_key']] ) && $overrides[$field['meta_key']] !== '' ) {
-                // Override exists and is not empty - use it
-                $page_part_fields[$field['name']] = $overrides[$field['meta_key']];
-            }
-        }
-    }
+		foreach ($custom_fields as $field) {
+			if (isset($attributes['overrides'][$field['meta_key']])
+			    && $attributes['overrides'][$field['meta_key']] !== '') {
+				$page_part_fields[$field['name']] = $attributes['overrides'][$field['meta_key']];
+			}
+		}
+	}
 
 	//Enqueue any part-specific CSS files we find
-	$css_uri = "/template-parts/page-parts/{$design}.css";
-	if ( file_exists( THEME_ROOT_ABS . $css_uri ) ) {
-		wp_enqueue_style( $design, THEME_ROOT . $css_uri, array(), filemtime(THEME_ROOT_ABS . $css_uri), false);
-	}
+//	$css_uri = "/template-parts/page-parts/{$design}.css";
+//	if ( file_exists( THEME_ROOT_ABS . $css_uri ) ) {
+//		wp_enqueue_style( $design, THEME_ROOT . $css_uri, array(), filemtime(THEME_ROOT_ABS . $css_uri), false);
+//	}
 
 	ob_start();
 	//This is the actual frontend rendering!
