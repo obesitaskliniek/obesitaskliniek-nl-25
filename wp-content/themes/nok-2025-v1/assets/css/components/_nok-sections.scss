@@ -111,6 +111,7 @@
   @include components-base.media-breakpoint-up(components-base.$mobile-breakpoint) {
     @include components-base.domready {
       &.circle {
+        position: relative;
         &::after {
           content: "";
           position: fixed;
@@ -126,6 +127,11 @@
           background: var(--circle-background-color, oklch(from var(--nok-darkblue) calc(l * .5) c h / 10%));
           @media (prefers-color-scheme: dark) {
             background: var(--circle-background-color, oklch(from var(--nok-darkblue) calc(l * 2) c h / 10%));
+          }
+        }
+        &.nok-aos[data-visible="false"] {
+          &::after {
+            display: none;
           }
         }
       }
