@@ -1,7 +1,7 @@
 import {useSelect, useDispatch} from '@wordpress/data';
 import {registerPlugin} from '@wordpress/plugins';
 import {PluginDocumentSettingPanel} from '@wordpress/edit-post';
-import {SelectControl, TextControl, TextareaControl, CheckboxControl} from '@wordpress/components';
+import {SelectControl, TextControl, TextareaControl, CheckboxControl, Button, Draggable } from '@wordpress/components';
 import {hnlLogger} from '../assets/js/modules/hnl.logger.mjs';
 import {Fragment, useRef, useState, useEffect} from '@wordpress/element';
 
@@ -15,8 +15,8 @@ const RepeaterField = ({ field, schema, value, onChange }) => {
             return [];
         }
     });
+    const [draggedIndex, setDraggedIndex] = useState(null);
 
-    // Create empty item structure from schema
     const createEmptyItem = () => {
         const emptyItem = {};
         schema.forEach(schemaField => {
@@ -46,7 +46,36 @@ const RepeaterField = ({ field, schema, value, onChange }) => {
         updateItems(newItems);
     };
 
-    // Render field based on schema type
+    const moveItem = (fromIndex, toIndex) => {
+        const newItems = [...items];
+        const [movedItem] = newItems.splice(fromIndex, 1);
+        newItems.splice(toIndex, 0, movedItem);
+        updateItems(newItems);
+    };
+
+    const handleDragStart = (e, index) => {
+        setDraggedIndex(index);
+        e.dataTransfer.effectAllowed = 'move';
+        e.currentTarget.style.opacity = '0.5';
+    };
+
+    const handleDragEnd = (e) => {
+        e.currentTarget.style.opacity = '1';
+        setDraggedIndex(null);
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+    };
+
+    const handleDrop = (e, dropIndex) => {
+        e.preventDefault();
+        if (draggedIndex !== null && draggedIndex !== dropIndex) {
+            moveItem(draggedIndex, dropIndex);
+        }
+    };
+
     const renderSchemaField = (schemaField, item, index) => {
         const fieldKey = schemaField.name;
         const fieldValue = item[fieldKey] || '';
@@ -70,28 +99,11 @@ const RepeaterField = ({ field, schema, value, onChange }) => {
                         <textarea
                             value={fieldValue}
                             onChange={(e) => updateItem(index, fieldKey, e.target.value)}
-                            rows="3"
-                            style={{ ...fieldStyle, resize: 'vertical' }}
-                        />
-                    </div>
-                );
-
-            case 'url':
-                return (
-                    <div key={fieldKey} style={{ marginBottom: '8px' }}>
-                        <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px' }}>
-                            {label}:
-                        </label>
-                        <input
-                            type="url"
-                            value={fieldValue}
-                            onChange={(e) => updateItem(index, fieldKey, e.target.value)}
-                            placeholder="https://..."
+                            rows={3}
                             style={fieldStyle}
                         />
                     </div>
                 );
-
             case 'text':
             default:
                 return (
@@ -111,49 +123,72 @@ const RepeaterField = ({ field, schema, value, onChange }) => {
     };
 
     return (
-        <div style={{ border: '1px solid #ddd', borderRadius: '4px', padding: '12px', marginTop: '8px' }}>
-            <div style={{ marginBottom: '12px', fontSize: '13px', fontWeight: '600' }}>
+        <div style={{ marginTop: '12px' }}>
+            <label style={{
+                display: 'block',
+                fontSize: '12px',
+                fontWeight: '600',
+                marginBottom: '8px',
+                color: '#1e1e1e'
+            }}>
                 {field.label}
-            </div>
+            </label>
 
-            {items.map((item, index) => (
-                <div key={index} style={{
-                    border: '1px solid #e0e0e0',
-                    borderRadius: '4px',
-                    marginBottom: '10px',
-                    overflow: 'hidden'
-                }}>
-                    <div style={{
-                        background: '#f8f9fa',
-                        padding: '8px 12px',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        borderBottom: '1px solid #e0e0e0'
-                    }}>
-                        <span style={{ fontSize: '12px', fontWeight: '600' }}>
-                            Item {index + 1}
-                        </span>
-                        <button
-                            type="button"
-                            onClick={() => removeItem(index)}
-                            style={{
-                                background: 'none',
-                                border: 'none',
-                                color: '#d63638',
-                                cursor: 'pointer',
-                                fontSize: '12px'
-                            }}
-                        >
-                            Remove
-                        </button>
-                    </div>
+            <div style={{ marginBottom: '12px' }}>
+                {items.map((item, index) => (
+                    <div
+                        key={index}
+                        draggable
+                        onDragStart={(e) => handleDragStart(e, index)}
+                        onDragEnd={handleDragEnd}
+                        onDragOver={handleDragOver}
+                        onDrop={(e) => handleDrop(e, index)}
+                        style={{
+                            background: draggedIndex === index ? '#f0f0f0' : '#f8f9fa',
+                            border: '1px solid #ddd',
+                            borderRadius: '4px',
+                            padding: '12px',
+                            marginBottom: '8px',
+                            position: 'relative',
+                            cursor: 'move',
+                            transition: 'background 0.2s'
+                        }}
+                    >
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '8px'
+                        }}>
+                            <span style={{
+                                fontSize: '11px',
+                                fontWeight: '600',
+                                color: '#555',
+                                userSelect: 'none'
+                            }}>
+                                ⋮⋮ Item {index + 1}
+                            </span>
+                            <button
+                                type="button"
+                                onClick={() => removeItem(index)}
+                                style={{
+                                    background: '#dc3232',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '4px 8px',
+                                    borderRadius: '3px',
+                                    cursor: 'pointer',
+                                    fontSize: '11px'
+                                }}
+                            >
+                                Verwijder
+                            </button>
+                        </div>
 
-                    <div style={{ padding: '12px' }}>
                         {schema.map(schemaField => renderSchemaField(schemaField, item, index))}
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
 
             <button
                 type="button"

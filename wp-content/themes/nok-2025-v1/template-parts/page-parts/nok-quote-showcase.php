@@ -13,7 +13,7 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
 $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'left';
 ?>
 
-    <nok-section class="<?= $colors;?>">
+    <nok-section class="<?= $colors;?> gradient-background">
         <div class="nok-section__inner">
             <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start nok-column-gap-3">
                 <div class="nok-layout-flex-column nok-align-items-stretch" style="order:<?= $left ? '1' : '2'; ?>">
