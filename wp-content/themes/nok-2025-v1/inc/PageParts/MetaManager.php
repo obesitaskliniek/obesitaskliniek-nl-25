@@ -233,7 +233,7 @@ class MetaManager {
 	/**
 	 * Get appropriate sanitize callback for field type
 	 */
-	private function get_sanitize_callback(string $field_type) {
+	public function get_sanitize_callback(string $field_type) {
 		switch ($field_type) {
 			case 'url':
 				return 'esc_url_raw';

@@ -208,54 +208,7 @@ function DesignSlugPanel() {
     const currentTemplateData = registry[currentTemplate] || {};
     const customFields = currentTemplateData.custom_fields || [];
 
-    // 6) Enhanced function to trigger preview update with all meta
-    const triggerPreviewUpdate = (updatedMeta = null) => {
-        const metaToStore = updatedMeta || meta;
-        const currentSlug = metaToStore?.design_slug || '';
-
-        hnlLogger.log(NAME, 'Storing all meta:');
-        hnlLogger.log(NAME, metaToStore);
-
-        // Prepare form data
-        const formData = new URLSearchParams({
-            action: 'store_preview_state',
-            post_id: postId,
-            design_slug: currentSlug
-        });
-
-        // Add all meta fields as JSON
-        formData.append('all_meta', JSON.stringify(metaToStore));
-
-        // Store the meta value via AJAX
-        fetch(window.PagePartDesignSettings.ajaxurl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                hnlLogger.log(NAME, 'Meta stored via React:');
-                hnlLogger.log(NAME, data);
-
-                // Trigger autosave and iframe refresh
-                return wp.data.dispatch('core/editor').autosave();
-            })
-            .then(() => {
-                hnlLogger.log(NAME, 'Autosave completed via React');
-
-                // Update preview if function exists - mark as user-initiated
-                if (typeof window.nokUpdatePreview === 'function') {
-                    window.nokUpdatePreview(true); // true = user initiated
-                }
-            })
-            .catch(error => {
-                hnlLogger.error(NAME, `Preview update failed: ${error}`);
-            });
-    };
-
-    // 7) Local state for immediate UI updates + debounced backend updates
+    // 6) Local state for immediate UI updates + debounced backend updates
     const [localFieldValues, setLocalFieldValues] = useState({});
     const [isInitialized, setIsInitialized] = useState(false);
     const debounceRef = useRef({});
@@ -306,15 +259,12 @@ function DesignSlugPanel() {
             const newMeta = {...meta, [fieldName]: value};
             editPost({meta: newMeta});
 
-            // Trigger preview update
-            triggerPreviewUpdate(newMeta);
-
             // Clean up timeout reference
             delete debounceRef.current[fieldName];
         }, 500);
     };
 
-    // 8) Render field based on type
+    // 7) Render field based on type
     const renderField = (field) => {
         // Use local state value for immediate UI updates, fallback to meta value
         const fieldValue = localFieldValues[field.meta_key] ?? meta?.[field.meta_key] ?? '';
@@ -417,8 +367,6 @@ function DesignSlugPanel() {
                     // Update the editor meta
                     const newMeta = {...meta, design_slug: newSlug};
                     editPost({meta: newMeta});
-                    // Trigger preview update with the updated meta
-                    triggerPreviewUpdate(newMeta);
                 }}
             />
 

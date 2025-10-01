@@ -217,7 +217,12 @@ registerBlockType(blockName, {
 
 
         // Build the iframe src
-        const src = postId ? `/wp-json/nok-2025-v1/v1/embed-page-part/${postId}` : '';
+        //const src = postId ? `/wp-json/nok-2025-v1/v1/embed-page-part/${postId}` : '';
+        const src = postId
+            ? `/wp-json/nok-2025-v1/v1/embed-page-part/${postId}?${new URLSearchParams(
+                Object.entries(overrides).map(([key, value]) => [key, value])
+            ).toString()}`
+            : '';
 
         // Refs & state for dynamic height
         const iframeRef = useRef(null);
