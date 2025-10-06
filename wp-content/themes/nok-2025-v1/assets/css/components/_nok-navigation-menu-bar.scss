@@ -23,8 +23,8 @@ nok-navigation-menu-bar {
 
     overflow: hidden;
     height: 6rem;
-    padding-right: var(--#{components-base.$prefix}-padding-base, 1.5rem);
 
+    padding-right: var(--#{components-base.$prefix}-padding-base, 1.5rem);
     padding-left: var(--#{components-base.$prefix}-padding-base, 1.5rem);
 
     pointer-events: all;

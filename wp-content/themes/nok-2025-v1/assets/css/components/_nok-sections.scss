@@ -111,7 +111,7 @@
   @include components-base.media-breakpoint-up(components-base.$mobile-breakpoint) {
     @include components-base.domready {
       &.circle {
-        position: relative;
+        transform: translateY(0); //creates a context for the circle
         &::after {
           content: "";
           position: fixed;
