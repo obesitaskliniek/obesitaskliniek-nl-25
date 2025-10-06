@@ -116,7 +116,11 @@ class RestEndpoints {
 		}
 
 		$edit_link = admin_url("post.php?post={$id}&action=edit");
-		$html .= '</head><body>
+		$html .= '<link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+        <link href="'.THEME_ROOT.'/assets/fonts/realist.css" rel="stylesheet" crossorigin="anonymous">
+        </head><body>
         <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkerblue--darker nok-z-top halign-center valign-center">
             <a href="' . $edit_link . '" type="button" target="_blank" class="nok-button nok-align-self-to-sm-stretch fill-group-column nok-bg-darkerblue nok-text-contrast no-shadow" tabindex="0">Bewerken</a>
         </nok-screen-mask>';
