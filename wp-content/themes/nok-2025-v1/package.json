@@ -6,9 +6,12 @@
     "postbuild": "xcopy build\\*.* . /E /H /Y",
     "build": "wp-scripts build --output-path=build",
     "start": "wp-scripts start --output-path=build"
-
   },
   "devDependencies": {
-    "@wordpress/scripts": "^30.19.0"
+    "@wordpress/scripts": "^30.25.0"
+  },
+  "dependencies": {
+    "@wordpress/data": "10.9.0",
+    "@wordpress/dom-ready": "4.9.0"
   }
 }

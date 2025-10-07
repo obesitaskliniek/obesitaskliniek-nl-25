@@ -3,7 +3,7 @@
 use NOK2025\V1\Assets;
 use NOK2025\V1\Helpers;
 
-$colors = 'nok-bg-darkblue nok-text-white';
+$colors = 'nok-bg-darkerblue nok-text-white';
 
 if ( ! empty( $args ) ) {
     if ( $args['colors'] ) {
@@ -33,7 +33,7 @@ if ( ! empty( $args ) ) {
                                 // Your loop content
                                 $hubspotData = Helpers::setup_hubspot_metadata( get_the_ID() ); ?>
 
-                                <nok-square-block class="nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white" data-shadow="false">
+                                <nok-square-block class="nok-bg-darkblue nok-dark-bg-darkestblue nok-text-contrast" data-shadow="false">
                                     <div class="nok-square-block__heading">
                                         <h2 class="nok-fs-3 nok-fs-to-md-2">
                                             <?= ucfirst(sprintf('%s %s (%s)', $hubspotData['soort'], ucfirst($hubspotData['locatie']), $hubspotData['type'])) ?>

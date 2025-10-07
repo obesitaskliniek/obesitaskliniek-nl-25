@@ -2,7 +2,7 @@
 $rand_id = rand( 1000, 9999 );
 ?>
     <nok-bmi-calculator class="nok-layout-grid nok-grid-gap-3 nok-align-items-start calculating loading"
-                        data-requires="./nok-bmi-calculator.mjs?cache=<?= $rand_id ?>">
+                        data-requires="./nok-bmi-calculator.mjs?cache=<?= $rand_id ?>" data-require-lazy="true">
         <form id="<?= $rand_id; ?>" style="display: contents;">
         <nok-square-block class="calculator-inputs nok-layout-grid nok-layout-grid__2-column half-grid-gap nok-align-items-center
                 nok-bg-white nok-dark-bg-darkestblue nok-text-contrast" data-shadow="true">

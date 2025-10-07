@@ -9,6 +9,18 @@ use NOK2025\V1\Helpers;
 $featuredImage = Helpers::get_featured_image();
 $hubspotData   = Helpers::setup_hubspot_metadata( get_the_ID() );
 
+$limit = 4;
+$raw_ids = explode(';', $hubspotData['data_raw']['related_voorlichtingen'][0]);
+$related_ids = array_map('intval', array_slice($raw_ids, 0, $limit));
+
+$alternatives = get_posts([
+	'post__in' => $related_ids,
+	'post_type' => 'voorlichting',
+	'orderby' => 'post__in',
+	'numberposts' => count($related_ids),
+	'post_status' => 'publish'
+]);
+
 ?>
 
     <nok-hero class="nok-section">
@@ -28,15 +40,19 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                 <div>
                     <?= ucfirst( $hubspotData['intro'] ); ?>
                 </div>
-                <?php
-                if (!$hubspotData['open']) {
-                    echo "<div class='nok-alert nok-bg-greenyellow--lighter nok-p-1 nok-mb-1 nok-rounded-border nok-bg-alpha-10' role='alert'>
-                                <p>Helaas, deze voorlichting is {$hubspotData['status']}! Aanmelden is daarom niet (meer) mogelijk. 
-                                Kijk bij de <a class='nok-hyperlink' href='#alternatieven'>alternatieven</a>, 
-                                of ga naar onze <a href='#'>agenda</a> voor meer voorlichtingen.</p>
-                              </div>";
-                }
-                ?>
+	            <?php
+	            if ( ! $hubspotData['open'] ) {
+		            echo "<div class='nok-alert nok-bg-greenyellow--lighter nok-p-1 nok-mb-1 nok-rounded-border nok-bg-alpha-10' role='alert'><p>
+                                Helaas, deze voorlichting is {$hubspotData['status']}! Aanmelden is daarom niet (meer) mogelijk.";
+		            if ( count( $alternatives ) > 0 ) {
+			            echo "Kijk bij de <a class='nok-hyperlink' href='#alternatieven'>alternatieven</a>, of bekijk";
+		            } else {
+			            echo "Bekijk ";
+                    }
+		            echo "onze <a href='#'>agenda</a> voor meer voorlichtingen.";
+		            echo "</p></div>";
+	            }
+	            ?>
             </article>
 
         </div>
@@ -47,7 +63,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 
             <article class="nok-layout-grid nok-layout-grid__3-column fill-one nok-column-gap-3">
 
-                <div class="body-copy baseline-grid nok-order-1 nok-order-lg-0" data-requires="./modules/hnl.baseline-grid.mjs?cache=<?= time(); ?>">
+                <div class="baseline-grid nok-order-1 nok-order-lg-0" data-requires="./modules/hnl.baseline-grid.mjs?cache=<?= time(); ?>">
                     <?= Helpers::classFirstP( $hubspotData['intro_lang'], "fw-bold nok-fs-2" ); ?>
                     <p>De <?= $hubspotData['soort'];?> start om <?= $hubspotData['timestamp']['start_time']; ?> en duurt ongeveer <?= Helpers::minutesToDutchRounded(intval ( $hubspotData['duur'] )); ?>, tot <?= $hubspotData['timestamp']['end_time']; ?> uur.</p>
                     <?php if (!empty($hubspotData['onderwerpen'])) : ?>
@@ -58,15 +74,6 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                     <p>
                         Deze voorlichting is gratis.
                     </p>
-                    <h2 id="aanmelden">Aanmelden</h2>
-                    <?php
-                    if ( function_exists( 'gravity_form' ) && $hubspotData['open'] ) {
-                        gravity_form( 1, false, false );
-                    } else {
-                        echo "<p>Helaas, deze voorlichting is {$hubspotData['status']}! Aanmelden is daarom niet (meer) mogelijk. Kijk bij de <a class='nok-hyperlink' href='#alternatieven'>alternatieven</a>, 
-                        of ga naar onze <a class='nok-hyperlink' href='#'>agenda</a> voor meer voorlichtingen.</p>";
-                    }
-                    ?>
 
                 </div>
 
@@ -77,14 +84,11 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                             printf('<h2 class="nok-text-yellow nok-dark-text-yellow nok-fs-2 nok-fs-to-md-2">%s (%s)</p>',
                                     ucfirst( $hubspotData['soort'] ),
                                     $hubspotData['type']);
-                            printf('<h2>%s %s</h2>',
-                                    Assets::getIcon('calendar'),
+                            printf('<h2>%s</h2>',
                                     $hubspotData['timestamp']['niceDateFull']);
-                            printf('<h3 class="fw-normal">%s %s</h2>',
-                                    Assets::getIcon('location'),
+                            printf('<h3 class="fw-normal">%s</h2>',
                                     ucfirst( $hubspotData['locatie'] ));
-                            printf('<h3 class="fw-normal">%s %s - %s uur</h2>',
-                                    Assets::getIcon('time'),
+                            printf('<h3 class="fw-normal">%s - %s uur</h2>',
                                     $hubspotData['timestamp']['start_time'],
                                     $hubspotData['timestamp']['end_time']);
                             ?>
@@ -108,6 +112,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                         </a>
                     </nok-square-block>
 
+                    <?php if (count($alternatives) > 0) : ?>
                     <nok-square-block class="nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10" data-shadow="true">
                         <div class="nok-square-block__heading">
                             <h2>Alternatieven</h2>
@@ -116,19 +121,8 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                             <div class="nok-layout nok-layout-grid nok-grid-gap-0_25 nok-column-gap-0_25 nok-mb-1" style="--grid-template-columns: 1fr auto auto auto;">
 
 	                            <?php
-	                            $limit = 4;
-	                            $raw_ids = explode(';', $hubspotData['data_raw']['related_voorlichtingen'][0]);
-	                            $related_ids = array_map('intval', array_slice($raw_ids, 0, $limit));
 
-	                            $posts = get_posts([
-		                            'post__in' => $related_ids,
-		                            'post_type' => 'voorlichting',
-		                            'orderby' => 'post__in',
-		                            'numberposts' => count($related_ids),
-		                            'post_status' => 'publish'
-	                            ]);
-
-	                            foreach ($posts as $post) {
+	                            foreach ($alternatives as $post) {
 		                            $hubspotData   = Helpers::setup_hubspot_metadata( $post->ID );
 		                            printf(
 			                            '<span class="nok-justify-self-start"><a class="nok-hyperlink" href="%s">%s</a></span><span class="nok-justify-self-start">%s</span><span class="nok-justify-self-center">-</span><span class="nok-justify-self-end">%s</span>',
@@ -146,8 +140,25 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                             </a>
                         </div>
                     </nok-square-block>
+                    <?php endif; ?>
                 </div>
             </article>
+        </div>
+    </nok-section>
+
+    <nok-section class="nok-bg-body--darker">
+        <div class="nok-section__inner">
+            <h2 id="aanmelden" class="nok-mb-1">Aanmelden</h2>
+            <nok-square-block class="nok-bg-body nok-text-contrast" data-shadow="true">
+		        <?php
+		        if ( function_exists( 'gravity_form' ) && $hubspotData['open'] ) {
+			        gravity_form( 1, false, false );
+		        } else {
+			        echo "<p>Helaas, deze voorlichting is {$hubspotData['status']}! Aanmelden is daarom niet (meer) mogelijk. Kijk bij de <a class='nok-hyperlink' href='#alternatieven'>alternatieven</a>, 
+                        of ga naar onze <a class='nok-hyperlink' href='#'>agenda</a> voor meer voorlichtingen.</p>";
+		        }
+		        ?>
+            </nok-square-block>
         </div>
     </nok-section>
 
