@@ -88,6 +88,9 @@ nok-square-block {
     &__text {
       color: var(--text-color);
       font-size: 1.1rem;
+      p {
+        margin: 0;
+      }
     }
 
     &__link {

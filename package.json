@@ -4,9 +4,9 @@
     "wp-content/themes/nok-2025-v1"
   ],
   "dependencies": {
-    "@wordpress/data": "^10.26.0",
-    "@wordpress/dom-ready": "^4.27.0",
-    "@wordpress/scripts": "^30.20.0",
+    "@wordpress/data": "^10.9.0",
+    "@wordpress/dom-ready": "^4.9.0",
+    "@wordpress/scripts": "^30.25.0",
     "autoprefixer": "^10.4.20",
     "csso": "^5.0.5",
     "csso-cli": "^4.0.2",
