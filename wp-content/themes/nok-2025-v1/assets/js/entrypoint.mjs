@@ -3,7 +3,8 @@ import {dynImports} from './modules/core.loader.mjs';
 import {logger} from './modules/core.log.mjs';
 
 import {classToggler} from './modules/hnl.classtoggler.mjs';
-import {isVisible, pageScrollPercentage, watchVisibility} from "./modules/hnl.helpers.mjs";
+import {pageScrollPercentage} from "./modules/util.perf.mjs";
+import {isVisible, watchVisibility} from "./modules/util.observe.mjs";
 import {setupScrollbarControl, setupFakeScrollbar} from "./nok-scrollbar.mjs";
 import AOS from './nok-aos.mjs';
 
