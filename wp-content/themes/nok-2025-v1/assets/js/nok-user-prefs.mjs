@@ -1,5 +1,5 @@
 import { singleClick } from "./modules/hnl.clickhandlers.mjs";
-import eventHandler from "./modules/hnl.eventhandler.mjs";
+import events from './modules/core.events.mjs';
 
 export const NAME = "userPrefs";
 
@@ -35,7 +35,7 @@ function applyFontSize(fontSize) {
 }
 
 // Restore user preferences on page load
-eventHandler.docReady(() => {
+events.docReady(() => {
   const rootStyles = getComputedStyle(document.documentElement);
   normalFontSize = parseFloat(rootStyles.getPropertyValue("--font-size-base")) || 1;
   const storedFontSize = sessionStorage.getItem("fontSize");
