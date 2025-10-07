@@ -9,9 +9,5 @@
   },
   "devDependencies": {
     "@wordpress/scripts": "^30.25.0"
-  },
-  "dependencies": {
-    "@wordpress/data": "10.9.0",
-    "@wordpress/dom-ready": "4.9.0"
   }
 }
