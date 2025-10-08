@@ -5,3 +5,4 @@ wp-admin/
 /wp-content/themes/nok-2025-v1/js/modules/
 /wp-content/themes/nok-2025-v1/js/mobileConsole/
 *.7z
+wp-config.php
