@@ -37,7 +37,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
 
         </nok-screen-mask>
 
-        <nok-accessibility-helper class="nok-bg-body nok-text-darkerblue nok-dark-text-contrast nok-nav-control-dropdown" data-requires="./nok-user-prefs.mjs">
+        <nok-accessibility-helper class="nok-bg-body nok-text-darkerblue nok-dark-text-contrast nok-nav-control-dropdown" data-requires="./nok-user-prefs.mjs" data-require-lazy="true">
             <h5>Toegankelijkheid</h5>
             <div class="nok-layout-flex-row half-flex-gap">
                 Tekstgrootte:
