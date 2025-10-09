@@ -39,7 +39,7 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
                         Neem contact op <?= Assets::getIcon('arrow-right-long', 'nok-text-yellow'); ?>
                     </button>
                 </nok-square-block>
-                <div class="nok-layout-grid nok-layout-grid__3-column" data-requires="./nok-accordion.mjs?cache=<?= time(); ?>">
+                <div class="nok-layout-grid nok-layout-grid__3-column" data-requires="./nok-accordion.mjs" data-require-lazy="true">
                     <nok-accordion class="nok-border-bottom-to-lg-1 nok-pt-to-lg-1 nok-pb-to-lg-0_5">
                         <details data-opened-at="lg" name="footer-accordion-group">
                             <summary class="nok-fs-2 nok-fs-to-lg-3 fw-bold nok-mb-0_5">Behandeling</summary>

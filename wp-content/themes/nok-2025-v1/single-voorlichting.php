@@ -63,7 +63,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 
             <article class="nok-layout-grid nok-layout-grid__3-column fill-one nok-column-gap-3">
 
-                <div class="baseline-grid nok-order-1 nok-order-lg-0" data-requires="./modules/hnl.baseline-grid.mjs?cache=<?= time(); ?>">
+                <div class="baseline-grid nok-order-1 nok-order-lg-0" data-requires="./modules/hnl.baseline-grid.mjs">
                     <?= Helpers::classFirstP( $hubspotData['intro_lang'], "fw-bold nok-fs-2" ); ?>
                     <p>De <?= $hubspotData['soort'];?> start om <?= $hubspotData['timestamp']['start_time']; ?> en duurt ongeveer <?= Helpers::minutesToDutchRounded(intval ( $hubspotData['duur'] )); ?>, tot <?= $hubspotData['timestamp']['end_time']; ?> uur.</p>
                     <?php if (!empty($hubspotData['onderwerpen'])) : ?>

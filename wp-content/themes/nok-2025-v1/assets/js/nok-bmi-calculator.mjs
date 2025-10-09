@@ -33,7 +33,10 @@
  * });
  */
 
-import {debounceThis, debouncedEvent} from "./modules/hnl.debounce.mjs";
+export const NAME = "NOK-BMI-Calculator";
+
+import {debounceThis, debouncedEvent} from "./modules/util.debounce.mjs";
+import {logger} from "./modules/core.log.mjs";
 
 /**
  * BMI cutoff values for classification.
@@ -618,7 +621,7 @@ function createGUIController(container) {
         return updateQueue;
     };
 
-    return { state, updateCalculation, isUpdating: () => isUpdating };
+    return {state, updateCalculation, isUpdating: () => isUpdating};
 }
 
 /**
@@ -627,7 +630,7 @@ function createGUIController(container) {
  * @param {Object} result - Calculation result object
  */
 function updateContainerClasses(container, result) {
-    const { category, treatmentEligible } = result;
+    const {category, treatmentEligible} = result;
 
     // Remove existing category classes
     container.classList.remove(
@@ -824,7 +827,8 @@ function registerGUIInput(controller, type, element) {
 
     if (element.type === 'number') {
         element.addEventListener('focusin', () => {
-            element.dataset.original = element.value; element.select();
+            element.dataset.original = element.value;
+            element.select();
         })
         element.addEventListener('blur', () => {
             if (!element.value) element.value = element.dataset.original;
@@ -842,7 +846,7 @@ function registerGUIInput(controller, type, element) {
         controller.updateCalculation(type, e.debounceStateFinal).then(result => {
             if (e.debounceStateFinal) {
                 element.dispatchEvent(new CustomEvent('bmi-input-completed', {
-                    detail: { type, value: newValue, calculationResult: result }
+                    detail: {type, value: newValue, calculationResult: result}
                 }));
             }
         });
@@ -893,6 +897,28 @@ function initGUI(elements) {
         // Perform initial calculation with GUI update
         controller.updateCalculation('height', true);
     });
+}
+
+/**
+ * Standard hook interface
+ * @example:
+ * ModuleRegistry.waitFor("NOK-BMI-Calculator")
+ *       .then(calculator => {
+ *         const result = calculator.api('calculate', [192, 80]);
+ *         logger.log(NAME, `BMI Result from NOK-BMI-Calculator: ${result.bmi}`);
+ *       }).catch(error => {
+ *     logger.error(NAME, "Error loading NOK-BMI-Calculator for menu carousel:");
+ *     logger.error(NAME, error);
+ *   });
+ */
+export function api(action, ...args) {
+    switch (action) {
+        case 'calculate':
+            return calculate(...args[0]);
+
+        default:
+            logger.warn(NAME, `Unknown action: ${action}`);
+    }
 }
 
 // Public API object for better compatibility

@@ -21,12 +21,12 @@ const NOK_THEME_ROOT = 'https://dev.obesitaskliniek.nl/wp-content/themes/nok-202
 
     <!-- <link rel="modulepreload" href="../js/mobileConsole/hnl.mobileconsole.js?cache=<?= time(); ?>">
     <script src="../js/mobileConsole/hnl.mobileconsole.js?cache=<?= time(); ?>"></script><!--//-->
-    <link rel="modulepreload" href="../js/entrypoint.min.mjs?cache=<?= time(); ?>">
-    <script type="module" src="../js/entrypoint.min.mjs?cache=<?= time(); ?>" defer></script>
+    <link rel="modulepreload" href="../js/entrypoint.min.mjs">
+    <script type="module" src="../js/entrypoint.min.mjs" defer></script>
 
     <!-- Load the module with explicit defer
-    <link rel="modulepreload" href="../js/nok-element-library.min.mjs?cache=<?= time(); ?>">
-    <script type="module" src="../js/nok-element-library.min.mjs?cache=<?= time(); ?>" defer></script>
+    <link rel="modulepreload" href="../js/nok-element-library.min.mjs">
+    <script type="module" src="../js/nok-element-library.min.mjs" defer></script>
 
     <style>
         :not(:defined) {
@@ -74,11 +74,11 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
 ?>
 
 <nav class="nok25-section nok25-nav nok25-text-darkerblue"
-     data-requires="./nok-toggler.mjs?cache=<?= time(); ?>">
+     data-requires="./nok-toggler.mjs">
     <div class="nok25-nav-mask nok25-bg-darkerblue nok25-dark-bg-darkerblue--darker nok25-z-1"
          data-toggles="open"></div>
     <div class="nok25-bg-body nok25-text-darkerblue nok25-dark-text-contrast nok25-nav-control-dropdown nok25-bg-blur nok25-bg-alpha-9"
-         data-requires="./nok-user-prefs.mjs?cache=<?= time(); ?>">
+         data-requires="./nok-user-prefs.mjs">
         <h5>Toegankelijkheid</h5>
         <div class="nok25-nav-control-dropdown__section">
             Tekstgrootte:

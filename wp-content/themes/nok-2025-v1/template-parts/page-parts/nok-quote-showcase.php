@@ -69,7 +69,7 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
 
                 <!-- Component: accordion items -->
                 <div class="nok-layout-grid nok-layout-grid__1-column"
-                     data-requires="./nok-accordion.mjs?cache=<?= time(); ?>" style="order:<?= $left ? '2' : '1'; ?>">
+                     data-requires="./nok-accordion.mjs" data-require-lazy="true" style="order:<?= $left ? '2' : '1'; ?>">
 
                     <?php
                     $x = 0;

@@ -16,7 +16,7 @@ use NOK2025\V1\Theme;
 <?php $star = Assets::getIcon('star');
 $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg') .'</nok-logo>'; ?>
 
-    <nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs?cache=<?= time(); ?>">
+    <nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs">
         <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkestblue--darker nok-z-1"
                          data-untoggles-class="sidebar-open,popup-open" data-untoggles-attribute="state" data-untoggles-attribute-value="open" data-no-children="true">
 
@@ -37,7 +37,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
 
         </nok-screen-mask>
 
-        <nok-accessibility-helper class="nok-bg-body nok-text-darkerblue nok-dark-text-contrast nok-nav-control-dropdown" data-requires="./nok-user-prefs.mjs?cache=<?= time(); ?>">
+        <nok-accessibility-helper class="nok-bg-body nok-text-darkerblue nok-dark-text-contrast nok-nav-control-dropdown" data-requires="./nok-user-prefs.mjs">
             <h5>Toegankelijkheid</h5>
             <div class="nok-layout-flex-row half-flex-gap">
                 Tekstgrootte:
@@ -107,7 +107,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                 <div class="nok-section__inner--stretched nok-nav-carousel
             nok-bg-white--darker nok-dark-bg-darkerblue nok-dark-text-white
             nok-z-2"
-                     data-scroll-snapping="true" data-requires="./nok-menu-carousel.mjs">
+                     data-scroll-snapping="true" data-requires="./nok-menu-carousel.mjs" data-require-lazy="true">
                     <div class="nok-nav-carousel__inner nok-text-darkerblue nok-dark-text-white">
                         <div class="nok-nav-carousel__slide">
                             <div class="nok-nav-menu-items" id="topmenu">
