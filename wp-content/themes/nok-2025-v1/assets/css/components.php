@@ -19,8 +19,8 @@ const THEME_ROOT = 'https://dev.obesitaskliniek.nl/wp-content/themes/nok-2025-v1
 
     <!--<link rel="modulepreload" href="../asset/js/mobileConsole/hnl.mobileconsole.js?cache=<?= time(); ?>">
     <script src="../asset/js/mobileConsole/hnl.mobileconsole.js?cache=<?= time(); ?>"></script><!--//-->
-    <link rel="modulepreload" href="../js/entrypoint.min.mjs?cache=<?= time(); ?>">
-    <script type="module" src="../js/entrypoint.min.mjs?cache=<?= time(); ?>" defer></script>
+    <link rel="modulepreload" href="../js/entrypoint.min.mjs">
+    <script type="module" src="../js/entrypoint.min.mjs" defer></script>
 </head>
 <body class="no-js nok-bg-body nok-text-contrast">
 <div class="nok-accessibility-helper"></div>
@@ -60,10 +60,10 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
 </svg></nok-logo>'; ?>
 
 
-<nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs?cache=<?= time(); ?>">
+<nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs">
     <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkerblue--darker nok-z-1" data-toggles="open"></nok-screen-mask>
 
-    <nok-accessibility-helper class="nok-bg-body nok-text-darkerblue nok-dark-text-contrast nok-nav-control-dropdown" data-requires="./nok-user-prefs.mjs?cache=<?= time(); ?>">
+    <nok-accessibility-helper class="nok-bg-body nok-text-darkerblue nok-dark-text-contrast nok-nav-control-dropdown" data-requires="./nok-user-prefs.mjs">
         <h5>Toegankelijkheid</h5>
         <div class="nok-layout-flex-row half-flex-gap">
             Tekstgrootte:
@@ -611,7 +611,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
 
             <!-- Component: accordion items -->
             <div class="nok-layout-grid nok-layout-grid__1-column"
-                 data-requires="./nok-accordion.mjs?cache=<?= time(); ?>">
+                 data-requires="./nok-accordion.mjs">
                 <nok-accordion>
                     <details
                             class="nok-bg-white nok-dark-bg-darkerblue nok-dark-text-white nok-rounded-border nok-text-contrast">
@@ -683,7 +683,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                         </svg>
                     </button>
                 </nok-square-block>
-                <div class="nok-layout-grid nok-layout-grid__3-column" data-requires="./nok-accordion.mjs?cache=<?= time(); ?>">
+                <div class="nok-layout-grid nok-layout-grid__3-column" data-requires="./nok-accordion.mjs">
                     <nok-accordion class="nok-border-bottom-to-lg-1 nok-pt-to-lg-1 nok-pb-to-lg-0_5">
                         <details data-opened-at="lg" name="footer-accordion-group">
                             <summary class="nok-fs-2 nok-fs-to-lg-3 fw-bold nok-mb-0_5">Behandeling</summary>
