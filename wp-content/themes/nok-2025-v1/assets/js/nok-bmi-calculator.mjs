@@ -35,8 +35,8 @@
 
 export const NAME = "NOK-BMI-Calculator";
 
-import {debounceThis, debouncedEvent} from "./modules/util.debounce.mjs";
-import {logger} from "./modules/core.log.mjs";
+import {debounceThis, debouncedEvent} from "./domule/util.debounce.mjs";
+import {logger} from "./domule/core.log.mjs";
 
 /**
  * BMI cutoff values for classification.

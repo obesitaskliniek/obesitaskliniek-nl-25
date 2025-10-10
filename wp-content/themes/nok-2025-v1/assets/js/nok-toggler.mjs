@@ -62,7 +62,7 @@
  *      data-untoggles-class="open">Select Item</div>
  */
 
-import { singleClick } from "./modules/hnl.clickhandlers.mjs";
+import { singleClick } from "./domule/modules/hnl.clickhandlers.mjs";
 
 export const NAME = 'simpleToggler';
 
