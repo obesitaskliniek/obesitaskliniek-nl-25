@@ -1,5 +1,5 @@
-import { singleClick } from "./modules/hnl.clickhandlers.mjs";
-import events from './modules/core.events.mjs';
+import { singleClick } from "./domule/modules/hnl.clickhandlers.mjs";
+import events from './domule/core.events.mjs';
 
 export const NAME = "userPrefs";
 

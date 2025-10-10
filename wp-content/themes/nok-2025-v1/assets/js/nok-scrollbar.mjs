@@ -24,9 +24,9 @@
   <button data-scroll-target="list" data-scroll-action="forward" data-scroll-smooth="false">Skip →</button>
  */
 
-import events from './modules/core.events.mjs';
-import {isVisible} from "./modules/util.observe.mjs";
-import mediaInfo from "./modules/helper.media-info.mjs";
+import events from './domule/core.events.mjs';
+import {isVisible} from "./domule/util.observe.mjs";
+import mediaInfo from "./domule/util.mediainfo.mjs";
 
 export const NAME = "scrollBarEmulator";
 

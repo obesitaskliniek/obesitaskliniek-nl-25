@@ -1,8 +1,8 @@
 /*
 Embedded scroll menu handler (c) 2025 Klaas Leussink / hnldesign
  */
-import {singleClick} from "./modules/hnl.clickhandlers.mjs";
-import {logger} from "./modules/core.log.mjs";
+import {singleClick} from "./domule/modules/hnl.clickhandlers.mjs";
+import {logger} from "./domule/core.log.mjs";
 
 export const NAME = 'menuCarousel';
 

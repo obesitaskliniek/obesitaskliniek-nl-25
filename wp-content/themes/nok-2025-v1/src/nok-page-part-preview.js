@@ -2,8 +2,8 @@ import '@wordpress/edit-post';          // ensure wp-editor is registered
 import domReady from '@wordpress/dom-ready';
 import {render, createElement, useRef, useState, useEffect} from '@wordpress/element';
 import {select, dispatch, subscribe} from '@wordpress/data';
-import {debounceThis} from "../assets/js/modules/hnl.debounce.mjs";
-import {hnlLogger} from '../assets/js/modules/hnl.logger.mjs';
+import {debounceThis} from "../assets/js/domule/modules/hnl.debounce.mjs";
+import {hnlLogger} from '../assets/js/domule/modules/hnl.logger.mjs';
 
 const NAME = 'nok-page-part-preview';
 const prefix = `nok-page-part-preview`;

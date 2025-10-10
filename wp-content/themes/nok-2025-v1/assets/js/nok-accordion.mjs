@@ -1,4 +1,4 @@
-import {ViewportScroller} from "./modules/helper.ensure-visibility.mjs";
+import {ViewportScroller} from "./domule/util.ensure-visibility.mjs";
 /**
  * This is a polyfill for the <details> element,
  * intended for browsers that don't support the CSS property `interpolate-size: allow-keywords`

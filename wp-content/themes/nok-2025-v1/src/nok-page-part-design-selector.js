@@ -2,7 +2,7 @@ import {useSelect, useDispatch} from '@wordpress/data';
 import {registerPlugin} from '@wordpress/plugins';
 import {PluginDocumentSettingPanel} from '@wordpress/edit-post';
 import {SelectControl, TextControl, TextareaControl, CheckboxControl, Button, Draggable } from '@wordpress/components';
-import {hnlLogger} from '../assets/js/modules/hnl.logger.mjs';
+import {hnlLogger} from '../assets/js/domule/modules/hnl.logger.mjs';
 import {Fragment, useRef, useState, useEffect} from '@wordpress/element';
 
 const NAME = 'nok-page-part-design-selector';
