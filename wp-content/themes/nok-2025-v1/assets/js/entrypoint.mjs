@@ -1,7 +1,14 @@
+/**
+ * DOMule dependency - external library
+ * Located at: assets/js/domule/
+ * Repository: https://github.com/c-kick/DOMule
+ *
+ * Not in package.json - manually maintained
+ */
+
 import events from './domule/core.events.mjs';
 import {loadModules} from './domule/core.loader.mjs';
 import {logger} from './domule/core.log.mjs';
-
 import {classToggler} from './domule/modules/hnl.classtoggler.mjs';
 import {pageScrollPercentage} from "./domule/util.perf.mjs";
 import {isVisible, watchVisibility} from "./domule/util.observe.mjs";
