@@ -114,3 +114,12 @@ $fields = $theme->get_page_part_fields($post_id, $design);
 - Type-based field sanitization
 - REST API: `/wp-json/nok-2025-v1/v1/embed-page-part/{id}`
 - 5-minute transient expiration for previews
+
+## External Dependencies
+
+### DOMule
+Location: `assets/js/domule/`  
+Source: https://github.com/c-kick/DOMule  
+Version: [specify version/commit if pinned]
+
+Not managed via npm. Must be present for frontend functionality.

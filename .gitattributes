@@ -1,2 +1,4 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+# DOMule (external dependency) - https://github.com/c-kick/DOMule
+wp-content/themes/nok-2025-v1/assets/js/domule/** linguist-vendored
