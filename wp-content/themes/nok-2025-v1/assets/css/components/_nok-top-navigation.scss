@@ -46,6 +46,7 @@ nok-top-navigation {
       position: fixed;
       top: 0;
       bottom: 0;
+      border: 1px solid green;
       justify-content: flex-start;
       z-index: components-base.$z-stack-top;
       pointer-events: none;

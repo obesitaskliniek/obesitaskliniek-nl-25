@@ -171,25 +171,19 @@ function swipeToClose(element, closeCallback, direction = 'y', min = -9999, max 
   const pointerDown = (e) => {
     isDragging = false;
     start = getCoords(e)[direction];
-    const moveEvent = e.type === "touchstart" ? "touchmove" : "mousemove";
-    const endEvent = e.type === "touchstart" ? "touchend" : "mouseup";
-    document.addEventListener(moveEvent, drag, { passive: false });
-    document.addEventListener(endEvent, pointerUp, { passive: true });
+    document.addEventListener("pointermove", drag, { passive: false });
+    document.addEventListener("pointerup", pointerUp, { passive: true });
   };
 
   const cleanup = () => {
-    document.removeEventListener("touchmove", drag);
-    document.removeEventListener("touchend", pointerUp);
-    document.removeEventListener("mousemove", drag);
-    document.removeEventListener("mouseup", pointerUp);
+    document.removeEventListener("pointermove", drag);
+    document.removeEventListener("pointerup", pointerUp);
   };
 
-  element.addEventListener("touchstart", pointerDown);
-  element.addEventListener("mousedown", pointerDown);
+  element.addEventListener("pointerdown", pointerDown);
 
   return () => {
-    element.removeEventListener("touchstart", pointerDown);
-    element.removeEventListener("mousedown", pointerDown);
+    element.removeEventListener("pointerdown", pointerDown);
     cleanup();
     if (animationFrame) cancelAnimationFrame(animationFrame);
   };
