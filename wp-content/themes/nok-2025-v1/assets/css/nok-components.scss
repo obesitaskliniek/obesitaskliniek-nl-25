@@ -45,9 +45,14 @@ html {
           $scrollbarHandleColor: #0003,
           $scrollbarHandleColorActive: #000E
   );
+
 }
 
+html {
+  border: 1px solid blue;
+}
 body {
+  border: 1px solid red;
   --nok-body-text-color: var(--nok-darkerblue);
   background: linear-gradient(180deg, var(--nok-body--darker), var(--nok-body));
   @include nok-mixins.nok-text-font;
