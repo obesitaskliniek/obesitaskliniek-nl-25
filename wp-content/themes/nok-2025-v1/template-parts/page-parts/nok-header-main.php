@@ -9,12 +9,11 @@
 use NOK2025\V1\Assets;
 use NOK2025\V1\Theme;
 
+$theme = Theme::get_instance();
+$menu_manager = $theme->get_menu_manager();
+$star = Assets::getIcon('star');
+$logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg') .'</nok-logo>';
 ?>
-
-
-
-<?php $star = Assets::getIcon('star');
-$logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg') .'</nok-logo>'; ?>
 
     <nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs">
         <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkestblue--darker nok-z-1"
@@ -31,7 +30,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                     </button>
                 </nok-popup-header>
                 <nok-popup-body>
-                    <?php ( Theme::get_instance() )->embed_post_part_template('nok-bmi-calculator', array(), true); ?>
+                    <?php $theme->embed_post_part_template('nok-bmi-calculator', array(), true); ?>
                 </nok-popup-body>
             </nok-popup>
 
@@ -108,6 +107,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
             nok-bg-white--darker nok-dark-bg-darkerblue nok-dark-text-white
             nok-z-2"
                      data-scroll-snapping="true" data-requires="./nok-menu-carousel.mjs" data-require-lazy="true">
+
                     <div class="nok-nav-carousel__inner nok-text-darkerblue nok-dark-text-white">
                         <div class="nok-nav-carousel__slide">
                             <div class="nok-nav-menu-items" id="topmenu">
@@ -188,6 +188,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                     <div>
                         <?= $logo; ?>
                     </div>
+	                <?php $menu_manager->render_desktop_menu_bar('primary'); ?>
                     <div>Behandelingen</div>
                     <div>Over NOK</div>
                     <div>Agenda</div>
@@ -199,26 +200,29 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                     </div>
                 </div>
                 <nok-nav-menu-bar-dropdown>
-                    <div class="dropdown-contents nok-bg-white nok-dark-bg-darkerblue--darker nok-dark-text-contrast">
-                        <div class="dropdown-contents-menu nok-ul-list nok-mt-0">
-                            <h3>Behandeling</h3>
-                            <div>Wat is obesitas?</div>
-                            <div>Onze behandeling van obesitas</div>
-                            <div>Ons behandelprogramma</div>
-                            <div>De operatie</div>
-                            <div>De kosten van de behandeling</div>
-                        </div>
-                        <nok-square-block class="nok-bg-darkerblue">
-                            <h3 class="nok-square-block__heading">
-                                Vragen, of behoefte aan persoonlijk advies?
-                            </h3>
-                            <button class="nok-button nok-bg-darkblue nok-text-contrast" tabindex="0">
-                                Neem contact op
-	                            <?= Assets::getIcon('arrow-right', 'nok-text-yellow'); ?>
-                            </button>
-                        </nok-square-block>
-                    </div>
+	                <?php $menu_manager->render_desktop_dropdown('primary'); ?>
                 </nok-nav-menu-bar-dropdown>
+<!--                <nok-nav-menu-bar-dropdown>-->
+<!--                    <div class="dropdown-contents nok-bg-white nok-dark-bg-darkerblue--darker nok-dark-text-contrast">-->
+<!--                        <div class="dropdown-contents-menu nok-ul-list nok-mt-0">-->
+<!--                            <h3>Behandeling</h3>-->
+<!--                            <div>Wat is obesitas?</div>-->
+<!--                            <div>Onze behandeling van obesitas</div>-->
+<!--                            <div>Ons behandelprogramma</div>-->
+<!--                            <div>De operatie</div>-->
+<!--                            <div>De kosten van de behandeling</div>-->
+<!--                        </div>-->
+<!--                        <nok-square-block class="nok-bg-darkerblue">-->
+<!--                            <h3 class="nok-square-block__heading">-->
+<!--                                Vragen, of behoefte aan persoonlijk advies?-->
+<!--                            </h3>-->
+<!--                            <button class="nok-button nok-bg-darkblue nok-text-contrast" tabindex="0">-->
+<!--                                Neem contact op-->
+<!--	                            --><?php //= Assets::getIcon('arrow-right', 'nok-text-yellow'); ?>
+<!--                            </button>-->
+<!--                        </nok-square-block>-->
+<!--                    </div>-->
+<!--                </nok-nav-menu-bar-dropdown>-->
             </nok-navigation-menu-bar>
         </nok-navigation-desktop>
 
