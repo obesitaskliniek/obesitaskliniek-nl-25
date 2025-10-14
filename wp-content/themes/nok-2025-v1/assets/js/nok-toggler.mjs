@@ -3,7 +3,7 @@
  *
  * @fileoverview Provides universal toggle functionality with click handling,
  * auto-hide timers, outside-click dismissal, and swipe-to-close gestures.
- * Supports both class-based and attribute-based toggles with independent targets.
+ * Supports class-based and attribute-based toggles, sets, and unsets with independent targets.
  *
  * @example
  * // Basic class toggle (backward compatible)
@@ -14,28 +14,65 @@
  * <div data-toggles-class="open,active" data-class-target=".modal">Toggle</div>
  *
  * @example
- * // Attribute toggle
- * <div data-toggles-attribute="expanded"
- *      data-toggles-attribute-value="true"
- *      data-attribute-target=".sidebar">Toggle</div>
+ * // Set classes (add only, never remove)
+ * <div data-sets-class="active,visible" data-class-target=".panel">Activate</div>
  *
  * @example
- * // Multiple attributes with different values
- * <div data-toggles-attribute="state,mode"
- *      data-toggles-attribute-value="active,dark"
- *      data-attribute-target=".widget">Toggle</div>
+ * // Unset classes (remove only, never add)
+ * <div data-unsets-class="open,active" data-class-target=".modal">Close</div>
  *
  * @example
- * // Multiple targets - classes on one element, attributes on another
- * <div data-toggles-class="open" data-class-target=".modal"
- *      data-toggles-attribute="expanded"
- *      data-toggles-attribute-value="true"
- *      data-attribute-target=".sidebar">Toggle</div>
+ * // Set attributes (add only)
+ * <div data-sets-attribute="expanded,active"
+ *      data-sets-attribute-value="true,true"
+ *      data-attribute-target=".sidebar">Open</div>
  *
  * @example
- * // Permanent toggle (disables outside-click dismissal, requires explicit untoggle)
+ * // Unset attributes (remove only) - auto-targets elements with matching attr=value
+ * <div data-unsets-attribute="expanded,visible"
+ *      data-unsets-attribute-value="true,true">Close</div>
+ *
+ * @example
+ * // Combined operations on different targets
+ * <div data-sets-class="highlight" data-class-target=".item"
+ *      data-unsets-class="open" data-unset-target=".menu">Select Item</div>
+ *
+ * @example
+ * // Permanent toggle (disables outside-click dismissal)
  * <div data-toggles-class="open" data-class-target=".dropdown"
  *      data-toggle-permanent="true">Toggle</div>
+ *
+ * @example
+ * // Toggle only if-present="false" - prevents untoggling when class already present from another toggler
+ * <div data-toggles-class="sidebar-open" data-class-target=".navigation"
+ *      data-toggles-class-if-present="false">Menu Item A</div>
+ * <div data-toggles-class="sidebar-open" data-class-target=".navigation"
+ *      data-toggles-class-if-present="false">Menu Item B</div>
+ *
+ * @example
+ * // Independent if-present for classes and attributes
+ * <div data-toggles-class="open" data-class-target=".modal"
+ *      data-toggles-class-if-present="false"
+ *      data-toggles-attribute="expanded" data-toggles-attribute-value="true"
+ *      data-attribute-target=".sidebar"
+ *      data-toggles-attribute-if-present="false">Toggle</div>
+ *
+ * @example
+ * // Click-outside behavior - defaults to unset-class only
+ * <div data-toggles-class="open" data-class-target=".modal">Toggle</div>
+ *
+ * @example
+ * // Click-outside - unset attributes only
+ * <div data-toggles-attribute="visible" data-toggles-attribute-value="true"
+ *      data-attribute-target=".panel"
+ *      data-click-outside="unset-attribute">Toggle</div>
+ *
+ * @example
+ * // Click-outside - unset both classes and attributes
+ * <div data-toggles-class="open" data-class-target=".modal"
+ *      data-toggles-attribute="expanded" data-toggles-attribute-value="true"
+ *      data-attribute-target=".sidebar"
+ *      data-click-outside="unset-class,unset-attribute">Toggle</div>
  *
  * @example
  * // Auto-hide after timeout
@@ -46,383 +83,721 @@
  * // With swipe-to-close
  * <div data-toggles-class="visible" data-class-target=".panel"
  *      data-swipe-close=".panel" data-swipe-direction="x">Toggle</div>
- *
- * @example
- * // Untoggle classes (remove only, no toggle) - auto-targets elements with those classes
- * <div data-untoggles-class="open,active">Close</div>
- *
- * @example
- * // Untoggle attributes (remove only, no toggle) - auto-targets elements with matching attr=value
- * <div data-untoggles-attribute="expanded,visible"
- *      data-untoggles-attribute-value="true,true">Close</div>
- *
- * @example
- * // Combined toggle and untoggle on different targets
- * <div data-toggles-class="highlight" data-class-target=".item"
- *      data-untoggles-class="open">Select Item</div>
  */
 
-import { singleClick } from "./domule/modules/hnl.clickhandlers.mjs";
+import {singleClick} from "./domule/modules/hnl.clickhandlers.mjs";
+import {logger} from "./domule/core.log.mjs";
 
 export const NAME = 'simpleToggler';
 
-class ToggleManager {
-  constructor() {
-    this.instances = new WeakMap();
-  }
+// ============================================================================
+// UTILITIES - Class and Attribute Operations
+// ============================================================================
 
-  register(element, cleanup) {
-    if (!this.instances.has(element)) {
-      this.instances.set(element, []);
+/**
+ * Class manipulation utilities.
+ * @private
+ */
+const ClassUtils = {
+    hasAny: (el, names) => names?.some(n => el.classList.contains(n)) ?? false,
+    toggleMultiple: (el, names) => names?.forEach(n => el.classList.toggle(n)),
+    addMultiple: (el, names) => names && el.classList.add(...names),
+    removeMultiple: (el, names) => names && el.classList.remove(...names),
+    findWithClasses: (names) => names ? Array.from(document.querySelectorAll(names.map(c => `.${c}`).join(','))) : []
+};
+
+/**
+ * Attribute manipulation utilities.
+ * @private
+ */
+const AttrUtils = {
+    hasAny: (el, names, vals) => {
+        if (!names || !vals) return false;
+        return names.some((n, i) => {
+            const attrName = 'data-' + n;
+            const expectedVal = vals[i] || '';
+            return el.getAttribute(attrName) === expectedVal;
+        });
+    },
+    toggleMultiple: (el, names, vals) => {
+        if (!names || !vals) return;
+        names.forEach((n, i) => {
+            const attr = 'data-' + n;
+            const val = vals[i] || '';
+            if (el.getAttribute(attr) === val) {
+                el.removeAttribute(attr);
+            } else {
+                el.setAttribute(attr, val);
+            }
+        });
+    },
+    setMultiple: (el, names, vals) => {
+        if (!names || !vals) return;
+        names.forEach((n, i) => {
+            const attr = 'data-' + n;
+            const val = vals[i] || '';
+            el.setAttribute(attr, val);
+        });
+    },
+    removeMultiple: (el, names) => {
+        if (!names) return;
+        names.forEach(n => el.removeAttribute('data-' + n));
+    },
+    findWithAttrs: (names, vals) => {
+        if (!names || !vals) return [];
+        const selectors = names.map((n, i) => {
+            const attrName = 'data-' + n;
+            const attrVal = vals[i] || '';
+            return `[${attrName}="${attrVal}"]`;
+        });
+        return Array.from(document.querySelectorAll(selectors.join(',')));
     }
-    this.instances.get(element).push(cleanup);
-  }
+};
 
-  cleanup(elements) {
-    elements.forEach(element => {
-      const cleanupFns = this.instances.get(element);
-      if (cleanupFns) {
-        cleanupFns.forEach(fn => fn());
-        this.instances.delete(element);
-      }
-    });
-  }
+// ============================================================================
+// STATE TRACKING - WeakMaps for Memory-Safe Element Association
+// ============================================================================
+
+/**
+ * Tracks last toggler for each target element (prevents if-present conflicts).
+ * Separate maps for class and attribute operations.
+ * @private
+ */
+const lastTogglers = {
+    class: new WeakMap(),
+    attribute: new WeakMap()
+};
+
+/**
+ * Cleanup registry for all toggle instances.
+ * @private
+ */
+class ToggleManager {
+    constructor() {
+        this.instances = new WeakMap();
+    }
+
+    register(element, cleanup) {
+        if (!this.instances.has(element)) {
+            this.instances.set(element, []);
+        }
+        this.instances.get(element).push(cleanup);
+    }
+
+    cleanup(elements) {
+        elements.forEach(element => {
+            const cleanupFns = this.instances.get(element);
+            if (cleanupFns) {
+                cleanupFns.forEach(fn => fn());
+                this.instances.delete(element);
+            }
+        });
+    }
 }
 
 const toggleManager = new ToggleManager();
 
-const ClassUtils = {
-  hasAny: (el, names) => names?.some(n => el.classList.contains(n)) ?? false,
-  toggleMultiple: (el, names) => names?.forEach(n => el.classList.toggle(n)),
-  removeMultiple: (el, names) => names && el.classList.remove(...names),
-  findWithClasses: (names) => names ? Array.from(document.querySelectorAll(names.map(c => `.${c}`).join(','))) : []
-};
+// ============================================================================
+// CONFIGURATION PARSING
+// ============================================================================
 
-const AttrUtils = {
-  hasAny: (el, names, vals) => {
-    if (!names || !vals) return false;
-    return names.some((n, i) => el.getAttribute(`data-${n}`) === (vals[i] || ''));
-  },
-  toggleMultiple: (el, names, vals) => {
-    if (!names || !vals) return;
-    names.forEach((n, i) => {
-      const attr = `data-${n}`;
-      const val = vals[i] || '';
-      el.getAttribute(attr) === val ? el.removeAttribute(attr) : el.setAttribute(attr, val);
-    });
-  },
-  removeMultiple: (el, names) => names?.forEach(n => el.removeAttribute(`data-${n}`)),
-  findWithAttrs: (names, vals) => {
-    if (!names || !vals) return [];
-    return Array.from(document.querySelectorAll(
-        names.map((n, i) => `[data-${n}="${vals[i] || ''}"]`).join(',')
-    ));
-  }
-};
-
-function swipeToClose(element, closeCallback, direction = 'y', min = -9999, max = 0) {
-  if (!element) return () => {};
-
-  let start = 0, current = 0, isDragging = false, animationFrame = null;
-  const clamp = (v, mn, mx) => Math.min(mx, Math.max(mn, v));
-  const getCoords = (e) => (e.touches?.[0] || e.changedTouches?.[0] || e);
-
-  const updateTransform = (delta) => {
-    if (animationFrame) return;
-    animationFrame = requestAnimationFrame(() => {
-      element.style.transform = direction === 'x'
-          ? `translate3d(${clamp(delta, min, max)}px, 0, 0)`
-          : `translate3d(0, ${clamp(delta, min, max)}px, 0)`;
-      animationFrame = null;
-    });
-  };
-
-  const drag = (e) => {
-    current = getCoords(e)[direction];
-    isDragging = current !== start;
-    if (!isDragging) return;
-    e.preventDefault();
-    element.style.userSelect = "none";
-    element.style.transition = "none";
-    updateTransform(current - start);
-  };
-
-  const pointerUp = () => {
-    if (animationFrame) {
-      cancelAnimationFrame(animationFrame);
-      animationFrame = null;
-    }
-    if (isDragging) {
-      const threshold = (direction === 'x' ? element.clientWidth : element.clientHeight) / 4;
-      const shouldClose = Math.abs(start - current) > threshold;
-      element.style.transition = "transform 0.25s ease-out";
-      element.addEventListener('transitionend', () => {
-        element.style.userSelect = "";
-        element.style.transition = "";
-        element.style.transform = "";
-      }, { once: true });
-      element.style.transform = shouldClose ? "" : "translate3d(0, 0, 0)";
-      if (shouldClose) closeCallback(element);
-    }
-    cleanup();
-    isDragging = false;
-  };
-
-  const pointerDown = (e) => {
-    isDragging = false;
-    start = getCoords(e)[direction];
-    document.addEventListener("pointermove", drag, { passive: false });
-    document.addEventListener("pointerup", pointerUp, { passive: true });
-  };
-
-  const cleanup = () => {
-    document.removeEventListener("pointermove", drag);
-    document.removeEventListener("pointerup", pointerUp);
-  };
-
-  element.addEventListener("pointerdown", pointerDown);
-
-  return () => {
-    element.removeEventListener("pointerdown", pointerDown);
-    cleanup();
-    if (animationFrame) cancelAnimationFrame(animationFrame);
-  };
-}
-
-function resolveTarget(selector, toggler, fallback) {
-  if (!selector) return fallback;
-  if (selector === '_self') return toggler;
-  if (selector === 'parent') return toggler.parentNode;
-  try {
-    return document.querySelector(selector);
-  } catch {
-    return fallback;
-  }
-}
-
+/**
+ * Parses data attributes into structured config.
+ * @private
+ * @param {HTMLElement} toggler - Toggle trigger element
+ * @returns {Object} Parsed configuration
+ */
 function parseConfig(toggler) {
-  const split = (str) => str?.split(',').map(s => s.trim()).filter(Boolean) || null;
-  return {
-    classes: {
-      toggle: split(toggler.dataset.togglesClass),
-      untoggle: split(toggler.dataset.untogglesClass),
-      target: toggler.dataset.classTarget || toggler.dataset.target || null
-    },
-    attributes: {
-      toggle: split(toggler.dataset.togglesAttribute),
-      toggleValues: toggler.dataset.togglesAttributeValue?.split(',').map(s => s.trim()) || null,
-      untoggle: split(toggler.dataset.untogglesAttribute),
-      untoggleValues: toggler.dataset.untogglesAttributeValue?.split(',').map(s => s.trim()) || null,
-      target: toggler.dataset.attributeTarget || null
-    },
-    legacy: {
-      toggle: split(toggler.dataset.toggles),
-      untoggle: split(toggler.dataset.untoggles)
+    const split = (str) => str?.split(',').map(s => s.trim()).filter(Boolean) || null;
+
+    // Deprecation warnings
+    if (toggler.dataset.untoggles || toggler.dataset.untogglesClass || toggler.dataset.untogglesAttribute) {
+        logger.warn(NAME, 'data-untoggles* is deprecated and non-functional. Use data-unsets* instead.');
+        logger.warn(NAME, toggler);
     }
-  };
-}
 
-function resolveTargets(config, toggler, defaultTarget) {
-  const targets = { class: null, attribute: null };
-
-  if (config.classes.toggle || (config.legacy.toggle && !config.attributes.toggle)) {
-    targets.class = resolveTarget(config.classes.target || config.attributes.target, toggler, defaultTarget);
-  } else if (config.classes.untoggle && !config.classes.target) {
-    targets.class = ClassUtils.findWithClasses(config.classes.untoggle);
-  } else if (config.classes.target) {
-    targets.class = resolveTarget(config.classes.target, toggler, defaultTarget);
-  }
-
-  if (config.attributes.toggle || config.attributes.untoggle) {
-    if (config.attributes.target) {
-      targets.attribute = resolveTarget(config.attributes.target, toggler, defaultTarget);
-    } else if (config.attributes.untoggle && config.attributes.untoggleValues) {
-      targets.attribute = AttrUtils.findWithAttrs(config.attributes.untoggle, config.attributes.untoggleValues);
-    }
-  }
-
-  return targets;
-}
-
-class ToggleState {
-  constructor(config, targets) {
-    this.config = config;
-    this.targets = targets;
-    this.isAutoTargeted = {
-      class: Array.isArray(targets.class),
-      attribute: Array.isArray(targets.attribute)
-    };
-
-    if (config.legacy.toggle && !config.classes.toggle) config.classes.toggle = config.legacy.toggle;
-    if (config.legacy.untoggle && !config.classes.untoggle) config.classes.untoggle = config.legacy.untoggle;
-  }
-
-  getCurrentTargets() {
     return {
-      class: this.isAutoTargeted.class && this.config.classes.untoggle
-          ? ClassUtils.findWithClasses(this.config.classes.untoggle)
-          : this.targets.class,
-      attribute: this.isAutoTargeted.attribute && this.config.attributes.untoggle && this.config.attributes.untoggleValues
-          ? AttrUtils.findWithAttrs(this.config.attributes.untoggle, this.config.attributes.untoggleValues)
-          : this.targets.attribute
+        classes: {
+            toggle: split(toggler.dataset.togglesClass),
+            set: split(toggler.dataset.setsClass),
+            unset: split(toggler.dataset.unsetsClass),
+            target: toggler.dataset.classTarget || toggler.dataset.target || null,
+            unsetTarget: toggler.dataset.unsetTarget || null,
+            ifPresent: toggler.dataset.togglesClassIfPresent?.toLowerCase()
+        },
+        attributes: {
+            toggle: split(toggler.dataset.togglesAttribute),
+            toggleValues: toggler.dataset.togglesAttributeValue?.split(',').map(s => s.trim()) || null,
+            set: split(toggler.dataset.setsAttribute),
+            setValues: toggler.dataset.setsAttributeValue?.split(',').map(s => s.trim()) || null,
+            unset: split(toggler.dataset.unsetsAttribute),
+            unsetValues: toggler.dataset.unsetsAttributeValue?.split(',').map(s => s.trim()) || null,
+            target: toggler.dataset.attributeTarget || null,
+            unsetTarget: toggler.dataset.unsetAttributeTarget || null,
+            ifPresent: toggler.dataset.togglesAttributeIfPresent?.toLowerCase()
+        },
+        legacy: {
+            toggle: split(toggler.dataset.toggles)
+        },
+        behavior: {
+            clickOutside: toggler.dataset.clickOutside?.split(',').map(s => s.trim()) || null,
+            autoHide: parseInt(toggler.dataset.autohide) || 0,
+            permanent: toggler.dataset.togglePermanent?.toLowerCase() === "true",
+            noChildren: toggler.dataset.noChildren
+        },
+        swipe: {
+            target: toggler.dataset.swipeClose || null,
+            direction: toggler.dataset.swipeDirection || 'y',
+            limits: toggler.dataset.swipeLimits?.split(',').map(Number) || [-9999, 0]
+        }
     };
-  }
-
-  isActive() {
-    const targets = this.getCurrentTargets();
-    const check = (target, fn) => {
-      if (!target) return false;
-      return (Array.isArray(target) ? target : [target]).some(fn);
-    };
-
-    return check(targets.class, el =>
-        (this.config.classes.toggle && ClassUtils.hasAny(el, this.config.classes.toggle)) ||
-        (this.config.classes.untoggle && ClassUtils.hasAny(el, this.config.classes.untoggle))
-    ) || check(targets.attribute, el =>
-        (this.config.attributes.toggle && AttrUtils.hasAny(el, this.config.attributes.toggle, this.config.attributes.toggleValues)) ||
-        (this.config.attributes.untoggle && AttrUtils.hasAny(el, this.config.attributes.untoggle, this.config.attributes.untoggleValues))
-    );
-  }
-
-  toggle() {
-    const targets = this.getCurrentTargets();
-    const process = (target, fn) => target && (Array.isArray(target) ? target : [target]).forEach(fn);
-
-    process(targets.class, t => {
-      if (this.config.classes.toggle) {
-        ClassUtils.toggleMultiple(t, this.config.classes.toggle);
-      } else if (this.config.classes.untoggle && ClassUtils.hasAny(t, this.config.classes.untoggle)) {
-        ClassUtils.removeMultiple(t, this.config.classes.untoggle);
-      }
-    });
-
-    process(targets.attribute, t => {
-      if (this.config.attributes.toggle) {
-        AttrUtils.toggleMultiple(t, this.config.attributes.toggle, this.config.attributes.toggleValues);
-      } else if (this.config.attributes.untoggle && AttrUtils.hasAny(t, this.config.attributes.untoggle, this.config.attributes.untoggleValues)) {
-        AttrUtils.removeMultiple(t, this.config.attributes.untoggle);
-      }
-    });
-  }
-
-  remove() {
-    const targets = this.getCurrentTargets();
-    const process = (target, fn) => target && (Array.isArray(target) ? target : [target]).forEach(fn);
-    process(targets.class, t => {
-      ClassUtils.removeMultiple(t, this.config.classes.toggle);
-      ClassUtils.removeMultiple(t, this.config.classes.untoggle);
-    });
-    process(targets.attribute, t => {
-      AttrUtils.removeMultiple(t, this.config.attributes.toggle);
-      AttrUtils.removeMultiple(t, this.config.attributes.untoggle);
-    });
-  }
-
-  containsElement(element) {
-    if (!element) return false;
-    const targets = this.getCurrentTargets();
-    const check = (target) => {
-      if (!target) return false;
-      return (Array.isArray(target) ? target : [target]).some(t => t === element || t.contains(element));
-    };
-    return check(targets.class) || check(targets.attribute);
-  }
 }
 
+// ============================================================================
+// TARGET RESOLUTION
+// ============================================================================
+
+/**
+ * Resolves selector to DOM element.
+ * @private
+ * @param {string} selector - CSS selector or keyword (_self, parent)
+ * @param {HTMLElement} toggler - Reference element
+ * @param {HTMLElement} fallback - Default if selector fails
+ * @returns {HTMLElement|null}
+ */
+function resolveTarget(selector, toggler, fallback) {
+    if (!selector) return fallback;
+    if (selector === '_self') return toggler;
+    if (selector === 'parent') return toggler.parentNode;
+    try {
+        return document.querySelector(selector);
+    } catch {
+        return fallback;
+    }
+}
+
+/**
+ * Resolves all targets for toggle operations.
+ * Handles auto-targeting (finding elements by class/attr when no target specified).
+ * @private
+ * @param {Object} config - Parsed configuration
+ * @param {HTMLElement} toggler - Toggle trigger
+ * @param {HTMLElement} defaultTarget - Fallback target
+ * @returns {Object} Resolved targets
+ */
+function resolveTargets(config, toggler, defaultTarget) {
+    const targets = {
+        class: {toggle: null, set: null, unset: null},
+        attribute: {toggle: null, set: null, unset: null}
+    };
+
+    // Legacy fallback
+    if (config.legacy.toggle && !config.classes.toggle && !config.attributes.toggle) {
+        config.classes.toggle = config.legacy.toggle;
+    }
+
+    // Class targets
+    if (config.classes.toggle) {
+        targets.class.toggle = resolveTarget(config.classes.target || config.attributes.target, toggler, defaultTarget);
+    }
+    if (config.classes.set) {
+        targets.class.set = resolveTarget(config.classes.target, toggler, defaultTarget);
+    }
+    if (config.classes.unset) {
+        // Auto-target: find elements by class if no explicit target
+        if (config.classes.unsetTarget || config.classes.target) {
+            targets.class.unset = resolveTarget(config.classes.unsetTarget || config.classes.target, toggler, defaultTarget);
+        } else {
+            targets.class.unset = ClassUtils.findWithClasses(config.classes.unset);
+        }
+    }
+
+    // Attribute targets
+    if (config.attributes.toggle) {
+        targets.attribute.toggle = resolveTarget(config.attributes.target, toggler, defaultTarget);
+    }
+    if (config.attributes.set) {
+        targets.attribute.set = resolveTarget(config.attributes.target, toggler, defaultTarget);
+    }
+    if (config.attributes.unset) {
+        // Auto-target: find elements by attribute if no explicit target
+        if (config.attributes.unsetTarget || config.attributes.target) {
+            targets.attribute.unset = resolveTarget(config.attributes.unsetTarget || config.attributes.target, toggler, defaultTarget);
+        } else if (config.attributes.unsetValues) {
+            targets.attribute.unset = AttrUtils.findWithAttrs(config.attributes.unset, config.attributes.unsetValues);
+        }
+    }
+
+    return targets;
+}
+
+// ============================================================================
+// TOGGLE STATE MANAGEMENT
+// ============================================================================
+
+/**
+ * Manages toggle state and operations.
+ * @private
+ */
+class ToggleState {
+    constructor(config, targets, toggler) {
+        this.config = config;
+        this.targets = targets;
+        this.toggler = toggler;
+        this.isAutoTargeted = {
+            classUnset: Array.isArray(targets.class.unset),
+            attributeUnset: Array.isArray(targets.attribute.unset)
+        };
+        this._cachedTargets = null;
+    }
+
+    /**
+     * Gets current targets (with auto-target refresh).
+     * Caches result per operation to avoid repeated DOM queries.
+     * @private
+     */
+    getCurrentTargets() {
+        if (this._cachedTargets) return this._cachedTargets;
+
+        this._cachedTargets = {
+            class: {
+                toggle: this.targets.class.toggle,
+                set: this.targets.class.set,
+                unset: this.isAutoTargeted.classUnset && this.config.classes.unset
+                    ? ClassUtils.findWithClasses(this.config.classes.unset)
+                    : this.targets.class.unset
+            },
+            attribute: {
+                toggle: this.targets.attribute.toggle,
+                set: this.targets.attribute.set,
+                unset: this.isAutoTargeted.attributeUnset && this.config.attributes.unset && this.config.attributes.unsetValues
+                    ? AttrUtils.findWithAttrs(this.config.attributes.unset, this.config.attributes.unsetValues)
+                    : this.targets.attribute.unset
+            }
+        };
+
+        return this._cachedTargets;
+    }
+
+    /**
+     * Clears cached targets (call before operations that may change DOM).
+     * @private
+     */
+    clearCache() {
+        this._cachedTargets = null;
+    }
+
+    /**
+     * Checks if-present logic for given operation type.
+     * @private
+     * @param {'class'|'attribute'} type - Operation type
+     * @returns {boolean} True if toggle should be skipped
+     */
+    checkIfPresent(type) {
+        const targets = this.getCurrentTargets();
+        const target = targets[type].toggle;
+        if (!target) return false;
+
+        const config = type === 'class' ? this.config.classes : this.config.attributes;
+        if (config.ifPresent !== 'false') return false;
+
+        const targetArray = Array.isArray(target) ? target : [target];
+        const isActive = targetArray.some(t => {
+            if (type === 'class') {
+                return ClassUtils.hasAny(t, config.toggle);
+            } else {
+                return AttrUtils.hasAny(t, config.toggle, config.toggleValues);
+            }
+        });
+
+        if (!isActive) return false;
+
+        const lastToggler = lastTogglers[type].get(target);
+        if (lastToggler === this.toggler) return false;
+
+        // Active from different toggler - skip toggle, update tracking
+        lastTogglers[type].set(target, this.toggler);
+        return true;
+    }
+
+    /**
+     * Updates last toggler tracking after successful toggle.
+     * @private
+     * @param {'class'|'attribute'} type - Operation type
+     */
+    updateTracking(type) {
+        const targets = this.getCurrentTargets();
+        const target = targets[type].toggle;
+        if (!target) return;
+
+        const config = type === 'class' ? this.config.classes : this.config.attributes;
+        if (config.ifPresent !== 'false') return;
+
+        const targetArray = Array.isArray(target) ? target : [target];
+        const isActive = targetArray.some(t => {
+            if (type === 'class') {
+                return ClassUtils.hasAny(t, config.toggle);
+            } else {
+                return AttrUtils.hasAny(t, config.toggle, config.toggleValues);
+            }
+        });
+
+        if (isActive) {
+            lastTogglers[type].set(target, this.toggler);
+        } else {
+            lastTogglers[type].delete(target);
+        }
+    }
+
+    /**
+     * Checks if any toggle operation is currently active.
+     * @returns {boolean}
+     */
+    isActive() {
+        const targets = this.getCurrentTargets();
+        const check = (target, fn) => {
+            if (!target) return false;
+            return (Array.isArray(target) ? target : [target]).some(fn);
+        };
+
+        return check(targets.class.toggle, el =>
+            this.config.classes.toggle && ClassUtils.hasAny(el, this.config.classes.toggle)
+        ) || check(targets.attribute.toggle, el =>
+            this.config.attributes.toggle && AttrUtils.hasAny(el, this.config.attributes.toggle, this.config.attributes.toggleValues)
+        );
+    }
+
+    /**
+     * Applies toggle/set/unset operations.
+     * @param {Object} options - Operation flags
+     * @param {boolean} options.skipClassToggle - Skip class toggle
+     * @param {boolean} options.skipAttributeToggle - Skip attribute toggle
+     */
+    apply(options = {}) {
+        this.clearCache();
+        const targets = this.getCurrentTargets();
+        const process = (target, fn) => target && (Array.isArray(target) ? target : [target]).forEach(fn);
+
+        // Toggles
+        if (!options.skipClassToggle && this.config.classes.toggle) {
+            process(targets.class.toggle, t => ClassUtils.toggleMultiple(t, this.config.classes.toggle));
+        }
+        if (!options.skipAttributeToggle && this.config.attributes.toggle) {
+            process(targets.attribute.toggle, t =>
+                AttrUtils.toggleMultiple(t, this.config.attributes.toggle, this.config.attributes.toggleValues)
+            );
+        }
+
+        // Sets
+        if (this.config.classes.set) {
+            process(targets.class.set, t => ClassUtils.addMultiple(t, this.config.classes.set));
+        }
+        if (this.config.attributes.set) {
+            process(targets.attribute.set, t =>
+                AttrUtils.setMultiple(t, this.config.attributes.set, this.config.attributes.setValues)
+            );
+        }
+
+        // Unsets
+        if (this.config.classes.unset) {
+            process(targets.class.unset, t => ClassUtils.removeMultiple(t, this.config.classes.unset));
+        }
+        if (this.config.attributes.unset) {
+            process(targets.attribute.unset, t => AttrUtils.removeMultiple(t, this.config.attributes.unset));
+        }
+    }
+
+    /**
+     * Removes toggle state (for click-outside/swipe-to-close).
+     * @param {Object} options - Removal scope
+     * @param {boolean} options.class - Remove class toggles
+     * @param {boolean} options.attribute - Remove attribute toggles
+     */
+    remove(options = {class: true, attribute: true}) {
+        this.clearCache();
+        const targets = this.getCurrentTargets();
+        const process = (target, fn) => target && (Array.isArray(target) ? target : [target]).forEach(fn);
+
+        if (options.class && this.config.classes.toggle) {
+            process(targets.class.toggle, t => ClassUtils.removeMultiple(t, this.config.classes.toggle));
+        }
+        if (options.attribute && this.config.attributes.toggle) {
+            process(targets.attribute.toggle, t => AttrUtils.removeMultiple(t, this.config.attributes.toggle));
+        }
+    }
+
+    /**
+     * Checks if element is within any target.
+     * @param {HTMLElement} element - Element to check
+     * @returns {boolean}
+     */
+    containsElement(element) {
+        if (!element) return false;
+        const targets = this.getCurrentTargets();
+        const check = (target) => {
+            if (!target) return false;
+            return (Array.isArray(target) ? target : [target]).some(t =>
+                t === element || t.contains(element)
+            );
+        };
+        return check(targets.class.toggle) || check(targets.class.set) || check(targets.class.unset) ||
+            check(targets.attribute.toggle) || check(targets.attribute.set) || check(targets.attribute.unset);
+    }
+}
+
+// ============================================================================
+// GESTURE HANDLING - Swipe-to-Close
+// ============================================================================
+
+/**
+ * Creates swipe-to-close gesture handler.
+ * @private
+ * @param {HTMLElement} element - Element to attach gesture
+ * @param {Function} closeCallback - Called on successful swipe
+ * @param {string} direction - 'x' or 'y' axis
+ * @param {number} min - Minimum position
+ * @param {number} max - Maximum position
+ * @returns {Function} Cleanup function
+ */
+function createSwipeHandler(element, closeCallback, direction = 'y', min = -9999, max = 0) {
+    if (!element) return () => {};
+
+    let start = 0, current = 0, isDragging = false, animationFrame = null;
+    const clamp = (v, mn, mx) => Math.min(mx, Math.max(mn, v));
+    const getCoords = (e) => (e.touches?.[0] || e.changedTouches?.[0] || e);
+
+    const updateTransform = (delta) => {
+        if (animationFrame) return;
+        animationFrame = requestAnimationFrame(() => {
+            element.style.transform = direction === 'x'
+                ? `translate3d(${clamp(delta, min, max)}px, 0, 0)`
+                : `translate3d(0, ${clamp(delta, min, max)}px, 0)`;
+            animationFrame = null;
+        });
+    };
+
+    const drag = (e) => {
+        current = getCoords(e)[direction];
+        isDragging = current !== start;
+        if (!isDragging) return;
+        e.preventDefault();
+        element.style.userSelect = "none";
+        element.style.transition = "none";
+        updateTransform(current - start);
+    };
+
+    const pointerUp = () => {
+        if (animationFrame) {
+            cancelAnimationFrame(animationFrame);
+            animationFrame = null;
+        }
+        if (isDragging) {
+            const threshold = (direction === 'x' ? element.clientWidth : element.clientHeight) / 4;
+            const shouldClose = Math.abs(start - current) > threshold;
+            element.style.transition = "transform 0.25s ease-out";
+            element.addEventListener('transitionend', () => {
+                element.style.userSelect = "";
+                element.style.transition = "";
+                element.style.transform = "";
+            }, {once: true});
+            element.style.transform = shouldClose ? "" : "translate3d(0, 0, 0)";
+            if (shouldClose) closeCallback(element);
+        }
+        cleanup();
+        isDragging = false;
+    };
+
+    const pointerDown = (e) => {
+        isDragging = false;
+        start = getCoords(e)[direction];
+        document.addEventListener("pointermove", drag, {passive: false});
+        document.addEventListener("pointerup", pointerUp, {passive: true});
+    };
+
+    const cleanup = () => {
+        document.removeEventListener("pointermove", drag);
+        document.removeEventListener("pointerup", pointerUp);
+    };
+
+    element.addEventListener("pointerdown", pointerDown);
+
+    return () => {
+        element.removeEventListener("pointerdown", pointerDown);
+        cleanup();
+        if (animationFrame) cancelAnimationFrame(animationFrame);
+    };
+}
+
+// ============================================================================
+// MAIN TOGGLE HANDLER - Orchestrates All Behaviors
+// ============================================================================
+
+/**
+ * Creates complete toggle handler for element.
+ * @private
+ * @param {HTMLElement} toggler - Toggle trigger element
+ * @param {HTMLElement} defaultTarget - Fallback target
+ * @returns {Function} Cleanup function
+ */
 function createToggleHandler(toggler, defaultTarget) {
-  const config = parseConfig(toggler);
-  const targets = resolveTargets(config, toggler, defaultTarget);
-  const state = new ToggleState(config, targets);
+    const config = parseConfig(toggler);
+    const targets = resolveTargets(config, toggler, defaultTarget);
+    const state = new ToggleState(config, targets, toggler);
 
-  if (!config.classes.toggle && !config.classes.untoggle &&
-      !config.attributes.toggle && !config.attributes.untoggle &&
-      !config.legacy.toggle && !config.legacy.untoggle) {
-    return () => {};
-  }
+    // Early exit if no operations configured
+    if (!config.classes.toggle && !config.classes.set && !config.classes.unset &&
+        !config.attributes.toggle && !config.attributes.set && !config.attributes.unset) {
+        return () => {};
+    }
 
-  if (!targets.class && !targets.attribute) return () => {};
+    // Early exit if no valid targets
+    if (!targets.class.toggle && !targets.class.set && !targets.class.unset &&
+        !targets.attribute.toggle && !targets.attribute.set && !targets.attribute.unset) {
+        return () => {};
+    }
 
-  const autoHide = parseInt(toggler.dataset.autohide) || 0;
-  const isPermanent = toggler.dataset.togglePermanent?.toLowerCase() === "true";
-  let autoHideTimeout = null;
-  const cleanupFunctions = [];
+    const hasToggleAction = config.classes.toggle || config.attributes.toggle;
+    let autoHideTimeout = null;
+    let isOutsideListenerAttached = false;
+    const cleanupFunctions = [];
 
-  const handleClickOutside = (event) => {
-    const clickedInside = toggler.contains(event?.target) || state.containsElement(event?.target);
-    if (!event || !clickedInside) {
-      if (state.isActive()) {
-        state.remove();
+    /**
+     * Handles click-outside dismissal.
+     * @private
+     */
+    const handleClickOutside = (event) => {
+        const clickedInside = toggler.contains(event?.target) || state.containsElement(event?.target);
+
+        if (!event || !clickedInside) {
+            const shouldRemoveClass = !config.behavior.clickOutside ||
+                config.behavior.clickOutside.includes('unset-class');
+            const shouldRemoveAttr = config.behavior.clickOutside?.includes('unset-attribute') || false;
+
+            if (shouldRemoveClass || shouldRemoveAttr) {
+                state.remove({class: shouldRemoveClass, attribute: shouldRemoveAttr});
+                clearTimeout(autoHideTimeout);
+                autoHideTimeout = null;
+                document.removeEventListener("click", handleClickOutside);
+                isOutsideListenerAttached = false;
+            }
+        } else if (autoHideTimeout) {
+            // Reset auto-hide timer on inside click
+            clearTimeout(autoHideTimeout);
+            autoHideTimeout = setTimeout(handleClickOutside, config.behavior.autoHide * 1000);
+        }
+    };
+
+    /**
+     * Handles toggle click.
+     * @private
+     */
+    const handleToggleClick = (event) => {
+        const childClick = toggler.contains(event.target) && event.target !== toggler;
+        if (!toggler.contains(event.target) || (config.behavior.noChildren && childClick)) return;
+
+        // Check if-present logic
+        const skipClassToggle = state.checkIfPresent('class');
+        const skipAttributeToggle = state.checkIfPresent('attribute');
+
+        // Apply operations
+        state.apply({skipClassToggle, skipAttributeToggle});
+
+        // Update tracking
+        if (!skipClassToggle) state.updateTracking('class');
+        if (!skipAttributeToggle) state.updateTracking('attribute');
+
+        // Cleanup timers
         clearTimeout(autoHideTimeout);
         autoHideTimeout = null;
-        document.removeEventListener("click", handleClickOutside);
-      }
-    } else if (autoHideTimeout) {
-      clearTimeout(autoHideTimeout);
-      autoHideTimeout = setTimeout(handleClickOutside, autoHide * 1000);
-    }
-  };
 
-  const handleToggleClick = (event) => {
-    const childClick = toggler.contains(event.target) && event.target !== toggler;
-    if (!toggler.contains(event.target) || (toggler.dataset.noChildren && childClick)) return;
-
-    state.toggle();
-    clearTimeout(autoHideTimeout);
-    autoHideTimeout = null;
-
-    const isToggleAction = config.classes.toggle || config.attributes.toggle || config.legacy.toggle;
-    if (!isPermanent && isToggleAction) {
-      document.addEventListener("click", handleClickOutside);
-    }
-    if (autoHide > 0) {
-      autoHideTimeout = setTimeout(handleClickOutside, autoHide * 1000);
-    }
-  };
-
-  cleanupFunctions.push(singleClick(toggler, handleToggleClick));
-
-  if (toggler.dataset.swipeClose) {
-    const swipeTarget = document.querySelector(toggler.dataset.swipeClose);
-    if (swipeTarget) {
-      const swipeLimits = toggler.dataset.swipeLimits?.split(',').map(Number) || [-9999, 0];
-      const swipeDirection = toggler.dataset.swipeDirection || 'y';
-      cleanupFunctions.push(swipeToClose(swipeTarget, () => {
-        if (state.isActive()) {
-          state.remove();
-          clearTimeout(autoHideTimeout);
-          autoHideTimeout = null;
+        // Setup click-outside listener
+        if (!config.behavior.permanent && hasToggleAction && state.isActive() && !isOutsideListenerAttached) {
+            setTimeout(() => {
+                document.addEventListener("click", handleClickOutside);
+                isOutsideListenerAttached = true;
+            }, 0);
         }
-      }, swipeDirection, ...swipeLimits));
-    }
-  }
 
-  return () => {
-    clearTimeout(autoHideTimeout);
-    document.removeEventListener("click", handleClickOutside);
-    cleanupFunctions.forEach(cleanup => cleanup());
-  };
+        // Setup auto-hide timer
+        if (config.behavior.autoHide > 0 && state.isActive()) {
+            autoHideTimeout = setTimeout(handleClickOutside, config.behavior.autoHide * 1000);
+        }
+    };
+
+    // Register click handler
+    cleanupFunctions.push(singleClick(toggler, handleToggleClick));
+
+    // Register swipe handler
+    if (config.swipe.target) {
+        const swipeTarget = document.querySelector(config.swipe.target);
+        if (swipeTarget) {
+            cleanupFunctions.push(createSwipeHandler(
+                swipeTarget,
+                () => {
+                    if (state.isActive()) {
+                        state.remove();
+                        clearTimeout(autoHideTimeout);
+                        autoHideTimeout = null;
+                    }
+                },
+                config.swipe.direction,
+                ...config.swipe.limits
+            ));
+        }
+    }
+
+    // Return cleanup function
+    return () => {
+        clearTimeout(autoHideTimeout);
+        document.removeEventListener("click", handleClickOutside);
+        cleanupFunctions.forEach(cleanup => cleanup());
+    };
 }
 
+// ============================================================================
+// INITIALISATION
+// ============================================================================
+
+/**
+ * Initializes toggle functionality for elements.
+ * @param {HTMLElement[]} elements - Container elements
+ */
 export function init(elements) {
-  if (!Array.isArray(elements)) return;
-  toggleManager.cleanup(elements);
+    if (!Array.isArray(elements)) return;
+    toggleManager.cleanup(elements);
 
-  elements.forEach(element => {
-    if (!(element instanceof Element)) return;
-    try {
-      element.querySelectorAll(
-          '[data-toggles],[data-untoggles],' +
-          '[data-toggles-class],[data-untoggles-class],' +
-          '[data-toggles-attribute],[data-untoggles-attribute]'
-      ).forEach(toggler => {
-        toggleManager.register(element, createToggleHandler(toggler, element));
-      });
-    } catch (error) {
-      console.error('[ToggleModule] Error initializing togglers:', error);
-    }
-  });
+    elements.forEach(element => {
+        if (!(element instanceof Element)) return;
+        try {
+            element.querySelectorAll(
+                '[data-toggles],[data-toggles-class],[data-toggles-attribute],' +
+                '[data-sets],[data-sets-class],[data-sets-attribute],' +
+                '[data-unsets],[data-unsets-class],[data-unsets-attribute],' +
+                '[data-untoggles],[data-untoggles-class],[data-untoggles-attribute]'
+            ).forEach(toggler => {
+                toggleManager.register(element, createToggleHandler(toggler, element));
+            });
+        } catch (error) {
+            logger.error(NAME, 'Error initializing togglers:', error);
+        }
+    });
 }
 
+/**
+ * Cleans up toggle handlers for elements.
+ * @param {HTMLElement[]} elements - Elements to cleanup
+ */
 export function cleanup(elements) {
-  toggleManager.cleanup(elements);
+    toggleManager.cleanup(elements);
+}
+
+/**
+ * Destroys all toggle instances (for SPA unmounting).
+ */
+export function destroy() {
+    // Clear WeakMaps (they'll GC automatically, but explicit is cleaner)
+    lastTogglers.class = new WeakMap();
+    lastTogglers.attribute = new WeakMap();
+
+    logger.info(NAME, 'Module destroyed');
 }

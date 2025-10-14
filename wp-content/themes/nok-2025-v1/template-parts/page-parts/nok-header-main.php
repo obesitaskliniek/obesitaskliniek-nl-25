@@ -17,13 +17,13 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
 
     <nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs">
         <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkestblue--darker nok-z-1"
-                         data-untoggles-class="sidebar-open,popup-open" data-untoggles-attribute="state" data-untoggles-attribute-value="open" data-no-children="true">
+                         data-unsets-class="sidebar-open,popup-open" data-unsets-attribute="state" data-unsets-attribute-value="open" data-no-children="true">
 
             <nok-popup class="nok-bg-body nok-dark-bg-darkerblue nok-align-items-stretch" id="popup-bmi-calculator">
                 <nok-popup-header>
                     <nok-popup-title>BMI Calculator</nok-popup-title>
-                    <button title="Klik om te sluiten" class="nok-button--small" data-untoggles-class="popup-open" data-class-target="nok-top-navigation"
-                    data-untoggles-attribute="state" data-untoggles-attribute-value="open" data-attribute-target="#popup-bmi-calculator">
+                    <button title="Klik om te sluiten" class="nok-button--small" data-unsets-class="popup-open" data-class-target="nok-top-navigation"
+                    data-unsets-attribute="state" data-unsets-attribute-value="open" data-attribute-target="#popup-bmi-calculator">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
                             <path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="0.8" d="M2.4 2.8c-.2-.2-.2-.5 0-.7.2-.2.5-.2.7 0l5.1 5.1 5.1-5.1c.2-.2.5-.2.7 0 .2.2.2.5 0 .7L8.9 7.9 14 13c.2.2.2.5 0 .7s-.5.2-.7 0L8.2 8.6l-5.1 5.1c-.2.2-.5.2-.7 0-.2-.2-.2-.5 0-.7l5.1-5.1-5.1-5.1Z"></path>
                         </svg>
@@ -183,8 +183,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
             </nok-navigation-top-row>
             <nok-navigation-menu-bar class="nok-section__inner nok-my-0 nok-z-3">
                 <div class="nok-navigation-menu-bar__inner
-            nok-bg-white nok-dark-bg-darkerblue nok-dark-text-contrast"
-                     data-toggles="sidebar-open">
+            nok-bg-white nok-dark-bg-darkerblue nok-dark-text-contrast">
                     <div>
                         <?= $logo; ?>
                     </div>

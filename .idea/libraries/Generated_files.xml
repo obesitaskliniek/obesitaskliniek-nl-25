@@ -58,6 +58,7 @@
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/mobileConsole/hnl.mobileconsole.min.js" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/mobileConsole/mobileConsole.user.min.js" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-accordion.min.mjs" />
+        <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-aos.min.mjs" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-bmi-calculator.min.mjs" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-element-library.min.mjs" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-element-stylesheet-cache.min.mjs" />
@@ -124,6 +125,7 @@
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/mobileConsole/hnl.mobileconsole.min.js" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/mobileConsole/mobileConsole.user.min.js" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-accordion.min.mjs" />
+      <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-aos.min.mjs" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-bmi-calculator.min.mjs" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-element-library.min.mjs" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-element-stylesheet-cache.min.mjs" />

@@ -22,7 +22,8 @@ if (empty($parents_with_children)) {
 ?>
 <div class="dropdown-contents nok-bg-white nok-dark-bg-darkerblue--darker nok-dark-text-contrast">
 	<?php foreach ($parents_with_children as $parent): ?>
-		<div class="dropdown-contents-menu nok-ul-list nok-mt-0">
+		<div class="dropdown-contents-menu nok-ul-list nok-mt-0"
+			 data-submenu-id="submenu-<?= esc_attr($parent['id']); ?>">
 			<h3><?= esc_html($parent['title']); ?></h3>
 			<?php foreach ($parent['children'] as $child):
 				$classes = ['nok-nav-menu-item'];

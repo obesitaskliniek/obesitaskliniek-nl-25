@@ -21,8 +21,21 @@ if ( empty( $menu_items ) ) {
 	return;
 }
 ?>
+
+<style>
+    .dropdown-contents-menu {
+        display: none;
+    }
+    <?php foreach ( $menu_items as $item ): ?>
+    [data-active-menu="submenu-<?= $item['id']; ?>"] .dropdown-contents-menu[data-submenu-id="submenu-<?= $item['id']; ?>"] {
+        display: flex;
+    }
+    <?php endforeach; ?>
+</style>
+
 <?php foreach ( $menu_items as $item ): ?>
-    <div>
+    <div <?php if ($item['has_children']): ?>data-toggles="sidebar-open" data-class-target="nok-top-navigation" data-toggles-class-if-present="false" data-click-outside="unset-class"
+         data-sets-attribute="active-menu" data-sets-attribute-value="submenu-<?= $item['id']; ?>" data-attribute-target="nok-top-navigation"<?php endif; ?>>
 		<?php
 		$classes = [ 'nok-nav-menu-item' ];
 
