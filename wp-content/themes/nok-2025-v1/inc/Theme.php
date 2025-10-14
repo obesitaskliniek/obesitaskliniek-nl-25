@@ -5,6 +5,7 @@ namespace NOK2025\V1;
 
 use NOK2025\V1\PostTypes;
 use NOK2025\V1\Core\AssetManager;
+use NOK2025\V1\Navigation\MenuManager;
 use NOK2025\V1\PageParts\Registry;
 use NOK2025\V1\PageParts\MetaManager;
 use NOK2025\V1\PageParts\PreviewSystem;
@@ -16,6 +17,7 @@ final class Theme {
 
 	// Components
 	private AssetManager $asset_manager;
+	private MenuManager $menu_manager;
 	private Registry $registry;
 	private MetaManager $meta_manager;
 	private PreviewSystem $preview_system;
@@ -34,6 +36,7 @@ final class Theme {
 
 		// Initialize components with proper dependencies
 		$this->asset_manager = new AssetManager();
+		$this->menu_manager = new MenuManager();
 		$this->registry = new Registry();
 		$this->meta_manager = new MetaManager($this->registry);
 		$this->preview_system = new PreviewSystem($this->meta_manager);
@@ -56,6 +59,7 @@ final class Theme {
 
 		// Let components register their hooks
 		$this->asset_manager->register_hooks();
+		$this->menu_manager->register_hooks();
 		$this->meta_manager->register_hooks();
 		$this->preview_system->register_hooks();
 		$this->rest_endpoints->register_hooks();
@@ -93,6 +97,13 @@ final class Theme {
 	// =============================================================================
 	// DELEGATED METHODS TO COMPONENTS
 	// =============================================================================
+
+	/**
+	 * Get menu manager instance
+	 */
+	public function get_menu_manager(): MenuManager {
+		return $this->menu_manager;
+	}
 
 	/**
 	 * Get page part registry (delegated to Registry component)
