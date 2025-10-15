@@ -4,8 +4,8 @@
  * Description: A very basic text block with title and content.
  * Slug: nok-plain-text-block
  * Custom Fields:
- * - layout:select(left|center|right)
- * - collapse_bottom:checkbox
+ * - layout:select(left|center|right)!page-editable
+ * - collapse_bottom:checkbox!page-editable,
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
