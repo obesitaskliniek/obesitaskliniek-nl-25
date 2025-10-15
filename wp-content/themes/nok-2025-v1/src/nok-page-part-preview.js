@@ -1,4 +1,4 @@
-import '@wordpress/edit-post';          // ensure wp-editor is registered
+import '@wordpress/editor';          // ensure wp-editor is registered
 import domReady from '@wordpress/dom-ready';
 import {render, createElement, useRef, useState, useEffect} from '@wordpress/element';
 import {select, dispatch, subscribe} from '@wordpress/data';
@@ -121,45 +121,39 @@ domReady(() => {
             logger.info(NAME, 'User-initiated preview update');
         }
 
-        // Call the original updateFrame logic
         const postId = wp.data.select('core/editor').getCurrentPostId();
 
-        // Collect complete editor state
-        const completeEditorState = {
-            title: wp.data.select('core/editor').getEditedPostAttribute('title') || '',
-            content: wp.data.select('core/editor').getEditedPostAttribute('content') || '',
-            excerpt: wp.data.select('core/editor').getEditedPostAttribute('excerpt') || '',
-            meta: wp.data.select('core/editor').getEditedPostAttribute('meta') || {}
-        };
+        // ONLY collect meta fields for transient - let Gutenberg handle title/content
+        const metaFields = wp.data.select('core/editor').getEditedPostAttribute('meta') || {};
 
         // Prepare for storage
         const formData = new URLSearchParams({
             action: 'store_preview_state',
             post_id: postId,
-            nonce: window.PagePartDesignSettings.nonce  // Add this line
+            nonce: window.PagePartDesignSettings.nonce
         });
 
-        // Add complete state
-        formData.append('editor_state', JSON.stringify(completeEditorState));
+        // Only store meta fields
+        formData.append('meta_fields', JSON.stringify(metaFields));
 
-
-        // Store the meta value via AJAX
+        // Store meta via AJAX
         fetch(ajaxurl, {
-            method: 'POST', headers: {
+            method: 'POST',
+            headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-            }, body: formData
+            },
+            body: formData
         })
             .then(response => response.json())
             .then(data => {
-                logger.info(NAME, 'Meta stored intransient.');
+                logger.info(NAME, 'Meta fields stored in transient');
                 logger.info(NAME, data);
 
-                // Perform autosave (for content changes) - RETURN the promise
+                // Gutenberg autosave handles title/content
                 return wp.data.dispatch('core/editor').autosave();
             })
             .then(autosaveResult => {
                 logger.info(NAME, 'Autosave completed.');
-                // Dismiss the autosave notice immediately
                 wp.data.dispatch('core/notices').removeNotice('autosave-exists');
 
                 const previewLink = wp.data

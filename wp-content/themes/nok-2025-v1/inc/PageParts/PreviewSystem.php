@@ -21,37 +21,33 @@ class PreviewSystem {
 	 */
 	public function handle_preview_state(): void {
 		add_action('wp_ajax_store_preview_state', function () {
-			// Verify nonce first
+			// Verify nonce
 			if (!wp_verify_nonce($_POST['nonce'] ?? '', 'nok_preview_state_nonce')) {
 				wp_send_json_error('Invalid nonce');
 				return;
 			}
 
 			$post_id = (int) $_POST['post_id'];
-			$editor_state_raw = $_POST['editor_state'] ?? '';
+			$meta_fields_raw = $_POST['meta_fields'] ?? '';
 
-			if ($post_id && !empty($editor_state_raw)) {
-				// Decode the complete editor state
-				$editor_state = json_decode(stripslashes($editor_state_raw), true);
+			if ($post_id && !empty($meta_fields_raw)) {
+				$meta_fields = json_decode(stripslashes($meta_fields_raw), true);
 
-				if (json_last_error() === JSON_ERROR_NONE && is_array($editor_state)) {
-					// Sanitize the complete state
-					$sanitized_state = [
-						'title'   => sanitize_text_field($editor_state['title'] ?? ''),
-						'content' => wp_kses_post($editor_state['content'] ?? ''),
-						'excerpt' => sanitize_textarea_field($editor_state['excerpt'] ?? ''),
-						'meta'    => $this->meta_manager->sanitize_meta_fields($editor_state['meta'] ?? [])
-					];
+				if (json_last_error() === JSON_ERROR_NONE && is_array($meta_fields)) {
+					// Sanitize only meta fields
+					$sanitized_meta = $this->meta_manager->sanitize_meta_fields($meta_fields);
 
-					// Store in single transient
-					set_transient("preview_editor_state_{$post_id}", $sanitized_state, 300);
+					// Store only meta in transient
+					set_transient("preview_editor_state_{$post_id}", [
+						'meta' => $sanitized_meta
+					], 300);
 
-					wp_send_json_success("Stored complete editor state for post {$post_id}");
+					wp_send_json_success("Stored meta fields for post {$post_id}");
 				} else {
-					wp_send_json_error('Invalid editor state data');
+					wp_send_json_error('Invalid meta fields data');
 				}
 			} else {
-				wp_send_json_error('Missing post ID or editor state');
+				wp_send_json_error('Missing post ID or meta fields');
 			}
 		});
 	}

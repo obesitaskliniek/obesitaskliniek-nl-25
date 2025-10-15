@@ -84,6 +84,9 @@ class MetaManager {
 	/**
 	 * Save editor state from unified transient or fallback methods
 	 */
+	/**
+	 * Save meta fields from transient - title/content handled by Gutenberg
+	 */
 	public function save_editor_state(int $post_id, \WP_Post $post): void {
 		// Prevent infinite recursion
 		static $saving = [];
@@ -92,37 +95,19 @@ class MetaManager {
 		}
 		$saving[$post_id] = true;
 
-		// Let WordPress REST API handle saves automatically
+		// Let WordPress REST API handle title/content saves
 		if (defined('REST_REQUEST') && REST_REQUEST) {
 			unset($saving[$post_id]);
 			return;
 		}
 
-		// Check for unified transient data
+		// Check for meta fields in transient
 		$preview_state = get_transient("preview_editor_state_{$post_id}");
 
-		if ($preview_state && is_array($preview_state)) {
-			// Prepare post updates
-			$post_updates = ['ID' => $post_id];
-
-			if (isset($preview_state['title'])) {
-				$post_updates['post_title'] = $preview_state['title'];
-			}
-
-			if (isset($preview_state['content'])) {
-				$post_updates['post_content'] = $preview_state['content'];
-			}
-
-			// Single database update if we have changes
-			if (count($post_updates) > 1) {
-				wp_update_post($post_updates);
-			}
-
-			// Save all meta fields
-			if (isset($preview_state['meta']) && is_array($preview_state['meta'])) {
-				foreach ($preview_state['meta'] as $meta_key => $meta_value) {
-					update_post_meta($post_id, $meta_key, $meta_value);
-				}
+		if ($preview_state && is_array($preview_state) && isset($preview_state['meta'])) {
+			// Save only meta fields - Gutenberg handles title/content
+			foreach ($preview_state['meta'] as $meta_key => $meta_value) {
+				update_post_meta($post_id, $meta_key, $meta_value);
 			}
 
 			// Clean up transient
