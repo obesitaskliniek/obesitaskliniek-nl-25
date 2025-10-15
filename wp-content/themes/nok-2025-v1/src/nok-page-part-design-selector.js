@@ -415,6 +415,54 @@ function DesignSlugPanel() {
                     {customFields.map(renderField)}
                 </Fragment>
             )}
+
+            {/* Reset button */}
+            {customFields.length > 0 && (
+                <Fragment>
+                    <hr style={{margin: '16px 0'}}/>
+                    <Button
+                        isDestructive
+                        isSecondary
+                        onClick={() => {
+                            if (confirm('Wil je alle NOK Design template opties voor deze page part terugzetten naar de standaardwaarden?')) {
+                                logger.log(NAME, 'Resetting template fields to defaults');
+
+                                const resetMeta = {...meta};
+                                customFields.forEach(field => {
+                                    // Set to field default or type-based default
+                                    let defaultValue = field.default;
+                                    if (defaultValue === undefined) {
+                                        switch (field.type) {
+                                            case 'repeater':
+                                                defaultValue = '[]';
+                                                break;
+                                            case 'checkbox':
+                                                defaultValue = '0';
+                                                break;
+                                            default:
+                                                defaultValue = '';
+                                        }
+                                    }
+                                    resetMeta[field.meta_key] = defaultValue;
+                                });
+
+                                // Reset local state
+                                const resetLocal = {};
+                                customFields.forEach(field => {
+                                    resetLocal[field.meta_key] = resetMeta[field.meta_key];
+                                });
+                                setLocalFieldValues(resetLocal);
+
+                                // Update editor
+                                editPost({meta: resetMeta});
+                            }
+                        }}
+                        style={{width: '100%', justifyContent: 'center'}}
+                    >
+                        Reset opties
+                    </Button>
+                </Fragment>
+            )}
         </PluginDocumentSettingPanel>
     );
 }

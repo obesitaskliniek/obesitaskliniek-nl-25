@@ -64,6 +64,9 @@ class TemplateRenderer {
 			return;
 		}
 
+		// Handle CSS based on context and template type
+		$this->handle_template_css($template_type, $design);
+
 		include $template_path;
 	}
 

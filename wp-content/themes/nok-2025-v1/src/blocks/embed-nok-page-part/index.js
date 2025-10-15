@@ -1,25 +1,33 @@
 import {registerBlockType} from '@wordpress/blocks';
 import {InspectorControls, BlockControls, useBlockProps, MediaUpload, MediaUploadCheck} from '@wordpress/block-editor';
 import {SelectControl, PanelBody, Button, Popover, TextControl, CheckboxControl} from '@wordpress/components';
-import {useSelect} from '@wordpress/data';
+import {useSelect, useDispatch} from '@wordpress/data';
 import {__} from '@wordpress/i18n';
 import {useRef, useState, useEffect} from '@wordpress/element';
 
 const textDomain = 'nok-2025-v1';
 const blockName = 'nok2025/embed-nok-page-part';
 
-const CustomPagePartSelector = ({value, options, onChange}) => {
+const CustomPagePartSelector = ({value, options, onChange, onOpen}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [hoveredOption, setHoveredOption] = useState(null);
     const buttonRef = useRef();
     const selectedOption = options.find(opt => opt.value === value);
+
+    const handleOpen = () => {
+        const newOpenState = !isOpen;
+        setIsOpen(newOpenState);
+        if (newOpenState && onOpen) {
+            onOpen();
+        }
+    };
 
     return (
         <div style={{position: 'relative'}}>
             <Button
                 ref={buttonRef}
                 variant="secondary"
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={handleOpen}
                 style={{
                     width: '100%',
                     textAlign: 'left',
@@ -42,57 +50,69 @@ const CustomPagePartSelector = ({value, options, onChange}) => {
                                   backgroundColor: '#f0f0f1',
                                   borderRadius: '6px',
                                   fontSize: '1em',
-                                  color: '#555'
+                                  color: '#555',
+                                  marginLeft: 'auto'
                               }}/> : null
                 }
-                <span>▼</span>
             </Button>
-
             {isOpen && (
-                <div
-                    style={{
-                        position: 'absolute',
-                        top: '100%',
-                        left: '0',
-                        right: '0',
-                        zIndex: 999999,
-                        backgroundColor: 'white',
-                        border: '1px solid #ccd0d4',
-                        borderRadius: '4px',
-                        boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
-                        maxHeight: '300px',
-                        overflow: 'hidden'
-                    }}
-                >
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    zIndex: 99999
+                }}>
+                    <div
+                        style={{
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            background: 'transparent'
+                        }}
+                        onClick={() => setIsOpen(false)}
+                    />
                     <div style={{
-                        minWidth: '100%',
+                        position: 'absolute',
+                        top: buttonRef.current?.getBoundingClientRect().bottom + window.scrollY,
+                        left: buttonRef.current?.getBoundingClientRect().left + window.scrollX,
+                        width: buttonRef.current?.offsetWidth || 'auto',
                         maxHeight: '300px',
+                        overflowY: 'auto',
                         backgroundColor: 'white',
-                        border: '1px solid #ccd0d4',
-                        borderRadius: '4px',
-                        boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
-                        overflow: 'hidden auto'
+                        border: '1px solid #ccc',
+                        borderRadius: '2px',
+                        boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+                        zIndex: 100000,
                     }}>
                         {options.map(option => (
                             <Button
                                 key={option.value}
-                                variant="tertiary"
-                                onMouseEnter={() => setHoveredOption(option.value)}
-                                onMouseLeave={() => setHoveredOption(null)}
                                 onClick={() => {
                                     onChange(option.value);
                                     setIsOpen(false);
                                 }}
+                                onMouseEnter={() => setHoveredOption(option.value)}
+                                onMouseLeave={() => setHoveredOption(null)}
                                 style={{
                                     width: '100%',
                                     textAlign: 'left',
                                     padding: '8px 12px',
+                                    border: 'none',
                                     borderBottom: '1px solid #f0f0f1',
                                     borderRadius: '0',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
                                     justifyContent: 'space-between',
-                                    backgroundColor: option.value === value ? 'var(--wp-admin-theme-color)' : (hoveredOption === option.value
-                                        ? '#e6f3ff'
-                                        : 'transparent'),
+                                    backgroundColor: option.value === value
+                                        ? 'var(--wp-admin-theme-color)' : (hoveredOption === option.value
+                                            ? '#e6f3ff'
+                                            : 'transparent'),
                                     color: option.value === value ? 'white' : 'inherit',
                                 }}
                             >
@@ -118,6 +138,8 @@ const CustomPagePartSelector = ({value, options, onChange}) => {
 registerBlockType(blockName, {
     edit: ({attributes, setAttributes}) => {
         const {postId, overrides} = attributes;
+        const {invalidateResolution} = useDispatch('core');
+
         const parts = useSelect(
             select => select('core').getEntityRecords('postType', 'page_part', {
                 per_page: -1,
@@ -127,6 +149,15 @@ registerBlockType(blockName, {
             }),
             []
         ) || [];
+
+        const refreshPageParts = () => {
+            invalidateResolution('getEntityRecords', ['postType', 'page_part', {
+                per_page: -1,
+                _embed: true,
+                orderby: 'modified',
+                order: 'desc'
+            }]);
+        };
 
         // Get template registry from localized data
         const registry = (typeof window !== 'undefined' && window.PagePartDesignSettings)
@@ -154,80 +185,15 @@ registerBlockType(blockName, {
                 const designSlug = (part.meta && part.meta.design_slug) || '';
                 const templateName = (registry[designSlug] && registry[designSlug].name)
                     ? registry[designSlug].name
-                    : (designSlug || 'Unknown');
-
-                const formattedLabel = `${part.title.rendered}`;
-
+                    : designSlug || 'Unknown';
                 return {
-                    label: formattedLabel,
+                    label: `${part.title.rendered}`,
                     template: templateName,
                     value: part.id
                 };
             })
         ];
 
-        // Render override control based on field type
-        const renderOverrideControl = (field) => {
-            const overrideValue = overrides[field.meta_key] || '';
-
-            const updateOverride = (value) => {
-                const newOverrides = {...overrides};
-                if (value === '' || value === null) {
-                    delete newOverrides[field.meta_key];
-                } else {
-                    newOverrides[field.meta_key] = value;
-                }
-                setAttributes({overrides: newOverrides});
-            };
-
-            switch (field.type) {
-                case 'select':
-                    const selectOptions = field.options || [];
-                    const selectLabels = field.option_labels || selectOptions;
-
-                    return (
-                        <SelectControl
-                            key={field.meta_key}
-                            label={`Override ${field.label}`}
-                            value={overrideValue}
-                            options={[
-                                {label: '— Gebruik de ingestelde waarde —', value: ''},
-                                ...selectOptions.map((option, index) => ({
-                                    label: selectLabels[index] || option,
-                                    value: option
-                                }))
-                            ]}
-                            onChange={updateOverride}
-                        />
-                    );
-
-                case 'checkbox':
-                    return (
-                        <CheckboxControl
-                            key={field.meta_key}
-                            label={`Override ${field.label}`}
-                            checked={overrideValue === '1'}
-                            onChange={(checked) => updateOverride(checked ? '1' : '0')}
-                        />
-                    );
-
-                case 'text':
-                default:
-                    return (
-                        <TextControl
-                            key={field.meta_key}
-                            label={`Override ${field.label}`}
-                            value={overrideValue}
-                            onChange={updateOverride}
-                            placeholder="Gebruik de ingestelde waarde"
-                        />
-                    );
-            }
-        };
-
-
-        // Build the iframe src
-        //const src = postId ? `/wp-json/nok-2025-v1/v1/embed-page-part/${postId}` : '';
         const src = postId
             ? `/wp-json/nok-2025-v1/v1/embed-page-part/${postId}?${new URLSearchParams(
                 Object.entries(overrides).map(([key, value]) => [key, value])
@@ -293,6 +259,7 @@ registerBlockType(blockName, {
                             value={postId}
                             options={dropdownOptions}
                             onChange={val => setAttributes({postId: parseInt(val, 10)})}
+                            onOpen={refreshPageParts}
                         />
 
                         {pageEditableFields.length > 0 && postId !== 0 && (
@@ -301,11 +268,68 @@ registerBlockType(blockName, {
                                     Deze page part biedt de mogelijkheid om enkele instellingen specifek voor deze
                                     pagina te overschrijven/herdefinieren:
                                 </p>
-                                {pageEditableFields.map(renderOverrideControl)}
+                                {pageEditableFields.map(field => {
+                                    const currentValue = overrides[field.meta_key] || '';
+                                    const updateOverride = (newValue) => {
+                                        const newOverrides = {...overrides};
+                                        if (newValue === '' || newValue === null) {
+                                            delete newOverrides[field.meta_key];
+                                        } else {
+                                            newOverrides[field.meta_key] = newValue;
+                                        }
+                                        setAttributes({overrides: newOverrides});
+                                    };
+
+                                    switch (field.type) {
+                                        case 'select':
+                                            const selectOptions = field.options || [];
+                                            const selectLabels = field.option_labels || selectOptions;
+                                            return (
+                                                <SelectControl
+                                                    key={field.meta_key}
+                                                    label={`Override ${field.label}`}
+                                                    value={currentValue}
+                                                    options={[
+                                                        {label: '— Gebruik de ingestelde waarde —', value: ''},
+                                                        ...selectOptions.map((opt, idx) => ({
+                                                            label: selectLabels[idx] || opt,
+                                                            value: opt
+                                                        }))
+                                                    ]}
+                                                    onChange={updateOverride}
+                                                />
+                                            );
+
+                                        case 'checkbox':
+                                            return (
+                                                <CheckboxControl
+                                                    key={field.meta_key}
+                                                    label={`Override ${field.label}`}
+                                                    checked={currentValue === '1'}
+                                                    onChange={checked => updateOverride(checked ? '1' : '')}
+                                                />
+                                            );
+
+                                        case 'text':
+                                        case 'url':
+                                            return (
+                                                <TextControl
+                                                    key={field.meta_key}
+                                                    label={`Override ${field.label}`}
+                                                    value={currentValue}
+                                                    onChange={updateOverride}
+                                                    placeholder="— Gebruik de ingestelde waarde —"
+                                                />
+                                            );
+
+                                        default:
+                                            return null;
+                                    }
+                                })}
                             </PanelBody>
                         )}
 
-                        {/* Featured Image Override */}
+                        {/* Featured Image Override - separate section, only when template allows it */}
                         {postId !== 0 && templateData.featured_image_overridable && (
                             <PanelBody title={__('Uitgelichte afbeelding', textDomain)} initialOpen={false}>
                                 <p style={{fontSize: '12px', color: '#666', marginBottom: '12px'}}>
@@ -321,35 +345,31 @@ registerBlockType(blockName, {
                                         allowedTypes={['image']}
                                         value={overrides._override_thumbnail_id || ''}
                                         render={({open}) => (
-                                            <>
-                                                {overrides._override_thumbnail_id && (
-                                                    <div style={{marginBottom: '12px', border: '1px solid #ddd', borderRadius: '4px', overflow: 'hidden', maxWidth: '200px'}}>
-                                                        {overrideThumbnail ? (
-                                                            <img
-                                                                src={overrideThumbnail.media_details?.sizes?.medium?.source_url
-                                                                    || overrideThumbnail.media_details?.sizes?.thumbnail?.source_url
-                                                                    || overrideThumbnail.source_url}
-                                                                style={{
-                                                                    width: '100%',
-                                                                    height: 'auto',
-                                                                    display: 'block'
-                                                                }}
-                                                                alt=""
-                                                            />
-                                                        ) : (
-                                                            <div style={{padding: '20px', textAlign: 'center', color: '#999'}}>
-                                                                Laden...
-                                                            </div>
-                                                        )}
+                                            <div>
+                                                {overrideThumbnail && (
+                                                    <div style={{
+                                                        marginBottom: '12px',
+                                                        border: '1px solid #ddd',
+                                                        borderRadius: '4px',
+                                                        overflow: 'hidden',
+                                                        maxWidth: '200px'
+                                                    }}>
+                                                        <img
+                                                            src={overrideThumbnail.media_details?.sizes?.medium?.source_url
+                                                                || overrideThumbnail.media_details?.sizes?.thumbnail?.source_url
+                                                                || overrideThumbnail.source_url}
+                                                            style={{width: '100%', height: 'auto', display: 'block'}}
+                                                            alt=""
+                                                        />
                                                     </div>
                                                 )}
                                                 <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap'}}>
                                                     <Button variant="secondary" onClick={open}>
-                                                        {overrides._override_thumbnail_id
+                                                        {overrideThumbnail
                                                             ? __('Wijzig afbeelding', textDomain)
                                                             : __('Selecteer afbeelding', textDomain)}
                                                     </Button>
-                                                    {overrides._override_thumbnail_id && (
+                                                    {overrideThumbnail && (
                                                         <Button
                                                             variant="tertiary"
                                                             isDestructive
@@ -363,7 +383,7 @@ registerBlockType(blockName, {
                                                         </Button>
                                                     )}
                                                 </div>
-                                            </>
+                                            </div>
                                         )}
                                     />
                                 </MediaUploadCheck>
@@ -371,27 +391,28 @@ registerBlockType(blockName, {
                         )}
                     </PanelBody>
 
-                    {postId ? (
-                        <div style={{position: 'relative', width: '100%'}}>
-                            <iframe
-                                key={`${postId}-${JSON.stringify(overrides)}`} // force reload when overrides change
-                                ref={iframeRef}
-                                title={__('Embedded NOK Page Part', textDomain)}
-                                src={src}
-                                style={{
-                                    width: '100%',
-                                    height: `${height}px`,
-                                    border: 0,
-                                }}
-                                sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-                            />
+                    {postId === 0 ? (
+                        <div style={{
+                            padding: '40px 20px',
+                            textAlign: 'center',
+                            backgroundColor: '#f0f0f1',
+                            border: '1px dashed #ccc'
+                        }}>
+                            <p style={{margin: 0, color: '#666'}}>
+                                {__('Selecteer een Page Part om de preview te zien', textDomain)}
+                            </p>
                         </div>
                     ) : (
-                        <p>{__('Selecteer een blok om te bekijken…', textDomain)}</p>
+                        <iframe
+                            ref={iframeRef}
+                            src={src}
+                            style={{width: '100%', height: `${height}px`, border: 'none'}}
+                        />
                     )}
                 </div>
             </>
         );
     },
-    save: () => null, // fully dynamic
+
+    save: () => null
 });
