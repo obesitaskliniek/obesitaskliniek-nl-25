@@ -26,6 +26,7 @@ class Registry {
 				'slug'          => 'Slug',
 				'icon'          => 'Icon',
 				'custom_fields' => 'Custom Fields',
+				'featured_image_overridable' => 'Featured Image Overridable'
 			]);
 
 			if (empty($data['slug'])) {
@@ -34,6 +35,9 @@ class Registry {
 
 			// Parse custom fields
 			$data['custom_fields'] = $this->parse_custom_fields($data['custom_fields'], $data['slug']);
+
+			// Parse featured image overridable flag
+			$data['featured_image_overridable'] = strtolower($data['featured_image_overridable'] ?? '') === 'true';
 
 			$this->part_registry[$data['slug']] = $data;
 		}
