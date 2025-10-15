@@ -10,7 +10,18 @@ class FieldContext implements \ArrayAccess {
 	}
 
 	public function has(string $key): bool {
-		return isset($this->fields[$key]) && $this->fields[$key] !== '';
+		if (!isset($this->fields[$key])) {
+			return false;
+		}
+
+		$value = $this->fields[$key];
+
+		// Empty, unchecked checkbox, or empty JSON structures
+		if ($value === '' || $value === '0' || $value === '[]' || $value === '{}') {
+			return false;
+		}
+
+		return true;
 	}
 
 	public function get(string $key, $default = ''): mixed {
