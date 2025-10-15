@@ -18,13 +18,19 @@ class FieldContext implements \ArrayAccess {
 	}
 
 	public function get_esc_html(string $key, $default = ''): mixed {
-		return esc_html($this->get($key, $default));
+		$value = $this->get($key, $default);
+		return $this->is_placeholder($value) ? $value : esc_html($value);
 	}
 
 	public function get_esc_url(string $key, $default = ''): mixed {
-		return esc_url($this->get($key, $default));
+		$value = $this->get($key, $default);
+		return $this->is_placeholder($value) ? $value : esc_url($value);
 	}
 
+	public function get_esc_attr(string $key, $default = ''): mixed {
+		$value = $this->get($key, $default);
+		return $this->is_placeholder($value) ? $value : esc_attr($value);
+	}
 	public function all(): array {
 		return $this->fields;
 	}
@@ -44,5 +50,9 @@ class FieldContext implements \ArrayAccess {
 
 	public function offsetUnset($offset): void {
 		unset($this->fields[$offset]);
+	}
+
+	private function is_placeholder(mixed $value): bool {
+		return is_string($value) && str_starts_with($value, '<span class="placeholder-field');
 	}
 }

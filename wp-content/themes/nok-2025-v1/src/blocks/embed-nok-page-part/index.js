@@ -1,6 +1,6 @@
 import {registerBlockType} from '@wordpress/blocks';
-import {InspectorControls, BlockControls, useBlockProps} from '@wordpress/block-editor';
-import {SelectControl, PanelBody, Button, Popover} from '@wordpress/components';
+import {InspectorControls, BlockControls, useBlockProps, MediaUpload, MediaUploadCheck} from '@wordpress/block-editor';
+import {SelectControl, PanelBody, Button, Popover, TextControl, CheckboxControl} from '@wordpress/components';
 import {useSelect} from '@wordpress/data';
 import {__} from '@wordpress/i18n';
 import {useRef, useState, useEffect} from '@wordpress/element';
@@ -138,6 +138,14 @@ registerBlockType(blockName, {
         const designSlug = selectedPart?.meta?.design_slug || '';
         const templateData = registry[designSlug] || {};
         const pageEditableFields = (templateData.custom_fields || []).filter(f => f.page_editable);
+        const overrideThumbnail = useSelect(
+            (select) => {
+                const thumbnailId = overrides._override_thumbnail_id;
+                if (!thumbnailId) return null;
+                return select('core').getMedia(thumbnailId);
+            },
+            [overrides._override_thumbnail_id]
+        );
 
         // Build dropdown options with template names
         const dropdownOptions = [
@@ -294,6 +302,71 @@ registerBlockType(blockName, {
                                     pagina te overschrijven/herdefinieren:
                                 </p>
                                 {pageEditableFields.map(renderOverrideControl)}
+                            </PanelBody>
+                        )}
+
+                        {/* Featured Image Override */}
+                        {postId !== 0 && templateData.featured_image_overridable && (
+                            <PanelBody title={__('Uitgelichte afbeelding', textDomain)} initialOpen={false}>
+                                <p style={{fontSize: '12px', color: '#666', marginBottom: '12px'}}>
+                                    Overschrijf de uitgelichte afbeelding van deze page part specifiek voor deze pagina.
+                                </p>
+                                <MediaUploadCheck>
+                                    <MediaUpload
+                                        onSelect={(media) => {
+                                            const newOverrides = {...overrides};
+                                            newOverrides._override_thumbnail_id = media.id;
+                                            setAttributes({overrides: newOverrides});
+                                        }}
+                                        allowedTypes={['image']}
+                                        value={overrides._override_thumbnail_id || ''}
+                                        render={({open}) => (
+                                            <>
+                                                {overrides._override_thumbnail_id && (
+                                                    <div style={{marginBottom: '12px', border: '1px solid #ddd', borderRadius: '4px', overflow: 'hidden', maxWidth: '200px'}}>
+                                                        {overrideThumbnail ? (
+                                                            <img
+                                                                src={overrideThumbnail.media_details?.sizes?.medium?.source_url
+                                                                    || overrideThumbnail.media_details?.sizes?.thumbnail?.source_url
+                                                                    || overrideThumbnail.source_url}
+                                                                style={{
+                                                                    width: '100%',
+                                                                    height: 'auto',
+                                                                    display: 'block'
+                                                                }}
+                                                                alt=""
+                                                            />
+                                                        ) : (
+                                                            <div style={{padding: '20px', textAlign: 'center', color: '#999'}}>
+                                                                Laden...
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
+                                                <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap'}}>
+                                                    <Button variant="secondary" onClick={open}>
+                                                        {overrides._override_thumbnail_id
+                                                            ? __('Wijzig afbeelding', textDomain)
+                                                            : __('Selecteer afbeelding', textDomain)}
+                                                    </Button>
+                                                    {overrides._override_thumbnail_id && (
+                                                        <Button
+                                                            variant="tertiary"
+                                                            isDestructive
+                                                            onClick={() => {
+                                                                const newOverrides = {...overrides};
+                                                                delete newOverrides._override_thumbnail_id;
+                                                                setAttributes({overrides: newOverrides});
+                                                            }}
+                                                        >
+                                                            {__('Verwijder override', textDomain)}
+                                                        </Button>
+                                                    )}
+                                                </div>
+                                            </>
+                                        )}
+                                    />
+                                </MediaUploadCheck>
                             </PanelBody>
                         )}
                     </PanelBody>

@@ -3,6 +3,7 @@
  * Template Name: Ervaringen text block
  * Description: A block with a title, content, and ervaringen block carousel.
  * Slug: nok-ervaringen-text-block
+ * Featured Image Overridable: true
  * Custom Fields:
  * - layout:select(left|right)
  * - achtergrond:select(Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-white|Transparant::nok-text-darkerblue nok-dark-text-white)

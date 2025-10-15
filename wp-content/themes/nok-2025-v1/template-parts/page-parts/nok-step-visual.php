@@ -3,6 +3,7 @@
  * Template Name: Step Visual
  * Description: A split-content page part for representing a step with a visual
  * Slug: nok-step-visual
+ * Featured Image Overridable: true
  * Custom Fields:
  * - tagline:text,
  * - button_blauw_text:text,

@@ -3,6 +3,7 @@
  * Template Name: Simple picture text block
  * Description: A basic block with a title, image and content. Image 'sticks' to the left or right side of the viewport.
  * Slug: nok-picture-text-block
+ * Featured Image Overridable: true
  * Custom Fields:
  * - tagline:text,
  * - button_text:text,

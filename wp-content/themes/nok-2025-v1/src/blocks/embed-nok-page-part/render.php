@@ -26,6 +26,14 @@ return function( array $attributes ): string {
 
 	// Apply overrides from block attributes
 	if (!empty($attributes['overrides']) && is_array($attributes['overrides'])) {
+		// Apply featured image override if set
+		if (isset($attributes['overrides']['_override_thumbnail_id']) && $attributes['overrides']['_override_thumbnail_id'] !== '') {
+			add_filter('post_thumbnail_id', function($thumbnail_id, $post) use ($post_id, $attributes) {
+				$check_id = is_object($post) ? $post->ID : $post;
+				return ($check_id == $post_id) ? (int)$attributes['overrides']['_override_thumbnail_id'] : $thumbnail_id;
+			}, 10, 2);
+		}
+
 		$registry = $theme_instance->get_page_part_registry();
 		$template_data = $registry[$design] ?? [];
 		$custom_fields = $template_data['custom_fields'] ?? [];

@@ -3,6 +3,7 @@
  * Template Name: Hero
  * Description: A hero unit for the top of the main (first level) pages.
  * Slug: nok-hero
+ * Featured Image Overridable: true
  * Custom Fields:
  * - tagline:text,
  * - button_blauw_text:text,

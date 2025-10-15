@@ -155,6 +155,15 @@ class RestEndpoints {
 
 		// Make sure we have the post in the loop
 		if ($wp_query->have_posts()) {
+
+			// Apply featured image override if set
+			if (isset($overrides['_override_thumbnail_id']) && $overrides['_override_thumbnail_id'] !== '') {
+				add_filter('post_thumbnail_id', function($thumbnail_id, $post) use ($id, $overrides) {
+					$check_id = is_object($post) ? $post->ID : $post;
+					return ($check_id == $id) ? (int)$overrides['_override_thumbnail_id'] : $thumbnail_id;
+				}, 10, 2);
+			}
+
 			$wp_query->the_post();
 
 			ob_start();
