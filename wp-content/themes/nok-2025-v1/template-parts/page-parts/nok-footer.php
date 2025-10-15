@@ -11,21 +11,22 @@
  * - button_transparant_url:url,
  * - link_text:text,
  * - link_url:url,
- *  - colors:select(Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue nok-dark-text-white|Donkerblauw::nok-bg-darkestblue nok-text-white--darker)
+ * - colors:select(Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue nok-dark-text-white|Donkerblauw::nok-bg-darkestblue nok-text-white--darker)
+ *
+ * @var \NOK2025\V1\PageParts\FieldContext $context
  */
 
 use NOK2025\V1\Assets;
 
 $default_colors = 'nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue nok-dark-text-white';
-$colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors'] : $default_colors;
-$left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'left';
+$colors = $context->has('colors') ? $context->get('colors') : $default_colors;
 ?>
 
 <nok-page-footer class="nok-section">
     <div class="nok-section__inner--stretched nok-my-0 nok-px-0 nok-border-radius-0 <?= $colors; ?>">
         <div class="nok-section__inner nok-page-footer__inner">
             <div class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start nok-column-gap-3">
-                <?php $block_colors = str_contains($colors, 'nok-bg-darkestblue') ? 'nok-bg-darkblue nok-bg-alpha-6 nok-alpha-10' : 'nok-bg-body nok-dark-bg-body--darker nok-alpha-10 nok-alpha-10'; ?>
+				<?php $block_colors = str_contains($colors, 'nok-bg-darkestblue') ? 'nok-bg-darkblue nok-bg-alpha-6 nok-alpha-10' : 'nok-bg-body nok-dark-bg-body--darker nok-alpha-10 nok-alpha-10'; ?>
                 <nok-square-block class="<?= $block_colors; ?>">
                     <div class="nok-square-block__heading">
                         <h3 class="fw-bold">Vragen?</h3>
@@ -86,5 +87,3 @@ $left = empty($page_part_fields['layout']) || $page_part_fields['layout'] === 'l
         </div>
     </div>
 </nok-page-footer>
-
-<?php

@@ -56,16 +56,13 @@ class TemplateRenderer {
 	 * Core template rendering logic
 	 */
 	private function render_template(string $template_type, string $design, array $fields): void {
-		$page_part_fields = $fields; // Make available to template
+		$context = new FieldContext($fields); // Instead of raw array
 		$template_path = get_theme_file_path("template-parts/{$template_type}/{$design}.php");
 
 		if (!file_exists($template_path)) {
 			$this->render_template_error($design, $template_type);
 			return;
 		}
-
-		// Handle CSS based on context and template type
-		$this->handle_template_css($template_type, $design);
 
 		include $template_path;
 	}

@@ -2,8 +2,8 @@ import '@wordpress/edit-post';          // ensure wp-editor is registered
 import domReady from '@wordpress/dom-ready';
 import {render, createElement, useRef, useState, useEffect} from '@wordpress/element';
 import {select, dispatch, subscribe} from '@wordpress/data';
-import {debounceThis} from "../assets/js/domule/modules/hnl.debounce.mjs";
-import {hnlLogger} from '../assets/js/domule/modules/hnl.logger.mjs';
+import {debounceThis} from "../assets/js/domule/util.debounce.mjs";
+import {logger} from '../assets/js/domule/core.log.mjs';
 
 const NAME = 'nok-page-part-preview';
 const prefix = `nok-page-part-preview`;
@@ -83,11 +83,11 @@ domReady(() => {
     const iframe = document.getElementById(`${prefix}-iframe`);
 
     if (!iframe) {
-        hnlLogger.error(NAME, 'Failed to load iframe');
+        logger.error(NAME, 'Failed to load iframe');
         return;
     }
     if (!button) {
-        hnlLogger.warn(NAME, 'Update button not found, continuing with frame only');
+        logger.warn(NAME, 'Update button not found, continuing with frame only');
     }
 
     // Add initialization state tracking
@@ -101,8 +101,8 @@ domReady(() => {
             const postId = wp.data.select('core/editor').getCurrentPostId();
             const previewLink = wp.data.select('core/editor').getEditedPostPreviewLink();
 
-            hnlLogger.info(NAME, 'Loading initial preview');
-            hnlLogger.info(NAME, `src: ${previewLink}`);
+            logger.info(NAME, 'Loading initial preview');
+            logger.info(NAME, `src: ${previewLink}`);
 
             if (previewLink && !previewLink.includes('auto-draft')) {
                 iframe.removeAttribute('srcdoc');
@@ -116,7 +116,7 @@ domReady(() => {
     const enhancedUpdateFrame = (isUserInitiated = false) => {
         if (isUserInitiated) {
             userInitiatedChange = true;
-            hnlLogger.info(NAME, 'User-initiated preview update');
+            logger.info(NAME, 'User-initiated preview update');
         }
 
         // Call the original updateFrame logic
@@ -149,14 +149,14 @@ domReady(() => {
         })
             .then(response => response.json())
             .then(data => {
-                hnlLogger.info(NAME, 'Meta stored intransient.');
-                hnlLogger.info(NAME, data);
+                logger.info(NAME, 'Meta stored intransient.');
+                logger.info(NAME, data);
 
                 // Perform autosave (for content changes) - RETURN the promise
                 return wp.data.dispatch('core/editor').autosave();
             })
             .then(autosaveResult => {
-                hnlLogger.info(NAME, 'Autosave completed.');
+                logger.info(NAME, 'Autosave completed.');
                 // Dismiss the autosave notice immediately
                 wp.data.dispatch('core/notices').removeNotice('autosave-exists');
 
@@ -168,7 +168,7 @@ domReady(() => {
                 iframe.src = `${previewLink}&hide_adminbar=1`;
             })
             .catch(error => {
-                hnlLogger.error(NAME, `Preview update failed: ${error}`);
+                logger.error(NAME, `Preview update failed: ${error}`);
             });
     };
 
@@ -183,7 +183,7 @@ domReady(() => {
     setTimeout(() => {
         isInitializing = false;
         loadInitialPreview(); // Load preview after initialization
-        hnlLogger.info(NAME, 'Preview system initialized, updates now enabled');
+        logger.info(NAME, 'Preview system initialized, updates now enabled');
     }, 2000);
 
     // Enhanced subscribe function with autosave detection
@@ -202,7 +202,7 @@ domReady(() => {
         // Check if design_slug changed
         if (currentSlug !== lastSlug) {
             lastSlug = currentSlug;
-                hnlLogger.info(NAME, `Design slug changed to: ${currentSlug}`);
+                logger.info(NAME, `Design slug changed to: ${currentSlug}`);
                 enhancedUpdateFrame();
             return;
         }
@@ -211,7 +211,7 @@ domReady(() => {
         const hasMetaChanged = JSON.stringify(meta) !== JSON.stringify(lastMeta);
         if (hasMetaChanged) {
             lastMeta = {...meta};
-                hnlLogger.info(NAME, `Custom fields changed, updating preview`);
+                logger.info(NAME, `Custom fields changed, updating preview`);
                 enhancedUpdateFrame();
         }
     });

@@ -2,7 +2,7 @@ import {useSelect, useDispatch} from '@wordpress/data';
 import {registerPlugin} from '@wordpress/plugins';
 import {PluginDocumentSettingPanel} from '@wordpress/edit-post';
 import {SelectControl, TextControl, TextareaControl, CheckboxControl, Button, Draggable } from '@wordpress/components';
-import {hnlLogger} from '../assets/js/domule/modules/hnl.logger.mjs';
+import {logger} from '../assets/js/domule/core.log.mjs';
 import {Fragment, useRef, useState, useEffect} from '@wordpress/element';
 
 const NAME = 'nok-page-part-design-selector';
@@ -271,7 +271,7 @@ function DesignSlugPanel() {
     const updateMetaField = (fieldName, value) => {
         // Don't trigger updates during initialization
         if (!isInitialized) {
-            hnlLogger.log(NAME, `Skipping update during initialization for ${fieldName}`);
+            logger.log(NAME, `Skipping update during initialization for ${fieldName}`);
             return;
         }
 
@@ -288,7 +288,7 @@ function DesignSlugPanel() {
 
         // Set new timeout for debounced backend update
         debounceRef.current[fieldName] = setTimeout(() => {
-            hnlLogger.log(NAME, `Debounced update for ${fieldName}: ${value}`);
+            logger.log(NAME, `Debounced update for ${fieldName}: ${value}`);
 
             // Update the editor meta
             const newMeta = {...meta, [fieldName]: value};
@@ -398,7 +398,7 @@ function DesignSlugPanel() {
                 value={currentTemplate}
                 options={options}
                 onChange={(newSlug) => {
-                    hnlLogger.log(NAME, `→ setting design_slug to "${newSlug}"`);
+                    logger.log(NAME, `→ setting design_slug to "${newSlug}"`);
                     // Update the editor meta
                     const newMeta = {...meta, design_slug: newSlug};
                     editPost({meta: newMeta});

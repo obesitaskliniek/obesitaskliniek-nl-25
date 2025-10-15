@@ -237,6 +237,10 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 		return $eventData;
 	}
 
+	public static function has_field($field) : bool {
+		global $page_part_fields;
+		return key_exists($field, $page_part_fields)  && $page_part_fields[$field] !== '';
+	}
 }
 
 /**
