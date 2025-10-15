@@ -1,6 +1,6 @@
 import {useSelect, useDispatch} from '@wordpress/data';
 import {registerPlugin} from '@wordpress/plugins';
-import {PluginDocumentSettingPanel} from '@wordpress/edit-post';
+import {PluginDocumentSettingPanel} from '@wordpress/editor';
 import {SelectControl, TextControl, TextareaControl, CheckboxControl, Button, Draggable } from '@wordpress/components';
 import {logger} from '../assets/js/domule/core.log.mjs';
 import {Fragment, useRef, useState, useEffect} from '@wordpress/element';
@@ -323,6 +323,8 @@ function DesignSlugPanel() {
                         label={field.label}
                         type="url"
                         value={fieldValue}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize={true}
                         onChange={(value) => updateMetaField(field.meta_key, value)}
                         placeholder="https://..."
                     />
@@ -354,6 +356,8 @@ function DesignSlugPanel() {
                         key={field.meta_key}
                         label={field.label}
                         value={fieldValue}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize={true}
                         options={[
                             { label: '— Select —', value: '' },
                             ...selectOptions.map((option, index) => ({
@@ -382,6 +386,8 @@ function DesignSlugPanel() {
                         key={field.meta_key}
                         label={field.label}
                         value={fieldValue}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize={true}
                         onChange={(value) => updateMetaField(field.meta_key, value)}
                     />
                 );
@@ -397,6 +403,8 @@ function DesignSlugPanel() {
                 label="Template"
                 value={currentTemplate}
                 options={options}
+                __nextHasNoMarginBottom
+                __next40pxDefaultSize={true}
                 onChange={(newSlug) => {
                     logger.log(NAME, `→ setting design_slug to "${newSlug}"`);
                     // Update the editor meta
@@ -422,7 +430,9 @@ function DesignSlugPanel() {
                     <hr style={{margin: '16px 0'}}/>
                     <Button
                         isDestructive
-                        isSecondary
+                        variant="secondary"
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize={true}
                         onClick={() => {
                             if (confirm('Wil je alle NOK Design template opties voor deze page part terugzetten naar de standaardwaarden?')) {
                                 logger.log(NAME, 'Resetting template fields to defaults');

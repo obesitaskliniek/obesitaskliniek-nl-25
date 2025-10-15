@@ -244,6 +244,12 @@ body { //helps increase specificity
   .#{nok-variables.$prefix}-text-contrast {
     --text-color: var(--bg-color--contrast, inherit) !important;
   }
+  .#{nok-variables.$prefix}-bg-contrast {
+    background-color: var(--bg-color--contrast, inherit) !important;
+  }
+  .#{nok-variables.$prefix}-bg-contrast.#{nok-variables.$prefix}-text-contrast {
+    color: var(--bg-color, inherit) !important;
+  }
   .#{nok-variables.$prefix}-fill-contrast {
     fill: var(--bg-color--contrast, inherit) !important;
   }

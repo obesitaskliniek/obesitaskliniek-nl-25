@@ -5,14 +5,18 @@
  * Custom Fields:
  *  - layout:select(left|right),
  *  - colors:select(Transparant::nok-bg-body|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Blauw::nok-bg-darkerblue nok-text-contrast)!page-editable,
+ *  - block-colors:select(Wit::nok-bg-white nok-text-darkestblue|Blauw::nok-bg-darkblue nok-text-contrast)!page-editable,
  *  - quote-items:repeater(quote:text,name:text,profession:text),
  *  - accordion-items:repeater(title:text,content:textarea,button_text:text,button_url:url),
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
 
+use NOK2025\V1\Assets;
+
 $default_colors = '';
 $colors         = $context->has( 'colors' ) ? $context->get( 'colors' ) : $default_colors;
+$block_colors   = $context->has( 'block-colors' ) ? $context->get( 'block-colors' ) : 'nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast';
 $left           = ! $context->has( 'layout' ) || $context->get( 'layout' ) === 'left';
 ?>
 
@@ -48,7 +52,7 @@ $left           = ! $context->has( 'layout' ) || $context->get( 'layout' ) === '
 				?>
 
                 <nok-square-block class="nok-p-2 no-gap
-                nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast">
+                <?= $block_colors; ?>">
                     <div class="nok-scrollable__horizontal" id="quote-showcase-scroller" data-scroll-snapping="true"
                          data-draggable="true"
                          data-autoscroll="true">
@@ -96,7 +100,7 @@ $left           = ! $context->has( 'layout' ) || $context->get( 'layout' ) === '
 					foreach ( $accordion_data as $index => $specialist ) : ?>
                         <nok-accordion>
                             <details
-                                    class="nok-bg-darkblue nok-dark-bg-darkerblue nok-dark-text-white nok-rounded-border nok-text-contrast"
+                                    class="<?= $block_colors; ?> nok-rounded-border nok-text-contrast"
                                     name="<?= $accordion_group; ?>" <?= $index == 0 ? 'open' : ''; ?>>
                                 <summary
                                         class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold"><?= esc_html( $specialist['title'] ); ?></summary>
@@ -104,9 +108,9 @@ $left           = ! $context->has( 'layout' ) || $context->get( 'layout' ) === '
                                     <p class="<?= isset( $specialist['button_url'] ) ? 'nok-mb-1' : ''; ?>"><?= wp_kses_post( $specialist['content'] ); ?></p>
 									<?php if ( isset( $specialist['button_url'] ) ) : ?>
                                         <a href="<?= esc_url( $specialist['button_url'] ); ?>" role="button"
-                                           class="nok-button nok-text-contrast nok-bg-darkerblue nok-dark-bg-darkblue nok-visible-xs nok-align-self-stretch fill-mobile"
+                                           class="nok-button nok-text-contrast nok-bg-darkblue--darker nok-dark-bg-darkestblue nok-visible-xs nok-align-self-stretch fill-mobile"
                                            tabindex="0">
-											<?= esc_html( trim( $specialist['button_text'] ) !== '' ? trim( $specialist['button_text'] ) : 'Lees meer' ); ?>
+											<?= esc_html( trim( $specialist['button_text'] ) !== '' ? trim( $specialist['button_text'] ) : 'Lees meer' ); ?> <?= Assets::getIcon('arrow-right-long', 'nok-text-yellow'); ?>
                                         </a>
 									<?php endif; ?>
                                 </div>
