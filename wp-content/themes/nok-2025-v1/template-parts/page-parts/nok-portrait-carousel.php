@@ -7,58 +7,60 @@
  *  - button_url:url,
  * - team_members:repeater
  * - colors:select(Blauw::nok-bg-darkblue nok-text-white|Wit::nok-bg-white nok-text-darkblue)
+ *
+ * @var \NOK2025\V1\PageParts\FieldContext $context
  */
 
 use NOK2025\V1\Assets;
 
 $default_colors = 'nok-bg-darkblue nok-text-white';
-$colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors'] : $default_colors;
+$colors = $context->has('colors') ? $context->get('colors') : $default_colors;
 
 ?>
 
-<nok-section class="<?= $colors;?>">
+<nok-section class="<?= $colors; ?>">
     <div class="nok-section__inner--stretched">
         <div class="nok-section__inner">
 
             <article class="nok-layout-grid nok-layout-grid__3-column nok-align-items-start">
-                <?php the_title('<h1 class="nok-column-first-2 nok-span-all-columns-to-xxl">', '</h1>'); ?>
+				<?php the_title('<h1 class="nok-column-first-2 nok-span-all-columns-to-xxl">', '</h1>'); ?>
                 <div class="new-row nok-column-first-2 nok-span-all-columns-to-xxl"><?php the_content(); ?></div>
 
-                <?php if (!empty($page_part_fields['button_url'])) : ?>
-                <a role="button" href="<?= $page_part_fields['button_url']; ?>"
-                   class="nok-button nok-column-last-1 nok-bg-darkestblue nok-text-contrast fill-mobile">
-                    <?= $page_part_fields['button_text']; ?> <?= Assets::getIcon('arrow-right-long', 'nok-text-yellow'); ?>
-                </a>
-                <?php endif; ?>
+				<?php if ($context->has('button_url')) : ?>
+                    <a role="button" href="<?= $context->get_esc_url('button_url'); ?>"
+                       class="nok-button nok-column-last-1 nok-bg-darkestblue nok-text-contrast fill-mobile">
+						<?= $context->get_esc_html('button_text'); ?> <?= Assets::getIcon('arrow-right-long', 'nok-text-yellow'); ?>
+                    </a>
+				<?php endif; ?>
                 <!-- Component: drag-scrollable blokkengroep -->
                 <div class="nok-mt-2 nok-align-self-stretch">
                     <div class="nok-layout-grid nok-layout-grid__4-column nok-columns-to-lg-2
                 nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="false">
-                        <?php
-                        $specialisten = array('Arts', 'Internist', 'Diëtist', 'Psycholoog', 'Bewegingsdeskundige', 'Chirurg');
-                        $people_dir = THEME_ROOT_ABS . '/assets/img/people';
-                        $images = array();
-                        if (is_dir($people_dir)) :
-                            $images = glob($people_dir . '/*.png');
-                            shuffle($specialisten);
-                            foreach ($specialisten as $specialist) :
-                                if (!empty($images)) :
-                                    $random_key = array_rand($images);
-                                    $image = $images[$random_key];
-                                    $filename = basename($image);
-                                    $persoon = str_replace('-transparant', '', pathinfo($filename)['filename']);
-                                    $afbeelding = THEME_ROOT . '/assets/img/people/' . $filename;
-                                    unset($images[$random_key]); ?>
+						<?php
+						$specialisten = array('Arts', 'Internist', 'Diëtist', 'Psycholoog', 'Bewegingsdeskundige', 'Chirurg');
+						$people_dir = THEME_ROOT_ABS . '/assets/img/people';
+						$images = array();
+						if (is_dir($people_dir)) :
+							$images = glob($people_dir . '/*.png');
+							shuffle($specialisten);
+							foreach ($specialisten as $specialist) :
+								if (!empty($images)) :
+									$random_key = array_rand($images);
+									$image = $images[$random_key];
+									$filename = basename($image);
+									$persoon = str_replace('-transparant', '', pathinfo($filename)['filename']);
+									$afbeelding = THEME_ROOT . '/assets/img/people/' . $filename;
+									unset($images[$random_key]); ?>
                                     <nok-square-block class="nok-p-0 nok-border-radius-0">
                                         <div class="square-portrait-image nok-rounded-border-large nok-gradient-1">
-                                            <img src="<?= $afbeelding; ?>" loading="lazy" style="filter:drop-shadow(30px 20px 30px rgba(var(--nok-darkerblue-rgb), 0.15))">
+                                            <img src="<?= esc_url($afbeelding); ?>" loading="lazy" style="filter:drop-shadow(30px 20px 30px rgba(var(--nok-darkerblue-rgb), 0.15))">
                                         </div>
                                         <div>
-                                            <h3><?= $persoon; ?></h3>
-                                            <p class="fw-300"><?= $specialist; ?></p>
+                                            <h3><?= esc_html($persoon); ?></h3>
+                                            <p class="fw-300"><?= esc_html($specialist); ?></p>
                                         </div>
                                     </nok-square-block>
-                                <?php endif; endforeach; endif; ?>
+								<?php endif; endforeach; endif; ?>
                     </div>
                 </div>
 
@@ -67,6 +69,3 @@ $colors = ($page_part_fields['colors'] ?? "") !== "" ? $page_part_fields['colors
         </div>
     </div>
 </nok-section>
-
-
-<?php

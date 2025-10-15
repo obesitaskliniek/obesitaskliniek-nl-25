@@ -121,7 +121,9 @@ registerBlockType(blockName, {
         const parts = useSelect(
             select => select('core').getEntityRecords('postType', 'page_part', {
                 per_page: -1,
-                _embed: true
+                _embed: true,
+                orderby: 'modified',
+                order: 'desc'
             }),
             []
         ) || [];
@@ -153,7 +155,7 @@ registerBlockType(blockName, {
                     template: templateName,
                     value: part.id
                 };
-            }).sort((a, b) => a.label.localeCompare(b.label))
+            })
         ];
 
         // Render override control based on field type
@@ -288,7 +290,8 @@ registerBlockType(blockName, {
                         {pageEditableFields.length > 0 && postId !== 0 && (
                             <PanelBody title={__('Pagina-afhankelijke overrides', textDomain)} initialOpen={false}>
                                 <p style={{fontSize: '12px', color: '#666', marginBottom: '12px'}}>
-                                    Deze page part biedt de mogelijkheid om enkele instellingen specifek voor deze pagina te overschrijven/herdefinieren:
+                                    Deze page part biedt de mogelijkheid om enkele instellingen specifek voor deze
+                                    pagina te overschrijven/herdefinieren:
                                 </p>
                                 {pageEditableFields.map(renderOverrideControl)}
                             </PanelBody>
