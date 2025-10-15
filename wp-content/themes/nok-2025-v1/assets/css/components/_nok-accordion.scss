@@ -61,7 +61,7 @@ nok-accordion {
     &:not([open]) {
       summary:hover, summary:focus {
         background: var(--bg-color--hover, #f6f6f);
-        color: var(--text-color--hover, #454545);
+        color: var(--text-color--hover, var(--bg-color--contrast, #454545));
       }
       &::details-content {
         height: 0;

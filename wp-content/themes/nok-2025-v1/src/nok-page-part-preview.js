@@ -100,11 +100,13 @@ domReady(() => {
         if (!hasLoadedInitialPreview) {
             const postId = wp.data.select('core/editor').getCurrentPostId();
             const previewLink = wp.data.select('core/editor').getEditedPostPreviewLink();
+            const designSlug = wp.data.select('core/editor').getEditedPostAttribute('meta')?.design_slug;
 
             logger.info(NAME, 'Loading initial preview');
             logger.info(NAME, `src: ${previewLink}`);
 
-            if (previewLink && !previewLink.includes('auto-draft')) {
+            // Only load if template selected and not auto-draft
+            if (previewLink && !previewLink.includes('auto-draft') && designSlug) {
                 iframe.removeAttribute('srcdoc');
                 iframe.src = `${previewLink}&hide_adminbar=1`;
                 hasLoadedInitialPreview = true;
