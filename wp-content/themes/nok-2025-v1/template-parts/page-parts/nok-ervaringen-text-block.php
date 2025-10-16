@@ -3,12 +3,11 @@
  * Template Name: Ervaringen text block
  * Description: A block with a title, content, and ervaringen block carousel.
  * Slug: nok-ervaringen-text-block
- * Featured Image Overridable: true
  * Custom Fields:
- * - layout:select(left|right)
- * - achtergrond:select(Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-white|Transparant::nok-text-darkerblue nok-dark-text-white)
- * - tekst:select(Blauw::nok-text-darkerblue nok-text-dark-contrast|Wit::nok-text-white nok-text-dark-contrast)
- * - circle_color:select(Blauw::var(--nok-darkerblue)|Automatisch::var(--nok-body--lighter)|Uit::transparent)
+ * - layout:select(left|right)!page-editable
+ * - achtergrond:select(Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-white|Transparant::nok-text-darkerblue nok-dark-text-white)!page-editable
+ * - tekst:select(Blauw::nok-text-darkerblue nok-dark-text-contrast|Wit::nok-text-white nok-dark-text-contrast)!page-editable
+ * - circle_color:select(Blauw::var(--nok-darkerblue)|Automatisch::var(--nok-body--lighter)|Uit::transparent)!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */

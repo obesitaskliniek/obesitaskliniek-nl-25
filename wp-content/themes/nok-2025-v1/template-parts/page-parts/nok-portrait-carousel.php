@@ -6,7 +6,7 @@
  *  - button_text:text,
  *  - button_url:url,
  * - team_members:repeater
- * - colors:select(Blauw::nok-bg-darkblue nok-text-white|Wit::nok-bg-white nok-text-darkblue)
+ * - colors:select(Blauw::nok-bg-darkblue nok-text-white|Wit::nok-bg-white nok-text-darkblue nok-dark-bg-body--darker nok-dark-text-contrast)!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -57,7 +57,7 @@ $colors = $context->has('colors') ? $context->get('colors') : $default_colors;
                                         </div>
                                         <div>
                                             <h3><?= esc_html($persoon); ?></h3>
-                                            <p class="fw-300"><?= esc_html($specialist); ?></p>
+                                            <p class="fw-300 nok-mt-0"><?= esc_html($specialist); ?></p>
                                         </div>
                                     </nok-square-block>
 								<?php endif; endforeach; endif; ?>

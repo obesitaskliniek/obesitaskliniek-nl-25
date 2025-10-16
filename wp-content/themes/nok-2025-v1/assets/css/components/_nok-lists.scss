@@ -37,6 +37,9 @@ ul.wp-block-list {
     display: flex;
     list-style: none;
     align-items: flex-start;
+    strong,b,u {
+      display: contents;
+    }
 
     &:before {
       --size: 1ex;

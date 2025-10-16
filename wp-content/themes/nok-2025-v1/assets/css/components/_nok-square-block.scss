@@ -36,6 +36,9 @@ nok-square-block {
       &__icon {
         grid-column: 1;
         grid-row: 2;
+        @include components-base.media-breakpoint-down(components-base.$mobile-breakpoint) {
+          justify-self: center;
+        }
       }
 
       &__heading {
