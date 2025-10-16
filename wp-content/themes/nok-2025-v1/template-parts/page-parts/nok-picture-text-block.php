@@ -8,11 +8,11 @@
  * - tagline:text,
  * - button_text:text,
  * - button_url:url,
- * - layout:select(left|right)
- * - achtergrondkleur:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue|Transparant::)
- * - tekstkleur:select(Standaard::nok-text-contrast|Wit::nok-text-white|Zwart::nok-text-black)
- * - circle_color:select(Blauw::var(--nok-darkerblue)|Automatisch::|Uit::transparent)
- * - pull_down:checkbox(true)
+ * - layout:select(left|right)!page-editable
+ * - achtergrondkleur:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue|Donkerder::nok-bg-body--darker|Transparant::)!page-editable
+ * - tekstkleur:select(Standaard::nok-text-contrast|Wit::nok-text-white|Zwart::nok-text-black)!page-editable
+ * - circle_color:select(Blauw::var(--nok-darkerblue)|Automatisch::|Uit::transparent)!page-editable
+ * - pull_down:checkbox(true)!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */

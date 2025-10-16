@@ -338,14 +338,19 @@ registerBlockType(blockName, {
                                                     onChange={updateOverride}
                                                 />
                                             );
-
+                                        //because an override for a boolean will result in no override when false
                                         case 'checkbox':
                                             return (
-                                                <CheckboxControl
+                                                <SelectControl
                                                     key={field.meta_key}
                                                     label={`Override ${field.label}`}
-                                                    checked={currentValue === '1'}
-                                                    onChange={checked => updateOverride(checked ? '1' : '')}
+                                                    value={currentValue}
+                                                    options={[
+                                                        {label: '— Gebruik de ingestelde waarde —', value: ''},
+                                                        {label: 'Ja', value: '1'},
+                                                        {label: 'Nee', value: '0'}
+                                                    ]}
+                                                    onChange={updateOverride}
                                                 />
                                             );
 

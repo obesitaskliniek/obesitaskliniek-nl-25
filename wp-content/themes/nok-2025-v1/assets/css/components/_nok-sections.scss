@@ -111,6 +111,15 @@
   @include components-base.media-breakpoint-up(components-base.$mobile-breakpoint) {
     @include components-base.domready {
       &.circle {
+        //only show circle if next section has become visible (and we're animating them using aos) or is last section before footer.
+        /*
+        &:not(.nok-aos),
+        &:has(+ nok-page-footer),
+        &.nok-aos:has(+ nok-section.nok-aos[data-visible="true"]) {
+          &::after {
+            content: "";
+          }
+        }*/
         transform: translateY(0); //creates a context for the circle
         &::after {
           content: "";
@@ -129,15 +138,18 @@
             background: var(--circle-background-color, oklch(from var(--nok-darkblue) calc(l * 2) c h / 10%));
           }
         }
-        &.nok-aos[data-visible="false"] {
-          &::after {
-            display: none;
+        &.nok-aos {
+          &[data-visible="false"] {
+            &::after {
+              display: none;
+            }
           }
         }
       }
     }
   }
 
+  //connection-line between "linked" sections
   &.linked:has(+ &.linked) {
     position: relative;
 
