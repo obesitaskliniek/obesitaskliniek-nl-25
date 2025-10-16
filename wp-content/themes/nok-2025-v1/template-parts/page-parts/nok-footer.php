@@ -37,7 +37,7 @@ $colors = $context->has('colors') ? $context->get('colors') : $default_colors;
                     </p>
                     <button class="nok-button nok-justify-self-start fill-mobile
                 nok-bg-darkblue nok-text-contrast" tabindex="0">
-                        Neem contact op <?= Assets::getIcon('arrow-right-long', 'nok-text-yellow'); ?>
+                        Neem contact op <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow'); ?>
                     </button>
                 </nok-square-block>
                 <div class="nok-layout-grid nok-layout-grid__3-column" data-requires="./nok-accordion.mjs" data-require-lazy="true">

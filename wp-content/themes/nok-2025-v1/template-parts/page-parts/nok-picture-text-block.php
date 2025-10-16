@@ -64,7 +64,7 @@ $featuredImage = Helpers::get_featured_image($pull_down ? ($left ? 'nok-rounded-
 						<?php if ($context->has('button_url')) : ?>
                             <a role="button" href="<?= $context->get_esc_url('button_url'); ?>"
                                class="nok-button nok-align-self-to-sm-stretch nok-bg-darkblue nok-text-contrast fill-mobile">
-								<?= $context->get_esc_html('button_text'); ?> <?= Assets::getIcon('arrow-right-long', 'nok-text-yellow'); ?>
+								<?= $context->get_esc_html('button_text'); ?> <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow'); ?>
                             </a>
 						<?php endif; ?>
                     </div>
@@ -78,7 +78,7 @@ $featuredImage = Helpers::get_featured_image($pull_down ? ($left ? 'nok-rounded-
 						<?php if ($context->has('button_url')) : ?>
                             <a role="button" href="<?= $context->get_esc_url('button_url'); ?>"
                                class="nok-button nok-align-self-to-sm-stretch nok-bg-darkblue nok-text-contrast fill-mobile">
-								<?= $context->get_esc_html('button_text'); ?> <?= Assets::getIcon('arrow-right-long', 'nok-text-yellow'); ?>
+								<?= $context->get_esc_html('button_text'); ?> <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow'); ?>
                             </a>
 						<?php endif; ?>
                     </div>

@@ -110,7 +110,7 @@ $left           = ! $context->has( 'layout' ) || $context->get( 'layout' ) === '
                                         <a href="<?= esc_url( $specialist['button_url'] ); ?>" role="button"
                                            class="nok-button nok-text-contrast nok-bg-darkblue--darker nok-dark-bg-darkestblue nok-visible-xs nok-align-self-stretch fill-mobile"
                                            tabindex="0">
-											<?= esc_html( trim( $specialist['button_text'] ) !== '' ? trim( $specialist['button_text'] ) : 'Lees meer' ); ?> <?= Assets::getIcon('arrow-right-long', 'nok-text-yellow'); ?>
+											<?= esc_html( trim( $specialist['button_text'] ) !== '' ? trim( $specialist['button_text'] ) : 'Lees meer' ); ?> <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow'); ?>
                                         </a>
 									<?php endif; ?>
                                 </div>

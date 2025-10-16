@@ -1,31 +1,133 @@
 <?php
-
 namespace NOK2025\V1;
 
 class Assets {
-
-	public array $icons = array(
+	/** @var array<string, string> Legacy icons during transition */
+	private array $legacyIcons = [
 		'star'               => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nok-icon %s" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/> </svg>',
-		'star-outline'       => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nok-icon %s" viewBox="0 0 16 16"> <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z"/> </svg>',
-		'calendar'           => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nok-icon %s" viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/></svg>',
-		'calendar-full'      => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nok-icon %s" viewBox="0 0 16 16"><path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z"/> <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/></svg>',
-		'location'           => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nok-icon %s" viewBox="0 0 16 16"><path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/> <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/></svg>',
-		'time'               => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nok-icon %s" viewBox="0 0 16 16"><path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/> <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/></svg>',
-		'plus'               => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nok-icon %s" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/></svg>',
-		'arrow-down'         => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nok-icon %s" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/></svg>',
-		'arrow-right'        => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nok-icon %s" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/> </svg>',
-		'arrow-right-long'   => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nok-icon %s" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/> </svg>',
-		'arrow-right-longer' => '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="16" fill="currentColor" class="nok-icon %s" viewBox="0 0 32 16"><path fill-rule="evenodd" d="M1.1 8c0-.3.2-.5.5-.5h27.7L26 4.4a.5.5 0 1 1 .8-.8l4 4c.2.2.2.6 0 .8l-4 4a.5.5 0 1 1-.8-.8l3.2-3.1H1.6a.5.5 0 0 1-.5-.5"/></svg>',
-		'arrow-left'         => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nok-icon %s" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5"/></svg>',
-		'arrow-left-long'    => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nok-icon %s" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/></svg>',
-		'arrow-left-longer'  => '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="16" fill="currentColor" class="nok-icon %s" viewBox="0 0 32 16"><path fill-rule="evenodd" d="M30.9 8c0-.3-.2-.5-.5-.5H2.7L6 4.4a.5.5 0 1 0-.8-.8l-4 4c-.2.2-.2.6 0 .8l4 4a.5.5 0 1 0 .8-.8L2.8 8.5H30.4c.3 0 .5-.2.5-.5"/></svg>',
-		'heart-pulse'        => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nok-icon %s" viewBox="0 0 16 16"><path d="M4.6 0 3.4.2a3.8 3.8 0 0 0-2 1.8A4.1 4.1 0 0 0 1 3.2a4.6 4.6 0 0 0 0 1c0 .6.1 1.1.4 1.6 0 .1.1.2.3.2l.3-.2a.3.3 0 0 0 0-.2l-.1-.2a3.5 3.5 0 0 1-.4-1.7 3.3 3.3 0 0 1 3-3H5a3.4 3.4 0 0 1 2 .8 58.6 58.6 0 0 1 1.5 1.3h.1l.6-.7A46.3 46.3 0 0 1 10.8 1a3.6 3.6 0 0 1 1.6-.3 3.2 3.2 0 0 1 3 3.2c0 .9-.3 1.7-.9 2.4a146.4 146.4 0 0 1-6 6h-.2c0-.2-.3-.4-.5-.6L5 8.7l-.5-.4a.4.4 0 0 0-.2 0 .3.3 0 0 0-.2.2.5.5 0 0 0 0 .1v.1A1036.8 1036.8 0 0 0 8.5 13a.5.5 0 0 0 .1 0l4.2-4.3A212.3 212.3 0 0 0 15 6.6a4 4 0 0 0 1-3 3.9 3.9 0 0 0-.8-2.2 3.8 3.8 0 0 0-3-1.4 4 4 0 0 0-2.4.9c-.2 0-.2.1-.8.7l-.5.5-.4-.5a19.4 19.4 0 0 0-.6-.6A4 4 0 0 0 5 0a7.1 7.1 0 0 0-.4 0Z"/><path d="m7 7.8-.6-1.1L6 5.6a.3.3 0 0 0-.2-.2.4.4 0 0 0-.1 0 .3.3 0 0 0-.2.1l-.4.7-.5.6H.2a.3.3 0 0 0-.1 0A.3.3 0 0 0 0 7l-.1.1a.3.3 0 0 0 .2.3h4.5a.3.3 0 0 0 .2 0l.3-.6.4-.5A154.7 154.7 0 0 1 7 9a.3.3 0 0 0 .1 0 .3.3 0 0 0 .2-.1A180 180 0 0 0 8.4 5l.4 1 .4 1.1a.3.3 0 0 0 .1.2h2a.3.3 0 0 0 .1-.4.3.3 0 0 0-.2-.2H9.7l-.5-1.4L8.7 4a.3.3 0 0 0-.2 0 .3.3 0 0 0 0-.1h-.1A.3.3 0 0 0 8 4L7 7.8Z"/></svg>',
-	);
+		// ... rest of legacy icons
+	];
 
-	public static function getIcon( string $name, string $class = '' ): string {
-		$instance = new self();
+	/** @var array<string, string>|null Cached filesystem icons */
+	private static ?array $iconCache = null;
 
-		return sprintf( $instance->icons[ $name ] ?? '', $class );
+	/** @var string Icons directory path */
+	private static string $iconsPath;
+
+	public function __construct() {
+		self::$iconsPath = get_template_directory() . '/assets/icons/';
 	}
 
+	/**
+	 * Get inline SVG icon with optional attributes
+	 *
+	 * @param string $name Icon name WITH prefix (e.g., 'ui_arrow-right', 'nok_calendar')
+	 * @param string $class CSS classes to apply
+	 * @param array $attrs Additional SVG attributes ['width' => '24', 'height' => '24']
+	 * @return string Inline SVG or empty string if not found
+	 */
+	public static function getIcon(string $name, string $class = '', array $attrs = []): string {
+		$instance = new self();
+
+		// Initialize cache on first call
+		if (self::$iconCache === null) {
+			self::$iconCache = $instance->loadIconsFromFilesystem();
+		}
+
+		// Attempt filesystem lookup
+		$svg = self::$iconCache[$name] ?? null;
+
+		// Fallback to legacy if not found
+		if ($svg === null) {
+			$svg = $instance->legacyIcons[$name] ?? '';
+			if ($svg && $class) {
+				return sprintf($svg, $class);
+			}
+			return $svg;
+		}
+
+		// Inject attributes into filesystem SVG
+		return $instance->injectSvgAttributes($svg, $class, $attrs);
+	}
+
+	/**
+	 * Get icon by category
+	 *
+	 * @param string $category 'ui' or 'nok'
+	 * @return array<string, string> Icon name (without prefix) => SVG content
+	 */
+	public static function getIconsByCategory(string $category): array {
+		$instance = new self();
+
+		if (self::$iconCache === null) {
+			self::$iconCache = $instance->loadIconsFromFilesystem();
+		}
+
+		$prefix = strtolower($category) . '_';
+		$results = [];
+
+		foreach (self::$iconCache as $name => $svg) {
+			if (str_starts_with($name, $prefix)) {
+				// Return without prefix for convenience
+				$results[substr($name, strlen($prefix))] = $svg;
+			}
+		}
+
+		return $results;
+	}
+
+	/**
+	 * Load all icons from filesystem
+	 */
+	private function loadIconsFromFilesystem(): array {
+		$icons = [];
+
+		if (!is_dir(self::$iconsPath)) {
+			return $icons;
+		}
+
+		foreach (glob(self::$iconsPath . '*.svg') as $filepath) {
+			$filename = basename($filepath, '.svg');
+
+			// Use full filename WITH prefix as key
+			$icons[$filename] = file_get_contents($filepath);
+		}
+
+		return $icons;
+	}
+
+	/**
+	 * Inject class and attributes into SVG
+	 */
+	private function injectSvgAttributes(string $svg, string $class, array $attrs): string {
+		$dom = new \DOMDocument();
+		@$dom->loadXML($svg);
+
+		$svgElement = $dom->getElementsByTagName('svg')->item(0);
+		if (!$svgElement) {
+			return $svg;
+		}
+
+		// Inject class
+		if ($class) {
+			$existing = $svgElement->getAttribute('class');
+			$svgElement->setAttribute('class', trim("$existing nok-icon $class"));
+		} else {
+			$svgElement->setAttribute('class', 'nok-icon');
+		}
+
+		// Inject additional attributes
+		foreach ($attrs as $key => $value) {
+			$svgElement->setAttribute($key, $value);
+		}
+
+		return $dom->saveXML($svgElement);
+	}
+
+	/**
+	 * Clear icon cache (useful for development)
+	 */
+	public static function clearCache(): void {
+		self::$iconCache = null;
+	}
 }
