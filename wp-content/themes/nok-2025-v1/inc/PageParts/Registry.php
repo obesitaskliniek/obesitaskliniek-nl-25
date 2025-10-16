@@ -180,6 +180,19 @@ class Registry {
 					'page_editable' => $is_page_editable, // Whether field is editable in page context
 				];
 			}
+			// Check for icon-selector field: "icon:icon-selector"
+			elseif (preg_match('/^([^:]+):icon-selector$/', $definition, $matches)) {
+				$field_name = trim($matches[1]);
+				$meta_key = $template_slug . '_' . $field_name;
+
+				$fields[] = [
+					'name'          => $field_name,
+					'type'          => 'icon-selector',
+					'meta_key'      => $meta_key,
+					'label'         => $this->generate_field_label($field_name),
+					'page_editable' => $is_page_editable,
+				];
+			}
 			elseif (preg_match('/^([^:]+):repeater\((.+)\)$/', $definition, $matches)) {
 				$field_name = trim($matches[1]);
 				$schema_string = trim($matches[2]);
