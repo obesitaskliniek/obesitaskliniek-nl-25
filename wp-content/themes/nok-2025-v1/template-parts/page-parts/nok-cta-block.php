@@ -8,7 +8,7 @@
  * - colors:select(Blauw op transparant|Blauw op donkerblauw)!page-editable,
  * - button_text:text,
  * - button_url:url,
- * - icon:select(nok_operatie|nok_genen)!page-editable,
+ * - icon:icon-selector!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */

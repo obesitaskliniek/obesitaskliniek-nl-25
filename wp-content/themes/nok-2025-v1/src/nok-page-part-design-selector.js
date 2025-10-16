@@ -4,6 +4,7 @@ import {PluginDocumentSettingPanel} from '@wordpress/editor';
 import {SelectControl, TextControl, TextareaControl, CheckboxControl, Button, Draggable } from '@wordpress/components';
 import {logger} from '../assets/js/domule/core.log.mjs';
 import {Fragment, useRef, useState, useEffect} from '@wordpress/element';
+import IconSelector from './components/IconSelector';
 
 const NAME = 'nok-page-part-design-selector';
 
@@ -333,7 +334,7 @@ function DesignSlugPanel() {
                 // Add safety check for schema
                 if (!field.schema || field.schema.length === 0) {
                     return (
-                        <div key={field.meta_key} style={{ padding: '12px', background: '#fff3cd', border: '1px solid #ffc107', borderRadius: '4px' }}>
+                        <div key={field.meta_key} style={{ padding: '2px', background: '#fff3cd', border: '1px solid #ffc107', borderRadius: '4px' }}>
                             <strong>Warning:</strong> Repeater field "{field.label}" has no schema defined.
                         </div>
                     );
@@ -344,6 +345,16 @@ function DesignSlugPanel() {
                         field={field}
                         schema={field.schema}
                         value={fieldValue}
+                        onChange={(value) => updateMetaField(field.meta_key, value)}
+                    />
+                );
+            case 'icon-selector':
+                const availableIcons = window.PagePartDesignSettings?.icons || {};
+                return (
+                    <IconSelector
+                        key={field.meta_key}
+                        value={fieldValue}
+                        icons={availableIcons}
                         onChange={(value) => updateMetaField(field.meta_key, value)}
                     />
                 );

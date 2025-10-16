@@ -80,6 +80,7 @@ class AssetManager {
 
 		$data = [
 			'registry' => $registry,
+			'icons'    => \NOK2025\V1\Assets::getIconsForAdmin(),
 			'ajaxurl'  => admin_url('admin-ajax.php'),
 			'nonce'    => wp_create_nonce('nok_preview_state_nonce')
 		];

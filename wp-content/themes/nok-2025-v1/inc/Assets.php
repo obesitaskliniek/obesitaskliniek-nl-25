@@ -130,4 +130,32 @@ class Assets {
 	public static function clearCache(): void {
 		self::$iconCache = null;
 	}
+
+	/**
+	 * Get all available icons grouped by category
+	 * @return array ['ui' => ['name' => 'svg'], 'nok' => ['name' => 'svg']]
+	 */
+	public static function getIconsForAdmin(): array {
+		$instance = new self();
+
+		if (!is_dir(self::$iconsPath)) {
+			return [];
+		}
+
+		$icons = ['ui' => [], 'nok' => []];
+
+		foreach (glob(self::$iconsPath . '*.svg') as $filepath) {
+			$filename = basename($filepath, '.svg');
+			$svg = file_get_contents($filepath);
+
+			// Determine category from prefix
+			if (str_starts_with($filename, 'ui_')) {
+				$icons['ui'][$filename] = $svg;
+			} elseif (str_starts_with($filename, 'nok_')) {
+				$icons['nok'][$filename] = $svg;
+			}
+		}
+
+		return $icons;
+	}
 }
