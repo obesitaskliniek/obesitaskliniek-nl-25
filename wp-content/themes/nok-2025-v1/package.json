@@ -5,7 +5,9 @@
   "scripts": {
     "postbuild": "xcopy build\\*.* . /E /H /Y",
     "build": "wp-scripts build --output-path=build",
-    "start": "wp-scripts start --output-path=build"
+    "start": "wp-scripts start --output-path=build",
+    "icons:normalize": "node normalize-icons.js",
+    "icons:watch": "nodemon --watch assets/icons-source --ext svg --exec npm run icons:normalize"
   },
   "devDependencies": {
     "@wordpress/scripts": "^30.25.0"
