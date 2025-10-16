@@ -8,6 +8,7 @@
  * - colors:select(Blauw op transparant|Blauw op donkerblauw)!page-editable,
  * - button_text:text,
  * - button_url:url,
+ * - icon:select(nok_operatie|nok_genen)!page-editable,
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -25,19 +26,21 @@ if ($context->get('colors') === "Blauw op donkerblauw") {
 	$section_colors = 'nok-bg-darkerblue';
 	$block_colors = 'nok-bg-darkblue nok-text-white';
 }
+
+$icon = $context->has('icon') ? $context->get('icon') : 'ui_arrow-right-long';
 ?>
 
 <nok-section class="<?= $section_colors; ?>">
     <div class="nok-section__inner">
         <nok-square-block class="horizontal nok-p-xl-4 layout-<?= $layout; ?> <?= $block_colors; ?>" data-shadow="true">
             <div class="nok-square-block__icon">
-				<?= Assets::getIcon('arrow-right-long'); ?>
+				<?= Assets::getIcon($icon); ?>
             </div>
 			<?php the_title('<h1 class="nok-square-block__heading nok-fs-5">', '</h2>'); ?>
             <div class="nok-square-block__text"><?php the_content(); ?></div>
 
 			<?php if ($context->has('button_url')) : ?>
-                <a role="button" href="<?= $context->get_esc_url('button_url'); ?>" class="nok-button nok-align-self-end nok-bg-white nok-text-darkblue fill-mobile"><?= $context->get_esc_html('button_text'); ?> <?= Assets::getIcon('arrow-right-long', 'nok-text-lightblue'); ?></a>
+                <a role="button" href="<?= $context->get_esc_url('button_url'); ?>" class="nok-button nok-align-self-end nok-bg-white nok-text-darkblue fill-mobile"><?= $context->get_esc_html('button_text'); ?> <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-lightblue'); ?></a>
 			<?php endif; ?>
         </nok-square-block>
     </div>

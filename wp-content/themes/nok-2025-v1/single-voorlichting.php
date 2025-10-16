@@ -104,11 +104,11 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                         </div>
                         <a role="button" href="#aanmelden" class="nok-button nok-button--large nok-justify-self-start w-100
                 nok-bg-yellow nok-text-contrast <?= $hubspotData['open'] ? '' : 'disabled'; ?>" tabindex="0">
-                            Aanmelden <?= Assets::getIcon('arrow-down'); ?>
+                            Aanmelden <?= Assets::getIcon('ui_arrow-down'); ?>
                         </a>
                         <a role="button" href="" class="nok-button nok-justify-self-start w-100
                 nok-bg-lightgrey--lighter nok-text-contrast <?= $hubspotData['open'] ? '' : 'disabled'; ?>" tabindex="0">
-	                        <?= Assets::getIcon('plus'); ?> Voeg toe aan agenda
+	                        <?= Assets::getIcon('ui_plus'); ?> Voeg toe aan agenda
                         </a>
                     </nok-square-block>
 
@@ -136,7 +136,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                             </div>
                             <a role="button" href="#aanmelden" class="nok-button nok-button nok-justify-self-start w-100
                                 nok-bg-body--darker nok-text-contrast <?= $hubspotData['open'] ? '' : 'disabled'; ?>" tabindex="0">
-                                Bekijk volledige agenda <?= Assets::getIcon('calendar-full'); ?>
+                                Bekijk volledige agenda <?= Assets::getIcon('ui_calendar-full'); ?>
                             </a>
                         </div>
                     </nok-square-block>

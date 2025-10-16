@@ -42,13 +42,13 @@ if ( ! empty( $args ) ) {
                                     <div class="nok-square-block__text">
                                         <?php
                                         printf('<p>%s %s</p>',
-                                                Assets::getIcon('calendar'),
+                                                Assets::getIcon('ui_calendar'),
                                                 $hubspotData['timestamp']['niceDateFull']);
                                         printf('<p>%s %s</p>',
-                                                Assets::getIcon('location'),
+                                                Assets::getIcon('ui_location'),
                                                 ucfirst( $hubspotData['locatie'] ));
                                         printf('<p>%s %s - %s uur</p>',
-                                                Assets::getIcon('time'),
+                                                Assets::getIcon('ui_time'),
                                                 $hubspotData['timestamp']['start_time'],
                                                 $hubspotData['timestamp']['end_time']);
                                         ?>

@@ -63,7 +63,7 @@ if (empty($parents_with_children)) {
 		</h3>
 		<button class="nok-button nok-bg-darkblue nok-text-contrast" tabindex="0">
 			Neem contact op
-			<?= Assets::getIcon('arrow-right', 'nok-text-yellow'); ?>
+			<?= Assets::getIcon('ui_arrow-right', 'nok-text-yellow'); ?>
 		</button>
 	</nok-square-block>
 </div>

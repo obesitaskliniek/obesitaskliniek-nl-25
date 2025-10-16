@@ -41,10 +41,10 @@ $bg_colors = $context->has('achtergrond') ? $context->get('achtergrond') : $defa
 				<?php the_content(); ?>
                 <div class="nok-button-group">
                     <button class="nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast fill-group-column" data-scroll-target="ervaringen-scroller" data-scroll-action="backward">
-						<?= Assets::getIcon('arrow-left-longer'); ?>
+						<?= Assets::getIcon('ui_arrow-left-longer'); ?>
                     </button>
                     <button class="nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast fill-group-column" data-scroll-target="ervaringen-scroller" data-scroll-action="forward">
-						<?= Assets::getIcon('arrow-right-longer'); ?>
+						<?= Assets::getIcon('ui_arrow-right-longer'); ?>
                     </button>
                 </div>
             </div>

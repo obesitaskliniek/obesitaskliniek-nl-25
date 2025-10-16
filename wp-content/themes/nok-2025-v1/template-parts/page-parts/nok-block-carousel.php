@@ -31,7 +31,7 @@ $colors = $context->has('colors') ? $context->get('colors') : $default_colors;
 						<?php $x = 6; while ($x--) : ?>
                             <nok-square-block class="nok-bg-darkblue nok-text-white">
                                 <div class="nok-square-block__icon">
-									<?= Assets::getIcon('heart-pulse'); ?>
+									<?= Assets::getIcon('nok_leefstijl'); ?>
                                 </div>
                                 <h2 class="nok-square-block__heading">
                                     Een titeltekst met variabele lengte <?= $x; ?>
@@ -41,7 +41,7 @@ $colors = $context->has('colors') ? $context->get('colors') : $default_colors;
                                     blandit lorem vel mattis. Pellentesque ultrices velit at nisl placerat faucibus.
                                 </p>
                                 <a class="nok-square-block__link" href="#">
-									<?= $context->get_esc_html('read_more', 'Lees verder'); ?> <?= Assets::getIcon('arrow-right-longer'); ?>
+									<?= $context->get_esc_html('read_more', 'Lees verder'); ?> <?= Assets::getIcon('ui_arrow-right-longer'); ?>
                                 </a>
                             </nok-square-block>
 						<?php endwhile; ?>

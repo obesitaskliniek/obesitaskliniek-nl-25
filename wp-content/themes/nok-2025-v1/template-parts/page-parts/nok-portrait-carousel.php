@@ -29,7 +29,7 @@ $colors = $context->has('colors') ? $context->get('colors') : $default_colors;
 				<?php if ($context->has('button_url')) : ?>
                     <a role="button" href="<?= $context->get_esc_url('button_url'); ?>"
                        class="nok-button nok-column-last-1 nok-bg-darkestblue nok-text-contrast fill-mobile">
-						<?= $context->get_esc_html('button_text'); ?> <?= Assets::getIcon('arrow-right-long', 'nok-text-yellow'); ?>
+						<?= $context->get_esc_html('button_text'); ?> <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow'); ?>
                     </a>
 				<?php endif; ?>
                 <!-- Component: drag-scrollable blokkengroep -->
