@@ -4,7 +4,7 @@
  * Description: Displays title, content, and a horizontally scrollable carousel of blocks
  * Slug: nok-block-carousel
  * Custom Fields:
- * - blocks:repeater
+ * - blocks:repeater(icon:icon-selector,title:text,content:textarea,link_url:url)
  * - read_more:text!default(Lees verder)
  * - colors:select(Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue)!page-editable!default(nok-bg-darkerblue nok-text-white)
  *
@@ -12,7 +12,15 @@
  */
 
 use NOK2025\V1\Assets;
+
 $c = $context;
+
+$blocks = $c->blocks->json(array_fill(0, 6, [
+	'icon' => 'nok_leefstijl',
+	'title' => 'Een titeltekst met variabele lengte',
+	'content' => 'Aenean ac feugiat nibh. Praesent venenatis non nibh vitae pretium. Suspendisse euismod blandit lorem vel mattis. Pellentesque ultrices velit at nisl placerat faucibus.',
+	'link_url' => '#'
+]));
 ?>
 
 <nok-section class="<?= $c->colors ?>">
@@ -27,23 +35,30 @@ $c = $context;
                 <div class="nok-mt-2 nok-align-self-stretch">
                     <div class="nok-layout-grid nok-layout-grid__3-column
             nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="true">
-						<?php $x = 6; while ($x--) : ?>
+						<?php foreach ($blocks as $block) : ?>
                             <nok-square-block class="nok-bg-darkblue nok-text-white">
-                                <div class="nok-square-block__icon">
-									<?= Assets::getIcon('nok_leefstijl'); ?>
-                                </div>
-                                <h2 class="nok-square-block__heading">
-                                    Een titeltekst met variabele lengte <?= $x; ?>
-                                </h2>
-                                <p class="nok-square-block__text">
-                                    Aenean ac feugiat nibh. Praesent venenatis non nibh vitae pretium. Suspendisse euismod
-                                    blandit lorem vel mattis. Pellentesque ultrices velit at nisl placerat faucibus.
-                                </p>
-                                <a class="nok-square-block__link" href="#">
-	                                <?= $c->read_more ?> <?= Assets::getIcon('ui_arrow-right-longer'); ?>
-                                </a>
+								<?php if (!empty($block['icon'])) : ?>
+                                    <div class="nok-square-block__icon">
+										<?= Assets::getIcon(esc_attr($block['icon'])); ?>
+                                    </div>
+								<?php endif; ?>
+								<?php if (!empty($block['title'])) : ?>
+                                    <h2 class="nok-square-block__heading">
+										<?= esc_html($block['title']); ?>
+                                    </h2>
+								<?php endif; ?>
+								<?php if (!empty($block['content'])) : ?>
+                                    <p class="nok-square-block__text">
+										<?= esc_html($block['content']); ?>
+                                    </p>
+								<?php endif; ?>
+								<?php if (!empty($block['link_url'])) : ?>
+                                    <a class="nok-square-block__link" href="<?= esc_url($block['link_url']); ?>">
+										<?= $c->read_more ?> <?= Assets::getIcon('ui_arrow-right-longer'); ?>
+                                    </a>
+								<?php endif; ?>
                             </nok-square-block>
-						<?php endwhile; ?>
+						<?php endforeach; ?>
                     </div>
                 </div>
 
