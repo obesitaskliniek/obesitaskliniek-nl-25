@@ -59,30 +59,34 @@ class FieldContext implements \ArrayAccess {
 	}
 
 	/**
-	 * Check if field has a non-empty value
+	 * Check if value is non-empty
+	 * Optionally return values based on result
 	 *
 	 * Returns false for:
-	 * - Missing fields
 	 * - Empty strings
 	 * - Unchecked checkboxes ('0')
 	 * - Empty JSON structures ('[]', '{}')
+	 * - null values
 	 *
-	 * @param string $key Field name
-	 * @return bool
+	 * @param string $key Key to check for
+	 * @param mixed $ifTrue Optional: return this if value exists
+	 * @param mixed $ifFalse Optional: return this if value is empty
+	 *
+	 * @return bool|mixed
 	 */
-	public function has(string $key): bool {
+	public function has(string $key, mixed $ifTrue = null, mixed $ifFalse = null): mixed {
 		if (!isset($this->fields[$key])) {
-			return false;
+			$exists = false;
+		} else {
+			$value = $this->fields[$key];
+			$exists = !($value === '' || $value === '0' || $value === '[]' || $value === '{}');
 		}
 
-		$value = $this->fields[$key];
-
-		// Empty, unchecked checkbox, or empty JSON structures
-		if ($value === '' || $value === '0' || $value === '[]' || $value === '{}') {
-			return false;
+		if ($ifTrue !== null) {
+			return $exists ? $ifTrue : $ifFalse;
 		}
 
-		return true;
+		return $exists;
 	}
 
 	/**
