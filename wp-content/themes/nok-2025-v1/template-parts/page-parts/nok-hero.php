@@ -6,14 +6,14 @@
  * Featured Image Overridable: true
  * Custom Fields:
  * - tagline:text
- * - button_blauw_text:text
+ * - button_blauw_text:text!default(Lees meer)
  * - button_blauw_url:url
- * - button_transparant_text:text
+ * - button_transparant_text:text!default(Bekijk meer)
  * - button_transparant_url:url
  * - usp_1_text:text
  * - usp_2_text:text
  * - usp_3_text:text
- * - button_vestiging_text:text
+ * - button_vestiging_text:text!default(Onze vestigingen)
  * - button_vestiging_url:url
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context

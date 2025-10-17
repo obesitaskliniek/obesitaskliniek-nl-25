@@ -17,11 +17,14 @@ use NOK2025\V1\Assets;
 
 $c = $context;
 
+// Layout direction
 $left = $c->layout->is('left');
-$circle_color_style = $c->has('circle_color', '--circle-background-color:' . $c->circle_color->raw(), '');
-$circle_offset = $left
-	? 'calc(50vw - (var(--section-max-width) * 0.35))'
-	: 'calc(50vw + (var(--section-max-width) * 0.25))';
+
+// Circle color as CSS custom property
+$circle_style = $c->circle_color->css_var('circle-background-color');
+
+// Circle offset calculation based on layout
+$circle_offset = "--circle-offset:" . $c->layout->is('left', 'calc(50vw - (var(--section-max-width) * 0.35))', 'calc(50vw + (var(--section-max-width) * 0.25))');
 
 $testimonial_data = $c->testimonials->json([
 	[
@@ -45,7 +48,7 @@ $testimonial_data = $c->testimonials->json([
 ]);
 ?>
 <nok-section class="circle <?= $c->achtergrond ?> <?= $c->tekst ?>"
-             style="<?= $circle_color_style ?>;--circle-offset:<?= $circle_offset ?>;">
+             style="<?= $circle_style ?>; <?= $circle_offset ?>;">
     <div class="nok-section__inner triple-margin nok-my-to-lg-4">
         <article class="nok-layout-grid
                             nok-columns-6 nok-columns-to-lg-1

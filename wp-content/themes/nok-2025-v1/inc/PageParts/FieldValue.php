@@ -244,6 +244,20 @@ class FieldValue {
 	}
 
 	/**
+	 * Generate CSS custom property declaration
+	 * Returns empty string if field empty
+	 *
+	 * @param string $property_name Property name (without --)
+	 * @return string '--property-name: value' or ''
+	 */
+	public function css_var(string $property_name): string {
+		if ($this->value === '' || $this->value === null) {
+			return '';
+		}
+		return '--' . $property_name . ':' . esc_attr($this->value);
+	}
+
+	/**
 	 * Default string conversion uses HTML escaping
 	 * Allows echo/interpolation without explicit ->html()
 	 *
