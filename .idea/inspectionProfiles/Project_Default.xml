@@ -1,6 +1,7 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
+    <inspection_tool class="4a5d45dd-b532-37a8-b65a-1cf4a5c545c5" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="CssUnknownProperty" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myCustomPropertiesEnabled" value="true" />
       <option name="myIgnoreVendorSpecificProperties" value="false" />
@@ -10,6 +11,28 @@
             <item index="0" class="java.lang.String" itemvalue="interpolate-size" />
           </list>
         </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="CustomRegExpInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myConfigurations">
+        <list>
+          <RegExpInspectionConfiguration>
+            <option name="description" value="Custom field name contains hyphen." />
+            <option name="name" value="Custom Field with Hyphen" />
+            <option name="problemDescriptor" value="Custom field &quot;#ref&quot; uses hyphen. Replace with underscore for magic getter: $context-&gt;field_name" />
+            <option name="uuid" value="4a5d45dd-b532-37a8-b65a-1cf4a5c545c5" />
+            <option name="patterns">
+              <list>
+                <InspectionPattern>
+                  <option name="regExp" value="^(\s*\*\s*-\s*)(\w+)-(\w+)(:)" />
+                  <option name="_fileType" value="PHP" />
+                  <option name="searchContext" value="ANY" />
+                  <option name="replacement" value="$1$2_$3$4" />
+                </InspectionPattern>
+              </list>
+            </option>
+          </RegExpInspectionConfiguration>
+        </list>
       </option>
     </inspection_tool>
     <inspection_tool class="HtmlUnknownTag" enabled="true" level="WARNING" enabled_by_default="true">
