@@ -80,7 +80,7 @@ const RepeaterField = ({ field, schema, value, onChange }) => {
     const renderSchemaField = (schemaField, item, index) => {
         const fieldKey = schemaField.name;
         const fieldValue = item[fieldKey] || '';
-        const label = schemaField.name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        const label = schemaField.name.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
 
         const fieldStyle = {
             width: '100%',
@@ -91,32 +91,81 @@ const RepeaterField = ({ field, schema, value, onChange }) => {
         };
 
         switch (schemaField.type) {
+            case 'icon-selector':
+                const availableIcons = window.PagePartDesignSettings?.icons || {};
+                return (
+                    <div key={fieldKey} style={{marginBottom: '8px'}}>
+                        <label style={{display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px'}}>
+                            {label}:
+                        </label>
+                        <IconSelector
+                            value={fieldValue}
+                            icons={availableIcons}
+                            onChange={(value) => updateItem(index, fieldKey, value)}
+                        />
+                    </div>
+                );
+
             case 'textarea':
                 return (
-                    <div key={fieldKey} style={{ marginBottom: '8px' }}>
-                        <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px' }}>
+                    <div key={fieldKey} style={{marginBottom: '8px'}}>
+                        <label style={{display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px'}}>
                             {label}:
                         </label>
                         <textarea
                             value={fieldValue}
                             onChange={(e) => updateItem(index, fieldKey, e.target.value)}
                             rows={3}
-                            style={fieldStyle}
+                            style={{
+                                width: '100%',
+                                padding: '6px 8px',
+                                border: '1px solid #ddd',
+                                borderRadius: '3px',
+                                fontSize: '13px'
+                            }}
                         />
                     </div>
                 );
-            case 'text':
+
+            case 'url':
+                return (
+                    <div key={fieldKey} style={{marginBottom: '8px'}}>
+                        <label style={{display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px'}}>
+                            {label}:
+                        </label>
+                        <input
+                            type="url"
+                            value={fieldValue}
+                            onChange={(e) => updateItem(index, fieldKey, e.target.value)}
+                            placeholder="https://..."
+                            style={{
+                                width: '100%',
+                                padding: '6px 8px',
+                                border: '1px solid #ddd',
+                                borderRadius: '3px',
+                                fontSize: '13px'
+                            }}
+                        />
+                    </div>
+                );
+
             default:
                 return (
-                    <div key={fieldKey} style={{ marginBottom: '8px' }}>
-                        <label style={{ display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px' }}>
+                    <div key={fieldKey} style={{marginBottom: '8px'}}>
+                        <label style={{display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px'}}>
                             {label}:
                         </label>
                         <input
                             type="text"
                             value={fieldValue}
                             onChange={(e) => updateItem(index, fieldKey, e.target.value)}
-                            style={fieldStyle}
+                            style={{
+                                width: '100%',
+                                padding: '6px 8px',
+                                border: '1px solid #ddd',
+                                borderRadius: '3px',
+                                fontSize: '13px'
+                            }}
                         />
                     </div>
                 );
