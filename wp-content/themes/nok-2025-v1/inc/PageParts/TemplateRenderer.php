@@ -56,7 +56,17 @@ class TemplateRenderer {
 	 * Core template rendering logic
 	 */
 	private function render_template(string $template_type, string $design, array $fields): void {
-		$context = new FieldContext($fields); // Instead of raw array
+		// Build defaults from registry
+		$registry = (new Registry())->get_registry();
+		$template_data = $registry[$design] ?? [];
+		$defaults = [];
+		foreach (($template_data['custom_fields'] ?? []) as $field) {
+			if (!empty($field['default'])) {
+				$defaults[$field['name']] = $field['default'];
+			}
+		}
+
+		$context = new FieldContext($fields, $defaults);
 		$template_path = get_theme_file_path("template-parts/{$template_type}/{$design}.php");
 
 		if (!file_exists($template_path)) {
