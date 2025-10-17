@@ -103,6 +103,22 @@ class FieldValue {
 	}
 
 	/**
+	 * Get value or fallback if empty
+	 * Use for providing defaults when field might be empty
+	 *
+	 * @param mixed $fallback Value to return if field is empty
+	 * @return mixed
+	 */
+	public function otherwise(mixed $fallback): mixed {
+		// Check for empty values
+		if ($this->value === '' || $this->value === '0' || $this->value === '[]' || $this->value === '{}' || $this->value === null) {
+			return $fallback;
+		}
+
+		return $this->value;
+	}
+
+	/**
 	 * Check if value equals given string
 	 * Optionally return values based on result
 	 *
