@@ -235,7 +235,23 @@ function getOrientation(scrollElement) {
           : 'horizontal');
 }
 
+function hasScrollbars(element) {
+  const style = window.getComputedStyle(element);
+  const overflowY = style.overflowY;
+  const overflowX = style.overflowX;
+
+  return {
+    vertical: (overflowY === 'scroll' || overflowY === 'auto') &&
+        element.scrollHeight > element.clientHeight,
+    horizontal: (overflowX === 'scroll' || overflowX === 'auto') &&
+        element.scrollWidth > element.clientWidth
+  };
+}
+
 export function setupFakeScrollbar(scrollElement) {
+  if ((!hasScrollbars(scrollElement).horizontal && !hasScrollbars(scrollElement).vertical)) {
+    return;
+  }
   if (scrollElement.id) {
     scrollContainers.set(scrollElement.id, {
       element: scrollElement,

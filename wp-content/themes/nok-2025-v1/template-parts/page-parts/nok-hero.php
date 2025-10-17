@@ -1,28 +1,28 @@
 <?php
 /**
  * Template Name: Hero
- * Description: A hero unit for the top of the main (first level) pages.
+ * Description: Full-width hero section with SVG-masked image, title, content, CTAs and USP footer
  * Slug: nok-hero
  * Featured Image Overridable: true
  * Custom Fields:
- * - tagline:text,
- * - button_blauw_text:text,
- * - button_blauw_url:url,
- * - button_transparant_text:text,
- * - button_transparant_url:url,
- * - usp_1_text:text,
- * - usp_2_text:text,
- * - usp_3_text:text,
- * - button_vestiging_text:text,
- * - button_vestiging_url:url,
+ * - tagline:text
+ * - button_blauw_text:text
+ * - button_blauw_url:url
+ * - button_transparant_text:text
+ * - button_transparant_url:url
+ * - usp_1_text:text
+ * - usp_2_text:text
+ * - usp_3_text:text
+ * - button_vestiging_text:text
+ * - button_vestiging_url:url
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
 
 use NOK2025\V1\Helpers;
 
+$c = $context;
 $featuredImage = Helpers::get_featured_image();
-
 ?>
 
     <nok-hero class="nok-section">
@@ -31,26 +31,26 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 
             <article class="nok-pl-section-padding nok-px-to-lg-section-padding">
                 <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading">
-	                <?= $context->get_esc_html('tagline'); ?>
+			        <?= $c->tagline ?>
                 </h2>
-				<?php the_title( '<h1 class="nok-fs-giant">', '</h1>' ); ?>
+		        <?php the_title('<h1 class="nok-fs-giant">', '</h1>'); ?>
                 <div>
-					<?php the_content(); ?>
+			        <?php the_content(); ?>
                 </div>
                 <div class="nok-button-group nok-justify-items-start">
-					<?php if ( $context->has( 'button_blauw_url' ) ) : ?>
-                        <a role="button" href="<?= $context->get_esc_url('button_blauw_url'); ?>"
+			        <?php if ($c->has('button_blauw_url')): ?>
+                        <a role="button" href="<?= $c->button_blauw_url->url() ?>"
                            class="nok-button nok-justify-self-center nok-bg-darkerblue nok-text-contrast fill-group-column"
                            tabindex="0">
-							<?= $context->get_esc_html('button_blauw_text'); ?>
+					        <?= $c->button_blauw_text ?>
                         </a>
-					<?php endif; ?>
-					<?php if ( $context->has( 'button_transparant_url' ) ) : ?>
-                        <a role="button" href="<?= $context->get_esc_url('button_transparant_url'); ?>"
+			        <?php endif; ?>
+			        <?php if ($c->has('button_transparant_url')): ?>
+                        <a role="button" href="<?= $c->button_transparant_url->url() ?>"
                            class="nok-hyperlink nok-justify-self-center fw-bold">
-							<?= $context->get_esc_html('button_transparant_text'); ?>
+					        <?= $c->button_transparant_text ?>
                         </a>
-					<?php endif; ?>
+			        <?php endif; ?>
                 </div>
             </article>
 
@@ -115,16 +115,16 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
             </figure>
 
             <footer class="nok-px-section-padding nok-bg-body--lighter nok-dark-bg-darkerblue nok-bg-blur--large nok-bg-alpha-6">
-				<?php if ( $context->has( 'usp_1_text' ) ) : ?>
+		        <?php if ($c->has('usp_1_text')): ?>
                     <div class="nok-fs-buttons nok-usp nok-invisible-to-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                              class="nok-text-lightblue" viewBox="0 0 16 16">
                             <path d="M4 9.42h1.063C5.4 12.323 7.317 14 10.34 14c.622 0 1.167-.068 1.659-.185v-1.3c-.484.119-1.045.17-1.659.17-2.1 0-3.455-1.198-3.775-3.264h4.017v-.928H6.497v-.936q-.002-.165.008-.329h4.078v-.927H6.618c.388-1.898 1.719-2.985 3.723-2.985.614 0 1.175.05 1.659.177V2.194A6.6 6.6 0 0 0 10.341 2c-2.928 0-4.82 1.569-5.244 4.3H4v.928h1.01v1.265H4v.928z"></path>
                         </svg>
-						<?= $context->get_esc_html('usp_1_text'); ?>
+				        <?= $c->usp_1_text ?>
                     </div>
-				<?php endif; ?>
-				<?php if ( $context->has( 'usp_2_text' ) ) : ?>
+		        <?php endif; ?>
+		        <?php if ($c->has('usp_2_text')): ?>
                     <div class="nok-fs-buttons nok-usp nok-invisible-to-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
                              class="nok-text-lightblue">
@@ -132,25 +132,25 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                             <rect width=".7" height=".6" x="5.1" y="11" rx="0" ry="0"></rect>
                             <path d="M5.7 11.8h-.6V14c0 .3 0 .3-.2.3h-.1v.5h.3c.5 0 .8-.3.8-.8v-2.2Zm1.2-.1c-.4 0-.7.1-.9.4l.2.4c0-.1.3-.2.5-.2s.4.1.4.4h-.3c-.6 0-.9.3-.9.7s.2.7.7.7.5-.1.6-.2v.2h.5v-1.2c0-.6-.3-1-.9-1Zm.3 1.4v.2s-.1.1-.4.1-.2 0-.2-.2.1-.2.4-.2h.2ZM9 11.7c-.4 0-.7.1-.9.4l.2.4c0-.1.3-.2.5-.2s.4.1.4.4h-.3c-.6 0-.9.3-.9.7s.2.7.7.7.5-.1.6-.2v.2h.5v-1.2c0-.6-.3-1-.9-1Zm.3 1.4v.2s-.1.1-.4.1-.2 0-.2-.2.1-.2.4-.2h.2Zm2.2-1.4c-.4 0-.5.1-.6.3v-.2h-.5v2.1h.6v-1.4c0-.2.3-.3.5-.3v-.5Z"></path>
                         </svg>
-	                    <?= $context->get_esc_html('usp_2_text'); ?>
+				        <?= $c->usp_2_text ?>
                     </div>
-				<?php endif; ?>
-				<?php if ( $context->has( 'usp_3_text' ) ) : ?>
+		        <?php endif; ?>
+		        <?php if ($c->has('usp_3_text')): ?>
                     <div class="nok-fs-buttons nok-usp nok-invisible-to-xxxl">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                              viewBox="0 0 16 16" class="nok-text-lightblue">
                             <path d="M8.5 5.034v1.1l.953-.55.5.867L9 7l.953.55-.5.866-.953-.55v1.1h-1v-1.1l-.953.55-.5-.866L7 7l-.953-.55.5-.866.953.55v-1.1zM13.25 9a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25zM13 11.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25zm.25 1.75a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25zm-11-4a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5A.25.25 0 0 0 3 9.75v-.5A.25.25 0 0 0 2.75 9zm0 2a.25.25 0 0 0-.25.25v.5c0 .138.112.25.25.25h.5a.25.25 0 0 0 .25-.25v-.5a.25.25 0 0 0-.25-.25zM2 13.25a.25.25 0 0 1 .25-.25h.5a.25.25 0 0 1 .25.25v.5a.25.25 0 0 1-.25.25h-.5a.25.25 0 0 1-.25-.25z"></path>
                             <path d="M5 1a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1a1 1 0 0 1 1 1v4h3a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h3V3a1 1 0 0 1 1-1zm2 14h2v-3H7zm3 0h1V3H5v12h1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1zm0-14H6v1h4zm2 7v7h3V8zm-8 7V8H1v7z"></path>
                         </svg>
-	                    <?= $context->get_esc_html('usp_3_text'); ?>
+				        <?= $c->usp_3_text ?>
                     </div>
-				<?php endif; ?>
-				<?php if ( $context->has( 'button_vestiging_url' ) ) : ?>
-                    <a role="button" href="<?= $context->get_esc_url('button_vestiging_url'); ?>"
+		        <?php endif; ?>
+		        <?php if ($c->has('button_vestiging_url')): ?>
+                    <a role="button" href="<?= $c->button_vestiging_url->url() ?>"
                        class="nok-button nok-bg-white nok-text-darkerblue nok-visible-xs nok-align-self-stretch"
-                       tabindex="0"><?= $context->get_esc_html('button_vestiging_text'); ?>
+                       tabindex="0"><?= $c->button_vestiging_text ?>
                     </a>
-				<?php endif; ?>
+		        <?php endif; ?>
             </footer>
         </div>
     </nok-hero>

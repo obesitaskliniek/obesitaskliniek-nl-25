@@ -1,22 +1,21 @@
 <?php
 /**
  * Template Name: Block Carousel
+ * Description: Displays title, content, and a horizontally scrollable carousel of blocks
  * Slug: nok-block-carousel
  * Custom Fields:
  * - blocks:repeater
- * - read_more:text
- * - colors:select(Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue)
+ * - read_more:text!default(Lees verder)
+ * - colors:select(Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue)!page-editable!default(nok-bg-darkerblue nok-text-white)
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
 
 use NOK2025\V1\Assets;
-
-$default_colors = 'nok-bg-darkerblue nok-text-white';
-$colors = $context->has('colors') ? $context->get('colors') : $default_colors;
+$c = $context;
 ?>
 
-<nok-section class="<?= $colors; ?>">
+<nok-section class="<?= $c->colors ?>">
     <div class="nok-section__inner--stretched">
         <div class="nok-section__inner">
 
@@ -24,7 +23,7 @@ $colors = $context->has('colors') ? $context->get('colors') : $default_colors;
 				<?php the_title('<h1 class="nok-fs-giant">', '</h1>'); ?>
                 <div class="nok-text-content"><?php the_content(); ?></div>
 
-                <!-- Component: drag-scrollable blokkengroep -->
+                <!-- Component: drag-scrollable block carousel -->
                 <div class="nok-mt-2 nok-align-self-stretch">
                     <div class="nok-layout-grid nok-layout-grid__3-column
             nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="true">
@@ -41,7 +40,7 @@ $colors = $context->has('colors') ? $context->get('colors') : $default_colors;
                                     blandit lorem vel mattis. Pellentesque ultrices velit at nisl placerat faucibus.
                                 </p>
                                 <a class="nok-square-block__link" href="#">
-									<?= $context->get_esc_html('read_more', 'Lees verder'); ?> <?= Assets::getIcon('ui_arrow-right-longer'); ?>
+	                                <?= $c->read_more ?> <?= Assets::getIcon('ui_arrow-right-longer'); ?>
                                 </a>
                             </nok-square-block>
 						<?php endwhile; ?>

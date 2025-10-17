@@ -1,7 +1,7 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
-    <inspection_tool class="4a5d45dd-b532-37a8-b65a-1cf4a5c545c5" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="4a5d45dd-b532-37a8-b65a-1cf4a5c545c5" enabled="true" level="ERROR" enabled_by_default="true" editorAttributes="TEXT_STYLE_ERROR" />
     <inspection_tool class="CssUnknownProperty" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myCustomPropertiesEnabled" value="true" />
       <option name="myIgnoreVendorSpecificProperties" value="false" />

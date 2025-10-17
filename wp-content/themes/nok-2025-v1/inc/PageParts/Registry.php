@@ -121,6 +121,13 @@ class Registry {
 				$definition = preg_replace('/!page-editable\s*,?\s*/', '', $definition);
 				$definition = trim($definition);
 			}
+			// Extract default value flag
+			$default_value = null;
+			if (preg_match('/!default\(([^)]+)\)/', $definition, $default_match)) {
+				$default_value = trim($default_match[1]);
+				$definition = preg_replace('/!default\([^)]+\)\s*,?\s*/', '', $definition);
+				$definition = trim($definition);
+			}
 
 			// Check for select field with bracket notation: "position:select(left|right)"
 			if (preg_match('/^([^:]+):select\((.*)$/', $definition, $matches)) {
@@ -156,7 +163,8 @@ class Registry {
 					'label'         => $this->generate_field_label($field_name),
 					'options'       => $options,        // Actual values
 					'option_labels' => $option_labels,  // Display labels
-					'page_editable' => $is_page_editable, // Whether field is editable in page context
+					'page_editable' => $is_page_editable,
+					'default'       => $default_value
 				];
 			}
 			// Check for checkbox field with optional default: "field_name:checkbox(true)"
@@ -175,9 +183,9 @@ class Registry {
 					'type'     => 'checkbox',
 					'meta_key' => $meta_key,
 					'label'    => $this->generate_field_label($field_name),
-					'default'  => $default_storage_value,
 					'options'  => [], // Empty for checkbox fields
-					'page_editable' => $is_page_editable, // Whether field is editable in page context
+					'page_editable' => $is_page_editable,
+					'default'       => $default_value
 				];
 			}
 			// Check for icon-selector field: "icon:icon-selector"
@@ -191,6 +199,7 @@ class Registry {
 					'meta_key'      => $meta_key,
 					'label'         => $this->generate_field_label($field_name),
 					'page_editable' => $is_page_editable,
+					'default'       => $default_value
 				];
 			}
 			elseif (preg_match('/^([^:]+):repeater\((.+)\)$/', $definition, $matches)) {
@@ -210,7 +219,8 @@ class Registry {
 					'meta_key' => $template_slug . '_' . $field_name,
 					'label' => $this->generate_field_label($field_name),
 					'schema' => $schema,
-					'page_editable' => $is_page_editable, // Whether field is editable in page context
+					'page_editable' => $is_page_editable,
+					'default'       => $default_value
 				];
 			}
 			// Handle regular fields: "field_name:type"
@@ -232,7 +242,8 @@ class Registry {
 					'meta_key' => $meta_key,
 					'label'    => $this->generate_field_label($field_name),
 					'options'  => [], // Empty for non-select fields
-					'page_editable' => $is_page_editable, // Whether field is editable in page context
+					'page_editable' => $is_page_editable,
+					'default'       => $default_value
 				];
 			}
 		}
