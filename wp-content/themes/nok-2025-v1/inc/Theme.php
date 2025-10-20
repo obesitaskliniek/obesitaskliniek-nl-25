@@ -23,6 +23,7 @@ final class Theme {
 	private PreviewSystem $preview_system;
 	private TemplateRenderer $template_renderer;
 	private RestEndpoints $rest_endpoints;
+	private \NOK2025\V1\SEO\ContentAggregator $content_aggregator;
 
 	// Settings store (can hold customizer values)
 	private array $settings = [];
@@ -41,7 +42,16 @@ final class Theme {
 		$this->meta_manager = new MetaManager($this->registry);
 		$this->preview_system = new PreviewSystem($this->meta_manager);
 		$this->template_renderer = new TemplateRenderer();
-		$this->rest_endpoints = new RestEndpoints($this->template_renderer, $this->meta_manager);
+		$this->content_aggregator = new \NOK2025\V1\SEO\ContentAggregator(
+			$this->template_renderer,
+			$this->meta_manager
+		);
+
+		$this->rest_endpoints = new RestEndpoints(
+			$this->template_renderer,
+			$this->meta_manager,
+			$this->content_aggregator
+		);
 	}
 
 	public static function get_instance(): Theme {
@@ -63,6 +73,10 @@ final class Theme {
 		$this->meta_manager->register_hooks();
 		$this->preview_system->register_hooks();
 		$this->rest_endpoints->register_hooks();
+
+		// SEO cache invalidation
+		add_action('save_post', [$this, 'invalidate_seo_cache_on_save'], 20, 2);
+		add_action('save_post_page_part', [$this, 'invalidate_dependent_pages_seo_cache'], 20, 1);
 
 		// Customizer
 		add_action('customize_register', [$this, 'register_customizer']);
@@ -142,6 +156,51 @@ final class Theme {
 	 */
 	public function embed_post_part_template(string $design, array $fields, bool $register_css = false): void {
 		$this->template_renderer->embed_post_part_template($design, $fields, $register_css);
+	}
+
+	public function get_content_aggregator(): \NOK2025\V1\SEO\ContentAggregator {
+		return $this->content_aggregator;
+	}
+
+	// =============================================================================
+	// SEO CACHE INVALIDATION
+	// =============================================================================
+
+	/**
+	 * Invalidate SEO cache when page/post is saved
+	 */
+	public function invalidate_seo_cache_on_save(int $post_id, \WP_Post $post): void {
+		if (wp_is_post_revision($post_id) || wp_is_post_autosave($post_id)) {
+			return;
+		}
+
+		$allowed_types = ['page', 'post'];
+		if (!in_array($post->post_type, $allowed_types)) {
+			return;
+		}
+
+		$this->content_aggregator->invalidate_cache($post_id);
+	}
+
+	/**
+	 * When a page part is saved, invalidate cache for all pages using it
+	 */
+	public function invalidate_dependent_pages_seo_cache(int $part_id): void {
+		if (wp_is_post_revision($part_id) || wp_is_post_autosave($part_id)) {
+			return;
+		}
+
+		$query = new \WP_Query([
+			'post_type' => ['page', 'post'],
+			'post_status' => 'any',
+			'posts_per_page' => -1,
+			's' => '"postId":' . $part_id,
+			'fields' => 'ids'
+		]);
+
+		foreach ($query->posts as $post_id) {
+			$this->content_aggregator->invalidate_cache($post_id);
+		}
 	}
 
 	// =============================================================================
