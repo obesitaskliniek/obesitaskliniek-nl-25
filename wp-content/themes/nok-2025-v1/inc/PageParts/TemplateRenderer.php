@@ -35,7 +35,7 @@ class TemplateRenderer {
 	}
 
 	// In TemplateRenderer class
-	public function render_page_part_with_context(int $part_id, array $overrides = []): string {
+	public function render_page_part_with_context(int $part_id, array $overrides, MetaManager $meta_manager): string {
 		$post = get_post($part_id);
 		if (!$post || $post->post_type !== 'page_part') {
 			return '';
@@ -46,7 +46,6 @@ class TemplateRenderer {
 			return '';
 		}
 
-		// Set up WordPress context
 		global $wp_query;
 		$original_post = $GLOBALS['post'] ?? null;
 		$original_query = $wp_query;
@@ -57,8 +56,7 @@ class TemplateRenderer {
 			$wp_query->the_post();
 		}
 
-		// Get fields and apply overrides
-		$page_part_fields = $this->meta_manager->get_page_part_fields($part_id, $design, false);
+		$page_part_fields = $meta_manager->get_page_part_fields($part_id, $design, false);
 
 		if (!empty($overrides)) {
 			$registry = \NOK2025\V1\Theme::get_instance()->get_page_part_registry();
@@ -76,7 +74,6 @@ class TemplateRenderer {
 		$this->render_page_part($design, $page_part_fields);
 		$output = ob_get_clean();
 
-		// Restore context
 		wp_reset_postdata();
 		$GLOBALS['post'] = $original_post;
 		$wp_query = $original_query;

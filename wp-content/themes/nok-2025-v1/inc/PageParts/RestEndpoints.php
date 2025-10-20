@@ -192,10 +192,31 @@ class RestEndpoints {
 
 			// ✓ Use shared renderer method
 			ob_start();
-			$this->renderer->render_page_part_for_context( $id, $design, $overrides, $this->meta_manager );
-			$output = ob_get_clean();
 
-			wp_reset_postdata();
+			// Get fields with overrides
+			$page_part_fields = $this->meta_manager->get_page_part_fields($id, $design, false);
+
+			if (!empty($overrides)) {
+				$registry = \NOK2025\V1\Theme::get_instance()->get_page_part_registry();
+				$template_data = $registry[$design] ?? [];
+				$custom_fields = $template_data['custom_fields'] ?? [];
+
+				foreach ($custom_fields as $field) {
+					if ($field['page_editable']
+					    && isset($overrides[$field['meta_key']])
+					    && $overrides[$field['meta_key']] !== '') {
+
+						$sanitize_callback = $this->meta_manager->get_sanitize_callback($field['type']);
+						$page_part_fields[$field['name']] = call_user_func(
+							$sanitize_callback,
+							$overrides[$field['meta_key']]
+						);
+					}
+				}
+			}
+
+			$this->renderer->render_page_part($design, $page_part_fields);
+			$output = ob_get_clean();
 		} else {
 			$output = '<p style="color: red; padding: 20px;">Error: Could not load page part data</p>';
 		}

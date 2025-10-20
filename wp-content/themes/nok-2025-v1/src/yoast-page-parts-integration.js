@@ -86,10 +86,10 @@ import { select } from '@wordpress/data';
          */
         modifyContent(data) {
             //const stack = new Error().stack;
-            console.log(`[Yoast] ⏰ modifyContent called at ${new Date().toISOString()}`);
+            //console.log(`[Yoast] ⏰ modifyContent called at ${new Date().toISOString()}`);
             //console.log('[Yoast] Call stack:', stack);
-            console.log('[Yoast] Original length:', data.length);
-            console.log('[Yoast] Aggregated length:', this.aggregatedContent.length);
+            //console.log('[Yoast] Original length:', data.length);
+            //console.log('[Yoast] Aggregated length:', this.aggregatedContent.length);
 
             if (this.aggregatedContent) {
                 return data + '\n\n' + this.aggregatedContent;

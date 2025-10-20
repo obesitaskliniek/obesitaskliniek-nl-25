@@ -143,7 +143,7 @@ class ContentAggregator {
 	 * @return string Rendered HTML
 	 */
 	private function render_page_part(int $part_id, array $overrides = []): string {
-		return $this->renderer->render_page_part_with_context($part_id, $overrides);
+		return $this->renderer->render_page_part_with_context($part_id, $overrides, $this->meta_manager);
 	}
 
 	/**
