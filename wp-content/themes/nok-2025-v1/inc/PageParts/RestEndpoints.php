@@ -170,10 +170,7 @@ class RestEndpoints {
 		$original_post     = $post;
 		$original_wp_query = $wp_query;
 
-		// Set up the post and pass it to template via $args
 		$post = get_post( $id );
-
-		// Set up a proper WordPress query context
 		$wp_query = new \WP_Query( [
 			'post_type'      => 'page_part',
 			'p'              => $id,
@@ -182,55 +179,27 @@ class RestEndpoints {
 
 		$output = '';
 
-		// Make sure we have the post in the loop
 		if ( $wp_query->have_posts() ) {
-
 			// Apply featured image override if set
 			if ( isset( $overrides['_override_thumbnail_id'] ) && $overrides['_override_thumbnail_id'] !== '' ) {
 				add_filter( 'post_thumbnail_id', function ( $thumbnail_id, $post ) use ( $id, $overrides ) {
 					$check_id = is_object( $post ) ? $post->ID : $post;
-
 					return ( $check_id == $id ) ? (int) $overrides['_override_thumbnail_id'] : $thumbnail_id;
 				}, 10, 2 );
 			}
 
 			$wp_query->the_post();
 
+			// ✓ Use shared renderer method
 			ob_start();
-
-			// Get base page part fields
-			$page_part_fields = $this->meta_manager->get_page_part_fields( $id, $design, false );
-
-			// Apply overrides from query parameters
-			if ( ! empty( $overrides ) ) {
-				$registry      = \NOK2025\V1\Theme::get_instance()->get_page_part_registry();
-				$template_data = $registry[ $design ] ?? [];
-				$custom_fields = $template_data['custom_fields'] ?? [];
-
-				foreach ( $custom_fields as $field ) {
-					if ( $field['page_editable']
-					     && isset( $overrides[ $field['meta_key'] ] )
-					     && $overrides[ $field['meta_key'] ] !== '' ) {
-
-						// Sanitize based on field type
-						$sanitize_callback                  = $this->meta_manager->get_sanitize_callback( $field['type'] );
-						$page_part_fields[ $field['name'] ] = call_user_func(
-							$sanitize_callback,
-							$overrides[ $field['meta_key'] ]
-						);
-					}
-				}
-			}
-
-			$this->renderer->render_page_part( $design, $page_part_fields );
-
+			$this->renderer->render_page_part_for_context( $id, $design, $overrides, $this->meta_manager );
 			$output = ob_get_clean();
+
 			wp_reset_postdata();
 		} else {
 			$output = '<p style="color: red; padding: 20px;">Error: Could not load page part data</p>';
 		}
 
-		// Restore original state
 		$post     = $original_post;
 		$wp_query = $original_wp_query;
 

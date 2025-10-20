@@ -34,6 +34,56 @@ class TemplateRenderer {
 		$this->render_template('page-parts', $design, $fields);
 	}
 
+	// In TemplateRenderer class
+	public function render_page_part_with_context(int $part_id, array $overrides = []): string {
+		$post = get_post($part_id);
+		if (!$post || $post->post_type !== 'page_part') {
+			return '';
+		}
+
+		$design = get_post_meta($part_id, 'design_slug', true);
+		if (!$design) {
+			return '';
+		}
+
+		// Set up WordPress context
+		global $wp_query;
+		$original_post = $GLOBALS['post'] ?? null;
+		$original_query = $wp_query;
+
+		$wp_query = new \WP_Query(['p' => $part_id, 'post_type' => 'page_part']);
+
+		if ($wp_query->have_posts()) {
+			$wp_query->the_post();
+		}
+
+		// Get fields and apply overrides
+		$page_part_fields = $this->meta_manager->get_page_part_fields($part_id, $design, false);
+
+		if (!empty($overrides)) {
+			$registry = \NOK2025\V1\Theme::get_instance()->get_page_part_registry();
+			$template_data = $registry[$design] ?? [];
+			$custom_fields = $template_data['custom_fields'] ?? [];
+
+			foreach ($custom_fields as $field) {
+				if (isset($overrides[$field['meta_key']]) && $overrides[$field['meta_key']] !== '') {
+					$page_part_fields[$field['name']] = $overrides[$field['meta_key']];
+				}
+			}
+		}
+
+		ob_start();
+		$this->render_page_part($design, $page_part_fields);
+		$output = ob_get_clean();
+
+		// Restore context
+		wp_reset_postdata();
+		$GLOBALS['post'] = $original_post;
+		$wp_query = $original_query;
+
+		return $output;
+	}
+
 	/**
 	 * Render a post part template directly
 	 */

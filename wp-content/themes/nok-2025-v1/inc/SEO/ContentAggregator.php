@@ -143,36 +143,7 @@ class ContentAggregator {
 	 * @return string Rendered HTML
 	 */
 	private function render_page_part(int $part_id, array $overrides = []): string {
-		$post = get_post($part_id);
-		if (!$post || $post->post_type !== 'page_part') {
-			return '';
-		}
-
-		$design = get_post_meta($part_id, 'design_slug', true);
-		if (!$design) {
-			return '';
-		}
-
-		// Get page part fields
-		$page_part_fields = $this->meta_manager->get_page_part_fields($part_id, $design, false);
-
-		// Apply overrides
-		if (!empty($overrides)) {
-			$registry = \NOK2025\V1\Theme::get_instance()->get_page_part_registry();
-			$template_data = $registry[$design] ?? [];
-			$custom_fields = $template_data['custom_fields'] ?? [];
-
-			foreach ($custom_fields as $field) {
-				if (isset($overrides[$field['meta_key']]) && $overrides[$field['meta_key']] !== '') {
-					$page_part_fields[$field['name']] = $overrides[$field['meta_key']];
-				}
-			}
-		}
-
-		// Render to string
-		ob_start();
-		$this->renderer->render_page_part($design, $page_part_fields);
-		return ob_get_clean();
+		return $this->renderer->render_page_part_with_context($part_id, $overrides);
 	}
 
 	/**
@@ -184,32 +155,26 @@ class ContentAggregator {
 	 * @param string $html HTML content
 	 * @return string Extracted semantic content
 	 */
-	private function extract_semantic_content(string $html): string {
-		if (empty($html)) {
-			return '';
-		}
+	private function extract_semantic_content(string $html): string {if (empty($html)) {
+		return '';
+	}
 
-		// Handle Gutenberg blocks that might not be rendered yet
+		// Remove completely if raw blocks
 		if (strpos($html, '<!-- wp:') !== false) {
-			// If it's raw block markup, just extract text content
-			$html = strip_tags($html);
-			return trim(preg_replace('/\s+/', ' ', $html));
+			return '';  // ✓ Return empty instead of trying to extract
 		}
 
-		// Suppress errors from malformed HTML
 		libxml_use_internal_errors(true);
-
 		$doc = new \DOMDocument();
 		$doc->loadHTML(
 			mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'),
 			LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
 		);
-
 		libxml_clear_errors();
 
 		$content_parts = [];
 
-		// Extract headings (h1-h6)
+		// Extract headings
 		for ($i = 1; $i <= 6; $i++) {
 			$headings = $doc->getElementsByTagName("h{$i}");
 			foreach ($headings as $heading) {
@@ -234,6 +199,16 @@ class ContentAggregator {
 		foreach ($lists as $li) {
 			$text = trim($li->textContent);
 			if (!empty($text)) {
+				$content_parts[] = $text;
+			}
+		}
+
+		// ✓ NEW: Extract divs/spans with direct text (not in p/h tags)
+		$xpath = new \DOMXPath($doc);
+		$textNodes = $xpath->query('//div/text()[normalize-space()] | //span/text()[normalize-space()]');
+		foreach ($textNodes as $textNode) {
+			$text = trim($textNode->textContent);
+			if (!empty($text) && strlen($text) > 20) {  // Only substantial text
 				$content_parts[] = $text;
 			}
 		}
@@ -272,7 +247,7 @@ class ContentAggregator {
 			}
 		}
 
-		return implode("\n\n", $content_parts);
+		return implode("\n\n", array_unique($content_parts));
 	}
 
 	/**
@@ -351,8 +326,8 @@ class ContentAggregator {
 			return ['content' => '', 'part_count' => 0, 'parts' => []];
 		}
 
-		// Start with page's own content
-		$aggregated = $this->extract_semantic_content($post->post_content);
+		// Don't extract from page content - only from rendered parts
+		$aggregated = '';  // ✓ Changed
 		$parts_info = [];
 
 		foreach ($part_ids as $part_id) {

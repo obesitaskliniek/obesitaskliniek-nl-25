@@ -219,10 +219,6 @@ import { select } from '@wordpress/data';
                         !== JSON.stringify(previousPartIds);
 
                     if (idsChanged) {
-                        console.log('[Yoast Page Parts] Part IDs changed:', {
-                            from: previousPartIds,
-                            to: currentPartIds
-                        });
 
                         // Verify state is stable before fetching
                         setTimeout(() => {
@@ -235,10 +231,7 @@ import { select } from '@wordpress/data';
 
                             if (JSON.stringify(verifyIds) === JSON.stringify(currentPartIds)) {
                                 previousPartIds = currentPartIds;
-                                console.log('[Yoast Page Parts] State stable, fetching content');
                                 this.fetchAggregatedContent();
-                            } else {
-                                console.log('[Yoast Page Parts] State changed during verification, will retry');
                             }
                         }, 300);
                     }
