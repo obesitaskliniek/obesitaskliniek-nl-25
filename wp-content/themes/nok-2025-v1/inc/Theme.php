@@ -24,6 +24,7 @@ final class Theme {
 	private TemplateRenderer $template_renderer;
 	private RestEndpoints $rest_endpoints;
 	private \NOK2025\V1\SEO\ContentAggregator $content_aggregator;
+	private \NOK2025\V1\SEO\YoastIntegration $yoast_integration;
 
 	// Settings store (can hold customizer values)
 	private array $settings = [];
@@ -46,7 +47,7 @@ final class Theme {
 			$this->template_renderer,
 			$this->meta_manager
 		);
-
+		$this->yoast_integration = new \NOK2025\V1\SEO\YoastIntegration();
 		$this->rest_endpoints = new RestEndpoints(
 			$this->template_renderer,
 			$this->meta_manager,
@@ -73,6 +74,7 @@ final class Theme {
 		$this->meta_manager->register_hooks();
 		$this->preview_system->register_hooks();
 		$this->rest_endpoints->register_hooks();
+		$this->yoast_integration->register_hooks();
 
 		// SEO cache invalidation
 		add_action('save_post', [$this, 'invalidate_seo_cache_on_save'], 20, 2);

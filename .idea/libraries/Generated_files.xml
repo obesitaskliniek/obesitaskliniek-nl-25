@@ -81,6 +81,7 @@
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-scrollbar.min.mjs" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-toggler.min.mjs" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-user-prefs.min.mjs" />
+        <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/yoast-page-parts-integration.min.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
@@ -163,6 +164,7 @@
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-scrollbar.min.mjs" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-toggler.min.mjs" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-user-prefs.min.mjs" />
+      <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/yoast-page-parts-integration.min.js" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

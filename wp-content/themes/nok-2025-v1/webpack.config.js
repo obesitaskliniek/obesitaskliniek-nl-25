@@ -19,6 +19,11 @@ module.exports = {
             'src/nok-page-part-design-selector.js'
         ),
 
+        'assets/js/yoast-page-parts-integration': path.resolve(
+            __dirname,
+            'src/yoast-page-parts-integration.js'
+        ),
+
         'blocks/embed-nok-page-part/index': path.resolve(
             __dirname,
             'src/blocks/embed-nok-page-part/index.js'
