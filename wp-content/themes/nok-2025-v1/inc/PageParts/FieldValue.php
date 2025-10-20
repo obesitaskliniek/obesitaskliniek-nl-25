@@ -174,10 +174,19 @@ class FieldValue {
 	 * Check if value is truthy (for checkboxes)
 	 * Matches '1' or 'true' strings
 	 *
-	 * @return bool
+	 * @param mixed $ifTrue Optional: return this if true
+	 * @param mixed $ifFalse Optional: return this if false
+	 *
+	 * @return bool|mixed
 	 */
-	public function isTrue(): bool {
-		return $this->value === '1' || $this->value === 'true';
+	public function isTrue( mixed $ifTrue = null, mixed $ifFalse = null ): mixed {
+		$eval = $this->value === '1' || $this->value === 'true';
+
+		if ( $ifTrue !== null || $ifFalse !== null ) {
+			return $eval ? $ifTrue : ( $ifFalse ?? '' );
+		}
+
+		return $eval;
 	}
 
 	/**

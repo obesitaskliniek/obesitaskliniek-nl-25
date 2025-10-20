@@ -236,6 +236,7 @@ Register settings in `inc/Customizer.php`.
 - [ ] Usage tracking system
 - [ ] Additional field types (image gallery, color picker)
 - [ ] Bulk operations for page parts
+- [ ] Partner logo system, like the icon-selector
 
 ## External Dependencies
 
