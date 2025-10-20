@@ -337,4 +337,45 @@ class ContentAggregator {
 
 		return false;
 	}
+
+	/**
+	 * Get aggregated content using explicit part IDs (from editor state)
+	 *
+	 * @param int   $post_id  Post ID
+	 * @param array $part_ids Array of page part IDs
+	 * @return array
+	 */
+	public function get_aggregated_content_from_parts(int $post_id, array $part_ids): array {
+		$post = get_post($post_id);
+		if (!$post) {
+			return ['content' => '', 'part_count' => 0, 'parts' => []];
+		}
+
+		// Start with page's own content
+		$aggregated = $this->extract_semantic_content($post->post_content);
+		$parts_info = [];
+
+		foreach ($part_ids as $part_id) {
+			if (!$part_id) continue;
+
+			$rendered_html = $this->render_page_part($part_id, []);
+			$part_content = $this->extract_semantic_content($rendered_html);
+
+			if (!empty($part_content)) {
+				$aggregated .= "\n\n" . $part_content;
+			}
+
+			$parts_info[] = [
+				'id' => $part_id,
+				'title' => get_the_title($part_id),
+				'content_length' => strlen($part_content)
+			];
+		}
+
+		return [
+			'content' => trim($aggregated),
+			'part_count' => count($parts_info),
+			'parts' => $parts_info
+		];
+	}
 }

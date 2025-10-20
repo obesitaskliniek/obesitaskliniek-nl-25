@@ -48,16 +48,19 @@ import { select } from '@wordpress/data';
         /**
          * Register with Yoast SEO
          */
-        registerPlugin() {
+        async registerPlugin() {
             if (typeof YoastSEO === 'undefined' || typeof YoastSEO.app === 'undefined') {
                 console.warn('[Yoast Page Parts] YoastSEO.app not available');
                 return;
             }
 
-            // Register our plugin
+            // Fetch content FIRST
+            console.log('[Yoast Page Parts] Pre-fetching content before registration...');
+            await this.fetchAggregatedContent();
+
+            // NOW register with content ready
             YoastSEO.app.registerPlugin(this.pluginName, { status: 'ready' });
 
-            // Register content modification
             YoastSEO.app.registerModification(
                 'content',
                 this.modifyContent.bind(this),
@@ -65,12 +68,12 @@ import { select } from '@wordpress/data';
                 10
             );
 
-            console.log('[Yoast Page Parts] Plugin registered successfully');
+            console.log('[Yoast Page Parts] Plugin registered with preloaded content');
 
-            // Pre-fetch content
-            this.fetchAggregatedContent();
+            // Trigger initial analysis
+            this.refreshYoastAnalysis();
 
-            // Listen for editor changes to refresh content
+            // Watch for future changes
             this.watchForChanges();
         }
 
@@ -82,8 +85,9 @@ import { select } from '@wordpress/data';
          * @returns {string} Modified content with page parts included
          */
         modifyContent(data) {
-            // Add timestamp to see WHEN this runs
+            //const stack = new Error().stack;
             console.log(`[Yoast] ⏰ modifyContent called at ${new Date().toISOString()}`);
+            //console.log('[Yoast] Call stack:', stack);
             console.log('[Yoast] Original length:', data.length);
             console.log('[Yoast] Aggregated length:', this.aggregatedContent.length);
 
@@ -97,7 +101,6 @@ import { select } from '@wordpress/data';
          * Fetch aggregated content from REST API
          */
         async fetchAggregatedContent() {
-            // Prevent duplicate fetches
             if (this.isFetching) {
                 return this.fetchPromise;
             }
@@ -108,15 +111,27 @@ import { select } from '@wordpress/data';
                 return;
             }
 
+            // Get current part IDs from editor
+            const blocks = select('core/block-editor')?.getBlocks() || [];
+            const pagePartBlocks = this.findPagePartBlocks(blocks);
+            const partIds = pagePartBlocks
+                .map(b => b.attributes?.postId)
+                .filter(Boolean);
+
+            console.log('[Yoast Page Parts] Fetching with part IDs:', partIds);
+
             this.isFetching = true;
 
             this.fetchPromise = fetch(
-                `/wp-json/nok-2025-v1/v1/seo-content/${postId}?use_cache=true`,
+                `/wp-json/nok-2025-v1/v1/seo-content/${postId}`,
                 {
+                    method: 'POST',
                     credentials: 'same-origin',
                     headers: {
+                        'Content-Type': 'application/json',
                         'X-WP-Nonce': wpApiSettings?.nonce || ''
-                    }
+                    },
+                    body: JSON.stringify({ part_ids: partIds })
                 }
             )
                 .then(response => {
@@ -147,6 +162,27 @@ import { select } from '@wordpress/data';
         }
 
         /**
+         * Find all page part blocks recursively
+         * @param {Array} blocks Block array
+         * @returns {Array} Page part blocks
+         */
+        findPagePartBlocks(blocks) {
+            let found = [];
+
+            for (const block of blocks) {
+                if (block.name === 'nok2025/embed-nok-page-part') {
+                    found.push(block);
+                }
+
+                if (block.innerBlocks?.length > 0) {
+                    found = found.concat(this.findPagePartBlocks(block.innerBlocks));
+                }
+            }
+
+            return found;
+        }
+
+        /**
          * Get current post ID from WordPress data store
          *
          * @returns {number|null} Post ID or null
@@ -165,26 +201,73 @@ import { select } from '@wordpress/data';
          * Watch for changes that should trigger content refresh
          */
         watchForChanges() {
-            let lastBlockCount = 0;
-            let debounceTimer = null;
+            let previousPartIds = [];
+            let verificationTimer = null;
 
-            // Subscribe to block changes
             wp.data.subscribe(() => {
-                const blocks = select('core/block-editor')?.getBlocks() || [];
-                const currentBlockCount = this.countPagePartBlocks(blocks);
+                clearTimeout(verificationTimer);
 
-                // If page part block count changed, refresh
-                if (currentBlockCount !== lastBlockCount) {
-                    lastBlockCount = currentBlockCount;
+                verificationTimer = setTimeout(() => {
+                    const blocks = select('core/block-editor')?.getBlocks() || [];
+                    const pagePartBlocks = this.findPagePartBlocks(blocks);
+                    const currentPartIds = pagePartBlocks
+                        .map(b => b.attributes?.postId)
+                        .filter(Boolean)
+                        .sort();
 
-                    // Debounce the refresh (wait 1 second after last change)
-                    clearTimeout(debounceTimer);
-                    debounceTimer = setTimeout(() => {
-                        console.log('[Yoast Page Parts] Block count changed, refreshing content...');
-                        this.fetchAggregatedContent();
-                    }, 1000);
-                }
+                    const idsChanged = JSON.stringify(currentPartIds)
+                        !== JSON.stringify(previousPartIds);
+
+                    if (idsChanged) {
+                        console.log('[Yoast Page Parts] Part IDs changed:', {
+                            from: previousPartIds,
+                            to: currentPartIds
+                        });
+
+                        // Verify state is stable before fetching
+                        setTimeout(() => {
+                            const verifyBlocks = select('core/block-editor')?.getBlocks() || [];
+                            const verifyParts = this.findPagePartBlocks(verifyBlocks);
+                            const verifyIds = verifyParts
+                                .map(b => b.attributes?.postId)
+                                .filter(Boolean)
+                                .sort();
+
+                            if (JSON.stringify(verifyIds) === JSON.stringify(currentPartIds)) {
+                                previousPartIds = currentPartIds;
+                                console.log('[Yoast Page Parts] State stable, fetching content');
+                                this.fetchAggregatedContent();
+                            } else {
+                                console.log('[Yoast Page Parts] State changed during verification, will retry');
+                            }
+                        }, 300);
+                    }
+                }, 800);
             });
+        }
+
+        /**
+         * Find all page part blocks recursively
+         *
+         * @param {Array} blocks Block array
+         * @returns {Array} Array of page part blocks
+         */
+        findPagePartBlocks(blocks) {
+            let pagePartBlocks = [];
+
+            for (const block of blocks) {
+                if (block.name === 'nok2025/embed-nok-page-part') {
+                    pagePartBlocks.push(block);
+                }
+
+                if (block.innerBlocks && block.innerBlocks.length > 0) {
+                    pagePartBlocks = pagePartBlocks.concat(
+                        this.findPagePartBlocks(block.innerBlocks)
+                    );
+                }
+            }
+
+            return pagePartBlocks;
         }
 
         /**

@@ -35,7 +35,7 @@ class RestEndpoints {
 		);
 
 		register_rest_route( 'nok-2025-v1/v1', '/seo-content/(?P<id>\d+)', [
-			'methods'             => 'GET',
+			'methods'             => ['GET', 'POST'],  // Add POST
 			'callback'            => [ $this, 'get_seo_content' ],
 			'permission_callback' => function () {
 				return current_user_can( 'edit_posts' );
@@ -44,6 +44,13 @@ class RestEndpoints {
 				'id'        => [
 					'validate_callback' => function ( $param ) {
 						return is_numeric( $param );
+					}
+				],
+				'part_ids'  => [  // NEW
+					'type'              => 'array',
+					'items'             => ['type' => 'integer'],
+					'sanitize_callback' => function($ids) {
+						return array_map('absint', $ids);
 					}
 				],
 				'use_cache' => [
@@ -238,6 +245,7 @@ class RestEndpoints {
 	 */
 	public function get_seo_content(\WP_REST_Request $request) {
 		$post_id = (int) $request['id'];
+		$part_ids = $request->get_param('part_ids');  // May be null
 		$use_cache = $request->get_param('use_cache');
 
 		if (!$this->content_aggregator) {
@@ -250,23 +258,20 @@ class RestEndpoints {
 
 		$post = get_post($post_id);
 		if (!$post) {
-			return new \WP_Error(
-				'post_not_found',
-				'Post not found',
-				['status' => 404]
-			);
+			return new \WP_Error('post_not_found', 'Post not found', ['status' => 404]);
 		}
 
-		// Check permissions
 		if (!current_user_can('edit_post', $post_id)) {
-			return new \WP_Error(
-				'forbidden',
-				'You do not have permission to view this content',
-				['status' => 403]
-			);
+			return new \WP_Error('forbidden', 'You do not have permission to view this content', ['status' => 403]);
 		}
 
-		$result = $this->content_aggregator->get_aggregated_content($post_id, $use_cache);
+		// If part_ids provided, use them directly (editor state)
+		if ($part_ids !== null && is_array($part_ids)) {
+			$result = $this->content_aggregator->get_aggregated_content_from_parts($post_id, $part_ids);
+		} else {
+			// Fallback to parsing post_content (saved state)
+			$result = $this->content_aggregator->get_aggregated_content($post_id, $use_cache);
+		}
 
 		return new \WP_REST_Response([
 			'post_id' => $post_id,
@@ -276,7 +281,7 @@ class RestEndpoints {
 			'parts' => $result['parts'],
 			'content_length' => strlen($result['content']),
 			'word_count' => str_word_count($result['content']),
-			'cached' => $use_cache
+			'from_editor_state' => ($part_ids !== null)
 		], 200);
 	}
 }
