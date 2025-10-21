@@ -129,12 +129,21 @@ class RestEndpoints {
 			}
 		}
 
-		// Extract image alt text
+		// Extract images (preserve as HTML img tags for Yoast)
 		$images = $doc->getElementsByTagName( 'img' );
 		foreach ( $images as $img ) {
+			$src = $img->getAttribute( 'src' );
 			$alt = $img->getAttribute( 'alt' );
-			if ( ! empty( $alt ) ) {
-				$content_parts[] = "[image: {$alt}]";
+
+			if ( ! empty( $src ) ) {
+				// Create simplified img tag that Yoast can detect
+				$img_tag = '<img src="' . esc_url( $src ) . '"';
+				if ( ! empty( $alt ) ) {
+					$img_tag .= ' alt="' . esc_attr( $alt ) . '"';
+				}
+				$img_tag .= ' />';
+
+				$content_parts[] = $img_tag;
 			}
 		}
 
@@ -272,21 +281,22 @@ class RestEndpoints {
 			}
 		}
 
-		$edit_link = admin_url( "post.php?post={$id}&action=edit" );
+		//$edit_link = admin_url( "post.php?post={$id}&action=edit" );
 		$html      .= '<link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
         <link href="' . THEME_ROOT . '/assets/fonts/realist.css" rel="stylesheet" crossorigin="anonymous">
         </head><body>';
 
-		$html .= '<div style="position: fixed; top: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 8px 12px; font-size: 12px; z-index: 9999; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif;">
-        <strong>Preview:</strong> ' . esc_html( get_the_title( $id ) ) . '
-        <a href="' . esc_url( $edit_link ) . '" target="_blank" style="color: #8cf; margin-left: 12px; text-decoration: none;">✏️ Bewerken</a>
-    </div>';
+		//$html .= '<div style="position: fixed; top: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 8px 12px; font-size: 12px; z-index: 9999; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif;">
+        //<strong>Preview:</strong> ' . esc_html( get_the_title( $id ) ) . '
+        //<a href="' . esc_url( $edit_link ) . '" target="_blank" style="color: #8cf; margin-left: 12px; text-decoration: none;">✏️ Bewerken</a>
+        //</div>';
 
-		$html .= '<div style="margin-top: 36px;">';
+		//$html .= '<div style="margin-top: 36px; pointer-events: none;">';
 		$html .= $rendered_html;
-		$html .= '</div></body></html>';
+		//$html .= '</div>';
+		$html .= '</body></html>';
 
 		echo $html;
 		exit;

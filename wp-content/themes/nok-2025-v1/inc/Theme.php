@@ -76,6 +76,31 @@ final class Theme {
 		// Content filters
 		add_filter('the_content', [$this, 'enhance_paragraph_classes'], 1);
 		add_filter('show_admin_bar', [$this, 'maybe_hide_admin_bar']);
+
+		/**
+		 * Add fallback alt text to images missing it
+		 *
+		 * @param array $attr Image attributes
+		 * @param WP_Post $attachment Image attachment post
+		 * @return array Modified attributes
+		 */
+		add_filter('wp_get_attachment_image_attributes', function($attr, $attachment) {
+			// Only add fallback if alt is missing or empty
+			if (empty($attr['alt'])) {
+				// Try attachment title
+				$attr['alt'] = $attachment->post_title;
+
+				// Still empty? Use attachment filename (cleaned up)
+				if (empty($attr['alt'])) {
+					$filename = get_attached_file($attachment->ID);
+					$attr['alt'] = ucwords(str_replace(['-', '_'], ' ',
+						pathinfo($filename, PATHINFO_FILENAME)
+					));
+				}
+			}
+
+			return $attr;
+		}, 10, 2);
 	}
 
 	// =============================================================================

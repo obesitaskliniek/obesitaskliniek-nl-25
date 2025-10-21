@@ -322,6 +322,7 @@ import {__} from '@wordpress/i18n';
                 YoastSEO.app.refresh();
             }
         }
+
     }
 
     // Initialize when DOM ready

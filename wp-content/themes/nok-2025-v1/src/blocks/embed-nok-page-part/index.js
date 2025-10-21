@@ -1,6 +1,7 @@
 import {registerBlockType} from '@wordpress/blocks';
 import {InspectorControls, BlockControls, useBlockProps, MediaUpload, MediaUploadCheck} from '@wordpress/block-editor';
-import {SelectControl, PanelBody, Button, Popover, TextControl, CheckboxControl} from '@wordpress/components';
+import {SelectControl, PanelBody, Button, Popover, TextControl, CheckboxControl, Icon} from '@wordpress/components';
+import {pencil} from '@wordpress/icons';
 import {useSelect, useDispatch} from '@wordpress/data';
 import {__} from '@wordpress/i18n';
 import {useRef, useState, useEffect} from '@wordpress/element';
@@ -152,7 +153,7 @@ registerBlockType(blockName, {
         }
     },
     edit: ({attributes, setAttributes}) => {
-        const { postId, overrides, excludeFromSeo } = attributes;
+        const {postId, overrides, excludeFromSeo} = attributes;
         const {invalidateResolution} = useDispatch('core');
 
         const parts = useSelect(
@@ -181,6 +182,7 @@ registerBlockType(blockName, {
 
         // Get selected page part and its template data
         const selectedPart = parts.find(p => p.id === postId);
+        const partTitle = selectedPart?.title?.rendered || '';
         const designSlug = selectedPart?.meta?.design_slug || '';
         const templateData = registry[designSlug] || {};
         const pageEditableFields = (templateData.custom_fields || []).filter(f => f.page_editable);
@@ -320,7 +322,14 @@ registerBlockType(blockName, {
         return (
             <>
                 <BlockControls></BlockControls>
-                <div {...useBlockProps()} style={{position: 'relative', width: '100%', margin: '0', maxWidth: '100%'}}>
+                <div {...useBlockProps()} style={{
+                    position: 'relative',
+                    width: '100%',
+                    marginBottom: '15px',
+                    maxWidth: '100%',
+                    padding: '15px 3vw',
+                    boxSizing: 'border-box',
+                }}>
 
                     {/* SEO Exclusion Badge */}
                     {excludeFromSeo && (
@@ -340,7 +349,8 @@ registerBlockType(blockName, {
                         </div>
                     )}
 
-                    <PanelBody title={__('NOK Page Part Blok', textDomain)} initialOpen>
+                    <PanelBody title={__('NOK Page Part Blok', textDomain) + (partTitle ? ` - ${partTitle}` : '')}
+                               initialOpen>
                         <CustomPagePartSelector
                             label={__('Selecteer een Page Part uit de lijst', textDomain)}
                             value={postId}
@@ -359,7 +369,7 @@ registerBlockType(blockName, {
                                     help={__('Schakel uit om deze page part uit te sluiten van Yoast SEO analyse', textDomain)}
                                     checked={!excludeFromSeo}
                                     onChange={(value) => {
-                                        setAttributes({ excludeFromSeo: !value });
+                                        setAttributes({excludeFromSeo: !value});
 
                                         // Notify Yoast integration of change
                                         if (window.nokYoastIntegration?.debug) {
@@ -540,29 +550,70 @@ registerBlockType(blockName, {
                                 </MediaUploadCheck>
                             </PanelBody>
                         )}
+                        {postId === 0 ? (
+                            <div style={{
+                                padding: '40px 20px',
+                                textAlign: 'center',
+                                backgroundColor: '#f0f0f1',
+                                border: '1px dashed #ccc'
+                            }}>
+                                <p style={{margin: 0, color: '#666'}}>
+                                    {__('Selecteer een Page Part om de preview te zien', textDomain)}
+                                </p>
+                            </div>
+                        ) : (
+                            <div style={{
+                                marginTop: '15px',
+                                border: '1px solid rgba(0,0,0,0.6)',
+                                borderRadius: '10px',
+                                padding: '0',
+                                boxSizing: 'border-box',
+                                overflow: 'hidden',
+                                display: 'flex',
+                                flexDirection: 'column'
+                            }}>
+                                <div style={{
+                                    background: 'rgba(0,0,0,0.1)',
+                                    borderBottom: '1px solid rgba(0,0,0,0.6)',
+                                    padding: '8px 12px',
+                                    fontSize: '12px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '12px'
+                                }}>
+                                    <strong>Preview:</strong>
+                                    <span>{selectedPart?.title.rendered || `ID ${postId}`}</span>
+                                    <a
+                                        href={`/wp-admin/post.php?post=${postId}&action=edit`}
+                                        target="_blank"
+                                        title={" Bewerk deze Page Part (in nieuw tabblad)"}
+                                        rel="noopener noreferrer"
+                                        style={{
+                                            color: '#8cf',
+                                            textDecoration: 'none',
+                                            marginLeft: 'auto'
+                                        }}
+                                    >
+                                        <Icon icon={pencil} />
+                                    </a>
+                                </div>
+                                <iframe
+                                    ref={iframeRef}
+                                    src={src}
+                                    style={{
+                                        pointerEvents: 'none',
+                                        width: '100%',
+                                        height: `${height}px`,
+                                        flexShrink: 0,
+                                    }}
+                                />
+                            </div>
+                        )}
                     </PanelBody>
-
-                    {postId === 0 ? (
-                        <div style={{
-                            padding: '40px 20px',
-                            textAlign: 'center',
-                            backgroundColor: '#f0f0f1',
-                            border: '1px dashed #ccc'
-                        }}>
-                            <p style={{margin: 0, color: '#666'}}>
-                                {__('Selecteer een Page Part om de preview te zien', textDomain)}
-                            </p>
-                        </div>
-                    ) : (
-                        <iframe
-                            ref={iframeRef}
-                            src={src}
-                            style={{width: '100%', height: `${height}px`, border: 'none'}}
-                        />
-                    )}
                 </div>
             </>
-        );
+        )
+            ;
     },
 
     save: () => null

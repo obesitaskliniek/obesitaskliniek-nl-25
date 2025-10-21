@@ -94,6 +94,9 @@ nok-square-block {
       p {
         margin: 0;
       }
+      &:last-child {
+        grid-row: span 2;
+      }
     }
 
     &__link {
