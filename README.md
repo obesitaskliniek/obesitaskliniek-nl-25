@@ -109,6 +109,65 @@ Usage in page editor:
 3. Override fields as needed
 4. Preview updates in real-time
 
+## Yoast SEO Integration
+
+Page parts are automatically included in Yoast SEO content analysis when editing pages.
+
+### How It Works
+
+The integration piggybacks the existing iframe preview system:
+
+1. Each page part renders in an iframe (already happens for preview)
+2. Server extracts semantic content (headings, paragraphs, lists, image alt text)
+3. Content embedded in iframe as `<meta name="yoast-content">` tag
+4. Block component reads meta tag and stores in global data store
+5. Yoast SEO reads aggregated content during analysis
+
+**Zero additional network overhead** - uses preview requests that already happen.
+
+### Features
+
+**Visual Editor Only**
+- SEO analysis works in visual mode
+- Code editor shows notice: "Page Part SEO analysis is disabled in code editor mode"
+- Automatically re-enables when switching back to visual mode
+
+**Per-Block Exclusion**
+- Each page part block has "SEO Instellingen" panel
+- Toggle "Meenemen in SEO analyse" checkbox to exclude specific parts
+- Visual badge (🚫 SEO uitgesloten) shows on excluded blocks
+- Analysis updates in real-time when toggled
+
+**Content Analysis**
+- Extracts: h1-h6 headings, paragraphs, list items, image alt text
+- Skips: raw Gutenberg blocks, non-semantic markup
+- Updates automatically when page parts change
+
+### Technical Details
+
+**Architecture:**
+- Synchronous content delivery (no async race conditions)
+- Conforms to [Yoast Developer Integration Guide](https://developer.yoast.com/blog/yoast-seo-developer-integration/)
+- Follows ACF/Elementor integration patterns
+- Content always matches rendered output (WYSIWYG for SEO)
+
+**Debug Mode:**
+Enable debug logging in browser console:
+```javascript
+window.nokYoastIntegration.debug = true;
+```
+
+Logs show:
+- Iframe content extraction
+- Part inclusion/exclusion changes
+- Character counts and aggregation
+- Analysis refresh triggers
+
+**Limitations:**
+- Only analyzes published page part content (not drafts)
+- Requires visual editor mode
+- Page parts must render successfully in iframes
+
 ## Preview System
 
 Uses WordPress transients for live previews without saving:
