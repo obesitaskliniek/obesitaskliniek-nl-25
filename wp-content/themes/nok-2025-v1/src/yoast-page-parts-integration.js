@@ -1,65 +1,201 @@
 /**
  * Yoast SEO Page Parts Integration
  *
- * Integrates NOK page parts content into Yoast SEO analysis by fetching
- * aggregated content from all embedded page parts and providing it to
- * Yoast's analysis engine.
+ * Architecture:
+ * - Waits for all page part iframes to load and extract their semantic content
+ * - Stores content in window.nokPagePartData keyed by part ID
+ * - Registers with Yoast only after all expected parts have loaded
+ * - Provides aggregated content synchronously via modifyContent()
+ * - Visual editor mode only (shows notice in code mode)
  *
  * @package NOK2025\V1\SEO
  */
 
-import { select } from '@wordpress/data';
+import {select, dispatch} from '@wordpress/data';
+import {__} from '@wordpress/i18n';
 
-(function() {
+(function () {
     'use strict';
 
     /**
-     * Main integration class
+     * Main Yoast integration class
      */
     class YoastPagePartsIntegration {
         constructor() {
             this.pluginName = 'nok-page-parts-analysis';
-            this.aggregatedContent = '';
-            this.isFetching = false;
-            this.fetchPromise = null;
+            this.isRegistered = false;
+            this.currentMode = null;
+
+            // Global store for iframe content (populated by iframes)
+            window.nokPagePartData = window.nokPagePartData || {};
 
             this.init();
         }
 
         /**
-         * Initialize the integration
+         * Initialize integration
+         *
+         * Checks editor mode and either:
+         * - Visual mode: Wait for iframes and register with Yoast
+         * - Code mode: Show notice and exit
          */
         init() {
-            // Check if we're in the block editor
             if (typeof wp === 'undefined' || typeof wp.data === 'undefined') {
                 console.warn('[Yoast Page Parts] WordPress data module not available');
                 return;
             }
 
+            // Check editor mode
+            if (!this.isVisualMode()) {
+                this.showCodeModeNotice();
+                this.watchForModeSwitch();
+                return;
+            }
+
+            this.currentMode = 'visual';
+
             // Wait for Yoast SEO to be ready
             if (typeof YoastSEO !== 'undefined' && typeof YoastSEO.app !== 'undefined') {
-                this.registerPlugin();
+                this.waitForIframesAndRegister();
             } else {
-                // Listen for Yoast ready event
-                jQuery(window).on('YoastSEO:ready', () => this.registerPlugin());
+                jQuery(window).on('YoastSEO:ready', () => this.waitForIframesAndRegister());
             }
+
+            this.watchForModeSwitch();
         }
 
         /**
-         * Register with Yoast SEO
+         * Check if editor is in visual mode
+         *
+         * @returns {boolean} True if visual mode, false if code mode
          */
-        async registerPlugin() {
+        isVisualMode() {
+            const editorMode = select('core/edit-post')?.getEditorMode();
+            return editorMode === 'visual';
+        }
+
+        /**
+         * Show editor notice when in code mode
+         *
+         * Creates dismissible info notice explaining SEO analysis
+         * is disabled in code editor mode.
+         */
+        showCodeModeNotice() {
+            dispatch('core/notices').createInfoNotice(
+                __('Page Part SEO analysis is disabled in code editor mode. Switch to visual mode for full SEO analysis.', 'nok-2025-v1'),
+                {
+                    id: 'nok-yoast-code-mode',
+                    isDismissible: true
+                }
+            );
+        }
+
+        /**
+         * Watch for mode switches between visual and code
+         *
+         * Registers/unregisters Yoast integration as user switches modes
+         */
+        watchForModeSwitch() {
+            let lastMode = this.currentMode;
+
+            wp.data.subscribe(() => {
+                const newMode = this.isVisualMode() ? 'visual' : 'code';
+
+                if (newMode !== lastMode) {
+                    lastMode = newMode;
+                    this.currentMode = newMode;
+
+                    if (newMode === 'visual' && !this.isRegistered) {
+                        // Switched TO visual: initialize
+                        dispatch('core/notices').removeNotice('nok-yoast-code-mode');
+                        this.waitForIframesAndRegister();
+                    } else if (newMode === 'code') {
+                        // Switched TO code: show notice (whether registered or not)
+                        this.showCodeModeNotice();  // ADD THIS LINE
+                    }
+                }
+            });
+        }
+
+        /**
+         * Wait for all expected iframes to load, then register with Yoast
+         *
+         * Polls window.nokPagePartData until all expected parts are present,
+         * with 10-second timeout. Then registers plugin with Yoast.
+         */
+        async waitForIframesAndRegister() {
             if (typeof YoastSEO === 'undefined' || typeof YoastSEO.app === 'undefined') {
                 console.warn('[Yoast Page Parts] YoastSEO.app not available');
                 return;
             }
 
-            // Fetch content FIRST
-            console.log('[Yoast Page Parts] Pre-fetching content before registration...');
-            await this.fetchAggregatedContent();
+            // Register immediately as 'loading'
+            YoastSEO.app.registerPlugin(this.pluginName, {status: 'loading'});
 
-            // NOW register with content ready
-            YoastSEO.app.registerPlugin(this.pluginName, { status: 'ready' });
+            const expectedParts = window.nokYoastIntegration?.expectedParts || [];
+
+            if (nokYoastIntegration.debug) {
+                console.log('[Yoast Page Parts] Waiting for iframes:', expectedParts);
+            }
+
+            // If no parts expected, mark as ready immediately
+            if (expectedParts.length === 0) {
+                YoastSEO.app.pluginReady(this.pluginName);
+                this.completeRegistration();
+                return;
+            }
+
+            // Wait for all iframes to populate nokPagePartData
+            const maxWait = 10000;
+            const checkInterval = 100;
+            let elapsed = 0;
+
+            const checkLoaded = () => {
+                const loadedIds = Object.keys(window.nokPagePartData).map(id => parseInt(id));
+                const allLoaded = expectedParts.every(id => loadedIds.includes(id));
+
+                if (allLoaded) {
+                    if (nokYoastIntegration.debug) {
+                        console.log('[Yoast Page Parts] All iframes loaded');
+                    }
+                    YoastSEO.app.pluginReady(this.pluginName);
+                    this.completeRegistration();
+                    return true;
+                }
+
+                return false;
+            };
+
+            // Immediate check
+            if (checkLoaded()) {
+                return;
+            }
+
+            // Poll until loaded or timeout
+            const interval = setInterval(() => {
+                elapsed += checkInterval;
+
+                if (checkLoaded()) {
+                    clearInterval(interval);
+                } else if (elapsed >= maxWait) {
+                    clearInterval(interval);
+                    console.warn('[Yoast Page Parts] Timeout waiting for iframes, marking as ready with partial data');
+                    YoastSEO.app.pluginReady(this.pluginName);
+                    this.completeRegistration();
+                }
+            }, checkInterval);
+        }
+
+        /**
+         * Complete registration after iframes are loaded
+         *
+         * Registers content modification callback and starts watching
+         * for block structure changes.
+         */
+        completeRegistration() {
+            if (this.isRegistered) {
+                return;
+            }
 
             YoastSEO.app.registerModification(
                 'content',
@@ -68,103 +204,56 @@ import { select } from '@wordpress/data';
                 10
             );
 
-            console.log('[Yoast Page Parts] Plugin registered with preloaded content');
+            this.isRegistered = true;
 
-            // Trigger initial analysis
+            if (nokYoastIntegration.debug) {
+                console.log('[Yoast Page Parts] Plugin registered with Yoast');
+            }
+
+            // Initial analysis
             this.refreshYoastAnalysis();
 
-            // Watch for future changes
-            this.watchForChanges();
+            // Watch for block changes
+            this.watchForBlockChanges();
         }
 
         /**
          * Content modification callback
-         * Called by Yoast during analysis - must be synchronous
          *
-         * @param {string} data Current content
-         * @returns {string} Modified content with page parts included
+         * Called by Yoast during analysis. Reads from window.nokPagePartData
+         * and appends all page part content to the page's base content.
+         *
+         * MUST be synchronous - data is pre-loaded from iframes.
+         *
+         * @param {string} data Current page content
+         * @returns {string} Content with page parts appended
          */
         modifyContent(data) {
-            //const stack = new Error().stack;
-            //console.log(`[Yoast] ⏰ modifyContent called at ${new Date().toISOString()}`);
-            //console.log('[Yoast] Call stack:', stack);
-            //console.log('[Yoast] Original length:', data.length);
-            //console.log('[Yoast] Aggregated length:', this.aggregatedContent.length);
-
-            if (this.aggregatedContent) {
-                return data + '\n\n' + this.aggregatedContent;
-            }
-            return data;
-        }
-
-        /**
-         * Fetch aggregated content from REST API
-         */
-        async fetchAggregatedContent() {
-            if (this.isFetching) {
-                return this.fetchPromise;
-            }
-
-            const postId = this.getCurrentPostId();
-            if (!postId) {
-                console.warn('[Yoast Page Parts] No post ID available');
-                return;
-            }
-
-            // Get current part IDs from editor
             const blocks = select('core/block-editor')?.getBlocks() || [];
-            const pagePartBlocks = this.findPagePartBlocks(blocks);
-            const partIds = pagePartBlocks
-                .map(b => b.attributes?.postId)
-                .filter(Boolean);
+            const pagePartBlocks = this.findPagePartBlocks(blocks)
+                .filter(block => !block.attributes?.excludeFromSeo); // Respect exclusion
 
-            console.log('[Yoast Page Parts] Fetching with part IDs:', partIds);
+            let aggregated = '';
 
-            this.isFetching = true;
-
-            this.fetchPromise = fetch(
-                `/wp-json/nok-2025-v1/v1/seo-content/${postId}`,
-                {
-                    method: 'POST',
-                    credentials: 'same-origin',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-WP-Nonce': wpApiSettings?.nonce || ''
-                    },
-                    body: JSON.stringify({ part_ids: partIds })
+            pagePartBlocks.forEach(block => {
+                const partId = block.attributes?.postId;
+                if (partId && window.nokPagePartData[partId]) {
+                    aggregated += '\n\n' + window.nokPagePartData[partId];
                 }
-            )
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    this.aggregatedContent = data.content || '';
-                    console.log(
-                        `[Yoast Page Parts] Fetched ${data.content_length} characters from ${data.part_count} parts`
-                    );
+            });
 
-                    // Trigger Yoast refresh to reanalyze with new content
-                    this.refreshYoastAnalysis();
-                })
-                .catch(error => {
-                    console.error('[Yoast Page Parts] Failed to fetch aggregated content:', error);
-                    this.aggregatedContent = '';
-                })
-                .finally(() => {
-                    this.isFetching = false;
-                    this.fetchPromise = null;
-                });
+            if (nokYoastIntegration.debug && aggregated) {
+                console.log(`[Yoast Page Parts] Adding ${aggregated.length} characters from ${pagePartBlocks.length} parts`);
+            }
 
-            return this.fetchPromise;
+            return data + aggregated;
         }
 
         /**
          * Find all page part blocks recursively
-         * @param {Array} blocks Block array
-         * @returns {Array} Page part blocks
+         *
+         * @param {Array} blocks Block array from getBlocks()
+         * @returns {Array} Array of page part block objects
          */
         findPagePartBlocks(blocks) {
             let found = [];
@@ -183,123 +272,59 @@ import { select } from '@wordpress/data';
         }
 
         /**
-         * Get current post ID from WordPress data store
+         * Watch for block structure changes
          *
-         * @returns {number|null} Post ID or null
+         * Monitors block additions, removals, and exclusion toggle changes.
+         * Triggers Yoast refresh when structure changes.
          */
-        getCurrentPostId() {
-            try {
-                const postId = select('core/editor')?.getCurrentPostId();
-                return postId || null;
-            } catch (error) {
-                console.error('[Yoast Page Parts] Error getting post ID:', error);
-                return null;
-            }
-        }
-
-        /**
-         * Watch for changes that should trigger content refresh
-         */
-        watchForChanges() {
-            let previousPartIds = [];
-            let verificationTimer = null;
+        watchForBlockChanges() {
+            let prevState = this.getBlockState();
 
             wp.data.subscribe(() => {
-                clearTimeout(verificationTimer);
+                const currentState = this.getBlockState();
 
-                verificationTimer = setTimeout(() => {
-                    const blocks = select('core/block-editor')?.getBlocks() || [];
-                    const pagePartBlocks = this.findPagePartBlocks(blocks);
-                    const currentPartIds = pagePartBlocks
-                        .map(b => b.attributes?.postId)
-                        .filter(Boolean)
-                        .sort();
+                if (JSON.stringify(currentState) !== JSON.stringify(prevState)) {
+                    prevState = currentState;
 
-                    const idsChanged = JSON.stringify(currentPartIds)
-                        !== JSON.stringify(previousPartIds);
-
-                    if (idsChanged) {
-
-                        // Verify state is stable before fetching
-                        setTimeout(() => {
-                            const verifyBlocks = select('core/block-editor')?.getBlocks() || [];
-                            const verifyParts = this.findPagePartBlocks(verifyBlocks);
-                            const verifyIds = verifyParts
-                                .map(b => b.attributes?.postId)
-                                .filter(Boolean)
-                                .sort();
-
-                            if (JSON.stringify(verifyIds) === JSON.stringify(currentPartIds)) {
-                                previousPartIds = currentPartIds;
-                                this.fetchAggregatedContent();
-                            }
-                        }, 300);
+                    if (nokYoastIntegration.debug) {
+                        console.log('[Yoast Page Parts] Block structure changed, refreshing analysis');
                     }
-                }, 800);
+
+                    this.refreshYoastAnalysis();
+                }
             });
         }
 
         /**
-         * Find all page part blocks recursively
+         * Get current block state for change detection
          *
-         * @param {Array} blocks Block array
-         * @returns {Array} Array of page part blocks
+         * Creates serializable state object with part IDs and exclusion status.
+         *
+         * @returns {Array} Array of {id, excluded} objects
          */
-        findPagePartBlocks(blocks) {
-            let pagePartBlocks = [];
-
-            for (const block of blocks) {
-                if (block.name === 'nok2025/embed-nok-page-part') {
-                    pagePartBlocks.push(block);
-                }
-
-                if (block.innerBlocks && block.innerBlocks.length > 0) {
-                    pagePartBlocks = pagePartBlocks.concat(
-                        this.findPagePartBlocks(block.innerBlocks)
-                    );
-                }
-            }
-
-            return pagePartBlocks;
+        getBlockState() {
+            const blocks = select('core/block-editor')?.getBlocks() || [];
+            return this.findPagePartBlocks(blocks).map(block => ({
+                id: block.attributes?.postId || 0,
+                excluded: block.attributes?.excludeFromSeo || false
+            }));
         }
 
         /**
-         * Count page part blocks recursively
+         * Trigger Yoast analysis refresh
          *
-         * @param {Array} blocks Block array
-         * @returns {number} Count of page part blocks
-         */
-        countPagePartBlocks(blocks) {
-            let count = 0;
-
-            for (const block of blocks) {
-                if (block.name === 'nok2025/embed-nok-page-part') {
-                    count++;
-                }
-
-                // Recursively count inner blocks
-                if (block.innerBlocks && block.innerBlocks.length > 0) {
-                    count += this.countPagePartBlocks(block.innerBlocks);
-                }
-            }
-
-            return count;
-        }
-
-        /**
-         * Trigger Yoast to refresh its analysis
+         * Tells Yoast to re-run content analysis with current content.
          */
         refreshYoastAnalysis() {
-            if (typeof YoastSEO !== 'undefined' && typeof YoastSEO.app !== 'undefined') {
-                // Trigger a refresh of the analysis
-                if (typeof YoastSEO.app.refresh === 'function') {
-                    YoastSEO.app.refresh();
-                }
+            if (typeof YoastSEO !== 'undefined' &&
+                typeof YoastSEO.app !== 'undefined' &&
+                typeof YoastSEO.app.refresh === 'function') {
+                YoastSEO.app.refresh();
             }
         }
     }
 
-    // Initialize when DOM is ready
+    // Initialize when DOM ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
             new YoastPagePartsIntegration();

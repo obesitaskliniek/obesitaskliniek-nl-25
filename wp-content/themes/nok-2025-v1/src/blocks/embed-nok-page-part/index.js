@@ -137,8 +137,22 @@ const CustomPagePartSelector = ({value, options, onChange, onOpen}) => {
 };
 
 registerBlockType(blockName, {
+    attributes: {
+        postId: {
+            type: 'number',
+            default: 0
+        },
+        overrides: {
+            type: 'object',
+            default: {}
+        },
+        excludeFromSeo: {
+            type: 'boolean',
+            default: false
+        }
+    },
     edit: ({attributes, setAttributes}) => {
-        const {postId, overrides} = attributes;
+        const { postId, overrides, excludeFromSeo } = attributes;
         const {invalidateResolution} = useDispatch('core');
 
         const parts = useSelect(
@@ -205,6 +219,39 @@ registerBlockType(blockName, {
         const iframeRef = useRef(null);
         const [height, setHeight] = useState(400);
 
+        const onLoad = () => {
+            updateHeight();
+
+            // Extract semantic content from iframe for Yoast
+            try {
+                const doc = iframe.contentDocument || iframe.contentWindow.document;
+                const meta = doc.querySelector('meta[name="yoast-content"]');
+                if (meta && postId) {
+                    const content = meta.getAttribute('content');
+
+                    // Store in global for Yoast integration
+                    window.nokPagePartData = window.nokPagePartData || {};
+                    window.nokPagePartData[postId] = content;
+
+                    if (window.nokYoastIntegration?.debug) {
+                        console.log(`[Yoast] Stored content for part ${postId}:`, content.length, 'chars');
+                    }
+                }
+            } catch (e) {
+                // Cross-origin or not ready - ignore
+            }
+
+            // Watch for any DOM changes inside the iframe
+            if (iframe.contentDocument && iframe.contentDocument.body) {
+                mo = new MutationObserver(updateHeight);
+                mo.observe(iframe.contentDocument.body, {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                });
+            }
+        };
+
         useEffect(() => {
             const iframe = iframeRef.current;
             if (!iframe) {
@@ -228,6 +275,26 @@ registerBlockType(blockName, {
 
             const onLoad = () => {
                 updateHeight();
+
+                // Extract semantic content from iframe for Yoast
+                try {
+                    const doc = iframe.contentDocument || iframe.contentWindow.document;
+                    const meta = doc.querySelector('meta[name="yoast-content"]');
+                    if (meta && postId) {
+                        const content = meta.getAttribute('content');
+
+                        // Store in global for Yoast integration
+                        window.nokPagePartData = window.nokPagePartData || {};
+                        window.nokPagePartData[postId] = content;
+
+                        if (window.nokYoastIntegration?.debug) {
+                            console.log(`[Yoast] Stored content for part ${postId}:`, content.length, 'chars');
+                        }
+                    }
+                } catch (e) {
+                    // Cross-origin or not ready - ignore
+                }
+
                 // watch for any DOM changes inside the iframe
                 if (iframe.contentDocument && iframe.contentDocument.body) {
                     mo = new MutationObserver(updateHeight);
@@ -254,6 +321,25 @@ registerBlockType(blockName, {
             <>
                 <BlockControls></BlockControls>
                 <div {...useBlockProps()} style={{position: 'relative', width: '100%', margin: '0', maxWidth: '100%'}}>
+
+                    {/* SEO Exclusion Badge */}
+                    {excludeFromSeo && (
+                        <div style={{
+                            position: 'absolute',
+                            top: '10px',
+                            right: '10px',
+                            background: '#f0f0f1',
+                            padding: '4px 8px',
+                            borderRadius: '3px',
+                            fontSize: '11px',
+                            color: '#666',
+                            zIndex: 10,
+                            border: '1px solid #ddd'
+                        }}>
+                            🚫 SEO uitgesloten
+                        </div>
+                    )}
+
                     <PanelBody title={__('NOK Page Part Blok', textDomain)} initialOpen>
                         <CustomPagePartSelector
                             label={__('Selecteer een Page Part uit de lijst', textDomain)}
@@ -262,6 +348,27 @@ registerBlockType(blockName, {
                             onChange={val => setAttributes({postId: parseInt(val, 10)})}
                             onOpen={refreshPageParts}
                         />
+
+                        {postId !== 0 && (
+                            <PanelBody
+                                title={__('SEO Instellingen', textDomain)}
+                                initialOpen={false}
+                            >
+                                <CheckboxControl
+                                    label={__('Meenemen in SEO analyse', textDomain)}
+                                    help={__('Schakel uit om deze page part uit te sluiten van Yoast SEO analyse', textDomain)}
+                                    checked={!excludeFromSeo}
+                                    onChange={(value) => {
+                                        setAttributes({ excludeFromSeo: !value });
+
+                                        // Notify Yoast integration of change
+                                        if (window.nokYoastIntegration?.debug) {
+                                            console.log(`[Yoast] Part ${postId} SEO exclusion changed to:`, !value);
+                                        }
+                                    }}
+                                />
+                            </PanelBody>
+                        )}
 
                         {pageEditableFields.length > 0 && postId !== 0 && (
                             <PanelBody title={__('Pagina-afhankelijke overrides', textDomain)} initialOpen={false}>

@@ -1,9 +1,19 @@
 <?php
 /**
- * Yoast SEO Integration
+ * YoastIntegration - Page Parts SEO Content Analysis
  *
- * Integrates the page parts system with Yoast SEO by providing
- * aggregated content to Yoast's analysis engine.
+ * Integrates page parts with Yoast SEO by collecting rendered content
+ * from iframe previews and providing aggregated text to Yoast's analysis engine.
+ *
+ * Architecture notes:
+ * - Page parts render in iframes (not directly in editor DOM)
+ * - Each iframe extracts its semantic content via meta tag
+ * - JavaScript waits for all iframes to load before registering with Yoast
+ * - Visual editor mode only (code editor cannot access iframe content)
+ *
+ * @example Basic initialization in Theme class
+ * $yoast = new YoastIntegration();
+ * $yoast->register_hooks();
  *
  * @package NOK2025\V1\SEO
  */
@@ -12,15 +22,20 @@ namespace NOK2025\V1\SEO;
 
 class YoastIntegration {
 
+	/**
+	 * Register WordPress hooks
+	 *
+	 * Hooks into admin_enqueue_scripts to load integration JavaScript
+	 * only on appropriate edit screens with Yoast SEO active.
+	 */
 	public function register_hooks(): void {
-		// Only load if Yoast SEO is active
-		add_action('admin_enqueue_scripts', [$this, 'enqueue_integration_script']);
+		add_action('admin_enqueue_scripts', [$this, 'enqueue_integration_script'], 20);
 	}
 
 	/**
 	 * Check if Yoast SEO is active
 	 *
-	 * @return bool
+	 * @return bool True if WPSEO_VERSION constant is defined
 	 */
 	private function is_yoast_active(): bool {
 		return defined('WPSEO_VERSION');
@@ -28,6 +43,14 @@ class YoastIntegration {
 
 	/**
 	 * Enqueue the Yoast integration script
+	 *
+	 * Loads JavaScript integration only when:
+	 * - On post/page edit screens
+	 * - Yoast SEO is active
+	 * - Block editor is enabled
+	 * - Post type supports page parts (page/post)
+	 *
+	 * Passes expected page part IDs to JavaScript for loading detection.
 	 *
 	 * @param string $hook Current admin page hook
 	 */
@@ -37,7 +60,6 @@ class YoastIntegration {
 			return;
 		}
 
-		// Only load if Yoast SEO is active
 		if (!$this->is_yoast_active()) {
 			return;
 		}
@@ -58,7 +80,17 @@ class YoastIntegration {
 			return;
 		}
 
-		// Load the integration script
+		// Extract expected page part IDs from saved post content
+		$post_id = get_the_ID();
+		$expected_parts = [];
+
+		if ($post_id) {
+			$post = get_post($post_id);
+			if ($post && !empty($post->post_content)) {
+				$expected_parts = $this->extract_page_part_ids($post->post_content);
+			}
+		}
+
 		$asset_file = get_theme_file_path('/assets/js/yoast-page-parts-integration.asset.php');
 
 		if (!file_exists($asset_file)) {
@@ -76,16 +108,60 @@ class YoastIntegration {
 			true
 		);
 
-		// Localize script with any needed data
+		// JavaScript will use expectedParts to know when all iframes have loaded
 		wp_localize_script(
 			'nok-yoast-page-parts-integration',
 			'nokYoastIntegration',
 			[
-				'restUrl' => rest_url('nok-2025-v1/v1'),
-				'nonce' => wp_create_nonce('wp_rest'),
-				'postId' => get_the_ID(),
+				'expectedParts' => $expected_parts,
+				'postId' => $post_id,
 				'debug' => defined('WP_DEBUG') && WP_DEBUG
 			]
 		);
+	}
+
+	/**
+	 * Extract page part IDs from post content
+	 *
+	 * Parses Gutenberg block structure to find all nok2025/embed-nok-page-part
+	 * blocks and extracts their postId attributes.
+	 *
+	 * @param string $content Raw post_content with block comments
+	 * @return array Array of unique page part IDs
+	 */
+	private function extract_page_part_ids(string $content): array {
+		$blocks = parse_blocks($content);
+		return $this->find_page_part_ids_recursive($blocks);
+	}
+
+	/**
+	 * Recursively find page part IDs in block structure
+	 *
+	 * Handles nested blocks (page parts inside columns, groups, etc.)
+	 *
+	 * @param array $blocks Array of parsed block arrays from parse_blocks()
+	 * @return array Array of unique page part IDs
+	 */
+	private function find_page_part_ids_recursive(array $blocks): array {
+		$part_ids = [];
+
+		foreach ($blocks as $block) {
+			if ($block['blockName'] === 'nok2025/embed-nok-page-part') {
+				$post_id = $block['attrs']['postId'] ?? 0;
+				if ($post_id > 0) {
+					$part_ids[] = $post_id;
+				}
+			}
+
+			// Check inner blocks recursively
+			if (!empty($block['innerBlocks'])) {
+				$part_ids = array_merge(
+					$part_ids,
+					$this->find_page_part_ids_recursive($block['innerBlocks'])
+				);
+			}
+		}
+
+		return array_unique($part_ids);
 	}
 }
