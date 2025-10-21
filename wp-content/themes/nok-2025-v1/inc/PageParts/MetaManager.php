@@ -17,6 +17,8 @@ class MetaManager {
 		add_action('save_post_page_part', [$this, 'save_editor_state'], 10, 2);
 		add_filter('manage_page_part_posts_columns', [$this, 'add_page_part_columns']);
 		add_action('manage_page_part_posts_custom_column', [$this, 'render_page_part_column'], 10, 2);
+		add_action('restrict_manage_posts', [$this, 'add_template_filter']);
+		add_action('parse_query', [$this, 'filter_by_template']);
 	}
 
 	/**
@@ -294,5 +296,57 @@ class MetaManager {
 	 */
 	public function sanitize_checkbox_field($value) {
 		return $value ? '1' : '0';
+	}
+
+	/**
+	 * Add template filter dropdown to page_part admin list
+	 */
+	public function add_template_filter(): void {
+		$post_type = $_GET['post_type'] ?? '';
+
+		if ($post_type !== 'page_part') {
+			return;
+		}
+
+		$registry = $this->registry->get_registry();
+		$current_template = $_GET['design_template'] ?? '';
+
+		echo '<select name="design_template">';
+		echo '<option value="">' . esc_html__('All Templates', THEME_TEXT_DOMAIN) . '</option>';
+
+		foreach ($registry as $slug => $data) {
+			printf(
+				'<option value="%s"%s>%s</option>',
+				esc_attr($slug),
+				selected($current_template, $slug, false),
+				esc_html($data['name'])
+			);
+		}
+
+		echo '</select>';
+	}
+
+	/**
+	 * Filter page_part query by template
+	 */
+	public function filter_by_template(\WP_Query $query): void {
+		global $pagenow;
+
+		if ($pagenow !== 'edit.php'
+		    || !isset($_GET['post_type'])
+		    || $_GET['post_type'] !== 'page_part'
+		    || !isset($_GET['design_template'])
+		    || $_GET['design_template'] === ''
+		) {
+			return;
+		}
+
+		$query->set('meta_query', [
+			[
+				'key'     => 'design_slug',
+				'value'   => sanitize_key($_GET['design_template']),
+				'compare' => '='
+			]
+		]);
 	}
 }
