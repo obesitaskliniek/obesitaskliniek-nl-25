@@ -3,11 +3,36 @@
 
 namespace NOK2025\V1\PageParts;
 
+/**
+ * RestEndpoints - REST API endpoints for page parts and SEO content
+ *
+ * Provides REST endpoints for:
+ * - Embedding page parts with live preview support
+ * - Pruning orphaned template field metadata
+ * - Aggregating SEO content from embedded page parts
+ * - Rendering page parts with override parameters
+ *
+ * @example Register endpoints in theme initialization
+ * $endpoints = new RestEndpoints($renderer, $meta_manager, $content_aggregator);
+ * $endpoints->register_hooks();
+ *
+ * @example Access embed endpoint
+ * GET /wp-json/nok-2025-v1/v1/embed-page-part/123?override_field=value
+ *
+ * @package NOK2025\V1\PageParts
+ */
 class RestEndpoints {
 	private TemplateRenderer $renderer;
 	private MetaManager $meta_manager;
 	private ?\NOK2025\V1\SEO\ContentAggregator $content_aggregator = null;
 
+	/**
+	 * Constructor
+	 *
+	 * @param TemplateRenderer $template_renderer Template rendering service
+	 * @param MetaManager $meta_manager Meta field management service
+	 * @param \NOK2025\V1\SEO\ContentAggregator|null $content_aggregator Optional SEO content aggregator
+	 */
 	public function __construct(
 		TemplateRenderer $template_renderer,
 		MetaManager $meta_manager,
@@ -18,12 +43,20 @@ class RestEndpoints {
 		$this->content_aggregator = $content_aggregator;
 	}
 
+	/**
+	 * Register WordPress action hooks
+	 *
+	 * @return void
+	 */
 	public function register_hooks(): void {
 		add_action( 'rest_api_init', [ $this, 'register_rest_routes' ] );
+		add_action('rest_api_init', [$this, 'register_prune_endpoint']);
 	}
 
 	/**
 	 * Register custom REST API routes
+	 *
+	 * @return void
 	 */
 	public function register_rest_routes(): void {
 		register_rest_route( 'nok-2025-v1/v1', '/embed-page-part/(?P<id>\d+)',
@@ -36,8 +69,71 @@ class RestEndpoints {
 	}
 
 	/**
+	 * Register endpoint for pruning orphaned template field metadata
+	 *
+	 * @return void
+	 */
+	public function register_prune_endpoint(): void {
+		register_rest_route('nok/v1', '/page-part/(?P<id>\d+)/prune-fields', [
+			'methods' => 'POST',
+			'callback' => [$this, 'prune_fields'],
+			'permission_callback' => function() {
+				return current_user_can('edit_posts');
+			},
+			'args' => [
+				'retain_current' => [
+					'required' => false,
+					'type' => 'boolean',
+					'default' => false
+				]
+			]
+		]);
+	}
+
+	/**
+	 * Prune orphaned template-specific meta fields
+	 *
+	 * Deletes meta fields from old templates when template changes.
+	 * Optionally retains fields belonging to current template.
+	 *
+	 * @param \WP_REST_Request $request Request with id and retain_current parameter
+	 * @return \WP_REST_Response Response with deleted field list and count
+	 */
+	public function prune_fields(\WP_REST_Request $request): \WP_REST_Response {
+		$post_id = (int) $request['id'];
+		$retain_current = $request->get_param('retain_current') ?? false;
+
+		$current_template = get_post_meta($post_id, 'design_slug', true);
+		$all_meta = get_post_meta($post_id);
+		$deleted = [];
+
+		foreach (array_keys($all_meta) as $meta_key) {
+			// Match pattern: template-slug_field_name
+			if (preg_match('/^[a-z0-9-]+_[a-z_]+$/', $meta_key) && $meta_key !== 'design_slug') {
+				$belongs_to_current = strpos($meta_key, $current_template . '_') === 0;
+
+				if (!($retain_current && $belongs_to_current)) {
+					delete_post_meta($post_id, $meta_key);
+					$deleted[] = $meta_key;
+				}
+			}
+		}
+
+		return new \WP_REST_Response([
+			'deleted' => $deleted,
+			'count' => count($deleted)
+		]);
+	}
+
+	/**
 	 * REST API callback for embedding page parts
-	 * Only runs in the backend when editing a PAGE, embedding page parts
+	 *
+	 * Renders page part with preview state and query parameter overrides.
+	 * Extracts semantic content for Yoast SEO integration.
+	 * Only runs in backend when editing a page.
+	 *
+	 * @param \WP_REST_Request $request Request with id parameter and optional overrides
+	 * @return void Outputs HTML and exits
 	 */
 	public function embed_page_part_callback( \WP_REST_Request $request ) {
 		$id   = (int) $request->get_param( 'id' );
@@ -77,7 +173,6 @@ class RestEndpoints {
 	 * Returns plain text suitable for Yoast SEO content analysis.
 	 *
 	 * @param string $html Rendered HTML content
-	 *
 	 * @return string Extracted semantic text
 	 */
 	private function extract_semantic_content( string $html ): string {
@@ -157,7 +252,6 @@ class RestEndpoints {
 	 * @param int $id Page part ID
 	 * @param string $design Design slug
 	 * @param array $overrides Override parameters
-	 *
 	 * @return string Rendered HTML
 	 */
 	private function render_page_part_html( int $id, string $design, array $overrides = [] ): string {
@@ -216,6 +310,10 @@ class RestEndpoints {
 
 	/**
 	 * Setup preview filters for meta and content
+	 *
+	 * @param int $id Page part ID
+	 * @param array $preview_state Preview state data from transient
+	 * @return void
 	 */
 	private function setup_preview_filters( int $id, array $preview_state ): void {
 		add_filter( 'get_post_metadata', function ( $value, $object_id, $meta_key ) use ( $id, $preview_state ) {
@@ -257,6 +355,7 @@ class RestEndpoints {
 	 * @param array $overrides Override parameters
 	 * @param string $rendered_html Pre-rendered HTML content
 	 * @param string $semantic_content Extracted semantic content for Yoast
+	 * @return void Outputs HTML and exits
 	 */
 	private function output_embed_html( int $id, string $design, array $overrides = [], string $rendered_html = '', string $semantic_content = '' ): void {
 		$css_uris = [
@@ -304,6 +403,12 @@ class RestEndpoints {
 
 	/**
 	 * Render the page part content within proper WordPress context
+	 *
+	 * @deprecated Method appears unused, candidate for removal
+	 * @param int $id Page part ID
+	 * @param string $design Design slug
+	 * @param array $overrides Override parameters
+	 * @return string Rendered HTML content
 	 */
 	private function render_page_part_content( int $id, string $design, array $overrides = [] ): string {
 		// Store original state
@@ -372,9 +477,11 @@ class RestEndpoints {
 	/**
 	 * REST endpoint: Get aggregated SEO content for a post
 	 *
-	 * @param \WP_REST_Request $request Request object
+	 * Aggregates content from embedded page parts for SEO analysis.
+	 * Supports both editor state (via part_ids) and saved state (via post_content).
 	 *
-	 * @return \WP_REST_Response|WP_Error
+	 * @param \WP_REST_Request $request Request with id, optional part_ids and use_cache
+	 * @return \WP_REST_Response|\WP_Error Response with aggregated content or error
 	 */
 	public function get_seo_content( \WP_REST_Request $request ) {
 		$post_id   = (int) $request['id'];

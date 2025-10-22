@@ -8,75 +8,99 @@ use NOK2025\V1\Helpers;
 class MetaManager {
 	private Registry $registry;
 
-	public function __construct(Registry $registry) {
+	/**
+	 * Constructor
+	 *
+	 * @param Registry $registry Page part registry instance
+	 */
+	public function __construct( Registry $registry ) {
 		$this->registry = $registry;
 	}
 
+	/**
+	 * Register WordPress hooks for meta management
+	 *
+	 * @return void
+	 */
 	public function register_hooks(): void {
-		add_action('init', [$this, 'register_design_meta']);
-		add_action('save_post_page_part', [$this, 'save_editor_state'], 10, 2);
-		add_filter('manage_page_part_posts_columns', [$this, 'add_page_part_columns']);
-		add_action('manage_page_part_posts_custom_column', [$this, 'render_page_part_column'], 10, 2);
-		add_action('restrict_manage_posts', [$this, 'add_template_filter']);
-		add_action('parse_query', [$this, 'filter_by_template']);
+		add_action( 'init', [ $this, 'register_design_meta' ] );
+		add_action( 'save_post_page_part', [ $this, 'save_editor_state' ], 10, 2 );
+		add_filter( 'manage_page_part_posts_columns', [ $this, 'add_page_part_columns' ] );
+		add_action( 'manage_page_part_posts_custom_column', [ $this, 'render_page_part_column' ], 10, 2 );
+		add_action( 'restrict_manage_posts', [ $this, 'add_template_filter' ] );
+		add_action( 'parse_query', [ $this, 'filter_by_template' ] );
 	}
 
 	/**
 	 * Register design_slug meta field and all custom fields for REST API access
+	 *
+	 * @return void
 	 */
 	public function register_design_meta(): void {
 		// Register the main design_slug field
-		register_post_meta('page_part', 'design_slug', [
+		register_post_meta( 'page_part', 'design_slug', [
 			'type'              => 'string',
 			'show_in_rest'      => true,
 			'single'            => true,
 			'sanitize_callback' => 'sanitize_key',
 			'default'           => '',
-		]);
+		] );
 
 		// Register all custom fields from templates
 		$registry = $this->registry->get_registry();
 
-		foreach ($registry as $template_slug => $template_data) {
-			if (empty($template_data['custom_fields'])) {
+		foreach ( $registry as $template_slug => $template_data ) {
+			if ( empty( $template_data['custom_fields'] ) ) {
 				continue;
 			}
 
-			foreach ($template_data['custom_fields'] as $field) {
-				$sanitize_callback = $this->get_sanitize_callback($field['type']);
+			foreach ( $template_data['custom_fields'] as $field ) {
+				$sanitize_callback = $this->get_sanitize_callback( $field['type'] );
 
-				register_post_meta('page_part', $field['meta_key'], [
-					'type'              => $this->get_meta_type($field['type']),
+				register_post_meta( 'page_part', $field['meta_key'], [
+					'type'              => $this->get_meta_type( $field['type'] ),
 					'show_in_rest'      => true,
 					'single'            => true,
 					'sanitize_callback' => $sanitize_callback,
-					'default'           => $this->get_default_value($field['type'], $field),
-				]);
+					'default'           => $this->get_default_value( $field['type'], $field ),
+				] );
 			}
 		}
 	}
 
-	public function get_page_part_fields(int $post_id, string $design, bool $is_editing = false): array {
-		$registry = $this->registry->get_registry();
-		$current_template_data = $registry[$design] ?? [];
-		$expected_fields = $current_template_data['custom_fields'] ?? [];
+	/**
+	 * Get page part fields with defaults and placeholders
+	 *
+	 * Returns field values from database with fallbacks:
+	 * - Editing mode: Shows placeholders for empty text fields
+	 * - Display mode: Returns empty strings for missing fields
+	 *
+	 * @param int $post_id Page part post ID
+	 * @param string $design Design slug to get fields for
+	 * @param bool $is_editing Whether in editor context (shows placeholders)
+	 * @return array Associative array of field name => value
+	 */
+	public function get_page_part_fields( int $post_id, string $design, bool $is_editing = false ): array {
+		$registry              = $this->registry->get_registry();
+		$current_template_data = $registry[ $design ] ?? [];
+		$expected_fields       = $current_template_data['custom_fields'] ?? [];
 
 		$default_fields = [
 			'text' => '(leeg)',
-			'url' => '#',
+			'url'  => '#',
 		];
 
 		$page_part_fields = [];
 
-		foreach ($expected_fields as $field) {
-			$meta_key = $field['meta_key'];
+		foreach ( $expected_fields as $field ) {
+			$meta_key         = $field['meta_key'];
 			$short_field_name = $field['name'];
-			$is_text_based = in_array($field['type'], ['text', 'textarea'], true);
+			$is_text_based    = in_array( $field['type'], [ 'text', 'textarea' ], true );
 
-			$actual_meta_value = get_post_meta($post_id, $meta_key, true);
-			$page_part_fields[$short_field_name] = empty($actual_meta_value) ?
-				($is_editing ?
-					($is_text_based ? Helpers::show_placeholder($short_field_name) : ($default_fields[$field['type']] ?? '')) : '') :
+			$actual_meta_value                     = get_post_meta( $post_id, $meta_key, true );
+			$page_part_fields[ $short_field_name ] = empty( $actual_meta_value ) ?
+				( $is_editing ?
+					( $is_text_based ? Helpers::show_placeholder( $short_field_name ) : ( $default_fields[ $field['type'] ] ?? '' ) ) : '' ) :
 				$actual_meta_value;
 		}
 
@@ -85,104 +109,127 @@ class MetaManager {
 
 	/**
 	 * Save editor state from unified transient or fallback methods
+	 *
+	 * Priority order:
+	 * 1. Transient preview state (from Gutenberg editor)
+	 * 2. REST API handled by WordPress
+	 * 3. Legacy form submission
+	 *
+	 * @param int $post_id Page part post ID
+	 * @param \WP_Post $post Post object
+	 * @return void
 	 */
-	/**
-	 * Save meta fields from transient - title/content handled by Gutenberg
-	 */
-	public function save_editor_state(int $post_id, \WP_Post $post): void {
+
+	public function save_editor_state( int $post_id, \WP_Post $post ): void {
 		// Prevent infinite recursion
 		static $saving = [];
-		if (isset($saving[$post_id])) {
+		if ( isset( $saving[ $post_id ] ) ) {
 			return;
 		}
-		$saving[$post_id] = true;
+		$saving[ $post_id ] = true;
 
-		// Let WordPress REST API handle title/content saves
-		if (defined('REST_REQUEST') && REST_REQUEST) {
-			unset($saving[$post_id]);
-			return;
-		}
+		// Check for meta fields in transient FIRST
+		$preview_state = get_transient( "preview_editor_state_{$post_id}" );
 
-		// Check for meta fields in transient
-		$preview_state = get_transient("preview_editor_state_{$post_id}");
-
-		if ($preview_state && is_array($preview_state) && isset($preview_state['meta'])) {
-			// Save only meta fields - Gutenberg handles title/content
-			foreach ($preview_state['meta'] as $meta_key => $meta_value) {
-				update_post_meta($post_id, $meta_key, $meta_value);
+		if ( $preview_state && is_array( $preview_state ) && isset( $preview_state['meta'] ) ) {
+			foreach ( $preview_state['meta'] as $meta_key => $meta_value ) {
+				if ( $meta_value === null ) {
+					delete_post_meta( $post_id, $meta_key );
+				} else {
+					update_post_meta( $post_id, $meta_key, $meta_value );
+				}
 			}
 
 			// Clean up transient
-			delete_transient("preview_editor_state_{$post_id}");
-			unset($saving[$post_id]);
+			delete_transient( "preview_editor_state_{$post_id}" );
+			unset( $saving[ $post_id ] );
+
 			return;
 		}
 
-		// Fallback: traditional form submission for compatibility
-		$this->handle_legacy_form_submission($post_id);
-		unset($saving[$post_id]);
+		// Let WordPress REST API handle normal saves
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			unset( $saving[ $post_id ] );
+
+			return;
+		}
+
+		// Fallback: traditional form submission
+		$this->handle_legacy_form_submission( $post_id );
+		unset( $saving[ $post_id ] );
 	}
 
 	/**
 	 * Add custom columns to page_part post list
+	 *
+	 * @param array $columns Existing columns
+	 * @return array Modified columns with template column
 	 */
-	public function add_page_part_columns(array $columns): array {
+	public function add_page_part_columns( array $columns ): array {
 		// Insert template column after title
 		$new_columns = [];
-		foreach ($columns as $key => $value) {
-			$new_columns[$key] = $value;
-			if ($key === 'title') {
-				$new_columns['design_template'] = __('Template', THEME_TEXT_DOMAIN);
+		foreach ( $columns as $key => $value ) {
+			$new_columns[ $key ] = $value;
+			if ( $key === 'title' ) {
+				$new_columns['design_template'] = __( 'Template', THEME_TEXT_DOMAIN );
 			}
 		}
+
 		return $new_columns;
 	}
 
 	/**
 	 * Render custom column content for page_part posts
+	 *
+	 * @param string $column_name Column identifier
+	 * @param int $post_id Post ID being rendered
+	 * @return void
 	 */
-	public function render_page_part_column(string $column_name, int $post_id): void {
-		if ($column_name === 'design_template') {
-			$design_slug = get_post_meta($post_id, 'design_slug', true);
+	public function render_page_part_column( string $column_name, int $post_id ): void {
+		if ( $column_name === 'design_template' ) {
+			$design_slug = get_post_meta( $post_id, 'design_slug', true );
 
-			if ($design_slug) {
-				$registry = $this->registry->get_registry();
-				$template_name = $registry[$design_slug]['name'] ?? $design_slug;
-				echo esc_html($template_name);
+			if ( $design_slug ) {
+				$registry      = $this->registry->get_registry();
+				$template_name = $registry[ $design_slug ]['name'] ?? $design_slug;
+				echo esc_html( $template_name );
 			} else {
-				echo '<em>' . esc_html__('No template', THEME_TEXT_DOMAIN) . '</em>';
+				echo '<em>' . esc_html__( 'No template', THEME_TEXT_DOMAIN ) . '</em>';
 			}
 		}
 	}
 
 	/**
 	 * Sanitize meta fields based on their registered field types
+	 *
+	 * @param array $meta_fields Associative array of meta_key => value
+	 * @return array Sanitized meta fields
 	 */
-	public function sanitize_meta_fields(array $meta_fields): array {
+	public function sanitize_meta_fields( array $meta_fields ): array {
 		$sanitized = [];
-		$registry = $this->registry->get_registry();
+		$registry  = $this->registry->get_registry();
 
-		foreach ($meta_fields as $meta_key => $meta_value) {
+		foreach ( $meta_fields as $meta_key => $meta_value ) {
 			// Find the field definition to get proper sanitization
 			$field_found = false;
-			foreach ($registry as $template_slug => $template_data) {
-				if (empty($template_data['custom_fields'])) {
+			foreach ( $registry as $template_slug => $template_data ) {
+				if ( empty( $template_data['custom_fields'] ) ) {
 					continue;
 				}
 
-				foreach ($template_data['custom_fields'] as $field) {
-					if ($field['meta_key'] === $meta_key) {
-						$sanitize_callback = $this->get_sanitize_callback($field['type']);
-						$sanitized[$meta_key] = call_user_func($sanitize_callback, $meta_value);
-						$field_found = true;
+				foreach ( $template_data['custom_fields'] as $field ) {
+					if ( $field['meta_key'] === $meta_key ) {
+						$sanitize_callback      = $this->get_sanitize_callback( $field['type'] );
+						$sanitized[ $meta_key ] = call_user_func( $sanitize_callback, $meta_value );
+						$field_found            = true;
 						break 2; // Break out of both loops
 					}
 				}
 			}
 
 			// If field not found in registry, use default sanitization
-			if (!$field_found) {
-				$sanitized[$meta_key] = sanitize_text_field($meta_value);
+			if ( ! $field_found ) {
+				$sanitized[ $meta_key ] = sanitize_text_field( $meta_value );
 			}
 		}
 
@@ -191,27 +238,30 @@ class MetaManager {
 
 	/**
 	 * Handle legacy form submission for backward compatibility
+	 *
+	 * @param int $post_id Page part post ID
+	 * @return void
 	 */
-	private function handle_legacy_form_submission(int $post_id): void {
-		if (isset($_POST['page_part_design_slug'])) {
-			$new = sanitize_key(wp_unslash($_POST['page_part_design_slug']));
-			update_post_meta($post_id, 'design_slug', $new);
+	private function handle_legacy_form_submission( int $post_id ): void {
+		if ( isset( $_POST['page_part_design_slug'] ) ) {
+			$new = sanitize_key( wp_unslash( $_POST['page_part_design_slug'] ) );
+			update_post_meta( $post_id, 'design_slug', $new );
 		}
 
 		// Handle traditional form submission for custom fields
 		$registry = $this->registry->get_registry();
-		foreach ($registry as $template_slug => $template_data) {
-			if (empty($template_data['custom_fields'])) {
+		foreach ( $registry as $template_slug => $template_data ) {
+			if ( empty( $template_data['custom_fields'] ) ) {
 				continue;
 			}
 
-			foreach ($template_data['custom_fields'] as $field) {
+			foreach ( $template_data['custom_fields'] as $field ) {
 				$form_field_name = 'page_part_' . $field['meta_key'];
 
-				if (isset($_POST[$form_field_name])) {
-					$sanitize_callback = $this->get_sanitize_callback($field['type']);
-					$sanitized_value = call_user_func($sanitize_callback, wp_unslash($_POST[$form_field_name]));
-					update_post_meta($post_id, $field['meta_key'], $sanitized_value);
+				if ( isset( $_POST[ $form_field_name ] ) ) {
+					$sanitize_callback = $this->get_sanitize_callback( $field['type'] );
+					$sanitized_value   = call_user_func( $sanitize_callback, wp_unslash( $_POST[ $form_field_name ] ) );
+					update_post_meta( $post_id, $field['meta_key'], $sanitized_value );
 				}
 			}
 		}
@@ -219,30 +269,44 @@ class MetaManager {
 
 	/**
 	 * Get appropriate sanitize callback for field type
+	 *
+	 * @param string $type Field type (text, textarea, url, checkbox, repeater, etc.)
+	 * @return callable Sanitization callback function
 	 */
-	public function get_sanitize_callback(string $field_type) {
-		switch ($field_type) {
-			case 'url':
-				return 'esc_url_raw';
-			case 'textarea':
-				return 'sanitize_textarea_field';
-			case 'repeater':
-				return [$this, 'sanitize_json_field'];
-			case 'select':
-				return 'sanitize_text_field';
-			case 'checkbox':
-				return [$this, 'sanitize_checkbox_field'];
-			case 'text':
-			default:
-				return 'sanitize_text_field';
-		}
+	public function get_sanitize_callback( string $type ): callable {
+		return function ( $value ) use ( $type ) {
+			// Allow null for deletion
+			if ( $value === null ) {
+				return null;
+			}
+
+			switch ( $type ) {
+				case 'textarea':
+					return sanitize_textarea_field( $value );
+				case 'url':
+					return esc_url_raw( $value );
+				case 'checkbox':
+					return in_array( $value, [ '1', 1, true, '0', 0, false ], true ) ?
+						( $value ? '1' : '0' ) : '0';
+				case 'repeater':
+					return is_string( $value ) ? $value : wp_json_encode( $value );
+				case 'icon-selector':
+				case 'select':
+				case 'text':
+				default:
+					return sanitize_text_field( $value );
+			}
+		};
 	}
 
 	/**
 	 * Get meta type for WordPress registration
+	 *
+	 * @param string $field_type Field type from template definition
+	 * @return string WordPress meta type (always 'string' currently)
 	 */
-	private function get_meta_type(string $field_type): string {
-		switch ($field_type) {
+	private function get_meta_type( string $field_type ): string {
+		switch ( $field_type ) {
 			case 'repeater':
 				return 'string'; // JSON stored as string
 			default:
@@ -252,13 +316,17 @@ class MetaManager {
 
 	/**
 	 * Get default value for field type
+	 *
+	 * @param string $field_type Field type from template definition
+	 * @param array $field Complete field definition (may contain custom default)
+	 * @return mixed Default value for field type
 	 */
-	private function get_default_value(string $field_type, array $field = []) {
+	private function get_default_value( string $field_type, array $field = [] ) {
 		// Use field-specific default if provided
-		if (isset($field['default'])) {
+		if ( isset( $field['default'] ) ) {
 			return $field['default'];
 		}
-		switch ($field_type) {
+		switch ( $field_type ) {
 			case 'repeater':
 				return '[]'; // Empty JSON array
 			case 'checkbox':
@@ -270,21 +338,32 @@ class MetaManager {
 
 	/**
 	 * Sanitize JSON field data
+	 *
+	 * Handles both array input (REST API) and string input (form/double-encoded).
+	 * Returns valid JSON string or empty array.
+	 *
+	 * @param mixed $value Array or JSON string to sanitize
+	 * @return string Valid JSON string
 	 */
-	public function sanitize_json_field($value) {
-		if (is_string($value)) {
+	public function sanitize_json_field( $value ) {
+		// Handle arrays passed directly (REST API)
+		if ( is_array( $value ) ) {
+			return wp_json_encode( $value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+		}
+
+		if ( is_string( $value ) ) {
 			// First, try to decode it
-			$decoded = json_decode($value, true);
+			$decoded = json_decode( $value, true );
 
 			// If decode failed, the string might be double-encoded
-			if (json_last_error() !== JSON_ERROR_NONE) {
+			if ( json_last_error() !== JSON_ERROR_NONE ) {
 				// Try decoding again (handles double-encoding)
-				$decoded = json_decode(stripslashes($value), true);
+				$decoded = json_decode( stripslashes( $value ), true );
 			}
 
-			if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+			if ( json_last_error() === JSON_ERROR_NONE && is_array( $decoded ) ) {
 				// Re-encode with proper UTF-8 handling
-				return wp_json_encode($decoded, JSON_UNESCAPED_UNICODE);
+				return wp_json_encode( $decoded, JSON_UNESCAPED_UNICODE );
 			}
 		}
 
@@ -293,33 +372,38 @@ class MetaManager {
 
 	/**
 	 * Sanitize checkbox field - convert to '1' or '0'
+	 *
+	 * @param mixed $value Truthy or falsy value
+	 * @return string Either '1' or '0'
 	 */
-	public function sanitize_checkbox_field($value) {
+	public function sanitize_checkbox_field( $value ) {
 		return $value ? '1' : '0';
 	}
 
 	/**
 	 * Add template filter dropdown to page_part admin list
+	 *
+	 * @return void
 	 */
 	public function add_template_filter(): void {
 		$post_type = $_GET['post_type'] ?? '';
 
-		if ($post_type !== 'page_part') {
+		if ( $post_type !== 'page_part' ) {
 			return;
 		}
 
-		$registry = $this->registry->get_registry();
+		$registry         = $this->registry->get_registry();
 		$current_template = $_GET['design_template'] ?? '';
 
 		echo '<select name="design_template">';
-		echo '<option value="">' . esc_html__('All Templates', THEME_TEXT_DOMAIN) . '</option>';
+		echo '<option value="">' . esc_html__( 'All Templates', THEME_TEXT_DOMAIN ) . '</option>';
 
-		foreach ($registry as $slug => $data) {
+		foreach ( $registry as $slug => $data ) {
 			printf(
 				'<option value="%s"%s>%s</option>',
-				esc_attr($slug),
-				selected($current_template, $slug, false),
-				esc_html($data['name'])
+				esc_attr( $slug ),
+				selected( $current_template, $slug, false ),
+				esc_html( $data['name'] )
 			);
 		}
 
@@ -328,25 +412,28 @@ class MetaManager {
 
 	/**
 	 * Filter page_part query by template
+	 *
+	 * @param \WP_Query $query Query object to modify
+	 * @return void
 	 */
-	public function filter_by_template(\WP_Query $query): void {
+	public function filter_by_template( \WP_Query $query ): void {
 		global $pagenow;
 
-		if ($pagenow !== 'edit.php'
-		    || !isset($_GET['post_type'])
-		    || $_GET['post_type'] !== 'page_part'
-		    || !isset($_GET['design_template'])
-		    || $_GET['design_template'] === ''
+		if ( $pagenow !== 'edit.php'
+		     || ! isset( $_GET['post_type'] )
+		     || $_GET['post_type'] !== 'page_part'
+		     || ! isset( $_GET['design_template'] )
+		     || $_GET['design_template'] === ''
 		) {
 			return;
 		}
 
-		$query->set('meta_query', [
+		$query->set( 'meta_query', [
 			[
 				'key'     => 'design_slug',
-				'value'   => sanitize_key($_GET['design_template']),
+				'value'   => sanitize_key( $_GET['design_template'] ),
 				'compare' => '='
 			]
-		]);
+		] );
 	}
 }
