@@ -601,7 +601,6 @@ registerBlockType(blockName, {
                                     ref={iframeRef}
                                     src={src}
                                     style={{
-                                        pointerEvents: 'none',
                                         width: '100%',
                                         height: `${height}px`,
                                         flexShrink: 0,

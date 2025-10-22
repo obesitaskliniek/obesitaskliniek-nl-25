@@ -1,5 +1,6 @@
 @use "components/shared" as components-base;
 
+/*
 body nok-screen-mask {
   .nok-button {
     display: none;
@@ -35,5 +36,31 @@ body:hover > nok-screen-mask {
 @media (prefers-reduced-transparency) {
   body:hover > nok-screen-mask {
     display: none;
+  }
+}*/
+
+
+html body  {
+  cursor: move;
+  user-select: none;
+  &:hover:before {
+    pointer-events: none;
+    display: flex;
+    padding: 2px 4px;
+    margin: 0;
+    border-radius: 0;
+    font-size: 14px;
+    text-shadow: 1px 2px #000;
+    background: rgba(0, 0, 0, 0.5);
+    color: #FFF;
+    position: absolute;
+    inset: 0;
+    content: "Dit is een Page Part preview. Deze zijn niet interactief. \A Gebruik de voorvertoning/preview om de gehele pagina interactief te bekijken.";
+    text-align: center;
+    white-space: pre-wrap;
+    z-index: 999999;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(10px);
   }
 }
