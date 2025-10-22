@@ -48,16 +48,15 @@ nok-bg-alpha-10 nok-dark-bg-alpha-10 nok-subtle-shadow nok-grid-gap-0_5">
                         <nok-square-block class="nok-bg-white nok-alpha-10 nok-pull-up-lg-3" data-shadow="true">
                             <div class="nok-square-block__text nok-fs-1">
                                 Is je vraag niet beantwoord of wil je meer informatie over een bepaald
-                                onderwerp dat je niet terug kunt vinden bij <a href="/veelgestelde-vragen">de andere
-                                    veelgestelde vragen</a>?
+                                onderwerp?
                             </div>
-                            <a role="button" href="" class="nok-button nok-justify-self-start w-100
-                 nok-bg-yellow nok-text-contrast" tabindex="0">
-                                Neem contact op <?= Assets::getIcon( 'ui_telefoon', 'nok-text-darkblue' ) ?>
-                            </a>
                             <a role="button" href="" class="nok-button nok-justify-self-start w-100
                  nok-bg-darkblue nok-text-contrast" tabindex="0">
                                 Bekijk alle vragen <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ) ?>
+                            </a>
+                            <a role="button" href="" class="nok-button nok-justify-self-start w-100
+                 nok-bg-yellow nok-text-contrast" tabindex="0">
+                                Neem contact op <?= Assets::getIcon( 'ui_telefoon', 'nok-text-darkblue' ) ?>
                             </a>
                         </nok-square-block>
                     </div>
@@ -71,7 +70,7 @@ $faq_items = yarpp_get_related( array(), get_the_ID() );
 if ( $faq_items ) :
     $accordion_id = 'gerelateerde-vragen-' . sanitize_title( get_the_title() );
     ?>
-    <nok-section class="nok-bg-body--darker nok-text-darkblue">
+    <nok-section class="nok-bg-body--darker gradient-background nok-text-darkblue">
         <div class="nok-section__inner">
             <h2 class="nok-fs-5"><?= __( 'Gerelateerde vragen', 'yet-another-related-posts-plugin' ); ?></h2>
             <div class="nok-layout-grid nok-layout-grid__1-column nok-mt-1" data-requires="./nok-accordion.mjs" data-require-lazy="true">
