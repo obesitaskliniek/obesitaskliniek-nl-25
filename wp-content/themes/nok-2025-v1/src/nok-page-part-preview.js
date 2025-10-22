@@ -72,6 +72,7 @@ function IframePreview() {
 }
 
 domReady(() => {
+    logger.info(NAME, 'domReady');
     // Mount the iframe
     const root = document.getElementById(`${prefix}-root`);
     if (root) {
@@ -90,53 +91,38 @@ domReady(() => {
         logger.warn(NAME, 'Update button not found, continuing with frame only');
     }
 
-    // Add initialization state tracking
-    let isInitializing = true;
-    let userInitiatedChange = false;
-    let hasLoadedInitialPreview = false;
+    // Wait for editor to be ready before initializing
+    function whenEditorIsReady() {
+        return new Promise((resolve) => {
+            const unsubscribe = subscribe(() => {
+                const postId = select('core/editor').getCurrentPostId();
+                const postType = select('core/editor').getCurrentPostType();
 
-    // Function to load initial preview
-    const loadInitialPreview = () => {
-        if (!hasLoadedInitialPreview) {
-            const postId = wp.data.select('core/editor').getCurrentPostId();
-            const previewLink = wp.data.select('core/editor').getEditedPostPreviewLink();
-            const designSlug = wp.data.select('core/editor').getEditedPostAttribute('meta')?.design_slug;
+                // Editor is ready when we have a valid post ID and type
+                if (postId && postType) {
+                    unsubscribe();
+                    resolve();
+                }
+            });
+        });
+    }
 
-            logger.info(NAME, 'Loading initial preview');
-            logger.info(NAME, `src: ${previewLink}`);
-
-            // Only load if template selected and not auto-draft
-            if (previewLink && !previewLink.includes('auto-draft') && designSlug) {
-                iframe.removeAttribute('srcdoc');
-                iframe.src = `${previewLink}&hide_adminbar=1`;
-                hasLoadedInitialPreview = true;
-            }
-        }
-    };
-
-    // Enhanced updateFrame function that tracks user vs system changes
     const enhancedUpdateFrame = (isUserInitiated = false) => {
         if (isUserInitiated) {
-            userInitiatedChange = true;
             logger.info(NAME, 'User-initiated preview update');
         }
 
         const postId = wp.data.select('core/editor').getCurrentPostId();
-
-        // ONLY collect meta fields for transient - let Gutenberg handle title/content
         const metaFields = wp.data.select('core/editor').getEditedPostAttribute('meta') || {};
 
-        // Prepare for storage
         const formData = new URLSearchParams({
             action: 'store_preview_state',
             post_id: postId,
             nonce: window.PagePartDesignSettings.nonce
         });
 
-        // Only store meta fields
         formData.append('meta_fields', JSON.stringify(metaFields));
 
-        // Store meta via AJAX
         fetch(ajaxurl, {
             method: 'POST',
             headers: {
@@ -147,19 +133,43 @@ domReady(() => {
             .then(response => response.json())
             .then(data => {
                 logger.info(NAME, 'Meta fields stored in transient');
-                logger.info(NAME, data);
-
-                // Gutenberg autosave handles title/content
                 return wp.data.dispatch('core/editor').autosave();
             })
-            .then(autosaveResult => {
-                logger.info(NAME, 'Autosave completed.');
+            .then(() => {
+                logger.info(NAME, 'Autosave completed');
+
+                // Wait for autosaving flag to clear AND preview link to be available
+                return new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => {
+        unsubscribe();
+        reject(new Error('Timeout waiting for autosave to complete'));
+    }, 10000); // 10 second timeout
+
+                    const checkReady = () => {
+                        if (!wp.data.select('core/editor').isAutosavingPost()) {
+                            const previewLink = wp.data.select('core/editor').getEditedPostPreviewLink();
+                            if (previewLink) {
+                clearTimeout(timeout);
+                                resolve(previewLink);
+                                return true;
+                            }
+                        }
+                        return false;
+                    };
+
+                    // Try immediately first
+                    if (checkReady()) return;
+
+                    // Otherwise subscribe to changes
+                    const unsubscribe = subscribe(() => {
+                        if (checkReady()) {
+                            unsubscribe();
+                        }
+                    });
+                });
+            })
+            .then(previewLink => {
                 wp.data.dispatch('core/notices').removeNotice('autosave-exists');
-
-                const previewLink = wp.data
-                    .select('core/editor')
-                    .getEditedPostPreviewLink();
-
                 iframe.removeAttribute('srcdoc');
                 iframe.src = `${previewLink}&hide_adminbar=1`;
             })
@@ -168,48 +178,80 @@ domReady(() => {
             });
     };
 
-    // Expose enhanced function globally
     window.nokUpdatePreview = enhancedUpdateFrame;
 
-    // Button click handler uses the enhanced function
     if (button) {
-        button.addEventListener('click', () => enhancedUpdateFrame(true)); // Mark button clicks as user-initiated
+        button.addEventListener('click', () => enhancedUpdateFrame(true));
     }
 
-    setTimeout(() => {
-        isInitializing = false;
-        loadInitialPreview(); // Load preview after initialization
-        logger.info(NAME, 'Preview system initialized, updates now enabled');
-    }, 2000);
+    // Initialize properly after editor is ready
+    (async () => {
+        await whenEditorIsReady();
 
-    // Enhanced subscribe function with autosave detection
-    let lastSlug = select("core/editor").getEditedPostAttribute("meta")?.design_slug;
-    let lastMeta = select("core/editor").getEditedPostAttribute("meta") || {};
+        logger.info(NAME, 'Editor ready, initializing preview system');
 
-    subscribe(() => {
-        // Skip all updates during initialization
-        if (isInitializing) {
-            return;
-        }
+        // NOW capture baseline state (after editor is stable)
+        let lastSlug = select("core/editor").getEditedPostAttribute("meta")?.design_slug;
+        let lastMeta = select("core/editor").getEditedPostAttribute("meta") || {};
 
-        const meta = select("core/editor").getEditedPostAttribute("meta") || {};
-        const currentSlug = meta.design_slug;
+    // Wait for preview link to be available
+    const waitForPreviewLink = () => {
+        return new Promise((resolve) => {
+            const check = () => {
+                const previewLink = select('core/editor').getEditedPostPreviewLink();
+                const designSlug = select("core/editor").getEditedPostAttribute("meta")?.design_slug;
 
-        // Check if design_slug changed
-        if (currentSlug !== lastSlug) {
-            lastSlug = currentSlug;
+                if (previewLink && !previewLink.includes('auto-draft') && designSlug) {
+                    return { previewLink, designSlug };
+                }
+                return null;
+            };
+
+            const result = check();
+            if (result) {
+                resolve(result);
+                return;
+            }
+
+            const unsubscribe = subscribe(() => {
+                const result = check();
+                if (result) {
+                    unsubscribe();
+                    resolve(result);
+                }
+            });
+        });
+    };
+
+        // Load initial preview
+    const { previewLink, designSlug } = await waitForPreviewLink();
+
+        logger.info(NAME, 'Loading initial preview');
+            iframe.removeAttribute('srcdoc');
+            iframe.src = `${previewLink}&hide_adminbar=1`;
+
+        // Subscribe to changes (only starts listening after editor is ready)
+        subscribe(() => {
+            const meta = select("core/editor").getEditedPostAttribute("meta") || {};
+            const currentSlug = meta.design_slug;
+
+            // Check if design_slug changed
+            if (currentSlug !== lastSlug) {
+                lastSlug = currentSlug;
                 logger.info(NAME, `Design slug changed to: ${currentSlug}`);
                 enhancedUpdateFrame();
-            return;
-        }
+                return;
+            }
 
-        // Check if any custom fields changed
-        const hasMetaChanged = JSON.stringify(meta) !== JSON.stringify(lastMeta);
-        if (hasMetaChanged) {
-            lastMeta = {...meta};
+            // Check if any custom fields changed
+            const hasMetaChanged = JSON.stringify(meta) !== JSON.stringify(lastMeta);
+            if (hasMetaChanged) {
+                lastMeta = {...meta};
                 logger.info(NAME, `Custom fields changed, updating preview`);
                 enhancedUpdateFrame();
-        }
-    });
+            }
+        });
 
+        logger.info(NAME, 'Preview system fully initialized');
+    })();
 });
