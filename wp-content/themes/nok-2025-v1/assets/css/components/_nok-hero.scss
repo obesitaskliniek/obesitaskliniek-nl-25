@@ -7,7 +7,8 @@ nok-hero {
   --footer-height: 6rem;
 
   &:not(:has(footer)) {
-    --footer-height: var(--nok-padding-section-sides);
+    //--footer-height: var(--nok-padding-section-sides);
+    --footer-height: 0;
   }
   &:has(figure) {
     --figure-row-mobile: var(--section-max-width, 85vw);
@@ -20,6 +21,7 @@ nok-hero {
     position: relative;
     overflow: hidden;
 
+    .article,
     article {
       display: flex;
       z-index: calc(var(--z-base, 1) + 2);

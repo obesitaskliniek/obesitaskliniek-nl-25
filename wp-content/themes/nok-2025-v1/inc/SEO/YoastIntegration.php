@@ -30,6 +30,18 @@ class YoastIntegration {
 	 */
 	public function register_hooks(): void {
 		add_action('admin_enqueue_scripts', [$this, 'enqueue_integration_script'], 20);
+		// Exclude page_part from Yoast indexables and sitemaps
+		add_filter('wpseo_indexable_excluded_post_types', [$this, 'exclude_page_parts_from_indexables']);
+		add_filter('wpseo_sitemap_exclude_post_type', [$this, 'exclude_page_parts_from_sitemap'], 10, 2);
+	}
+
+	public function exclude_page_parts_from_indexables(array $excluded): array {
+		$excluded[] = 'page_part';
+		return $excluded;
+	}
+
+	public function exclude_page_parts_from_sitemap(bool $excluded, string $post_type): bool {
+		return $post_type === 'page_part' ? true : $excluded;
 	}
 
 	/**

@@ -1,0 +1,116 @@
+<?php
+/* Template Name: Event */
+
+get_header( 'faq_items' );
+
+use NOK2025\V1\Assets;
+use NOK2025\V1\Helpers;
+
+$featuredImage = Helpers::get_featured_image();
+
+
+?>
+
+    <nok-hero class="nok-section">
+        <div class="nok-section__inner nok-hero__inner nok-m-0 nok-border-radius-to-sm-0
+nok-bg-darkerblue nok-dark-bg-darkestblue nok-text-white nok-dark-text-white
+nok-bg-alpha-10 nok-dark-bg-alpha-10 nok-subtle-shadow nok-grid-gap-0_5">
+            <div class="article">
+                <h2 class="nok-fs-2 nok-fs-to-md-1">
+                    <?php
+                    $terms = get_the_terms( get_the_ID(), 'faq_categories' );
+                    if ( $terms && ! is_wp_error( $terms ) ) {
+                        $prefix = count( $terms ) === 1 ? 'Categorie: ' : 'Categorieën: ';
+                        echo $prefix . get_the_term_list( get_the_ID(), 'faq_categories', '', ', ', '', false );
+                    }
+                    ?>
+                </h2>
+                <h2 class="nok-text-lightblue nok-dark-text-yellow nok-fs-2 nok-fs-to-md-1">
+                    <?php echo $page_part_fields['tagline'] ?? ''; ?>
+                </h2>
+                <?php the_title( '<h1 class="nok-fs-6">', '</h1>' ); ?>
+            </div>
+
+        </div>
+    </nok-hero>
+
+    <nok-section class="no-aos">
+        <div class="nok-section__inner">
+            <div class="nok-layout-grid nok-layout-grid__3-column fill-one nok-column-gap-3
+                nok-text-darkblue">
+                <div class="body-copy">
+                    <article title="Vraag: <?= get_the_title(); ?>">
+                        <?php the_content(); ?>
+                    </article>
+                </div>
+                <aside>
+                    <div class="nok-column-last-1 nok-order-0 nok-order-lg-1">
+                        <nok-square-block class="nok-bg-white nok-alpha-10 nok-pull-up-lg-3" data-shadow="true">
+                            <div class="nok-square-block__text nok-fs-1">
+                                Is je vraag niet beantwoord of wil je meer informatie over een bepaald
+                                onderwerp dat je niet terug kunt vinden bij <a href="/veelgestelde-vragen">de andere
+                                    veelgestelde vragen</a>?
+                            </div>
+                            <a role="button" href="" class="nok-button nok-justify-self-start w-100
+                 nok-bg-yellow nok-text-contrast" tabindex="0">
+                                Neem contact op <?= Assets::getIcon( 'ui_telefoon', 'nok-text-darkblue' ) ?>
+                            </a>
+                            <a role="button" href="" class="nok-button nok-justify-self-start w-100
+                 nok-bg-darkblue nok-text-contrast" tabindex="0">
+                                Bekijk alle vragen <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ) ?>
+                            </a>
+                        </nok-square-block>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </nok-section>
+
+<?php
+$faq_items = yarpp_get_related( array(), get_the_ID() );
+if ( $faq_items ) :
+    $accordion_id = 'gerelateerde-vragen-' . sanitize_title( get_the_title() );
+    ?>
+    <nok-section class="nok-bg-body--darker nok-text-darkblue">
+        <div class="nok-section__inner">
+            <h2 class="nok-fs-5"><?= __( 'Gerelateerde vragen', 'yet-another-related-posts-plugin' ); ?></h2>
+            <div class="nok-layout-grid nok-layout-grid__1-column nok-mt-1" data-requires="./nok-accordion.mjs" data-require-lazy="true">
+            <?php
+            foreach ( $faq_items as $post ) {
+
+                $post_id       = $post->ID;
+                $item_title    = get_the_title( $post_id );
+                $items_cats    = get_the_terms( $post_id, 'faq_categories' );
+                $item_category = $items_cats[0]->name;
+                $cat_slug      = $items_cats[0]->slug;
+                $item_id       = $cat_slug . '-' . $post_id; ?>
+                <nok-accordion>
+                        <details class="nok-bg-body nok-dark-bg-darkblue nok-dark-text-contrast nok-rounded-border" name="<?= $accordion_id; ?>">
+                            <summary class="nok-py-1 nok-px-2 nok-fs-2 nok-fs-to-lg-3 fw-bold">
+                                <?= $item_title; ?>
+                            </summary>
+                            <div class="accordion-content nok-p-2 nok-pt-0">
+                                <article title="<?= $item_title; ?>">
+                                    <?php the_excerpt(); ?>
+                                </article>
+                                <a role="button" href="<?= get_the_permalink( $post_id ); ?>"
+                                   class="nok-button nok-button--small nok-justify-self-start nok-bg-darkblue nok-text-contrast nok-mt-1"
+                                   tabindex="0">
+                                    Lees meer <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ) ?>
+                                </a>
+                                <a role="button" href="/veelgestelde-vragen"
+                                   class="nok-button nok-button--small nok-justify-self-start nok-bg-yellow nok-text-contrast nok-mt-1"
+                                   tabindex="0" title="Niet gevonden wat je zocht? Bekijk hier alle veelgestelde vragen.">Bekijk alle veelgestelde vragen
+                                </a>
+                            </div>
+                        </details>
+                </nok-accordion>
+            <?php }
+            wp_reset_postdata(); ?>
+            </div>
+        </div>
+    </nok-section>
+<?php endif; ?>
+
+<?php
+get_footer();

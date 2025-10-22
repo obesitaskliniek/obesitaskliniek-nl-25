@@ -58,7 +58,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
         </div>
     </nok-hero>
 
-    <nok-section>
+    <nok-section class="no-aos">
         <div class="nok-section__inner">
 
             <article class="nok-layout-grid nok-layout-grid__3-column fill-one nok-column-gap-3">
