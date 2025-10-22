@@ -13,8 +13,12 @@ const IconSelector = ({ value, onChange, icons }) => {
     `;
 
     // Flatten icons from {ui: {...}, nok: {...}} structure
-    const allIcons = Object.entries(icons).flatMap(([category, iconList]) =>
-        Object.entries(iconList).map(([name, svg]) => ({ name, svg, category }))
+    const allIcons = Object.entries(icons).flatMap(entry =>
+        Object.entries(entry[1]).map(iconEntry => ({
+            name: iconEntry[0],
+            svg: iconEntry[1],
+            category: entry[0]
+        }))
     );
 
     const filteredIcons = allIcons.filter(icon =>
@@ -37,30 +41,58 @@ const IconSelector = ({ value, onChange, icons }) => {
             </label>
 
             {/* Selected icon preview */}
-            <div
-                onClick={() => setIsOpen(!isOpen)}
-                style={{
-                    border: '1px solid #ddd',
-                    borderRadius: '4px',
-                    padding: '8px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    background: '#fff',
-                    minHeight: '40px'
-                }}
-            >
-                {selectedIcon ? (
-                    <>
-                        <div
-                            style={{ width: '24px', height: '24px', flexShrink: 0 }}
-                            dangerouslySetInnerHTML={{ __html: selectedIcon.svg }}
-                        />
-                        <span style={{ fontSize: '13px' }}>{selectedIcon.name}</span>
-                    </>
-                ) : (
-                    <span style={{ fontSize: '13px', color: '#757575' }}>Select an icon...</span>
+            <div style={{ position: 'relative' }}>
+                <div
+                    onClick={() => setIsOpen(!isOpen)}
+                    style={{
+                        border: '1px solid #ddd',
+                        borderRadius: '4px',
+                        padding: '8px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        background: '#fff',
+                        minHeight: '40px'
+                    }}
+                >
+                    {selectedIcon ? (
+                        <>
+                            <div
+                                style={{ width: '24px', height: '24px', flexShrink: 0 }}
+                                dangerouslySetInnerHTML={{ __html: selectedIcon.svg }}
+                            />
+                            <span style={{ fontSize: '13px' }}>{selectedIcon.name}</span>
+                        </>
+                    ) : (
+                        <span style={{ fontSize: '13px', color: '#757575' }}>Select an icon...</span>
+                    )}
+                </div>
+
+                {selectedIcon && (
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onChange('');
+                        }}
+                        style={{
+                            position: 'absolute',
+                            right: '8px',
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            background: '#d63638',
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: '3px',
+                            padding: '4px 8px',
+                            fontSize: '11px',
+                            cursor: 'pointer',
+                            fontWeight: '500'
+                        }}
+                        title="Clear icon"
+                    >
+                        ×
+                    </button>
                 )}
             </div>
 
