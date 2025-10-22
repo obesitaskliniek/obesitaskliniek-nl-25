@@ -7,7 +7,9 @@
  * - layout:select(left|right)!page-editable!default(left)
  * - colors:select(Transparant::nok-bg-body|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Blauw::nok-bg-darkerblue nok-text-contrast)!page-editable!default(nok-bg-body)
  * - block_colors:select(Wit::nok-bg-white nok-text-darkestblue|Blauw::nok-bg-darkblue nok-text-contrast)!page-editable!default(nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast)
+ * - quote_block_colors:select(Wit::nok-bg-white nok-text-darkestblue|Blauw::nok-bg-darkblue nok-text-contrast)!page-editable!default(nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast)
  * - quote_items:repeater(quote:text,name:text,profession:text)
+ * - accordion_open_first:checkbox!default(true)
  * - accordion_items:repeater(title:text,content:textarea,button_text:text,button_url:url)
  * - accordion_button_text:text!default(Lees meer)
  *
@@ -44,7 +46,7 @@ $left = $c->layout->is('left');
 
 				?>
 
-                <nok-square-block class="nok-p-2 no-gap <?= $c->block_colors ?>">
+                <nok-square-block class="nok-p-2 no-gap <?= $c->quote_block_colors ?>">
                     <div class="nok-scrollable__horizontal" id="quote-showcase-scroller" data-scroll-snapping="true"
                          data-draggable="true"
                          data-autoscroll="true">
@@ -64,6 +66,7 @@ $left = $c->layout->is('left');
                 <?php endif; ?>
             </div>
 
+            <?php if ($c->has('accordion_items')): ?>
             <!-- Component: accordion items -->
             <div class="nok-layout-grid nok-layout-grid__1-column"
                  data-requires="./nok-accordion.mjs" data-require-lazy="true"
@@ -88,7 +91,7 @@ $left = $c->layout->is('left');
 				foreach ($accordion_data as $index => $item) : ?>
                     <nok-accordion>
                         <details class="<?= $c->block_colors ?> nok-rounded-border nok-text-contrast"
-                                 name="<?= esc_attr($accordion_group) ?>" <?= $index == 0 ? 'open' : '' ?>>
+                                 name="<?= esc_attr($accordion_group) ?>" <?= ($index == 0 && $c->accordion_open_first->isTrue('open')) ? 'open' : '' ?>>
                             <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold">
 								<?= esc_html($item['title']) ?>
                             </summary>
@@ -110,6 +113,7 @@ $left = $c->layout->is('left');
                 <?php endforeach; ?>
             </div>
 
+            <?php endif; ?>
         </article>
     </div>
 </nok-section>

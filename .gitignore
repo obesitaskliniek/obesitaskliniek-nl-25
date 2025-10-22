@@ -1,3 +1,6 @@
+/.idea/sshConfigs.xml
+/.idea/webServers.xml
+/.idea/deployment.xml
 node_modules/
 wp-includes/
 wp-admin/
