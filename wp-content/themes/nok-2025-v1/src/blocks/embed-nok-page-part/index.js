@@ -6,6 +6,7 @@ import {useSelect, useDispatch} from '@wordpress/data';
 import {__} from '@wordpress/i18n';
 import {useRef, useState, useEffect} from '@wordpress/element';
 import IconSelector from '../../components/IconSelector';
+import ColorTool from "../../../assets/js/domule/util.color.mjs";
 
 const textDomain = 'nok-2025-v1';
 const blockName = 'nok2025/embed-nok-page-part';
@@ -49,10 +50,10 @@ const CustomPagePartSelector = ({value, options, onChange, onOpen}) => {
                         <span dangerouslySetInnerHTML={{__html: `${selectedOption.template}`}}
                               style={{
                                   padding: '2px 6px',
-                                  backgroundColor: '#f0f0f1',
+                                  backgroundColor: ColorTool.new(selectedOption.template).string,
                                   borderRadius: '6px',
                                   fontSize: '1em',
-                                  color: '#555',
+                                  color: ColorTool.new(selectedOption.template).contra,
                                   marginLeft: 'auto'
                               }}/> : null
                 }
@@ -90,46 +91,49 @@ const CustomPagePartSelector = ({value, options, onChange, onOpen}) => {
                         boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
                         zIndex: 100000,
                     }}>
-                        {options.map(option => (
-                            <Button
-                                key={option.value}
-                                onClick={() => {
-                                    onChange(option.value);
-                                    setIsOpen(false);
-                                }}
-                                onMouseEnter={() => setHoveredOption(option.value)}
-                                onMouseLeave={() => setHoveredOption(null)}
-                                style={{
-                                    width: '100%',
-                                    textAlign: 'left',
-                                    padding: '8px 12px',
-                                    border: 'none',
-                                    borderBottom: '1px solid #f0f0f1',
-                                    borderRadius: '0',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                    justifyContent: 'space-between',
-                                    backgroundColor: option.value === value
-                                        ? 'var(--wp-admin-theme-color)' : (hoveredOption === option.value
-                                            ? '#e6f3ff'
-                                            : 'transparent'),
-                                    color: option.value === value ? 'white' : 'inherit',
-                                }}
-                            >
-                                <span dangerouslySetInnerHTML={{__html: option.label}}/>
-                                {option.value ?
-                                    <span dangerouslySetInnerHTML={{__html: `${option.template}`}}
-                                          style={{
-                                              padding: '2px 6px',
-                                              backgroundColor: '#f0f0f1',
-                                              borderRadius: '6px',
-                                              fontSize: '1em',
-                                              color: '#555'
-                                          }}/> : null}
-                            </Button>
-                        ))}
+                        {options.map(option => {
+                            const color = ColorTool.new(option.template);
+                            return (
+                                <Button
+                                    key={option.value}
+                                    onClick={() => {
+                                        onChange(option.value);
+                                        setIsOpen(false);
+                                    }}
+                                    onMouseEnter={() => setHoveredOption(option.value)}
+                                    onMouseLeave={() => setHoveredOption(null)}
+                                    style={{
+                                        width: '100%',
+                                        textAlign: 'left',
+                                        padding: '8px 12px',
+                                        border: 'none',
+                                        borderBottom: '1px solid #f0f0f1',
+                                        borderRadius: '0',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        justifyContent: 'space-between',
+                                        backgroundColor: option.value === value
+                                            ? 'var(--wp-admin-theme-color)' : (hoveredOption === option.value
+                                                ? '#e6f3ff'
+                                                : 'transparent'),
+                                        color: option.value === value ? 'white' : 'inherit',
+                                    }}
+                                >
+                                    <span dangerouslySetInnerHTML={{__html: option.label}}/>
+                                    {option.value ?
+                                        <span dangerouslySetInnerHTML={{__html: `${option.template}`}}
+                                              style={{
+                                                  padding: '2px 6px',
+                                                  backgroundColor: color.adjust({sat: 0.7}).string,
+                                                  borderRadius: '6px',
+                                                  fontSize: '1em',
+                                                  color: color.contra
+                                              }}/> : null}
+                                </Button>
+                            )
+                        })}
                     </div>
                 </div>
             )}
@@ -594,7 +598,7 @@ registerBlockType(blockName, {
                                             marginLeft: 'auto'
                                         }}
                                     >
-                                        <Icon icon={pencil} />
+                                        <Icon icon={pencil}/>
                                     </a>
                                 </div>
                                 <iframe
