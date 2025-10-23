@@ -105,7 +105,7 @@ $component-name: #{nok-variables.$prefix}-nav;
     top: 0;
     z-index: nok-variables.$z-stack-top;
 
-    max-width: var(--section-max-width, calc(100vw - (var(--nok25-padding-section-sides, 1.5rem) * 2)));
+    max-width: var(--section-max-width, calc(100vw - (var(--nok25-nok-spacing-section-sides, 1.5rem) * 2)));
     @include nok-mixins.media-breakpoint-down(md) {
       width: 100%;
     }
@@ -413,7 +413,7 @@ $component-name: #{nok-variables.$prefix}-nav;
         flex-wrap: nowrap;
         justify-content: space-between;
 
-        padding: 1rem var(--#{nok-variables.$prefix}-padding-section-sides);
+        padding: 1rem var(--#{nok-variables.$prefix}-nok-spacing-section-sides);
         gap: var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap));
       }
 
@@ -509,7 +509,7 @@ $component-name: #{nok-variables.$prefix}-nav;
       &__menuitems {
         --item-padding: clamp(0.5rem, 2vw, 1rem);
         font-weight: 400;
-        padding: 1rem var(--#{nok-variables.$prefix}-padding-section-sides);
+        padding: 1rem var(--#{nok-variables.$prefix}-nok-spacing-section-sides);
         display: flex;
         flex-direction: column;
         overflow-y: auto; //make sure we can scroll the submenus on really small screens (or many items)

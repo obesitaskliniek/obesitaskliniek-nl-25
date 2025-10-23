@@ -113,7 +113,7 @@ const PASS2_CONFIG = {
             params: {
                 overrides: {
                     convertPathData: {
-                        floatPrecision: 2,
+                        floatPrecision: 5,
                         transformPrecision: 5
                     }
                 }

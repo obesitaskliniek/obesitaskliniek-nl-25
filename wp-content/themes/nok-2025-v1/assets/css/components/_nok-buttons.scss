@@ -13,6 +13,7 @@ button,
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  vertical-align: middle;
 
   margin: 0;
   padding: var(--flex-gap) calc(var(--flex-gap) * 2);

@@ -28,8 +28,8 @@
 
   &__inner {
     width: 100%;
-    padding-right: var(--#{components-base.$prefix}-padding-section-sides, (components-base.$padding-base * 2));
-    padding-left: var(--#{components-base.$prefix}-padding-section-sides, (components-base.$padding-base * 2));
+    padding-right: var(--#{components-base.$prefix}-nok-spacing-section-sides, (components-base.$padding-base * 2));
+    padding-left: var(--#{components-base.$prefix}-nok-spacing-section-sides, (components-base.$padding-base * 2));
     margin: var(--nok-spacing-section-ends, components-base.$padding-base) auto;
 
     &.double-margin {
@@ -43,8 +43,8 @@
     @at-root nok-popup-body &,
     &.condensed {
       margin: calc(.5 * var(--nok-spacing-section-ends, components-base.$padding-base)) auto;
-      padding-right: calc(.5 * var(--#{components-base.$prefix}-padding-section-sides, (components-base.$padding-base * 2)));
-      padding-left: calc(.5 * var(--#{components-base.$prefix}-padding-section-sides, (components-base.$padding-base * 2)));
+      padding-right: calc(.5 * var(--#{components-base.$prefix}-nok-spacing-section-sides, (components-base.$padding-base * 2)));
+      padding-left: calc(.5 * var(--#{components-base.$prefix}-nok-spacing-section-sides, (components-base.$padding-base * 2)));
     }
 
     &--stretched {

@@ -47,7 +47,7 @@ $exposed-variables: (
     "default-heading-line-height": $default-heading-line-height,
     "padding-base": $padding-base,
     "global-grid-gap": $padding-base,
-    "padding-section-sides": max(env(safe-area-inset-left), min(6vw, $padding-base * 3)),
+    "nok-spacing-section-sides": max(env(safe-area-inset-left), min(6vw, $padding-base * 3)),
     "spacing-section-ends": max(env(safe-area-inset-right), min(12vw, $padding-base * 3)),
     "default-border-radius": $default-border-radius,
     "default-border-radius--large": $default-border-radius--large,
@@ -104,7 +104,7 @@ $padding-base-values: (
         gap: var(--gap),
         grid-gap: var(--grid-gap),
         column-gap: var(--column-gap),
-        section-padding: var(--nok-padding-section-sides),
+        section-padding: var(--nok-spacing-section-ends),
 );
 
 @mixin parsed-variables {

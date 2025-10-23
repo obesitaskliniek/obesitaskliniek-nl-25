@@ -20,7 +20,7 @@ nok-popup {
   visibility: hidden;
   pointer-events: none;
 
-  margin: map.get(components-base.$exposed-variables, "padding-section-sides");
+  margin: map.get(components-base.$exposed-variables, "nok-spacing-section-sides");
   padding:  0;
   column-gap: 0;
 

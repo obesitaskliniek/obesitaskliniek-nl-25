@@ -27,7 +27,8 @@
 }
 
 /* custom elements */
-article, aside, section,
+//article,aside,
+section,
 nok-logo, nok-mobile-nav, nok-desktop-nav {
   display: contents;
 }
@@ -80,6 +81,13 @@ body {
   border-style: solid;
   @include nok-mixins.nok-subtle-shadow;
 }
+
+svg.nok-icon {
+  vertical-align: middle;
+  width: 1em;
+  height: 1em;
+}
+
 
 //as helpers contain overrides, include them last
 //todo: move all other styles that are not inside files to scss files, so we can revert to a @use again to place these helpers last

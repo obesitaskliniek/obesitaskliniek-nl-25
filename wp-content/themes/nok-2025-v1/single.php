@@ -12,23 +12,21 @@ $featuredImage = Helpers::get_featured_image();
 ?>
 
     <nok-hero class="nok-section">
-        <div class="nok-section__inner nok-hero__inner nok-m-0 nok-border-radius-to-sm-0
+        <article class="nok-section__inner nok-hero__inner nok-m-0 nok-border-radius-to-sm-0
 nok-bg-darkerblue nok-dark-bg-darkestblue nok-text-white nok-dark-text-white
 nok-bg-alpha-10 nok-dark-bg-alpha-10 nok-subtle-shadow">
 
-            <article>
-                <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-2 nok-fs-to-md-1">
-					<?php echo $page_part_fields['tagline'] ?? ''; ?>
-                </h2>
-				<?php the_title( '<h1 class="nok-fs-6">', '</h1>' ); ?>
-                <div class="">
-					<?php
-                    //the_content();
-                    ?>
-                </div>
-            </article>
+            <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-2 nok-fs-to-md-1">
+                <?php echo $page_part_fields['tagline'] ?? ''; ?>
+            </h2>
+            <?php the_title( '<h1 class="nok-fs-6">', '</h1>' ); ?>
+            <div class="">
+                <?php
+                //the_content();
+                ?>
+            </div>
 
-        </div>
+        </article>
     </nok-hero>
 
     <nok-section>
@@ -69,17 +67,17 @@ nok-bg-alpha-10 nok-dark-bg-alpha-10 nok-subtle-shadow">
                     <h2>Aanmelden</h2>
 
                     <?php
-                    if (function_exists('gravity_form')) {
-	                    gravity_form(1, false, false);
+                    if ( function_exists( 'gravity_form' ) ) {
+                        gravity_form( 1, false, false );
                     }
                     ?>
                     <form class="nok-form">
                         <div class="nok-form-element">
-                            <input type="text" name="input_field" id="input_field" placeholder="" />
+                            <input type="text" name="input_field" id="input_field" placeholder=""/>
                             <label for="input_field">Naam</label>
                         </div>
                         <div class="nok-form-element">
-                            <input type="email" name="input_field_2" id="input_field_2" placeholder="" />
+                            <input type="email" name="input_field_2" id="input_field_2" placeholder=""/>
                             <label for="input_field_2">E-mail adres</label>
                         </div>
                         <div class="nok-form-element">
@@ -105,7 +103,8 @@ nok-bg-alpha-10 nok-dark-bg-alpha-10 nok-subtle-shadow">
                 <div class="nok-column-last-1 nok-order-0 nok-order-lg-1">
                     <nok-square-block class="nok-bg-white nok-alpha-10 nok-pull-up-lg-3" data-shadow="true">
                         <div class="nok-square-block__heading">
-                            <h2 class="nok-text-lightblue nok-dark-text-yellow nok-fs-2 nok-fs-to-md-2">Voorlichting (online)</h2>
+                            <h2 class="nok-text-lightblue nok-dark-text-yellow nok-fs-2 nok-fs-to-md-2">Voorlichting
+                                (online)</h2>
                             <h2>Dinsdag 14 januari</h2>
                         </div>
                         <div class="nok-square-block__text nok-fs-1">

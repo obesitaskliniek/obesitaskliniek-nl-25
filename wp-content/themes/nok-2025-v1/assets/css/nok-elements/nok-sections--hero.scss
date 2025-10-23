@@ -48,7 +48,7 @@ $component-name: #{nok-variables.$prefix}-hero;
       grid-column: 2 / 4;
     }
     @include nok-mixins.media-breakpoint-down(lg) {
-      padding-left: var(--#{nok-variables.$prefix}-padding-section-sides, 1.5rem);
+      padding-left: var(--#{nok-variables.$prefix}-nok-spacing-section-sides, 1.5rem);
     }
 
     z-index: $z_base + 1;
@@ -146,11 +146,11 @@ $component-name: #{nok-variables.$prefix}-hero;
   }
 
   section {
-    padding-right: var(--#{nok-variables.$prefix}-padding-section-sides, 1.5rem);
-    padding-left: var(--#{nok-variables.$prefix}-padding-section-sides, 1.5rem);
+    padding-right: var(--#{nok-variables.$prefix}-nok-spacing-section-sides, 1.5rem);
+    padding-left: var(--#{nok-variables.$prefix}-nok-spacing-section-sides, 1.5rem);
   }
   article {
-    padding: var(--grid-gap) 0 var(--grid-gap) var(--#{nok-variables.$prefix}-padding-section-sides, 1.5rem);
+    padding: var(--grid-gap) 0 var(--grid-gap) var(--#{nok-variables.$prefix}-nok-spacing-section-sides, 1.5rem);
   }
 
   /* Mobile */
@@ -164,7 +164,7 @@ $component-name: #{nok-variables.$prefix}-hero;
     article {
       grid-row: 2 / 4;
       align-self: end;
-      padding-right: var(--#{nok-variables.$prefix}-padding-section-sides, 1.5rem);
+      padding-right: var(--#{nok-variables.$prefix}-nok-spacing-section-sides, 1.5rem);
     }
     figure {
       grid-row: 1 / 3;

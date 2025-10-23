@@ -31,7 +31,7 @@ $component-name: #{nok-variables.$prefix}-square-block;
   @include nok-mixins.nok-border-radius('large');
   //line-height: var(--#{nok-variables.$prefix}-default-line-height, 1.25);
 
-  padding: var(--#{nok-variables.$prefix}-padding-section-sides, 3rem);
+  padding: var(--#{nok-variables.$prefix}-nok-spacing-section-sides, 3rem);
   border-radius: var(--#{nok-variables.$prefix}-default-border-radius--large, 8px);
   @include nok-mixins.nok-subtle-shadow;
   background-color: var(--background-color);
