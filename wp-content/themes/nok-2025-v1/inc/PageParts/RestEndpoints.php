@@ -49,8 +49,9 @@ class RestEndpoints {
 	 * @return void
 	 */
 	public function register_hooks(): void {
-		add_action( 'rest_api_init', [ $this, 'register_rest_routes' ] );
+		add_action('rest_api_init', [$this, 'register_rest_routes' ] );
 		add_action('rest_api_init', [$this, 'register_prune_endpoint']);
+		add_action('rest_api_init', [$this, 'register_post_query_endpoint']);
 	}
 
 	/**
@@ -123,6 +124,77 @@ class RestEndpoints {
 			'deleted' => $deleted,
 			'count' => count($deleted)
 		]);
+	}
+
+	/**
+	 * Register endpoint for querying posts
+	 *
+	 * @return void
+	 */
+	public function register_post_query_endpoint(): void {
+		register_rest_route('nok-2025-v1/v1', '/posts/query', [
+			'methods' => 'GET',
+			'callback' => [$this, 'query_posts_callback'],
+			'permission_callback' => '__return_true',
+			'args' => [
+				'post_type' => [
+					'required' => false,
+					'type' => 'string',
+					'default' => 'post'
+				],
+				'exclude' => [
+					'required' => false,
+					'type' => 'string',
+					'default' => ''
+				],
+				'search' => [
+					'required' => false,
+					'type' => 'string',
+					'default' => ''
+				]
+			]
+		]);
+	}
+
+	/**
+	 * REST callback: Query posts by date, excluding specified IDs
+	 *
+	 * @param \WP_REST_Request $request
+	 * @return \WP_REST_Response
+	 */
+	public function query_posts_callback(\WP_REST_Request $request): \WP_REST_Response {
+		$post_type = $request->get_param('post_type');
+		$exclude = $request->get_param('exclude');
+		$search = $request->get_param('search');
+
+		$args = [
+			'post_type' => $post_type,
+			'post_status' => 'publish',
+			'posts_per_page' => 50,
+			'orderby' => 'date',
+			'order' => 'DESC'
+		];
+
+		if (!empty($exclude)) {
+			$args['post__not_in'] = array_map('intval', explode(',', $exclude));
+		}
+
+		if (!empty($search)) {
+			$args['s'] = $search;
+		}
+
+		$query = new \WP_Query($args);
+		$posts = [];
+
+		foreach ($query->posts as $post) {
+			$posts[] = [
+				'id' => $post->ID,
+				'title' => get_the_title($post->ID),
+				'date' => get_the_date('Y-m-d', $post->ID)
+			];
+		}
+
+		return new \WP_REST_Response($posts, 200);
 	}
 
 	/**

@@ -29,7 +29,9 @@ class MetaManager {
 		add_action( 'manage_page_part_posts_custom_column', [ $this, 'render_page_part_column' ], 10, 2 );
 		add_action( 'restrict_manage_posts', [ $this, 'add_template_filter' ] );
 		add_action( 'parse_query', [ $this, 'filter_by_template' ] );
-		add_filter( 'is_protected_meta', [ $this, 'protect_page_part_meta' ], 10, 2 );
+		if ( ! isset($_GET['show_custom_fields'])) {
+			add_filter( 'is_protected_meta', [ $this, 'protect_page_part_meta' ], 10, 2 );
+		}
 	}
 
 	/**

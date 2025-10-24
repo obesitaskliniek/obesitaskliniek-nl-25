@@ -1,14 +1,193 @@
 import {useSelect, useDispatch} from '@wordpress/data';
 import {registerPlugin} from '@wordpress/plugins';
 import {PluginDocumentSettingPanel} from '@wordpress/editor';
-import {SelectControl, TextControl, TextareaControl, CheckboxControl, Button, Draggable } from '@wordpress/components';
+import {SelectControl, TextControl, TextareaControl, CheckboxControl, Button, Draggable} from '@wordpress/components';
 import {logger} from '../assets/js/domule/core.log.mjs';
-import {Fragment, useRef, useState, useEffect} from '@wordpress/element';
+import {Fragment, useRef, useState, useEffect, useMemo} from '@wordpress/element';
 import IconSelector from './components/IconSelector';
 
 const NAME = 'nok-page-part-design-selector';
 
-const RepeaterField = ({ field, schema, value, onChange }) => {
+const labelStyle = {
+    display: 'block',
+    fontSize: '13px',
+    fontWeight: '600',
+    margin: '0 0 16px 0',
+    padding: '0',
+    textTransform: 'none'
+};
+
+const fieldStyle = {
+    width: '100%',
+    borderBottom: '1px solid #ddd',
+    borderRadius: '3px',
+    fontSize: '13px',
+    margin: '0',
+    padding: '16px 0',
+};
+
+// Wrapper for consistent field spacing and labeling
+const FieldGroup = ({ label, children }) => (
+    <div style={{ marginBottom: '16px' }}>
+        {label && (
+            <div style={{
+                marginBottom: '8px',
+                fontSize: '11px',
+                fontWeight: '600',
+                textTransform: 'uppercase',
+                color: '#1e1e1e'
+            }}>
+                {label}
+            </div>
+        )}
+        {children}
+    </div>
+);
+
+const PostSelector = ({value, onChange, postType = 'post'}) => {
+    const [availablePosts, setAvailablePosts] = useState([]);
+    const [selectedPosts, setSelectedPosts] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const selectedIds = useMemo(() => {
+        try {
+            return JSON.parse(value || '[]');
+        } catch {
+            return [];
+        }
+    }, [value]);
+
+    // Fetch selected post details on mount
+    useEffect(() => {
+        if (selectedIds.length > 0) {
+            fetchSelectedPosts();
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchPosts();
+    }, [selectedIds, searchTerm]);
+
+    const fetchSelectedPosts = async () => {
+        try {
+            const response = await fetch(`/wp-json/nok-2025-v1/v1/posts/query?post_type=${postType}&include=${selectedIds.join(',')}`);
+            const posts = await response.json();
+            setSelectedPosts(posts);
+        } catch (error) {
+            console.error('Failed to fetch selected posts:', error);
+        }
+    };
+
+    const fetchPosts = async () => {
+        setLoading(true);
+        try {
+            const params = new URLSearchParams({
+                post_type: postType,
+                exclude: selectedIds.join(','),
+                search: searchTerm
+            });
+
+            const response = await fetch(`/wp-json/nok-2025-v1/v1/posts/query?${params}`);
+            const posts = await response.json();
+            setAvailablePosts(posts);
+        } catch (error) {
+            console.error('Failed to fetch posts:', error);
+        }
+        setLoading(false);
+    };
+
+    const addPost = (post) => {
+        const newIds = [...selectedIds, post.id];
+        setSelectedPosts([...selectedPosts, post]);
+        onChange(JSON.stringify(newIds));
+    };
+
+    const removePost = (postId) => {
+        const newIds = selectedIds.filter(id => id !== postId);
+        setSelectedPosts(selectedPosts.filter(p => p.id !== postId));
+        onChange(JSON.stringify(newIds));
+    };
+
+    return (
+        <div>
+            <div style={{marginBottom: '8px'}}>
+                <input
+                    type="text"
+                    placeholder="Search posts..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{
+                        width: '100%',
+                        padding: '6px 8px',
+                        border: '1px solid #ddd',
+                        borderRadius: '3px'
+                    }}
+                />
+            </div>
+
+            {selectedPosts.length > 0 && (
+                <div style={{marginBottom: '8px'}}>
+                    <strong>Selected:</strong>
+                    {selectedPosts.map(post => (
+                        <div key={post.id} style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            padding: '4px 8px',
+                            background: '#f0f0f0',
+                            marginTop: '4px',
+                            borderRadius: '3px'
+                        }}>
+                            <span>{post.title}</span>
+                            <button
+                                type="button"
+                                onClick={() => removePost(post.id)}
+                                style={{
+                                    background: 'none',
+                                    border: 'none',
+                                    color: '#cc0000',
+                                    cursor: 'pointer',
+                                    padding: '0 4px'
+                                }}
+                            >
+                                ×
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            <div style={{maxHeight: '200px', overflowY: 'auto', border: '1px solid #ddd', borderRadius: '3px'}}>
+                {loading ? (
+                    <div style={{padding: '8px', textAlign: 'center'}}>Loading...</div>
+                ) : availablePosts.length === 0 ? (
+                    <div style={{padding: '8px', textAlign: 'center', color: '#666'}}>
+                        {searchTerm ? 'No posts found' : 'All posts selected'}
+                    </div>
+                ) : (
+                    availablePosts.map(post => (
+                        <div
+                            key={post.id}
+                            onClick={() => addPost(post)}
+                            style={{
+                                padding: '8px',
+                                cursor: 'pointer',
+                                borderBottom: '1px solid #eee'
+                            }}
+                            onMouseEnter={(e) => e.target.style.background = '#f9f9f9'}
+                            onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                        >
+                            <div style={{fontWeight: '500'}}>{post.title}</div>
+                            <div style={{fontSize: '11px', color: '#666'}}>{post.date}</div>
+                        </div>
+                    ))
+                )}
+            </div>
+        </div>
+    );
+};
+
+const RepeaterField = ({field, schema, value, onChange}) => {
     const [items, setItems] = useState(() => {
         try {
             return JSON.parse(value || '[]');
@@ -43,7 +222,7 @@ const RepeaterField = ({ field, schema, value, onChange }) => {
 
     const updateItem = (index, key, itemValue) => {
         const newItems = [...items];
-        newItems[index] = { ...newItems[index], [key]: itemValue };
+        newItems[index] = {...newItems[index], [key]: itemValue};
         updateItems(newItems);
     };
 
@@ -80,38 +259,24 @@ const RepeaterField = ({ field, schema, value, onChange }) => {
     const renderSchemaField = (schemaField, item, index) => {
         const fieldKey = schemaField.name;
         const fieldValue = item[fieldKey] || '';
-        const label = schemaField.name.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
-
-        const fieldStyle = {
-            width: '100%',
-            padding: '6px 8px',
-            border: '1px solid #ddd',
-            borderRadius: '3px',
-            fontSize: '13px'
-        };
+        const label = schemaField.name.charAt(0).toUpperCase() + schemaField.name.slice(1).replace(/_/g, ' ');
 
         switch (schemaField.type) {
             case 'icon-selector':
                 const availableIcons = window.PagePartDesignSettings?.icons || {};
                 return (
-                    <div key={fieldKey} style={{marginBottom: '8px'}}>
-                        <label style={{display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px'}}>
-                            {label}:
-                        </label>
+                    <FieldGroup key={fieldKey} label={schemaField.label || label}>
                         <IconSelector
                             value={fieldValue}
                             icons={availableIcons}
-                            onChange={(value) => updateItem(index, fieldKey, value)}
+                            onChange={(value) => updateMetaField(field.meta_key, value)}
                         />
-                    </div>
+                    </FieldGroup>
                 );
 
             case 'textarea':
                 return (
-                    <div key={fieldKey} style={{marginBottom: '8px'}}>
-                        <label style={{display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px'}}>
-                            {label}:
-                        </label>
+                    <FieldGroup key={fieldKey} label={schemaField.label || label}>
                         <textarea
                             value={fieldValue}
                             onChange={(e) => updateItem(index, fieldKey, e.target.value)}
@@ -124,15 +289,12 @@ const RepeaterField = ({ field, schema, value, onChange }) => {
                                 fontSize: '13px'
                             }}
                         />
-                    </div>
+                    </FieldGroup>
                 );
 
             case 'url':
                 return (
-                    <div key={fieldKey} style={{marginBottom: '8px'}}>
-                        <label style={{display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px'}}>
-                            {label}:
-                        </label>
+                    <FieldGroup key={fieldKey} label={schemaField.label || label}>
                         <input
                             type="url"
                             value={fieldValue}
@@ -146,15 +308,12 @@ const RepeaterField = ({ field, schema, value, onChange }) => {
                                 fontSize: '13px'
                             }}
                         />
-                    </div>
+                    </FieldGroup>
                 );
 
             default:
                 return (
-                    <div key={fieldKey} style={{marginBottom: '8px'}}>
-                        <label style={{display: 'block', fontSize: '11px', fontWeight: '600', marginBottom: '4px'}}>
-                            {label}:
-                        </label>
+                    <FieldGroup key={fieldKey} label={schemaField.label || label}>
                         <input
                             type="text"
                             value={fieldValue}
@@ -167,49 +326,38 @@ const RepeaterField = ({ field, schema, value, onChange }) => {
                                 fontSize: '13px'
                             }}
                         />
-                    </div>
+                    </FieldGroup>
                 );
         }
     };
 
     return (
-        <div style={{ marginTop: '12px' }}>
-            <label style={{
-                display: 'block',
-                fontSize: '12px',
-                fontWeight: '600',
-                marginBottom: '8px',
-                color: '#1e1e1e'
-            }}>
-                {field.label}
-            </label>
-
-            <div style={{ marginBottom: '12px' }}>
-                {items.map((item, index) => (
-                    <div
-                        key={index}
-                        draggable
-                        onDragStart={(e) => handleDragStart(e, index)}
-                        onDragEnd={handleDragEnd}
-                        onDragOver={handleDragOver}
-                        onDrop={(e) => handleDrop(e, index)}
-                        style={{
-                            background: draggedIndex === index ? '#f0f0f0' : '#f8f9fa',
-                            border: '1px solid #ddd',
-                            borderRadius: '4px',
-                            padding: '12px',
-                            marginBottom: '8px',
-                            position: 'relative',
-                            cursor: 'move',
-                            transition: 'background 0.2s'
-                        }}
-                    >
-                        <div style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            marginBottom: '8px'
-                        }}>
+        <>
+            {items.map((item, index) => (
+                <div
+                    key={index}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, index)}
+                    onDragEnd={handleDragEnd}
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDrop(e, index)}
+                    style={{
+                        background: draggedIndex === index ? '#f0f0f0' : '#f8f9fa',
+                        border: '1px solid #ddd',
+                        borderRadius: '4px',
+                        padding: '12px',
+                        marginBottom: '8px',
+                        position: 'relative',
+                        cursor: 'move',
+                        transition: 'background 0.2s'
+                    }}
+                >
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: '8px'
+                    }}>
                             <span style={{
                                 fontSize: '11px',
                                 fontWeight: '600',
@@ -218,28 +366,26 @@ const RepeaterField = ({ field, schema, value, onChange }) => {
                             }}>
                                 ⋮⋮ Item {index + 1}
                             </span>
-                            <button
-                                type="button"
-                                onClick={() => removeItem(index)}
-                                style={{
-                                    background: '#dc3232',
-                                    color: 'white',
-                                    border: 'none',
-                                    padding: '4px 8px',
-                                    borderRadius: '3px',
-                                    cursor: 'pointer',
-                                    fontSize: '11px'
-                                }}
-                            >
-                                Verwijder
-                            </button>
-                        </div>
-
-                        {schema.map(schemaField => renderSchemaField(schemaField, item, index))}
+                        <button
+                            type="button"
+                            onClick={() => removeItem(index)}
+                            style={{
+                                background: '#dc3232',
+                                color: 'white',
+                                border: 'none',
+                                padding: '4px 8px',
+                                borderRadius: '3px',
+                                cursor: 'pointer',
+                                fontSize: '11px'
+                            }}
+                        >
+                            Verwijder
+                        </button>
                     </div>
-                ))}
-            </div>
 
+                    {schema.map(schemaField => renderSchemaField(schemaField, item, index))}
+                </div>
+            ))}
             <button
                 type="button"
                 onClick={addItem}
@@ -255,7 +401,7 @@ const RepeaterField = ({ field, schema, value, onChange }) => {
             >
                 Add Item
             </button>
-        </div>
+        </>
     );
 };
 
@@ -326,10 +472,10 @@ function DesignSlugPanel() {
         }
 
         // Update local state immediately for responsive UI
-                setLocalFieldValues(prev => ({
-                    ...prev,
+        setLocalFieldValues(prev => ({
+            ...prev,
             [fieldName]: value
-                }));
+        }));
 
         // Clear any existing timeout for this field
         if (debounceRef.current[fieldName]) {
@@ -357,152 +503,150 @@ function DesignSlugPanel() {
         switch (field.type) {
             case 'textarea':
                 return (
-                    <TextareaControl
-                        key={field.meta_key}
-                        label={field.label}
-                        value={fieldValue}
-                        onChange={(value) => updateMetaField(field.meta_key, value)}
-                        rows={3}
-                    />
+                    <FieldGroup key={field.meta_key} label={field.label}>
+                        <TextareaControl
+                            value={fieldValue}
+                            onChange={(value) => updateMetaField(field.meta_key, value)}
+                            rows={3}
+                        />
+                    </FieldGroup>
                 );
 
             case 'url':
                 return (
-                    <TextControl
-                        key={field.meta_key}
-                        label={field.label}
-                        type="url"
-                        value={fieldValue}
-                        __nextHasNoMarginBottom
-                        __next40pxDefaultSize={true}
-                        onChange={(value) => updateMetaField(field.meta_key, value)}
-                        placeholder="https://..."
-                    />
+                    <FieldGroup key={field.meta_key} label={field.label}>
+                        <TextControl
+                            type="url"
+                            value={fieldValue}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize={true}
+                            onChange={(value) => updateMetaField(field.meta_key, value)}
+                            placeholder="https://..."
+                        />
+                    </FieldGroup>
                 );
             case 'repeater':
-                // Add safety check for schema
+                if (field.repeater_subtype === 'post') {
+                    return (
+                        <FieldGroup key={field.meta_key} label={field.label}>
+                            <PostSelector
+                                value={fieldValue}
+                                onChange={(value) => updateMetaField(field.meta_key, value)}
+                                postType="post"
+                            />
+                        </FieldGroup>
+                    );
+                }
+
                 if (!field.schema || field.schema.length === 0) {
                     return (
-                        <div key={field.meta_key} style={{ padding: '2px', background: '#fff3cd', border: '1px solid #ffc107', borderRadius: '4px' }}>
+                        <div key={field.meta_key} style={{ padding: '8px', background: '#fff3cd', border: '1px solid #ffc107', borderRadius: '4px', marginBottom: '16px' }}>
                             <strong>Warning:</strong> Repeater field "{field.label}" has no schema defined.
                         </div>
                     );
                 }
+
                 return (
-                    <RepeaterField
-                        key={field.meta_key}
-                        field={field}
-                        schema={field.schema}
-                        value={fieldValue}
-                        onChange={(value) => updateMetaField(field.meta_key, value)}
-                    />
+                    <FieldGroup key={field.meta_key} label={field.label}>
+                        <RepeaterField
+                            field={field}
+                            schema={field.schema}
+                            value={fieldValue}
+                            onChange={(value) => updateMetaField(field.meta_key, value)}
+                        />
+                    </FieldGroup>
                 );
             case 'icon-selector':
                 const availableIcons = window.PagePartDesignSettings?.icons || {};
                 return (
-                    <IconSelector
-                        key={field.meta_key}
-                        value={fieldValue}
-                        icons={availableIcons}
-                        onChange={(value) => updateMetaField(field.meta_key, value)}
-                    />
+                    <FieldGroup key={field.meta_key} label={field.label}>
+                        <IconSelector
+                            value={fieldValue}
+                            icons={availableIcons}
+                            onChange={(value) => updateMetaField(field.meta_key, value)}
+                        />
+                    </FieldGroup>
                 );
             case 'select':
                 const selectOptions = field.options || [];
                 const selectLabels = field.option_labels || selectOptions; // Fallback to options if no labels
 
                 return (
-                    <SelectControl
-                        key={field.meta_key}
-                        label={field.label}
-                        value={fieldValue}
-                        __nextHasNoMarginBottom
-                        __next40pxDefaultSize={true}
-                        options={[
-                            { label: '— Select —', value: '' },
-                            ...selectOptions.map((option, index) => ({
-                                label: selectLabels[index] || option,
-                                value: option
-                            }))
-                        ]}
-                        onChange={(value) => updateMetaField(field.meta_key, value)}
-                    />
+                    <FieldGroup key={field.meta_key} label={field.label}>
+                        <SelectControl
+                            key={field.meta_key}
+                            value={fieldValue}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize={true}
+                            options={[
+                                {label: '— Select —', value: ''},
+                                ...selectOptions.map((option, index) => ({
+                                    label: selectLabels[index] || option,
+                                    value: option
+                                }))
+                            ]}
+                            onChange={(value) => updateMetaField(field.meta_key, value)}
+                        />
+                    </FieldGroup>
                 );
 
             case 'checkbox':
                 return (
-                    <CheckboxControl
-                        key={field.meta_key}
-                        label={field.label}
-                        checked={fieldValue === '1' || fieldValue === true}
-                        onChange={(checked) => updateMetaField(field.meta_key, checked ? '1' : '0')}
-                    />
+                    <FieldGroup key={field.meta_key} label={field.label}>
+                        <CheckboxControl
+                            key={field.meta_key}
+                            checked={fieldValue === '1' || fieldValue === true}
+                            onChange={(checked) => updateMetaField(field.meta_key, checked ? '1' : '0')}
+                        />
+                    </FieldGroup>
                 );
 
             case 'text':
             default:
                 return (
-                    <TextControl
-                        key={field.meta_key}
-                        label={field.label}
-                        value={fieldValue}
-                        __nextHasNoMarginBottom
-                        __next40pxDefaultSize={true}
-                        onChange={(value) => updateMetaField(field.meta_key, value)}
-                    />
+                    <FieldGroup key={field.meta_key} label={field.label}>
+                        <TextControl
+                            key={field.meta_key}
+                            value={fieldValue}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize={true}
+                            onChange={(value) => updateMetaField(field.meta_key, value)}
+                        />
+                    </FieldGroup>
                 );
         }
     };
 
-    function cleanCustomFields(retainCurrent = false) {
+    function cleanCustomFields(currentTemplate, retainCurrent = false) {
+        const fieldsToDelete = [];
 
-        const resetMeta = {...meta};
-        resetMeta.forEach(field => {
-            // Skip design_slug
-            console.log(field);
-            /*
-            if (metaKey === 'design_slug') {
-                return;
-            }
-
-            let defaultValue = field.default;
-
-            // If it matches template field pattern
-            if (/^[a-z0-9-]+_[a-z_]+$/.test(metaKey)) {
-                const belongsToCurrentTemplate = metaKey.startsWith(currentTemplate + '_');
-                if (retainCurrent && belongsToCurrentTemplate) {
-                    return;
+        for (const key in meta) {
+            if (/^[a-z0-9-]+_[a-z0-9_]+$/.test(key) && key !== 'design_slug') {
+                if (!(retainCurrent && key.startsWith(currentTemplate + '_'))) {
+                    fieldsToDelete.push(key);
+                    logger.warn(NAME, `Will remove ${key}`);
                 } else {
-                    if (defaultValue === undefined) {
-                        switch (field.type) {
-                            case 'repeater':
-                                defaultValue = '[]';
-                                break;
-                            case 'checkbox':
-                                defaultValue = '0';
-                                break;
-                            default:
-                                defaultValue = '';
-                        }
-                    }
-                    resetMeta[field.meta_key] = defaultValue;
+                    logger.log(NAME, `Will not remove ${key}`);
                 }
-            }//*/
+            }
+        }
 
+        if (fieldsToDelete.length === 0) {
+            return;
+        }
+
+        wp.apiFetch({
+            path: `/nok/v1/page-part/${postId}/prune-fields`,
+            method: 'POST',
+            data: {retain_current: retainCurrent}
+        }).then(() => {
+            logger.log(NAME, `Deleted ${fieldsToDelete.length} field(s)`);
+
+            // Update editor state to reflect deletion
+            const newMeta = {...meta};
+            fieldsToDelete.forEach(key => delete newMeta[key]);
+            editPost({meta: newMeta});
         });
-        console.log('Reset meta:', resetMeta);
-
-        /*
-        // Reset local state
-        const resetLocal = {};
-        customFields.forEach(field => {
-            resetLocal[field.meta_key] = resetMeta[field.meta_key];
-        });
-        setLocalFieldValues(resetLocal);
-
-        // Update editor
-        editPost({meta: resetMeta});
-         */
     }
 
     return (
@@ -528,9 +672,9 @@ function DesignSlugPanel() {
             {customFields.length > 0 && (
                 <Fragment>
                     <hr style={{margin: '16px 0'}}/>
-                    <h4 style={{margin: '0 0 12px 0', fontSize: '13px', fontWeight: '600'}}>
+                    <h2 style={fieldStyle}>
                         Template options
-                    </h4>
+                    </h2>
                     {customFields.map(renderField)}
                 </Fragment>
             )}

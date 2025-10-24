@@ -206,11 +206,20 @@ class Registry {
 				$field_name = trim($matches[1]);
 				$schema_string = trim($matches[2]);
 
-				// Parse schema: "title:text,content:textarea,button_text:text"
+				// Parse schema and detect post repeater
 				$schema = [];
+				$is_post_repeater = false;
+
 				foreach (explode(',', $schema_string) as $field_def) {
 					list($name, $type) = explode(':', $field_def);
-					$schema[] = ['name' => trim($name), 'type' => trim($type)];
+					$name = trim($name);
+					$type = trim($type);
+
+					if ($type === 'post') {
+						$is_post_repeater = true;
+					}
+
+					$schema[] = ['name' => $name, 'type' => $type];
 				}
 
 				$fields[] = [
@@ -219,6 +228,7 @@ class Registry {
 					'meta_key' => $template_slug . '_' . $field_name,
 					'label' => $this->generate_field_label($field_name),
 					'schema' => $schema,
+					'repeater_subtype' => $is_post_repeater ? 'post' : 'fields',
 					'page_editable' => $is_page_editable,
 					'default'       => $default_value
 				];

@@ -255,7 +255,15 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 	 * @param string $text Text containing various quote characters
 	 * @return string Text with all quotes removed
 	 */
-	public static function strip_all_quotes(string $text): string {
+	public static function strip_all_quotes(mixed $text): string {
+		// Handle non-string inputs
+		if ($text === null || $text === '') {
+			return '';
+		}
+
+		// Cast to string for numeric types
+		$text = (string) $text;
+
 		// Convert HTML entities to actual characters
 		$text = wp_specialchars_decode($text, ENT_QUOTES);
 
