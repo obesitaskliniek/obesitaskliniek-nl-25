@@ -24,36 +24,37 @@ $alternatives = get_posts( [
 ?>
 
     <nok-hero class="nok-section">
-        <article class="nok-section__inner nok-hero__inner nok-m-0 nok-border-radius-to-sm-0
-        nok-layout-grid nok-layout-grid__3-column one-fill nok-column-gap-3
-nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10">
-
-            <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-2 nok-fs-to-md-1">
-                kruimelpad (todo)
-            </h2>
-            <?php printf( '<h1 class="nok-fs-6">%s %s (%s)</h1>',
-                    ucfirst( $hubspotData['soort'] ),
-                    $hubspotData['locatie'],
-                    $hubspotData['type'] );
-            ?>
-            <div>
-                <?= ucfirst( $hubspotData['intro'] ); ?>
-            </div>
-            <?php
-            if ( ! $hubspotData['open'] ) {
-                echo "<div class='nok-alert nok-bg-greenyellow--lighter nok-p-1 nok-mb-1 nok-rounded-border nok-bg-alpha-10' role='alert'><p>
+        <div class="nok-section__inner nok-hero__inner
+        nok-layout-grid nok-layout-grid__3-column fill-one
+        nok-m-0 nok-border-radius-to-sm-0
+nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10 nok-subtle-shadow">
+            <div class="article">
+                <h2 class="nok-fs-2 nok-fs-to-md-1">
+                    kruimelpad (todo)
+                </h2>
+	            <?php printf( '<h1 class="nok-fs-6">%s %s (%s)</h1>',
+		            ucfirst( $hubspotData['soort'] ),
+		            $hubspotData['locatie'],
+		            $hubspotData['type'] );
+	            ?>
+                <div>
+		            <?= ucfirst( $hubspotData['intro'] ); ?>
+		            <?php
+		            if ( ! $hubspotData['open'] ) {
+			            echo "<div class='nok-alert nok-bg-greenyellow--lighter nok-p-1 nok-mt-1 nok-rounded-border nok-bg-alpha-10' role='alert'><p>
                                 Helaas, deze voorlichting is {$hubspotData['status']}! Aanmelden is daarom niet (meer) mogelijk.";
-                if ( count( $alternatives ) > 0 ) {
-                    echo "Kijk bij de <a class='nok-hyperlink' href='#alternatieven'>alternatieven</a>, of bekijk";
-                } else {
-                    echo "Bekijk ";
-                }
-                echo "onze <a href='#'>agenda</a> voor meer voorlichtingen.";
-                echo "</p></div>";
-            }
-            ?>
-
-        </article>
+			            if ( count( $alternatives ) > 0 ) {
+				            echo "Kijk bij de <a class='nok-hyperlink' href='#alternatieven'>alternatieven</a>, of bekijk";
+			            } else {
+				            echo "Bekijk ";
+			            }
+			            echo "onze <a href='#'>agenda</a> voor meer voorlichtingen.";
+			            echo "</p></div>";
+		            }
+		            ?>
+                </div>
+            </div>
+        </div>
     </nok-hero>
 
     <nok-section class="no-aos">

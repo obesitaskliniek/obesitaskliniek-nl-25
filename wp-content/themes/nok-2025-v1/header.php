@@ -29,4 +29,4 @@
 
     </head>
 
-    <body class="no-js nok-bg-body nok-text-contrast">
+    <body class="no-js no-debug nok-bg-body nok-text-contrast">
