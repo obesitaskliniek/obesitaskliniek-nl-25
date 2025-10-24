@@ -251,11 +251,11 @@ sup { top: -.5em; }
 
 a {
   color: var(--text-color), var(--text-color--contrast, 1);
-  text-decoration: underline;
+  text-decoration: none;
 
   &:hover {
     color: var(--text-color--hover);
-    text-decoration: inherit;
+    text-decoration: none;
   }
 }
 

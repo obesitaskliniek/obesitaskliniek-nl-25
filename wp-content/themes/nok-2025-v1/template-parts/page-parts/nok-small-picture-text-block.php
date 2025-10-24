@@ -10,7 +10,7 @@
  * - button_url:url
  * - layout:select(left|right)!page-editable!default(left)
  * - achtergrondkleur:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue|Transparant::)!page-editable
- * - tekstkleur:select(Standaard::nok-text-contrast|Wit::nok-text-white|Zwart::nok-text-black)!page-editable
+ * - tekstkleur:select(Standaard::nok-text-darkerblue|Contrast::nok-text-contrast|Wit::nok-text-white|Zwart::nok-text-black)!page-editable!default(nok-text-darkerblue)
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -39,7 +39,7 @@ $featuredImage = Helpers::get_featured_image();
 						<?= $c->tagline ?>
                     </h2>
 				<?php endif; ?>
-				<?php the_title('<h1 class="nok-fs-giant">', '</h1>'); ?>
+				<?php the_title('<h1 class="nok-fs-giant nok-mb-1">', '</h1>'); ?>
 				<?php the_content(); ?>
 				<?php if ($c->has('button_url')) : ?>
                     <a role="button" href="<?= $c->button_url->url() ?>"

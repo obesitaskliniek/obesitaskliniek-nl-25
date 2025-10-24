@@ -78,6 +78,7 @@ class MetaManager {
 	 * @param int $post_id Page part post ID
 	 * @param string $design Design slug to get fields for
 	 * @param bool $is_editing Whether in editor context (shows placeholders)
+	 *
 	 * @return array Associative array of field name => value
 	 */
 	public function get_page_part_fields( int $post_id, string $design, bool $is_editing = false ): array {
@@ -117,18 +118,24 @@ class MetaManager {
 	 *
 	 * @param int $post_id Page part post ID
 	 * @param \WP_Post $post Post object
+	 *
 	 * @return void
 	 */
 
 	public function save_editor_state( int $post_id, \WP_Post $post ): void {
-		// Prevent infinite recursion
+		// Only handle autosaves (for preview generation)
+		// Let REST API handle real saves
+		if ( ! wp_is_post_autosave( $post_id ) ) {
+			return;
+		}
+
 		static $saving = [];
 		if ( isset( $saving[ $post_id ] ) ) {
 			return;
 		}
 		$saving[ $post_id ] = true;
 
-		// Check for meta fields in transient FIRST
+		// For autosaves, use transient if it exists
 		$preview_state = get_transient( "preview_editor_state_{$post_id}" );
 
 		if ( $preview_state && is_array( $preview_state ) && isset( $preview_state['meta'] ) ) {
@@ -139,23 +146,8 @@ class MetaManager {
 					update_post_meta( $post_id, $meta_key, $meta_value );
 				}
 			}
-
-			// Clean up transient
-			delete_transient( "preview_editor_state_{$post_id}" );
-			unset( $saving[ $post_id ] );
-
-			return;
 		}
 
-		// Let WordPress REST API handle normal saves
-		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
-			unset( $saving[ $post_id ] );
-
-			return;
-		}
-
-		// Fallback: traditional form submission
-		$this->handle_legacy_form_submission( $post_id );
 		unset( $saving[ $post_id ] );
 	}
 
@@ -163,6 +155,7 @@ class MetaManager {
 	 * Add custom columns to page_part post list
 	 *
 	 * @param array $columns Existing columns
+	 *
 	 * @return array Modified columns with template column
 	 */
 	public function add_page_part_columns( array $columns ): array {
@@ -183,6 +176,7 @@ class MetaManager {
 	 *
 	 * @param string $column_name Column identifier
 	 * @param int $post_id Post ID being rendered
+	 *
 	 * @return void
 	 */
 	public function render_page_part_column( string $column_name, int $post_id ): void {
@@ -203,6 +197,7 @@ class MetaManager {
 	 * Sanitize meta fields based on their registered field types
 	 *
 	 * @param array $meta_fields Associative array of meta_key => value
+	 *
 	 * @return array Sanitized meta fields
 	 */
 	public function sanitize_meta_fields( array $meta_fields ): array {
@@ -240,6 +235,7 @@ class MetaManager {
 	 * Handle legacy form submission for backward compatibility
 	 *
 	 * @param int $post_id Page part post ID
+	 *
 	 * @return void
 	 */
 	private function handle_legacy_form_submission( int $post_id ): void {
@@ -271,6 +267,7 @@ class MetaManager {
 	 * Get appropriate sanitize callback for field type
 	 *
 	 * @param string $type Field type (text, textarea, url, checkbox, repeater, etc.)
+	 *
 	 * @return callable Sanitization callback function
 	 */
 	public function get_sanitize_callback( string $type ): callable {
@@ -303,6 +300,7 @@ class MetaManager {
 	 * Get meta type for WordPress registration
 	 *
 	 * @param string $field_type Field type from template definition
+	 *
 	 * @return string WordPress meta type (always 'string' currently)
 	 */
 	private function get_meta_type( string $field_type ): string {
@@ -319,6 +317,7 @@ class MetaManager {
 	 *
 	 * @param string $field_type Field type from template definition
 	 * @param array $field Complete field definition (may contain custom default)
+	 *
 	 * @return mixed Default value for field type
 	 */
 	private function get_default_value( string $field_type, array $field = [] ) {
@@ -343,6 +342,7 @@ class MetaManager {
 	 * Returns valid JSON string or empty array.
 	 *
 	 * @param mixed $value Array or JSON string to sanitize
+	 *
 	 * @return string Valid JSON string
 	 */
 	public function sanitize_json_field( $value ) {
@@ -374,6 +374,7 @@ class MetaManager {
 	 * Sanitize checkbox field - convert to '1' or '0'
 	 *
 	 * @param mixed $value Truthy or falsy value
+	 *
 	 * @return string Either '1' or '0'
 	 */
 	public function sanitize_checkbox_field( $value ) {
@@ -414,6 +415,7 @@ class MetaManager {
 	 * Filter page_part query by template
 	 *
 	 * @param \WP_Query $query Query object to modify
+	 *
 	 * @return void
 	 */
 	public function filter_by_template( \WP_Query $query ): void {
