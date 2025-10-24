@@ -9,11 +9,10 @@ namespace NOK2025\V1\PageParts;
  * Provides REST endpoints for:
  * - Embedding page parts with live preview support
  * - Pruning orphaned template field metadata
- * - Aggregating SEO content from embedded page parts
  * - Rendering page parts with override parameters
  *
  * @example Register endpoints in theme initialization
- * $endpoints = new RestEndpoints($renderer, $meta_manager, $content_aggregator);
+ * $endpoints = new RestEndpoints($renderer, $meta_manager);
  * $endpoints->register_hooks();
  *
  * @example Access embed endpoint
@@ -24,23 +23,19 @@ namespace NOK2025\V1\PageParts;
 class RestEndpoints {
 	private TemplateRenderer $renderer;
 	private MetaManager $meta_manager;
-	private ?\NOK2025\V1\SEO\ContentAggregator $content_aggregator = null;
 
 	/**
 	 * Constructor
 	 *
 	 * @param TemplateRenderer $template_renderer Template rendering service
 	 * @param MetaManager $meta_manager Meta field management service
-	 * @param \NOK2025\V1\SEO\ContentAggregator|null $content_aggregator Optional SEO content aggregator
 	 */
 	public function __construct(
 		TemplateRenderer $template_renderer,
-		MetaManager $meta_manager,
-		?\NOK2025\V1\SEO\ContentAggregator $content_aggregator = null
+		MetaManager $meta_manager
 	) {
 		$this->renderer           = $template_renderer;
 		$this->meta_manager       = $meta_manager;
-		$this->content_aggregator = $content_aggregator;
 	}
 
 	/**
@@ -542,56 +537,5 @@ class RestEndpoints {
 		$wp_query = $original_wp_query;
 
 		return $output;
-	}
-
-	/**
-	 * REST endpoint: Get aggregated SEO content for a post
-	 *
-	 * Aggregates content from embedded page parts for SEO analysis.
-	 * Supports both editor state (via part_ids) and saved state (via post_content).
-	 *
-	 * @param \WP_REST_Request $request Request with id, optional part_ids and use_cache
-	 * @return \WP_REST_Response|\WP_Error Response with aggregated content or error
-	 */
-	public function get_seo_content( \WP_REST_Request $request ) {
-		$post_id   = (int) $request['id'];
-		$part_ids  = $request->get_param( 'part_ids' );  // May be null
-		$use_cache = $request->get_param( 'use_cache' );
-
-		if ( ! $this->content_aggregator ) {
-			return new \WP_Error(
-				'aggregator_not_initialized',
-				'Content aggregator not available',
-				[ 'status' => 500 ]
-			);
-		}
-
-		$post = get_post( $post_id );
-		if ( ! $post ) {
-			return new \WP_Error( 'post_not_found', 'Post not found', [ 'status' => 404 ] );
-		}
-
-		if ( ! current_user_can( 'edit_post', $post_id ) ) {
-			return new \WP_Error( 'forbidden', 'You do not have permission to view this content', [ 'status' => 403 ] );
-		}
-
-		// If part_ids provided, use them directly (editor state)
-		if ( $part_ids !== null && is_array( $part_ids ) ) {
-			$result = $this->content_aggregator->get_aggregated_content_from_parts( $post_id, $part_ids );
-		} else {
-			// Fallback to parsing post_content (saved state)
-			$result = $this->content_aggregator->get_aggregated_content( $post_id, $use_cache );
-		}
-
-		return new \WP_REST_Response( [
-			'post_id'           => $post_id,
-			'post_title'        => get_the_title( $post_id ),
-			'content'           => $result['content'],
-			'part_count'        => $result['part_count'],
-			'parts'             => $result['parts'],
-			'content_length'    => strlen( $result['content'] ),
-			'word_count'        => str_word_count( $result['content'] ),
-			'from_editor_state' => ( $part_ids !== null )
-		], 200 );
 	}
 }
