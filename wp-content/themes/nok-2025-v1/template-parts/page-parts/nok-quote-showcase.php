@@ -4,11 +4,11 @@
  * Description: Two-column layout with quote carousel and accordion items
  * Slug: nok-quote-showcase
  * Custom Fields:
- * - layout:select(left|right)!page-editable!default(left)
+ * - layout:select(left|right|accordion-left)!page-editable!default(left)
  * - colors:select(Transparant::nok-bg-body|Grijs::nok-bg-body--darker gradient-background|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Blauw::nok-bg-darkerblue nok-text-contrast)!page-editable!default(nok-bg-body)
  * - block_colors:select(Wit::nok-bg-white nok-text-darkestblue|Blauw::nok-bg-darkblue nok-text-contrast)!page-editable!default(nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast)
  * - quote_block_colors:select(Wit::nok-bg-white nok-text-darkestblue|Blauw::nok-bg-darkblue nok-text-contrast)!page-editable!default(nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast)
- * - quote_items:repeater(quote:text,name:text,profession:text)
+ * - quote_items:repeater(quote:text,name:text,subname:text)
  * - accordion_open_first:checkbox!default(true)
  * - accordion_items:repeater(title:text,content:textarea,button_text:text,button_url:url)
  * - accordion_button_text:text!default(Lees meer)
@@ -27,7 +27,11 @@ $left = $c->layout->is('left');
     <div class="nok-section__inner">
         <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start nok-column-gap-3">
             <div class="nok-layout-flex-column nok-align-items-stretch" style="order:<?= $left ? '1' : '2' ?>">
-				<?php the_title( '<h1>', '</h1>' ); ?>
+				<?php
+                if (!$c->layout->is('accordion-left')) {
+	                the_title( '<h1>', '</h1>' );
+                }
+                ?>
                 <div><?php the_content(); ?></div>
 
 	            <?php if ($c->has('quote_items')):
@@ -46,24 +50,14 @@ $left = $c->layout->is('left');
 
 				?>
 
-                <nok-square-block class="nok-p-2 no-gap <?= $c->quote_block_colors ?>">
-                    <div class="nok-scrollable__horizontal" id="quote-showcase-scroller" data-scroll-snapping="true"
-                         data-draggable="true"
-                         data-autoscroll="true">
-                        <?php foreach ($quote_data as $index => $quote) : ?>
-                        <div>
-                                <blockquote class="nok-square-block__text"><?= esc_html($quote['quote']) ?></blockquote>
-                            <div class="nok-layout-flex-column nok-align-items-start no-gap">
-                                    <strong class="nok-fs-2"><?= esc_html($quote['name']) ?></strong>
-									<?php if (!empty($quote['profession'])) : ?>
-                                        <p><?= esc_html($quote['profession']) ?></p>
-									<?php endif; ?>
-                            </div>
-                        </div>
-                        <?php endforeach; ?>
-                    </div>
-                </nok-square-block>
+		            <?php get_template_part( 'template-parts/post-parts/nok-scrollable-quote-block', null,
+		            array(
+			            'quotes'      => $quote_data,
+			            'block_color' => $c->quote_block_colors
+		            )
+	            ) ?>
                 <?php endif; ?>
+
             </div>
 
             <?php if ($c->has('accordion_items')): ?>
@@ -71,6 +65,11 @@ $left = $c->layout->is('left');
             <div class="nok-layout-grid nok-layout-grid__1-column"
                  data-requires="./nok-accordion.mjs" data-require-lazy="true"
                  style="order:<?= $left ? '2' : '1' ?>">
+	            <?php
+	            if ($c->layout->is('accordion-left')) {
+		            the_title( '<h1>', '</h1>' );
+	            }
+	            ?>
 
                 <?php
                 $accordion_group = 'accordion-group';

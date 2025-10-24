@@ -47,6 +47,8 @@ $testimonial_data = $c->testimonials->json([
 		'image_url' => 'https://www.obesitaskliniek.nl/wp-content/uploads/2025/06/1000108534-scaled:350x247-45-0-0-center-0-0.jpg'
 	]
 ]);
+
+$scroller_id = 'ervaringen-scroller';
 ?>
 <nok-section class="circle <?= $c->achtergrond ?> <?= $c->tekst ?>"
              style="<?= $circle_style ?>; <?= $circle_offset ?>;">
@@ -61,45 +63,26 @@ $testimonial_data = $c->testimonials->json([
                 <?php if ($c->carousel_buttons->isTrue()) : ?>
                 <div class="nok-button-group">
                     <button class="nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast fill-group-column"
-                            data-scroll-target="ervaringen-scroller" data-scroll-action="backward">
+                            data-scroll-target="<?= $scroller_id; ?>" data-scroll-action="backward">
 						<?= Assets::getIcon('ui_arrow-left-longer') ?>
                     </button>
                     <button class="nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast fill-group-column"
-                            data-scroll-target="ervaringen-scroller" data-scroll-action="forward">
+                            data-scroll-target="<?= $scroller_id; ?>" data-scroll-action="forward">
 						<?= Assets::getIcon('ui_arrow-right-longer') ?>
                     </button>
                 </div>
                 <?php endif; ?>
             </div>
 
-            <div class="nok-align-self-to-lg-stretch nok-column-last-3">
-                <div class="nok-scrollable__horizontal nok-subtle-shadow-compensation"
-                     data-scroll-snapping="true" data-draggable="true"
-                     id="ervaringen-scroller" data-autoscroll="false">
 
-					<?php foreach ($testimonial_data as $testimonial): ?>
-                        <nok-square-block class="nok-bg-white nok-text-darkerblue nok-dark-bg-darkblue nok-dark-text-contrast nok-alpha-10 nok-p-3" data-shadow="true">
-                            <div class="nok-square-block__heading">
-                                <h2>"<?= esc_html($testimonial['quote']) ?>"</h2>
-                            </div>
-                            <div class="nok-square-block__text nok-fs-2">
-								<?= esc_html($testimonial['excerpt']) ?>
-                            </div>
-							<?php if (!empty($testimonial['link_url'])): ?>
-                                <div class="nok-layout-flex-row space-between">
-                                    <a role="button" href="<?= esc_url($testimonial['link_url']) ?>"
-                                       class="nok-button nok-justify-self-start nok-bg-darkblue nok-text-contrast nok-dark-bg-darkerblue fill-mobile" tabindex="0">
-                                        Lees het verhaal <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow'); ?>
-                                    </a>
-									<?php if (!empty($testimonial['image_url'])): ?>
-                                        <img class="nok-square-block__thumbnail" src="<?= esc_url($testimonial['image_url']) ?>" loading="lazy">
-									<?php endif; ?>
-                                </div>
-							<?php endif; ?>
-                        </nok-square-block>
-					<?php endforeach; ?>
-                </div>
-            </div>
+	        <?php get_template_part( 'template-parts/post-parts/nok-scrollable-quote-block', null,
+		        array(
+                    'scroller_id' => $scroller_id,
+			        'quotes'      => $testimonial_data,
+			        'block_color' => 'nok-bg-white nok-text-darkerblue nok-dark-bg-darkblue nok-dark-text-contrast'
+		        )
+	        ) ?>
+
         </article>
     </div>
 </nok-section>

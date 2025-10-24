@@ -241,6 +241,46 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 		global $page_part_fields;
 		return key_exists($field, $page_part_fields)  && $page_part_fields[$field] !== '';
 	}
+
+	/**
+	 * Strip all quote-like characters for display within quoted text
+	 *
+	 * Removes straight quotes, curly quotes, HTML entities, grave accents,
+	 * and other quote-like characters to prevent visual duplication when
+	 * displaying content within HTML quote marks.
+	 *
+	 * @example Quote display
+	 * <h2>"<?= esc_html(Helpers::strip_all_quotes($quote['quote'])) ?>"</h2>
+	 *
+	 * @param string $text Text containing various quote characters
+	 * @return string Text with all quotes removed
+	 */
+	public static function strip_all_quotes(string $text): string {
+		// Convert HTML entities to actual characters
+		$text = wp_specialchars_decode($text, ENT_QUOTES);
+
+		// Remove all quote-like characters
+		$quotes = [
+			'"',        // Straight double quote
+			"'",        // Straight single quote
+			"\u{2018}", // Left single curly quote
+			"\u{2019}", // Right single curly quote
+			"\u{201C}", // Left double curly quote
+			"\u{201D}", // Right double curly quote
+			"\u{201F}", // Double high-reversed-9 quotation mark
+			"\u{201E}", // Double low-9 quotation mark
+			"\u{2039}", // Single left-pointing angle quotation mark
+			"\u{203A}", // Single right-pointing angle quotation mark
+			"\u{00AB}", // Left-pointing double angle quotation mark
+			"\u{00BB}", // Right-pointing double angle quotation mark
+			'`',        // Grave accent
+			"\u{00B4}", // Acute accent
+			"\u{2032}", // Prime
+			"\u{2033}", // Double prime
+		];
+
+		return str_replace($quotes, '', $text);
+	}
 }
 
 /**

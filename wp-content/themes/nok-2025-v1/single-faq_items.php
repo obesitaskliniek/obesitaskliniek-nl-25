@@ -19,7 +19,7 @@ function nok_cat_slug_to_icon($slug) {
         case 'afvallen' :
             return 'nok_weegschaal';
         default:
-            break;
+            return '';
     }
 }
 
