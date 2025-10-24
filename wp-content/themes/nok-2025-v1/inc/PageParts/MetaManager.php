@@ -37,16 +37,17 @@ class MetaManager {
 	 * @return void
 	 */
 	public function register_design_meta(): void {
-		// Register the main design_slug field
 		register_post_meta( 'page_part', 'design_slug', [
 			'type'              => 'string',
 			'show_in_rest'      => true,
 			'single'            => true,
 			'sanitize_callback' => 'sanitize_key',
+			'auth_callback'     => function() {
+				return current_user_can( 'edit_posts' );
+			},
 			'default'           => '',
 		] );
 
-		// Register all custom fields from templates
 		$registry = $this->registry->get_registry();
 
 		foreach ( $registry as $template_slug => $template_data ) {
@@ -62,6 +63,9 @@ class MetaManager {
 					'show_in_rest'      => true,
 					'single'            => true,
 					'sanitize_callback' => $sanitize_callback,
+					'auth_callback'     => function() {
+						return current_user_can( 'edit_posts' );
+					},
 					'default'           => $this->get_default_value( $field['type'], $field ),
 				] );
 			}

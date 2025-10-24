@@ -1,4 +1,4 @@
-import {useSelect, useDispatch, subscribe, select} from '@wordpress/data';
+import {useSelect, useDispatch} from '@wordpress/data';
 import {registerPlugin} from '@wordpress/plugins';
 import {PluginDocumentSettingPanel} from '@wordpress/editor';
 import {SelectControl, TextControl, TextareaControl, CheckboxControl, Button, Draggable } from '@wordpress/components';
@@ -319,17 +319,34 @@ function DesignSlugPanel() {
     }, [currentTemplate, meta?.design_slug]);
 
     const updateMetaField = (fieldName, value) => {
+        // Don't trigger updates during initialization
         if (!isInitialized) {
             logger.log(NAME, `Skipping update during initialization for ${fieldName}`);
             return;
         }
 
-        setLocalFieldValues(prev => ({...prev, [fieldName]: value}));
+        // Update local state immediately for responsive UI
+                setLocalFieldValues(prev => ({
+                    ...prev,
+            [fieldName]: value
+                }));
 
-        // Get CURRENT meta at moment of update, not from render
-        const currentMeta = select('core/editor').getEditedPostAttribute('meta');
-        const newMeta = {...currentMeta, [fieldName]: value};
-        editPost({meta: newMeta});
+        // Clear any existing timeout for this field
+        if (debounceRef.current[fieldName]) {
+            clearTimeout(debounceRef.current[fieldName]);
+        }
+
+        // Set new timeout for debounced backend update
+        debounceRef.current[fieldName] = setTimeout(() => {
+            logger.log(NAME, `Debounced update for ${fieldName}: ${value}`);
+
+            // Update the editor meta
+            const newMeta = {...meta, [fieldName]: value};
+            editPost({meta: newMeta});
+
+            // Clean up timeout reference
+            delete debounceRef.current[fieldName];
+        }, 500);
     };
 
     // 7) Render field based on type
@@ -437,36 +454,55 @@ function DesignSlugPanel() {
         }
     };
 
-    function cleanCustomFields(currentTemplate, retainCurrent = false) {
-        const fieldsToDelete = [];
+    function cleanCustomFields(retainCurrent = false) {
 
-        for (const key in meta) {
-            if (/^[a-z0-9-]+_[a-z0-9_]+$/.test(key) && key !== 'design_slug') {
-                if (!(retainCurrent && key.startsWith(currentTemplate + '_'))) {
-                    fieldsToDelete.push(key);
-                    logger.warn(NAME, `Will remove ${key}`);
-                } else {
-                    logger.log(NAME, `Will not remove ${key}`);
-                }
+        const resetMeta = {...meta};
+        resetMeta.forEach(field => {
+            // Skip design_slug
+            console.log(field);
+            /*
+            if (metaKey === 'design_slug') {
+                return;
             }
-        }
 
-        if (fieldsToDelete.length === 0) {
-            return;
-        }
+            let defaultValue = field.default;
 
-        wp.apiFetch({
-            path: `/nok/v1/page-part/${postId}/prune-fields`,
-            method: 'POST',
-            data: { retain_current: retainCurrent }
-        }).then(() => {
-            logger.log(NAME, `Deleted ${fieldsToDelete.length} field(s)`);
+            // If it matches template field pattern
+            if (/^[a-z0-9-]+_[a-z_]+$/.test(metaKey)) {
+                const belongsToCurrentTemplate = metaKey.startsWith(currentTemplate + '_');
+                if (retainCurrent && belongsToCurrentTemplate) {
+                    return;
+                } else {
+                    if (defaultValue === undefined) {
+                        switch (field.type) {
+                            case 'repeater':
+                                defaultValue = '[]';
+                                break;
+                            case 'checkbox':
+                                defaultValue = '0';
+                                break;
+                            default:
+                                defaultValue = '';
+                        }
+                    }
+                    resetMeta[field.meta_key] = defaultValue;
+                }
+            }//*/
 
-            // Update editor state to reflect deletion
-            const newMeta = {...meta};
-            fieldsToDelete.forEach(key => delete newMeta[key]);
-            editPost({meta: newMeta});
         });
+        console.log('Reset meta:', resetMeta);
+
+        /*
+        // Reset local state
+        const resetLocal = {};
+        customFields.forEach(field => {
+            resetLocal[field.meta_key] = resetMeta[field.meta_key];
+        });
+        setLocalFieldValues(resetLocal);
+
+        // Update editor
+        editPost({meta: resetMeta});
+         */
     }
 
     return (
@@ -511,7 +547,7 @@ function DesignSlugPanel() {
                         onClick={() => {
                             if (confirm('Wil je alle velden die niet langer door de huidige template worden gebruikt verwijderen?')) {
                                 logger.log(NAME, 'Pruning unused template fields');
-                                cleanCustomFields(currentTemplate, true);
+                                cleanCustomFields(true);
                             }
                         }}
                         style={{width: '100%', justifyContent: 'center', marginBottom: '16px'}}
@@ -527,7 +563,7 @@ function DesignSlugPanel() {
                         onClick={() => {
                             if (confirm('Wil je de velden voor ALLE templates voor deze page part terugzetten naar de standaardwaarden?')) {
                                 logger.log(NAME, 'Resetting template fields to defaults');
-                                cleanCustomFields(currentTemplate);
+                                cleanCustomFields();
                             }
                         }}
                         style={{width: '100%', justifyContent: 'center', marginBottom: '16px'}}
