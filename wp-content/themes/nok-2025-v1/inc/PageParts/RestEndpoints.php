@@ -167,6 +167,11 @@ class RestEndpoints {
 		$exclude = $request->get_param('exclude');
 		$search = $request->get_param('search');
 
+		// Handle comma-separated post types
+		if (is_string($post_type) && strpos($post_type, ',') !== false) {
+			$post_type = array_map('trim', explode(',', $post_type));
+		}
+
 		$args = [
 			'post_type' => $post_type,
 			'post_status' => 'publish',
@@ -190,7 +195,8 @@ class RestEndpoints {
 			$posts[] = [
 				'id' => $post->ID,
 				'title' => get_the_title($post->ID),
-				'date' => get_the_date('Y-m-d', $post->ID)
+				'date' => get_the_date('Y-m-d', $post->ID),
+				'type' => $post->post_type
 			];
 		}
 

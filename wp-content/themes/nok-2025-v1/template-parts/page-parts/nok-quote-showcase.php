@@ -9,7 +9,7 @@
  * - block_colors:select(Wit::nok-bg-white nok-text-darkestblue|Blauw::nok-bg-darkblue nok-text-contrast)!page-editable!default(nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast)
  * - quote_block_colors:select(Wit::nok-bg-white nok-text-darkestblue|Blauw::nok-bg-darkblue nok-text-contrast)!page-editable!default(nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast)
  * - quote_items:repeater(quote:text,name:text,subname:text)
- * - quote_posts:repeater(item:post)
+ * - quote_posts:repeater(faq_items)
  * - accordion_open_first:checkbox!default(true)
  * - accordion_items:repeater(title:text,content:textarea,button_text:text,button_url:url)
  * - accordion_button_text:text!default(Lees meer)

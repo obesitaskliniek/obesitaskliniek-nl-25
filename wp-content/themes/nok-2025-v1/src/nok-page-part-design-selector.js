@@ -44,7 +44,7 @@ const FieldGroup = ({ label, children }) => (
     </div>
 );
 
-const PostSelector = ({value, onChange, postType = 'post'}) => {
+const PostSelector = ({value, onChange, postTypes = ['post']}) => {
     const [availablePosts, setAvailablePosts] = useState([]);
     const [selectedPosts, setSelectedPosts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -83,7 +83,7 @@ const PostSelector = ({value, onChange, postType = 'post'}) => {
         setLoading(true);
         try {
             const params = new URLSearchParams({
-                post_type: postType,
+                post_type: postTypes.join(','), // Send as comma-separated
                 exclude: selectedIds.join(','),
                 search: searchTerm
             });
@@ -177,8 +177,10 @@ const PostSelector = ({value, onChange, postType = 'post'}) => {
                             onMouseEnter={(e) => e.target.style.background = '#f9f9f9'}
                             onMouseLeave={(e) => e.target.style.background = 'transparent'}
                         >
-                            <div style={{fontWeight: '500'}}>{post.title}</div>
-                            <div style={{fontSize: '11px', color: '#666'}}>{post.date}</div>
+                            <div style={{ fontWeight: '500' }}>{post.title}</div>
+                            <div style={{ fontSize: '11px', color: '#666' }}>
+                                {post.type} • {post.date}
+                            </div>
                         </div>
                     ))
                 )}
@@ -532,7 +534,7 @@ function DesignSlugPanel() {
                             <PostSelector
                                 value={fieldValue}
                                 onChange={(value) => updateMetaField(field.meta_key, value)}
-                                postType="post"
+                                postTypes={field.post_types || ['post']}
                             />
                         </FieldGroup>
                     );

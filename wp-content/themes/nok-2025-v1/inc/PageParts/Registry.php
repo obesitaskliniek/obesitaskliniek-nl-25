@@ -206,32 +206,41 @@ class Registry {
 				$field_name = trim($matches[1]);
 				$schema_string = trim($matches[2]);
 
-				// Parse schema and detect post repeater
-				$schema = [];
-				$is_post_repeater = false;
+				// Check if this is post type repeater (no colons in schema)
+				if (strpos($schema_string, ':') === false) {
+					// Post type repeater: "post|faq_items"
+					$post_types = array_map('trim', explode('|', $schema_string));
 
-				foreach (explode(',', $schema_string) as $field_def) {
-					list($name, $type) = explode(':', $field_def);
-					$name = trim($name);
-					$type = trim($type);
-
-					if ($type === 'post') {
-						$is_post_repeater = true;
+					$fields[] = [
+						'name' => $field_name,
+						'type' => 'repeater',
+						'meta_key' => $template_slug . '_' . $field_name,
+						'label' => $this->generate_field_label($field_name),
+						'schema' => [],
+						'repeater_subtype' => 'post',
+						'post_types' => $post_types,
+						'page_editable' => $is_page_editable,
+						'default' => $default_value
+					];
+				} else {
+					// Field repeater: "title:text,content:textarea"
+					$schema = [];
+					foreach (explode(',', $schema_string) as $field_def) {
+						list($name, $type) = explode(':', $field_def);
+						$schema[] = ['name' => trim($name), 'type' => trim($type)];
 					}
 
-					$schema[] = ['name' => $name, 'type' => $type];
+					$fields[] = [
+						'name' => $field_name,
+						'type' => 'repeater',
+						'meta_key' => $template_slug . '_' . $field_name,
+						'label' => $this->generate_field_label($field_name),
+						'schema' => $schema,
+						'repeater_subtype' => 'fields',
+						'page_editable' => $is_page_editable,
+						'default' => $default_value
+					];
 				}
-
-				$fields[] = [
-					'name' => $field_name,
-					'type' => 'repeater',
-					'meta_key' => $template_slug . '_' . $field_name,
-					'label' => $this->generate_field_label($field_name),
-					'schema' => $schema,
-					'repeater_subtype' => $is_post_repeater ? 'post' : 'fields',
-					'page_editable' => $is_page_editable,
-					'default'       => $default_value
-				];
 			}
 			// Handle regular fields: "field_name:type"
 			else {
