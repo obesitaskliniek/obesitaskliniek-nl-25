@@ -29,6 +29,37 @@ class MetaManager {
 		add_action( 'manage_page_part_posts_custom_column', [ $this, 'render_page_part_column' ], 10, 2 );
 		add_action( 'restrict_manage_posts', [ $this, 'add_template_filter' ] );
 		add_action( 'parse_query', [ $this, 'filter_by_template' ] );
+		add_filter( 'is_protected_meta', [ $this, 'protect_page_part_meta' ], 10, 2 );
+	}
+
+	/**
+	 * Mark page part meta fields as protected from Custom Fields panel
+	 *
+	 * @param bool   $protected Whether the key is protected
+	 * @param string $meta_key  Meta key being checked
+	 * @return bool Whether to protect this meta key
+	 */
+	public function protect_page_part_meta( bool $protected, string $meta_key ): bool {
+		// Protect design_slug
+		if ( $meta_key === 'design_slug' ) {
+			return true;
+		}
+
+		// Protect all registered template fields
+		$registry = $this->registry->get_registry();
+		foreach ( $registry as $template_data ) {
+			if ( empty( $template_data['custom_fields'] ) ) {
+				continue;
+			}
+
+			foreach ( $template_data['custom_fields'] as $field ) {
+				if ( $field['meta_key'] === $meta_key ) {
+					return true;
+				}
+			}
+		}
+
+		return $protected;
 	}
 
 	/**
