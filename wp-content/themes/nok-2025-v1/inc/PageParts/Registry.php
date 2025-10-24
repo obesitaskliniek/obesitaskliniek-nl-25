@@ -63,6 +63,7 @@ class Registry {
 			if ($header_name === 'Custom Fields') {
 				// Find the Custom Fields header line
 				if (preg_match('/^\s*\*\s*' . preg_quote($header_name, '/') . '\s*:\s*$/m', $comment_block, $matches, PREG_OFFSET_CAPTURE)) {
+					/** @noinspection PhpWrongStringConcatenationInspection */
 					$start_pos = $matches[0][1] + strlen($matches[0][0]);
 					$remaining_content = substr($comment_block, $start_pos);
 

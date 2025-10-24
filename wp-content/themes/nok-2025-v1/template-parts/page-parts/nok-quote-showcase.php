@@ -23,6 +23,7 @@ $c = $context;
 
 $left = $c->layout->is('left');
 
+//todo: handle these!
 var_dump($c->quote_posts->json());
 ?>
 
@@ -93,7 +94,7 @@ var_dump($c->quote_posts->json());
 				foreach ($accordion_data as $index => $item) : ?>
                     <nok-accordion>
                         <details class="<?= $c->block_colors ?> nok-rounded-border nok-text-contrast"
-                                 name="<?= esc_attr($accordion_group) ?>" <?= ($index == 0 && $c->accordion_open_first->isTrue('open')) ? 'open' : '' ?>>
+                                 name="<?= esc_attr($accordion_group) ?>" <?= ($index == 0 && $c->accordion_open_first->isTrue()) ? 'open' : '' ?>>
                             <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold">
 								<?= esc_html($item['title']) ?>
                             </summary>
