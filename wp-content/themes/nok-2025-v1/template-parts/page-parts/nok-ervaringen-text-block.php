@@ -10,8 +10,8 @@
  * - circle_color:select(Blauw::var(--nok-darkerblue)|Automatisch::var(--nok-body--lighter)|Uit::transparent)!page-editable!default(var(--nok-body--lighter))
  * - quote_items:repeater(quote:text,name:text,subname:text,excerpt:text,link_url:url,image_url:url)!descr[Voeg handmatige quotes toe om te tonen]
  * - quote_posts:post_repeater(post:ervaringen)!descr[Kies specifieke ervaringsverhalen om te tonen]
- * - random_quotes:checkbox(true)!descr[Vul aan met willekeurige ervaringen indien minder dan 5 quotes aanwezig zijn]
- * - carousel_buttons:checkbox(false)!descr[Toon navigatieknoppen voor de carousel]
+ * - random_quotes:checkbox!default(true)!descr[Vul aan met willekeurige ervaringen indien minder dan 5 quotes aanwezig zijn]
+ * - carousel_buttons:checkbox!default(false)!descr[Toon navigatieknoppen voor de carousel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */

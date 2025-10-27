@@ -12,7 +12,7 @@
  * - achtergrondkleur:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue|Donkerder::nok-bg-body--darker|Transparant::)!page-editable
  * - tekstkleur:select(Standaard::nok-text-contrast|Wit::nok-text-white|Zwart::nok-text-black)!page-editable
  * - circle_color:select(Blauw::var(--nok-darkerblue)|Automatisch::|Uit::transparent)!page-editable
- * - pull_down:checkbox(true)!page-editable
+ * - pull_down:checkbox!default(true)!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
