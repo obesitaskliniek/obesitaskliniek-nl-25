@@ -6,7 +6,7 @@
  * Custom Fields:
  * - quote_posts:post_repeater(post:ervaringen)!descr[Kies specifieke ervaringsverhalen om te tonen in de quote showcase]
  * - quote_items:repeater(quote:text,name:text,subname:text)!descr[Voeg handmatige quotes toe om te tonen in de quote showcase]
- * - random_quotes:checkbox(true)!descr[Vul aan met willekeurige ervaringen indien minder dan 5 quotes aanwezig zijn]
+ * - random_quotes:checkbox!default(true)!descr[Vul aan met willekeurige ervaringen indien minder dan 5 quotes aanwezig zijn]
  * - accordion_open_first:checkbox!default(true)!descr[Open het eerste accordion item standaard]
  * - accordion_framed:checkbox!default(true)!descr[Voeg een kader toe rondom de accordion items]
  * - accordion_items:repeater(title:text,content:textarea,button_text:text,button_url:url)!descr[Voeg accordion items toe die naast de quote showcase getoond worden]
