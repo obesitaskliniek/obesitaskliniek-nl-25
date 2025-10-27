@@ -4,16 +4,18 @@
  * Description: Two-column layout with quote carousel and accordion items
  * Slug: nok-quote-showcase
  * Custom Fields:
- * - layout:select(left|right|accordion-left)!page-editable!default(left)
- * - colors:select(Transparant::nok-bg-body|Grijs::nok-bg-body--darker gradient-background|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Blauw::nok-bg-darkerblue nok-text-contrast)!page-editable!default(nok-bg-body)
- * - block_colors:select(Body::nok-bg-body nok-text-contrast|Wit::nok-bg-white nok-text-darkestblue|Blauw::nok-bg-darkblue nok-text-contrast)!page-editable!default(nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast)
- * - quote_block_colors:select(Body::nok-bg-body nok-text-contrast|Wit::nok-bg-white nok-text-darkestblue|Blauw::nok-bg-darkblue nok-text-contrast)!page-editable!default(nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast)
- * - quote_items:repeater(quote:text,name:text,subname:text)!descr[Voeg handmatige quotes toe om te tonen in de quote showcase]
  * - quote_posts:post_repeater(post:ervaringen)!descr[Kies specifieke ervaringsverhalen om te tonen in de quote showcase]
- * - random_quotes:checkbox(false)!descr[Vul aan met willekeurige ervaringen indien minder dan 5 quotes aanwezig zijn]
+ * - quote_items:repeater(quote:text,name:text,subname:text)!descr[Voeg handmatige quotes toe om te tonen in de quote showcase]
+ * - random_quotes:checkbox(true)!descr[Vul aan met willekeurige ervaringen indien minder dan 5 quotes aanwezig zijn]
  * - accordion_open_first:checkbox!default(true)!descr[Open het eerste accordion item standaard]
+ * - accordion_framed:checkbox!default(true)!descr[Voeg een kader toe rondom de accordion items]
  * - accordion_items:repeater(title:text,content:textarea,button_text:text,button_url:url)!descr[Voeg accordion items toe die naast de quote showcase getoond worden]
  * - accordion_button_text:text!default(Lees meer)!descr[Standaardtekst voor de knop (als die er is) in een accordion item]
+ *  - layout:select(quotes-left|quotes-right|accordion-left-title-top)!page-editable!default(left)
+ *  - colors:select(Transparant::nok-bg-body|Grijs::nok-bg-body--darker gradient-background|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Blauw::nok-bg-darkerblue nok-text-contrast)!page-editable!default(Transparant)
+ *  - circle_color:select(Blauw::var(--nok-darkerblue)|Wit::var(--nok-darkerblue)|Automatisch::var(--nok-body--darker)|Uit::transparent)!page-editable!default(Uit)
+ *  - accordion_block_colors:select(Body::nok-bg-body nok-text-contrast|Wit::nok-bg-white nok-text-darkestblue|Blauw::nok-bg-darkblue nok-text-contrast)!page-editable!default(Wit)
+ *  - quote_block_colors:select(Body::nok-bg-body nok-text-contrast|Wit::nok-bg-white nok-text-darkestblue|Blauw::nok-bg-darkblue nok-text-contrast)!page-editable!default(Wit)
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -23,166 +25,119 @@ use NOK2025\V1\Helpers;
 
 $c = $context;
 
-$left = $c->layout->is( 'left' );
-
-function get_quotes_from_posts( $posts ) {
-    $quote_items = array();
-    foreach ( $posts as $post_id ) {
-        // Get the post meta
-        $post       = get_post( $post_id );
-        $post_meta  = get_post_meta( $post_id );
-        $quote_item = array(
-                'quote'     => Helpers::strip_all_quotes(isset( $post_meta['_highlighted_quote_1'] ) ? ( ( rand( 0, 1 ) || ! isset( $post_meta['_highlighted_quote_2'] ) ) ? $post_meta['_highlighted_quote_1'][0] : $post_meta['_highlighted_quote_2'][0] ) : get_the_title( $post )),
-            //todo: random quote selection should be excluded from cache, if possible
-                'excerpt'   => isset( $post_meta['_highlighted_excerpt'] ) ? Helpers::strip_all_quotes(rtrim( $post_meta['_highlighted_excerpt'][0], '.' )) . '...' : Helpers::get_excerpt( $post_id, 30 ),
-                'name'      => $post_meta['_naam_patient'][0] ?? 'Anonieme patiënt',
-                'subnaam'   => $post_meta['_subnaam_patient'][0] ?? '',
-                'link_url'  => get_permalink( $post_id ),
-                'image_url' => Helpers::get_featured_image_uri( $post )
-        );
-        array_push( $quote_items, $quote_item );
-    }
-
-    return $quote_items;
+if ($c->layout->is( 'quotes-left' )) {
+    $quote_column_order = '1';
+    $quote_column_class = 'nok-column-first-xxl-2 nok-column-first-xl-3';
+    $accordion_column_order = '2';
+    $accordion_column_class = 'nok-column-last-xl-3';
+} elseif ( $c->layout->is( 'quotes-right' ) || $c->layout->is( 'accordion-left-title-top' ) ) {
+    $quote_column_order = '2';
+    $quote_column_class = 'nok-column-last-xxl-2 nok-column-last-xl-3';
+    $accordion_column_order = '1';
+    $accordion_column_class = 'nok-column-first-xl-3';
 }
+
+// Circle color as CSS custom property
+$circle_style = $c->circle_color->css_var('circle-background-color');
+
+// Circle offset calculation based on layout
+$circle_offset = "--circle-offset:" . $c->layout->is('left', 'calc(50vw - (var(--section-max-width) * 0.35))', 'calc(50vw + (var(--section-max-width) * 0.25))');
 
 ?>
 
-<nok-section class="<?= $c->colors ?> gradient-background">
+<nok-section class="circle <?= $c->colors ?> gradient-background"
+             style="<?= $circle_style ?>; <?= $circle_offset ?>;">
+
     <div class="nok-section__inner">
-        <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start nok-column-gap-3">
-            <div class="nok-layout-flex-column nok-align-items-stretch" style="order:<?= $left ? '1' : '2' ?>">
+        <!--<article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start nok-column-gap-3">-->
+        <article class="nok-layout-grid nok-columns-1 nok-columns-xl-6 nok-columns-xxl-5 nok-align-items-start nok-column-gap-3">
+            <?php
+            if ( $c->layout->is( 'accordion-left-title-top' ) ) {
+                the_title( ' <div class="nok-span-all-columns nok-mb-1"><h2 class="nok-fs-5 nok-mb-0_5">', '</h2></div>' );
+            }
+            ?>
+
+            <div class="nok-layout-flex-column nok-align-items-stretch <?= $quote_column_class; ?>" style="order:<?= $quote_column_order; ?>">
                 <?php
-                if ( ! $c->layout->is( 'accordion-left' ) ) {
-                    the_title( '<h1>', '</h1>' );
+                if ( ! $c->layout->is( 'accordion-left-title-top' ) ) {
+                    the_title( '<h2 class="nok-fs-5">', '</h2>' );
                 }
                 ?>
-                <div><?php the_content(); ?></div>
+
+                <?php
+                if (get_the_content() !== '') : ?>
+                    <div><?php the_content(); ?></div>
+                <?php endif; ?>
 
                 <?php if ( $c->has( 'quote_items' ) || $c->has( 'quote_posts' ) ):
-
-                    // Process explicit quote posts first
-                    $explicit_quotes = get_quotes_from_posts( $c->quote_posts->json() );
-
-                    // Add custom quote items
-                    $custom_quotes = $c->has( 'quote_items' )
-                            ? $c->quote_items->json()
-                            : array();
-
-                    $quote_data = array_merge( $explicit_quotes, $custom_quotes );
-
-                    // Pad with random quotes if enabled and needed
-                    if ( $c->random_quotes->isTrue() && count( $quote_data ) < 5 ) {
-                        $needed          = 5 - count( $quote_data );
-                        $random_post_ids = get_posts( array(
-                                'post_type'      => 'post',
-                                'category_name'  => 'ervaringen',
-                                'posts_per_page' => $needed,
-                                'fields'         => 'ids',
-                                'post__not_in'   => array_merge(
-                                        $c->quote_posts->json(),
-                                        array_filter( array_column( $custom_quotes, 'post_id' ) ) // If custom quotes reference posts
-                                ),
-                                'orderby'        => 'rand' // Let MySQL handle randomization
-                        ) );
-
-                        if ( ! empty( $random_post_ids ) ) {
-                            $random_quotes = get_quotes_from_posts( $random_post_ids );
-                            $quote_data    = array_merge( $quote_data, $random_quotes );
-                        }
-                    }
-
-                    // shuffle all quotes if custom quotes have been added
-                    if ( $c->has( 'quote_items' ) || $c->random_quotes->isTrue() ) {
-                        shuffle( $quote_data );
-                    }
-
-                    /*
-                    $quote_posts = get_quotes_from_posts( $c->quote_posts->json() );
-                    $quote_items = $c->quote_items->json();
-                    $quote_data  = array_merge( $quote_posts, $quote_items );
-
-                    //shuffle if custom quotes have been added
-                    if ( $c->has( 'quote_items' ) ) {
-                        shuffle( $quote_data );
-                    }
-
-                    //pad with random quotes if this is enabled and less than 5 quotes are available
-                    if ( $c->random_quotes->isTrue() && count( $quote_data ) < 5 ) {
-                        $all_experience_posts = get_posts( array(
-                                'post_type'      => 'post',
-                                'category_name'  => 'ervaringen',
-                                'posts_per_page' => ( 5 - count( $quote_data ) ),
-                                'fields'         => 'ids',
-                                'post__not_in'   => $c->quote_posts->json()
-                        ) );
-                        $quote_data  = array_merge( $quote_data, $all_experience_posts );
-                        shuffle( $quote_data );
-                    }*/
-                    ?>
-
-                    <?php get_template_part( 'template-parts/post-parts/nok-scrollable-quote-block', null,
-                        array(
-                                'quotes'      => $quote_data,
-                                'block_color' => $c->quote_block_colors
-                        )
-                ) ?>
-                <?php endif; ?>
+                    // Build complete quote collection using Helpers
+                    $quote_data = Helpers::build_quote_collection(
+                            $c->quote_posts->json(),
+                            $c->quote_items->json(),
+                            $c->random_quotes->isTrue(),
+                            5
+                    );
+                    get_template_part( 'template-parts/post-parts/nok-scrollable-quote-block', null,
+                            array(
+                                    'class'         => $c->layout->is( 'accordion-left-title-top', 'nok-mt-5'),
+                                    'quotes'      => $quote_data,
+                                    'block_color' => $c->quote_block_colors->raw()
+                            )
+                    );
+                endif; ?>
 
             </div>
 
             <?php if ( $c->has( 'accordion_items' ) ): ?>
-                <!-- Component: accordion items -->
-                <div class="nok-layout-grid nok-layout-grid__1-column"
+                <div class="nok-layout-grid nok-layout-grid__1-column module-loaded <?= $accordion_column_class; ?>"
                      data-requires="./nok-accordion.mjs" data-require-lazy="true"
-                     style="order:<?= $left ? '2' : '1' ?>">
-                    <?php
-                    if ( $c->layout->is( 'accordion-left' ) ) {
-                        the_title( '<h1>', '</h1>' );
-                    }
-                    ?>
+                     style="order:<?= $accordion_column_order; ?>">
 
-                    <?php
-                    $accordion_group = 'accordion-group';
+                    <div class="<?= $c->accordion_block_colors->raw(); ?> nok-subtle-shadow nok-rounded-border-large nok-p-1"
+                         style="<?= $c->accordion_framed->isTrue('', 'display:contents;' ); ?>">
+                        <?php
+                        $accordion_group = 'accordion-group';
 
-                    $accordion_data = $c->accordion_items->json( [
-                            [
-                                    'title'       => 'Titel 1',
-                                    'content'     => 'Tekst 1',
-                                    'button_text' => 'Button tekst',
-                                    'button_url'  => '#'
-                            ],
-                            [
-                                    'title'       => 'Titel 2',
-                                    'content'     => 'Tekst 2',
-                                    'button_text' => 'Button tekst',
-                                    'button_url'  => '#'
-                            ]
-                    ] );
+                        $accordion_data = $c->accordion_items->json( [
+                                [
+                                        'title'       => 'Titel 1',
+                                        'content'     => 'Tekst 1',
+                                        'button_text' => 'Button tekst',
+                                        'button_url'  => '#'
+                                ],
+                                [
+                                        'title'       => 'Titel 2',
+                                        'content'     => 'Tekst 2',
+                                        'button_text' => 'Button tekst',
+                                        'button_url'  => '#'
+                                ]
+                        ] );
 
-                    foreach ( $accordion_data as $index => $item ) : ?>
-                        <nok-accordion>
-                            <details class="<?= $c->block_colors ?> nok-rounded-border nok-text-contrast"
-                                     name="<?= esc_attr( $accordion_group ) ?>" <?= ( $index == 0 && $c->accordion_open_first->isTrue() ) ? 'open' : '' ?>>
-                                <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold">
-                                    <?= esc_html( $item['title'] ) ?>
-                                </summary>
-                                <div class="accordion-content nok-p-2 nok-pt-0">
-                                    <p class="<?= ! empty( $item['button_url'] ) ? 'nok-mb-1' : '' ?>">
-                                        <?= wp_kses_post( $item['content'] ) ?>
-                                    </p>
-                                    <?php if ( ! empty( $item['button_url'] ) ) : ?>
-                                        <a href="<?= esc_url( $item['button_url'] ) ?>" role="button"
-                                           class="nok-button nok-text-contrast nok-bg-darkblue--darker nok-dark-bg-darkestblue nok-visible-xs nok-align-self-stretch fill-mobile"
-                                           tabindex="0">
-                                            <?= ! empty( trim( $item['button_text'] ) ) ? esc_html( $item['button_text'] ) : $c->accordion_button_text ?>
-                                            <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ) ?>
-                                        </a>
-                                    <?php endif; ?>
-                                </div>
-                            </details>
-                        </nok-accordion>
-                    <?php endforeach; ?>
+                        foreach ( $accordion_data as $index => $item ) : ?>
+                            <nok-accordion>
+                                <details
+                                        class="<?= $c->accordion_block_colors->raw() ?> nok-rounded-border nok-text-contrast"
+                                        name="<?= esc_attr( $accordion_group ) ?>" <?= ( $index == 0 && $c->accordion_open_first->isTrue() ) ? 'open' : '' ?>>
+                                    <summary class="nok-py-1 nok-px-2 nok-fs-3 nok-fs-to-sm-2 fw-bold">
+                                        <?= esc_html( $item['title'] ) ?>
+                                    </summary>
+                                    <div class="accordion-content nok-p-2 nok-pt-0">
+                                        <p class="<?= ! empty( $item['button_url'] ) ? 'nok-mb-1' : '' ?>">
+                                            <?= wp_kses_post( $item['content'] ) ?>
+                                        </p>
+                                        <?php if ( ! empty( $item['button_url'] ) ) : ?>
+                                            <a href="<?= esc_url( $item['button_url'] ) ?>" role="button"
+                                               class="nok-button nok-text-contrast nok-bg-darkblue--darker nok-dark-bg-darkestblue nok-visible-xs nok-align-self-stretch fill-mobile"
+                                               tabindex="0">
+                                                <?= ! empty( trim( $item['button_text'] ) ) ? esc_html( $item['button_text'] ) : $c->accordion_button_text ?>
+                                                <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ) ?>
+                                            </a>
+                                        <?php endif; ?>
+                                    </div>
+                                </details>
+                            </nok-accordion>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
 
             <?php endif; ?>

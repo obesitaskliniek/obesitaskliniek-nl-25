@@ -444,7 +444,7 @@ class MetaManager {
 
 		foreach ( $registry as $slug => $data ) {
 			printf(
-				'<option value="%s"%s>%s</option>',
+				'<option value="%s" %s>%s</option>',
 				esc_attr( $slug ),
 				selected( $current_template, $slug, false ),
 				esc_html( $data['name'] )

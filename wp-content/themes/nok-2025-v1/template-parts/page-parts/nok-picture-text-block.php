@@ -28,13 +28,16 @@ $left = $c->layout->is('left');
 // Circle color as CSS custom property
 $circle_style = $c->circle_color->css_var('circle-background-color');
 
+// Circle offset calculation based on layout
+$circle_offset = "--circle-offset:" . !$c->layout->is('left', 'calc(50vw - (var(--section-max-width) * 0.35))', 'calc(50vw + (var(--section-max-width) * 0.25))');
+
 // Featured image with conditional border class
 $border_class = $c->pull_down->isTrue(($left ? 'nok-rounded-border-large-right' : 'nok-rounded-border-large-left'));
 $featured_image = Helpers::get_featured_image($border_class);
 
 ?>
 <nok-section class="circle <?= $c->pull_down->isTrue('pull-down', '') ?> <?= $c->achtergrondkleur ?>"
-             style="<?= $circle_style ?>;--circle-offset:<?= $left ? 'calc(50vw + (var(--section-max-width) * 0.25))' : 'calc(50vw - (var(--section-max-width) * 0.25))' ?>;">
+             style="<?= $circle_style ?> <?= $circle_offset; ?>;">
     <div class="nok-section__inner">
         <article class="nok-align-self-stretch
                         <?= $c->tekstkleur ?>
