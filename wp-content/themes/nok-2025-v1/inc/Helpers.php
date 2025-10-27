@@ -344,6 +344,162 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 
 		return wp_trim_words($excerpt, $word_count, '...');
 	}
+
+	/**
+	 * Extract quote data from experience posts
+	 *
+	 * Transforms post IDs into structured arrays with quote, excerpt,
+	 * name, and metadata. Randomly selects between two quote fields
+	 * if both are available.
+	 *
+	 * Structure matches nok-scrollable-quote-block template requirements:
+	 * - quote: Main quote text (stripped of quote characters)
+	 * - excerpt: Short summary with ellipsis
+	 * - name: Patient name or 'Anonieme patiënt'
+	 * - subnaam: Optional subtitle (location, date, etc.)
+	 * - link_url: Permalink to full post
+	 * - image_url: Featured image URL or fallback
+	 *
+	 * @example Single post
+	 * $quotes = Helpers::get_quotes_from_experience_posts([123, 456]);
+	 *
+	 * @example With empty array
+	 * $quotes = Helpers::get_quotes_from_experience_posts([]);
+	 * // Returns []
+	 *
+	 * @param int[] $post_ids Array of post IDs from 'ervaringen' category
+	 * @return array[] Quote data arrays with standardized keys
+	 */
+	public static function get_quotes_from_experience_posts( array $post_ids ): array {
+		$quote_items = [];
+
+		foreach ( $post_ids as $post_id ) {
+			$post      = get_post( $post_id );
+			$post_meta = get_post_meta( $post_id );
+
+			// Random quote selection between two options if both exist
+			$quote_text = html_entity_decode(get_the_title($post), ENT_QUOTES, 'UTF-8');
+			if ( isset( $post_meta['_highlighted_quote_1'] ) ) {
+				if ( isset( $post_meta['_highlighted_quote_2'] ) && rand( 0, 1 ) ) {
+					$quote_text = $post_meta['_highlighted_quote_2'][0];
+				} else {
+					$quote_text = $post_meta['_highlighted_quote_1'][0];
+				}
+			}
+
+			// Build excerpt with fallback chain
+			$excerpt = '';
+			if ( isset( $post_meta['_highlighted_excerpt'] ) ) {
+				$excerpt = self::strip_all_quotes( rtrim( $post_meta['_highlighted_excerpt'][0], '.' ) ) . '...';
+			} else {
+				$excerpt = self::get_excerpt( $post_id, 30 );
+			}
+
+			$quote_item = [
+				'quote'     => self::strip_all_quotes( $quote_text ),
+				'excerpt'   => $excerpt,
+				'name'      => $post_meta['_naam_patient'][0] ?? 'Anonieme patiënt',
+				'subnaam'   => $post_meta['_subnaam_patient'][0] ?? '',
+				'link_url'  => get_permalink( $post_id ),
+				'image_url' => self::get_featured_image_uri( $post )
+			];
+
+			$quote_items[] = $quote_item;
+		}
+
+		return $quote_items;
+	}
+
+	/**
+	 * Build complete quote collection with optional random padding
+	 *
+	 * Merges explicit posts, custom quotes, and random padding into
+	 * unified collection. Shuffles when custom quotes or random padding
+	 * are present to prevent predictable ordering.
+	 *
+	 * Processing order:
+	 * 1. Extract quotes from explicitly selected posts
+	 * 2. Merge with custom manual quotes
+	 * 3. If enabled and below minimum, pad with random posts
+	 * 4. Shuffle if custom content or random padding added
+	 *
+	 * Random posts exclude explicitly selected posts and any posts
+	 * referenced in custom quotes to prevent duplicates.
+	 *
+	 * @example Basic usage with explicit posts
+	 * $quotes = Helpers::build_quote_collection(
+	 *     explicit_posts: [123, 456]
+	 * );
+	 *
+	 * @example With custom quotes and padding
+	 * $quotes = Helpers::build_quote_collection(
+	 *     explicit_posts: [123],
+	 *     custom_quotes: [['quote' => 'Great care', 'name' => 'Jan']],
+	 *     pad_with_random: true,
+	 *     minimum_count: 5
+	 * );
+	 *
+	 * @example All parameters
+	 * $quotes = Helpers::build_quote_collection(
+	 *     explicit_posts: $context->quote_posts->json(),
+	 *     custom_quotes: $context->quote_items->json(),
+	 *     pad_with_random: $context->random_quotes->isTrue(),
+	 *     minimum_count: 5
+	 * );
+	 *
+	 * @param int[] $explicit_posts Post IDs explicitly selected
+	 * @param array[] $custom_quotes Manual quote arrays with quote/name keys
+	 * @param bool $pad_with_random Fill to minimum with random posts
+	 * @param int $minimum_count Target quote count for random padding
+	 * @return array[] Complete quote collection ready for rendering
+	 */
+	public static function build_quote_collection(
+		array $explicit_posts,
+		array $custom_quotes = [],
+		bool $pad_with_random = false,
+		int $minimum_count = 5
+	): array {
+		// Extract quotes from explicitly selected posts
+		$quote_data = self::get_quotes_from_experience_posts( $explicit_posts );
+
+		// Merge with custom quotes
+		$quote_data = array_merge( $quote_data, $custom_quotes );
+
+		// Pad with random quotes if enabled and below minimum
+		if ( $pad_with_random && count( $quote_data ) < $minimum_count ) {
+			$needed = $minimum_count - count( $quote_data );
+
+			// Build exclusion list from explicit posts and custom quotes
+			$excluded_ids = $explicit_posts;
+			foreach ( $custom_quotes as $custom ) {
+				if ( isset( $custom['post_id'] ) ) {
+					$excluded_ids[] = $custom['post_id'];
+				}
+			}
+
+			$random_post_ids = get_posts( [
+				'post_type'      => 'post',
+				'category_name'  => 'ervaringen',
+				'posts_per_page' => $needed,
+				'fields'         => 'ids',
+				'post__not_in'   => array_filter( $excluded_ids ),
+				'orderby'        => 'rand'
+			] );
+
+			if ( ! empty( $random_post_ids ) ) {
+				$random_quotes = self::get_quotes_from_experience_posts( $random_post_ids );
+				$quote_data    = array_merge( $quote_data, $random_quotes );
+			}
+		}
+
+		// Shuffle if custom quotes or random padding added
+		if ( ! empty( $custom_quotes ) || $pad_with_random ) {
+			shuffle( $quote_data );
+		}
+
+		return $quote_data;
+	}
+
 }
 
 /**

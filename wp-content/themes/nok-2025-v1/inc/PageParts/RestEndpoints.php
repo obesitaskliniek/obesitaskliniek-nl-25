@@ -181,7 +181,7 @@ class RestEndpoints {
 			'post_type' => $post_type,
 			'post_status' => 'publish',
 			'posts_per_page' => 50,
-			'orderby' => 'date',
+			'orderby' => !empty($search) ? 'relevance' : 'date',  // ← Key change
 			'order' => 'DESC'
 		];
 
@@ -209,7 +209,23 @@ class RestEndpoints {
 		}
 
 		if (!empty($search)) {
+			// WordPress default search
 			$args['s'] = $search;
+
+			// Add explicit title search as fallback
+			add_filter('posts_search', function($search, $wp_query) use ($request) {
+				global $wpdb;
+				$search_term = $request->get_param('search');
+				if (empty($search_term)) {
+					return $search;
+				}
+
+				// Add OR condition for exact title match
+				$search_term_like = '%' . $wpdb->esc_like($search_term) . '%';
+				$search .= $wpdb->prepare(" OR {$wpdb->posts}.post_title LIKE %s", $search_term_like);
+
+				return $search;
+			}, 10, 2);
 		}
 
 		$query = new \WP_Query($args);
@@ -218,7 +234,7 @@ class RestEndpoints {
 		foreach ($query->posts as $post) {
 			$posts[] = [
 				'id' => $post->ID,
-				'title' => get_the_title($post->ID),
+				'title' => html_entity_decode(get_the_title($post->ID), ENT_QUOTES, 'UTF-8'),
 				'date' => get_the_date('Y-m-d', $post->ID),
 				'type' => $post->post_type
 			];

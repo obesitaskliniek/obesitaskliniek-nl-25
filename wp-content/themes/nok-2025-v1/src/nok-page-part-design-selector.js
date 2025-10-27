@@ -218,7 +218,9 @@ const RepeaterField = ({field, schema, value, onChange}) => {
     const [draggedIndex, setDraggedIndex] = useState(null);
 
     const createEmptyItem = () => {
-        const emptyItem = {};
+        const emptyItem = {
+            _id: `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        };
         schema.forEach(schemaField => {
             emptyItem[schemaField.name] = '';
         });
@@ -360,7 +362,7 @@ const RepeaterField = ({field, schema, value, onChange}) => {
         <>
             {items.map((item, index) => (
                 <div
-                    key={index}
+                    key={item._id || index}
                     draggable
                     onDragStart={(e) => handleDragStart(e, index)}
                     onDragEnd={handleDragEnd}
@@ -616,6 +618,21 @@ function DesignSlugPanel() {
             case 'select':
                 const selectOptions = field.options || [];
                 const selectLabels = field.option_labels || selectOptions; // Fallback to options if no labels
+                const hasDefault = field.default && field.default !== '';
+
+                // Only show "— Select —" if no default is defined
+                const options = hasDefault
+                    ? selectOptions.map((option, index) => ({
+                        label: selectLabels[index] || option,
+                        value: option
+                    }))
+                    : [
+                        {label: '— Select —', value: ''},
+                        ...selectOptions.map((option, index) => ({
+                            label: selectLabels[index] || option,
+                            value: option
+                        }))
+                    ];
 
                 return (
                     <FieldGroup key={field.meta_key} label={field.label}>
@@ -624,13 +641,7 @@ function DesignSlugPanel() {
                             value={fieldValue}
                             __nextHasNoMarginBottom
                             __next40pxDefaultSize={true}
-                            options={[
-                                {label: '— Select —', value: ''},
-                                ...selectOptions.map((option, index) => ({
-                                    label: selectLabels[index] || option,
-                                    value: option
-                                }))
-                            ]}
+                            options={options}
                             onChange={(value) => updateMetaField(field.meta_key, value)}
                         />
                         {field.description && (

@@ -35,7 +35,7 @@ $featuredImage = Helpers::get_featured_image();
 
             <div class="nok-order-<?= $order ?>">
 				<?php if ($c->has('tagline')) : ?>
-                    <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-4 nok-mb-0_5">
+                    <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-5 nok-mb-0_5">
 						<?= $c->tagline ?>
                     </h2>
 				<?php endif; ?>

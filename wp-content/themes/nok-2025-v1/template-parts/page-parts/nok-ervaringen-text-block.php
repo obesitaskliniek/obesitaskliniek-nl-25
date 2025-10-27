@@ -8,13 +8,16 @@
  * - achtergrond:select(Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-white|Transparant::nok-text-darkerblue nok-dark-text-white)!page-editable!default(nok-text-darkerblue nok-dark-text-white)
  * - tekst:select(Blauw::nok-text-darkerblue nok-dark-text-contrast|Wit::nok-text-white nok-dark-text-contrast)!page-editable!default(nok-text-darkerblue)
  * - circle_color:select(Blauw::var(--nok-darkerblue)|Automatisch::var(--nok-body--lighter)|Uit::transparent)!page-editable!default(var(--nok-body--lighter))
- * - testimonials:repeater(quote:text,excerpt:text,link_url:url,image_url:url)
- * - carousel_buttons:checkbox(false)
+ * - quote_items:repeater(quote:text,name:text,subname:text,excerpt:text,link_url:url,image_url:url)!descr[Voeg handmatige quotes toe om te tonen]
+ * - quote_posts:post_repeater(post:ervaringen)!descr[Kies specifieke ervaringsverhalen om te tonen]
+ * - random_quotes:checkbox(true)!descr[Vul aan met willekeurige ervaringen indien minder dan 5 quotes aanwezig zijn]
+ * - carousel_buttons:checkbox(false)!descr[Toon navigatieknoppen voor de carousel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
 
 use NOK2025\V1\Assets;
+use NOK2025\V1\Helpers;
 
 $c = $context;
 
@@ -27,26 +30,13 @@ $circle_style = $c->circle_color->css_var('circle-background-color');
 // Circle offset calculation based on layout
 $circle_offset = "--circle-offset:" . $c->layout->is('left', 'calc(50vw - (var(--section-max-width) * 0.35))', 'calc(50vw + (var(--section-max-width) * 0.25))');
 
-$testimonial_data = $c->testimonials->json([
-	[
-		'quote' => 'Wat een fijn traject ben ik aangegaan',
-		'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos vero.',
-		'link_url' => '#',
-		'image_url' => 'https://www.obesitaskliniek.nl/wp-content/uploads/2025/06/1000108534-scaled:350x247-45-0-0-center-0-0.jpg'
-	],
-	[
-		'quote' => 'Wat een fijn traject ben ik aangegaan',
-		'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos vero.',
-		'link_url' => '#',
-		'image_url' => 'https://www.obesitaskliniek.nl/wp-content/uploads/2025/06/1000108534-scaled:350x247-45-0-0-center-0-0.jpg'
-	],
-	[
-		'quote' => 'Wat een fijn traject ben ik aangegaan',
-		'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet doloribus iure perspiciatis quod, quos vero.',
-		'link_url' => '#',
-		'image_url' => 'https://www.obesitaskliniek.nl/wp-content/uploads/2025/06/1000108534-scaled:350x247-45-0-0-center-0-0.jpg'
-	]
-]);
+// Build quote collection using Helpers
+$testimonial_data = Helpers::build_quote_collection(
+    $c->quote_posts->json(),
+    $c->quote_items->json(),
+    $c->random_quotes->isTrue(),
+    5
+);
 
 $scroller_id = 'ervaringen-scroller';
 ?>

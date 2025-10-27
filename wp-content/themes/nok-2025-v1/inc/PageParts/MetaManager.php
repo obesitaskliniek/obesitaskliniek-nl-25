@@ -136,10 +136,16 @@ class MetaManager {
 			$is_text_based    = in_array( $field['type'], [ 'text', 'textarea' ], true );
 
 			$actual_meta_value                     = get_post_meta( $post_id, $meta_key, true );
-			$page_part_fields[ $short_field_name ] = empty( $actual_meta_value ) ?
-				( $is_editing ?
-					( $is_text_based ? Helpers::show_placeholder( $short_field_name ) : ( $default_fields[ $field['type'] ] ?? '' ) ) : '' ) :
-				$actual_meta_value;
+
+		// Use template default if available and value is empty
+		if ( empty( $actual_meta_value ) && isset( $field['default'] ) ) {
+			$page_part_fields[ $short_field_name ] = $field['default'];
+		} elseif ( empty( $actual_meta_value ) ) {
+			$page_part_fields[ $short_field_name ] = $is_editing ?
+				( $is_text_based ? Helpers::show_placeholder( $short_field_name ) : ( $default_fields[ $field['type'] ] ?? '' ) ) : '';
+		} else {
+			$page_part_fields[ $short_field_name ] = $actual_meta_value;
+		}
 		}
 
 		return $page_part_fields;
