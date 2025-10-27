@@ -137,6 +137,16 @@ class RestEndpoints {
 					'type' => 'string',
 					'default' => 'post'
 				],
+				'categories' => [
+					'required' => false,
+					'type' => 'string',
+					'default' => ''
+				],
+				'include' => [
+					'required' => false,
+					'type' => 'string',
+					'default' => ''
+				],
 				'exclude' => [
 					'required' => false,
 					'type' => 'string',
@@ -175,8 +185,27 @@ class RestEndpoints {
 			'order' => 'DESC'
 		];
 
+		$categories = $request->get_param('categories');
+		if (!empty($categories)) {
+			$args['tax_query'] = [
+				[
+					'taxonomy' => 'category',
+					'field' => 'slug',
+					'terms' => array_map('trim', explode(',', $categories)),
+					'operator' => 'IN'
+				]
+			];
+		}
+
 		if (!empty($exclude)) {
 			$args['post__not_in'] = array_map('intval', explode(',', $exclude));
+		}
+
+		$include = $request->get_param('include');
+		if (!empty($include)) {
+			$args['post__in'] = array_map('intval', explode(',', $include));
+			$args['orderby'] = 'post__in';
+			$args['post_type'] = 'any'; // Allow any post type when fetching by ID
 		}
 
 		if (!empty($search)) {

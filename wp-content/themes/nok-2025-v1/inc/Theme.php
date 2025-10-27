@@ -47,6 +47,8 @@ final class Theme {
 			$this->template_renderer,
 			$this->meta_manager
 		);
+		$this->post_meta_registrar = new PostMeta\MetaRegistrar();
+		$this->register_post_custom_fields();
 	}
 
 	public static function get_instance(): Theme {
@@ -195,5 +197,38 @@ final class Theme {
 		}
 
 		return $show;
+	}
+
+	private function register_post_custom_fields(): void {
+		// Get category IDs programmatically
+		$experience_cat = get_category_by_slug('ervaringen');
+
+		PostMeta\MetaRegistry::register_field('post', 'naam_patient', [
+			'type' => 'text',
+			'label' => 'Naam patiënt',
+			'placeholder' => 'Voer de naam...',
+			'categories' => [$experience_cat->term_id],
+		]);
+
+		PostMeta\MetaRegistry::register_field('post', 'highlighted_excerpt', [
+			'type' => 'textarea',
+			'label' => 'Samenvatting',
+			'placeholder' => 'Voer een korte samenvatting van 1-2 zinnen in...',
+			'categories' => [$experience_cat->term_id],
+		]);
+
+		PostMeta\MetaRegistry::register_field('post', 'highlighted_quote_1', [
+			'type' => 'textarea',
+			'label' => 'Highlighted Quote 1',
+			'placeholder' => 'Voer een quote uit het verhaal in...',
+			'categories' => [$experience_cat->term_id],
+		]);
+
+		PostMeta\MetaRegistry::register_field('post', 'highlighted_quote_2', [
+			'type' => 'textarea',
+			'label' => 'Highlighted Quote 2 (Optioneel)',
+			'placeholder' => 'Voer een quote uit het verhaal in...',
+			'categories' => [$experience_cat->term_id],
+		]);
 	}
 }

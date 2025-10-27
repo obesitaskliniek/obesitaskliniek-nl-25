@@ -24,6 +24,11 @@ module.exports = {
             'src/yoast-page-parts-integration.js'
         ),
 
+        'assets/js/nok-post-meta-panel': path.resolve(
+            __dirname,
+            'src/nok-post-meta-panel.js'
+        ),
+
         'blocks/embed-nok-page-part/index': path.resolve(
             __dirname,
             'src/blocks/embed-nok-page-part/index.js'

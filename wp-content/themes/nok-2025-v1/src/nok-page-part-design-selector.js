@@ -27,8 +27,8 @@ const fieldStyle = {
 };
 
 // Wrapper for consistent field spacing and labeling
-const FieldGroup = ({ label, children }) => (
-    <div style={{ marginBottom: '16px' }}>
+const FieldGroup = ({label, children}) => (
+    <div style={{marginBottom: '16px'}}>
         {label && (
             <div style={{
                 marginBottom: '8px',
@@ -44,7 +44,7 @@ const FieldGroup = ({ label, children }) => (
     </div>
 );
 
-const PostSelector = ({value, onChange, postTypes = ['post']}) => {
+const PostSelector = ({value, onChange, postTypes = ['post'], categories = []}) => {
     const [availablePosts, setAvailablePosts] = useState([]);
     const [selectedPosts, setSelectedPosts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -60,42 +60,52 @@ const PostSelector = ({value, onChange, postTypes = ['post']}) => {
 
     // Fetch selected post details on mount
     useEffect(() => {
-        if (selectedIds.length > 0) {
-            fetchSelectedPosts();
-        }
-    }, []);
+        const fetchSelectedPosts = async () => {
+            if (selectedIds.length === 0) {
+                setSelectedPosts([]);
+                return;
+            }
 
+            try {
+                const params = new URLSearchParams({
+                    include: selectedIds.join(',')
+                });
+                const response = await fetch(`/wp-json/nok-2025-v1/v1/posts/query?${params}`);
+                const posts = await response.json();
+                setSelectedPosts(posts);
+            } catch (error) {
+                console.error('Failed to fetch selected posts:', error);
+            }
+        };
+
+        fetchSelectedPosts();
+    }, [selectedIds.join(',')]); // Proper dependencies
+
+    // Fetch available posts
     useEffect(() => {
+        const fetchPosts = async () => {
+            setLoading(true);
+            try {
+                const params = new URLSearchParams({
+                    post_type: postTypes.join(','),
+                    exclude: selectedIds.join(','),
+                    search: searchTerm
+                });
+
+                if (categories.length > 0) {
+                    params.append('categories', categories.join(','));
+                }
+                const response = await fetch(`/wp-json/nok-2025-v1/v1/posts/query?${params}`);
+                const posts = await response.json();
+                setAvailablePosts(posts);
+            } catch (error) {
+                console.error('Failed to fetch posts:', error);
+            }
+            setLoading(false);
+        };
+
         fetchPosts();
-    }, [selectedIds, searchTerm]);
-
-    const fetchSelectedPosts = async () => {
-        try {
-            const response = await fetch(`/wp-json/nok-2025-v1/v1/posts/query?post_type=${postType}&include=${selectedIds.join(',')}`);
-            const posts = await response.json();
-            setSelectedPosts(posts);
-        } catch (error) {
-            console.error('Failed to fetch selected posts:', error);
-        }
-    };
-
-    const fetchPosts = async () => {
-        setLoading(true);
-        try {
-            const params = new URLSearchParams({
-                post_type: postTypes.join(','), // Send as comma-separated
-                exclude: selectedIds.join(','),
-                search: searchTerm
-            });
-
-            const response = await fetch(`/wp-json/nok-2025-v1/v1/posts/query?${params}`);
-            const posts = await response.json();
-            setAvailablePosts(posts);
-        } catch (error) {
-            console.error('Failed to fetch posts:', error);
-        }
-        setLoading(false);
-    };
+    }, [selectedIds.join(','), searchTerm, postTypes.join(','), categories.join(',')]);
 
     const addPost = (post) => {
         const newIds = [...selectedIds, post.id];
@@ -177,8 +187,8 @@ const PostSelector = ({value, onChange, postTypes = ['post']}) => {
                             onMouseEnter={(e) => e.target.style.background = '#f9f9f9'}
                             onMouseLeave={(e) => e.target.style.background = 'transparent'}
                         >
-                            <div style={{ fontWeight: '500' }}>{post.title}</div>
-                            <div style={{ fontSize: '11px', color: '#666' }}>
+                            <div style={{fontWeight: '500'}}>{post.title}</div>
+                            <div style={{fontSize: '11px', color: '#666'}}>
                                 {post.type} • {post.date}
                             </div>
                         </div>
@@ -535,6 +545,7 @@ function DesignSlugPanel() {
                                 value={fieldValue}
                                 onChange={(value) => updateMetaField(field.meta_key, value)}
                                 postTypes={field.post_types || ['post']}
+                                categories={field.categories || []}
                             />
                         </FieldGroup>
                     );
@@ -542,7 +553,13 @@ function DesignSlugPanel() {
 
                 if (!field.schema || field.schema.length === 0) {
                     return (
-                        <div key={field.meta_key} style={{ padding: '8px', background: '#fff3cd', border: '1px solid #ffc107', borderRadius: '4px', marginBottom: '16px' }}>
+                        <div key={field.meta_key} style={{
+                            padding: '8px',
+                            background: '#fff3cd',
+                            border: '1px solid #ffc107',
+                            borderRadius: '4px',
+                            marginBottom: '16px'
+                        }}>
                             <strong>Warning:</strong> Repeater field "{field.label}" has no schema defined.
                         </div>
                     );
@@ -655,6 +672,7 @@ function DesignSlugPanel() {
         <PluginDocumentSettingPanel
             name="page-part-design"
             title="NOK Design template"
+            icon="admin-generic"
         >
             <SelectControl
                 label="Template"

@@ -50,32 +50,49 @@ class Helpers {
 		return is_preview() || ( is_user_logged_in() && current_user_can( 'edit_post', $post_id ) );
 	}
 
-	public static function get_featured_image($class = null): string {
+	/**
+	 * Get featured image URL
+	 *
+	 * @param string $size Image size slug (default: 'large')
+	 * @param bool   $icon Whether to use icon representation
+	 *
+	 * @return string Image URL or fallback URL
+	 */
+	public static function get_featured_image_uri( $post, string $size = 'large', bool $icon = false ): string {
+		if ( has_post_thumbnail( $post ) ) {
+			return wp_get_attachment_image_url(
+				get_post_thumbnail_id( $post ),
+				$size,
+				$icon
+			) ?: '';
+		}
+
+		return 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:300x0-25-0-0-center-0.jpg';
+	}
+
+	public static function get_featured_image( $class = null ): string {
 		if ( has_post_thumbnail() ) {
-			// Output <img> with srcset, sizes, width/height, alt, AND loading="lazy"
 			$featuredImage = wp_get_attachment_image(
-				get_post_thumbnail_id(),  // attachment ID
-				'large',                   // size slug: 'thumbnail', 'medium', 'large', 'full', or your custom size
-				false,                    // icon? false = normal image
+				get_post_thumbnail_id(),
+				'large',
+				false,
 				[
-					'loading'  => 'eager', //eager since we are at the top of the page anyway
-					'decoding' => 'async', // async decoding for better performance
-					// These attributes get added to the <img> tag
-					'class'    => trim(($class ?? '') . " featured-image"),      // your CSS hook
-					// size hint: “100vw up to 1200px wide, then cap at 1200px”
+					'loading'  => 'eager',
+					'decoding' => 'async',
+					'class'    => trim( ( $class ?? '' ) . " featured-image" ),
 					'sizes'    => '(max-width: 1200px) 100vw, 1200px',
 				]
 			);
 		} else {
-			$featuredImage = '<img '. ($class ? "class='{$class}'" : '') .' src="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:100x0-25-0-0-center-0.jpg" 
+			$featuredImage = '<img ' . ( $class ? "class='{$class}'" : '' ) . ' src="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:100x0-25-0-0-center-0.jpg" 
 srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:1920x0-65-0-0-center-0.jpg 1920w,
-                             https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:768x0-65-0-0-center-0.jpg 768w,
-                             https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:320x0-65-0-0-center-0.jpg 320w,
-                             https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:150x0-65-0-0-center-0.jpg 150w" sizes="(max-width: 575px) 100vw,
-                                 (min-width: 575px) 75vw,
-                                 (min-width: 768px) 84vw,
-                                 (min-width: 996px) 84vw,
-                                 (min-width: 1200px) 84vw" loading="eager" decoding="async">';
+                     https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:768x0-65-0-0-center-0.jpg 768w,
+                     https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:320x0-65-0-0-center-0.jpg 320w,
+                     https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:150x0-65-0-0-center-0.jpg 150w" sizes="(max-width: 575px) 100vw,
+                         (min-width: 575px) 75vw,
+                         (min-width: 768px) 84vw,
+                         (min-width: 996px) 84vw,
+                         (min-width: 1200px) 84vw" loading="eager" decoding="async">';
 		}
 
 		return $featuredImage;
@@ -84,51 +101,49 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 	/**
 	 * @throws \Exception
 	 */
-	public static function getDateParts($date, int $minutes = 0): array
-	{
-		$formatter = new IntlDateFormatter('nl_NL', IntlDateFormatter::NONE, IntlDateFormatter::NONE);
+	public static function getDateParts( $date, int $minutes = 0 ): array {
+		$formatter = new IntlDateFormatter( 'nl_NL', IntlDateFormatter::NONE, IntlDateFormatter::NONE );
 
 		// Calculate end time by adding minutes
 		$endDate = clone $date;
-		$endDate->add(new DateInterval('PT' . abs($minutes) . 'M'));
-		if ($minutes < 0) {
+		$endDate->add( new DateInterval( 'PT' . abs( $minutes ) . 'M' ) );
+		if ( $minutes < 0 ) {
 			$endDate = clone $date;
-			$endDate->sub(new DateInterval('PT' . abs($minutes) . 'M'));
+			$endDate->sub( new DateInterval( 'PT' . abs( $minutes ) . 'M' ) );
 		}
 
 		return [
-			'day_number' => $date->format('J'),
-			'day_name' => $formatter->setPattern('EEEE') ? $formatter->format($date) : null,
-			'day_short' => $formatter->setPattern('EEE') ? $formatter->format($date) : null,
-			'month_number' => $date->format('n'),
-			'month_name' => $formatter->setPattern('MMMM') ? $formatter->format($date) : null,
-			'month_short' => $formatter->setPattern('MMM') ? $formatter->format($date) : null,
-			'year' => $date->format('Y'),
-			'hour' => $date->format('G'),
-			'minute' => $date->format('i'),
-			'niceDateFull' => $formatter->setPattern('EEEE d MMMM') ? $formatter->format($date) : null,
-			'start_time' => $date->format('G:i'),
-			'end_time' => $endDate->format('G:i')
+			'day_number'   => $date->format( 'J' ),
+			'day_name'     => $formatter->setPattern( 'EEEE' ) ? $formatter->format( $date ) : null,
+			'day_short'    => $formatter->setPattern( 'EEE' ) ? $formatter->format( $date ) : null,
+			'month_number' => $date->format( 'n' ),
+			'month_name'   => $formatter->setPattern( 'MMMM' ) ? $formatter->format( $date ) : null,
+			'month_short'  => $formatter->setPattern( 'MMM' ) ? $formatter->format( $date ) : null,
+			'year'         => $date->format( 'Y' ),
+			'hour'         => $date->format( 'G' ),
+			'minute'       => $date->format( 'i' ),
+			'niceDateFull' => $formatter->setPattern( 'EEEE d MMMM' ) ? $formatter->format( $date ) : null,
+			'start_time'   => $date->format( 'G:i' ),
+			'end_time'     => $endDate->format( 'G:i' )
 		];
 	}
 
-	public static function minutesToTime(int $minutes): string
-	{
-		$hours = intval($minutes / 60);
-		$mins = $minutes % 60;
-		return sprintf('%d:%02d', $hours, $mins);
+	public static function minutesToTime( int $minutes ): string {
+		$hours = intval( $minutes / 60 );
+		$mins  = $minutes % 60;
+
+		return sprintf( '%d:%02d', $hours, $mins );
 	}
 
-	public static function minutesToDutchRounded(int $minutes): string
-	{
+	public static function minutesToDutchRounded( int $minutes ): string {
 		// Round to nearest 30 minutes
-		$roundedMinutes = round($minutes / 30) * 30;
+		$roundedMinutes = round( $minutes / 30 ) * 30;
 		// Cap at 8 hours (480 minutes)
-		$roundedMinutes = min($roundedMinutes, 480);
+		$roundedMinutes = min( $roundedMinutes, 480 );
 
 		$hours = $roundedMinutes / 60;
 
-		return match($hours) {
+		return match ( $hours ) {
 			0.0 => '0 minuten',
 			0.5 => 'een half uur',
 			1.0 => 'een uur',
@@ -150,68 +165,69 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 		};
 	}
 
-	public static function classFirstP(string $string, string $class): string {
+	public static function classFirstP( string $string, string $class ): string {
 		// Check if string contains any <p> tags
-		if (!preg_match('/<p(\s[^>]*)?>/i', $string)) {
+		if ( ! preg_match( '/<p(\s[^>]*)?>/i', $string ) ) {
 			// No paragraph tags found - wrap entire content in <p> with class
-			return '<p class="' . htmlspecialchars($class, ENT_QUOTES) . '">' . $string . '</p>';
+			return '<p class="' . htmlspecialchars( $class, ENT_QUOTES ) . '">' . $string . '</p>';
 		}
 
 		// Paragraph tags exist - apply class to first one using original logic
-		return preg_replace('/<p(\s[^>]*)?>/i', '<p$1 class="' . htmlspecialchars($class, ENT_QUOTES) . '">', $string, 1);
+		return preg_replace( '/<p(\s[^>]*)?>/i', '<p$1 class="' . htmlspecialchars( $class, ENT_QUOTES ) . '">', $string, 1 );
 	}
 
 	/**
 	 * Query and loop through the last n posts from a custom post type
 	 *
 	 * @param string $post_type Custom post type slug
-	 * @param int    $count     Number of posts to retrieve
-	 * @param array  $meta_query Optional meta query parameters
-	 * @param array  $tax_query  Optional taxonomy query parameters
+	 * @param int $count Number of posts to retrieve
+	 * @param array $meta_query Optional meta query parameters
+	 * @param array $tax_query Optional taxonomy query parameters
+	 *
 	 * @return WP_Query|false   Query object or false on failure
 	 */
-	public static function get_latest_custom_posts($post_type, $count, $meta_query = [], $tax_query = [], $timestamp_field = null): WP_Query|bool {
+	public static function get_latest_custom_posts( $post_type, $count, $meta_query = [], $tax_query = [], $timestamp_field = null ): WP_Query|bool {
 		// Validate post type exists
-		if (!post_type_exists($post_type)) {
+		if ( ! post_type_exists( $post_type ) ) {
 			return false;
 		}
 
 		$args = [
-			'post_type'      => $post_type,
-			'posts_per_page' => absint($count),
-			'post_status'    => 'publish',
-			'no_found_rows'  => true,           // Skip pagination count query
+			'post_type'              => $post_type,
+			'posts_per_page'         => absint( $count ),
+			'post_status'            => 'publish',
+			'no_found_rows'          => true,           // Skip pagination count query
 			'update_post_meta_cache' => false,  // Skip meta cache if not needed
 			'update_post_term_cache' => false,  // Skip term cache if not needed
 		];
 
 		// Add timestamp filtering and sorting if field is provided
-		if ($timestamp_field) {
-			$args['orderby'] = 'meta_value_num';
-			$args['meta_key'] = $timestamp_field;
-			$args['order'] = 'ASC';
-			$args['meta_query'] = array_merge([
+		if ( $timestamp_field ) {
+			$args['orderby']    = 'meta_value_num';
+			$args['meta_key']   = $timestamp_field;
+			$args['order']      = 'ASC';
+			$args['meta_query'] = array_merge( [
 				[
 					'key'     => $timestamp_field,
-					'value'   => current_time('timestamp'),
+					'value'   => current_time( 'timestamp' ),
 					'compare' => '>='
 				]
-			], $meta_query);
+			], $meta_query );
 		} else {
 			// Default sorting by post date
 			$args['orderby'] = 'date';
-			$args['order'] = 'DESC';
-			if (!empty($meta_query)) {
+			$args['order']   = 'DESC';
+			if ( ! empty( $meta_query ) ) {
 				$args['meta_query'] = $meta_query;
 			}
 		}
 
 		// Add taxonomy query if provided
-		if (!empty($tax_query)) {
+		if ( ! empty( $tax_query ) ) {
 			$args['tax_query'] = $tax_query;
 		}
 
-		return new WP_Query($args);
+		return new WP_Query( $args );
 	}
 
 	public static function setup_hubspot_metadata( $postID ) {
@@ -237,9 +253,10 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 		return $eventData;
 	}
 
-	public static function has_field($field) : bool {
+	public static function has_field( $field ): bool {
 		global $page_part_fields;
-		return key_exists($field, $page_part_fields)  && $page_part_fields[$field] !== '';
+
+		return key_exists( $field, $page_part_fields ) && $page_part_fields[ $field ] !== '';
 	}
 
 	/**
@@ -249,15 +266,16 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 	 * and other quote-like characters to prevent visual duplication when
 	 * displaying content within HTML quote marks.
 	 *
+	 * @param string $text Text containing various quote characters
+	 *
+	 * @return string Text with all quotes removed
 	 * @example Quote display
 	 * <h2>"<?= esc_html(Helpers::strip_all_quotes($quote['quote'])) ?>"</h2>
 	 *
-	 * @param string $text Text containing various quote characters
-	 * @return string Text with all quotes removed
 	 */
-	public static function strip_all_quotes(mixed $text): string {
+	public static function strip_all_quotes( mixed $text ): string {
 		// Handle non-string inputs
-		if ($text === null || $text === '') {
+		if ( $text === null || $text === '' ) {
 			return '';
 		}
 
@@ -265,7 +283,7 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 		$text = (string) $text;
 
 		// Convert HTML entities to actual characters
-		$text = wp_specialchars_decode($text, ENT_QUOTES);
+		$text = wp_specialchars_decode( $text, ENT_QUOTES );
 
 		// Remove all quote-like characters
 		$quotes = [
@@ -287,7 +305,41 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 			"\u{2033}", // Double prime
 		];
 
-		return str_replace($quotes, '', $text);
+		return str_replace( $quotes, '', $text );
+	}
+
+	/**
+	 * Get trimmed excerpt with custom word count
+	 *
+	 * Uses WordPress's excerpt generation with wp_trim_words for
+	 * clean text truncation. Falls back to auto-generated excerpt
+	 * from post content if manual excerpt is empty.
+	 *
+	 * @example Default 55 words
+	 * $excerpt = Helpers::get_excerpt($post_id);
+	 *
+	 * @example Custom length
+	 * $short = Helpers::get_excerpt($post_id, 20);
+	 *
+	 * @param int|WP_Post|null $post Post ID, object, or null for current post
+	 * @param int $word_count Number of words to trim to
+	 * @return string HTML-escaped excerpt
+	 */
+	public static function get_excerpt(int|\WP_Post|null $post = null, int $word_count = 55): string {
+		$post = get_post($post);
+
+		if (!$post) {
+			return '';
+		}
+
+		// Get excerpt or generate from content
+		$excerpt = $post->post_excerpt ?: $post->post_content;
+
+		// Strip shortcodes and tags, then trim
+		$excerpt = strip_shortcodes($excerpt);
+		$excerpt = wp_strip_all_tags($excerpt);
+
+		return wp_trim_words($excerpt, $word_count, '...');
 	}
 }
 

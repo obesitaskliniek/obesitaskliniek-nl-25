@@ -12,77 +12,77 @@ class Registry {
 	 * @return array Array of [ slug => [ 'name' => ..., 'description' => ..., 'icon' => ..., 'custom_fields' => [...] ] ]
 	 */
 	public function get_registry(): array {
-		if ($this->part_registry !== null) {
+		if ( $this->part_registry !== null ) {
 			return $this->part_registry;
 		}
 
-		$files = glob(THEME_ROOT_ABS . '/template-parts/page-parts/*.php');
+		$files               = glob( THEME_ROOT_ABS . '/template-parts/page-parts/*.php' );
 		$this->part_registry = [];
 
-		foreach ($files as $file) {
-			$data = $this->get_custom_file_data($file, [
-				'name'          => 'Template Name',
-				'description'   => 'Description',
-				'slug'          => 'Slug',
-				'icon'          => 'Icon',
-				'custom_fields' => 'Custom Fields',
+		foreach ( $files as $file ) {
+			$data = $this->get_custom_file_data( $file, [
+				'name'                       => 'Template Name',
+				'description'                => 'Description',
+				'slug'                       => 'Slug',
+				'icon'                       => 'Icon',
+				'custom_fields'              => 'Custom Fields',
 				'featured_image_overridable' => 'Featured Image Overridable'
-			]);
+			] );
 
-			if (empty($data['slug'])) {
-				$data['slug'] = sanitize_title($data['name'] ?? basename($file, '.php'));
+			if ( empty( $data['slug'] ) ) {
+				$data['slug'] = sanitize_title( $data['name'] ?? basename( $file, '.php' ) );
 			}
 
 			// Parse custom fields
-			$data['custom_fields'] = $this->parse_custom_fields($data['custom_fields'], $data['slug']);
+			$data['custom_fields'] = $this->parse_custom_fields( $data['custom_fields'], $data['slug'] );
 
 			// Parse featured image overridable flag
-			$data['featured_image_overridable'] = strtolower($data['featured_image_overridable'] ?? '') === 'true';
+			$data['featured_image_overridable'] = strtolower( $data['featured_image_overridable'] ?? '' ) === 'true';
 
-			$this->part_registry[$data['slug']] = $data;
+			$this->part_registry[ $data['slug'] ] = $data;
 		}
 
 		return $this->part_registry;
 	}
 
-	private function get_custom_file_data(string $file, array $headers): array {
-		$file_content = file_get_contents($file);
-		if (!$file_content) {
-			return array_fill_keys(array_keys($headers), '');
+	private function get_custom_file_data( string $file, array $headers ): array {
+		$file_content = file_get_contents( $file );
+		if ( ! $file_content ) {
+			return array_fill_keys( array_keys( $headers ), '' );
 		}
 
 		// Extract only the comment block at the top
-		if (!preg_match('/^<\?php\s*\/\*\*(.*?)\*\//s', $file_content, $matches)) {
-			return array_fill_keys(array_keys($headers), '');
+		if ( ! preg_match( '/^<\?php\s*\/\*\*(.*?)\*\//s', $file_content, $matches ) ) {
+			return array_fill_keys( array_keys( $headers ), '' );
 		}
 
 		$comment_block = $matches[1];
-		$result = [];
+		$result        = [];
 
-		foreach ($headers as $key => $header_name) {
-			if ($header_name === 'Custom Fields') {
+		foreach ( $headers as $key => $header_name ) {
+			if ( $header_name === 'Custom Fields' ) {
 				// Find the Custom Fields header line
-				if (preg_match('/^\s*\*\s*' . preg_quote($header_name, '/') . '\s*:\s*$/m', $comment_block, $matches, PREG_OFFSET_CAPTURE)) {
+				if ( preg_match( '/^\s*\*\s*' . preg_quote( $header_name, '/' ) . '\s*:\s*$/m', $comment_block, $matches, PREG_OFFSET_CAPTURE ) ) {
 					/** @noinspection PhpWrongStringConcatenationInspection */
-					$start_pos = $matches[0][1] + strlen($matches[0][0]);
-					$remaining_content = substr($comment_block, $start_pos);
+					$start_pos         = $matches[0][1] + strlen( $matches[0][0] );
+					$remaining_content = substr( $comment_block, $start_pos );
 
 					// Find all lines that start with "* -" until we hit another header or end
 					//old regex: preg_match_all('/^\s*\*\s*-\s*([^,\n]+)(?:,\s*)?$/m', $remaining_content, $field_matches);
-					preg_match_all('/^\s*\*\s*-\s*(.+)$/m', $remaining_content, $field_matches);
+					preg_match_all( '/^\s*\*\s*-\s*(.+)$/m', $remaining_content, $field_matches );
 
-					$result[$key] = implode(',', array_map('trim', $field_matches[1]));
+					$result[ $key ] = implode( ',', array_map( 'trim', $field_matches[1] ) );
 				} else {
-					$result[$key] = '';
+					$result[ $key ] = '';
 				}
 			} else {
 				// Standard single-line header parsing
-				$pattern = '/^\s*\*\s*' . preg_quote($header_name, '/') . '\s*:\s*(.+)$/m';
+				$pattern = '/^\s*\*\s*' . preg_quote( $header_name, '/' ) . '\s*:\s*(.+)$/m';
 
-				if (preg_match($pattern, $comment_block, $header_matches)) {
-					$result[$key] = trim($header_matches[1]);
+				if ( preg_match( $pattern, $comment_block, $header_matches ) ) {
+					$result[ $key ] = trim( $header_matches[1] );
 				} else {
-					$result[$key] = '';
+					$result[ $key ] = '';
 				}
 			}
 		}
@@ -95,23 +95,24 @@ class Registry {
 	 *
 	 * @param string $fields_string Format: comma-separated with bracket options
 	 * @param string $template_slug Template slug for field prefixing
+	 *
 	 * @return array Parsed field definitions
 	 */
-	private function parse_custom_fields(string $fields_string, string $template_slug): array {
-		if (empty($fields_string)) {
+	private function parse_custom_fields( string $fields_string, string $template_slug ): array {
+		if ( empty( $fields_string ) ) {
 			return [];
 		}
 
 		$fields = [];
 
 		// Split by commas, but not commas inside brackets
-		$field_definitions = preg_split('/,(?![^\(]*\))/', $fields_string);
+		$field_definitions = preg_split( '/,(?![^\(]*\))/', $fields_string );
 
-		foreach ($field_definitions as $definition) {
+		foreach ( $field_definitions as $definition ) {
 			// Remove asterisks, whitespace, and dashes from comment blocks
-			$definition = trim($definition, " \t\n\r\0\x0B*-");
+			$definition = trim( $definition, " \t\n\r\0\x0B*-" );
 
-			if (empty($definition)) {
+			if ( empty( $definition ) ) {
 				continue;
 			}
 
@@ -119,38 +120,38 @@ class Registry {
 			$is_page_editable = false;
 			if ( str_contains( $definition, '!page-editable' ) ) {
 				$is_page_editable = true;
-				$definition = preg_replace('/!page-editable\s*,?\s*/', '', $definition);
-				$definition = trim($definition);
+				$definition       = preg_replace( '/!page-editable\s*,?\s*/', '', $definition );
+				$definition       = trim( $definition );
 			}
 			// Extract default value flag
 			$default_value = null;
-			if (preg_match('/!default\(([^)]+)\)/', $definition, $default_match)) {
-				$default_value = trim($default_match[1]);
-				$definition = preg_replace('/!default\([^)]+\)\s*,?\s*/', '', $definition);
-				$definition = trim($definition);
+			if ( preg_match( '/!default\(([^)]+)\)/', $definition, $default_match ) ) {
+				$default_value = trim( $default_match[1] );
+				$definition    = preg_replace( '/!default\([^)]+\)\s*,?\s*/', '', $definition );
+				$definition    = trim( $definition );
 			}
 
 			// Check for select field with bracket notation: "position:select(left|right)"
-			if (preg_match('/^([^:]+):select\((.*)$/', $definition, $matches)) {
-				$field_name = trim($matches[1]);
-				$content_with_trailing = trim($matches[2]);
+			if ( preg_match( '/^([^:]+):select\((.*)$/', $definition, $matches ) ) {
+				$field_name            = trim( $matches[1] );
+				$content_with_trailing = trim( $matches[2] );
 
 				// Remove the trailing ) that closes the select() function
-				$options_string = rtrim($content_with_trailing, ')');
+				$options_string = rtrim( $content_with_trailing, ')' );
 
-				$raw_options = array_map('trim', explode('|', $options_string));
+				$raw_options = array_map( 'trim', explode( '|', $options_string ) );
 
 				// Parse options with optional nice names (label::value or just value)
-				$options = [];
+				$options       = [];
 				$option_labels = [];
 
-				foreach ($raw_options as $raw_option) {
-					if (strpos($raw_option, '::') !== false) {
-						list($label, $value) = array_map('trim', explode('::', $raw_option, 2));
-						$options[] = $value;
+				foreach ( $raw_options as $raw_option ) {
+					if ( strpos( $raw_option, '::' ) !== false ) {
+						list( $label, $value ) = array_map( 'trim', explode( '::', $raw_option, 2 ) );
+						$options[]       = $value;
 						$option_labels[] = $label;
 					} else {
-						$options[] = $raw_option;
+						$options[]       = $raw_option;
 						$option_labels[] = $raw_option; // Use value as label if no label provided
 					}
 				}
@@ -161,107 +162,117 @@ class Registry {
 					'name'          => $field_name,
 					'type'          => 'select',
 					'meta_key'      => $meta_key,
-					'label'         => $this->generate_field_label($field_name),
+					'label'         => $this->generate_field_label( $field_name ),
 					'options'       => $options,        // Actual values
 					'option_labels' => $option_labels,  // Display labels
 					'page_editable' => $is_page_editable,
 					'default'       => $default_value
 				];
-			}
-			// Check for checkbox field with optional default: "field_name:checkbox(true)"
-			elseif (preg_match('/^([^:]+):checkbox(?:\(([^)]+)\))?$/', $definition, $matches)) {
-				$field_name = trim($matches[1]);
-				$default_value = isset($matches[2]) ? trim($matches[2]) : 'false';
+			} // Check for checkbox field with optional default: "field_name:checkbox(true)"
+			elseif ( preg_match( '/^([^:]+):checkbox(?:\(([^)]+)\))?$/', $definition, $matches ) ) {
+				$field_name    = trim( $matches[1] );
+				$default_value = isset( $matches[2] ) ? trim( $matches[2] ) : 'false';
 
 				// Convert string to boolean, then to our storage format
-				$is_default_checked = in_array(strtolower($default_value), ['true', '1', 'yes', 'on'], true);
+				$is_default_checked    = in_array( strtolower( $default_value ), [ 'true', '1', 'yes', 'on' ], true );
 				$default_storage_value = $is_default_checked ? '1' : '0';
 
 				$meta_key = $template_slug . '_' . $field_name;
 
 				$fields[] = [
-					'name'     => $field_name,
-					'type'     => 'checkbox',
-					'meta_key' => $meta_key,
-					'label'    => $this->generate_field_label($field_name),
-					'options'  => [], // Empty for checkbox fields
+					'name'          => $field_name,
+					'type'          => 'checkbox',
+					'meta_key'      => $meta_key,
+					'label'         => $this->generate_field_label( $field_name ),
+					'options'       => [], // Empty for checkbox fields
 					'page_editable' => $is_page_editable,
 					'default'       => $default_value
 				];
-			}
-			// Check for icon-selector field: "icon:icon-selector"
-			elseif (preg_match('/^([^:]+):icon-selector$/', $definition, $matches)) {
-				$field_name = trim($matches[1]);
-				$meta_key = $template_slug . '_' . $field_name;
+			} // Check for icon-selector field: "icon:icon-selector"
+			elseif ( preg_match( '/^([^:]+):icon-selector$/', $definition, $matches ) ) {
+				$field_name = trim( $matches[1] );
+				$meta_key   = $template_slug . '_' . $field_name;
 
 				$fields[] = [
 					'name'          => $field_name,
 					'type'          => 'icon-selector',
 					'meta_key'      => $meta_key,
-					'label'         => $this->generate_field_label($field_name),
+					'label'         => $this->generate_field_label( $field_name ),
 					'page_editable' => $is_page_editable,
 					'default'       => $default_value
 				];
-			}
-			elseif (preg_match('/^([^:]+):repeater\((.+)\)$/', $definition, $matches)) {
-				$field_name = trim($matches[1]);
-				$schema_string = trim($matches[2]);
+			} elseif ( preg_match( '/^([^:]+):repeater\((.+)\)$/', $definition, $matches ) ) {
+				$field_name    = trim( $matches[1] );
+				$schema_string = trim( $matches[2] );
 
-				// Check if this is post type repeater (no colons in schema)
-				if (strpos($schema_string, ':') === false) {
-					// Post type repeater: "post|faq_items"
-					$post_types = array_map('trim', explode('|', $schema_string));
+				$schema = [];
+				$parts  = explode( ',', $schema_string );
 
-					$fields[] = [
-						'name' => $field_name,
-						'type' => 'repeater',
-						'meta_key' => $template_slug . '_' . $field_name,
-						'label' => $this->generate_field_label($field_name),
-						'schema' => [],
-						'repeater_subtype' => 'post',
-						'post_types' => $post_types,
-						'page_editable' => $is_page_editable,
-						'default' => $default_value
-					];
-				} else {
-					// Field repeater: "title:text,content:textarea"
-					$schema = [];
-					foreach (explode(',', $schema_string) as $field_def) {
-						list($name, $type) = explode(':', $field_def);
-						$schema[] = ['name' => trim($name), 'type' => trim($type)];
+				foreach ( $parts as $field_def ) {
+					$field_def = trim( $field_def );
+					if ( strpos( $field_def, ':' ) !== false ) {
+						list( $name, $type ) = explode( ':', $field_def, 2 );
+						$schema[] = [ 'name' => trim( $name ), 'type' => trim( $type ) ];
 					}
-
-					$fields[] = [
-						'name' => $field_name,
-						'type' => 'repeater',
-						'meta_key' => $template_slug . '_' . $field_name,
-						'label' => $this->generate_field_label($field_name),
-						'schema' => $schema,
-						'repeater_subtype' => 'fields',
-						'page_editable' => $is_page_editable,
-						'default' => $default_value
-					];
 				}
-			}
-			// Handle regular fields: "field_name:type"
+
+				$fields[] = [
+					'name'             => $field_name,
+					'type'             => 'repeater',
+					'meta_key'         => $template_slug . '_' . $field_name,
+					'label'            => $this->generate_field_label( $field_name ),
+					'schema'           => $schema,
+					'repeater_subtype' => 'fields',
+					'page_editable'    => $is_page_editable,
+					'default'          => $default_value
+				];
+			} // Post repeater: "posts:post_repeater(post)" or "posts:post_repeater(post:news,events)"
+			elseif ( preg_match( '/^([^:]+):post_repeater\((.+)\)$/', $definition, $matches ) ) {
+				$field_name    = trim( $matches[1] );
+				$schema_string = trim( $matches[2] );
+
+				// Check for categories: "post:cat1,cat2"
+				if ( strpos( $schema_string, ':' ) !== false ) {
+					list( $post_type, $category_string ) = explode( ':', $schema_string, 2 );
+					$post_types = [ trim( $post_type ) ];
+					$categories = array_map( 'trim', explode( ',', $category_string ) );
+				} else {
+					// Simple post type(s): "post" or "post|faq_items"
+					$post_types = array_map( 'trim', explode( '|', $schema_string ) );
+					$categories = [];
+				}
+
+				$fields[] = [
+					'name'             => $field_name,
+					'type'             => 'repeater',
+					'meta_key'         => $template_slug . '_' . $field_name,
+					'label'            => $this->generate_field_label( $field_name ),
+					'schema'           => [],
+					'repeater_subtype' => 'post',
+					'post_types'       => $post_types,
+					'categories'       => $categories,
+					'page_editable'    => $is_page_editable,
+					'default'          => $default_value
+				];
+			} // Handle regular fields: "field_name:type"
 			else {
-				$parts = explode(':', $definition);
-				if (count($parts) < 2) {
+				$parts = explode( ':', $definition );
+				if ( count( $parts ) < 2 ) {
 					continue;
 				}
 
-				$field_name = trim($parts[0]);
-				$field_type = trim($parts[1]);
+				$field_name = trim( $parts[0] );
+				$field_type = trim( $parts[1] );
 
 				// Create prefixed meta key
 				$meta_key = $template_slug . '_' . $field_name;
 
 				$fields[] = [
-					'name'     => $field_name,
-					'type'     => $field_type,
-					'meta_key' => $meta_key,
-					'label'    => $this->generate_field_label($field_name),
-					'options'  => [], // Empty for non-select fields
+					'name'          => $field_name,
+					'type'          => $field_type,
+					'meta_key'      => $meta_key,
+					'label'         => $this->generate_field_label( $field_name ),
+					'options'       => [], // Empty for non-select fields
 					'page_editable' => $is_page_editable,
 					'default'       => $default_value
 				];
@@ -274,9 +285,10 @@ class Registry {
 	/**
 	 * Generate a human-readable label from field name
 	 */
-	public function generate_field_label(string $field_name): string {
+	public function generate_field_label( string $field_name ): string {
 		// Convert snake_case or kebab-case to Title Case
-		$label = str_replace(['_', '-'], ' ', $field_name);
-		return ucwords($label);
+		$label = str_replace( [ '_', '-' ], ' ', $field_name );
+
+		return ucwords( $label );
 	}
 }
