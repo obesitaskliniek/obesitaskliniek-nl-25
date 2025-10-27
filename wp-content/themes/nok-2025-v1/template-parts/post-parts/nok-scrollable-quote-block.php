@@ -36,8 +36,9 @@ $quote_block_button_style = $args['block_button_color'] ?? 'nok-bg-darkestblue n
                             Lees het verhaal <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ); ?>
                         </a>
                         <?php if ( ! empty( $quote['image_url'] ) ): ?>
-                            <img class="nok-square-block__thumbnail" src="<?= esc_url( $quote['image_url'] ) ?>"
-                                 loading="lazy">
+                        <div class="nok-square-block__thumbnail">
+                            <img src="<?= esc_url( $quote['image_url'] ) ?>" loading="lazy">
+                        </div>
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>

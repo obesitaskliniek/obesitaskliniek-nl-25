@@ -26,6 +26,14 @@ const fieldStyle = {
     padding: '16px 0',
 };
 
+const helpStyle = {
+    margin: '8px 0 8px 0',
+    fontSize: '12px',
+    color: '#757575',
+    fontStyle: 'italic',
+    lineHeight: '1.4'
+};
+
 // Wrapper for consistent field spacing and labeling
 const FieldGroup = ({label, children}) => (
     <div style={{marginBottom: '16px'}}>
@@ -283,6 +291,11 @@ const RepeaterField = ({field, schema, value, onChange}) => {
                             icons={availableIcons}
                             onChange={(value) => updateMetaField(field.meta_key, value)}
                         />
+                        {field.description && (
+                            <p style={helpStyle}>
+                                {field.description}
+                            </p>
+                        )}
                     </FieldGroup>
                 );
 
@@ -521,6 +534,11 @@ function DesignSlugPanel() {
                             onChange={(value) => updateMetaField(field.meta_key, value)}
                             rows={3}
                         />
+                        {field.description && (
+                            <p style={helpStylehelpStyle}>
+                                {field.description}
+                            </p>
+                        )}
                     </FieldGroup>
                 );
 
@@ -540,7 +558,11 @@ function DesignSlugPanel() {
             case 'repeater':
                 if (field.repeater_subtype === 'post') {
                     return (
-                        <FieldGroup key={field.meta_key} label={field.label}>
+                        <FieldGroup key={field.meta_key} label={field.label}>{field.description && (
+                            <p style={helpStyle}>
+                                {field.description}
+                            </p>
+                        )}
                             <PostSelector
                                 value={fieldValue}
                                 onChange={(value) => updateMetaField(field.meta_key, value)}
@@ -567,6 +589,11 @@ function DesignSlugPanel() {
 
                 return (
                     <FieldGroup key={field.meta_key} label={field.label}>
+                        {field.description && (
+                            <p style={helpStyle}>
+                                {field.description}
+                            </p>
+                        )}
                         <RepeaterField
                             field={field}
                             schema={field.schema}
@@ -606,14 +633,21 @@ function DesignSlugPanel() {
                             ]}
                             onChange={(value) => updateMetaField(field.meta_key, value)}
                         />
+                        {field.description && (
+                            <p style={helpStyle}>
+                                {field.description}
+                            </p>
+                        )}
                     </FieldGroup>
                 );
 
             case 'checkbox':
                 return (
-                    <FieldGroup key={field.meta_key} label={field.label}>
+                    <FieldGroup key={field.meta_key}>
                         <CheckboxControl
                             key={field.meta_key}
+                            label={field.label}
+                            help={field.description || ''}
                             checked={fieldValue === '1' || fieldValue === true}
                             onChange={(checked) => updateMetaField(field.meta_key, checked ? '1' : '0')}
                         />
@@ -631,6 +665,11 @@ function DesignSlugPanel() {
                             __next40pxDefaultSize={true}
                             onChange={(value) => updateMetaField(field.meta_key, value)}
                         />
+                        {field.description && (
+                            <p style={helpStyle}>
+                                {field.description}
+                            </p>
+                        )}
                     </FieldGroup>
                 );
         }

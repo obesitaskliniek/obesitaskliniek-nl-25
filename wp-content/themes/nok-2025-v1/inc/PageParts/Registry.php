@@ -68,7 +68,6 @@ class Registry {
 					$remaining_content = substr( $comment_block, $start_pos );
 
 					// Find all lines that start with "* -" until we hit another header or end
-					//old regex: preg_match_all('/^\s*\*\s*-\s*([^,\n]+)(?:,\s*)?$/m', $remaining_content, $field_matches);
 					preg_match_all( '/^\s*\*\s*-\s*(.+)$/m', $remaining_content, $field_matches );
 
 					$result[ $key ] = implode( ',', array_map( 'trim', $field_matches[1] ) );
@@ -116,19 +115,26 @@ class Registry {
 				continue;
 			}
 
-			// Check for page-editable flag and extract it
+			// Extract flags in order: page-editable, default, description
 			$is_page_editable = false;
 			if ( str_contains( $definition, '!page-editable' ) ) {
 				$is_page_editable = true;
 				$definition       = preg_replace( '/!page-editable\s*,?\s*/', '', $definition );
 				$definition       = trim( $definition );
 			}
-			// Extract default value flag
+
 			$default_value = null;
 			if ( preg_match( '/!default\(([^)]+)\)/', $definition, $default_match ) ) {
 				$default_value = trim( $default_match[1] );
 				$definition    = preg_replace( '/!default\([^)]+\)\s*,?\s*/', '', $definition );
 				$definition    = trim( $definition );
+			}
+
+			$description = '';
+			if ( preg_match( '/!descr\[([^\]]+)\]/', $definition, $descr_match ) ) {
+				$description = trim( $descr_match[1] );
+				$definition  = preg_replace( '/!descr\[[^\]]+\]\s*,?\s*/', '', $definition );
+				$definition  = trim( $definition );
 			}
 
 			// Check for select field with bracket notation: "position:select(left|right)"
@@ -166,7 +172,8 @@ class Registry {
 					'options'       => $options,        // Actual values
 					'option_labels' => $option_labels,  // Display labels
 					'page_editable' => $is_page_editable,
-					'default'       => $default_value
+					'default'       => $default_value,
+					'description'   => $description
 				];
 			} // Check for checkbox field with optional default: "field_name:checkbox(true)"
 			elseif ( preg_match( '/^([^:]+):checkbox(?:\(([^)]+)\))?$/', $definition, $matches ) ) {
@@ -186,7 +193,8 @@ class Registry {
 					'label'         => $this->generate_field_label( $field_name ),
 					'options'       => [], // Empty for checkbox fields
 					'page_editable' => $is_page_editable,
-					'default'       => $default_value
+					'default'       => $default_value,
+					'description'   => $description
 				];
 			} // Check for icon-selector field: "icon:icon-selector"
 			elseif ( preg_match( '/^([^:]+):icon-selector$/', $definition, $matches ) ) {
@@ -199,7 +207,8 @@ class Registry {
 					'meta_key'      => $meta_key,
 					'label'         => $this->generate_field_label( $field_name ),
 					'page_editable' => $is_page_editable,
-					'default'       => $default_value
+					'default'       => $default_value,
+					'description'   => $description
 				];
 			} elseif ( preg_match( '/^([^:]+):repeater\((.+)\)$/', $definition, $matches ) ) {
 				$field_name    = trim( $matches[1] );
@@ -224,7 +233,8 @@ class Registry {
 					'schema'           => $schema,
 					'repeater_subtype' => 'fields',
 					'page_editable'    => $is_page_editable,
-					'default'          => $default_value
+					'default'          => $default_value,
+					'description'      => $description
 				];
 			} // Post repeater: "posts:post_repeater(post)" or "posts:post_repeater(post:news,events)"
 			elseif ( preg_match( '/^([^:]+):post_repeater\((.+)\)$/', $definition, $matches ) ) {
@@ -252,7 +262,8 @@ class Registry {
 					'post_types'       => $post_types,
 					'categories'       => $categories,
 					'page_editable'    => $is_page_editable,
-					'default'          => $default_value
+					'default'          => $default_value,
+					'description'      => $description
 				];
 			} // Handle regular fields: "field_name:type"
 			else {
@@ -274,7 +285,8 @@ class Registry {
 					'label'         => $this->generate_field_label( $field_name ),
 					'options'       => [], // Empty for non-select fields
 					'page_editable' => $is_page_editable,
-					'default'       => $default_value
+					'default'       => $default_value,
+					'description'   => $description
 				];
 			}
 		}

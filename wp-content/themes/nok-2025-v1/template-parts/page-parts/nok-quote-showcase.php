@@ -8,12 +8,12 @@
  * - colors:select(Transparant::nok-bg-body|Grijs::nok-bg-body--darker gradient-background|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Blauw::nok-bg-darkerblue nok-text-contrast)!page-editable!default(nok-bg-body)
  * - block_colors:select(Body::nok-bg-body nok-text-contrast|Wit::nok-bg-white nok-text-darkestblue|Blauw::nok-bg-darkblue nok-text-contrast)!page-editable!default(nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast)
  * - quote_block_colors:select(Body::nok-bg-body nok-text-contrast|Wit::nok-bg-white nok-text-darkestblue|Blauw::nok-bg-darkblue nok-text-contrast)!page-editable!default(nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast)
- * - quote_items:repeater(quote:text,name:text,subname:text)
- * - quote_posts:post_repeater(post:ervaringen)
- * - random_quotes:checkbox(false)
- * - accordion_open_first:checkbox!default(true)
- * - accordion_items:repeater(title:text,content:textarea,button_text:text,button_url:url)
- * - accordion_button_text:text!default(Lees meer)
+ * - quote_items:repeater(quote:text,name:text,subname:text)!descr[Voeg handmatige quotes toe om te tonen in de quote showcase]
+ * - quote_posts:post_repeater(post:ervaringen)!descr[Kies specifieke ervaringsverhalen om te tonen in de quote showcase]
+ * - random_quotes:checkbox(false)!descr[Vul aan met willekeurige ervaringen indien minder dan 5 quotes aanwezig zijn]
+ * - accordion_open_first:checkbox!default(true)!descr[Open het eerste accordion item standaard]
+ * - accordion_items:repeater(title:text,content:textarea,button_text:text,button_url:url)!descr[Voeg accordion items toe die naast de quote showcase getoond worden]
+ * - accordion_button_text:text!default(Lees meer)!descr[Standaardtekst voor de knop (als die er is) in een accordion item]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -32,9 +32,9 @@ function get_quotes_from_posts( $posts ) {
         $post       = get_post( $post_id );
         $post_meta  = get_post_meta( $post_id );
         $quote_item = array(
-                'quote'     => isset( $post_meta['_highlighted_quote_1'] ) ? ( ( rand( 0, 1 ) || ! isset( $post_meta['_highlighted_quote_2'] ) ) ? $post_meta['_highlighted_quote_1'][0] : $post_meta['_highlighted_quote_2'][0] ) : get_the_title( $post ),
-                 //todo: random quote selection should be excluded from cache, if possible
-                'excerpt'   => isset($post_meta['_highlighted_excerpt']) ? rtrim($post_meta['_highlighted_excerpt'][0], '.') . '...' : Helpers::get_excerpt( $post_id, 30 ),
+                'quote'     => Helpers::strip_all_quotes(isset( $post_meta['_highlighted_quote_1'] ) ? ( ( rand( 0, 1 ) || ! isset( $post_meta['_highlighted_quote_2'] ) ) ? $post_meta['_highlighted_quote_1'][0] : $post_meta['_highlighted_quote_2'][0] ) : get_the_title( $post )),
+            //todo: random quote selection should be excluded from cache, if possible
+                'excerpt'   => isset( $post_meta['_highlighted_excerpt'] ) ? Helpers::strip_all_quotes(rtrim( $post_meta['_highlighted_excerpt'][0], '.' )) . '...' : Helpers::get_excerpt( $post_id, 30 ),
                 'name'      => $post_meta['_naam_patient'][0] ?? 'Anonieme patiënt',
                 'subnaam'   => $post_meta['_subnaam_patient'][0] ?? '',
                 'link_url'  => get_permalink( $post_id ),
@@ -60,12 +60,66 @@ function get_quotes_from_posts( $posts ) {
                 <div><?php the_content(); ?></div>
 
                 <?php if ( $c->has( 'quote_items' ) || $c->has( 'quote_posts' ) ):
+
+                    // Process explicit quote posts first
+                    $explicit_quotes = get_quotes_from_posts( $c->quote_posts->json() );
+
+                    // Add custom quote items
+                    $custom_quotes = $c->has( 'quote_items' )
+                            ? $c->quote_items->json()
+                            : array();
+
+                    $quote_data = array_merge( $explicit_quotes, $custom_quotes );
+
+                    // Pad with random quotes if enabled and needed
+                    if ( $c->random_quotes->isTrue() && count( $quote_data ) < 5 ) {
+                        $needed          = 5 - count( $quote_data );
+                        $random_post_ids = get_posts( array(
+                                'post_type'      => 'post',
+                                'category_name'  => 'ervaringen',
+                                'posts_per_page' => $needed,
+                                'fields'         => 'ids',
+                                'post__not_in'   => array_merge(
+                                        $c->quote_posts->json(),
+                                        array_filter( array_column( $custom_quotes, 'post_id' ) ) // If custom quotes reference posts
+                                ),
+                                'orderby'        => 'rand' // Let MySQL handle randomization
+                        ) );
+
+                        if ( ! empty( $random_post_ids ) ) {
+                            $random_quotes = get_quotes_from_posts( $random_post_ids );
+                            $quote_data    = array_merge( $quote_data, $random_quotes );
+                        }
+                    }
+
+                    // shuffle all quotes if custom quotes have been added
+                    if ( $c->has( 'quote_items' ) || $c->random_quotes->isTrue() ) {
+                        shuffle( $quote_data );
+                    }
+
+                    /*
                     $quote_posts = get_quotes_from_posts( $c->quote_posts->json() );
-                    $qoute_items = $c->quote_items->json();
-                    $quote_data  = array_merge( $quote_posts, $qoute_items );
+                    $quote_items = $c->quote_items->json();
+                    $quote_data  = array_merge( $quote_posts, $quote_items );
+
+                    //shuffle if custom quotes have been added
                     if ( $c->has( 'quote_items' ) ) {
                         shuffle( $quote_data );
-                    } ?>
+                    }
+
+                    //pad with random quotes if this is enabled and less than 5 quotes are available
+                    if ( $c->random_quotes->isTrue() && count( $quote_data ) < 5 ) {
+                        $all_experience_posts = get_posts( array(
+                                'post_type'      => 'post',
+                                'category_name'  => 'ervaringen',
+                                'posts_per_page' => ( 5 - count( $quote_data ) ),
+                                'fields'         => 'ids',
+                                'post__not_in'   => $c->quote_posts->json()
+                        ) );
+                        $quote_data  = array_merge( $quote_data, $all_experience_posts );
+                        shuffle( $quote_data );
+                    }*/
+                    ?>
 
                     <?php get_template_part( 'template-parts/post-parts/nok-scrollable-quote-block', null,
                         array(

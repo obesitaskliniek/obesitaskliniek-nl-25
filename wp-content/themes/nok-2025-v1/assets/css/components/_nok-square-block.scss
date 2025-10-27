@@ -139,6 +139,9 @@ nok-square-block {
     }
 
     &__thumbnail {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 50%;
       overflow: hidden;
       aspect-ratio: 1;

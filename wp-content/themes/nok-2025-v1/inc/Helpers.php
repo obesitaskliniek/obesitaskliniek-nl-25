@@ -287,6 +287,8 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 
 		// Remove all quote-like characters
 		$quotes = [
+			'“',
+			'”',
 			'"',        // Straight double quote
 			"'",        // Straight single quote
 			"\u{2018}", // Left single curly quote
@@ -305,7 +307,7 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 			"\u{2033}", // Double prime
 		];
 
-		return str_replace( $quotes, '', $text );
+		return str_replace( $quotes, '', trim($text) );
 	}
 
 	/**
@@ -338,6 +340,7 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 		// Strip shortcodes and tags, then trim
 		$excerpt = strip_shortcodes($excerpt);
 		$excerpt = wp_strip_all_tags($excerpt);
+		$excerpt = self::strip_all_quotes( $excerpt );
 
 		return wp_trim_words($excerpt, $word_count, '...');
 	}
