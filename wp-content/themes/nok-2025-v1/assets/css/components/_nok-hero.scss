@@ -21,6 +21,8 @@ nok-hero {
     position: relative;
     overflow: hidden;
 
+    .header,
+    header,
     .article,
     article {
       display: flex;
@@ -147,7 +149,7 @@ nok-hero {
     @include components-base.media-breakpoint-down(xl) {
       //grid-template-rows: 5rem auto var(--footer-height);
       grid-template-columns: 6fr 2fr 8fr;
-      article {
+      article, header {
         grid-column: 1 / 3;
       }
     }
@@ -159,10 +161,10 @@ nok-hero {
       }
       //grid-template-rows: 45vmax 4rem auto 1fr;
       //grid-template-rows: 50vw 25vw auto 1fr; //makes the first 2 rows take on a 4:3 ratio, for the figure
-      article, figure, footer, &-figure-mask {
+      article, header, figure, footer, &-figure-mask {
         grid-column: 1;
       }
-      article {
+      article, header {
         grid-row: 3 / 5;
         align-self: end;
       }
@@ -188,9 +190,11 @@ nok-hero {
       button {
         align-self: stretch;
       }
-      article .#{components-base.$prefix}-button-group {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr;
+      article, header {
+        .#{components-base.$prefix}-button-group {
+          grid-template-columns: 1fr;
+          grid-template-rows: 1fr 1fr;
+        }
       }
     }
   }

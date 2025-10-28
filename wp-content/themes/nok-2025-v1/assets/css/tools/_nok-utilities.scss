@@ -134,3 +134,32 @@
 
   @return $string;
 }
+
+/// Shifts section width values to earlier breakpoint keys
+/// @param {Map} $widths-map - Original section widths map
+/// @param {Number} $shift - How many steps to shift (default: 1)
+/// @param {String|null} $stop-at - Breakpoint at which to stop narrowing (default: null)
+/// @return {Map} - New map with shifted values
+@function shift-section-widths($widths-map, $shift: 1, $stop-at: null) {
+  $keys: map.keys($widths-map);
+  $values: map.values($widths-map);
+  $result: ();
+
+  $start-index: $shift + 1;
+
+  // If stop-at specified, only include breakpoints after it
+  @if $stop-at {
+    $stop-index: list.index($keys, $stop-at);
+    @if $stop-index and ($stop-index + 1) > $start-index {
+      $start-index: $stop-index + 1;
+    }
+  }
+
+  @for $i from $start-index through list.length($keys) {
+    $current-key: list.nth($keys, $i);
+    $previous-value: list.nth($values, $i - $shift);
+    $result: map.merge($result, ($current-key: $previous-value));
+  }
+
+  @return $result;
+}

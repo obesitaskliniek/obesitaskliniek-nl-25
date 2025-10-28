@@ -1,5 +1,6 @@
 @use "nok-variables";
 @use "tools/nok-rfs";
+@use "tools/nok-mixins";
 @use "nok-reboot-body";
 @use "nok-wordpress-quirks";
 //@use "nok-colors";
@@ -207,7 +208,7 @@ blockquote {
 
 b,
 strong {
-  font-weight: bolder;
+  font-weight: bold;
 }
 
 
@@ -335,8 +336,28 @@ kbd {
 
 figure {
   margin: 0;
+  figcaption {
+    opacity: 0.8;
+    font-weight: 300;
+    font-size: 0.8em;
+  }
 }
-
+.wp-block-image {
+  margin-top: 2rem;
+}
+.wp-block-image figure {
+  img {
+    @include nok-mixins.nok-border-radius;
+  }
+  &.alignleft {
+    float: left;
+    margin: 0 2em .5em 0;
+  }
+  &.alignright {
+    float: right;
+    margin: 0 0 .5em 2em;
+  }
+}
 
 // Images and content
 

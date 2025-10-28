@@ -1,0 +1,25 @@
+@use "shared" as components-base;
+
+.nok-quote {
+  display: flex;
+  position: relative;
+  padding: 0;
+  font-style: normal;
+
+  &__icon {
+    position: absolute;
+    left: -1.5em;
+    top: -1em;
+    opacity: 0.07;
+    color: var(--text-color, var(--bg-color--contrast));
+    line-height: 1;
+    svg {
+      font-size: 3.5em;
+    }
+  }
+
+  &__text {
+    color: var(--text-color, var(--bg-color--contrast));
+    margin: 0;
+  }
+}

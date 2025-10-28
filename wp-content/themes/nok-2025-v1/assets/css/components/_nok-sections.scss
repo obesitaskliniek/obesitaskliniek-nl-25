@@ -1,4 +1,5 @@
 @use "sass:map";
+@use "sass:math";
 @use "shared" as components-base;
 
 @mixin nok-section {
@@ -15,13 +16,13 @@
   overflow-x: clip;
   font-size: 1.1rem;
 
-  //&:nth-child(even):not([class^="nok-bg"]) {
-  //  background-color: var(--nok-body--darker);
-  //}
   //descending z-index cascade
   @for $i from 1 through 20 {
     &:nth-child(#{$i}) {
-      --section-index: #{$i};
+      --section-index: #{$i * 2 - 1};
+      &.z-ascend {
+        --section-index: #{$i * 2 - 4};
+      }
     }
   }
   z-index: calc(#{components-base.$z-stack-top} - var(--section-index));
@@ -53,6 +54,14 @@
 
     &--full-width {
       --section-max-width: 100%;
+    }
+
+    &.nok-section-narrow {
+      @each $breakpoint, $section-max-width in components-base.$section-max-widths-narrow {
+        @include components-base.media-breakpoint-up($breakpoint, components-base.$grid-breakpoints) {
+          max-width: $section-max-width;
+        }
+      }
     }
 
     @each $breakpoint, $section-max-width in components-base.$section-max-widths {
