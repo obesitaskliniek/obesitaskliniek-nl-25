@@ -4,6 +4,32 @@ import {TextControl, TextareaControl, CheckboxControl} from '@wordpress/componen
 import {useSelect, useDispatch} from '@wordpress/data';
 import {useMemo} from '@wordpress/element';
 
+const helpStyle = {
+    margin: '8px 0 8px 0',
+    fontSize: '12px',
+    color: '#757575',
+    fontStyle: 'italic',
+    lineHeight: '1.4'
+};
+
+// Wrapper for consistent field spacing and labeling
+const FieldGroup = ({label, children}) => (
+    <div style={{marginBottom: '16px'}}>
+        {label && (
+            <div style={{
+                marginBottom: '8px',
+                fontSize: '11px',
+                fontWeight: '600',
+                textTransform: 'uppercase',
+                color: '#1e1e1e'
+            }}>
+                {label}
+            </div>
+        )}
+        {children}
+    </div>
+);
+
 const PostMetaPanel = () => {
     const {editPost} = useDispatch('core/editor');
 
@@ -92,20 +118,23 @@ const PostMetaPanel = () => {
         switch (field.type) {
             case 'textarea':
                 return (
-                    <div key={metaKey} style={{marginBottom: '16px'}}>
-                        <label style={labelStyle}>{field.label}</label>
+                    <FieldGroup key={field.meta_key} label={field.label}>
                         <TextareaControl
                             {...commonProps}
                             placeholder={field.placeholder}
                             rows={3}
                         />
-                    </div>
+                        {field.description && (
+                            <p style={helpStyle}>
+                                {field.description}
+                            </p>
+                        )}
+                    </FieldGroup>
                 );
 
             case 'url':
                 return (
-                    <div key={metaKey} style={{marginBottom: '16px'}}>
-                        <label style={labelStyle}>{field.label}</label>
+                    <FieldGroup key={field.meta_key} label={field.label}>
                         <TextControl
                             {...commonProps}
                             type="url"
@@ -113,32 +142,42 @@ const PostMetaPanel = () => {
                             __nextHasNoMarginBottom
                             __next40pxDefaultSize
                         />
-                    </div>
+                        {field.description && (
+                            <p style={helpStyle}>
+                                {field.description}
+                            </p>
+                        )}
+                    </FieldGroup>
                 );
 
             case 'checkbox':
                 return (
-                    <div key={metaKey} style={{marginBottom: '16px'}}>
+                    <FieldGroup key={field.meta_key}>
                         <CheckboxControl
                             label={field.label}
+                            help={field.description || ''}
                             checked={value === '1' || value === 1 || value === true}
                             onChange={(checked) => updateMeta(metaKey, checked ? '1' : '0')}
                         />
-                    </div>
+                    </FieldGroup>
                 );
 
             case 'text':
             default:
                 return (
-                    <div key={metaKey} style={{marginBottom: '16px'}}>
-                        <label style={labelStyle}>{field.label}</label>
+                    <FieldGroup key={field.meta_key} label={field.label}>
                         <TextControl
                             {...commonProps}
                             placeholder={field.placeholder}
                             __nextHasNoMarginBottom
                             __next40pxDefaultSize
                         />
-                    </div>
+                        {field.description && (
+                            <p style={helpStyle}>
+                                {field.description}
+                            </p>
+                        )}
+                    </FieldGroup>
                 );
         }
     };

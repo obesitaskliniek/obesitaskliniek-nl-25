@@ -8,15 +8,6 @@ import IconSelector from './components/IconSelector';
 
 const NAME = 'nok-page-part-design-selector';
 
-const labelStyle = {
-    display: 'block',
-    fontSize: '13px',
-    fontWeight: '600',
-    margin: '0 0 16px 0',
-    padding: '0',
-    textTransform: 'none'
-};
-
 const fieldStyle = {
     width: '100%',
     borderBottom: '1px solid #ddd',
@@ -537,7 +528,7 @@ function DesignSlugPanel() {
                             rows={3}
                         />
                         {field.description && (
-                            <p style={helpStylehelpStyle}>
+                            <p style={helpStyle}>
                                 {field.description}
                             </p>
                         )}
