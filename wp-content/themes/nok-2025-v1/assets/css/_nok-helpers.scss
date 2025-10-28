@@ -763,6 +763,12 @@ $utilities: (
 /* Animate on scroll */
 
 .nok-aos {
+  opacity: 0;
+  @include nok-mixins.no-transitions {
+    @at-root body.domready & {
+      opacity: 1;
+    }
+  }
   @include nok-mixins.transition-properties {
     opacity: 0;
     &[data-visible="true"] {

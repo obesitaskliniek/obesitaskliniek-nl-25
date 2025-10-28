@@ -32,7 +32,7 @@ nok-top-navigation {
       display: none !important;
     }
     & {
-      position: sticky;
+      position: sticky !important;
       top: 0;
       z-index: components-base.$z-stack-top;
     }
@@ -43,7 +43,7 @@ nok-top-navigation {
       display: none !important;
     }
     & {
-      position: fixed;
+      position: fixed !important;
       top: 0;
       bottom: 0;
       border: 1px solid green;
