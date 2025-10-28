@@ -83,7 +83,7 @@ events.docReady(function(){
 
 
   const aos = AOS.init({
-    selector: 'nok-section:not(.no-aos)',
+    selector: 'nok-section:not(.no-aos),.nok-aos',
     duration: 600,
     threshold: 0.35,
     once: true
