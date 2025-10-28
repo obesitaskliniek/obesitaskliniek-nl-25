@@ -25,6 +25,7 @@ use NOK2025\V1\Helpers;
 
 $c = $context;
 
+
 if ($c->layout->is( 'quotes-left' )) {
     $quote_column_order = '1';
     $quote_column_class = 'nok-column-first-xxl-2 nok-column-first-xl-3';
@@ -35,6 +36,11 @@ if ($c->layout->is( 'quotes-left' )) {
     $quote_column_class = 'nok-column-last-xxl-2 nok-column-last-xl-3';
     $accordion_column_order = '1';
     $accordion_column_class = 'nok-column-first-xl-3';
+} else {
+    $quote_column_order = '1';
+    $quote_column_class = 'nok-column-first-xxl-2 nok-column-first-xl-3';
+    $accordion_column_order = '2';
+    $accordion_column_class = 'nok-column-last-xl-3';
 }
 
 // Circle color as CSS custom property

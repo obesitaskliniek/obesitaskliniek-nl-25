@@ -10,7 +10,6 @@ $page_part_fields = $theme->get_page_part_fields($id, $design, true);
 
 // Enqueue core styles
 wp_enqueue_style('nok-components-css');
-wp_enqueue_style('nok-backend-css');
 
 get_header();
 

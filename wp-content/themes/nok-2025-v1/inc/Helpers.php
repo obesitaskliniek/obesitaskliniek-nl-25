@@ -348,9 +348,9 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 	/**
 	 * Extract quote data from experience posts
 	 *
-	 * Transforms post IDs into structured arrays with quote, excerpt,
-	 * name, and metadata. Randomly selects between two quote fields
-	 * if both are available.
+	 * Extracts blockquotes from post content. Randomly selects one
+	 * blockquote if multiple exist. Falls back to post title if no
+	 * blockquotes found.
 	 *
 	 * Structure matches nok-scrollable-quote-block template requirements:
 	 * - quote: Main quote text (stripped of quote characters)
@@ -377,15 +377,13 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 			$post      = get_post( $post_id );
 			$post_meta = get_post_meta( $post_id );
 
-			// Random quote selection between two options if both exist
-			$quote_text = html_entity_decode(get_the_title($post), ENT_QUOTES, 'UTF-8');
-			if ( isset( $post_meta['_highlighted_quote_1'] ) ) {
-				if ( isset( $post_meta['_highlighted_quote_2'] ) && rand( 0, 1 ) ) {
-					$quote_text = $post_meta['_highlighted_quote_2'][0];
-				} else {
-					$quote_text = $post_meta['_highlighted_quote_1'][0];
-				}
-			}
+			// Extract blockquotes from content
+			$blockquotes = self::extract_blockquotes_from_content( $post->post_content );
+
+			// Select quote: random blockquote or fall back to title
+			$quote_text = !empty($blockquotes)
+				? $blockquotes[array_rand($blockquotes)]
+				: html_entity_decode(get_the_title($post), ENT_QUOTES, 'UTF-8');
 
 			// Build excerpt with fallback chain
 			$excerpt = '';
@@ -408,6 +406,39 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 		}
 
 		return $quote_items;
+	}
+
+	/**
+	 * Extract text content from all blockquotes in HTML
+	 *
+	 * Parses HTML content and returns array of blockquote text content,
+	 * stripping all HTML tags and preserving only the text.
+	 *
+	 * @param string $content HTML content potentially containing blockquotes
+	 * @return string[] Array of blockquote text content
+	 */
+	private static function extract_blockquotes_from_content( string $content ): array {
+		if ( empty( $content ) ) {
+			return [];
+		}
+
+		$dom = new \DOMDocument();
+		@$dom->loadHTML(
+			mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ),
+			LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+		);
+
+		$blockquotes = $dom->getElementsByTagName( 'blockquote' );
+		$quotes      = [];
+
+		foreach ( $blockquotes as $blockquote ) {
+			$text = trim( $blockquote->textContent );
+			if ( !empty( $text ) ) {
+				$quotes[] = $text;
+			}
+		}
+
+		return $quotes;
 	}
 
 	/**
@@ -500,7 +531,277 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 		return $quote_data;
 	}
 
+	/**
+	 * Echo first paragraph from post content
+	 */
+	public static function the_content_first_paragraph(): void {
+		echo self::get_content_first_paragraph();
+	}
+
+	/**
+	 * Echo remaining content after first paragraph
+	 */
+	public static function the_content_rest(): void {
+		echo self::get_content_rest();
+	}
+
+	/**
+	 * Echo remaining content with organically distributed injected HTML
+	 *
+	 * Distributes injections evenly throughout the content based on total
+	 * block count. With 3 injections in 10 blocks, places at ~25%, 50%, 75%.
+	 *
+	 * @param string|array<string> $injections HTML to inject (single string or array)
+	 *
+	 * @example Single injection (placed at ~50%)
+	 * Helpers::the_content_rest_with_injections('<aside>Ad</aside>');
+	 *
+	 * @example Multiple injections (evenly distributed)
+	 * Helpers::the_content_rest_with_injections([
+	 *     '<aside>Ad 1</aside>',
+	 *     '<div>CTA</div>',
+	 *     '<aside>Ad 2</aside>'
+	 * ]);
+	 */
+	public static function the_content_rest_with_injections(string|array $injections = []): void {
+		echo self::get_content_rest_with_injections($injections);
+	}
+
+	/**
+	 * Get first paragraph from post content
+	 *
+	 * Applies all WordPress content filters after splitting at first
+	 * paragraph boundary in raw content. Cached per post.
+	 *
+	 * @return string First paragraph HTML or empty string
+	 */
+	public static function get_content_first_paragraph(): string {
+		return self::split_content_cache(get_the_ID())['first'] ?? '';
+	}
+
+	/**
+	 * Get remaining content after first paragraph
+	 *
+	 * @return string Remaining content HTML or empty string
+	 */
+	public static function get_content_rest(): string {
+		return self::split_content_cache(get_the_ID())['rest'] ?? '';
+	}
+
+	/**
+	 * Split content and populate static cache
+	 *
+	 * Priority logic:
+	 * 1. If highlighted_excerpt custom field is set, use it as 'first'
+	 *    and full content as 'rest'
+	 * 2. Otherwise, split at first paragraph boundary in raw content
+	 *
+	 * Applies WordPress filters to each section independently to keep
+	 * shortcodes/blocks intact and respect semantic structure.
+	 *
+	 * @param int $post_id Post ID to process
+	 * @return array{first: string, rest: string} Split content parts
+	 */
+	private static function split_content_cache(int $post_id): array {
+		static $cache = [];
+
+		if (isset($cache[$post_id])) {
+			return $cache[$post_id];
+		}
+
+		// Check for highlighted_excerpt custom field
+		$highlighted_excerpt = get_post_meta($post_id, '_highlighted_excerpt', true);
+
+		if (!empty($highlighted_excerpt)) {
+			// Use highlighted excerpt as first, full content as rest
+			$full_content = apply_filters('the_content', get_post_field('post_content', $post_id));
+			$cache[$post_id] = [
+				'first' => apply_filters('the_content', $highlighted_excerpt),
+				'rest'  => $full_content
+			];
+			return $cache[$post_id];
+		}
+
+		// Get raw content before filters
+		$raw = get_post_field('post_content', $post_id);
+
+		// Find first paragraph break (double newline)
+		$pattern = '/\n\s*\n/';
+		$parts = preg_split($pattern, $raw, 2);
+
+		if (count($parts) === 1) {
+			// No paragraph break - everything is "first"
+			$cache[$post_id] = [
+				'first' => apply_filters('the_content', $parts[0]),
+				'rest'  => ''
+			];
+			return $cache[$post_id];
+		}
+
+		// Apply filters to each part independently
+		$cache[$post_id] = [
+			'first' => apply_filters('the_content', $parts[0]),
+			'rest'  => apply_filters('the_content', $parts[1])
+		];
+
+		return $cache[$post_id];
+	}
+
+	/**
+	 * Get remaining content with organically distributed injected HTML
+	 *
+	 * Automatically calculates optimal injection positions based on content
+	 * length. Distributes N injections into N+1 equal segments.
+	 *
+	 * @param string|array<string> $injections HTML to inject (single string or array)
+	 * @return string Content with distributed injections
+	 */
+	public static function get_content_rest_with_injections(string|array $injections = []): string {
+		$content = self::get_content_rest();
+
+		if (empty($content) || empty($injections)) {
+			return $content;
+		}
+
+		// Normalize to array
+		if (is_string($injections)) {
+			$injections = [$injections];
+		}
+
+		// Count total block elements in content
+		$block_count = self::count_block_elements($content);
+
+		if ($block_count === 0) {
+			// No blocks found, append all injections at end
+			return $content . implode('', $injections);
+		}
+
+		// Calculate positions for even distribution
+		$positions = self::calculate_distribution_positions(count($injections), $block_count);
+
+		// Build position => HTML map
+		$position_map = array_combine($positions, $injections);
+
+		// Sort descending and inject
+		krsort($position_map, SORT_NUMERIC);
+
+		foreach ($position_map as $position => $html) {
+			$content = self::inject_after_block_element($content, $html, $position);
+		}
+
+		return $content;
+	}
+
+	/**
+	 * Count root-level block elements in HTML content
+	 *
+	 * Only counts direct children, ignores nested blocks.
+	 *
+	 * @param string $content HTML content
+	 * @return int Number of root block elements
+	 */
+	private static function count_block_elements(string $content): int {
+		$block_tags = 'p|div|figure|blockquote|ul|ol|h[1-6]|pre|table|section|article|aside|header|footer|nav|main';
+
+		// Match all opening and closing tags
+		$pattern = '/<(\/)?('. $block_tags . ')(?:\s[^>]*)?\s*>/i';
+
+		preg_match_all($pattern, $content, $matches, PREG_SET_ORDER);
+
+		$depth = 0;
+		$root_count = 0;
+
+		foreach ($matches as $match) {
+			$is_closing = !empty($match[1]); // Check for closing slash
+
+			if ($is_closing) {
+				if ($depth === 1) {  // Changed from 0 to 1
+					// Root-level closing tag
+					$root_count++;
+				}
+				$depth = max(0, $depth - 1);
+			} else {
+				// Opening tag
+				$depth++;
+			}
+		}
+
+		return $root_count;
+	}
+
+
+	/**
+	 * Calculate evenly distributed positions for injections
+	 *
+	 * Divides content into N+1 segments and places injections at segment boundaries.
+	 * With 3 injections in 10 blocks: places at blocks 2, 5, 7 (~25%, 50%, 75%).
+	 *
+	 * @param int $injection_count Number of items to inject
+	 * @param int $total_blocks Total block elements available
+	 * @return int[] Positions for injections (1-based)
+	 */
+	private static function calculate_distribution_positions(int $injection_count, int $total_blocks): array {
+		$positions = [];
+		$step = $total_blocks / ($injection_count + 1);
+
+		for ($i = 1; $i <= $injection_count; $i++) {
+			$positions[] = (int) round($i * $step);
+		}
+
+		return $positions;
+	}
+
+	/**
+	 * Inject HTML after Nth root-level block element
+	 *
+	 * Counts only direct children, ignoring nested blocks.
+	 * Appends if target position exceeds available root blocks.
+	 *
+	 * @param string $content HTML content
+	 * @param string $injection HTML to inject
+	 * @param int $after_position Target root block number (1-based)
+	 * @return string Modified content
+	 */
+	private static function inject_after_block_element(string $content, string $injection, int $after_position): string {
+		$block_tags = 'p|div|figure|blockquote|ul|ol|h[1-6]|pre|table|section|article|aside|header|footer|nav|main';
+
+		// Match all opening and closing tags with their positions
+		$pattern = '/<(\/)?('. $block_tags . ')(?:\s[^>]*)?\s*>/i';
+
+		preg_match_all($pattern, $content, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
+
+		$depth = 0;
+		$root_count = 0;
+
+		foreach ($matches as $match_data) {
+			$full_match = $match_data[0][0]; // Full matched string
+			$position = $match_data[0][1];   // Position in content
+			$is_closing = !empty($match_data[1][0]); // Check for closing slash
+
+			if ($is_closing) {
+				if ($depth === 1) {  // Changed from 0 to 1
+					// Root-level closing tag
+					$root_count++;
+
+					if ($root_count === $after_position) {
+						// Insert after this root closing tag
+						$insert_pos = $position + strlen($full_match);
+						return substr($content, 0, $insert_pos) . $injection . substr($content, $insert_pos);
+					}
+				}
+				$depth = max(0, $depth - 1);
+			} else {
+				// Opening tag
+				$depth++;
+			}
+		}
+
+		// Not enough root blocks, append at end
+		return $content . $injection;
+	}
 }
+
+
 
 /**
  * Join an array of items into a comma‑separated list,

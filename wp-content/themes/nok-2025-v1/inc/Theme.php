@@ -11,6 +11,7 @@ use NOK2025\V1\PageParts\MetaManager;
 use NOK2025\V1\PageParts\PreviewSystem;
 use NOK2025\V1\PageParts\TemplateRenderer;
 use NOK2025\V1\PageParts\RestEndpoints;
+use NOK2025\V1\SEO\YoastIntegration;
 
 final class Theme {
 	private static ?Theme $instance = null;
@@ -23,7 +24,8 @@ final class Theme {
 	private PreviewSystem $preview_system;
 	private TemplateRenderer $template_renderer;
 	private RestEndpoints $rest_endpoints;
-	private \NOK2025\V1\SEO\YoastIntegration $yoast_integration;
+	private YoastIntegration $yoast_integration;
+	private BlockRenderers $block_renderers;
 
 	// Settings store (can hold customizer values)
 	private array $settings = [];
@@ -42,7 +44,8 @@ final class Theme {
 		$this->meta_manager = new MetaManager($this->registry);
 		$this->preview_system = new PreviewSystem($this->meta_manager);
 		$this->template_renderer = new TemplateRenderer();
-		$this->yoast_integration = new \NOK2025\V1\SEO\YoastIntegration();
+		$this->yoast_integration = new YoastIntegration();
+		$this->block_renderers = new BlockRenderers();
 		$this->rest_endpoints = new RestEndpoints(
 			$this->template_renderer,
 			$this->meta_manager
@@ -71,6 +74,7 @@ final class Theme {
 		$this->preview_system->register_hooks();
 		$this->rest_endpoints->register_hooks();
 		$this->yoast_integration->register_hooks();
+		$this->block_renderers->register_hooks();
 
 		// Customizer
 		add_action('customize_register', [$this, 'register_customizer']);
@@ -79,6 +83,8 @@ final class Theme {
 		add_filter('the_content', [$this, 'enhance_paragraph_classes'], 1);
 		add_filter('show_admin_bar', [$this, 'maybe_hide_admin_bar']);
 
+		// Template hierarchy
+		add_filter('single_template', [$this, 'category_based_single_template']);
 		/**
 		 * Add fallback alt text to images missing it
 		 *
@@ -116,7 +122,7 @@ final class Theme {
 	}
 
 	public function register_customizer(\WP_Customize_Manager $wp_customize): void {
-		\NOK2025\V1\Customizer::register($wp_customize);
+		Customizer::register($wp_customize);
 	}
 
 	public function get_setting(string $key, $default = null) {
@@ -199,6 +205,34 @@ final class Theme {
 		return $show;
 	}
 
+	/**
+	 * Enable category-specific single post templates
+	 *
+	 * Checks for single-cat-{slug}.php before falling back to single.php.
+	 *
+	 * @param string $template Path to template file
+	 * @return string Modified template path
+	 */
+	public function category_based_single_template(string $template): string {
+		if (!is_singular('post')) {
+			return $template;
+		}
+
+		$categories = get_the_category();
+		if (empty($categories)) {
+			return $template;
+		}
+
+		foreach ($categories as $category) {
+			$cat_template = locate_template("single-cat-{$category->slug}.php");
+			if ($cat_template) {
+				return $cat_template;
+			}
+		}
+
+		return $template;
+	}
+
 	private function register_post_custom_fields(): void {
 		// Get category IDs programmatically
 		$experience_cat = get_category_by_slug('ervaringen');
@@ -207,6 +241,7 @@ final class Theme {
 			'type' => 'text',
 			'label' => 'Naam patiënt',
 			'placeholder' => 'Voer de naam...',
+			'description' => 'Beschrijving',
 			'categories' => [$experience_cat->term_id],
 		]);
 
@@ -214,20 +249,7 @@ final class Theme {
 			'type' => 'textarea',
 			'label' => 'Samenvatting',
 			'placeholder' => 'Voer een korte samenvatting van 1-2 zinnen in...',
-			'categories' => [$experience_cat->term_id],
-		]);
-
-		PostMeta\MetaRegistry::register_field('post', 'highlighted_quote_1', [
-			'type' => 'textarea',
-			'label' => 'Highlighted Quote 1',
-			'placeholder' => 'Voer een quote uit het verhaal in...',
-			'categories' => [$experience_cat->term_id],
-		]);
-
-		PostMeta\MetaRegistry::register_field('post', 'highlighted_quote_2', [
-			'type' => 'textarea',
-			'label' => 'Highlighted Quote 2 (Optioneel)',
-			'placeholder' => 'Voer een quote uit het verhaal in...',
+			'description' => 'Beschrijving',
 			'categories' => [$experience_cat->term_id],
 		]);
 	}
