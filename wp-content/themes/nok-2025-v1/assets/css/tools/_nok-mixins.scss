@@ -270,8 +270,10 @@
 @mixin native-scrollbar-styling(
   $scrollbarVertical: true,
   $scrollbarSize: 6px,
-  $scrollbarTrackColor: oklch(from var(--nok-body) l c h / 0.25),
-  $scrollbarHandleColor: #FFFE,
+  $scrollbarTrackColor: oklch(from var(--bg-color--contrast, var(--bg-body)) l c h / 0.25),
+  //$scrollbarTrackColor: oklch(from var(--nok-body) l c h / 0.25),
+  $scrollbarHandleColor: oklch(from var(--bg-color--contrast, var(--bg-body)) l c h / 1),
+  //$scrollbarHandleColor: #FFFE,
   $scrollbarHandleColorActive: #FFFF
 ) {
   // CSS variables at mixin root for runtime theming
@@ -339,48 +341,6 @@
   }
 }
 
-@mixin nok-scrollbar-style(
-  $scrollbarVertical: true,
-  $scrollbarSize: 6px,
-  $scrollbarTrackColor: oklch(from var(--nok-body) l c h / 0.25),
-  $scrollbarHandleColor: #FFFE,
-  $scrollbarHandleColorActive: #FFFF
-) {
-  --scrollbar-size: #{$scrollbarSize};
-  --scrollbar-track-color: #{$scrollbarTrackColor};
-  --scrollbar-handle-color: #{$scrollbarHandleColor};
-  --scrollbar-handle-color--active: #{$scrollbarHandleColorActive};
-  scrollbar-gutter: stable;
-
-  @if ($scrollbarVertical: true) {
-    overflow: hidden overlay;
-    &::-webkit-scrollbar {
-      width: var(--scrollbar-size, 6px);
-    }
-  } @else {
-    overflow: overlay hidden;
-    &::-webkit-scrollbar {
-      height: var(--scrollbar-size, 6px);
-    }
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color: var(--scrollbar-track-color, #FFF);
-    border-radius: var(--scrollbar-track-color);
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: var(--scrollbar-handle-color, #FFFE);
-    border: 1px solid var(--scrollbar-handle-color, #FFFE);
-    border-radius: var(--scrollbar-size, 6px);
-
-    &:hover {
-      background-color: var(--scrollbar-handle-color--active, #FFFF);
-      border-color: var(--scrollbar-handle-color--active, #FFFF);
-    }
-  }
-
-}
 
 ///**
 // * Mixin to style scrollbars and optionally add a fake scrollbar with identical styles.
@@ -394,10 +354,12 @@
 @mixin nok-scrollbar-thin(
   $scrollbarSize: 6px,
   $scrollbarVertical: false,
-  $scrollbarHandleColor: var(--text-color, #CCC),
+  $scrollbarTrackColor: oklch(from var(--bg-color--contrast, var(--bg-body)) l c h / 0.25),
+  //$scrollbarTrackColor: oklch(from var(--nok-body) l c h / 0.25),
+  $scrollbarHandleColor: oklch(from var(--bg-color--contrast, var(--bg-body)) l c h / 1),
+  //$scrollbarHandleColor: #FFFE,
   $scrollbarHandleColorActive: var(--text-color--hover, #FFF),
   $scrollbarHandle_active_outline: oklch(from var(--text-color--hover, #FFF) l c h / 0.5),
-  $scrollbarTrackColor: oklch(from var(--nok-body) l c h / 0.25),
 ) {
   @include transition-properties {
     + .fake-scrollbar {

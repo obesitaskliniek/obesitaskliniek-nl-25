@@ -6,12 +6,13 @@
  * Custom Fields:
  * - layout:select(left|right)!page-editable!default(left)
  * - achtergrond:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue|Transparant::nok-text-darkerblue)!page-editable!default(nok-text-darkerblue)
- * - tekst:select(Blauw::nok-text-darkerblue nok-dark-text-contrast|Wit::nok-text-white nok-dark-text-contrast)!page-editable!default(nok-text-darkerblue)
- * - circle_color:select(Blauw::var(--nok-darkerblue)|Automatisch::var(--nok-body--lighter)|Uit::transparent)!page-editable!default(var(--nok-body--lighter))
  * - quote_items:repeater(quote:text,name:text,subname:text,excerpt:text,link_url:url,image_url:url)!descr[Voeg handmatige quotes toe om te tonen]
  * - quote_posts:post_repeater(post:ervaringen)!descr[Kies specifieke ervaringsverhalen om te tonen]
  * - random_quotes:checkbox!default(true)!descr[Vul aan met willekeurige ervaringen indien minder dan 5 quotes aanwezig zijn]
  * - carousel_buttons:checkbox!default(false)!descr[Toon navigatieknoppen voor de carousel]
+ * - colors:select(Transparant::nok-bg-body|Grijs::nok-bg-body--darker gradient-background|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Blauw::nok-bg-darkerblue nok-text-contrast)!page-editable!default(Transparant)
+ * - circle_color:select(Blauw::var(--nok-darkerblue)|Wit::var(--nok-darkerblue)|Automatisch::var(--nok-body--darker)|Uit::transparent)!page-editable!default(Uit)
+ * - quote_block_colors:select(Body::nok-bg-body nok-text-contrast|Wit::nok-bg-white nok-text-darkestblue|Blauw::nok-bg-darkblue nok-text-contrast)!page-editable!default(Wit)
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -40,7 +41,7 @@ $testimonial_data = Helpers::build_quote_collection(
 
 $scroller_id = 'ervaringen-scroller';
 ?>
-<nok-section class="circle <?= $c->achtergrond ?> <?= $c->tekst ?>"
+<nok-section class="circle <?= $c->colors ?> gradient-background"
              style="<?= $circle_style ?>; <?= $circle_offset ?>;">
     <div class="nok-section__inner triple-margin nok-my-to-lg-4">
         <article class="nok-layout-grid
@@ -52,11 +53,11 @@ $scroller_id = 'ervaringen-scroller';
 				<?php the_content(); ?>
                 <?php if ($c->carousel_buttons->isTrue()) : ?>
                 <div class="nok-button-group">
-                    <button class="nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast fill-group-column"
+                    <button class="nok-bg-lightgrey nok-dark-bg-darkblue nok-text-contrast fill-group-column"
                             data-scroll-target="<?= $scroller_id; ?>" data-scroll-action="backward">
 						<?= Assets::getIcon('ui_arrow-left-longer') ?>
                     </button>
-                    <button class="nok-bg-body--darker nok-dark-bg-darkblue nok-text-contrast fill-group-column"
+                    <button class="nok-bg-lightgrey nok-dark-bg-darkblue nok-text-contrast fill-group-column"
                             data-scroll-target="<?= $scroller_id; ?>" data-scroll-action="forward">
 						<?= Assets::getIcon('ui_arrow-right-longer') ?>
                     </button>
@@ -69,7 +70,7 @@ $scroller_id = 'ervaringen-scroller';
 		        array(
                     'scroller_id' => $scroller_id,
 			        'quotes'      => $testimonial_data,
-			        'block_color' => 'nok-bg-white nok-text-darkerblue nok-dark-bg-darkblue nok-dark-text-contrast'
+                    'block_color' => $c->quote_block_colors->raw()
 		        )
 	        ) ?>
 

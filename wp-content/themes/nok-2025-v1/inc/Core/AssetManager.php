@@ -41,7 +41,7 @@ class AssetManager {
 			[],
 			$this->get_asset_version( '/assets/css/nok-backend-css.css', $dev_mode )
 		);
-		wp_enqueue_style('nok-backend-css');
+		wp_enqueue_style( 'nok-backend-css' );
 
 		if ( ! in_array( $hook, [ 'post.php', 'post-new.php' ] ) ) {
 			return;
@@ -49,12 +49,9 @@ class AssetManager {
 
 		$screen = get_current_screen();
 
-		if ( in_array( $screen->post_type, [ 'page_part', 'page', 'template_layout' ] ) ) {
-			$this->localize_preview_data();
-		}
-
-		// Localize for both page_part and page editors
-		if ( in_array( $screen->post_type, [ 'page_part', 'page' ] ) ) {
+		// Load preview assets for page_part posts
+		if ( $screen->post_type === 'page_part' ) {
+			$this->load_preview_assets();
 			$this->localize_preview_data();
 		}
 	}
