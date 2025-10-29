@@ -33,6 +33,11 @@ module.exports = {
             __dirname,
             'src/blocks/embed-nok-page-part/index.js'
         ),
+
+        'blocks/content-placeholder-nok-template/index': path.resolve(
+            __dirname,
+            'src/blocks/content-placeholder-nok-template/index.js'
+        ),
     },
 
     // 3) keep the default filename pattern

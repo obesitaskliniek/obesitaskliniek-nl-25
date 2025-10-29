@@ -5,7 +5,7 @@
  * Slug: nok-ervaringen-text-block
  * Custom Fields:
  * - layout:select(left|right)!page-editable!default(left)
- * - achtergrond:select(Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-white|Transparant::nok-text-darkerblue nok-dark-text-white)!page-editable!default(nok-text-darkerblue nok-dark-text-white)
+ * - achtergrond:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue|Transparant::nok-text-darkerblue)!page-editable!default(nok-text-darkerblue)
  * - tekst:select(Blauw::nok-text-darkerblue nok-dark-text-contrast|Wit::nok-text-white nok-dark-text-contrast)!page-editable!default(nok-text-darkerblue)
  * - circle_color:select(Blauw::var(--nok-darkerblue)|Automatisch::var(--nok-body--lighter)|Uit::transparent)!page-editable!default(var(--nok-body--lighter))
  * - quote_items:repeater(quote:text,name:text,subname:text,excerpt:text,link_url:url,image_url:url)!descr[Voeg handmatige quotes toe om te tonen]

@@ -1,0 +1,20 @@
+{
+  "apiVersion": 2,
+  "name": "nok2025/content-placeholder-nok-template",
+  "title": "NOK Template Inhoud Placeholder",
+  "description": "Geeft de hoofdinhoud van de post weer binnen een template layout.",
+  "category": "widgets",
+  "icon": "align-center",
+  "supports": {
+    "html": false,
+    "multiple": false
+  },
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php",
+  "editorStyle": [
+    "nok-components-css"
+  ],
+  "style": [
+    "nok-components-css"
+  ]
+}

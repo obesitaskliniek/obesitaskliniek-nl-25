@@ -49,8 +49,8 @@ class AssetManager {
 
 		$screen = get_current_screen();
 
-		if ( $screen->post_type === 'page_part' ) {
-			$this->load_preview_assets();
+		if ( in_array( $screen->post_type, [ 'page_part', 'page', 'template_layout' ] ) ) {
+			$this->localize_preview_data();
 		}
 
 		// Localize for both page_part and page editors
