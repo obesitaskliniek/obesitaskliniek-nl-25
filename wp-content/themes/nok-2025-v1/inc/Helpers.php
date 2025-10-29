@@ -399,7 +399,7 @@ class Helpers {
 				'name'      => $post_meta['_naam_patient'][0] ?? 'Anonieme patiënt',
 				'subnaam'   => $post_meta['_subnaam_patient'][0] ?? '',
 				'link_url'  => get_permalink( $post_id ),
-				'image_url' => self::get_featured_image_uri( $post )
+				'image_url' => self::get_featured_image_uri( $post, 'thumbnail' ),
 			];
 
 			$quote_items[] = $quote_item;

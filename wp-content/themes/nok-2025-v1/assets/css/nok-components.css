@@ -3037,7 +3037,7 @@ nok-hero .nok-hero__inner {
   nok-hero .nok-hero__inner article, nok-hero .nok-hero__inner header, nok-hero .nok-hero__inner figure, nok-hero .nok-hero__inner footer, nok-hero .nok-hero__inner-figure-mask {
     grid-column: 1;
   }
-  nok-hero .nok-hero__inner article, nok-hero .nok-hero__inner header {
+  nok-hero .nok-hero__inner article {
     grid-row: 3/5;
     align-self: end;
   }

@@ -90,7 +90,7 @@ registerBlockType(blockName, {
                             fontWeight: '600',
                             color: '#00132f'
                         }}>
-                            Post Inhoud Placeholder
+                            Inhoud Placeholder
                         </h3>
                         <p style={{
                             margin: 0,

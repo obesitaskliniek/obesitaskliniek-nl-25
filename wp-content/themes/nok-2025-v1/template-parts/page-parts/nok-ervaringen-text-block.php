@@ -39,6 +39,8 @@ $testimonial_data = Helpers::build_quote_collection(
     5
 );
 
+//todo: add button option, to link to alle ervaringen
+
 $scroller_id = 'ervaringen-scroller';
 ?>
 <nok-section class="circle <?= $c->colors ?> gradient-background"

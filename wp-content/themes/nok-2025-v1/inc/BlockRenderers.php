@@ -25,6 +25,7 @@ class BlockRenderers {
 	 */
 	public function register_hooks(): void {
 		add_filter('render_block_core/quote', [$this, 'render_quote_block'], 10, 2);
+		add_filter('render_block_core/heading', [$this, 'render_heading_block'], 10, 2);
 	}
 
 	/**
@@ -82,4 +83,23 @@ class BlockRenderers {
 			$text
 		);
 	}
+
+	public function render_heading_block( string $block_content, array $block) {
+		// Use DOMDocument (you're already using it for quotes)
+		$dom = new \DOMDocument();
+		@$dom->loadHTML(
+			mb_convert_encoding( $block_content, 'HTML-ENTITIES', 'UTF-8' ),
+			LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+		);
+
+		$heading2 = $dom->getElementsByTagName( 'h2' )->item( 0 );
+
+		if ( $heading2 ) {
+			$existing = $heading2->getAttribute( 'class' );
+			$heading2->setAttribute( 'class', trim( $existing . ' nok-fs-5 fw-400' ) );
+		}
+
+		return $dom->saveHTML();
+	}
+
 }

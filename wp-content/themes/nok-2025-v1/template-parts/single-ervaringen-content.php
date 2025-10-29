@@ -27,9 +27,6 @@ if ( $has_featured_image ) {
 nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10">
 
 			<header class="nok-section__inner nok-section-narrow nok-mt-0 <?= $heading_article_class; ?>">
-				<h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading">
-SINGLE-ERVARINGEN-CONTENT
-				</h2>
 				<?php the_title( '<h1 class="nok-fs-giant">', '</h1>' ); ?>
 				<div>
 					<?php Helpers::the_content_first_paragraph(); ?>

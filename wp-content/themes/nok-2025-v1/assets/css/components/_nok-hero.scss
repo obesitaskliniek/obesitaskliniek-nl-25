@@ -164,7 +164,7 @@ nok-hero {
       article, header, figure, footer, &-figure-mask {
         grid-column: 1;
       }
-      article, header {
+      article {
         grid-row: 3 / 5;
         align-self: end;
       }
