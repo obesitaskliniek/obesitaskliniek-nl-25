@@ -85,7 +85,7 @@ class Helpers {
 			);
 		} else {
 			$featuredImage = '<img ' . ( $class ? "class='{$class}'" : '' ) . ' src="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:100x0-25-0-0-center-0.jpg" 
-srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:1920x0-65-0-0-center-0.jpg 1920w,
+					srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:1920x0-65-0-0-center-0.jpg 1920w,
                      https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:768x0-65-0-0-center-0.jpg 768w,
                      https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:320x0-65-0-0-center-0.jpg 320w,
                      https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:150x0-65-0-0-center-0.jpg 150w" sizes="(max-width: 575px) 100vw,
@@ -488,7 +488,8 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 		array $explicit_posts,
 		array $custom_quotes = [],
 		bool $pad_with_random = false,
-		int $minimum_count = 5
+		int $minimum_count = 5,
+		array $not = [],
 	): array {
 		// Extract quotes from explicitly selected posts
 		$quote_data = self::get_quotes_from_experience_posts( $explicit_posts );
@@ -501,7 +502,7 @@ srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%2020
 			$needed = $minimum_count - count( $quote_data );
 
 			// Build exclusion list from explicit posts and custom quotes
-			$excluded_ids = $explicit_posts;
+			$excluded_ids = array_merge($explicit_posts, $not);
 			foreach ( $custom_quotes as $custom ) {
 				if ( isset( $custom['post_id'] ) ) {
 					$excluded_ids[] = $custom['post_id'];

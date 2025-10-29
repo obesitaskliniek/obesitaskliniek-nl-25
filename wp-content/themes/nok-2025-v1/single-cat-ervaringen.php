@@ -1,9 +1,21 @@
 <?php
 /* Template Name: Event */
 
+use NOK2025\V1\Helpers;
+use NOK2025\V1\Theme;
+
+$theme = Theme::get_instance();
+
 get_header( 'generic' );
 
-use NOK2025\V1\Helpers;
+// Render template layout (if configured)
+$layout_id = get_theme_mod('template_layout_ervaringen', 0);
+if ($layout_id) {
+    $layout = get_post($layout_id);
+    if ($layout && $layout->post_status === 'publish') {
+        echo apply_filters('the_content', $layout->post_content);
+    }
+}
 
 $post_meta           = get_post_meta( get_the_ID() );
 $naam_patient        = $post_meta['_naam_patient'][0] ?? '';
@@ -50,6 +62,21 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
             </article>
         </article>
     </nok-section>
+
+
+<?php
+
+
+// Build quote collection using Helpers
+$testimonial_data = Helpers::build_quote_collection( [], [], true, 5, [get_the_ID()] );
+
+get_template_part( 'template-parts/post-parts/nok-scrollable-quote-block', null,
+        array(
+                'scroller_id' => 'ervaringen',
+                'quotes'      => $testimonial_data,
+                'block_color' => 'nok-bg-white nok-text-darkerblue nok-dark-bg-darkblue nok-dark-text-contrast'
+        )
+) ?>
 
 <?php
 get_footer();

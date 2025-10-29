@@ -13,6 +13,7 @@ class PostTypes {
 	 */
 	public function register_post_types(): void {
 		$this->register_page_part_post_type();
+		$this->register_template_layout_post_type();
 		// Add other post types here as needed
 	}
 
@@ -74,6 +75,57 @@ class PostTypes {
 	}
 
 	/**
+	 * Register the template_layout custom post type
+	 *
+	 * Template layouts are block editor compositions used to define
+	 * the structure of single post templates (e.g., single-cat-ervaringen.php).
+	 * They allow admins to configure template zones using page part blocks
+	 * without hard-coding post IDs in template files.
+	 */
+	private function register_template_layout_post_type(): void {
+		$labels = [
+			'name'               => __( 'Template Layouts', THEME_TEXT_DOMAIN ),
+			'singular_name'      => __( 'Template Layout', THEME_TEXT_DOMAIN ),
+			'add_new_item'       => __( 'Add New Template Layout', THEME_TEXT_DOMAIN ),
+			'edit_item'          => __( 'Edit Template Layout', THEME_TEXT_DOMAIN ),
+			'new_item'           => __( 'New Template Layout', THEME_TEXT_DOMAIN ),
+			'view_item'          => __( 'View Template Layout', THEME_TEXT_DOMAIN ),
+			'view_items'         => __( 'View Template Layouts', THEME_TEXT_DOMAIN ),
+			'search_items'       => __( 'Search Template Layouts', THEME_TEXT_DOMAIN ),
+			'not_found'          => __( 'No template layouts found.', THEME_TEXT_DOMAIN ),
+			'not_found_in_trash' => __( 'No template layouts found in Trash.', THEME_TEXT_DOMAIN ),
+			'all_items'          => __( 'All Template Layouts', THEME_TEXT_DOMAIN ),
+		];
+
+		$args = [
+			'labels'              => $labels,
+			'description'         => __( 'Block editor layouts for configuring single post templates.', THEME_TEXT_DOMAIN ),
+			'public'              => false,
+			'publicly_queryable'  => false,
+			'show_ui'             => true,
+			'show_in_menu'        => true,
+			'show_in_nav_menus'   => false,
+			'show_in_admin_bar'   => true,
+			'show_in_rest'        => true,
+			'rest_base'           => 'template-layouts',
+			'menu_position'       => 6,
+			'menu_icon'           => 'dashicons-schedule',
+			'capability_type'     => 'post',
+			'hierarchical'        => false,
+			'supports'            => [
+				'title',
+				'editor',
+				'revisions',
+			],
+			'has_archive'         => false,
+			'can_export'          => true,
+			'delete_with_user'    => false,
+		];
+
+		register_post_type( 'template_layout', $args );
+	}
+
+	/**
 	 * Protect page_part posts from being accessed by non-logged-in users
 	 *
 	 * Page parts are designed to be embedded components, not standalone pages.
@@ -102,18 +154,17 @@ class PostTypes {
 		}
 
 		// Define protected post types
-		$protected_post_types = [ 'page_part' ];
+		$protected_post_types = [ 'page_part', 'template_layout' ];
 
-		// Protect single page part views
+		// Protect single views
 		if ( is_singular( $protected_post_types ) ) {
-			// Serve 404 to prevent indexing and indicate these aren't public pages
 			$wp_query->set_404();
 			status_header( 404 );
 			nocache_headers();
 			return;
 		}
 
-		// Protect archive pages (if ever enabled)
+		// Protect archive pages
 		if ( is_post_type_archive( $protected_post_types ) ) {
 			wp_safe_redirect( home_url( '/' ) );
 			exit;

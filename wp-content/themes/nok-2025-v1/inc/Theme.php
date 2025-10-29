@@ -109,6 +109,29 @@ final class Theme {
 
 			return $attr;
 		}, 10, 2);
+
+		/**
+		 * Force complete thumbnail regeneration after image editing
+		 */
+		add_action('wp_save_image_editor_file', function($dummy, $filename, $image, $mime_type, $post_id) {
+			if (!$post_id) {
+				return;
+			}
+
+			// Queue regeneration after save completes
+			add_action('shutdown', function() use ($post_id) {
+				require_once(ABSPATH . 'wp-admin/includes/image.php');
+
+				$file_path = get_attached_file($post_id);
+				if ($file_path) {
+					// This regenerates ALL registered sizes from the newly edited original
+					wp_update_attachment_metadata(
+						$post_id,
+						wp_generate_attachment_metadata($post_id, $file_path)
+					);
+				}
+			});
+		}, 10, 5);
 	}
 
 	// =============================================================================

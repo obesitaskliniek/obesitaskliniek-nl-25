@@ -82,54 +82,58 @@ function nok_get_categories($as_title = false) : string {
     </nok-section>
 
 <?php
-$faq_items = yarpp_get_related( array(), get_the_ID() );
-if ( $faq_items ) :
-    $accordion_id = 'gerelateerde-vragen-' . sanitize_title( get_the_title() );
-    ?>
-    <nok-section class="nok-bg-body--darker gradient-background nok-text-darkblue">
-        <div class="nok-section__inner">
-            <h2 class="nok-fs-5"><?= __( 'Gerelateerde vragen', 'yet-another-related-posts-plugin' ); ?></h2>
-            <div class="nok-layout-grid nok-layout-grid__1-column nok-mt-1" data-requires="./nok-accordion.mjs"
-                 data-require-lazy="true">
-                <?php
-                foreach ( $faq_items as $post ) {
+if ( function_exists( 'yarpp_get_related' ) ) :
+    $faq_items = yarpp_get_related( array(), get_the_ID() );
+    if ( $faq_items ) :
+        $accordion_id = 'gerelateerde-vragen-' . sanitize_title( get_the_title() );
+        ?>
+        <nok-section class="nok-bg-body--darker gradient-background nok-text-darkblue">
+            <div class="nok-section__inner">
+                <h2 class="nok-fs-5"><?= __( 'Gerelateerde vragen', 'yet-another-related-posts-plugin' ); ?></h2>
+                <div class="nok-layout-grid nok-layout-grid__1-column nok-mt-1" data-requires="./nok-accordion.mjs"
+                     data-require-lazy="true">
+                    <?php
+                    foreach ( $faq_items as $post ) {
 
-                    $post_id       = $post->ID;
-                    $item_title    = get_the_title( $post_id );
-                    $items_cats    = get_the_terms( $post_id, 'faq_categories' );
-                    $item_category = $items_cats[0]->name;
-                    $cat_slug      = $items_cats[0]->slug;
-                    $item_id       = $cat_slug . '-' . $post_id; ?>
-                    <nok-accordion>
-                        <details class="nok-bg-body nok-dark-bg-darkblue nok-dark-text-contrast nok-rounded-border"
-                                 name="<?= $accordion_id; ?>">
-                            <summary class="nok-py-1 nok-px-2 nok-fs-2 nok-fs-to-lg-3 fw-bold">
-                                <?= $item_title; ?>
-                            </summary>
-                            <div class="accordion-content nok-p-2 nok-pt-0">
-                                <article title="<?= $item_title; ?>">
-                                    <?php the_excerpt(); ?>
-                                </article>
-                                <footer class="nok-mt-1">
-                                    <a role="button" href="<?= get_the_permalink( $post_id ); ?>"
-                                       class="nok-button nok-button--small nok-justify-self-start nok-bg-darkblue nok-text-contrast"
-                                       tabindex="0">Lees meer <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ) ?>
-                                    </a>
-                                    <a role="button" href="/veelgestelde-vragen"
-                                       class="nok-button nok-button--small nok-justify-self-start nok-bg-yellow nok-text-contrast"
-                                       tabindex="0"
-                                       title="Niet gevonden wat je zocht? Bekijk hier alle vragen."><?= Assets::getIcon( 'ui_question' ); ?> Alle vragen <?= Assets::getIcon( 'ui_arrow-right-long' ) ?>
-                                    </a>
-                                </footer>
-                            </div>
-                        </details>
-                    </nok-accordion>
-                <?php }
-                wp_reset_postdata(); ?>
+                        $post_id       = $post->ID;
+                        $item_title    = get_the_title( $post_id );
+                        $items_cats    = get_the_terms( $post_id, 'faq_categories' );
+                        $item_category = $items_cats[0]->name;
+                        $cat_slug      = $items_cats[0]->slug;
+                        $item_id       = $cat_slug . '-' . $post_id; ?>
+                        <nok-accordion>
+                            <details class="nok-bg-body nok-dark-bg-darkblue nok-dark-text-contrast nok-rounded-border"
+                                     name="<?= $accordion_id; ?>">
+                                <summary class="nok-py-1 nok-px-2 nok-fs-2 nok-fs-to-lg-3 fw-bold">
+                                    <?= $item_title; ?>
+                                </summary>
+                                <div class="accordion-content nok-p-2 nok-pt-0">
+                                    <article title="<?= $item_title; ?>">
+                                        <?php the_excerpt(); ?>
+                                    </article>
+                                    <footer class="nok-mt-1">
+                                        <a role="button" href="<?= get_the_permalink( $post_id ); ?>"
+                                           class="nok-button nok-button--small nok-justify-self-start nok-bg-darkblue nok-text-contrast"
+                                           tabindex="0">Lees
+                                            meer <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ) ?>
+                                        </a>
+                                        <a role="button" href="/veelgestelde-vragen"
+                                           class="nok-button nok-button--small nok-justify-self-start nok-bg-yellow nok-text-contrast"
+                                           tabindex="0"
+                                           title="Niet gevonden wat je zocht? Bekijk hier alle vragen."><?= Assets::getIcon( 'ui_question' ); ?>
+                                            Alle vragen <?= Assets::getIcon( 'ui_arrow-right-long' ) ?>
+                                        </a>
+                                    </footer>
+                                </div>
+                            </details>
+                        </nok-accordion>
+                    <?php }
+                    wp_reset_postdata(); ?>
+                </div>
             </div>
-        </div>
-    </nok-section>
-<?php endif; ?>
+        </nok-section>
+    <?php endif;
+endif; ?>
 
 <?php
 get_footer();

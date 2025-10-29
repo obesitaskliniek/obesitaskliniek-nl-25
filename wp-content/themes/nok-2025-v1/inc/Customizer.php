@@ -3,31 +3,71 @@
 namespace NOK2025\V1;
 
 class Customizer {
-    public static function register( \WP_Customize_Manager $wp_customize ): void {
-        // Create a panel/section
-        $wp_customize->add_section( 'nok2025_general', [
-            'title'      => __( 'General Settings', THEME_TEXT_DOMAIN ),
-            'priority'   => 30,
-        ] );
 
-        // Add a setting & control (e.g., accent color)
-        $wp_customize->add_setting( 'accent_color', [
-            'default'           => '#FF0000',
-            'sanitize_callback' => 'sanitize_hex_color',
-        ] );
+	private static function get_template_layout_choices(): array {
+		$choices = [0 => '— None —'];
+		$layouts = get_posts([
+			'post_type' => 'template_layout',
+			'posts_per_page' => -1,
+			'orderby' => 'title',
+			'order' => 'ASC',
+			'post_status' => 'publish',
+		]);
 
-        $wp_customize->add_control( new \WP_Customize_Color_Control(
-            $wp_customize,
-            'accent_color_control',
-            [
-                'label'    => __( 'Accent Color', THEME_TEXT_DOMAIN ),
-                'section'  => THEME_TEXT_DOMAIN . '_general',
-                'settings' => 'accent_color',
-            ]
-        ) );
-    }
+		foreach ($layouts as $layout) {
+			$choices[$layout->ID] = $layout->post_title;
+		}
+
+		return $choices;
+	}
+
+	public static function register( \WP_Customize_Manager $wp_customize ): void {
+		// General section
+		$wp_customize->add_section( 'nok2025_general', [
+			'title'      => __( 'General Settings', THEME_TEXT_DOMAIN ),
+			'priority'   => 30,
+		] );
+
+		$wp_customize->add_setting( 'accent_color', [
+			'default'           => '#FF0000',
+			'sanitize_callback' => 'sanitize_hex_color',
+		] );
+
+		$wp_customize->add_control( new \WP_Customize_Color_Control(
+			$wp_customize,
+			'accent_color_control',
+			[
+				'label'    => __( 'Accent Color', THEME_TEXT_DOMAIN ),
+				'section'  => THEME_TEXT_DOMAIN . '_general',
+				'settings' => 'accent_color',
+			]
+		) );
+
+		// Template Layouts section
+		$wp_customize->add_section('template_layouts', [
+			'title' => __('Template Layouts', THEME_TEXT_DOMAIN),
+			'priority' => 31,
+			'description' => __('Configure template layouts for different post types. Create and edit layouts in the Template Layouts admin menu.', THEME_TEXT_DOMAIN),
+		]);
+
+		// Ervaringen template layout
+		$wp_customize->add_setting('template_layout_ervaringen', [
+			'default' => 0,
+			'sanitize_callback' => 'absint',
+		]);
+
+		$wp_customize->add_control('template_layout_ervaringen', [
+			'label' => __('Ervaringen Template', THEME_TEXT_DOMAIN),
+			'description' => sprintf(
+				'<a href="%s" target="_blank">%s</a> | <a href="%s" target="_blank">%s</a>',
+				admin_url('post-new.php?post_type=template_layout'),
+				__('Create New Layout', THEME_TEXT_DOMAIN),
+				admin_url('edit.php?post_type=template_layout'),
+				__('Manage Layouts', THEME_TEXT_DOMAIN)
+			),
+			'section' => 'template_layouts',
+			'type' => 'select',
+			'choices' => self::get_template_layout_choices(),
+		]);
+	}
 }
-
-//usage example
-//$accent = \nok2025\v1\Theme::get_instance()->get_setting( 'accent_color', '#FF0000' );
-//echo '<style> a { color: ' . esc_attr( $accent ) . '; } </style>';
