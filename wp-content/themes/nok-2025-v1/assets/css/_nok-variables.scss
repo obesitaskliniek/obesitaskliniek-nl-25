@@ -110,6 +110,11 @@ $padding-base-values: (
         double-section-padding: calc(2 * var(--nok-spacing-section-ends)),
 );
 
+$aspect-ratios: (
+        "16x5": 16 / 5,
+        "8x5": 8 / 5
+) !default;
+
 @mixin parsed-variables {
     @each $key, $value in $exposed-variables {
         --#{$prefix}-#{$key}: #{$value};

@@ -78,7 +78,7 @@ class BlockRenderers {
 
 		// Rebuild with theme structure
 		return sprintf(
-			'<blockquote class="nok-quote nok-fs-4 fw-bold nok-my-2"><div class="nok-quote__icon">%s</div><p class="nok-quote__text">%s</p></blockquote>',
+			'<blockquote class="nok-quote nok-fs-5 nok-my-2"><div class="nok-quote__icon">%s</div><p class="nok-quote__text">%s</p></blockquote>',
 			$icon,
 			$text
 		);

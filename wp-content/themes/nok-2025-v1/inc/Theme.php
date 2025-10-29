@@ -263,8 +263,8 @@ final class Theme {
 		PostMeta\MetaRegistry::register_field('post', 'naam_patient', [
 			'type' => 'text',
 			'label' => 'Naam patiënt',
-			'placeholder' => 'Voer de naam...',
-			'description' => 'Beschrijving',
+			'placeholder' => 'Voer de naam in...',
+			'description' => 'De naam wordt gebruikt op verschillende manieren, bijvoorbeeld voor de "Lees het verhaal van <naam>" links',
 			'categories' => [$experience_cat->term_id],
 		]);
 
@@ -272,7 +272,7 @@ final class Theme {
 			'type' => 'textarea',
 			'label' => 'Samenvatting',
 			'placeholder' => 'Voer een korte samenvatting van 1-2 zinnen in...',
-			'description' => 'Beschrijving',
+			'description' => 'Deze samenvatting wordt bijvoorbeeld gebruikt bij het uitlichten van dit ervaringsverhaal.',
 			'categories' => [$experience_cat->term_id],
 		]);
 	}

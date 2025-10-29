@@ -480,6 +480,13 @@ $utilities: (
                 class: #{nok-variables.$prefix}-border-radius,
                 values: 0
         ),
+        "aspect": (
+                property: aspect-ratio,
+                responsive: false,
+                responsive-up-to: true,
+                class: #{nok-variables.$prefix}-aspect,
+                values:nok-variables.$aspect-ratios
+        ),
         "invisible": (
                 property: display,
                 responsive: true,
@@ -524,6 +531,18 @@ $utilities: (
                 responsive-up-to: true,
                 property: align-items,
                 class: #{nok-variables.$prefix}-align-items,
+                values: (
+                        center: center,
+                        stretch: stretch,
+                        start: flex-start,
+                        end: flex-end,
+                )
+        ),
+        "align-content": (
+                responsive: false,
+                responsive-up-to: true,
+                property: align-content,
+                class: #{nok-variables.$prefix}-align-content,
                 values: (
                         center: center,
                         stretch: stretch,
