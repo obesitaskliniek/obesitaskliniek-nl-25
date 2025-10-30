@@ -46,7 +46,7 @@ $featuredImage = Helpers::get_featured_image();
                         </a>
 					<?php endif; ?>
                 </nok-square-block>
-                <div class="cover-image nok-rounded-border-large nok-invisible-to-lg nok-h-100">
+                <div class="nok-image-cover nok-rounded-border-large nok-invisible-to-lg nok-h-100">
 					<?= $featuredImage ?>
                 </div>
             </div>
@@ -55,7 +55,7 @@ $featuredImage = Helpers::get_featured_image();
                         text-start
                         nok-layout-grid overlap-middle offset--1 nok-columns-6 no-overlap-to-lg nok-column-offset-1
                         nok-align-items-center">
-                <div class="cover-image nok-rounded-border-large nok-invisible-to-lg nok-h-100">
+                <div class="nok-image-cover nok-rounded-border-large nok-invisible-to-lg nok-h-100">
 					<?= $featuredImage ?>
                 </div>
                 <nok-square-block class="nok-bg-white nok-alpha-10 nok-my-2 nok-my-to-lg-0" data-shadow="true">

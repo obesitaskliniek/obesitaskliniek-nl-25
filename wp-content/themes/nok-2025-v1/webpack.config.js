@@ -29,6 +29,11 @@ module.exports = {
             'src/nok-post-meta-panel.js'
         ),
 
+        'assets/js/nok-image-layout-extension': path.resolve(
+            __dirname,
+            'src/nok-image-layout-extension.js'
+        ),
+
         'blocks/embed-nok-page-part/index': path.resolve(
             __dirname,
             'src/blocks/embed-nok-page-part/index.js'

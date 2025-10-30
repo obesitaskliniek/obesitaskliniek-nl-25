@@ -342,26 +342,6 @@ figure {
     font-size: 0.8em;
   }
 }
-.wp-block-image {
-  margin-top: 2rem;
-  img {
-    @include nok-mixins.nok-border-radius('large');
-  }
-  &.alignleft {
-    float: left;
-    margin: 0 2em .5em 0;
-  }
-  &.alignright {
-    float: right;
-    margin: 0 0 .5em 2em;
-  }
-  &.size-large:not(.alignleft):not(.alignright) {
-    @include nok-mixins.cover-image;
-    img {
-      @include nok-mixins.nok-subtle-shadow;
-    }
-  }
-}
 
 // Images and content
 

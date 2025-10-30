@@ -110,7 +110,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                     <path id="a" fill="url(#a)"
                           d="M260.6,623.8c159.1,334.1,397.5,456.5,643.3,380.1-210.2,51.2-429-87.2-581.7-408.1C152.9,240.6,207.4-32.3,427.1-148c-3.6,1.9-7.3,3.7-11,5.6C165-7.5,90.7,267.3,260.6,623.8Z"></path>
                     <g mask="url(#image-mask)" class="">
-                        <foreignObject height="1060" width="700" x="200" class="cover-image">
+                        <foreignObject height="1060" width="700" x="200" class="nok-image-cover">
 							<?= $featuredImage; ?>
                         </foreignObject>
                     </g>

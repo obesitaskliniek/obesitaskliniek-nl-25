@@ -1,25 +1,56 @@
+@use "components/nok-images";
+@use "tools/nok-mixins";
+@use "nok-helpers";
 
-.nok-section__inner:hover{
+// Editor-only: simulate blur with pseudo-element
+.block-editor-block-list__block.nok-image-cover-blur {
+  .components-resizable-box__container {
+    overflow: hidden;
+    &::before {
+      content: '';
+      background-image: var(--blur-bg-image);
+      background-size: cover;
+      background-position: center;
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      @include nok-mixins.compensated-blur;
+    }
+  }
+
+  img {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+
+.nok-section__inner:hover {
   %outline {
     outline-width: 2px;
     outline-style: dashed;
     outline-offset: -2px;
   }
+
   .nok-text-content, p, span, h1, h2, h3, h4, h5, h6 {
     @extend %outline;
     outline-color: cornflowerblue;
   }
+
   img {
     @extend %outline;
     outline-color: darkmagenta;
   }
+
   a, button {
     @extend %outline;
     outline-color: #ffaa00;
   }
 }
+
 blockquote.wp-block-quote {
   font-size: 2em;
+
   ::before {
     content: '"';
     position: absolute;

@@ -48,7 +48,7 @@ $featuredImage = Helpers::get_featured_image();
                     </a>
 				<?php endif; ?>
             </div>
-            <div class="cover-image nok-rounded-border-large nok-order-<?= ($order % 2) + 1 ?>">
+            <div class="nok-image-cover nok-rounded-border-large nok-order-<?= ($order % 2) + 1 ?>">
 				<?= $featuredImage ?>
             </div>
         </article>

@@ -57,7 +57,7 @@ $featured_image = Helpers::get_featured_image($border_class);
                 <div class="nok-column-first-lg-4
                     pullee
                     stick-to-left-viewport-side nok-h-100
-                    cover-image nok-rounded-border-large nok-order-0">
+                    nok-image-cover nok-rounded-border-large nok-order-0">
 					<?= $featured_image ?>
                 </div>
                 <div class="nok-layout-grid nok-layout-grid__1-column
@@ -92,7 +92,7 @@ $featured_image = Helpers::get_featured_image($border_class);
                     nok-column-last-lg-4
                     pullee
                     stick-to-right-viewport-side nok-h-100
-                    cover-image nok-rounded-border-large nok-order-1">
+                    nok-image-cover nok-rounded-border-large nok-order-1">
 					<?= $featured_image ?>
                 </div>
 			<?php endif; ?>

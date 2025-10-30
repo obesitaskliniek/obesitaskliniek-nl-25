@@ -3,6 +3,7 @@
 @use "nok-variables";
 @use "tools/nok-mixins";
 @use "tools/nok-api";
+@use "components/nok-images";
 
 .#{nok-variables.$prefix}-heading-font {
   @include nok-mixins.nok-heading-font;
@@ -48,57 +49,6 @@
 
 .fw-300 {
   font-weight: 300;
-}
-
-.natural-fit-image {
-  &-width {
-    img {
-      width: 100%;
-      height: auto;
-    }
-  }
-  &-height {
-    img {
-      height: 100%;
-      width: auto;
-      margin: 0 auto;
-    }
-  }
-}
-.cover-image {
-  @include nok-mixins.cover-image;
-}
-.cover-image-blur {
-  $blur: 10px;
-  display: block !important;
-  width: calc(100% + ($blur * 2)) !important;
-  height: calc(100% + ($blur * 2)) !important;
-  -o-object-fit: cover !important;
-  object-fit: cover !important;
-  -o-object-position: center center !important;
-  object-position: center center !important;
-  position: absolute !important;
-  z-index: 1 !important;
-  filter: blur($blur);
-  inset: 0;
-  transform: scale(1.1);
-  ~ img {
-    position: relative;
-    z-index: 2;
-  }
-}
-
-.square-image {
-  aspect-ratio: 1 / 1;
-  @include nok-mixins.cover-image;
-}
-
-.square-portrait-image {
-  aspect-ratio: 1 / 1;
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  @include nok-mixins.cover-image;
 }
 
 .w-100 {

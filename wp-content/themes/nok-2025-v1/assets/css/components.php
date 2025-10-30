@@ -403,7 +403,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                         </svg>
                     </button>
                 </nok-square-block>
-                <div class="cover-image nok-rounded-border-large nok-invisible-to-lg align-self-stretch">
+                <div class="nok-image-cover nok-rounded-border-large nok-invisible-to-lg align-self-stretch">
                     <?php $testimg = 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%20' . str_pad(rand(1, 59), 2, 0, STR_PAD_LEFT); ?>
                     <img src="<?= $testimg; ?>:400x0-25-0-0-center-0.jpg" width="1920" height="1281"
                          srcset="<?= $testimg; ?>:1920x0-65-0-0-center-0.jpg 1920w,
@@ -422,7 +422,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                         text-start
                         nok-layout-grid overlap-middle offset--1 nok-columns-7 no-overlap-to-lg nok-column-offset-0 nok-column-offset-xl-1
                         nok-align-items-center">
-                <div class="cover-image nok-rounded-border-large nok-invisible-to-lg align-self-stretch">
+                <div class="nok-image-cover nok-rounded-border-large nok-invisible-to-lg align-self-stretch">
                     <?php $testimg = 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%20' . str_pad(rand(1, 59), 2, 0, STR_PAD_LEFT); ?>
                     <img src="<?= $testimg; ?>:400x0-25-0-0-center-0.jpg" width="1920" height="1281"
                          srcset="<?= $testimg; ?>:1920x0-65-0-0-center-0.jpg 1920w,
@@ -491,7 +491,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                                     $afbeelding = THEME_ROOT . '/assets/img/people/' . $filename;
                                     unset($images[$random_key]); ?>
                                 <nok-square-block class="nok-p-0 nok-border-radius-0">
-                                    <div class="square-portrait-image nok-rounded-border-large nok-gradient-1">
+                                    <div class="nok-image-square-portrait nok-rounded-border-large nok-gradient-1">
                                         <img src="<?= $afbeelding; ?>" loading="lazy" style="filter:drop-shadow(30px 20px 30px rgba(var(--nok-darkerblue-rgb), 0.15))">
                                     </div>
                                     <div>

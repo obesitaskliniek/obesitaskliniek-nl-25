@@ -41,7 +41,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 	<nok-section class="z-ascend no-aos">
 		<article class="nok-section__inner nok-section-narrow nok-text-darkerblue <?= $article_class; ?>">
 			<?php if ( $has_featured_image ) : ?>
-				<figure class="nok-pull-up-4 nok-mb-section-padding natural-fit-image-height nok-rounded-border-large nok-subtle-shadow nok-aos nok-aspect-16x9">
+				<figure class="nok-pull-up-4 nok-mb-section-padding nok-image-cover-blur nok-rounded-border-large nok-subtle-shadow nok-aos nok-aspect-16x9">
                     <?= $blur_image; ?>
 					<?= $featured_image; ?>
 				</figure>

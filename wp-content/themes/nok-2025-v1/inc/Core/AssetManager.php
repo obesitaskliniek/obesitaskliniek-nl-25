@@ -54,6 +54,30 @@ class AssetManager {
 			$this->load_preview_assets();
 			$this->localize_preview_data();
 		}
+
+		// Enqueue image layout extension for block editor
+		if ( in_array( $hook, [ 'post.php', 'post-new.php' ] ) ) {
+			$screen = get_current_screen();
+			if ( $screen && $screen->is_block_editor() ) {
+				$asset = require get_theme_file_path( '/assets/js/nok-image-layout-extension.asset.php' );
+				wp_enqueue_script(
+					'nok-image-layout-extension',
+					get_stylesheet_directory_uri() . '/assets/js/nok-image-layout-extension.js',
+					$asset['dependencies'],
+					$asset['version']
+				);
+
+				wp_localize_script(
+					'nok-image-layout-extension',
+					'nokImageLayouts',
+					[
+						'variants' => [
+							[ 'name' => '', 'label' => 'Auto width', 'icon' => 'format-image' ]
+						]
+					]
+				);
+			}
+		}
 	}
 
 	private function load_preview_assets(): void {

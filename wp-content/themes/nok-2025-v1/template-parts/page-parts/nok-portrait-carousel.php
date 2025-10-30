@@ -52,7 +52,7 @@ $c = $context;
 									$afbeelding = THEME_ROOT . '/assets/img/people/' . $filename;
 									unset($images[$random_key]); ?>
                                     <nok-square-block class="nok-p-0 nok-border-radius-0">
-                                        <div class="square-portrait-image nok-rounded-border-large nok-gradient-1">
+                                        <div class="nok-image-square-portrait nok-rounded-border-large nok-gradient-1">
                                             <img src="<?= esc_url($afbeelding) ?>" loading="lazy" style="filter:drop-shadow(30px 20px 30px rgba(var(--nok-darkerblue-rgb), 0.15))">
                                         </div>
                                         <div>

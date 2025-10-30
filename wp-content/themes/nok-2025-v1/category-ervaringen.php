@@ -96,7 +96,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 									</div>
 									<div class="nok-ervaringen-item__image nok-bg-darkestblue nok-bg-alpha-5" style="grid-area: 1 / 1; z-index: 1; position: relative;">
 										<a href="<?php the_permalink(); ?>">
-											<figure class="cover-image" style=" position: absolute; width: 100%; height: 100%;">
+											<figure class="nok-image-cover" style=" position: absolute; width: 100%; height: 100%;">
 												<?php echo $featured_image; ?>
 											</figure>
 										</a>

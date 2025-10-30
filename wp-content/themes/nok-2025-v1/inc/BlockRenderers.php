@@ -24,8 +24,72 @@ class BlockRenderers {
 	 * @return void
 	 */
 	public function register_hooks(): void {
-		add_filter('render_block_core/quote', [$this, 'render_quote_block'], 10, 2);
-		add_filter('render_block_core/heading', [$this, 'render_heading_block'], 10, 2);
+		add_filter( 'render_block_core/quote', [ $this, 'render_quote_block' ], 10, 2 );
+		add_filter( 'render_block_core/heading', [ $this, 'render_heading_block' ], 10, 2 );
+		add_filter( 'render_block_core/image', [ $this, 'handle_ghost_image' ], 10, 2 );
+	}
+
+	public function handle_ghost_image( string $block_content, array $block ): string {
+		$enable_blur = $block['attrs']['enableBlurBackground'] ?? false;
+
+		if ( ! $enable_blur ) {
+			return $block_content;
+		}
+
+		$image_id = $block['attrs']['id'] ?? 0;
+		if ( ! $image_id ) {
+			return $block_content;
+		}
+
+		// Get thumbnail/medium size for blur
+		$blur_image = wp_get_attachment_image(
+			$image_id,
+			'medium',
+			false,
+			[ 'class' => 'cover-image-blur' ]
+		);
+
+		if ( ! $blur_image ) {
+			return $block_content;
+		}
+
+		$dom = new \DOMDocument();
+		@$dom->loadHTML(
+			mb_convert_encoding( $block_content, 'HTML-ENTITIES', 'UTF-8' ),
+			LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+		);
+
+		$figure    = $dom->getElementsByTagName( 'figure' )->item( 0 );
+		$first_img = $dom->getElementsByTagName( 'img' )->item( 0 );
+
+		if ( ! $figure || ! $first_img ) {
+			return $block_content;
+		}
+
+		// Parse blur image HTML
+		$blur_dom = new \DOMDocument();
+		@$blur_dom->loadHTML(
+			mb_convert_encoding( $blur_image, 'HTML-ENTITIES', 'UTF-8' ),
+			LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+		);
+
+		$blur_img_node = $dom->importNode( $blur_dom->documentElement, true );
+
+		// Insert BEFORE first image
+		//$first_img->parentNode->insertBefore($blur_img_node, $first_img);
+
+		// Wrap both images in container div
+		$wrapper = $dom->createElement( 'div' );
+		$wrapper->setAttribute( 'class', 'nok-image-cover-blur-container' );
+
+		// Insert wrapper before first image
+		$first_img->parentNode->insertBefore( $wrapper, $first_img );
+
+		// Move both images into wrapper
+		$wrapper->appendChild( $blur_img_node );
+		$wrapper->appendChild( $first_img );
+
+		return $dom->saveHTML();
 	}
 
 	/**
@@ -39,42 +103,43 @@ class BlockRenderers {
 	 *
 	 * @param string $block_content Original block HTML
 	 * @param array $block Block data including attributes
+	 *
 	 * @return string Transformed HTML
 	 */
-	public function render_quote_block(string $block_content, array $block): string {
+	public function render_quote_block( string $block_content, array $block ): string {
 		$dom = new \DOMDocument();
 		@$dom->loadHTML(
-			mb_convert_encoding($block_content, 'HTML-ENTITIES', 'UTF-8'),
+			mb_convert_encoding( $block_content, 'HTML-ENTITIES', 'UTF-8' ),
 			LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
 		);
 
-		$blockquote = $dom->getElementsByTagName('blockquote')->item(0);
-		if (!$blockquote) {
+		$blockquote = $dom->getElementsByTagName( 'blockquote' )->item( 0 );
+		if ( ! $blockquote ) {
 			return $block_content;
 		}
 
 		// Extract all inner content, stripping paragraph wrappers
 		$text = '';
-		foreach ($blockquote->childNodes as $node) {
-			if ($node->nodeName === 'p') {
+		foreach ( $blockquote->childNodes as $node ) {
+			if ( $node->nodeName === 'p' ) {
 				// Get innerHTML only (content without the <p> tags)
-				foreach ($node->childNodes as $child) {
-					$text .= $dom->saveHTML($child);
+				foreach ( $node->childNodes as $child ) {
+					$text .= $dom->saveHTML( $child );
 				}
 				// Add space between paragraphs if multiple exist
 				$text .= ' ';
 			}
 		}
 
-		$text = trim($text);
+		$text = trim( $text );
 
 		// Bail if no content extracted
-		if (empty($text)) {
+		if ( empty( $text ) ) {
 			return $block_content;
 		}
 
 		// Get quote icon
-		$icon = Assets::getIcon('ui_quote');
+		$icon = Assets::getIcon( 'ui_quote' );
 
 		// Rebuild with theme structure
 		return sprintf(
@@ -84,7 +149,7 @@ class BlockRenderers {
 		);
 	}
 
-	public function render_heading_block( string $block_content, array $block) {
+	public function render_heading_block( string $block_content, array $block ) {
 		// Use DOMDocument (you're already using it for quotes)
 		$dom = new \DOMDocument();
 		@$dom->loadHTML(
