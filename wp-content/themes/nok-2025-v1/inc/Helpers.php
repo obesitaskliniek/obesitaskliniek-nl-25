@@ -386,11 +386,12 @@ class Helpers {
 				: html_entity_decode(get_the_title($post), ENT_QUOTES, 'UTF-8');
 
 			// Build excerpt with fallback chain
-			$excerpt = '';
+			$excerpt = self::get_excerpt( $post_id, 30 );
 			if ( isset( $post_meta['_highlighted_excerpt'] ) ) {
-				$excerpt = self::strip_all_quotes( rtrim( $post_meta['_highlighted_excerpt'][0], '.' ) ) . '...';
-			} else {
-				$excerpt = self::get_excerpt( $post_id, 30 );
+				$trimmed = rtrim($post_meta['_highlighted_excerpt'][0], '.' );
+				if ($trimmed !== '') {
+					$excerpt = self::strip_all_quotes( $trimmed ) . '...';
+				}
 			}
 
 			$quote_item = [
