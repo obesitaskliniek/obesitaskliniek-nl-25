@@ -21,7 +21,6 @@ if ( $has_featured_image ) {
 	$article_class         = 'nok-mt-0';
 }
 ?>
-
 	<nok-hero class="nok-section">
 		<div class="nok-section__inner nok-columns-1 nok-hero__inner nok-mt-0 nok-px-0 nok-border-radius-to-sm-0
 nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10">
@@ -42,7 +41,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 					<?= $featured_image; ?>
 				</figure>
 			<?php endif; ?>
-			<article>
+			<article class="narrow-paragraphs">
 				<?php Helpers::the_content_rest(); ?>
 			</article>
 		</article>

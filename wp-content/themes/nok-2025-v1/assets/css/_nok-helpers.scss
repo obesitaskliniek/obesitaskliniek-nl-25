@@ -57,18 +57,12 @@
   }
 }
 .cover-image {
-  img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center center;
-  }
+  @include nok-mixins.cover-image;
 }
 
 .square-image {
   aspect-ratio: 1 / 1;
-  @extend .cover-image;
+  @include nok-mixins.cover-image;
 }
 
 .square-portrait-image {
@@ -76,7 +70,7 @@
   display: flex;
   align-items: stretch;
   justify-content: center;
-  @extend .cover-image;
+  @include nok-mixins.cover-image;
 }
 
 .w-100 {

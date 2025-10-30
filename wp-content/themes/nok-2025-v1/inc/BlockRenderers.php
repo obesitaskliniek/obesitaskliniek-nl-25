@@ -78,7 +78,7 @@ class BlockRenderers {
 
 		// Rebuild with theme structure
 		return sprintf(
-			'<blockquote class="nok-quote nok-fs-5 nok-my-2"><div class="nok-quote__icon">%s</div><p class="nok-quote__text">%s</p></blockquote>',
+			'<blockquote class="wp-block-quote nok-quote nok-fs-5 nok-my-2"><div class="nok-quote__icon">%s</div><p class="nok-quote__text">%s</p></blockquote>',
 			$icon,
 			$text
 		);
@@ -96,7 +96,7 @@ class BlockRenderers {
 
 		if ( $heading2 ) {
 			$existing = $heading2->getAttribute( 'class' );
-			$heading2->setAttribute( 'class', trim( $existing . ' nok-fs-5 fw-400' ) );
+			$heading2->setAttribute( 'class', trim( $existing . ' nok-fs-5 fw-400 nok-my-1' ) );
 		}
 
 		return $dom->saveHTML();

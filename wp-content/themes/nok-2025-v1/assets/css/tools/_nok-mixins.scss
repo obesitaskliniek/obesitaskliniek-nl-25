@@ -32,6 +32,16 @@
   @include nok-shadow;
 }
 
+@mixin cover-image {
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
 @mixin nok-subtle-shadow-menu {
   box-shadow: -8px 8px 16px rgba(0, 0, 0, 0.1);
 }

@@ -1,0 +1,11 @@
+@use "shared" as components-base;
+
+article {
+  @include components-base.media-breakpoint-up(components-base.$mobile-breakpoint) {
+    &.narrow-paragraphs .wp-block-heading,
+    &.narrow-paragraphs .wp-block-quote,
+    &.narrow-paragraphs .wp-block-paragraph {
+      margin: 0 var(--nok-spacing-section-ends);
+    }
+  }
+}

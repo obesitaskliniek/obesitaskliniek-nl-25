@@ -344,10 +344,8 @@ figure {
 }
 .wp-block-image {
   margin-top: 2rem;
-}
-.wp-block-image figure {
   img {
-    @include nok-mixins.nok-border-radius;
+    @include nok-mixins.nok-border-radius('large');
   }
   &.alignleft {
     float: left;
@@ -356,6 +354,12 @@ figure {
   &.alignright {
     float: right;
     margin: 0 0 .5em 2em;
+  }
+  &.size-large:not(.alignleft):not(.alignright) {
+    @include nok-mixins.cover-image;
+    img {
+      @include nok-mixins.nok-subtle-shadow;
+    }
   }
 }
 

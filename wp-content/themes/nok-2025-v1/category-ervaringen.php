@@ -88,6 +88,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 									<div class="nok-p-3 nok-p-lg-4 nok-text-white nok-align-self-end" style="grid-area: 1 / 1; z-index: 2;
 									background-image: linear-gradient(transparent 0%, rgba(var(--nok-darkestblue-rgb), 0.5) 50%);
 									text-shadow: 0.2em 0.2em 0.4em rgba(var(--nok-darkestblue-rgb), 0.3);">
+                                        <?= $naam_patient ? $naam_patient . ' -' : '' ;?>
 										<time datetime="<?php echo get_the_date('c'); ?>">
 											<?php echo get_the_date('j F Y'); ?>
 										</time>
