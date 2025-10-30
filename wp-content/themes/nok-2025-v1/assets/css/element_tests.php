@@ -406,7 +406,7 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                 </p>
             </article>
         </div>
-        <figure class="nok25-rounded-border-large-right tuck-under pull-down nok-align-self-end natural-fit-image mh-50-vh nok25-mr-section-padding-to-lg">
+        <figure class="nok25-rounded-border-large-right tuck-under pull-down nok-align-self-end natural-fit-image-width mh-50-vh nok25-mr-section-padding-to-lg">
             <?php $testimg2 = 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%20' . str_pad(rand(1, 59), 2, 0, STR_PAD_LEFT); ?>
             <img src="<?= $testimg2; ?>:400x0-25-0-0-center-0.jpg" width="1920" height="1281" srcset="<?= $testimg2; ?>:1920x0-65-0-0-center-0.jpg 1920w,
                                      <?= $testimg2; ?>:768x0-65-0-0-center-0.jpg 768w,

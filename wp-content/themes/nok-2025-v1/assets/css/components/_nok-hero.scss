@@ -148,7 +148,9 @@ nok-hero {
     }
     @include components-base.media-breakpoint-down(xl) {
       //grid-template-rows: 5rem auto var(--footer-height);
-      grid-template-columns: 6fr 2fr 8fr;
+      &:has(figure) {
+        grid-template-columns: 6fr 2fr 8fr;
+      }
       article, header {
         grid-column: 1 / 3;
       }

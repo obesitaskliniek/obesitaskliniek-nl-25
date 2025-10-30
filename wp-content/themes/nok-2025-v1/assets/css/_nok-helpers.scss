@@ -51,13 +51,41 @@
 }
 
 .natural-fit-image {
-  img {
-    width: 100%;
-    height: auto;
+  &-width {
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+  &-height {
+    img {
+      height: 100%;
+      width: auto;
+      margin: 0 auto;
+    }
   }
 }
 .cover-image {
   @include nok-mixins.cover-image;
+}
+.cover-image-blur {
+  $blur: 10px;
+  display: block !important;
+  width: calc(100% + ($blur * 2)) !important;
+  height: calc(100% + ($blur * 2)) !important;
+  -o-object-fit: cover !important;
+  object-fit: cover !important;
+  -o-object-position: center center !important;
+  object-position: center center !important;
+  position: absolute !important;
+  z-index: 1 !important;
+  filter: blur($blur);
+  inset: 0;
+  transform: scale(1.1);
+  ~ img {
+    position: relative;
+    z-index: 2;
+  }
 }
 
 .square-image {
