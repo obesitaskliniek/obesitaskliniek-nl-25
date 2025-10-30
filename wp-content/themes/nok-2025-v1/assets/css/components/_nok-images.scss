@@ -93,28 +93,28 @@
   &-cover-blur {
     &-container {
       @include components-base.nok-border-radius('large');
+      @include components-base.nok-subtle-shadow;
       position: relative;
       overflow: hidden;
+    }
+    &-ghost {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover;
+      object-position: center center;
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      @include components-base.compensated-blur;
+      ~ img {
+        position: relative;
+        z-index: 2;
+      }
     }
     @include commmon-styles;
     @extend .nok-image-natural-fit-height;
 
-  }
-}
-
-.cover-image-blur {
-  display: block;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover;
-  object-position: center center;
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  @include components-base.compensated-blur;
-  ~ img {
-    position: relative;
-    z-index: 2;
   }
 }
 

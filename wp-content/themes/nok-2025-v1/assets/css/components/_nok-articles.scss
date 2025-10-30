@@ -3,11 +3,9 @@
 article {
   @include components-base.media-breakpoint-up(components-base.$mobile-breakpoint) {
     &.narrow-paragraphs {
-      p,
-      .wp-block-heading,
-      .wp-block-quote,
-      .wp-block-paragraph {
-        margin-inline: var(--nok-spacing-section-ends);
+      padding-inline: var(--nok-spacing-section-ends);
+      .wp-block-image {
+        margin-inline: calc( -1 * var(--nok-spacing-section-ends));
       }
     }
   }

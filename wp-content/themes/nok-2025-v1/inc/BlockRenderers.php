@@ -46,7 +46,7 @@ class BlockRenderers {
 			$image_id,
 			'medium',
 			false,
-			[ 'class' => 'cover-image-blur' ]
+			[ 'class' => 'nok-image-cover-blur-ghost' ]
 		);
 
 		if ( ! $blur_image ) {

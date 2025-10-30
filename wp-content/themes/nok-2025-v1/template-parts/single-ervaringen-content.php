@@ -11,7 +11,7 @@ $naam_patient        = $post_meta['_naam_patient'][0] ?? '';
 $subnaam_patient     = $post_meta['_subnaam_patient'][0] ?? '';
 
 $featured_image     = Helpers::get_featured_image();
-$blur_image         = Helpers::get_featured_image('cover-image-blur');
+$blur_image         = Helpers::get_featured_image('nok-image-cover-blur-ghost');
 $has_featured_image = has_post_thumbnail( get_the_ID() ) && $featured_image !== '';
 
 if ( $has_featured_image ) {
