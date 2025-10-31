@@ -51,12 +51,7 @@ if ( empty( $menu_items ) ) {
 
 		$class_string = implode( ' ', array_map( 'esc_attr', $classes ) );
 
-		// Determine URL - if has children, use # to prevent navigation
-		if ( $item['has_children'] ) {
-			$url = '#';
-		} else {
-			$url = $item['url'] ?: '#';
-		}
+        $url = $item['url'] ?: '#';
 
 		// Build attributes
 		$attrs = [];

@@ -83,6 +83,16 @@
  * // With swipe-to-close
  * <div data-toggles-class="visible" data-class-target=".panel"
  *      data-swipe-close=".panel" data-swipe-direction="x">Toggle</div>
+ *
+ * @example
+ * // Hover behavior (default) - activates on pointerenter, deactivates on pointerleave
+ * <div data-toggles-class="open" data-class-target=".dropdown"
+ *      data-on-hover="true">Hover Me</div>
+ *
+ * @example
+ * // Click behavior - explicitly disable hover
+ * <div data-toggles-class="open" data-class-target=".dropdown"
+ *      data-on-hover="false">Click Me</div>
  */
 
 import {singleClick} from "./domule/modules/hnl.clickhandlers.mjs";
@@ -243,7 +253,8 @@ function parseConfig(toggler) {
             clickOutside: toggler.dataset.clickOutside?.split(',').map(s => s.trim()) || null,
             autoHide: parseInt(toggler.dataset.autohide) || 0,
             permanent: toggler.dataset.togglePermanent?.toLowerCase() === "true",
-            noChildren: toggler.dataset.noChildren
+            noChildren: toggler.dataset.noChildren,
+            onHover: toggler.dataset.onHover?.toLowerCase() !== "false"
         },
         swipe: {
             target: toggler.dataset.swipeClose || null,
@@ -687,10 +698,6 @@ function createToggleHandler(toggler, defaultTarget) {
         }
     };
 
-    /**
-     * Handles toggle click.
-     * @private
-     */
     const handleToggleClick = (event) => {
         const childClick = toggler.contains(event.target) && event.target !== toggler;
         if (!toggler.contains(event.target) || (config.behavior.noChildren && childClick)) return;
@@ -724,8 +731,65 @@ function createToggleHandler(toggler, defaultTarget) {
         }
     };
 
-    // Register click handler
-    cleanupFunctions.push(singleClick(toggler, handleToggleClick));
+    /**
+     * Handles hover enter (activates toggle).
+     * @private
+     */
+    const handleHoverEnter = (event) => {
+        const childHover = toggler.contains(event.target) && event.target !== toggler;
+        if (config.behavior.noChildren && childHover) return;
+
+        // Check if-present logic
+        const skipClassToggle = state.checkIfPresent('class');
+        const skipAttributeToggle = state.checkIfPresent('attribute');
+
+        // Apply operations
+        state.apply({skipClassToggle, skipAttributeToggle});
+
+        // Update tracking
+        if (!skipClassToggle) state.updateTracking('class');
+        if (!skipAttributeToggle) state.updateTracking('attribute');
+    };
+
+    /**
+     * Handles hover leave (deactivates toggle).
+     * Uses same logic as click-outside to verify we're truly leaving the interactive area.
+     * @private
+     */
+    const handleHoverLeave = (event) => {
+        // Check if pointer is moving to a related target (where we're going)
+        const relatedTarget = event.relatedTarget;
+
+        // Check if we're still inside the toggler or any target elements
+        const stillInside = (relatedTarget && (
+            toggler.contains(relatedTarget) ||
+            state.containsElement(relatedTarget)
+        ));
+
+        // Only remove toggle state if we're truly leaving the entire interactive area
+        if (!stillInside) {
+            const shouldRemoveClass = !config.behavior.clickOutside ||
+                config.behavior.clickOutside.includes('unset-class');
+            const shouldRemoveAttr = config.behavior.clickOutside?.includes('unset-attribute') || false;
+
+            state.remove({class: shouldRemoveClass, attribute: shouldRemoveAttr});
+        }
+    };
+
+    // Register event handlers based on behavior
+    if (config.behavior.onHover) {
+        // Hover mode: use pointerenter/pointerleave
+        toggler.addEventListener('pointerenter', handleHoverEnter);
+        toggler.addEventListener('pointerleave', handleHoverLeave);
+
+        cleanupFunctions.push(() => {
+            toggler.removeEventListener('pointerenter', handleHoverEnter);
+            toggler.removeEventListener('pointerleave', handleHoverLeave);
+        });
+    } else {
+        // Click mode: use singleClick handler
+        cleanupFunctions.push(singleClick(toggler, handleToggleClick));
+    }
 
     // Register swipe handler
     if (config.swipe.target) {
