@@ -10,7 +10,7 @@ registerBlockType('nok2025/embed-nok-video', {
     edit: ({attributes, setAttributes}) => {
         const {videoUrl, videoType, title, description} = attributes;
         const blockProps = useBlockProps({
-            className: 'nok-video-section'
+            className: 'nok-video-block'
         });
 
         // Generate preview embed
@@ -21,7 +21,7 @@ registerBlockType('nok2025/embed-nok-video', {
                         icon={<BlockIcon icon={video} />}
                         label="NOK Video"
                         instructions="Voer een video URL in"
-                        className="nok-video-section__placeholder"
+                        className="nok-video-block__placeholder"
                     >
                         <div style={{width: '100%', maxWidth: '400px'}}>
                             <SelectControl
@@ -123,20 +123,20 @@ registerBlockType('nok2025/embed-nok-video', {
                 </InspectorControls>
 
                 <div {...blockProps}>
-                    <div className="nok-video-section__content">
+                    <div className="nok-video-block__content">
                         {/* Video Preview */}
                         {!videoUrl ? (
                             // Show placeholder directly without wrapper to maintain proper sizing
                             getPreviewEmbed()
                         ) : (
-                            <div className="nok-video-section__video-wrapper">
+                            <div className="nok-video-block__video-wrapper">
                                 {getPreviewEmbed()}
                             </div>
                         )}
 
                         {/* Text Content */}
                         {(title || description) && (
-                            <div className="nok-video-section__text">
+                            <div className="nok-video-block__text">
                                 {title && (
                                     <h2 className="nok-fs-giant">{title}</h2>
                                 )}

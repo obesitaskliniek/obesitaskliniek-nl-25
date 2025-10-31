@@ -9,7 +9,7 @@
 $component-name: nok-video-block;
 
 // Component wrapper
-nok-video-section {
+nok-video-block {
   display: block;
   container-type: inline-size;
 }
@@ -174,24 +174,6 @@ nok-video-section {
     .components-placeholder__fieldset {
       width: 100%;
       max-width: 400px;
-    }
-  }
-}
-
-// Responsive adjustments using container queries
-@include components-base.media-breakpoint-down(components-base.$mobile-breakpoint){
-  .#{$component-name} {
-    &__video-wrapper {
-      // Smaller play button on mobile
-      &::before {
-        width: 60px;
-        height: 60px;
-      }
-
-      // Smaller triangle
-      &::after {
-        border-width: 12px 0 12px 20px;
-      }
     }
   }
 }

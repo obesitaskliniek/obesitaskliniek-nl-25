@@ -13,14 +13,18 @@
 }
 
 .wp-block-image {
+
   &.size-large,
-  &:has(.size-large) {
+  &.size-full,
+  &:has(.size-large),
+  &:has(.size-full) {
     &:has(figcaption) {
       margin-top: 2rem;
       margin-bottom: 1rem;
     }
     margin-block: 2rem;
   }
+
   > img,
   > a > img,
   figure > img,
