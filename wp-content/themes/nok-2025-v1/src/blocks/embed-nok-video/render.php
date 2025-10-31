@@ -36,26 +36,26 @@ return function( array $attributes, string $content, WP_Block $block ): string {
 
 	// Build wrapper classes
 	$wrapper_attributes = get_block_wrapper_attributes( [
-		'class' => 'nok-video-section',
+		'class' => 'nok-video-block nok-my-1',
 	] );
 
 	ob_start();
 	?>
 	<div <?php echo $wrapper_attributes; ?> data-requires="./nok-video-playback.mjs" data-require-lazy="true">
-		<div class="nok-video-section__content">
+		<div class="nok-video-block__content">
 
 			<?php if ( $video_html ): ?>
-				<div class="nok-video-section__video-wrapper">
+				<div class="nok-video-block__video-wrapper">
 					<?php echo $video_html; ?>
 				</div>
 			<?php else: ?>
-				<div class="nok-video-section__video-wrapper nok-video-section__empty">
+				<div class="nok-video-block__video-wrapper nok-video-block__empty">
 					<p>Geen video URL opgegeven</p>
 				</div>
 			<?php endif; ?>
 
 			<?php if ( ! empty( $title ) || ! empty( $description ) ): ?>
-				<div class="nok-video-section__text">
+				<div class="nok-video-block__text">
 					<?php if ( ! empty( $title ) ): ?>
 						<h2 class="nok-fs-giant"><?php echo esc_html( $title ); ?></h2>
 					<?php endif; ?>
