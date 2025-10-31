@@ -1,0 +1,237 @@
+@use "sass:map";
+@use "shared" as components-base;
+
+/**
+ * Video Section Component
+ * Video embed with play button overlay, title and description
+ */
+
+$component-name: nok-video-section;
+
+// Component wrapper
+nok-video-section {
+  display: block;
+  container-type: inline-size;
+}
+
+.#{$component-name} {
+
+  // Main content container
+  &__content {
+    display: grid;
+    gap: var(--spacing-3, 2rem);
+    max-width: var(--section-max-width, 1200px);
+    margin: 0 auto;
+  }
+
+  // Video wrapper with aspect ratio
+  &__video-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: 300px; // Ensure minimum height for visibility
+    border-radius: var(--nok-default-border-radius--large, 1.5rem);
+    overflow: hidden;
+    background: var(--nok-darkestblue);
+    @include components-base.nok-subtle-shadow;
+
+    // Embedded content (iframe, video)
+    iframe,
+    video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    // Deep selector for nested iframe from oEmbed
+    :deep(iframe) {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    // WordPress oEmbed wrapper fix (removes unwanted div wrappers)
+    > div,
+    > p {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+
+      iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    // Play button circle overlay
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      background: var(--nok-yellow--darker);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      transition: background 0.3s ease, transform 0.3s ease;
+      z-index: 10;
+    }
+
+    // Triangle play icon
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-40%, -50%);
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 15px 0 15px 26px;
+      border-color: transparent transparent transparent var(--nok-darkerblue);
+      pointer-events: none;
+      z-index: 11;
+      opacity: 0.9;
+      transition: background 0.3s ease, opacity 0.3s ease;
+    }
+
+    // Hover effects
+    &:hover {
+      &::before,
+      &::after {
+        background: var(--nok-yellow);
+      }
+
+      &::before {
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+    }
+
+    // Hide play button when video is playing (class added by JavaScript)
+    &.is-playing {
+      &::before,
+      &::after {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+  }
+
+  // Text content area
+  &__text {
+    display: grid;
+    gap: var(--spacing-2, 1rem);
+    text-align: center;
+
+    h1,
+    h2 {
+      margin: 0;
+    }
+
+    // Remove bottom margin from last paragraph
+    :deep(p:last-child) {
+      margin-bottom: 0;
+    }
+  }
+
+  // Empty state styling
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--nok-lightgrey);
+    aspect-ratio: 16 / 9;
+    min-height: 300px;
+
+    p {
+      margin: 0;
+      padding: 1rem;
+    }
+  }
+
+  // Placeholder styling (for editor)
+  &__placeholder {
+    aspect-ratio: 16 / 9;
+    min-height: 300px;
+
+    .components-placeholder__fieldset {
+      width: 100%;
+      max-width: 400px;
+    }
+  }
+}
+
+// Responsive adjustments using container queries
+@include components-base.media-breakpoint-down(components-base.$mobile-breakpoint){
+  .#{$component-name} {
+    &__video-wrapper {
+      // Smaller play button on mobile
+      &::before {
+        width: 60px;
+        height: 60px;
+      }
+
+      // Smaller triangle
+      &::after {
+        border-width: 12px 0 12px 20px;
+      }
+    }
+  }
+}
+
+// Editor-specific: make block selectable without playing video
+.block-editor-block-list__block {
+  .#{$component-name} {
+    &__video-wrapper {
+      // Prevent iframe from being clicked directly
+      iframe {
+        pointer-events: none;
+      }
+
+      // Add visible border on hover for easier selection
+      border: 2px solid transparent;
+      transition: border-color 0.2s ease;
+
+      &:hover {
+        border-color: rgba(0, 123, 255, 0.5);
+      }
+    }
+  }
+
+  // Selected state - show clear border
+  &.is-selected .#{$component-name} {
+    &__video-wrapper {
+      border-color: rgba(0, 123, 255, 0.8);
+      border-width: 3px;
+    }
+  }
+}
+
+// Accessibility: reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .#{$component-name} {
+    &__video-wrapper {
+      &::before,
+      &::after {
+        transition: none;
+      }
+    }
+  }
+}

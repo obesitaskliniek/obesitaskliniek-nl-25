@@ -762,9 +762,9 @@ $utilities: (
   }
   @include nok-mixins.transition-properties {
     opacity: 0;
+    position: relative;
     &[data-visible="true"] {
       animation: fade--up (nok-variables.$animation-duration * 3) ease-out forwards;
-      position: relative;
       nok-square-block,
       nok-accordion {
         transform: translateY(5%);

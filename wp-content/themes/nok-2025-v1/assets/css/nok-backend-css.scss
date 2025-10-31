@@ -1,6 +1,8 @@
 @use "components/nok-images";
+@use "components/nok-video-section";
 @use "tools/nok-mixins";
 @use "nok-helpers";
+@use "nok-colors-v2";
 
 // Editor-only: simulate blur with pseudo-element
 .block-editor-block-list__block.nok-image-cover-blur {
