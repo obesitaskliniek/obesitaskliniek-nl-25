@@ -272,7 +272,15 @@ final class Theme {
 			'type' => 'textarea',
 			'label' => 'Samenvatting',
 			'placeholder' => 'Voer een korte samenvatting van 1-2 zinnen in...',
-			'description' => 'Deze samenvatting wordt bijvoorbeeld gebruikt bij het uitlichten van dit ervaringsverhaal.',
+			'description' => 'Deze samenvatting wordt bijvoorbeeld gebruikt bij het uitlichten van dit ervaringsverhaal. Als dit veld leeg is worden de eerste 55 woorden van de tekst gebruikt.',
+			'categories' => [$experience_cat->term_id],
+		]);
+
+		PostMeta\MetaRegistry::register_field('post', 'behandeld_door', [
+			'type' => 'textarea',
+			'label' => 'Vestiging',
+			'placeholder' => 'Kies de vestiging...',
+			'description' => 'Selecteer de vestiging waar deze patient behandeld is.',
 			'categories' => [$experience_cat->term_id],
 		]);
 	}

@@ -52,6 +52,10 @@ class AssetManager {
 		// Load preview assets for page_part posts
 		if ( $screen->post_type === 'page_part' ) {
 			$this->load_preview_assets();
+		}
+
+		// Localize for any block editor
+		if ( $screen && $screen->is_block_editor() ) {
 			$this->localize_preview_data();
 		}
 

@@ -13,8 +13,18 @@
 }
 
 .wp-block-image {
-  margin-top: 2rem;
-  figure > img {
+  &.size-large,
+  &:has(.size-large) {
+    &:has(figcaption) {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    margin-block: 2rem;
+  }
+  > img,
+  > a > img,
+  figure > img,
+  figure > a > img {
     @include components-base.nok-border-radius('large');
   }
   &.alignleft {
@@ -101,7 +111,7 @@
       display: block;
       width: 100% !important;
       height: 100% !important;
-      object-fit: cover;
+      object-fit: fill;
       object-position: center center;
       position: absolute;
       z-index: 1;

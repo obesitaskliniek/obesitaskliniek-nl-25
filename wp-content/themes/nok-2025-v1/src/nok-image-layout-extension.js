@@ -10,8 +10,8 @@
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { Fragment } from '@wordpress/element';
-import { BlockControls } from '@wordpress/block-editor';
-import { ToolbarGroup, ToolbarButton, DropdownMenu, MenuGroup, MenuItem } from '@wordpress/components';
+import { BlockControls, InspectorControls } from '@wordpress/block-editor';
+import { ToolbarGroup, DropdownMenu, MenuGroup, MenuItem, PanelBody, ToggleControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 // Get variants from localized data
@@ -89,14 +89,18 @@ const withLayoutControls = createHigherOrderComponent((BlockEdit) => {
                                 </MenuGroup>
                             )}
                         </DropdownMenu>
-						<ToolbarButton
-							icon="image-filter"
-							label={__('Centreren en uitvullen met vervaagde afbeelding', 'nok2025')}
-							isPressed={enableBlurBackground}
-							onClick={() => setAttributes({ enableBlurBackground: !enableBlurBackground })}
-						/>
                     </ToolbarGroup>
                 </BlockControls>
+				<InspectorControls group="settings">
+					<PanelBody title={__('Afbeelding instellingen', 'nok2025')}>
+						<ToggleControl
+							label={__('Centreren en uitvullen met vervaagde afbeelding', 'nok2025')}
+							checked={enableBlurBackground}
+							onChange={(value) => setAttributes({ enableBlurBackground: value })}
+							help={__('Voegt een vervaagde achtergrond toe zodat de afbeelding uitvult zonder bij te snijden. Heeft effect op verticale (portret) afbeeldingen die in brede kaders moeten.', 'nok2025')}
+						/>
+					</PanelBody>
+				</InspectorControls>
                 <BlockEdit {...props} />
             </Fragment>
         );

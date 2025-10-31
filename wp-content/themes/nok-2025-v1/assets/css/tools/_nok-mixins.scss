@@ -868,7 +868,7 @@
   }
 }
 
-@mixin compensated-blur($blur: 10px) {
+@mixin compensated-blur($blur: 20px) {
   filter: blur($blur);
   transform: scale(1.1);
 }
