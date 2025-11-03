@@ -27,6 +27,16 @@
     align-items: center;
 
     // Breadcrumb links
+    > span:first-child {
+      a svg {
+        @include components-base.transition-properties {
+          transition: color calc(var(--animation-duration--in, var(--animation-duration, components-base.$animation-duration)) * .75) ease-in-out;
+        }
+      }
+      a:hover svg {
+        --text-base: var(--text-color--hover);
+      }
+    }
     > span:not(:first-child) {
       a {
         color: var(--text-color, var(--bg-color--contrast, inherit));

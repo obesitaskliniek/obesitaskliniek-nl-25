@@ -39,7 +39,7 @@ registerBlockType('nok2025/embed-nok-video', {
                                 value={videoUrl}
                                 onChange={(value) => setAttributes({videoUrl: value})}
                                 placeholder={
-                                    videoType === 'youtube' ? 'https://www.youtube.com/watch?v=...' :
+                                    videoType === 'youtube' ? 'dQw4w9WgXcQ of https://www.youtube.com/watch?v=...' :
                                     videoType === 'vimeo' ? 'https://vimeo.com/...' :
                                     'https://...'
                                 }
@@ -52,9 +52,14 @@ registerBlockType('nok2025/embed-nok-video', {
             // Extract video ID for preview
             let embedUrl = '';
             if (videoType === 'youtube') {
+                // Check if it's a full URL or just an ID
                 const youtubeMatch = videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
                 if (youtubeMatch) {
+                    // Full URL provided
                     embedUrl = `https://www.youtube.com/embed/${youtubeMatch[1]}`;
+                } else if (/^[a-zA-Z0-9_-]{11}$/.test(videoUrl)) {
+                    // Just the video ID provided (11 characters)
+                    embedUrl = `https://www.youtube.com/embed/${videoUrl}`;
                 }
             } else if (videoType === 'vimeo') {
                 const vimeoMatch = videoUrl.match(/vimeo\.com\/(\d+)/);
@@ -98,11 +103,11 @@ registerBlockType('nok2025/embed-nok-video', {
                             onChange={(value) => setAttributes({videoType: value})}
                         />
                         <TextControl
-                            label={__('Video URL', textDomain)}
+                            label={__('Video URL of ID', textDomain)}
                             value={videoUrl}
                             onChange={(value) => setAttributes({videoUrl: value})}
-                            placeholder="https://www.youtube.com/watch?v=..."
-                            help={videoType === 'youtube' ? 'YouTube URL (bijv. https://www.youtube.com/watch?v=...)' :
+                            placeholder={videoType === 'youtube' ? 'dQw4w9WgXcQ' : 'https://...'}
+                            help={videoType === 'youtube' ? 'YouTube video ID (bijv. dQw4w9WgXcQ) of volledige URL (bijv. https://www.youtube.com/watch?v=...)' :
                                   videoType === 'vimeo' ? 'Vimeo URL (bijv. https://vimeo.com/...)' :
                                   'Directe URL naar video bestand'}
                         />

@@ -1,10 +1,30 @@
 <?php
 /**
- * Server‑side render for Embed NOK Page Part.
+ * Server-side render callback for Embed NOK Page Part block
  *
- * @return callable
+ * Renders a page_part custom post type using its registered template and fields.
+ * Supports field value overrides and featured image override per block instance.
+ *
+ * Block attributes:
+ * - postId (int): Page part post ID to render
+ * - overrides (array): Field value overrides keyed by meta_key
+ *   - Example: ['nok-hero_title' => 'Custom Title']
+ *   - Special: '_override_thumbnail_id' for featured image override
+ *
+ * Process:
+ * 1. Load page_part post by ID
+ * 2. Retrieve design slug (template identifier)
+ * 3. Load default field values from post meta
+ * 4. Apply block attribute overrides (if any)
+ * 5. Render via TemplateRenderer with full post context
+ *
+ * Featured image override:
+ * Uses temporary filter on 'post_thumbnail_id' to swap featured image
+ * during template rendering without modifying post meta.
+ *
+ * @param array $attributes Block attributes from block.json
+ * @return string Rendered HTML output
  */
-
 use NOK2025\V1\Theme;
 
 return function( array $attributes ): string {

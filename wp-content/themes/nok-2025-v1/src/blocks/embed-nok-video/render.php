@@ -6,12 +6,13 @@
  * Supports YouTube, Vimeo (via oEmbed), and self-hosted videos.
  *
  * Block attributes:
- * - videoUrl (string): Video URL or file path
+ * - videoUrl (string): Video URL, file path, or YouTube video ID (11-char alphanumeric)
  * - videoType (string): 'youtube', 'vimeo', or 'self'
  * - title (string): Optional heading above/below video
  * - description (string): Optional text content
  *
  * Features:
+ * - Accepts YouTube video IDs (e.g., 'dQw4w9WgXcQ') and converts to full URL
  * - Automatic oEmbed for YouTube/Vimeo
  * - Play button overlay (hidden via JavaScript when playing)
  * - Lazy-loads nok-video-playback.mjs module
@@ -28,6 +29,14 @@ return function( array $attributes, string $content, WP_Block $block ): string {
 	$video_type = $attributes['videoType'] ?? 'youtube';
 	$title = $attributes['title'] ?? '';
 	$description = $attributes['description'] ?? '';
+
+	// Convert YouTube ID to full URL if needed
+	if ( $video_type === 'youtube' && ! empty( $video_url ) ) {
+		// Check if it's just a video ID (no slashes, typical YT ID pattern)
+		if ( preg_match( '/^[a-zA-Z0-9_-]{11}$/', $video_url ) ) {
+			$video_url = 'https://www.youtube.com/watch?v=' . $video_url;
+		}
+	}
 
 	// Get video embed HTML
 	$video_html = '';
