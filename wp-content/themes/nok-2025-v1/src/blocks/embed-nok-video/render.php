@@ -1,10 +1,28 @@
 <?php
 /**
- * Server-side render for Embed NOK Video.
+ * Server-side render callback for Embed NOK Video block
  *
- * @return callable
+ * Renders video embeds with play button overlay, optional title and description.
+ * Supports YouTube, Vimeo (via oEmbed), and self-hosted videos.
+ *
+ * Block attributes:
+ * - videoUrl (string): Video URL or file path
+ * - videoType (string): 'youtube', 'vimeo', or 'self'
+ * - title (string): Optional heading above/below video
+ * - description (string): Optional text content
+ *
+ * Features:
+ * - Automatic oEmbed for YouTube/Vimeo
+ * - Play button overlay (hidden via JavaScript when playing)
+ * - Lazy-loads nok-video-playback.mjs module
+ * - 16:9 aspect ratio wrapper
+ * - Fallback for missing video URL
+ *
+ * @param array $attributes Block attributes from block.json
+ * @param string $content Block inner content (unused for this block)
+ * @param WP_Block $block Block instance
+ * @return string Rendered HTML output
  */
-
 return function( array $attributes, string $content, WP_Block $block ): string {
 	$video_url = $attributes['videoUrl'] ?? '';
 	$video_type = $attributes['videoType'] ?? 'youtube';

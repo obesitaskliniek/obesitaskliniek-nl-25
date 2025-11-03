@@ -1,5 +1,38 @@
 <?php
-// functions.php
+/**
+ * Theme Bootstrap - NOK 2025 V1
+ *
+ * WordPress theme initialization file. Handles:
+ * - Development error reporting
+ * - Theme constants (paths, URIs, versions, settings)
+ * - PSR-4 autoloading for NOK2025\V1 namespace
+ * - Theme class initialization
+ * - Gutenberg block registration
+ * - Third-party plugin configuration (ACF, Gravity Forms)
+ *
+ * Constants defined:
+ * - THEME_ROOT_ABS: Absolute filesystem path to theme
+ * - THEME_ROOT: Theme URI for assets
+ * - THEME_VERSION: Theme version number
+ * - THEME_BS_VER: Bootstrap version used
+ * - THEME_NAME: Display name
+ * - THEME_TEXT_DOMAIN: Translation domain
+ * - THEME_MAINTENANCE_MODE: Maintenance mode flag
+ * - THEME_COPYRIGHT: Copyright notice
+ * - USER_LOGGED_IN: Current user login status
+ * - WP_ROOT: WordPress installation root path
+ * - SITE_BASE_URI: Base site URL
+ * - SITE_LIVE: Production environment flag
+ * - NONCE: Security nonce for requests
+ * - CACHE_URI_STRING: Cache-busting query string
+ *
+ * Autoloading:
+ * Classes in NOK2025\V1 namespace auto-load from inc/ directory
+ * Example: NOK2025\V1\Core\AssetManager loads from inc/Core/AssetManager.php
+ *
+ * @package NOK2025\V1
+ * @version 1.0.0
+ */
 
 // Only do this in development!
 ini_set( 'display_errors', '1' );

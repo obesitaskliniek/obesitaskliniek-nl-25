@@ -3,14 +3,71 @@
 
 namespace NOK2025\V1\Core;
 
+/**
+ * AssetManager - Handles CSS and JavaScript asset loading
+ *
+ * Responsible for:
+ * - Registering and enqueuing frontend CSS/JS assets
+ * - Registering and enqueuing admin/editor assets
+ * - Loading page part preview system scripts
+ * - Localizing JavaScript with PHP data (registry, icons, nonces)
+ * - Conditional asset loading based on development mode
+ * - Minified asset resolution for production
+ * - File-based cache busting via timestamps
+ * - Custom editor inline styles
+ *
+ * Development mode (Theme::is_development_mode() = true):
+ * - Loads unminified assets (.css)
+ * - Uses source file timestamps for versioning
+ *
+ * Production mode (Theme::is_development_mode() = false):
+ * - Attempts to load minified assets (.min.css)
+ * - Falls back to unminified if minified not found
+ * - Uses minified file timestamps for versioning
+ *
+ * @example Register hooks on initialization
+ * $asset_manager = new AssetManager();
+ * $asset_manager->register_hooks();
+ *
+ * @package NOK2025\V1\Core
+ */
 class AssetManager {
 
+	/**
+	 * Register WordPress action hooks for asset loading
+	 *
+	 * Hooks into:
+	 * - wp_enqueue_scripts: Frontend asset registration
+	 * - admin_enqueue_scripts: Admin/editor asset loading
+	 * - admin_head: Custom editor inline styles injection
+	 *
+	 * @return void
+	 *
+	 * @example Usage in Theme constructor
+	 * $this->asset_manager = new AssetManager();
+	 * $this->asset_manager->register_hooks();
+	 */
 	public function register_hooks(): void {
 		add_action( 'wp_enqueue_scripts', [ $this, 'frontend_assets' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_assets' ] );
 		add_action( 'admin_head', [ $this, 'custom_editor_inline_styles' ] );
 	}
 
+	/**
+	 * Register and enqueue frontend assets
+	 *
+	 * Registers CSS assets for the public-facing site, respecting development
+	 * mode settings for minification and cache busting.
+	 *
+	 * Registered assets:
+	 * - nok-components-css: Component styles
+	 * - nok-colors-css: Color system styles
+	 *
+	 * @return void
+	 *
+	 * @example Enqueue registered asset in template
+	 * wp_enqueue_style('nok-components-css');
+	 */
 	public function frontend_assets(): void {
 		$theme    = \NOK2025\V1\Theme::get_instance();
 		$dev_mode = $theme->is_development_mode();
@@ -30,6 +87,24 @@ class AssetManager {
 		);
 	}
 
+	/**
+	 * Load admin and block editor assets
+	 *
+	 * Conditionally loads assets based on the current admin screen:
+	 * - Always: Backend CSS (nok-backend-css)
+	 * - Page part editor: Preview system and design selector
+	 * - Block editor: Localized preview data and image layout extension
+	 *
+	 * @param string $hook Current admin page hook
+	 * @return void
+	 *
+	 * @example Manually check what would load
+	 * // On post.php with page_part post type:
+	 * // - nok-backend-css
+	 * // - nok-page-part-live-preview
+	 * // - nok-page-part-design-selector
+	 * // - PagePartDesignSettings localization
+	 */
 	public function admin_assets( $hook ): void {
 		$theme    = \NOK2025\V1\Theme::get_instance();
 		$dev_mode = $theme->is_development_mode();
@@ -84,6 +159,15 @@ class AssetManager {
 		}
 	}
 
+	/**
+	 * Load page part preview system assets
+	 *
+	 * Enqueues JavaScript bundles for the page part preview functionality:
+	 * - nok-page-part-live-preview: Live preview refresh system
+	 * - nok-page-part-design-selector: React-based design picker UI
+	 *
+	 * @return void
+	 */
 	private function load_preview_assets(): void {
 		// Preview system script
 		$asset = require get_theme_file_path( '/assets/js/nok-page-part-preview.asset.php' );
@@ -104,6 +188,21 @@ class AssetManager {
 		);
 	}
 
+	/**
+	 * Localize page part data for JavaScript consumption
+	 *
+	 * Makes PHP data available to JavaScript via wp_localize_script:
+	 * - registry: Complete page part registry with field definitions
+	 * - icons: Available icon set for icon-selector fields
+	 * - ajaxurl: WordPress AJAX endpoint URL
+	 * - nonce: Security nonce for AJAX requests
+	 *
+	 * Localizes to appropriate script handles:
+	 * - PagePartDesignSettings for page_part editor
+	 * - PagePartDesignSettings for embed-nok-page-part block
+	 *
+	 * @return void
+	 */
 	private function localize_preview_data(): void {
 		$theme    = \NOK2025\V1\Theme::get_instance();
 		$registry = $theme->get_page_part_registry();
@@ -127,6 +226,23 @@ class AssetManager {
 		}
 	}
 
+	/**
+	 * Inject custom inline styles for block editor
+	 *
+	 * Adds critical inline CSS to improve block editor UX:
+	 * - Sets minimum height for editor wrapper (35vh)
+	 * - Adjusts bottom padding pseudo-element height (60px)
+	 *
+	 * Only applies when viewing the block editor screen.
+	 *
+	 * @return void
+	 *
+	 * @example What gets injected in block editor
+	 * // <style>
+	 * //   .editor-styles-wrapper { min-height: 35vh !important; }
+	 * //   .editor-styles-wrapper::after { height: 60px !important; }
+	 * // </style>
+	 */
 	public function custom_editor_inline_styles(): void {
 		$screen = get_current_screen();
 		if ( $screen && $screen->is_block_editor() ) {
@@ -142,7 +258,24 @@ class AssetManager {
 	}
 
 	/**
-	 * Resolve asset URL, preferring minified version in production
+	 * Resolve asset URL with minification support
+	 *
+	 * Returns the appropriate asset URL based on development mode:
+	 * - Production: Returns minified version (.min.css) if it exists
+	 * - Production: Falls back to unminified if minified not found
+	 * - Development: Always returns unminified version
+	 *
+	 * @param string $asset_path Theme-relative asset path (e.g., '/assets/css/app.css')
+	 * @param bool $dev_mode Whether in development mode
+	 * @return string Full theme URL to asset
+	 *
+	 * @example In production with existing minified file
+	 * $url = $this->resolve_asset_url('/assets/css/app.css', false);
+	 * // Returns: https://example.com/wp-content/themes/nok-2025-v1/assets/css/app.min.css
+	 *
+	 * @example In development mode
+	 * $url = $this->resolve_asset_url('/assets/css/app.css', true);
+	 * // Returns: https://example.com/wp-content/themes/nok-2025-v1/assets/css/app.css
 	 */
 	private function resolve_asset_url( string $asset_path, bool $dev_mode ): string {
 		if ( ! $dev_mode ) {
@@ -156,7 +289,22 @@ class AssetManager {
 	}
 
 	/**
-	 * Get asset version, using minified file timestamp if available
+	 * Get asset version for cache busting
+	 *
+	 * Returns file modification timestamp for versioning:
+	 * - Production: Returns minified file timestamp if it exists
+	 * - Production: Falls back to unminified file timestamp
+	 * - Development: Always returns unminified file timestamp
+	 *
+	 * This ensures browser cache is invalidated when assets change.
+	 *
+	 * @param string $asset_path Theme-relative asset path
+	 * @param bool $dev_mode Whether in development mode
+	 * @return int Unix timestamp of file modification time
+	 *
+	 * @example Get version for cache busting
+	 * $version = $this->get_asset_version('/assets/css/app.css', false);
+	 * // Returns: 1735689600 (timestamp when file was last modified)
 	 */
 	private function get_asset_version( string $asset_path, bool $dev_mode ): int {
 		if ( ! $dev_mode ) {
@@ -171,6 +319,20 @@ class AssetManager {
 
 	/**
 	 * Convert asset path to minified version
+	 *
+	 * Transforms a standard asset path to its minified equivalent by
+	 * inserting .min before the file extension.
+	 *
+	 * @param string $asset_path Original asset path
+	 * @return string Minified asset path
+	 *
+	 * @example Convert CSS path
+	 * $min = $this->get_minified_path('/assets/css/app.css');
+	 * // Returns: '/assets/css/app.min.css'
+	 *
+	 * @example Already minified (no change)
+	 * $min = $this->get_minified_path('/assets/css/app.min.css');
+	 * // Returns: '/assets/css/app.min.min.css' (edge case)
 	 */
 	private function get_minified_path( string $asset_path ): string {
 		return preg_replace( '/\.css$/', '.min.css', $asset_path );

@@ -13,6 +13,41 @@ use NOK2025\V1\PageParts\TemplateRenderer;
 use NOK2025\V1\PageParts\RestEndpoints;
 use NOK2025\V1\SEO\YoastIntegration;
 
+/**
+ * Theme - Main theme orchestrator using singleton pattern
+ *
+ * Coordinates all theme components and subsystems:
+ * - Asset management (CSS/JS loading with dev/prod modes)
+ * - Page parts system (template registry, meta fields, rendering, preview)
+ * - Navigation menu rendering with custom walkers
+ * - Block rendering and registration
+ * - Yoast SEO integration for page parts
+ * - Post meta field registration
+ * - Content filters and template hierarchy customization
+ *
+ * @example Get theme instance and access registry
+ * $theme = Theme::get_instance();
+ * $registry = $theme->get_page_part_registry();
+ *
+ * @example Check development mode for conditional logic
+ * $theme = Theme::get_instance();
+ * if ($theme->is_development_mode()) {
+ *     // Load unminified assets, enable debugging
+ * }
+ *
+ * @example Render a page part template
+ * $theme = Theme::get_instance();
+ * $theme->embed_page_part_template('nok-hero', [
+ *     'title' => 'Welcome',
+ *     'subtitle' => 'To our site'
+ * ]);
+ *
+ * @example Get customizer setting
+ * $theme = Theme::get_instance();
+ * $logo_url = $theme->get_setting('custom_logo_url', 'default.png');
+ *
+ * @package NOK2025\V1
+ */
 final class Theme {
 	private static ?Theme $instance = null;
 
@@ -54,6 +89,20 @@ final class Theme {
 		$this->register_post_custom_fields();
 	}
 
+	/**
+	 * Get singleton instance of Theme
+	 *
+	 * Returns the single instance of the Theme class, creating it if necessary.
+	 * This ensures only one Theme instance exists throughout the application lifecycle.
+	 *
+	 * @return Theme The singleton Theme instance
+	 *
+	 * @example Basic usage
+	 * $theme = Theme::get_instance();
+	 *
+	 * @example Access registry through instance
+	 * $registry = Theme::get_instance()->get_page_part_registry();
+	 */
 	public static function get_instance(): Theme {
 		if (self::$instance === null) {
 			self::$instance = new self();
@@ -138,20 +187,76 @@ final class Theme {
 	// CORE THEME SETUP
 	// =============================================================================
 
+	/**
+	 * Register WordPress theme features and capabilities
+	 *
+	 * Enables core WordPress features:
+	 * - title-tag: Automatic <title> tag generation
+	 * - post-thumbnails: Featured image support
+	 * - html5: HTML5 markup for forms
+	 *
+	 * @return void
+	 *
+	 * @example Usage (automatically called via 'init' hook)
+	 * // No direct usage needed - hooked via setup_hooks()
+	 * // add_action('init', [$this, 'theme_supports']);
+	 */
 	public function theme_supports(): void {
 		add_theme_support('title-tag');
 		add_theme_support('post-thumbnails');
 		add_theme_support('html5', ['search-form', 'comment-form']);
 	}
 
+	/**
+	 * Register theme customizer settings
+	 *
+	 * Delegates customizer registration to the Customizer class.
+	 *
+	 * @param \WP_Customize_Manager $wp_customize WordPress customizer manager instance
+	 * @return void
+	 *
+	 * @example Usage (automatically called via 'customize_register' hook)
+	 * // Hooked via setup_hooks()
+	 * // add_action('customize_register', [$this, 'register_customizer']);
+	 */
 	public function register_customizer(\WP_Customize_Manager $wp_customize): void {
 		Customizer::register($wp_customize);
 	}
 
+	/**
+	 * Get theme customizer setting value
+	 *
+	 * Retrieves a theme modification value with optional default fallback.
+	 *
+	 * @param string $key The setting key to retrieve
+	 * @param mixed $default Optional. Default value if setting not found. Default null.
+	 * @return mixed The setting value or default
+	 *
+	 * @example Get logo URL with fallback
+	 * $logo = $theme->get_setting('custom_logo_url', 'default-logo.png');
+	 *
+	 * @example Check if feature is enabled
+	 * $enabled = $theme->get_setting('feature_enabled', false);
+	 */
 	public function get_setting(string $key, $default = null) {
 		return get_theme_mod($key, $default);
 	}
 
+	/**
+	 * Check if theme is in development mode
+	 *
+	 * Returns whether the theme is running in development mode.
+	 * In development mode, unminified assets are loaded and debugging is enabled.
+	 *
+	 * @return bool True if in development mode, false otherwise
+	 *
+	 * @example Conditional asset loading
+	 * if ($theme->is_development_mode()) {
+	 *     wp_enqueue_script('app', 'app.js');
+	 * } else {
+	 *     wp_enqueue_script('app', 'app.min.js');
+	 * }
+	 */
 	public function is_development_mode(): bool {
 		return $this->development_mode;
 	}
@@ -162,45 +267,153 @@ final class Theme {
 
 	/**
 	 * Get menu manager instance
+	 *
+	 * Returns the MenuManager component responsible for custom menu rendering
+	 * with walkers and menu item customization.
+	 *
+	 * @return MenuManager The menu manager instance
+	 *
+	 * @example Render primary navigation
+	 * $menu_manager = $theme->get_menu_manager();
+	 * $menu_manager->render('primary', ['container' => 'nav']);
 	 */
 	public function get_menu_manager(): MenuManager {
 		return $this->menu_manager;
 	}
 
 	/**
-	 * Get page part registry (delegated to Registry component)
+	 * Get page part registry
+	 *
+	 * Returns the complete registry of all registered page parts with their
+	 * field definitions, categories, and metadata. Delegated to Registry component.
+	 *
+	 * @return array Associative array of page part definitions keyed by design slug
+	 *
+	 * @example Get all registered page parts
+	 * $registry = $theme->get_page_part_registry();
+	 * foreach ($registry as $design => $config) {
+	 *     echo "Page part: {$design}\n";
+	 * }
+	 *
+	 * @example Check if page part exists
+	 * $registry = $theme->get_page_part_registry();
+	 * if (isset($registry['nok-hero'])) {
+	 *     // Hero page part is registered
+	 * }
 	 */
 	public function get_page_part_registry(): array {
 		return $this->registry->get_registry();
 	}
 
+	/**
+	 * Get page part field values for a specific post
+	 *
+	 * Retrieves all field values for a page part instance, with optional
+	 * editing context for displaying additional editor-specific data.
+	 *
+	 * @param int $post_id The post ID containing the page part
+	 * @param string $design The page part design slug (e.g., 'nok-hero')
+	 * @param bool $is_editing Optional. Whether in editing context. Default false.
+	 * @return array Associative array of field values keyed by field name
+	 *
+	 * @example Get hero fields for current post
+	 * $fields = $theme->get_page_part_fields(get_the_ID(), 'nok-hero');
+	 * echo $fields['title']; // Output hero title
+	 *
+	 * @example Get fields in editor context
+	 * $fields = $theme->get_page_part_fields($post_id, 'nok-cta', true);
+	 * // Returns additional metadata for editor UI
+	 */
 	public function get_page_part_fields(int $post_id, string $design, bool $is_editing = false): array {
 		return $this->meta_manager->get_page_part_fields($post_id, $design, $is_editing);
 	}
 
 	/**
-	 * Generate a human-readable label from field name (delegated to Registry)
+	 * Generate human-readable label from field name
+	 *
+	 * Converts field names (snake_case or kebab-case) into properly formatted
+	 * labels for display in forms and UI. Delegated to Registry component.
+	 *
+	 * @param string $field_name Field name to convert (e.g., 'hero_title' or 'cta-button')
+	 * @return string Human-readable label (e.g., 'Hero Title' or 'CTA Button')
+	 *
+	 * @example Generate label for form field
+	 * echo $theme->generate_field_label('background_color');
+	 * // Output: "Background Color"
+	 *
+	 * @example Generate label with acronym
+	 * echo $theme->generate_field_label('cta_url');
+	 * // Output: "CTA URL"
 	 */
 	public function generate_field_label(string $field_name): string {
 		return $this->registry->generate_field_label($field_name);
 	}
 
 	/**
-	 * Include a page part template (delegated to TemplateRenderer)
+	 * Include a page part template
+	 *
+	 * Includes a page part template file with provided arguments available
+	 * as local variables. Template file must exist in page-parts/ directory.
+	 * Delegated to TemplateRenderer component.
+	 *
+	 * @param string $design Page part design slug (e.g., 'nok-hero')
+	 * @param array $args Optional. Variables to extract into template scope. Default [].
+	 * @return void
+	 *
+	 * @example Include hero template with custom args
+	 * $theme->include_page_part_template('nok-hero', [
+	 *     'custom_class' => 'hero--large',
+	 *     'show_overlay' => true
+	 * ]);
 	 */
 	public function include_page_part_template(string $design, array $args = []): void {
 		$this->template_renderer->include_page_part_template($design, $args);
 	}
 
 	/**
-	 * Embed a page part template (delegated to TemplateRenderer)
+	 * Embed a page part template with field data
+	 *
+	 * Renders a page part template using provided field data without requiring
+	 * a post context. Useful for previews and standalone components.
+	 * Delegated to TemplateRenderer component.
+	 *
+	 * @param string $design Page part design slug (e.g., 'nok-cta')
+	 * @param array $fields Field values to pass to template
+	 * @param bool $register_css Optional. Whether to register component CSS. Default false.
+	 * @return void
+	 *
+	 * @example Embed CTA without post context
+	 * $theme->embed_page_part_template('nok-cta', [
+	 *     'title' => 'Get Started',
+	 *     'button_text' => 'Sign Up',
+	 *     'button_url' => '/register'
+	 * ], true);
+	 *
+	 * @example Embed hero for preview
+	 * $theme->embed_page_part_template('nok-hero', $preview_fields);
 	 */
 	public function embed_page_part_template(string $design, array $fields, bool $register_css = false): void {
 		$this->template_renderer->embed_page_part_template($design, $fields, $register_css);
 	}
 
 	/**
-	 * Embed a post part template (delegated to TemplateRenderer)
+	 * Embed a post part template with field data
+	 *
+	 * Renders a post part template (for individual post/article components)
+	 * using provided field data. Similar to page parts but specific to posts.
+	 * Delegated to TemplateRenderer component.
+	 *
+	 * @param string $design Post part design slug (e.g., 'post-header')
+	 * @param array $fields Field values to pass to template
+	 * @param bool $register_css Optional. Whether to register component CSS. Default false.
+	 * @return void
+	 *
+	 * @example Embed post header
+	 * $theme->embed_post_part_template('post-header', [
+	 *     'title' => $post->post_title,
+	 *     'author' => get_the_author(),
+	 *     'date' => get_the_date()
+	 * ], true);
 	 */
 	public function embed_post_part_template(string $design, array $fields, bool $register_css = false): void {
 		$this->template_renderer->embed_post_part_template($design, $fields, $register_css);
@@ -211,14 +424,34 @@ final class Theme {
 	// =============================================================================
 
 	/**
-	 * Add paragraph classes to content
+	 * Add WordPress block classes to paragraph tags
+	 *
+	 * Enhances classic editor content by adding 'wp-block-paragraph' class
+	 * to all <p> tags, ensuring consistent styling with Gutenberg blocks.
+	 *
+	 * @param string $content The post content HTML
+	 * @return string Modified content with paragraph classes
+	 *
+	 * @example Usage (automatically applied via 'the_content' filter)
+	 * // Input: <p>Hello world</p>
+	 * // Output: <p class="wp-block-paragraph">Hello world</p>
 	 */
 	public function enhance_paragraph_classes($content) {
 		return str_replace('<p>', '<p class="wp-block-paragraph">', $content);
 	}
 
 	/**
-	 * Hide admin bar when requested via URL parameter
+	 * Conditionally hide admin bar based on URL parameter
+	 *
+	 * Allows hiding the WordPress admin bar by adding ?hide_adminbar
+	 * to the URL. Useful for clean screenshots and presentations.
+	 *
+	 * @param bool $show Whether to show the admin bar
+	 * @return bool Modified show value
+	 *
+	 * @example Hide admin bar via URL
+	 * // Visit: https://example.com/page?hide_adminbar
+	 * // Admin bar will be hidden
 	 */
 	public function maybe_hide_admin_bar($show) {
 		if (isset($_GET['hide_adminbar'])) {

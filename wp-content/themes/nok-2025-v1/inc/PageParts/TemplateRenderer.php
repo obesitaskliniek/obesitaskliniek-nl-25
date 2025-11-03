@@ -3,6 +3,51 @@
 
 namespace NOK2025\V1\PageParts;
 
+/**
+ * TemplateRenderer - Handles page part and post part template rendering
+ *
+ * Responsible for:
+ * - Rendering page-parts and post-parts templates
+ * - Managing render contexts (frontend, editor preview, REST embed)
+ * - Context-aware CSS loading (enqueue vs inline)
+ * - Providing FieldContext to templates
+ * - Managing WordPress postdata setup/reset
+ * - Resolving minified CSS files in production
+ * - Template error handling
+ * - Supporting field value overrides
+ *
+ * Render contexts:
+ * - CONTEXT_FRONTEND: Standard frontend rendering with wp_enqueue_style
+ * - CONTEXT_PAGE_EDITOR_PREVIEW: Block editor preview with enqueue
+ * - CONTEXT_POST_EDITOR_PREVIEW: Post editor preview with enqueue + inline
+ * - CONTEXT_REST_EMBED: REST API context with inline CSS only
+ *
+ * Templates receive a $context variable (FieldContext) with methods:
+ * - $context->get('field_name'): Get field value with default fallback
+ * - $context->getOrFail('field_name'): Get required field or throw exception
+ *
+ * @example Basic page part rendering
+ * $renderer = new TemplateRenderer();
+ * $renderer->render_page_part('nok-hero', [
+ *     'title' => 'Welcome',
+ *     'subtitle' => 'To our site'
+ * ]);
+ *
+ * @example Rendering with post context
+ * $renderer->include_page_part_template('nok-cta', [
+ *     'post' => $post_object,
+ *     'page_part_fields' => $fields
+ * ]);
+ *
+ * @example Rendering with overrides
+ * $html = $renderer->render_page_part_with_context(
+ *     $part_id,
+ *     ['nok-hero_title' => 'Custom Title'],
+ *     $meta_manager
+ * );
+ *
+ * @package NOK2025\V1\PageParts
+ */
 class TemplateRenderer {
 	private RenderContext $context;
 
@@ -34,7 +79,29 @@ class TemplateRenderer {
 		$this->render_template('page-parts', $design, $fields);
 	}
 
-	// In TemplateRenderer class
+	/**
+	 * Render a page part with field overrides and return HTML
+	 *
+	 * Loads a page_part post, retrieves its fields, applies overrides,
+	 * and returns the rendered HTML as a string. Manages WordPress query
+	 * context to avoid interfering with the main loop.
+	 *
+	 * @param int $part_id Page part post ID
+	 * @param array $overrides Field overrides keyed by meta_key (e.g., ['nok-hero_title' => 'New Title'])
+	 * @param MetaManager $meta_manager MetaManager instance for field retrieval
+	 * @return string Rendered HTML output
+	 *
+	 * @example Render with title override
+	 * $html = $renderer->render_page_part_with_context(
+	 *     123,
+	 *     ['nok-hero_title' => 'Custom Title'],
+	 *     $meta_manager
+	 * );
+	 * echo $html;
+	 *
+	 * @example Render without overrides
+	 * $html = $renderer->render_page_part_with_context(456, [], $meta_manager);
+	 */
 	public function render_page_part_with_context(int $part_id, array $overrides, MetaManager $meta_manager): string {
 		$post = get_post($part_id);
 		if (!$post || $post->post_type !== 'page_part') {
