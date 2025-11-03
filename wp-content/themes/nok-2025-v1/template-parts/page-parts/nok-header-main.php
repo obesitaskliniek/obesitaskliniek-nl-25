@@ -9,6 +9,7 @@
  */
 
 use NOK2025\V1\Assets;
+use NOK2025\V1\Helpers;
 use NOK2025\V1\Theme;
 
 $theme = Theme::get_instance();
@@ -204,5 +205,4 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
             </nok-nav-menu-bar-dropdown>
         </nok-navigation-menu-bar>
     </nok-navigation-desktop>
-
 </nok-top-navigation>

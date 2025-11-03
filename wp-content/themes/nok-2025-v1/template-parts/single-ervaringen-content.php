@@ -27,10 +27,11 @@ if ( $has_featured_image ) {
 nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10">
 
 			<header class="nok-section__inner nok-section-narrow nok-mt-0 <?= $heading_article_class; ?>">
-                <time datetime="<?php echo get_the_date('c'); ?>">
-                    <?php echo get_the_date('j F Y'); ?>
-                </time>
+
+                <?php Helpers::render_breadcrumbs(); ?>
+
 				<?php the_title( '<h1 class="nok-fs-giant">', '</h1>' ); ?>
+
                 <div>
 					<?php Helpers::the_content_first_paragraph(); ?>
 				</div>
@@ -49,5 +50,8 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 			<article class="narrow-paragraphs">
 				<?php Helpers::the_content_rest(); ?>
 			</article>
+            <time datetime="<?php echo get_the_date('c'); ?>">
+                <?php echo get_the_date('j F Y'); ?>
+            </time>
 		</article>
 	</nok-section>

@@ -16,6 +16,8 @@ $featuredImage = Helpers::get_featured_image();
 nok-bg-darkerblue nok-dark-bg-darkestblue nok-text-white nok-dark-text-white
 nok-bg-alpha-10 nok-dark-bg-alpha-10 nok-subtle-shadow">
 
+            <?php Helpers::render_breadcrumbs(); ?>
+
             <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-2 nok-fs-to-md-1">
                 <?php echo $page_part_fields['tagline'] ?? ''; ?>
             </h2>

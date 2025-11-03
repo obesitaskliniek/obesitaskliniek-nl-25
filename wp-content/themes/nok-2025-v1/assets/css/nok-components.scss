@@ -23,6 +23,7 @@
 @use "./components/nok-hero";
 @use "./components/nok-page-footer";
 @use "./components/nok-navigation-pagination";
+@use "./components/nok-navigation-breadcrumbs";
 
 
 //Todo: move everything below to something that makes more sense - something like layout, or text-layout
@@ -91,6 +92,9 @@ svg.nok-icon {
   vertical-align: middle;
   width: 1em;
   height: 1em;
+  &.larger {
+    font-size: 1.2em;
+  }
 }
 
 

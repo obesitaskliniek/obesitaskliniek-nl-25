@@ -19,9 +19,7 @@ get_header('generic');
 		<div class="nok-section__inner nok-columns-1 nok-hero__inner nok-mt-0 nok-px-0 nok-border-radius-to-sm-0
 nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10">
 			<header class="nok-section__inner nok-mt-0 nok-mb-section-padding">
-				<a href="<?php echo esc_url(home_url('/')); ?>" class="nok-breadcrumb-link">
-					<span><?php esc_html_e('Breadcrumbs...', THEME_TEXT_DOMAIN); ?></span>
-				</a>
+                <?php Helpers::render_breadcrumbs(); ?>
 				<h1 class="nok-fs-giant"><?php single_cat_title(); ?></h1>
 				<?php if (category_description()): ?>
 					<div class="nok-category-description">
@@ -67,10 +65,10 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 
 						<article class="nok-layout-grid fill-fill nok-mb-section-padding nok-grid-gap-0 nok-rounded-border-large">
 
-							<div class="nok-aspect-to-lg-8x5 nok-order-lg-<?= $is_odd ? '0' : '1'; ?> nok-order-1 <?= $is_odd ? 'nok-bg-darkerblue nok-text-contrast' : 'nok-bg-darkerblue nok-bg-alpha-1 nok-text-darkerblue'; ?> nok-align-content-center">
-								<nok-square-block class="nok-alpha-10 nok-p-3 nok-p-lg-4 nok-order-0 nok-border-radius-0" data-shadow="false">
+							<div class="nok-aspect-to-lg-8x5 nok-order-lg-<?= $is_odd ? '0' : '1'; ?> nok-order-1 <?= $is_odd ? 'nok-bg-darkerblue nok-text-contrast' : 'nok-bg-darkerblue nok-bg-alpha-1 nok-dark-darkblue nok-dark-bg-alpha-4 nok-text-darkerblue'; ?> nok-align-content-center">
+								<nok-square-block class="nok-alpha-10 nok-p-3 nok-p-lg-4 nok-order-0 nok-border-radius-0 nok-dark-text-contrast" data-shadow="false">
 									<div class="nok-square-block__text">
-										<blockquote class="nok-quote nok-fs-3" style=" line-height: 1.2;">
+										<blockquote class="nok-quote nok-fs-3">
 											<div class="nok-quote__icon lifted"><?= Assets::getIcon('ui_quote'); ?></div>
 											<p class="nok-quote__text"><?php echo esc_html($excerpt); ?></p>
 										</blockquote>
@@ -85,7 +83,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 							</div>
 							<div class="nok-aspect-to-lg-8x5 nok-order-lg-<?= $is_odd ? '1' : '0'; ?> nok-order-0 nok-layout-grid nok-layout-grid__1-column">
 
-									<div class="nok-p-3 nok-p-lg-4 nok-text-white nok-align-self-end" style="grid-area: 1 / 1; z-index: 2;
+									<div class="nok-p-3 nok-p-lg-4 nok-text-white nok-align-self-end first-row-first-column nok-z-2 nok-pos-rel" style="
 									background-image: linear-gradient(transparent 0%, rgba(var(--nok-darkestblue-rgb), 0.5) 50%);
 									text-shadow: 0.2em 0.2em 0.4em rgba(var(--nok-darkestblue-rgb), 0.3);">
                                         <?= $naam_patient ? $naam_patient . ' -' : '' ;?>
@@ -94,9 +92,9 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 										</time>
 										<h2 class="nok-fs-6"><?php the_title(); ?></h2>
 									</div>
-									<div class="nok-ervaringen-item__image nok-bg-darkestblue nok-bg-alpha-5" style="grid-area: 1 / 1; z-index: 1; position: relative;">
+									<div class="nok-ervaringen-item__image nok-bg-darkestblue nok-bg-alpha-5 first-row-first-column nok-z-1 nok-pos-rel">
 										<a href="<?php the_permalink(); ?>">
-											<figure class="nok-image-cover" style=" position: absolute; width: 100%; height: 100%;">
+											<figure class="nok-image-cover nok-fill-parent">
 												<?php echo $featured_image; ?>
 											</figure>
 										</a>
@@ -109,14 +107,15 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 				</div>
 
 				<?php
-				// Pagination
-				the_posts_pagination(array(
-					'mid_size'           => 2,
-					'prev_text'          => __('&laquo; Vorige', THEME_TEXT_DOMAIN),
-					'next_text'          => __('Volgende &raquo;', THEME_TEXT_DOMAIN),
-					'screen_reader_text' => __('Paginanavigatie', THEME_TEXT_DOMAIN),
-				));
-				?>
+                // Pagination
+                the_posts_pagination( array(
+                        'class'              => 'nok-navigation-pagination',
+                        'mid_size'           => 2,
+                        'prev_text'          => Assets::getIcon( 'ui_arrow-left' ) . ' ' . __( '<span class="nok-invisible-to-sm">Vorige</span>', THEME_TEXT_DOMAIN ),
+                        'next_text'          => __( '<span class="nok-invisible-to-sm">Volgende</span>', THEME_TEXT_DOMAIN ) . ' ' . Assets::getIcon( 'ui_arrow-right' ),
+                        'screen_reader_text' => __( 'Paginanavigatie', THEME_TEXT_DOMAIN ),
+                ) );
+                ?>
 
 			<?php else: ?>
 				<p><?php esc_html_e('Geen ervaringen gevonden.', THEME_TEXT_DOMAIN); ?></p>

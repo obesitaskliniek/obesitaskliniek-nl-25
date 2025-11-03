@@ -311,6 +311,141 @@ class Helpers {
 	}
 
 	/**
+	 * Render breadcrumb navigation
+	 *
+	 * Outputs semantic breadcrumb navigation using Yoast SEO breadcrumbs
+	 * with fallback to simple Home link if Yoast is not available.
+	 *
+	 * Breadcrumb structure:
+	 * - Wrapped in <nav class="nok-breadcrumbs"> with aria-label
+	 * - Uses Yoast's breadcrumb_output filter for customization
+	 * - Includes structured data (via Yoast)
+	 *
+	 * @param bool $echo Whether to echo output (true) or return (false). Default true.
+	 * @param string $wrapper_class Additional CSS classes for nav wrapper. Default ''.
+	 * @return string|null HTML output when $echo is false, null when echoing
+	 *
+	 * @example Basic usage in template
+	 * Helpers::render_breadcrumbs();
+	 *
+	 * @example Return without echoing
+	 * $breadcrumbs_html = Helpers::render_breadcrumbs(false);
+	 *
+	 * @example With custom class
+	 * Helpers::render_breadcrumbs(true, 'nok-mb-3');
+	 */
+	public static function render_breadcrumbs(bool $echo = true, string $wrapper_class = ''): ?string {
+		$home_icon = Assets::getIcon('ui_home', 'nok-text-lightblue larger');
+		// Check if Yoast SEO breadcrumbs are available
+		if (function_exists('yoast_breadcrumb')) {
+			$breadcrumb_html = yoast_breadcrumb('', '', false);
+
+			if (!empty($breadcrumb_html)) {
+				// Inject home icon into the first breadcrumb link via DOM manipulation
+				$breadcrumb_html = self::inject_home_icon_in_breadcrumb_html($breadcrumb_html, $home_icon);
+
+				$classes = 'nok-breadcrumbs' . ($wrapper_class ? ' ' . esc_attr($wrapper_class) : '');
+				$output = sprintf(
+					'<nav class="%s" aria-label="%s">%s</nav>',
+					$classes,
+					esc_attr__('Breadcrumb', THEME_TEXT_DOMAIN),
+					$breadcrumb_html
+				);
+
+				if ($echo) {
+					echo $output;
+					return null;
+				}
+				return $output;
+			}
+		}
+
+		// Fallback: Simple home link with icon (matches Yoast structure)
+		$classes = 'nok-breadcrumbs nok-breadcrumbs--fallback' . ($wrapper_class ? ' ' . esc_attr($wrapper_class) : '');
+		$output = sprintf(
+			'<nav class="%s" aria-label="%s"><span><span><a href="%s">%s<span class="sr-only">%s</span></a></span></span></nav>',
+			$classes,
+			esc_attr__('Breadcrumb', THEME_TEXT_DOMAIN),
+			esc_url(home_url('/')),
+			$home_icon,
+			esc_html__('Home', THEME_TEXT_DOMAIN)
+		);
+
+		if ($echo) {
+			echo $output;
+			return null;
+		}
+		return $output;
+	}
+
+	/**
+	 * Inject home icon into Yoast breadcrumb HTML
+	 *
+	 * Uses DOMDocument to safely inject the home icon into the first breadcrumb link
+	 * (home link) as the first child element, and wraps the "Home" text in a
+	 * visually-hidden span for accessibility.
+	 *
+	 * @param string $breadcrumb_html Yoast-generated breadcrumb HTML
+	 * @param string $home_icon SVG icon HTML
+	 * @return string Modified breadcrumb HTML with icon
+	 */
+	private static function inject_home_icon_in_breadcrumb_html(string $breadcrumb_html, string $home_icon): string {
+		// Wrap in a container for parsing with proper UTF-8 encoding
+		$html = '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head><body>' . $breadcrumb_html . '</body></html>';
+
+		$dom = new \DOMDocument();
+		$dom->encoding = 'UTF-8';
+
+		// Suppress warnings for malformed HTML and load with UTF-8 encoding
+		@$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+		// Find the first <a> tag (home link)
+		$links = $dom->getElementsByTagName('a');
+		if ($links->length > 0) {
+			$first_link = $links->item(0);
+
+			// Create a temporary container to parse the icon SVG
+			$icon_dom = new \DOMDocument();
+			$icon_dom->encoding = 'UTF-8';
+			@$icon_dom->loadHTML(mb_convert_encoding('<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head><body>' . $home_icon . '</body></html>', 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+			$svg_element = $icon_dom->getElementsByTagName('svg')->item(0);
+
+			if ($svg_element) {
+				// Import the icon node into our main DOM
+				$icon_node = $dom->importNode($svg_element, true);
+
+				// Insert icon as the first child of the home link
+				$first_link->insertBefore($icon_node, $first_link->firstChild);
+			}
+
+			// Wrap text nodes in a visually-hidden span for accessibility
+			$text_nodes = [];
+			foreach ($first_link->childNodes as $child) {
+				if ($child->nodeType === XML_TEXT_NODE && trim($child->nodeValue) !== '') {
+					$text_nodes[] = $child;
+				}
+			}
+
+			foreach ($text_nodes as $text_node) {
+				$hidden_span = $dom->createElement('span');
+				$hidden_span->setAttribute('class', 'sr-only');
+				$text_node->parentNode->replaceChild($hidden_span, $text_node);
+				$hidden_span->appendChild($text_node);
+			}
+		}
+
+		// Extract just the breadcrumb content
+		$body = $dom->getElementsByTagName('body')->item(0);
+		$result = '';
+		foreach ($body->childNodes as $node) {
+			$result .= $dom->saveHTML($node);
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Get trimmed excerpt with custom word count
 	 *
 	 * Uses WordPress's excerpt generation with wp_trim_words for
