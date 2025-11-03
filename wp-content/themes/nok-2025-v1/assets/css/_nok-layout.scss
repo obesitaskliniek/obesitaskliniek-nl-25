@@ -141,6 +141,10 @@
       grid-column-start: 1;
     }
 
+    .first-row-first-column {
+      grid-area: 1 / 1;
+    }
+
     /* Weirdos */
     .stick-to-left-viewport-side { /* Only works properly for FIRST column! */
       margin-left: calc(-1 * ((100vw - (var(--section-max-width, 100vw) - (var(--nok-nok-spacing-section-sides) * 2))) / 2));
@@ -188,21 +192,4 @@
 }
 .half-flex-gap {
   gap: calc(var(--flex-gap) / 2);
-}
-.no {
-  &-gap {//note: will not unset the variable, so gap will still be inherited
-    gap: 0rem;
-  }
-  &-grid-gap {
-    --grid-gap: 0rem;
-  }
-  &-flex-gap {
-    --flex-gap: 0rem;
-  }
-  &-row-gap {
-    --row-gap: 0rem;
-  }
-  &-column-gap {
-    --column-gap: 0rem;
-  }
 }
