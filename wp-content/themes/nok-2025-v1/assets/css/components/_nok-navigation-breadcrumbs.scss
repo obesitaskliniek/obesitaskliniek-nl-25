@@ -12,6 +12,7 @@
 
   font-size: 0.875rem;
   line-height: 1.5;
+  max-width: 100%;
 
   // Yoast breadcrumb wrapper
   #breadcrumbs {
@@ -25,26 +26,37 @@
     display: flex;
     gap: var(--gap);
     align-items: center;
+    max-width: 100%;
 
-    // Breadcrumb links
-    > span:first-child {
-      a svg {
-        @include components-base.transition-properties {
-          transition: color calc(var(--animation-duration--in, var(--animation-duration, components-base.$animation-duration)) * .75) ease-in-out;
+    // Breadcrumb items
+    > span {
+      white-space: nowrap;
+
+      &:first-child {
+        flex-shrink: 0;
+        a svg {
+          @include components-base.transition-properties {
+            transition: color calc(var(--animation-duration--in, var(--animation-duration, components-base.$animation-duration)) * .75) ease-in-out;
+          }
+        }
+        a:hover svg {
+          --text-base: var(--text-color--hover);
         }
       }
-      a:hover svg {
-        --text-base: var(--text-color--hover);
+      &:not(:first-child) {
+        a {
+          color: var(--text-color, var(--bg-color--contrast, inherit));
+          --underline-color: var(--text-color, var(--bg-color--contrast, inherit));
+          --underline-color--active: var(--text-color--contrast, var(--bg-color, inherit));
+          @include components-base.nok-inline-link;
+        }
+      }
+      &:last-child {
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
-    > span:not(:first-child) {
-      a {
-        color: var(--text-color, var(--bg-color--contrast, inherit));
-        --underline-color: var(--text-color, var(--bg-color--contrast, inherit));
-        --underline-color--active: var(--text-color--contrast, var(--bg-color, inherit));
-        @include components-base.nok-inline-link;
-      }
-    }
+
   }
 
   // Fallback styling

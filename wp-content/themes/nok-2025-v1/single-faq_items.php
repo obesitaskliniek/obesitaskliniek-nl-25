@@ -47,16 +47,15 @@ function nok_get_categories($as_title = false) : string {
         nok-bg-darkerblue nok-dark-bg-darkestblue nok-text-white nok-dark-text-white
         nok-bg-alpha-10 nok-dark-bg-alpha-10 nok-subtle-shadow">
             <div class="article">
-                <h2 class="nok-fs-2 nok-fs-to-md-1" title="<?= nok_get_categories(true); ?>">
-                    <?= nok_get_categories(); ?>
-                </h2>
+                <?php Helpers::render_breadcrumbs(); ?>
+                <h2 class="sr-only" title="<?= nok_get_categories(true); ?>">Categorie: <?= nok_get_categories(); ?></h2>
                 <?php the_title( '<h1 class="nok-fs-6">', '</h1>' ); ?>
             </div>
 
         </div>
     </nok-hero>
 
-    <nok-section class="no-aos">
+    <nok-section class="no-aos z-ascend">
         <div class="nok-section__inner
         nok-layout-grid nok-layout-grid__3-column fill-one nok-grid-gap-section-padding">
             <article class="baseline-grid" title="Vraag: <?= get_the_title(); ?>" data-requires="./domule/modules/hnl.baseline-grid.mjs">
