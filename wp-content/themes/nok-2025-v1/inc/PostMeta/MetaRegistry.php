@@ -93,12 +93,14 @@ class MetaRegistry {
 	}
 
 	/**
-	 * Get REST API type for field
+	 * Get database storage type for field
+	 *
+	 * Note: opening_hours uses 'string' because it's stored as JSON in the database.
+	 * The REST API schema (defined in MetaRegistrar) handles the object representation.
 	 */
 	public static function get_rest_type( string $type ): string {
 		return match ( $type ) {
 			'number', 'checkbox', 'post_select' => 'integer',
-			'opening_hours' => 'object',
 			default => 'string',
 		};
 	}
@@ -106,11 +108,14 @@ class MetaRegistry {
 	/**
 	 * Get default value for field type
 	 * Returns type-appropriate default to avoid WordPress meta registration errors
+	 *
+	 * Note: opening_hours returns JSON string '{}' because it's stored as JSON in database.
+	 * The prepare_callback in MetaRegistrar decodes this to an array for the REST API.
 	 */
 	public static function get_default_value( string $type ) {
 		return match ( $type ) {
 			'number', 'checkbox', 'post_select' => 0,
-			'opening_hours' => [],
+			'opening_hours' => '{}',
 			default => '',
 		};
 	}
