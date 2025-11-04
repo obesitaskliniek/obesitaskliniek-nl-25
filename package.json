@@ -1,21 +1,4 @@
 {
   "private": true,
-  "workspaces": [
-    "wp-content/themes/nok-2025-v1"
-  ],
-  "dependencies": {
-    "@wordpress/data": "^10.32.0",
-    "@wordpress/dom-ready": "^4.32.0",
-    "@wordpress/scripts": "^30.25.0",
-    "autoprefixer": "^10.4.20",
-    "csso": "^5.0.5",
-    "csso-cli": "^4.0.2",
-    "google-closure-compiler": "^20240317.0.0",
-    "postcss": "^8.5.1",
-    "postcss-cli": "^11.0.0",
-    "sass": "^1.83.4"
-  },
-  "devDependencies": {
-    "svgo": "^4.0.0"
-  }
+  "description": "WordPress core files - for IDE indexing only. All development happens in wp-content/themes/nok-2025-v1/"
 }
