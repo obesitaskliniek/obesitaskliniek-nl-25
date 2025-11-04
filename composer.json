@@ -1,0 +1,14 @@
+{
+  "name": "nok/obesitaskliniek-nl-25",
+  "description": "Nederlandse Obesitas Kliniek Website",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "NOK2025\\V1\\": "wp-content/themes/nok-2025-v1/inc/"
+    }
+  },
+  "require": {
+    "php": ">=8.1"
+  }
+}
+

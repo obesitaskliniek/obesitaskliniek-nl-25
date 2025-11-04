@@ -44,8 +44,12 @@ class MetaRegistrar {
 					'auth_callback'     => function() {
 						return current_user_can( 'edit_posts' );
 					},
-					'default'           => $field['default'],
 				];
+
+				// Add default value for simple types (not for complex REST schemas)
+				if ( $field['type'] !== 'opening_hours' ) {
+					$args['default'] = $field['default'];
+				}
 
 				// Add schema for object types
 				if ( $field['type'] === 'opening_hours' ) {
