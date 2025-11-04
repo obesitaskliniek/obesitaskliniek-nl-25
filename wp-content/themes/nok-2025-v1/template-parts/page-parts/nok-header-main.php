@@ -177,7 +177,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                 <div>Zoek</div>
                 <div>NL</div>
                 <a href="#"
-                   data-toggles="open" data-target=".nok-nav-control-dropdown"
+                   data-toggles="open" data-target=".nok-nav-control-dropdown" data-on-hover="false"
                    data-swipe-close=".nok-nav-control-dropdown" data-autohide="10">
                     <span style="font-variant: all-small-caps;">a</span>A
                 </a>

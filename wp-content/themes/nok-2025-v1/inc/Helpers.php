@@ -505,13 +505,13 @@ class Helpers {
 			if ( $is_explicitly_closed ) {
 				// Explicitly marked as closed
 				$output .= sprintf(
-					'<p class="nok-mb-0"><strong>%s:</strong> <span style="color: #999;">Gesloten</span></p>',
+					'<p class="nok-layout-flex-row space-between"><span>%s</span> <span style="color: #999;">Gesloten</span></p>',
 					esc_html( $day_label )
 				);
 			} elseif ( $time_block && isset( $time_block['opens'] ) && isset( $time_block['closes'] ) ) {
 				// Has opening hours
 				$output .= sprintf(
-					'<p class="nok-mb-0"><strong>%s:</strong> %s - %s</p>',
+					'<p class="nok-layout-flex-row space-between"><span>%s</span> <span>%s - %s uur</span></p>',
 					esc_html( $day_label ),
 					esc_html( $time_block['opens'] ),
 					esc_html( $time_block['closes'] )
@@ -519,7 +519,7 @@ class Helpers {
 			} else {
 				// No hours available
 				$output .= sprintf(
-					'<p class="nok-mb-0"><strong>%s:</strong> <span style="color: #999;">Gesloten</span></p>',
+					'<p class="nok-layout-flex-row space-between"><span>%s</span> <span style="color: #999;">Gesloten</span></p>',
 					esc_html( $day_label )
 				);
 			}

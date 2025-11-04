@@ -139,3 +139,22 @@
     @include components-base.nok-subtle-shadow;
   }
 }*/
+
+.nok-faded-background {
+  position: relative;
+  &::before {
+    content: "";
+    background: var(--bg-image);
+    mask-image: linear-gradient(to right, transparent, #000);
+    background-size: cover;
+    background-position: center;
+    display: block;
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: 0.7;
+  }
+}
