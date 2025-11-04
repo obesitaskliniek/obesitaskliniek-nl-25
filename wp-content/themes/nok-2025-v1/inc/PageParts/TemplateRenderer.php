@@ -303,10 +303,11 @@ class TemplateRenderer {
 	 * @return array Fields with tokens replaced
 	 */
 	private function replace_tokens(array $fields): array {
-		global $post;
+		// Use queried object (the actual page being viewed), not current loop post
+		$post = get_queried_object();
 
 		// Only process if we have a post context
-		if (!$post) {
+		if (!$post || !($post instanceof \WP_Post)) {
 			return $fields;
 		}
 
@@ -353,6 +354,18 @@ class TemplateRenderer {
 		}
 
 		return $processed_fields;
+	}
+
+	/**
+	 * Process tokens in string content (public wrapper for page part content)
+	 *
+	 * @param string $content Content with tokens to process
+	 * @return string Content with tokens replaced
+	 */
+	public function process_content_tokens(string $content): string {
+		// Wrap in array for replace_tokens(), then unwrap
+		$result = $this->replace_tokens(['content' => $content]);
+		return $result['content'] ?? $content;
 	}
 
 	/**

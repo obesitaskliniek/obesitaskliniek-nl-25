@@ -60,7 +60,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 			<?php endif; ?>
 
 			<article class="narrow-paragraphs">
-				<?php the_content(); ?>
+				<?php the_content();?>
 			</article>
 
 			<?php if ( $phone || $email || $opening_hours ) : ?>

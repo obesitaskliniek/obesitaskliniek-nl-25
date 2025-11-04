@@ -12,6 +12,7 @@ use NOK2025\V1\PageParts\PreviewSystem;
 use NOK2025\V1\PageParts\TemplateRenderer;
 use NOK2025\V1\PageParts\RestEndpoints;
 use NOK2025\V1\SEO\YoastIntegration;
+use WP_Post;
 
 /**
  * Theme - Main theme orchestrator using singleton pattern
@@ -130,6 +131,7 @@ final class Theme {
 
 		// Content filters
 		add_filter( 'the_content', [ $this, 'enhance_paragraph_classes' ], 1 );
+		add_filter('the_content', [$this, 'process_page_part_tokens'], 5);
 		add_filter( 'show_admin_bar', [ $this, 'maybe_hide_admin_bar' ] );
 
 		// Template hierarchy
@@ -447,6 +449,26 @@ final class Theme {
 	 */
 	public function enhance_paragraph_classes( $content ) {
 		return str_replace( '<p>', '<p class="wp-block-paragraph">', $content );
+	}
+
+	/**
+	 * Process tokens in page part content
+	 *
+	 * Only processes tokens when rendering page_part post type to avoid
+	 * overhead on regular posts/pages.
+	 *
+	 * @param string $content Post content
+	 * @return string Content with tokens replaced
+	 */
+	public function process_page_part_tokens(string $content): string {
+		global $post;
+
+		// Only process page_part post type
+		if (!$post || get_post_type($post) !== 'page_part') {
+			return $content;
+		}
+
+		return $this->template_renderer->process_content_tokens($content);
 	}
 
 	/**
