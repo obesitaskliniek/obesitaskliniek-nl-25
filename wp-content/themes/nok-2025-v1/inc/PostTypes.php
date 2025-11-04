@@ -14,6 +14,7 @@ class PostTypes {
 	public function register_post_types(): void {
 		$this->register_page_part_post_type();
 		$this->register_template_layout_post_type();
+		$this->register_vestiging_post_type();
 		// Add other post types here as needed
 	}
 
@@ -123,6 +124,78 @@ class PostTypes {
 		];
 
 		register_post_type( 'template_layout', $args );
+	}
+
+	/**
+	 * Register the vestiging custom post type
+	 *
+	 * Vestigingen (locations/offices) represent physical clinic locations.
+	 * Each vestiging has address, contact info, and opening hours.
+	 *
+	 * Meta fields (registered in Theme.php):
+	 * - _street, _housenumber, _postal_code, _city
+	 * - _phone (formatted via Helpers::format_phone())
+	 * - _email
+	 * - _opening_hours (JSON, formatted via Helpers::format_opening_hours())
+	 *
+	 * URLs:
+	 * - Archive: /vestigingen/
+	 * - Single: /vestigingen/{slug}/
+	 *
+	 * Templates:
+	 * - archive-vestiging.php
+	 * - template-parts/single-vestiging-content.php
+	 */
+	private function register_vestiging_post_type(): void {
+		$labels = [
+			'name'               => __( 'Vestigingen', THEME_TEXT_DOMAIN ),
+			'singular_name'      => __( 'Vestiging', THEME_TEXT_DOMAIN ),
+			'add_new_item'       => __( 'Nieuwe vestiging toevoegen', THEME_TEXT_DOMAIN ),
+			'edit_item'          => __( 'Vestiging bewerken', THEME_TEXT_DOMAIN ),
+			'new_item'           => __( 'Nieuwe vestiging', THEME_TEXT_DOMAIN ),
+			'view_item'          => __( 'Vestiging bekijken', THEME_TEXT_DOMAIN ),
+			'view_items'         => __( 'Vestigingen bekijken', THEME_TEXT_DOMAIN ),
+			'search_items'       => __( 'Vestigingen zoeken', THEME_TEXT_DOMAIN ),
+			'not_found'          => __( 'Geen vestigingen gevonden.', THEME_TEXT_DOMAIN ),
+			'not_found_in_trash' => __( 'Geen vestigingen gevonden in prullenbak.', THEME_TEXT_DOMAIN ),
+			'all_items'          => __( 'Alle vestigingen', THEME_TEXT_DOMAIN ),
+			'archives'           => __( 'Vestiging archieven', THEME_TEXT_DOMAIN ),
+			'attributes'         => __( 'Vestiging attributen', THEME_TEXT_DOMAIN ),
+		];
+
+		$args = [
+			'labels'              => $labels,
+			'description'         => __( 'Kliniek vestigingen met adres- en contactgegevens.', THEME_TEXT_DOMAIN ),
+			'public'              => true,
+			'publicly_queryable'  => true,
+			'show_ui'             => true,
+			'show_in_menu'        => true,
+			'show_in_nav_menus'   => true,
+			'show_in_admin_bar'   => true,
+			'show_in_rest'        => true,
+			'rest_base'           => 'vestigingen',
+			'menu_position'       => 6,
+			'menu_icon'           => 'dashicons-location-alt',
+			'capability_type'     => 'post',
+			'hierarchical'        => false,
+			'supports'            => [
+				'title',
+				'editor',
+				'thumbnail',
+				'revisions',
+				'custom-fields',
+			],
+			'has_archive'         => 'vestigingen',
+			'rewrite'             => [
+				'slug'       => 'vestigingen',
+				'with_front' => false,
+			],
+			'query_var'           => true,
+			'can_export'          => true,
+			'delete_with_user'    => false,
+		];
+
+		register_post_type( 'vestiging', $args );
 	}
 
 	/**

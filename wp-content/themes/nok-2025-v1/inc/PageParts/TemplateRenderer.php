@@ -180,6 +180,9 @@ class TemplateRenderer {
 			}
 		}
 
+		// Replace tokens in field values
+		$fields = $this->replace_tokens($fields);
+
 		$context = new FieldContext($fields, $defaults);
 		$template_path = get_theme_file_path("template-parts/{$template_type}/{$design}.php");
 
@@ -286,6 +289,70 @@ class TemplateRenderer {
 	 */
 	public function get_current_context(): string {
 		return $this->context->get_context();
+	}
+
+	/**
+	 * Replace tokens in field values with dynamic content
+	 *
+	 * Supported tokens:
+	 * - {{post_title}} - Current post title
+	 * - {{post_meta:field_name}} - Post meta field value
+	 * - {{vestiging_meta:field_name}} - Vestiging meta field value (via behandeld_door)
+	 *
+	 * @param array $fields Field values to process
+	 * @return array Fields with tokens replaced
+	 */
+	private function replace_tokens(array $fields): array {
+		global $post;
+
+		// Only process if we have a post context
+		if (!$post) {
+			return $fields;
+		}
+
+		$processed_fields = [];
+
+		foreach ($fields as $key => $value) {
+			// Only process string values
+			if (!is_string($value)) {
+				$processed_fields[$key] = $value;
+				continue;
+			}
+
+			// Replace {{post_title}}
+			$value = str_replace('{{post_title}}', get_the_title($post->ID), $value);
+
+			// Replace {{post_meta:field_name}}
+			$value = preg_replace_callback('/\{\{post_meta:([a-zA-Z0-9_-]+)\}\}/', function($matches) use ($post) {
+				$field_name = $matches[1];
+				$meta_key = '_' . $field_name;
+				$meta_value = get_post_meta($post->ID, $meta_key, true);
+				return $meta_value ?: '';
+			}, $value);
+
+			// Replace {{vestiging_meta:field_name}}
+			$value = preg_replace_callback('/\{\{vestiging_meta:([a-zA-Z0-9_-]+)\}\}/', function($matches) use ($post) {
+				$field_name = $matches[1];
+
+				// Get behandeld_door post ID from current post meta
+				// TODO: Once post_select field is implemented, this will return an integer
+				// For now, it may contain text that needs to be parsed
+				$vestiging_id = get_post_meta($post->ID, '_behandeld_door', true);
+
+				if (!$vestiging_id || !is_numeric($vestiging_id)) {
+					return '';
+				}
+
+				// Get vestiging meta field
+				$meta_key = '_' . $field_name;
+				$meta_value = get_post_meta($vestiging_id, $meta_key, true);
+				return $meta_value ?: '';
+			}, $value);
+
+			$processed_fields[$key] = $value;
+		}
+
+		return $processed_fields;
 	}
 
 	/**

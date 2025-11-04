@@ -311,6 +311,224 @@ class Helpers {
 	}
 
 	/**
+	 * Format Dutch phone numbers for display
+	 *
+	 * Formats Dutch phone numbers with area code separation and grouping.
+	 * Mirrors the JavaScript formatPhone function from util.format.mjs.
+	 *
+	 * Handles:
+	 * - Mobile numbers (06)
+	 * - Geographic area codes (010, 020, etc.)
+	 * - International prefixes (+31, 0031)
+	 * - Premium/toll-free numbers (0900, 0800)
+	 *
+	 * Output format:
+	 * - National: `020 - 123 45 67`
+	 * - International: `+31 20 - 123 45 67`
+	 *
+	 * @param string $phone Phone number to format
+	 * @return string Formatted phone number or original input if invalid
+	 *
+	 * @example
+	 * format_phone('0201234567');
+	 * // Returns: '020 - 123 45 67'
+	 *
+	 * @example
+	 * format_phone('+31201234567');
+	 * // Returns: '+31 20 - 123 45 67'
+	 *
+	 * @example
+	 * format_phone('0612345678');
+	 * // Returns: '06 - 123 45 678'
+	 */
+	public static function format_phone( string $phone ): string {
+		// Dutch area code prefixes ordered by length (longest first for greedy matching)
+		$area_prefixes = [
+			// 4-digit prefixes
+			'0909', '0906', '0900', '0842', '0800', '0676',
+			// 3-digit prefixes
+			'0111', '0475', '0113', '0478', '0114', '0481', '0115', '0485',
+			'0117', '0486', '0118', '0487', '0488', '0492', '0161', '0493',
+			'0162', '0495', '0164', '0497', '0165', '0499', '0166', '0511',
+			'0167', '0512', '0168', '0513', '0172', '0514', '0174', '0515',
+			'0180', '0516', '0181', '0517', '0182', '0518', '0183', '0519',
+			'0184', '0521', '0186', '0522', '0187', '0523', '0222', '0524',
+			'0223', '0525', '0224', '0527', '0226', '0528', '0227', '0529',
+			'0228', '0251', '0543', '0252', '0544', '0255', '0545', '0294',
+			'0546', '0297', '0547', '0299', '0548', '0313', '0561', '0314',
+			'0562', '0315', '0566', '0316', '0570', '0317', '0571', '0318',
+			'0572', '0320', '0573', '0321', '0575', '0341', '0577', '0342',
+			'0578', '0343', '0591', '0344', '0592', '0345', '0593', '0346',
+			'0594', '0347', '0595', '0348', '0596', '0418', '0597', '0411',
+			'0598', '0412', '0599', '0413', '0416',
+			// 2-digit prefixes (common area codes)
+			'010', '013', '015', '020', '023', '024', '026', '030', '033',
+			'035', '036', '038', '040', '043', '045', '046', '050', '053',
+			'055', '058', '070', '071', '072', '073', '074', '075', '076',
+			'077', '078', '079',
+			// Mobile
+			'06'
+		];
+
+		$result = [];
+		$country_prefix = '';
+
+		// Normalize: strip whitespace and non-numeric characters except + at start
+		$normalized = preg_replace( '/\s+/', '', $phone );
+		$normalized = preg_replace( '/[^\d+]/', '', $normalized );
+
+		// Extract international prefix if present
+		if ( str_starts_with( $normalized, '00' ) || str_starts_with( $normalized, '+' ) ) {
+			$country_prefix = str_starts_with( $normalized, '+' )
+				? substr( $normalized, 0, 3 )   // +31
+				: substr( $normalized, 0, 4 );  // 0031
+			$normalized = '0' . substr( $normalized, strlen( $country_prefix ) );
+			$result[] = $country_prefix;
+		}
+
+		// Find longest matching area code (greedy match)
+		$area_code = substr( $normalized, 0, 3 ); // Default: first 3 digits
+		for ( $length = 5; $length >= 2; $length-- ) {
+			$candidate = substr( $normalized, 0, $length );
+			if ( in_array( $candidate, $area_prefixes, true ) ) {
+				$area_code = $candidate;
+				break;
+			}
+		}
+
+		// Extract subscriber number (digits after area code)
+		$subscriber_number = substr( $normalized, strlen( $area_code ) );
+
+		// Format area code (strip leading 0 if international)
+		$formatted_area_code = $country_prefix
+			? substr( $area_code, 1 )
+			: $area_code;
+		$result[] = $formatted_area_code . ' - ';
+
+		// Group subscriber number: XX XX XX XX or XX XX XX
+		$subscriber_length = strlen( $subscriber_number );
+		if ( $subscriber_length > 7 ) {
+			// 8+ digits: XXX XX XX XX or XX XX XX XX
+			if ( preg_match( '/(\d{2,3})(\d{2})(\d{2})(\d{2})/', $subscriber_number, $matches ) ) {
+				array_shift( $matches ); // Remove full match
+				$result[] = implode( ' ', $matches );
+			} else {
+				$result[] = $subscriber_number;
+			}
+		} elseif ( $subscriber_length >= 6 ) {
+			// 6-7 digits: XX XX XX or XXX XX XX
+			if ( preg_match( '/(\d{2,3})(\d{2})(\d{2})/', $subscriber_number, $matches ) ) {
+				array_shift( $matches ); // Remove full match
+				$result[] = implode( ' ', $matches );
+			} else {
+				$result[] = $subscriber_number;
+			}
+		} else {
+			// Too short, just append as-is
+			$result[] = $subscriber_number;
+		}
+
+		$formatted = implode( ' ', $result );
+		// Clean up multiple spaces
+		$formatted = preg_replace( '/\s{2,}/', ' ', $formatted );
+
+		// Return original if result looks invalid
+		if ( strlen( $normalized ) < 10 || empty( $subscriber_number ) ) {
+			return $phone;
+		}
+
+		return trim( $formatted );
+	}
+
+	/**
+	 * Format opening hours JSON into readable HTML
+	 *
+	 * Converts opening hours JSON structure into formatted HTML output
+	 * with Dutch day names. Respects weekdays template with individual day overrides.
+	 *
+	 * Displays Monday-Friday only (weekend hours are not supported in this implementation).
+	 *
+	 * Logic:
+	 * - For Mon-Fri: Uses individual day hours if set, otherwise falls back to "weekdays" hours
+	 * - Shows "Gesloten" if no hours are available or day is explicitly marked as closed
+	 *
+	 * @param string $opening_hours_json JSON string of opening hours
+	 * @return string Formatted HTML output with Monday-Friday hours
+	 *
+	 * @example format_opening_hours('{"weekdays":[{"opens":"09:00","closes":"17:00"}],"monday":[]}')
+	 * Returns: <p>Maandag: 09:00 - 17:00</p> (uses weekdays fallback)
+	 *
+	 * @example format_opening_hours('{"weekdays":[{"opens":"09:00","closes":"17:00"}],"wednesday":[{"closed":true}]}')
+	 * Returns: Monday-Friday with Wednesday showing "Gesloten"
+	 */
+	public static function format_opening_hours( string $opening_hours_json ): string {
+		if ( empty( $opening_hours_json ) || $opening_hours_json === '{}' ) {
+			return '';
+		}
+
+		$hours = json_decode( $opening_hours_json, true );
+		if ( ! is_array( $hours ) ) {
+			return '';
+		}
+
+		$day_labels = [
+			'monday'    => 'Maandag',
+			'tuesday'   => 'Dinsdag',
+			'wednesday' => 'Woensdag',
+			'thursday'  => 'Donderdag',
+			'friday'    => 'Vrijdag',
+		];
+
+		$weekdays_template = isset( $hours['weekdays'] ) && ! empty( $hours['weekdays'] ) ? $hours['weekdays'][0] : null;
+		$weekday_keys = [ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday' ];
+
+		$output = '';
+		foreach ( $day_labels as $day_key => $day_label ) {
+			$day_hours = isset( $hours[ $day_key ] ) && ! empty( $hours[ $day_key ] ) ? $hours[ $day_key ] : [];
+
+			// Determine which hours to use
+			$time_block = null;
+			$is_explicitly_closed = false;
+
+			if ( count( $day_hours ) > 0 ) {
+				// Individual day hours set - check if explicitly closed
+				$time_block = $day_hours[0];
+				if ( isset( $time_block['closed'] ) && $time_block['closed'] === true ) {
+					$is_explicitly_closed = true;
+				}
+			} elseif ( in_array( $day_key, $weekday_keys, true ) && $weekdays_template ) {
+				// Weekday without individual hours - use weekdays template
+				$time_block = $weekdays_template;
+			}
+
+			// Output the day
+			if ( $is_explicitly_closed ) {
+				// Explicitly marked as closed
+				$output .= sprintf(
+					'<p class="nok-mb-0"><strong>%s:</strong> <span style="color: #999;">Gesloten</span></p>',
+					esc_html( $day_label )
+				);
+			} elseif ( $time_block && isset( $time_block['opens'] ) && isset( $time_block['closes'] ) ) {
+				// Has opening hours
+				$output .= sprintf(
+					'<p class="nok-mb-0"><strong>%s:</strong> %s - %s</p>',
+					esc_html( $day_label ),
+					esc_html( $time_block['opens'] ),
+					esc_html( $time_block['closes'] )
+				);
+			} else {
+				// No hours available
+				$output .= sprintf(
+					'<p class="nok-mb-0"><strong>%s:</strong> <span style="color: #999;">Gesloten</span></p>',
+					esc_html( $day_label )
+				);
+			}
+		}
+
+		return $output;
+	}
+
+	/**
 	 * Render breadcrumb navigation
 	 *
 	 * Outputs semantic breadcrumb navigation using Yoast SEO breadcrumbs

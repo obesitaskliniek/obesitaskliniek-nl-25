@@ -73,15 +73,15 @@ final class Theme {
 		new PostTypes();
 
 		// Initialize components with proper dependencies
-		$this->asset_manager = new AssetManager();
-		$this->menu_manager = new MenuManager();
-		$this->registry = new Registry();
-		$this->meta_manager = new MetaManager($this->registry);
-		$this->preview_system = new PreviewSystem($this->meta_manager);
-		$this->template_renderer = new TemplateRenderer();
-		$this->yoast_integration = new YoastIntegration();
-		$this->block_renderers = new BlockRenderers();
-		$this->rest_endpoints = new RestEndpoints(
+		$this->asset_manager       = new AssetManager();
+		$this->menu_manager        = new MenuManager();
+		$this->registry            = new Registry();
+		$this->meta_manager        = new MetaManager( $this->registry );
+		$this->preview_system      = new PreviewSystem( $this->meta_manager );
+		$this->template_renderer   = new TemplateRenderer();
+		$this->yoast_integration   = new YoastIntegration();
+		$this->block_renderers     = new BlockRenderers();
+		$this->rest_endpoints      = new RestEndpoints(
 			$this->template_renderer,
 			$this->meta_manager
 		);
@@ -104,7 +104,7 @@ final class Theme {
 	 * $registry = Theme::get_instance()->get_page_part_registry();
 	 */
 	public static function get_instance(): Theme {
-		if (self::$instance === null) {
+		if ( self::$instance === null ) {
 			self::$instance = new self();
 			self::$instance->setup_hooks();
 		}
@@ -114,7 +114,7 @@ final class Theme {
 
 	private function setup_hooks(): void {
 		// Core theme setup
-		add_action('init', [$this, 'theme_supports']);
+		add_action( 'init', [ $this, 'theme_supports' ] );
 
 		// Let components register their hooks
 		$this->asset_manager->register_hooks();
@@ -126,61 +126,62 @@ final class Theme {
 		$this->block_renderers->register_hooks();
 
 		// Customizer
-		add_action('customize_register', [$this, 'register_customizer']);
+		add_action( 'customize_register', [ $this, 'register_customizer' ] );
 
 		// Content filters
-		add_filter('the_content', [$this, 'enhance_paragraph_classes'], 1);
-		add_filter('show_admin_bar', [$this, 'maybe_hide_admin_bar']);
+		add_filter( 'the_content', [ $this, 'enhance_paragraph_classes' ], 1 );
+		add_filter( 'show_admin_bar', [ $this, 'maybe_hide_admin_bar' ] );
 
 		// Template hierarchy
-		add_filter('single_template', [$this, 'category_based_single_template']);
+		add_filter( 'single_template', [ $this, 'category_based_single_template' ] );
 		/**
 		 * Add fallback alt text to images missing it
 		 *
 		 * @param array $attr Image attributes
 		 * @param WP_Post $attachment Image attachment post
+		 *
 		 * @return array Modified attributes
 		 */
-		add_filter('wp_get_attachment_image_attributes', function($attr, $attachment) {
+		add_filter( 'wp_get_attachment_image_attributes', function ( $attr, $attachment ) {
 			// Only add fallback if alt is missing or empty
-			if (empty($attr['alt'])) {
+			if ( empty( $attr['alt'] ) ) {
 				// Try attachment title
 				$attr['alt'] = $attachment->post_title;
 
 				// Still empty? Use attachment filename (cleaned up)
-				if (empty($attr['alt'])) {
-					$filename = get_attached_file($attachment->ID);
-					$attr['alt'] = ucwords(str_replace(['-', '_'], ' ',
-						pathinfo($filename, PATHINFO_FILENAME)
-					));
+				if ( empty( $attr['alt'] ) ) {
+					$filename    = get_attached_file( $attachment->ID );
+					$attr['alt'] = ucwords( str_replace( [ '-', '_' ], ' ',
+						pathinfo( $filename, PATHINFO_FILENAME )
+					) );
 				}
 			}
 
 			return $attr;
-		}, 10, 2);
+		}, 10, 2 );
 
 		/**
 		 * Force complete thumbnail regeneration after image editing
 		 */
-		add_action('wp_save_image_editor_file', function($dummy, $filename, $image, $mime_type, $post_id) {
-			if (!$post_id) {
+		add_action( 'wp_save_image_editor_file', function ( $dummy, $filename, $image, $mime_type, $post_id ) {
+			if ( ! $post_id ) {
 				return;
 			}
 
 			// Queue regeneration after save completes
-			add_action('shutdown', function() use ($post_id) {
-				require_once(ABSPATH . 'wp-admin/includes/image.php');
+			add_action( 'shutdown', function () use ( $post_id ) {
+				require_once( ABSPATH . 'wp-admin/includes/image.php' );
 
-				$file_path = get_attached_file($post_id);
-				if ($file_path) {
+				$file_path = get_attached_file( $post_id );
+				if ( $file_path ) {
 					// This regenerates ALL registered sizes from the newly edited original
 					wp_update_attachment_metadata(
 						$post_id,
-						wp_generate_attachment_metadata($post_id, $file_path)
+						wp_generate_attachment_metadata( $post_id, $file_path )
 					);
 				}
-			});
-		}, 10, 5);
+			} );
+		}, 10, 5 );
 	}
 
 	// =============================================================================
@@ -202,9 +203,9 @@ final class Theme {
 	 * // add_action('init', [$this, 'theme_supports']);
 	 */
 	public function theme_supports(): void {
-		add_theme_support('title-tag');
-		add_theme_support('post-thumbnails');
-		add_theme_support('html5', ['search-form', 'comment-form']);
+		add_theme_support( 'title-tag' );
+		add_theme_support( 'post-thumbnails' );
+		add_theme_support( 'html5', [ 'search-form', 'comment-form' ] );
 	}
 
 	/**
@@ -213,14 +214,15 @@ final class Theme {
 	 * Delegates customizer registration to the Customizer class.
 	 *
 	 * @param \WP_Customize_Manager $wp_customize WordPress customizer manager instance
+	 *
 	 * @return void
 	 *
 	 * @example Usage (automatically called via 'customize_register' hook)
 	 * // Hooked via setup_hooks()
 	 * // add_action('customize_register', [$this, 'register_customizer']);
 	 */
-	public function register_customizer(\WP_Customize_Manager $wp_customize): void {
-		Customizer::register($wp_customize);
+	public function register_customizer( \WP_Customize_Manager $wp_customize ): void {
+		Customizer::register( $wp_customize );
 	}
 
 	/**
@@ -230,6 +232,7 @@ final class Theme {
 	 *
 	 * @param string $key The setting key to retrieve
 	 * @param mixed $default Optional. Default value if setting not found. Default null.
+	 *
 	 * @return mixed The setting value or default
 	 *
 	 * @example Get logo URL with fallback
@@ -238,8 +241,8 @@ final class Theme {
 	 * @example Check if feature is enabled
 	 * $enabled = $theme->get_setting('feature_enabled', false);
 	 */
-	public function get_setting(string $key, $default = null) {
-		return get_theme_mod($key, $default);
+	public function get_setting( string $key, $default = null ) {
+		return get_theme_mod( $key, $default );
 	}
 
 	/**
@@ -314,6 +317,7 @@ final class Theme {
 	 * @param int $post_id The post ID containing the page part
 	 * @param string $design The page part design slug (e.g., 'nok-hero')
 	 * @param bool $is_editing Optional. Whether in editing context. Default false.
+	 *
 	 * @return array Associative array of field values keyed by field name
 	 *
 	 * @example Get hero fields for current post
@@ -324,8 +328,8 @@ final class Theme {
 	 * $fields = $theme->get_page_part_fields($post_id, 'nok-cta', true);
 	 * // Returns additional metadata for editor UI
 	 */
-	public function get_page_part_fields(int $post_id, string $design, bool $is_editing = false): array {
-		return $this->meta_manager->get_page_part_fields($post_id, $design, $is_editing);
+	public function get_page_part_fields( int $post_id, string $design, bool $is_editing = false ): array {
+		return $this->meta_manager->get_page_part_fields( $post_id, $design, $is_editing );
 	}
 
 	/**
@@ -335,6 +339,7 @@ final class Theme {
 	 * labels for display in forms and UI. Delegated to Registry component.
 	 *
 	 * @param string $field_name Field name to convert (e.g., 'hero_title' or 'cta-button')
+	 *
 	 * @return string Human-readable label (e.g., 'Hero Title' or 'CTA Button')
 	 *
 	 * @example Generate label for form field
@@ -345,8 +350,8 @@ final class Theme {
 	 * echo $theme->generate_field_label('cta_url');
 	 * // Output: "CTA URL"
 	 */
-	public function generate_field_label(string $field_name): string {
-		return $this->registry->generate_field_label($field_name);
+	public function generate_field_label( string $field_name ): string {
+		return $this->registry->generate_field_label( $field_name );
 	}
 
 	/**
@@ -358,6 +363,7 @@ final class Theme {
 	 *
 	 * @param string $design Page part design slug (e.g., 'nok-hero')
 	 * @param array $args Optional. Variables to extract into template scope. Default [].
+	 *
 	 * @return void
 	 *
 	 * @example Include hero template with custom args
@@ -366,8 +372,8 @@ final class Theme {
 	 *     'show_overlay' => true
 	 * ]);
 	 */
-	public function include_page_part_template(string $design, array $args = []): void {
-		$this->template_renderer->include_page_part_template($design, $args);
+	public function include_page_part_template( string $design, array $args = [] ): void {
+		$this->template_renderer->include_page_part_template( $design, $args );
 	}
 
 	/**
@@ -380,6 +386,7 @@ final class Theme {
 	 * @param string $design Page part design slug (e.g., 'nok-cta')
 	 * @param array $fields Field values to pass to template
 	 * @param bool $register_css Optional. Whether to register component CSS. Default false.
+	 *
 	 * @return void
 	 *
 	 * @example Embed CTA without post context
@@ -392,8 +399,8 @@ final class Theme {
 	 * @example Embed hero for preview
 	 * $theme->embed_page_part_template('nok-hero', $preview_fields);
 	 */
-	public function embed_page_part_template(string $design, array $fields, bool $register_css = false): void {
-		$this->template_renderer->embed_page_part_template($design, $fields, $register_css);
+	public function embed_page_part_template( string $design, array $fields, bool $register_css = false ): void {
+		$this->template_renderer->embed_page_part_template( $design, $fields, $register_css );
 	}
 
 	/**
@@ -406,6 +413,7 @@ final class Theme {
 	 * @param string $design Post part design slug (e.g., 'post-header')
 	 * @param array $fields Field values to pass to template
 	 * @param bool $register_css Optional. Whether to register component CSS. Default false.
+	 *
 	 * @return void
 	 *
 	 * @example Embed post header
@@ -415,8 +423,8 @@ final class Theme {
 	 *     'date' => get_the_date()
 	 * ], true);
 	 */
-	public function embed_post_part_template(string $design, array $fields, bool $register_css = false): void {
-		$this->template_renderer->embed_post_part_template($design, $fields, $register_css);
+	public function embed_post_part_template( string $design, array $fields, bool $register_css = false ): void {
+		$this->template_renderer->embed_post_part_template( $design, $fields, $register_css );
 	}
 
 	// =============================================================================
@@ -430,14 +438,15 @@ final class Theme {
 	 * to all <p> tags, ensuring consistent styling with Gutenberg blocks.
 	 *
 	 * @param string $content The post content HTML
+	 *
 	 * @return string Modified content with paragraph classes
 	 *
 	 * @example Usage (automatically applied via 'the_content' filter)
 	 * // Input: <p>Hello world</p>
 	 * // Output: <p class="wp-block-paragraph">Hello world</p>
 	 */
-	public function enhance_paragraph_classes($content) {
-		return str_replace('<p>', '<p class="wp-block-paragraph">', $content);
+	public function enhance_paragraph_classes( $content ) {
+		return str_replace( '<p>', '<p class="wp-block-paragraph">', $content );
 	}
 
 	/**
@@ -447,14 +456,15 @@ final class Theme {
 	 * to the URL. Useful for clean screenshots and presentations.
 	 *
 	 * @param bool $show Whether to show the admin bar
+	 *
 	 * @return bool Modified show value
 	 *
 	 * @example Hide admin bar via URL
 	 * // Visit: https://example.com/page?hide_adminbar
 	 * // Admin bar will be hidden
 	 */
-	public function maybe_hide_admin_bar($show) {
-		if (isset($_GET['hide_adminbar'])) {
+	public function maybe_hide_admin_bar( $show ) {
+		if ( isset( $_GET['hide_adminbar'] ) ) {
 			return false;
 		}
 
@@ -467,21 +477,22 @@ final class Theme {
 	 * Checks for single-cat-{slug}.php before falling back to single.php.
 	 *
 	 * @param string $template Path to template file
+	 *
 	 * @return string Modified template path
 	 */
-	public function category_based_single_template(string $template): string {
-		if (!is_singular('post')) {
+	public function category_based_single_template( string $template ): string {
+		if ( ! is_singular( 'post' ) ) {
 			return $template;
 		}
 
 		$categories = get_the_category();
-		if (empty($categories)) {
+		if ( empty( $categories ) ) {
 			return $template;
 		}
 
-		foreach ($categories as $category) {
-			$cat_template = locate_template("single-cat-{$category->slug}.php");
-			if ($cat_template) {
+		foreach ( $categories as $category ) {
+			$cat_template = locate_template( "single-cat-{$category->slug}.php" );
+			if ( $cat_template ) {
 				return $cat_template;
 			}
 		}
@@ -489,32 +500,99 @@ final class Theme {
 		return $template;
 	}
 
+	/**
+	 * Register custom meta fields for post types
+	 *
+	 * Registers meta fields for:
+	 * - Post type (ervaringen category): naam_patient, highlighted_excerpt, behandeld_door
+	 * - Vestiging CPT: street, housenumber, postal_code, city, phone, email, opening_hours
+	 *
+	 * Fields are registered via MetaRegistry and automatically integrated with:
+	 * - WordPress REST API (show_in_rest)
+	 * - Block editor meta panels (via MetaRegistrar)
+	 * - Custom sanitization callbacks per field type
+	 *
+	 * @return void
+	 */
 	private function register_post_custom_fields(): void {
 		// Get category IDs programmatically
-		$experience_cat = get_category_by_slug('ervaringen');
+		$experience_cat = get_category_by_slug( 'ervaringen' );
 
-		PostMeta\MetaRegistry::register_field('post', 'naam_patient', [
-			'type' => 'text',
-			'label' => 'Naam patiënt',
+		PostMeta\MetaRegistry::register_field( 'post', 'naam_patient', [
+			'type'        => 'text',
+			'label'       => 'Naam patiënt',
 			'placeholder' => 'Voer de naam in...',
 			'description' => 'De naam wordt gebruikt op verschillende manieren, bijvoorbeeld voor de "Lees het verhaal van <naam>" links',
-			'categories' => [$experience_cat->term_id],
-		]);
+			'categories'  => [ $experience_cat->term_id ],
+		] );
 
-		PostMeta\MetaRegistry::register_field('post', 'highlighted_excerpt', [
-			'type' => 'textarea',
-			'label' => 'Samenvatting',
+		PostMeta\MetaRegistry::register_field( 'post', 'highlighted_excerpt', [
+			'type'        => 'textarea',
+			'label'       => 'Samenvatting',
 			'placeholder' => 'Voer een korte samenvatting van 1-2 zinnen in...',
 			'description' => 'Deze samenvatting wordt bijvoorbeeld gebruikt bij het uitlichten van dit ervaringsverhaal. Als dit veld leeg is worden de eerste 55 woorden van de tekst gebruikt.',
-			'categories' => [$experience_cat->term_id],
-		]);
+			'categories'  => [ $experience_cat->term_id ],
+		] );
 
-		PostMeta\MetaRegistry::register_field('post', 'behandeld_door', [
-			'type' => 'textarea',
-			'label' => 'Vestiging',
-			'placeholder' => 'Kies de vestiging...',
-			'description' => 'Selecteer de vestiging waar deze patient behandeld is.',
-			'categories' => [$experience_cat->term_id],
-		]);
+		PostMeta\MetaRegistry::register_field( 'post', 'behandeld_door', [
+			'type'        => 'post_select',
+			'post_type'   => 'vestiging',
+			'label'       => 'Behandelende vestiging',
+			'placeholder' => 'Onbekend / Niet van toepassing',
+			'description' => 'Selecteer de vestiging waar deze patiënt behandeld is, of laat dit veld op "Onbekend" staan als dit niet van toepassing is.',
+			'categories'  => [ $experience_cat->term_id ],
+		] );
+
+		// Vestiging meta fields
+		PostMeta\MetaRegistry::register_field( 'vestiging', 'street', [
+			'type'        => 'text',
+			'label'       => 'Straat',
+			'placeholder' => 'Voer straatnaam in...',
+			'description' => 'De straatnaam van deze vestiging',
+		] );
+
+		PostMeta\MetaRegistry::register_field( 'vestiging', 'housenumber', [
+			'type'        => 'text',
+			'label'       => 'Huisnummer',
+			'placeholder' => 'Voer huisnummer in...',
+			'description' => 'Het huisnummer van deze vestiging',
+		] );
+
+		PostMeta\MetaRegistry::register_field( 'vestiging', 'postal_code', [
+			'type'        => 'text',
+			'label'       => 'Postcode',
+			'placeholder' => 'Voer postcode in...',
+			'description' => 'De postcode van deze vestiging',
+		] );
+
+		PostMeta\MetaRegistry::register_field( 'vestiging', 'city', [
+			'type'        => 'text',
+			'label'       => 'Stad',
+			'placeholder' => 'Voer plaatsnaam in...',
+			'description' => 'De plaatsnaam van deze vestiging',
+		] );
+
+		// TODO: Change to 'tel' type once MetaRegistry supports it
+		PostMeta\MetaRegistry::register_field( 'vestiging', 'phone', [
+			'type'        => 'text',
+			'label'       => 'Telefoonnummer',
+			'placeholder' => 'Voer telefoonnummer in...',
+			'description' => 'Het telefoonnummer van deze vestiging',
+		] );
+
+		PostMeta\MetaRegistry::register_field( 'vestiging', 'email', [
+			'type'        => 'email',
+			'label'       => 'E-mailadres',
+			'placeholder' => 'Voer e-mailadres in...',
+			'description' => 'Het e-mailadres van deze vestiging',
+		] );
+
+		PostMeta\MetaRegistry::register_field( 'vestiging', 'opening_hours', [
+			'type'        => 'opening_hours',
+			'label'       => 'Openingstijden',
+			'description' => 'Stel hier de standaard openingstijden in. Je kunt alle weekdagen instellen op een vaste 
+			opening- en sluitingstijd, en daarvan afwijken door een individuele dag aan te vinken en daar andere waardes 
+			in te vullen. Of selecteer enkel de dagen waarop de vestiging geopend is.',
+		] );
 	}
 }

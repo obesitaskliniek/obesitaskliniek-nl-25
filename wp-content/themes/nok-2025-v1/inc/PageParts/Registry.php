@@ -86,7 +86,8 @@ class Registry {
 				'slug'                       => 'Slug',
 				'icon'                       => 'Icon',
 				'custom_fields'              => 'Custom Fields',
-				'featured_image_overridable' => 'Featured Image Overridable'
+				'featured_image_overridable' => 'Featured Image Overridable',
+				'restriction'                => 'Restriction'
 			] );
 
 			if ( empty( $data['slug'] ) ) {
@@ -98,6 +99,9 @@ class Registry {
 
 			// Parse featured image overridable flag
 			$data['featured_image_overridable'] = strtolower( $data['featured_image_overridable'] ?? '' ) === 'true';
+
+			// Parse restriction
+			$data['restriction'] = $this->parse_restriction( $data['restriction'] ?? '' );
 
 			$this->part_registry[ $data['slug'] ] = $data;
 		}
@@ -461,5 +465,51 @@ class Registry {
 		$label = str_replace( [ '_', '-' ], ' ', $field_name );
 
 		return ucwords( $label );
+	}
+
+	/**
+	 * Parse restriction from template header
+	 *
+	 * Parses the Restriction header to determine which post types can use this page part.
+	 * Format: "post_types:type1,type2,type3"
+	 *
+	 * @param string $restriction_string Raw restriction string from template header
+	 * @return array Parsed restriction with 'post_types' key containing array of allowed post types
+	 *
+	 * @example Parse simple restriction
+	 * $restriction = $this->parse_restriction('post_types:post,page');
+	 * // Returns: ['post_types' => ['post', 'page']]
+	 *
+	 * @example Parse single post type
+	 * $restriction = $this->parse_restriction('post_types:template_layout');
+	 * // Returns: ['post_types' => ['template_layout']]
+	 *
+	 * @example Empty restriction (no restrictions)
+	 * $restriction = $this->parse_restriction('');
+	 * // Returns: []
+	 */
+	private function parse_restriction( string $restriction_string ): array {
+		if ( empty( $restriction_string ) ) {
+			return [];
+		}
+
+		$restriction = [];
+
+		// Parse post_types restriction
+		// Format: "post_types:type1,type2,type3"
+		// Example: "post_types:post,template_layout"
+		if ( preg_match( '/post_types:([a-zA-Z0-9_,]+)/', $restriction_string, $matches ) ) {
+			$post_types_string = $matches[1];
+			// Split by comma and trim whitespace
+			$post_types = array_map( 'trim', explode( ',', $post_types_string ) );
+			// Remove empty values
+			$post_types = array_filter( $post_types );
+
+			if ( ! empty( $post_types ) ) {
+				$restriction['post_types'] = $post_types;
+			}
+		}
+
+		return $restriction;
 	}
 }

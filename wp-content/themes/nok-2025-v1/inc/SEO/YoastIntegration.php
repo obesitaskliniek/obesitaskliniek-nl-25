@@ -33,6 +33,8 @@ class YoastIntegration {
 		// Exclude page_part from Yoast indexables and sitemaps
 		add_filter('wpseo_indexable_excluded_post_types', [$this, 'exclude_page_parts_from_indexables']);
 		add_filter('wpseo_sitemap_exclude_post_type', [$this, 'exclude_page_parts_from_sitemap'], 10, 2);
+		// Fix breadcrumb archive URLs for custom post types
+		add_filter('wpseo_breadcrumb_links', [$this, 'fix_breadcrumb_archive_urls']);
 	}
 
 	public function exclude_page_parts_from_indexables(array $excluded): array {
@@ -42,6 +44,39 @@ class YoastIntegration {
 
 	public function exclude_page_parts_from_sitemap(bool $excluded, string $post_type): bool {
 		return $post_type === 'page_part' ? true : $excluded;
+	}
+
+	/**
+	 * Fix breadcrumb archive URLs for custom post types
+	 *
+	 * Yoast's breadcrumb system has an architectural limitation where it doesn't
+	 * automatically respect WordPress's has_archive custom slugs. When a post type
+	 * is registered with has_archive set to a custom string (e.g., 'vestigingen'
+	 * for post type 'vestiging'), Yoast constructs breadcrumb URLs from the post
+	 * type name rather than querying WordPress's rewrite system.
+	 *
+	 * This method uses Yoast's official wpseo_breadcrumb_links extension point
+	 * to correct archive URLs by calling WordPress core's get_post_type_archive_link()
+	 * function, ensuring breadcrumbs respect the has_archive configuration.
+	 *
+	 * @param array $links Array of breadcrumb items from Yoast
+	 * @return array Modified breadcrumb array with corrected archive URLs
+	 */
+	public function fix_breadcrumb_archive_urls(array $links): array {
+		// Only process on vestiging-related pages
+		if (!is_singular('vestiging') && !is_post_type_archive('vestiging')) {
+			return $links;
+		}
+
+		foreach ($links as $key => $link) {
+			// Identify the vestiging archive breadcrumb by its ptarchive reference
+			if (isset($link['ptarchive']) && $link['ptarchive'] === 'vestiging') {
+				// Use WordPress core function to get the correct archive URL
+				$links[$key]['url'] = get_post_type_archive_link('vestiging');
+			}
+		}
+
+		return $links;
 	}
 
 	/**
