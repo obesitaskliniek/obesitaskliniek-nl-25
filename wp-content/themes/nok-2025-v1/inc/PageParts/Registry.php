@@ -283,7 +283,7 @@ class Registry {
 					'options'       => $options,        // Actual values
 					'option_labels' => $option_labels,  // Display labels
 					'page_editable' => $is_page_editable,
-					'default'       => $default_value,
+					'default'       => $this->resolve_select_default( $default_value, $options, $option_labels ),
 					'description'   => $description
 				];
 			}
@@ -437,6 +437,34 @@ class Registry {
 		}
 
 		return $fields;
+	}
+
+	/**
+	 * Resolve select default - map label to value if needed
+	 *
+	 * @param mixed $default_value Default from !default() flag
+	 * @param array $options Actual values
+	 * @param array $option_labels Display labels
+	 * @return mixed Resolved value or original
+	 */
+	private function resolve_select_default( $default_value, array $options, array $option_labels ) {
+		if ( $default_value === null || $default_value === '' ) {
+			return $default_value;
+		}
+
+		// Check if default is a label - map to corresponding value
+		$label_index = array_search( $default_value, $option_labels, true );
+		if ( $label_index !== false ) {
+			return $options[ $label_index ];
+		}
+
+		// Check if default is already a value - use as-is
+		if ( in_array( $default_value, $options, true ) ) {
+			return $default_value;
+		}
+
+		// Fallback to literal value (backward compat)
+		return $default_value;
 	}
 
 	/**

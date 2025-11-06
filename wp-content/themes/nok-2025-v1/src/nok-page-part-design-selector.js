@@ -469,9 +469,10 @@ function DesignSlugPanel() {
             customFields.forEach(field => {
                 const metaValue = meta[field.meta_key];
                 // Use field default if meta value is empty/undefined
-                const effectiveValue = (metaValue !== undefined && metaValue !== '')
+                const effectiveValue = (metaValue !== undefined)
                     ? metaValue
                     : (field.default || '');
+                console.info(field.meta_key, effectiveValue)
                 initialValues[field.meta_key] = effectiveValue;
             });
             setLocalFieldValues(initialValues);

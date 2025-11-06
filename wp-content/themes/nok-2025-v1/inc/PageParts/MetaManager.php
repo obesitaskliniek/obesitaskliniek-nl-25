@@ -29,7 +29,7 @@ class MetaManager {
 		add_action( 'manage_page_part_posts_custom_column', [ $this, 'render_page_part_column' ], 10, 2 );
 		add_action( 'restrict_manage_posts', [ $this, 'add_template_filter' ] );
 		add_action( 'parse_query', [ $this, 'filter_by_template' ] );
-		if ( ! isset($_GET['show_custom_fields'])) {
+		if ( ! isset( $_GET['show_custom_fields'] ) ) {
 			add_filter( 'is_protected_meta', [ $this, 'protect_page_part_meta' ], 10, 2 );
 		}
 	}
@@ -37,8 +37,9 @@ class MetaManager {
 	/**
 	 * Mark page part meta fields as protected from Custom Fields panel
 	 *
-	 * @param bool   $protected Whether the key is protected
-	 * @param string $meta_key  Meta key being checked
+	 * @param bool $protected Whether the key is protected
+	 * @param string $meta_key Meta key being checked
+	 *
 	 * @return bool Whether to protect this meta key
 	 */
 	public function protect_page_part_meta( bool $protected, string $meta_key ): bool {
@@ -75,7 +76,7 @@ class MetaManager {
 			'show_in_rest'      => true,
 			'single'            => true,
 			'sanitize_callback' => 'sanitize_key',
-			'auth_callback'     => function() {
+			'auth_callback'     => function () {
 				return current_user_can( 'edit_posts' );
 			},
 			'default'           => '',
@@ -91,16 +92,27 @@ class MetaManager {
 			foreach ( $template_data['custom_fields'] as $field ) {
 				$sanitize_callback = $this->get_sanitize_callback( $field['type'] );
 
-				register_post_meta( 'page_part', $field['meta_key'], [
+				// Check if field has empty string as valid option
+				$has_empty_option = $field['type'] === 'select'
+				                    && in_array( '', $field['options'] ?? [], true );
+
+				$meta_args = [
 					'type'              => $this->get_meta_type( $field['type'] ),
 					'show_in_rest'      => true,
 					'single'            => true,
 					'sanitize_callback' => $sanitize_callback,
-					'auth_callback'     => function() {
+					'auth_callback'     => function () {
 						return current_user_can( 'edit_posts' );
 					},
-					'default'           => $this->get_default_value( $field['type'], $field ),
-				] );
+				];
+
+				// Only register default if field doesn't have empty string as option
+				// Allows WordPress to save empty strings as explicit values
+				if ( ! $has_empty_option ) {
+					$meta_args['default'] = $this->get_default_value( $field['type'], $field );
+				}
+
+				register_post_meta( 'page_part', $field['meta_key'], $meta_args );
 			}
 		}
 	}
@@ -135,17 +147,20 @@ class MetaManager {
 			$short_field_name = $field['name'];
 			$is_text_based    = in_array( $field['type'], [ 'text', 'textarea' ], true );
 
-			$actual_meta_value                     = get_post_meta( $post_id, $meta_key, true );
+			$actual_meta_value = get_post_meta( $post_id, $meta_key, true );
 
-		// Use template default if available and value is empty
-		if ( empty( $actual_meta_value ) && isset( $field['default'] ) ) {
-			$page_part_fields[ $short_field_name ] = $field['default'];
-		} elseif ( empty( $actual_meta_value ) ) {
-			$page_part_fields[ $short_field_name ] = $is_editing ?
-				( $is_text_based ? Helpers::show_placeholder( $short_field_name ) : ( $default_fields[ $field['type'] ] ?? '' ) ) : '';
-		} else {
-			$page_part_fields[ $short_field_name ] = $actual_meta_value;
-		}
+			// Use template default only if meta key doesn't exist in database
+			// get_post_meta() returns false when key doesn't exist, but '' when set to empty
+			if ( $actual_meta_value === false && isset( $field['default'] ) ) {
+				$page_part_fields[ $short_field_name ] = $field['default'];
+			} elseif ( $actual_meta_value === false ) {
+				// Meta key doesn't exist and no default defined
+				$page_part_fields[ $short_field_name ] = $is_editing ?
+					( $is_text_based ? Helpers::show_placeholder( $short_field_name ) : ( $default_fields[ $field['type'] ] ?? '' ) ) : '';
+			} else {
+				// Meta key exists - use exact value (including empty string)
+				$page_part_fields[ $short_field_name ] = $actual_meta_value;
+			}
 		}
 
 		return $page_part_fields;
