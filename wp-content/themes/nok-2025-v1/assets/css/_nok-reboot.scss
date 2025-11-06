@@ -79,9 +79,9 @@ hr {
   /* Avoid text overflows */
   overflow-wrap: break-word;
   text-wrap: balance;
-  + p {
-    margin-top: 1em;
-  }
+  //+ p {
+  //  margin-top: 1em;
+  //}
 }
 
 h1 {
@@ -129,11 +129,11 @@ p {
     margin-top: 1em;
   }
 
-  @for $i from 1 through 6 {
-    & + h#{$i} {
-      margin-top: 1em;
-    }
-  }
+ // @for $i from 1 through 6 {
+  //  & + h#{$i} {
+  //    margin-top: 1em;
+  //  }
+  //}
 }
 
 // Abbreviations

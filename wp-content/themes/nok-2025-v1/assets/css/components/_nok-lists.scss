@@ -63,14 +63,15 @@ ul.wp-block-list {
   }
 
   &.checkmarks {
+    --checkmark-color: var(--nok-green);
     li {
       &:before {
         margin-block: 0;
-        margin-right: .5em;
+        margin-right: 1em;
         content: "\2713";
         background: transparent;
-        border: 2px solid var(--nok-green);
-        color: var(--nok-green);
+        border: 2px solid var(--checkmark-color);
+        color: var(--checkmark-color);
         aspect-ratio: 1 / 1;
         font-size: 1.25rem;
         width: 1.5em;
@@ -79,6 +80,9 @@ ul.wp-block-list {
         justify-content: center;
         font-weight: bold;
       }
+    }
+    &-yellow {
+      --checkmark-color: var(--nok-yellow);
     }
   }
 }

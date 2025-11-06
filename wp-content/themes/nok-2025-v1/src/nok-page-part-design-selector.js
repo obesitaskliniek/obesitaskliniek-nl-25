@@ -472,7 +472,6 @@ function DesignSlugPanel() {
                 const effectiveValue = (metaValue !== undefined)
                     ? metaValue
                     : (field.default || '');
-                console.info(field.meta_key, effectiveValue)
                 initialValues[field.meta_key] = effectiveValue;
             });
             setLocalFieldValues(initialValues);

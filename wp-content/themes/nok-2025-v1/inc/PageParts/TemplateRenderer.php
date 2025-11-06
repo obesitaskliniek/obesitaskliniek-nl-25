@@ -56,6 +56,34 @@ class TemplateRenderer {
 	}
 
 	/**
+	 * Register WordPress hooks for token replacement
+	 */
+	public function register_hooks(): void {
+		// Process tokens in page part titles
+		add_filter('the_title', [$this, 'process_title_tokens'], 10, 2);
+	}
+
+	/**
+	 * Process tokens in page part post titles
+	 *
+	 * Applies token replacement to page_part post titles wherever they're displayed.
+	 * Only processes page_part post type to avoid overhead on other content.
+	 *
+	 * @param string $title Post title
+	 * @param int $post_id Post ID
+	 * @return string Title with tokens replaced
+	 */
+	public function process_title_tokens(string $title, int $post_id): string {
+		// Only process page_part post type
+		if (get_post_type($post_id) !== 'page_part') {
+			return $title;
+		}
+
+		// Use existing process_content_tokens() method
+		return $this->process_content_tokens($title);
+	}
+
+	/**
 	 * Include a page part template with standardized setup
 	 * Used for frontend rendering and high-level template inclusion
 	 */
@@ -321,7 +349,7 @@ class TemplateRenderer {
 			}
 
 			// Replace {{post_title}}
-			$value = str_replace('{{post_title}}', get_the_title($post->ID), $value);
+			$value = str_replace('{{post_title}}', $post->post_title, $value);
 
 			// Replace {{post_meta:field_name}}
 			$value = preg_replace_callback('/\{\{post_meta:([a-zA-Z0-9_-]+)\}\}/', function($matches) use ($post) {

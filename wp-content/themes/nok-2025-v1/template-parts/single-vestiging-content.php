@@ -43,7 +43,7 @@ $has_featured_image = has_post_thumbnail( get_the_ID() ) && $featured_image !== 
         <div class="nok-section__inner
             nok-layout-grid nok-layout-grid__3-column fill-one
             nok-grid-gap-section-padding nok-mt-0">
-            <article>
+            <article class="nok-column-first-2 nok-layout-flex-column nok-align-items-start text-start">
                 <?php Helpers::the_content_rest(); ?>
             </article>
             <aside class="nok-column-last-1 nok-order-0 nok-order-lg-1 nok-grid-gap-1 nok-pull-up-lg-3

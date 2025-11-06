@@ -122,6 +122,7 @@ final class Theme {
 		$this->menu_manager->register_hooks();
 		$this->meta_manager->register_hooks();
 		$this->preview_system->register_hooks();
+		$this->template_renderer->register_hooks();
 		$this->rest_endpoints->register_hooks();
 		$this->yoast_integration->register_hooks();
 		$this->block_renderers->register_hooks();
