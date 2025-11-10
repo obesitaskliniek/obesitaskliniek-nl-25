@@ -249,7 +249,7 @@ class Registry {
 				$content_with_trailing = trim( $matches[2] );
 
 				// Remove the trailing ) that closes the select() function
-				$options_string = rtrim( $content_with_trailing, ')' );
+				$options_string = preg_replace( '/\)$/', '', $content_with_trailing, 1 );
 
 				// Split options by pipe separator
 				$raw_options = array_map( 'trim', explode( '|', $options_string ) );
