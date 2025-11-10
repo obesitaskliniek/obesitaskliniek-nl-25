@@ -282,7 +282,7 @@ const RepeaterField = ({field, schema, value, onChange}) => {
                         <IconSelector
                             value={fieldValue}
                             icons={availableIcons}
-                            onChange={(value) => updateMetaField(field.meta_key, value)}
+                            onChange={(value) => updateItem(index, fieldKey, value)}
                         />
                         {field.description && (
                             <p style={helpStyle}>

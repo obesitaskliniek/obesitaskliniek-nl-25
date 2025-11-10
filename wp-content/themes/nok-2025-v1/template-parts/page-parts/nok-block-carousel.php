@@ -5,6 +5,7 @@
  * Slug: nok-block-carousel
  * Custom Fields:
  * - blocks:repeater(icon:icon-selector,title:text,content:textarea,link_url:url)
+ * - aantal_blocks:select(2|3|4)!default(3)!descr[Aantal blokken dat in beeld is]
  * - read_more:text!default(Lees verder)
  * - colors:select(Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue)!page-editable!default(nok-bg-darkerblue nok-text-white)
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
@@ -34,7 +35,7 @@ $blocks = $c->blocks->json(array_fill(0, 6, [
 
                 <!-- Component: drag-scrollable block carousel -->
                 <div class="nok-mt-2 nok-align-self-stretch">
-                    <div class="nok-layout-grid nok-layout-grid__3-column
+                    <div class="nok-layout-grid nok-layout-grid__<?= $c->aantal_blocks->raw(); ?>-column
             nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="true">
 						<?php foreach ($blocks as $block) : ?>
                             <nok-square-block class="nok-bg-darkblue nok-text-white">

@@ -733,6 +733,7 @@ $utilities: (
     }
 
     nok-square-block {
+      word-break: break-word;
       .nok-square-block {
         &__icon,
         &__heading,

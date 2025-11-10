@@ -34,7 +34,7 @@ $featuredImage = Helpers::get_featured_image();
                         fill-fill nok-columns-to-lg-1 nok-column-gap-3
                         nok-align-items-start">
 
-            <div class="nok-order-<?= $order ?>">
+            <div class="nok-order-<?= $order ?> nok-layout-flex-column nok-align-items-start">
 				<?php if ($c->has('tagline')) : ?>
                     <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-5 nok-mb-0_5">
 						<?= $c->tagline ?>

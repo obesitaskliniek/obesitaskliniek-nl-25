@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Simple picture text block
+ * Template Name: Simple picture text block (not narrow)
  * Description: A basic block with a title, image and content. Image 'sticks' to the left or right side of the viewport.
  * Slug: nok-picture-text-block
  * Featured Image Overridable: true
@@ -13,7 +13,6 @@
  * - tekstkleur:select(Standaard::nok-text-contrast|Wit::nok-text-white|Zwart::nok-text-black)!page-editable
  * - circle_color:select(Blauw::var(--nok-darkerblue)|Wit::var(--nok-darkerblue)|Automatisch-lichter::oklch(from var(--bg-color) calc(l * 1.2) c h / 1)|Automatisch-donkerder::oklch(from var(--bg-color) calc(l * .8) c h / 1)|Uit::transparent)!page-editable!default(Uit)
  * - pull_down:checkbox!default(true)!page-editable
- * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -39,7 +38,7 @@ $featured_image = Helpers::get_featured_image($border_class);
 ?>
 <nok-section class="circle <?= $c->pull_down->isTrue('pull-down', '') ?> <?= $c->achtergrondkleur ?>"
              style="<?= $circle_style ?> <?= $circle_offset; ?>;">
-    <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
+    <div class="nok-section__inner">
         <article class="nok-align-self-stretch
                         <?= $c->tekstkleur ?>
                         text-start
