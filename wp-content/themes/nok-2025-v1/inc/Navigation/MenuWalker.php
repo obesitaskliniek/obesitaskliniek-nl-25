@@ -35,6 +35,7 @@ class MenuWalker extends \Walker_Nav_Menu {
 	private array $parent_items = [];
 
 	public function __construct(string $context = 'desktop') {
+		parent::__construct();
 		$this->context = $context;
 	}
 

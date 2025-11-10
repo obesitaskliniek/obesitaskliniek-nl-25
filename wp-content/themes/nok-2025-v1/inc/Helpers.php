@@ -33,7 +33,7 @@ use WP_Query;
  *     explicit_posts: $context->quote_posts->json(),
  *     pad_with_random: true,
  *     minimum_count: 5
- * );
+ * );/sti
  *
  * @example Render breadcrumbs
  * Helpers::render_breadcrumbs();
