@@ -587,6 +587,7 @@ class Helpers {
 		$home_icon = Assets::getIcon('ui_home', 'nok-text-lightblue larger');
 		// Check if Yoast SEO breadcrumbs are available
 		if (function_exists('yoast_breadcrumb')) {
+			/** @noinspection PhpUndefinedFunctionInspection */
 			$breadcrumb_html = yoast_breadcrumb('', '', false);
 
 			if (!empty($breadcrumb_html)) {
@@ -707,7 +708,7 @@ class Helpers {
 	 * @example Custom length
 	 * $short = Helpers::get_excerpt($post_id, 20);
 	 *
-	 * @param int|WP_Post|null $post Post ID, object, or null for current post
+	 * @param int|\WP_Post|null $post Post ID, object, or null for current post
 	 * @param int $word_count Number of words to trim to
 	 * @return string HTML-escaped excerpt
 	 */
@@ -1171,8 +1172,10 @@ class Helpers {
 
 					if ($root_count === $after_position) {
 						// Insert after this root closing tag
-						$insert_pos = $position + strlen($full_match);
-						return substr($content, 0, $insert_pos) . $injection . substr($content, $insert_pos);
+						$insert_pos = (int)($position + strlen($full_match));
+						$before = substr($content, 0, $insert_pos);
+						$after = substr($content, $insert_pos);
+						return $before . $injection . $after;
 					}
 				}
 				$depth = max(0, $depth - 1);

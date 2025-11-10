@@ -34,7 +34,7 @@ class MenuWalker extends \Walker_Nav_Menu {
 	private string $context; // 'desktop' or 'mobile'
 	private array $parent_items = [];
 
-	public function __construct(string $context = 'desktop') {
+	public function __construct(string $context = 'desktop') {4
 		parent::__construct();
 		$this->context = $context;
 	}
@@ -91,10 +91,10 @@ class MenuWalker extends \Walker_Nav_Menu {
 	/**
 	 * Start element - opening tag and content for menu item
 	 */
-	public function start_el(&$output, $item, $depth = 0, $args = null, $id = 0): void {
+	public function start_el(&$output, $data_object, $depth = 0, $args = null, $current_object_id = 0): void {
 		$indent = $this->indent($depth + 2);
 
-		$classes = empty($item->classes) ? [] : (array) $item->classes;
+		$classes = empty($data_object->classes) ? [] : (array) $data_object->classes;
 		$classes[] = 'nok-nav-menu-item';
 
 		// Add active class for current page
@@ -105,17 +105,17 @@ class MenuWalker extends \Walker_Nav_Menu {
 		$class_string = implode(' ', array_map('esc_attr', $classes));
 
 		// Determine URL
-		$url = !empty($item->url) ? $item->url : '#';
+		$url = !empty($data_object->url) ? $data_object->url : '#';
 
 		// If item has children and is top-level, link to submenu anchor (mobile) or use # (desktop)
 		if ($depth === 0 && in_array('menu-item-has-children', $classes)) {
-			$this->parent_items[$depth] = $item->title;
+			$this->parent_items[$depth] = $data_object->title;
 
 			if ($this->context === 'mobile') {
-				$url = '#submenu-' . sanitize_title($item->title);
+				$url = '#submenu-' . sanitize_title($data_object->title);
 			} elseif ($this->context === 'desktop') {
 				// Desktop parent items might just toggle dropdown
-				$url = $item->url ?: '#';
+				$url = $data_object->url ?: '#';
 			}
 		}
 
@@ -125,14 +125,14 @@ class MenuWalker extends \Walker_Nav_Menu {
 		}
 
 		$output .= "\n{$indent}<a href=\"" . esc_url($url) . '" class="' . $class_string . '">';
-		$output .= esc_html($item->title);
+		$output .= esc_html($data_object->title);
 		$output .= '</a>';
 	}
 
 	/**
 	 * End element - closing tag for menu item
 	 */
-	public function end_el(&$output, $item, $depth = 0, $args = null): void {
+	public function end_el(&$output, $data_object, $depth = 0, $args = null): void {
 		if ($this->context === 'desktop' && $depth === 0) {
 			$output .= "\n" . $this->indent($depth + 1) . '</div>';
 		}
