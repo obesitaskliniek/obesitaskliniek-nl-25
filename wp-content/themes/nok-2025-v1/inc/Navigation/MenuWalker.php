@@ -34,7 +34,7 @@ class MenuWalker extends \Walker_Nav_Menu {
 	private string $context; // 'desktop' or 'mobile'
 	private array $parent_items = [];
 
-	public function __construct(string $context = 'desktop') {4
+	public function __construct(string $context = 'desktop') {
 		parent::__construct();
 		$this->context = $context;
 	}
