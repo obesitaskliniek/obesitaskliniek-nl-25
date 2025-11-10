@@ -293,12 +293,16 @@ class Registry {
 			// Default is false if not specified
 			elseif ( preg_match( '/^([^:]+):checkbox(?:\(([^)]+)\))?$/', $definition, $matches ) ) {
 				$field_name    = trim( $matches[1] );
-				// Extract default value from parentheses, or use 'false' if not provided
-				$default_value = isset( $matches[2] ) ? trim( $matches[2] ) : 'false';
+				// Determine checkbox default value
+				if (isset($matches[2]) && $matches[2] !== '') {
+					$checkbox_default = trim($matches[2]);
+				} elseif ($default_value !== null && $default_value !== '') {
+					$checkbox_default = $default_value;
+				} else {
+					$checkbox_default = 'false';
+				}
 
-				// Convert various truthy strings to boolean
-				// Accepts: true, 1, yes, on (case-insensitive)
-				$is_default_checked    = in_array( strtolower( $default_value ), [ 'true', '1', 'yes', 'on' ], true );
+				$is_default_checked = in_array( strtolower($checkbox_default), [ 'true', '1', 'yes', 'on' ], true );
 				// Store as '1' or '0' for WordPress meta compatibility
 				$default_storage_value = $is_default_checked ? '1' : '0';
 
@@ -311,7 +315,7 @@ class Registry {
 					'label'         => $this->generate_field_label( $field_name ),
 					'options'       => [], // Empty for checkbox fields
 					'page_editable' => $is_page_editable,
-					'default'       => $default_value,
+					'default'       => $default_storage_value,
 					'description'   => $description
 				];
 			}
