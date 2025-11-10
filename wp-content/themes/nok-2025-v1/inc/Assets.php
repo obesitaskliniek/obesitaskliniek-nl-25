@@ -1,6 +1,29 @@
 <?php
 namespace NOK2025\V1;
 
+/**
+ * Assets - SVG icon management with filesystem and legacy fallback
+ *
+ * Provides centralized icon management:
+ * - Loads SVG icons from filesystem with caching
+ * - Supports prefixed naming convention (ui_, nok_)
+ * - Injects CSS classes and attributes into SVG elements
+ * - Falls back to legacy inline icons during transition
+ *
+ * @example Basic icon usage
+ * echo Assets::getIcon('ui_arrow-right', 'text-primary');
+ *
+ * @example Icon with custom attributes
+ * echo Assets::getIcon('nok_calendar', 'icon-lg', ['width' => '32', 'height' => '32']);
+ *
+ * @example Get icons by category for admin UI
+ * $uiIcons = Assets::getIconsByCategory('ui');
+ * foreach ($uiIcons as $name => $svg) {
+ *     echo "<div>$name: $svg</div>";
+ * }
+ *
+ * @package NOK2025\V1
+ */
 class Assets {
 	/** @var array<string, string> Legacy icons during transition */
 	private array $legacyIcons = [
@@ -78,6 +101,8 @@ class Assets {
 
 	/**
 	 * Load all icons from filesystem
+	 *
+	 * @return array<string, string> Icon name => SVG content
 	 */
 	private function loadIconsFromFilesystem(): array {
 		$icons = [];
@@ -98,6 +123,11 @@ class Assets {
 
 	/**
 	 * Inject class and attributes into SVG
+	 *
+	 * @param string $svg Raw SVG content
+	 * @param string $class CSS classes to add
+	 * @param array<string, string> $attrs Additional attributes
+	 * @return string Modified SVG with injected attributes
 	 */
 	private function injectSvgAttributes(string $svg, string $class, array $attrs): string {
 		$dom = new \DOMDocument();
@@ -133,7 +163,8 @@ class Assets {
 
 	/**
 	 * Get all available icons grouped by category
-	 * @return array ['ui' => ['name' => 'svg'], 'nok' => ['name' => 'svg']]
+	 *
+	 * @return array<string, array<string, string>> ['ui' => ['name' => 'svg'], 'nok' => ['name' => 'svg']]
 	 */
 	public static function getIconsForAdmin(): array {
 		$instance = new self();

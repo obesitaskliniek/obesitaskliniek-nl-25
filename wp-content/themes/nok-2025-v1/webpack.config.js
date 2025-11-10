@@ -34,6 +34,11 @@ module.exports = {
             'src/nok-image-layout-extension.js'
         ),
 
+        'assets/js/nok-button-extension': path.resolve(
+            __dirname,
+            'src/nok-button-extension.js'
+        ),
+
         'blocks/embed-nok-page-part/index': path.resolve(
             __dirname,
             'src/blocks/embed-nok-page-part/index.js'

@@ -3,6 +3,31 @@
 
 namespace NOK2025\V1\PageParts;
 
+/**
+ * PreviewSystem - Live preview system for page part custom post type editor
+ *
+ * Manages preview functionality in the page part editor:
+ * - Stores editor state in transients via AJAX
+ * - Intercepts preview requests and applies transient data
+ * - Adds preview meta box with iframe rendering
+ * - Filters post meta, title, and content during preview
+ *
+ * Works with PreviewEditor JavaScript to provide real-time updates
+ * as editors make changes without saving.
+ *
+ * @example Initialize in theme setup
+ * $preview = new PreviewSystem($meta_manager);
+ * $preview->register_hooks();
+ *
+ * @example Preview flow
+ * 1. Editor types in custom field
+ * 2. JavaScript sends AJAX request to store_preview_state
+ * 3. State saved in transient for 5 minutes
+ * 4. Preview iframe refresh picks up transient data
+ * 5. Filters apply transient values instead of database values
+ *
+ * @package NOK2025\V1\PageParts
+ */
 class PreviewSystem {
 	private MetaManager $meta_manager;
 

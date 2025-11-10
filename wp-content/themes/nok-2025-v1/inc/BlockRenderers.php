@@ -27,6 +27,7 @@ class BlockRenderers {
 		add_filter( 'render_block_core/quote', [ $this, 'render_quote_block' ], 10, 2 );
 		add_filter( 'render_block_core/heading', [ $this, 'render_heading_block' ], 10, 2 );
 		add_filter( 'render_block_core/image', [ $this, 'handle_ghost_image' ], 10, 2 );
+		add_filter( 'render_block_core/button', [ $this, 'render_button_block' ], 10, 2 );
 	}
 
 	public function handle_ghost_image( string $block_content, array $block ): string {
@@ -165,6 +166,119 @@ class BlockRenderers {
 		}
 
 		return $dom->saveHTML();
+	}
+
+	/**
+	 * Render NOK button block with icon and styling
+	 *
+	 * Transforms core/button block to apply NOK theme classes and inject optional icon.
+	 * Handles:
+	 * - Style presets (nok-bg-{style})
+	 * - Optional icon with color override
+	 * - Icon position (before/after text)
+	 * - Fill-mobile class
+	 * - Duplicate icon prevention
+	 * - Removes wrapper div to output clean anchor tag
+	 *
+	 * @param string $block_content Original block HTML
+	 * @param array $block Block data including attributes
+	 *
+	 * @return string Transformed HTML
+	 *
+	 * @example Button with icon after text
+	 * // Block attributes: nokIcon='ui_arrow-right-long', nokStyle='darkblue', nokIconPosition='after'
+	 * // Output: <a class="nok-button nok-bg-darkblue">Text<svg>...</svg></a>
+	 */
+	public function render_button_block( string $block_content, array $block ): string {
+		// Extract block attributes
+		$nok_icon          = $block['attrs']['nokIcon'] ?? '';
+		$nok_style         = $block['attrs']['nokStyle'] ?? 'darkblue';
+		$nok_icon_color    = $block['attrs']['nokIconColor'] ?? '';
+		$nok_icon_position = $block['attrs']['nokIconPosition'] ?? 'after';
+		$fill_mobile       = $block['attrs']['fillMobile'] ?? false;
+
+		// Load HTML into DOMDocument
+		$dom = new \DOMDocument();
+		@$dom->loadHTML(
+			mb_convert_encoding( $block_content, 'HTML-ENTITIES', 'UTF-8' ),
+			LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+		);
+
+		// Find button element (core/button renders as <a> tag inside <div>)
+		$button = $dom->getElementsByTagName( 'a' )->item( 0 );
+
+		if ( ! $button ) {
+			return $block_content;
+		}
+
+		// Apply NOK button classes to anchor tag
+		$existing_classes = $button->getAttribute( 'class' );
+
+		// Remove WordPress default button classes
+		$existing_classes = preg_replace( '/\bwp-block-button__link\b/', '', $existing_classes );
+		$existing_classes = preg_replace( '/\bwp-element-button\b/', '', $existing_classes );
+
+		$classes = [ 'nok-button', 'nok-text-contrast', "nok-bg-{$nok_style}" ];
+
+		if ( $fill_mobile ) {
+			$classes[] = 'fill-mobile';
+		}
+
+		$new_classes = implode( ' ', $classes );
+		$button->setAttribute( 'class', trim( "{$existing_classes} {$new_classes}" ) );
+
+		// Handle icon injection if icon is selected
+		if ( ! empty( $nok_icon ) ) {
+			// Check if icon already exists (prevent duplicates)
+			$existing_icons = $button->getElementsByTagName( 'svg' );
+			$has_icon       = false;
+
+			foreach ( $existing_icons as $svg ) {
+				if ( $svg->getAttribute( 'class' ) && strpos( $svg->getAttribute( 'class' ), 'nok-icon' ) !== false ) {
+					$has_icon = true;
+					break;
+				}
+			}
+
+			if ( ! $has_icon ) {
+				// Get icon SVG from Assets
+				$icon_name  = 'ui_' . $nok_icon;
+				$icon_class = $nok_icon_color ? "nok-text-{$nok_icon_color}" : '';
+				$icon_svg   = Assets::getIcon( $icon_name, $icon_class );
+
+				if ( ! empty( $icon_svg ) ) {
+					// Parse icon SVG into DOM
+					$icon_dom = new \DOMDocument();
+					@$icon_dom->loadHTML(
+						mb_convert_encoding( $icon_svg, 'HTML-ENTITIES', 'UTF-8' ),
+						LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+					);
+
+					$icon_svg_element = $icon_dom->getElementsByTagName( 'svg' )->item( 0 );
+
+					if ( $icon_svg_element ) {
+						// Import icon into main document
+						$icon_node = $dom->importNode( $icon_svg_element, true );
+
+						// Insert icon at correct position
+						if ( $nok_icon_position === 'before' ) {
+							// Insert as first child
+							if ( $button->firstChild ) {
+								$button->insertBefore( $icon_node, $button->firstChild );
+							} else {
+								$button->appendChild( $icon_node );
+							}
+						} else {
+							// Insert as last child (after text)
+							$button->appendChild( $icon_node );
+						}
+					}
+				}
+			}
+		}
+
+		// Extract just the anchor tag (remove wrapper div)
+		return $dom->saveHTML( $button );
 	}
 
 }

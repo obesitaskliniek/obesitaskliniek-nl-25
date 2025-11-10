@@ -157,6 +157,29 @@ class AssetManager {
 				);
 			}
 		}
+
+		// Enqueue button extension for block editor
+		if ( in_array( $hook, [ 'post.php', 'post-new.php' ] ) ) {
+			$screen = get_current_screen();
+			if ( $screen && $screen->is_block_editor() ) {
+				$button_asset = require get_theme_file_path( '/assets/js/nok-button-extension.asset.php' );
+				wp_enqueue_script(
+					'nok-button-extension',
+					get_stylesheet_directory_uri() . '/assets/js/nok-button-extension.js',
+					$button_asset['dependencies'],
+					$button_asset['version']
+				);
+
+				// Localize with ui_ icons only
+				wp_localize_script(
+					'nok-button-extension',
+					'nokButtonIcons',
+					[
+						'ui' => \NOK2025\V1\Assets::getIconsByCategory( 'ui' )
+					]
+				);
+			}
+		}
 	}
 
 	/**

@@ -3,6 +3,33 @@
 
 namespace NOK2025\V1\Navigation;
 
+/**
+ * MenuWalker - Custom WordPress nav menu walker for desktop and mobile layouts
+ *
+ * Extends Walker_Nav_Menu to provide context-specific menu HTML:
+ * - Desktop: Top-level items in grid, submenus in dropdown
+ * - Mobile: Carousel-based navigation with slide transitions
+ *
+ * Key features:
+ * - Context-aware output (desktop vs mobile)
+ * - Submenu ID generation for carousel anchors
+ * - Back button injection for mobile navigation
+ * - Active state classes for current pages
+ *
+ * @example Desktop menu
+ * wp_nav_menu([
+ *     'walker' => new MenuWalker('desktop'),
+ *     'theme_location' => 'primary'
+ * ]);
+ *
+ * @example Mobile menu with carousel
+ * wp_nav_menu([
+ *     'walker' => new MenuWalker('mobile'),
+ *     'theme_location' => 'mobile_primary'
+ * ]);
+ *
+ * @package NOK2025\V1\Navigation
+ */
 class MenuWalker extends \Walker_Nav_Menu {
 	private string $context; // 'desktop' or 'mobile'
 	private array $parent_items = [];

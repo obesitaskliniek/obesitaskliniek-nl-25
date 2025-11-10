@@ -11,6 +11,7 @@
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/dist/dom/selector-engine.min.js" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/dist/modal.min.js" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/dist/popover.min.js" />
+        <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/dist/scrollspy.min.js" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/dist/tab.min.js" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/dist/toast.min.js" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/dist/tooltip.min.js" />
@@ -27,13 +28,13 @@
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/src/dom/manipulator.min.js" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/src/util/index.min.js" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/src/util/sanitizer.min.js" />
-        <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/domule/modules/hnl.baseline-grid.min.mjs" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/entrypoint.min.mjs" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/mobileConsole/hnl.mobileconsole.min.js" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/mobileConsole/mobileConsole.user.min.js" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-accordion.min.mjs" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-aos.min.mjs" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-bmi-calculator.min.mjs" />
+        <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-button-extension.min.js" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-menu-carousel.min.mjs" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-scrollbar.min.mjs" />
         <item url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-toggler.min.mjs" />
@@ -51,6 +52,7 @@
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/dist/dom/selector-engine.min.js" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/dist/modal.min.js" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/dist/popover.min.js" />
+      <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/dist/scrollspy.min.js" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/dist/tab.min.js" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/dist/toast.min.js" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/dist/tooltip.min.js" />
@@ -67,13 +69,13 @@
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/src/dom/manipulator.min.js" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/src/util/index.min.js" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/bs/5.3.3/src/util/sanitizer.min.js" />
-      <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/domule/modules/hnl.baseline-grid.min.mjs" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/entrypoint.min.mjs" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/mobileConsole/hnl.mobileconsole.min.js" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/mobileConsole/mobileConsole.user.min.js" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-accordion.min.mjs" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-aos.min.mjs" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-bmi-calculator.min.mjs" />
+      <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-button-extension.min.js" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-menu-carousel.min.mjs" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-scrollbar.min.mjs" />
       <root url="file://$PROJECT_DIR$/wp-content/themes/nok-2025-v1/assets/js/nok-toggler.min.mjs" />

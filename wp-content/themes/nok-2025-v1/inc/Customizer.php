@@ -2,6 +2,23 @@
 // inc/Customizer.php
 namespace NOK2025\V1;
 
+/**
+ * Customizer - WordPress Customizer settings registration
+ *
+ * Registers theme customization options:
+ * - General settings (accent color)
+ * - Template layout assignments for custom post types
+ * - Dynamic dropdown population from template_layout posts
+ *
+ * @example Register in theme setup
+ * add_action('customize_register', [Customizer::class, 'register']);
+ *
+ * @example Access settings in templates
+ * $accent = get_theme_mod('accent_color', '#FF0000');
+ * $layout_id = get_theme_mod('template_layout_ervaringen', 0);
+ *
+ * @package NOK2025\V1
+ */
 class Customizer {
 
 	private static function get_template_layout_choices(): array {

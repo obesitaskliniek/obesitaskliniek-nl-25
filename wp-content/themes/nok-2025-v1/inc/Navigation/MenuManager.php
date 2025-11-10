@@ -3,12 +3,39 @@
 
 namespace NOK2025\V1\Navigation;
 
+/**
+ * MenuManager - WordPress menu registration and hierarchical rendering
+ *
+ * Handles navigation menu management:
+ * - Registers menu locations (primary, mobile, footer)
+ * - Builds hierarchical menu tree from flat WordPress menu items
+ * - Provides separate rendering for desktop bar, dropdown, and mobile carousel
+ * - Template-based rendering with context variables
+ *
+ * @example Basic usage in theme setup
+ * $menu_manager = new MenuManager();
+ * $menu_manager->register_hooks();
+ *
+ * @example Render primary navigation in header template
+ * $menu_manager->render_desktop_menu_bar('primary');
+ * $menu_manager->render_desktop_dropdown('primary');
+ *
+ * @example Render mobile menu
+ * $menu_manager->render_mobile_carousel('mobile_primary');
+ *
+ * @package NOK2025\V1\Navigation
+ */
 class MenuManager {
 
 	public function __construct() {
 		// Constructor reserved for future dependencies
 	}
 
+	/**
+	 * Register WordPress hooks
+	 *
+	 * @return void
+	 */
 	public function register_hooks(): void {
 		// Direct call during theme setup - no hook needed
 		$this->register_menus();
@@ -16,6 +43,8 @@ class MenuManager {
 
 	/**
 	 * Register theme menu locations
+	 *
+	 * @return void
 	 */
 	public function register_menus(): void {
 		register_nav_menus( [
@@ -29,8 +58,7 @@ class MenuManager {
 	 * Get menu items as hierarchical array
 	 *
 	 * @param string $location Menu location
-	 *
-	 * @return array Hierarchical menu structure
+	 * @return array<int, array> Hierarchical menu structure
 	 */
 	public function get_menu_tree( string $location ): array {
 		$locations = get_nav_menu_locations();
@@ -59,8 +87,7 @@ class MenuManager {
 	 *
 	 * @param array $items Flat array of menu items
 	 * @param int $parent_id Parent item ID
-	 *
-	 * @return array
+	 * @return array<int, array> Hierarchical array with nested children
 	 */
 	private function build_menu_tree( array $items, int $parent_id = 0 ): array {
 		$branch = [];
@@ -93,7 +120,8 @@ class MenuManager {
 	 * Render desktop menu bar (top-level items only)
 	 *
 	 * @param string $location Menu location
-	 * @param array $context Additional variables to pass to template
+	 * @param array<string, mixed> $context Additional variables to pass to template
+	 * @return void
 	 */
 	public function render_desktop_menu_bar( string $location = 'primary', array $context = [] ): void {
 		$menu_items = $this->get_menu_tree( $location );
@@ -112,7 +140,8 @@ class MenuManager {
 	 * Render desktop dropdown (all submenus)
 	 *
 	 * @param string $location Menu location
-	 * @param array $context Additional variables to pass to template
+	 * @param array<string, mixed> $context Additional variables to pass to template
+	 * @return void
 	 */
 	public function render_desktop_dropdown( string $location = 'primary', array $context = [] ): void {
 		$menu_items = $this->get_menu_tree( $location );
@@ -131,7 +160,8 @@ class MenuManager {
 	 * Render mobile carousel (full structure)
 	 *
 	 * @param string $location Menu location (falls back to primary if not set)
-	 * @param array $context Additional variables to pass to template
+	 * @param array<string, mixed> $context Additional variables to pass to template
+	 * @return void
 	 */
 	public function render_mobile_carousel( string $location = 'mobile_primary', array $context = [] ): void {
 		// Fallback to primary if mobile_primary not assigned
@@ -155,7 +185,8 @@ class MenuManager {
 	 * Load navigation template
 	 *
 	 * @param string $template_name Template filename without .php
-	 * @param array $context Variables to extract into template scope
+	 * @param array<string, mixed> $context Variables to extract into template scope
+	 * @return void
 	 */
 	private function load_template( string $template_name, array $context = [] ): void {
 		$template_path = get_template_directory() . "/template-parts/navigation/{$template_name}.php";
@@ -176,6 +207,8 @@ class MenuManager {
 
 	/**
 	 * Fallback menu when no menu is assigned (for use in templates)
+	 *
+	 * @return void
 	 */
 	public function render_fallback_menu(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {

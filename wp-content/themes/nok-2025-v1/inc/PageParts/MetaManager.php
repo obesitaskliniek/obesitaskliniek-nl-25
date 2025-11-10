@@ -5,6 +5,39 @@ namespace NOK2025\V1\PageParts;
 
 use NOK2025\V1\Helpers;
 
+/**
+ * MetaManager - Page part meta field management and persistence
+ *
+ * Handles all aspects of page part custom field data:
+ * - Registering meta fields with WordPress REST API
+ * - Retrieving field values with fallback defaults
+ * - Sanitizing and saving field data
+ * - Protecting internal meta from Custom Fields panel
+ * - Admin list columns and template filtering
+ * - Preview state synchronization from Gutenberg editor
+ * - Field value placeholders in editing mode
+ *
+ * Integrates with:
+ * - Registry: Reads field definitions
+ * - PreviewSystem: Saves transient editor state
+ * - REST API: Exposes fields to block editor
+ * - WordPress admin: Adds columns and filters
+ *
+ * @example Initialize with registry
+ * $registry = new Registry();
+ * $meta_manager = new MetaManager($registry);
+ * $meta_manager->register_hooks();
+ *
+ * @example Get page part fields for rendering
+ * $fields = $meta_manager->get_page_part_fields(123, 'nok-hero', false);
+ * echo $fields['title']; // Output field value
+ *
+ * @example Get fields in editor (with placeholders)
+ * $fields = $meta_manager->get_page_part_fields(123, 'nok-cta', true);
+ * // Returns placeholders for empty fields
+ *
+ * @package NOK2025\V1\PageParts
+ */
 class MetaManager {
 	private Registry $registry;
 

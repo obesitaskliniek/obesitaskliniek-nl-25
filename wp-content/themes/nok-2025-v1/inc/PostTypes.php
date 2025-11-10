@@ -2,6 +2,27 @@
 
 namespace NOK2025\V1;
 
+/**
+ * PostTypes - Custom post type registration and protection
+ *
+ * Registers theme custom post types:
+ * - page_part: Reusable page components for embedding
+ * - template_layout: Block editor templates for single post types
+ * - vestiging: Clinic locations with address and contact info
+ *
+ * Protects internal post types from public access:
+ * - Returns 404 for page_part and template_layout single views
+ * - Prevents search engine indexing
+ * - Allows logged-in users (for previews)
+ *
+ * @example Initialize in theme setup
+ * $post_types = new PostTypes();
+ *
+ * @example Query vestigingen
+ * $locations = get_posts(['post_type' => 'vestiging']);
+ *
+ * @package NOK2025\V1
+ */
 class PostTypes {
 	public function __construct() {
 		add_action( 'init', [ $this, 'register_post_types' ] );

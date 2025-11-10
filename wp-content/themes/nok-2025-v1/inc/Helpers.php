@@ -9,6 +9,37 @@ use DateTimeZone;
 use IntlDateFormatter;
 use WP_Query;
 
+/**
+ * Helpers - Static utility methods for theme-wide functionality
+ *
+ * Provides helper functions for:
+ * - Date and time formatting (Dutch locale)
+ * - Phone number formatting (Dutch conventions)
+ * - Opening hours display
+ * - Quote extraction and collection from experience posts
+ * - Content splitting and injection
+ * - Image handling with fallbacks
+ * - Breadcrumb rendering with Yoast integration
+ * - Security headers and CSP generation
+ *
+ * All methods are static for convenient access throughout the theme.
+ *
+ * @example Format phone number
+ * echo Helpers::format_phone('0201234567');
+ * // Outputs: 020 - 123 45 67
+ *
+ * @example Build quote collection
+ * $quotes = Helpers::build_quote_collection(
+ *     explicit_posts: $context->quote_posts->json(),
+ *     pad_with_random: true,
+ *     minimum_count: 5
+ * );
+ *
+ * @example Render breadcrumbs
+ * Helpers::render_breadcrumbs();
+ *
+ * @package NOK2025\V1
+ */
 class Helpers {
 	public static function makeRandomString( $bits = 256 ): string {
 		#generates nonce (for Google Tag Manager etc)
