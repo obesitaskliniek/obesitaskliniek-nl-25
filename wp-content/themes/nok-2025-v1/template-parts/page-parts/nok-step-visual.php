@@ -10,6 +10,7 @@
  * - button_blauw_url:url
  * - layout:select(left|right)!page-editable!default(left)
  * - colors:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white)!page-editable
+ * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -23,7 +24,7 @@ $featuredImage = Helpers::get_featured_image();
 ?>
 
 <nok-section class="linked <?= $c->colors ?>">
-    <div class="nok-section__inner">
+    <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
 		<?php if ($left) : ?>
             <div class="nok-align-self-stretch
                             text-start

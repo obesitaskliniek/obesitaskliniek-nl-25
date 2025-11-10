@@ -4,12 +4,13 @@
 @use "../nok-variables";
 
 // Collapsible accordion component using native <details> element
-$timing: 0,1,.9,1;
+$timing: 0, 1, .9, 1;
 $duration: components-base.$animation-duration;
 
 nok-accordion {
   --animation-timing: cubic-bezier(#{$timing});
   --animation-duration: #{$duration};
+
   details, summary {
     margin: 0;
     padding: 0;
@@ -18,6 +19,7 @@ nok-accordion {
     overflow: clip;
     align-self: self-start;
   }
+
   details {
     summary {
       display: flex;
@@ -27,13 +29,16 @@ nok-accordion {
       align-items: center;
       cursor: pointer;
       user-select: none;
+
       &:hover {
         color: var(--text-color--hover);
       }
+
       &::marker {
         display: none;
         visibility: collapse;
       }
+
       &::after {
         justify-self: flex-end;
         flex-shrink: 0;
@@ -50,6 +55,7 @@ nok-accordion {
         }
       }
     }
+
     &::details-content {
       padding: 0;
       @include components-base.transition-properties {
@@ -58,15 +64,18 @@ nok-accordion {
         transition-behavior: allow-discrete;
       }
     }
+
     &:not([open]) {
       summary:hover, summary:focus {
         background: var(--bg-color--hover, #f6f6f);
         color: var(--text-color--hover, var(--bg-color--contrast, #454545));
       }
+
       &::details-content {
         height: 0;
       }
     }
+
     &[open]:not(.accordion-closing) {
       // the .accordion-closing class is added in the polyfill as soon as collapsing starts,
       // so we can kick off the animation for the closing marker in time
@@ -76,6 +85,7 @@ nok-accordion {
         }
         @include components-base.accordion-button-icon(true);
       }
+
       &::details-content {
         height: auto;
       }
@@ -86,6 +96,7 @@ nok-accordion {
       @include components-base.media-breakpoint-up($breakpoint) {
         &[data-opened-at="#{$breakpoint}"] {
           display: contents;
+
           .accordion-content,
           &::details-content {
             height: auto;
@@ -108,4 +119,59 @@ nok-accordion {
       }
     }
   }
+
+  &.question-marks,
+  &.checkmarks {
+    details {
+      summary {
+        --checkmark-color: var(--nok-lightblue);
+
+        &:before {
+          --size: 1ex;
+          display: flex;
+          line-height: 1;
+          border-radius: 50%;
+
+          margin-block: 0;
+          margin-right: 1em;
+          content: "?";
+          background: transparent;
+          border: 2px solid var(--checkmark-color);
+          color: var(--checkmark-color);
+          aspect-ratio: 1 / 1;
+          font-size: 1.25rem;
+          width: 1.5em;
+          height: 1.5em;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+          @include components-base.transition-properties {
+            transform: rotate(-360deg);
+            transition:
+                    transform components-base.$animation-duration cubic-bezier(0.16, 1, 0.3, 1),
+                    color components-base.$animation-duration cubic-bezier(0.16, 1, 0.3, 1);
+          }
+        }
+      }
+
+      &[open] {
+        summary {
+          &:before {
+            @include components-base.transition-properties {
+              color: var(--bg-base-contrast);
+              transform: rotate(0deg);
+              content: "\2713";
+            }
+          }
+        }
+      }
+    }
+  }
+  &.question-marks details summary:before {
+    content: "?";
+  }
+  &.checkmarks details summary:before {
+    content: "\2713";
+  }
+
 }

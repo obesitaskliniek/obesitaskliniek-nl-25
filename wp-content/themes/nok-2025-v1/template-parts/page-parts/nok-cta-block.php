@@ -9,6 +9,7 @@
  * - icon:icon-selector!page-editable!default(ui_arrow-right-long)
  * - button_text:text!default(Lees meer)
  * - button_url:url
+ * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -25,7 +26,7 @@ $block_colors = $c->colors->is('Blauw op donkerblauw',
 ?>
 
 <nok-section class="<?= $section_colors ?>">
-    <div class="nok-section__inner">
+    <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
         <nok-square-block class="horizontal nok-p-xl-4 layout-<?= $c->layout_offset->attr() ?> <?= $block_colors ?>" data-shadow="true">
             <div class="nok-square-block__icon">
 				<?= Assets::getIcon($c->icon->raw()) ?>

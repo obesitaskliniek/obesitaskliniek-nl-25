@@ -13,6 +13,7 @@
  * - colors:select(Transparant::nok-bg-body|Grijs::nok-bg-body--darker gradient-background|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Blauw::nok-bg-darkerblue nok-text-contrast)!page-editable!default(Transparant)
  * - circle_color:select(Blauw::var(--nok-darkerblue)|Wit::var(--nok-darkerblue)|Automatisch-lichter::oklch(from var(--bg-color) calc(l * 1.2) c h / 1)|Automatisch-donkerder::oklch(from var(--bg-color) calc(l * .8) c h / 1)|Uit::transparent)!page-editable!default(Uit)
  * - quote_block_colors:select(Body::nok-bg-body nok-text-contrast|Wit::nok-bg-white nok-text-darkestblue|Blauw::nok-bg-darkblue nok-text-contrast)!page-editable!default(Wit)
+ * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -45,7 +46,7 @@ $scroller_id = 'ervaringen-scroller';
 ?>
 <nok-section class="circle <?= $c->colors ?> gradient-background"
              style="<?= $circle_style ?>; <?= $circle_offset ?>;">
-    <div class="nok-section__inner triple-margin nok-my-to-lg-4">
+    <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?> triple-margin nok-my-to-lg-4">
         <article class="nok-layout-grid
                             nok-columns-6 nok-columns-to-lg-1
                             nok-align-items-center

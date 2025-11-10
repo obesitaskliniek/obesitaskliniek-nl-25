@@ -451,7 +451,7 @@ $utilities: (
                 property: border-bottom,
                 class: #{nok-variables.$prefix}-border-bottom,
                 values: (
-                        1: 1px solid oklch(from var(--text-base) l c h / 0.25)
+                        1: 1px solid oklch(from var(--text-base, var(--text-color)) l c h/0.25)
                 )
         ),
         "border-radius": (
@@ -776,6 +776,7 @@ $utilities: (
 
 /* Animate on scroll */
 
+@media (prefers-reduced-motion: no-preference) {
 .nok-aos {
   opacity: 0;
   @include nok-mixins.no-transitions {
@@ -795,4 +796,5 @@ $utilities: (
       }
     }
   }
+}
 }

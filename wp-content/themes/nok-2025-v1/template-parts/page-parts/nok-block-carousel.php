@@ -7,6 +7,7 @@
  * - blocks:repeater(icon:icon-selector,title:text,content:textarea,link_url:url)
  * - read_more:text!default(Lees verder)
  * - colors:select(Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue)!page-editable!default(nok-bg-darkerblue nok-text-white)
+ * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -25,7 +26,7 @@ $blocks = $c->blocks->json(array_fill(0, 6, [
 
 <nok-section class="<?= $c->colors ?>">
     <div class="nok-section__inner--stretched">
-        <div class="nok-section__inner">
+        <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
 
             <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start">
 				<?php the_title('<h2 class="nok-fs-5">', '</h1>'); ?>

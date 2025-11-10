@@ -54,7 +54,7 @@ $circle_offset = "--circle-offset:" . $c->layout->is('left', 'calc(50vw - (var(-
 <nok-section class="circle <?= $c->colors ?> gradient-background"
              style="<?= $circle_style ?>; <?= $circle_offset ?>;">
 
-    <div class="nok-section__inner">
+    <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
         <!--<article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start nok-column-gap-3">-->
         <article class="nok-layout-grid nok-columns-1 nok-columns-xl-6 nok-columns-xxl-5 nok-align-items-start nok-column-gap-3">
             <?php
@@ -95,7 +95,7 @@ $circle_offset = "--circle-offset:" . $c->layout->is('left', 'calc(50vw - (var(-
             </div>
 
             <?php if ( $c->has( 'accordion_items' ) ): ?>
-                <div class="nok-layout-grid nok-layout-grid__1-column module-loaded <?= $accordion_column_class; ?>"
+                <div class="nok-layout-grid nok-layout-grid__1-column <?= $accordion_column_class; ?>"
                      data-requires="./nok-accordion.mjs" data-require-lazy="true"
                      style="order:<?= $accordion_column_order; ?>">
 
@@ -104,20 +104,7 @@ $circle_offset = "--circle-offset:" . $c->layout->is('left', 'calc(50vw - (var(-
                         <?php
                         $accordion_group = 'accordion-group';
 
-                        $accordion_data = $c->accordion_items->json( [
-                                [
-                                        'title'       => 'Titel 1',
-                                        'content'     => 'Tekst 1',
-                                        'button_text' => 'Button tekst',
-                                        'button_url'  => '#'
-                                ],
-                                [
-                                        'title'       => 'Titel 2',
-                                        'content'     => 'Tekst 2',
-                                        'button_text' => 'Button tekst',
-                                        'button_url'  => '#'
-                                ]
-                        ] );
+                        $accordion_data = $c->accordion_items->json();
 
                         foreach ( $accordion_data as $index => $item ) : ?>
                             <nok-accordion>

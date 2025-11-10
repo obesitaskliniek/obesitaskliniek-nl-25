@@ -11,6 +11,7 @@
  * - layout:select(left|right)!page-editable!default(left)
  * - achtergrondkleur:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue|Transparant::)!page-editable
  * - tekstkleur:select(Standaard::nok-text-darkerblue|Contrast::nok-text-contrast|Wit::nok-text-white|Zwart::nok-text-black)!page-editable!default(nok-text-darkerblue)
+ * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -24,7 +25,7 @@ $order = $left ? 1 : 2;
 $featuredImage = Helpers::get_featured_image();
 ?>
 <nok-section class="<?= $c->achtergrondkleur ?>">
-    <div class="nok-section__inner">
+    <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
 
         <article class="nok-align-self-stretch
                         <?= $c->tekstkleur ?>

@@ -9,6 +9,7 @@
  * - video_type:select(YouTube::youtube|Vimeo::vimeo|Self-hosted::self)!default(youtube)
  * - achtergrondkleur:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue|Donkerder::nok-bg-body--darker|Transparant::)!page-editable
  * - tekstkleur:select(Standaard::nok-text-contrast|Wit::nok-text-white|Blauw::nok-text-darkerblue)!page-editable
+*  - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -45,7 +46,7 @@ if ( $c->has( 'video_url' ) ) {
 
 <nok-video-section>
 	<nok-section class="<?= $c->achtergrondkleur ?>">
-		<div class="nok-section__inner">
+		<div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
 			<article class="nok-video-section__content <?= $c->tekstkleur ?>">
 
 				<?php if ( $video_html ): ?>

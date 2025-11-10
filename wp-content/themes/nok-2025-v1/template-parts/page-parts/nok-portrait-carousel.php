@@ -8,6 +8,7 @@
  * - button_url:url,
  * - team_members:repeater
  * - colors:select(Blauw::nok-bg-darkblue nok-text-white|Wit::nok-bg-white nok-text-darkblue nok-dark-bg-body--darker nok-dark-text-contrast)!page-editable
+ * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  *
  * todo: work out the repeater
  * @var \NOK2025\V1\PageParts\FieldContext $context
@@ -20,7 +21,7 @@ $c = $context;
 
 <nok-section class="<?= $c->colors ?>">
     <div class="nok-section__inner--stretched">
-        <div class="nok-section__inner">
+        <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
 
             <article class="nok-layout-grid nok-layout-grid__3-column nok-align-items-start">
 				<?php the_title('<h1 class="nok-column-first-2 nok-span-all-columns-to-xxl">', '</h1>'); ?>
