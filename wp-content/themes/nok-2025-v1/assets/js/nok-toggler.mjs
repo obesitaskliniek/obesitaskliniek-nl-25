@@ -93,6 +93,7 @@
  * // Click behavior - explicitly disable hover
  * <div data-toggles-class="open" data-class-target=".dropdown"
  *      data-on-hover="false">Click Me</div>
+ *
  */
 
 import {singleClick} from "./domule/modules/hnl.clickhandlers.mjs";
@@ -314,6 +315,7 @@ function resolveTargets(config, toggler, defaultTarget) {
     if (config.classes.set) {
         targets.class.set = resolveTarget(config.classes.target, toggler, defaultTarget);
     }
+
     if (config.classes.unset) {
         // Auto-target: find elements by class if no explicit target
         if (config.classes.unsetTarget || config.classes.target) {
@@ -658,12 +660,14 @@ function createToggleHandler(toggler, defaultTarget) {
     // Early exit if no operations configured
     if (!config.classes.toggle && !config.classes.set && !config.classes.unset &&
         !config.attributes.toggle && !config.attributes.set && !config.attributes.unset) {
+        logger.warn(NAME, 'No operations configured', toggler);
         return () => {};
     }
 
     // Early exit if no valid targets
     if (!targets.class.toggle && !targets.class.set && !targets.class.unset &&
         !targets.attribute.toggle && !targets.attribute.set && !targets.attribute.unset) {
+        logger.warn(NAME, 'No valid targets found', {config, toggler});
         return () => {};
     }
 

@@ -46,8 +46,8 @@ $has_featured_image = has_post_thumbnail( get_the_ID() ) && $featured_image !== 
             <article class="nok-column-first-2 nok-layout-flex-column nok-align-items-start text-start">
                 <?php Helpers::the_content_rest(); ?>
             </article>
-            <aside class="nok-column-last-1 nok-order-0 nok-order-lg-1 nok-grid-gap-1 nok-pull-up-lg-3
-            nok-layout-flex-column nok-align-items-stretch">
+            <aside class="nok-column-first-2 nok-column-last-xl-1 nok-order-0 nok-order-lg-1 nok-grid-gap-1 nok-pull-up-xl-3
+            nok-align-items-stretch nok-layout-grid nok-columns-xl-1">
                 <nok-square-block class="nok-bg-darkerblue nok-text-contrast nok-alpha-10"
                                   data-shadow="true">
                     <div class="nok-square-block__heading">
