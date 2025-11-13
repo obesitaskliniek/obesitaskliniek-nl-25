@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+    <path class="open" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10"
+          stroke-width="1.5" d="M2.7 3.9h11m-11 4h11m-11 4h11"/>
+    <path class="closed" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10"
+          stroke-width="0.8"
+          d="M2.4 2.8c-.2-.2-.2-.5 0-.7.2-.2.5-.2.7 0l5.1 5.1 5.1-5.1c.2-.2.5-.2.7 0 .2.2.2.5 0 .7L8.9 7.9 14 13c.2.2.2.5 0 .7s-.5.2-.7 0L8.2 8.6l-5.1 5.1c-.2.2-.5.2-.7 0-.2-.2-.2-.5 0-.7l5.1-5.1-5.1-5.1Z"/>
+</svg>

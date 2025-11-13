@@ -20,17 +20,15 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
 
 <nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs">
     <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkestblue--darker nok-z-1"
-                     data-on-hover="false"
+                     data-toggle-event="click"
                      data-unsets-class="sidebar-open,popup-open" data-unsets-attribute="state" data-unsets-attribute-value="open" data-no-children="true">
 
         <nok-popup class="nok-bg-body nok-dark-bg-darkerblue nok-align-items-stretch" id="popup-bmi-calculator">
             <nok-popup-header>
                 <nok-popup-title>BMI Calculator</nok-popup-title>
-                <button title="Klik om te sluiten" class="nok-button--small" data-unsets-class="popup-open" data-class-target="nok-top-navigation" data-on-hover="false"
+                <button title="Klik om te sluiten" class="nok-button--small" data-unsets-class="popup-open" data-class-target="nok-top-navigation" data-toggle-event="click"
                         data-unsets-attribute="state" data-unsets-attribute-value="open" data-attribute-target="#popup-bmi-calculator">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="0.8" d="M2.4 2.8c-.2-.2-.2-.5 0-.7.2-.2.5-.2.7 0l5.1 5.1 5.1-5.1c.2-.2.5-.2.7 0 .2.2.2.5 0 .7L8.9 7.9 14 13c.2.2.2.5 0 .7s-.5.2-.7 0L8.2 8.6l-5.1 5.1c-.2.2-.5.2-.7 0-.2-.2-.2-.5 0-.7l5.1-5.1-5.1-5.1Z"></path>
-                    </svg>
+                    <?= Assets::getIcon('ui_close') ?>
                 </button>
             </nok-popup-header>
             <nok-popup-body>
@@ -52,10 +50,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
             </button>
             <button class="nok-button nok-button--small nok-bg-darkblue nok-dark-bg-lightblue--darker nok-text-contrast"
                     tabindex="0" data-reset-font-size="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
-                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
-                </svg>
+                <?= Assets::getIcon('ui_reload') ?>
             </button>
         </div>
     </nok-accessibility-helper>
@@ -68,40 +63,22 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
             </button>
             <button class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
                     tabindex="0">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-                    <path stroke="currentColor"
-                          stroke-width="0"
-                          d='M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z'/>
-                </svg>
+                <?= Assets::getIcon('ui_telefoon') ?>
             </button>
             <button class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
                     tabindex="0">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-                    <path stroke="currentColor"
-                          stroke-width="0"
-                          d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0'/>
-                </svg>
+                <?= Assets::getIcon('ui_telefoon') ?>
             </button>
             <button class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
                     tabindex="0"
-                    data-toggles-class="open" data-class-target=".nok-nav-control-dropdown" data-on-hover="false"
+                    data-toggles-class="open" data-class-target=".nok-nav-control-dropdown" data-toggle-event="click"
                     data-swipe-close=".nok-nav-control-dropdown" data-autohide="10">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-                    <path stroke="currentColor"
-                          stroke-width="0"
-                          d='M11.7 3.7H9.9l-3.3 8.6-2.3-5.7H3.1L.8 12.3H2l.5-1.3h2.3l.5 1.3h3.1l.7-2h3.4l.8 2h1.9l-3.4-8.6ZM2.9 10l.8-2.1.8 2.1H2.9Zm6.7-1.1 1.2-3.2L12 8.9H9.7Z'/>
-                </svg>
+                <?= Assets::getIcon('ui_search') ?>
             </button>
             <button class="nok-button nok-button-menu nok-nav-menu-toggler nok-dark-bg-darkerblue nok-text-contrast no-shadow"
                     tabindex="0"
-                    data-toggles="sidebar-open" data-class-target="nok-top-navigation" data-on-hover="false">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-                    <path class="open" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10"
-                          stroke-width="1.5" d="M2.7 3.9h11m-11 4h11m-11 4h11"/>
-                    <path class="closed" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10"
-                          stroke-width="0.8"
-                          d="M2.4 2.8c-.2-.2-.2-.5 0-.7.2-.2.5-.2.7 0l5.1 5.1 5.1-5.1c.2-.2.5-.2.7 0 .2.2.2.5 0 .7L8.9 7.9 14 13c.2.2.2.5 0 .7s-.5.2-.7 0L8.2 8.6l-5.1 5.1c-.2.2-.5.2-.7 0-.2-.2-.2-.5 0-.7l5.1-5.1-5.1-5.1Z"/>
-                </svg>
+                    data-toggles="sidebar-open" data-class-target="nok-top-navigation" data-toggle-event="click">
+                <?= Assets::getIcon('ui_hamburger') ?>
             </button>
         </nok-navigation-top-row>
 
@@ -146,7 +123,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
             <div class="nok-section__inner--stretched nok-nav-footer nok-text-contrast nok-bg-darkerblue nok-dark-bg-darkestblue nok-z-1">
                 <div class="nok-nav-menu-items nok-nav-menu-items--compact">
                     <a href="#" class="nok-nav-menu-item nok-nav-menu-item--active">Werken bij</a>
-                    <a href="#" class="nok-nav-menu-item nok-popup-trigger" data-toggles-class="popup-open" data-class-target="nok-top-navigation" data-on-hover="false"
+                    <a href="#" class="nok-nav-menu-item nok-popup-trigger" data-toggles-class="popup-open" data-class-target="nok-top-navigation" data-toggle-event="click"
                        data-toggles-attribute="state" data-toggles-attribute-value="open" data-attribute-target="#popup-bmi-calculator">BMI berekenen</a>
                     <a href="#" class="nok-nav-menu-item">Mijn NOK</a>
                     <a href="#" class="nok-nav-menu-item">NOK App</a>
@@ -170,7 +147,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                 </div>
                 <div>Werken bij</div>
                 <div><a href="#" class="nok-nav-menu-item nok-popup-trigger"
-                        data-toggles-class="popup-open" data-class-target="nok-top-navigation" data-on-hover="false" data-click-outside="unset-class"
+                        data-toggles-class="popup-open" data-class-target="nok-top-navigation" data-toggle-event="click" data-click-outside="unset-class"
                         data-toggles-attribute="state" data-toggles-attribute-value="open" data-attribute-target="#popup-bmi-calculator">BMI berekenen</a></div>
                 <div>Mijn NOK</div>
                 <div>NOK App</div>
@@ -178,7 +155,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                 <div>Zoek</div>
                 <div>NL</div>
                 <a href="#"
-                   data-toggles="open" data-target=".nok-nav-control-dropdown" data-on-hover="false"
+                   data-toggles="open" data-target=".nok-nav-control-dropdown" data-toggle-event="click"
                    data-swipe-close=".nok-nav-control-dropdown" data-autohide="10">
                     <span style="font-variant: all-small-caps;">a</span>A
                 </a>
