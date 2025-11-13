@@ -70,6 +70,7 @@ nok-top-navigation {
         @include components-base.transition-properties {
           transition: transform var(--animation-duration--in) cubic-bezier(0.16, 1, 0.3, 1);
         }
+        path:last-of-type,
         .closed {
           display: none;
         }
@@ -101,9 +102,11 @@ nok-top-navigation {
     .nok-nav-menu-toggler.nok-button-menu {
       svg {
         transform: rotate(-180deg);
+        path:first-of-type,
         .open {
           display: none;
         }
+        path:last-of-type,
         .closed {
           display: inline;
         }
