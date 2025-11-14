@@ -38,11 +38,17 @@ RewriteRule (.*) $1.js [L]
 #RewriteRule (.*) $1.min.mjs [L]
 
 #AGGRESSIVE CACHE DISABLING
-RewriteCond ${REQUEST_FILENAME} (.*)\.(js|mjs|css)$
-RewriteCond ${QUERY_STRING} !(?:^|&)caching=(.*)(?:&|$)
-RewriteRule (.*)\.(js|mjs|css) https://%{HTTP_HOST}/$1.$2?caching=%{TIME} [R=302,L]
+#RewriteCond ${REQUEST_FILENAME} (.*)\.(js|mjs|css)$
+#RewriteCond ${QUERY_STRING} !(?:^|&)caching=(.*)(?:&|$)
+#RewriteRule (.*)\.(js|mjs|css) https://%{HTTP_HOST}/$1.$2?caching=%{TIME} [R=302,L]
 </IfModule>
 
+# Disable caching for JS modules during development
+<FilesMatch "\.(js|mjs)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+</FilesMatch>
 
 <IfModule mod_filter.c>
 	<IfModule mod_deflate.c>

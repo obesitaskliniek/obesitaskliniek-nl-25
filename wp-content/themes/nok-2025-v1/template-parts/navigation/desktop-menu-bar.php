@@ -34,8 +34,8 @@ if ( empty( $menu_items ) ) {
 </style>
 
 <?php foreach ( $menu_items as $item ): ?>
-    <div <?php if ($item['has_children']): ?>data-toggles="sidebar-open" data-class-target="nok-top-navigation" data-toggles-class-if-present="false" data-click-outside="unset-class"
-         data-sets-attribute="active-menu" data-sets-attribute-value="submenu-<?= $item['id']; ?>" data-attribute-target="nok-top-navigation"<?php endif; ?>>
+    <div <?php if ($item['has_children']): ?>data-sets-class="sidebar-open" data-toggle-event="hover" data-class-target="nok-top-navigation" data-toggle-outside="unset"
+         data-sets-attribute="data-active-menu" data-sets-attribute-value="submenu-<?= $item['id']; ?>" data-attribute-target="nok-top-navigation"<?php endif; ?>>
 		<?php
 		$classes = [ 'nok-nav-menu-item' ];
 

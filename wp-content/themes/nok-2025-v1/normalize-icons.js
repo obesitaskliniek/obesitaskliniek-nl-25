@@ -68,9 +68,9 @@ function cleanupSvg(svg) {
     }
 
     if (svg.includes('class="nok-icon"')) {
-        svg = svg.replace('class="nok-icon"', 'class="nok-icon %s"');
+        svg = svg.replace('class="nok-icon"', 'class="nok-icon"');
     } else {
-        svg = svg.replace(/<svg/, '<svg class="nok-icon %s"');
+        svg = svg.replace(/<svg/, '<svg class="nok-icon"');
     }
 
     return svg.trim();

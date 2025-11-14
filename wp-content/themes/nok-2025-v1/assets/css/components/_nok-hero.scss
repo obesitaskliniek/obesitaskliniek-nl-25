@@ -143,19 +143,19 @@ nok-hero {
     grid-template-rows: calc(var(--nok-top-navigation-height, 4rem) - 1rem) auto var(--footer-height);
 
     /* Mobile */
-    @include components-base.media-breakpoint-down(xxl) {
-      //grid-template-columns: 1fr auto auto;
-    }
     @include components-base.media-breakpoint-down(xl) {
       //grid-template-rows: 5rem auto var(--footer-height);
       &:has(figure) {
-        grid-template-columns: 6fr 2fr 8fr;
+        grid-template-columns: 8fr 2fr 8fr;
       }
       article, header {
         grid-column: 1 / 3;
       }
     }
     @include components-base.media-breakpoint-down(lg) {
+      &:has(figure) {
+        grid-template-columns: 1fr auto auto;
+      }
       grid-template-columns: 1fr;
       &:has(figure) {
         grid-template-rows: 5rem var(--figure-row-mobile, auto) 3rem auto var(--footer-height); //third column (3rem) is overlap between article and figure
@@ -187,8 +187,6 @@ nok-hero {
         justify-content: center;
         flex-direction: column;
       }
-    }
-    @include components-base.media-breakpoint-down(lg) {
       button {
         align-self: stretch;
       }

@@ -61,7 +61,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
 
 
 <nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs">
-    <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkerblue--darker nok-z-1" data-toggles="open"></nok-screen-mask>
+    <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkerblue--darker nok-z-1" data-toggles-class="open"></nok-screen-mask>
 
     <nok-accessibility-helper class="nok-bg-body nok-text-darkerblue nok-dark-text-contrast nok-nav-control-dropdown" data-requires="./nok-user-prefs.mjs">
         <h5>Toegankelijkheid</h5>
@@ -107,7 +107,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
             </button>
             <button class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
                     tabindex="0"
-                    data-toggles="open" data-target=".nok-nav-control-dropdown"
+                    data-toggles-class="open" data-target=".nok-nav-control-dropdown"
                     data-swipe-close=".nok-nav-control-dropdown" data-autohide="10">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
                     <path stroke="currentColor"
@@ -117,7 +117,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
             </button>
             <button class="nok-button nok-button-menu nok-nav-menu-toggler nok-dark-bg-darkerblue nok-text-contrast no-shadow nok-fill-yellow"
                     tabindex="0"
-                    data-toggles="open">
+                    data-toggles-class="open">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
                     <path class="open" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10"
                           stroke-width="1.5" d="M2.7 3.9h11m-11 4h11m-11 4h11"/>
@@ -198,7 +198,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
                 <div>Zoek</div>
                 <div>NL</div>
                 <a href="#"
-                   data-toggles="open" data-target=".nok-nav-control-dropdown"
+                   data-toggles-class="open" data-target=".nok-nav-control-dropdown"
                    data-swipe-close=".nok-nav-control-dropdown" data-autohide="10">
                     <span style="font-variant: all-small-caps;">a</span>A
                 </a>
@@ -207,7 +207,7 @@ $logo = '<nok-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58 1
         <nok-navigation-menu-bar class="nok-section__inner nok-my-0 nok-z-3">
             <div class="nok-navigation-menu-bar__inner
             nok-bg-white nok-dark-bg-darkerblue nok-dark-text-contrast"
-                 data-toggles="open">
+                 data-toggles-class="open">
                 <div>
                     <?= $logo; ?>
                 </div>

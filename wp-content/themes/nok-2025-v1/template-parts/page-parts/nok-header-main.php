@@ -18,16 +18,18 @@ $star = Assets::getIcon('ui_star');
 $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg') .'</nok-logo>';
 ?>
 
+<div style="position: fixed;left: 50%;top: 50%;background:#0008;color: #FFF;padding:15px;z-index:1000;transform: translate(-50%, -50%);" id="scroll-percentage">
+    0%
+</div>
+
 <nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs">
-    <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkestblue--darker nok-z-1"
-                     data-toggle-event="click"
-                     data-unsets-class="sidebar-open,popup-open" data-unsets-attribute="state" data-unsets-attribute-value="open" data-no-children="true">
+    <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkestblue--darker nok-z-1">
 
         <nok-popup class="nok-bg-body nok-dark-bg-darkerblue nok-align-items-stretch" id="popup-bmi-calculator">
             <nok-popup-header>
                 <nok-popup-title>BMI Calculator</nok-popup-title>
-                <button title="Klik om te sluiten" class="nok-button--small" data-unsets-class="popup-open" data-class-target="nok-top-navigation" data-toggle-event="click"
-                        data-unsets-attribute="state" data-unsets-attribute-value="open" data-attribute-target="#popup-bmi-calculator">
+                <button title="Klik om te sluiten" class="nok-button nok-button--small" data-unsets-class="popup-open" data-class-target="nok-top-navigation" data-toggle-event="click"
+                        data-unsets-attribute="data-state" data-unsets-attribute-value="open" data-attribute-target="#popup-bmi-calculator">
                     <?= Assets::getIcon('ui_close') ?>
                 </button>
             </nok-popup-header>
@@ -67,17 +69,17 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
             </button>
             <button class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
                     tabindex="0">
-                <?= Assets::getIcon('ui_telefoon') ?>
+                <?= Assets::getIcon('ui_search') ?>
             </button>
             <button class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
                     tabindex="0"
-                    data-toggles-class="open" data-class-target=".nok-nav-control-dropdown" data-toggle-event="click"
-                    data-swipe-close=".nok-nav-control-dropdown" data-autohide="10">
-                <?= Assets::getIcon('ui_search') ?>
+                    data-toggles-class="open" data-class-target=".nok-nav-control-dropdown" data-toggle-event="click"  data-toggle-outside="unset"
+                    data-swipe="unset" data-auto-restore="10">
+                <?= Assets::getIcon('ui_font_size') ?>
             </button>
             <button class="nok-button nok-button-menu nok-nav-menu-toggler nok-dark-bg-darkerblue nok-text-contrast no-shadow"
                     tabindex="0"
-                    data-toggles="sidebar-open" data-class-target="nok-top-navigation" data-toggle-event="click">
+                    data-toggles-class="sidebar-open" data-class-target="nok-top-navigation" data-toggle-event="click" data-toggle-outside="unset">
                 <?= Assets::getIcon('ui_hamburger') ?>
             </button>
         </nok-navigation-top-row>
@@ -124,7 +126,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                 <div class="nok-nav-menu-items nok-nav-menu-items--compact">
                     <a href="#" class="nok-nav-menu-item nok-nav-menu-item--active">Werken bij</a>
                     <a href="#" class="nok-nav-menu-item nok-popup-trigger" data-toggles-class="popup-open" data-class-target="nok-top-navigation" data-toggle-event="click"
-                       data-toggles-attribute="state" data-toggles-attribute-value="open" data-attribute-target="#popup-bmi-calculator">BMI berekenen</a>
+                       data-toggles-attribute="data-state" data-toggles-attribute-value="open" data-attribute-target="#popup-bmi-calculator">BMI berekenen</a>
                     <a href="#" class="nok-nav-menu-item">Mijn NOK</a>
                     <a href="#" class="nok-nav-menu-item">NOK App</a>
                     <button class="nok-button nok-button--small nok-bg-yellow nok-text-contrast nok-invisible-sm"
@@ -147,17 +149,17 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                 </div>
                 <div>Werken bij</div>
                 <div><a href="#" class="nok-nav-menu-item nok-popup-trigger"
-                        data-toggles-class="popup-open" data-class-target="nok-top-navigation" data-toggle-event="click" data-click-outside="unset-class"
-                        data-toggles-attribute="state" data-toggles-attribute-value="open" data-attribute-target="#popup-bmi-calculator">BMI berekenen</a></div>
+                        data-toggles-class="popup-open" data-class-target="nok-top-navigation" data-toggle-event="click"
+                        data-toggles-attribute="data-state" data-toggles-attribute-value="open" data-attribute-target="#popup-bmi-calculator">BMI berekenen</a></div>
                 <div>Mijn NOK</div>
                 <div>NOK App</div>
                 <div>+31 12345678</div>
                 <div>Zoek</div>
                 <div>NL</div>
                 <a href="#"
-                   data-toggles="open" data-target=".nok-nav-control-dropdown" data-toggle-event="click"
-                   data-swipe-close=".nok-nav-control-dropdown" data-autohide="10">
-                    <span style="font-variant: all-small-caps;">a</span>A
+                   data-toggles-class="open" data-target=".nok-nav-control-dropdown" data-toggle-event="click" data-toggle-outside="unset"
+                   data-swipe="unset" data-auto-restore="10">
+                    <?= Assets::getIcon('ui_font_size') ?>
                 </a>
             </div>
         </nok-navigation-top-row>

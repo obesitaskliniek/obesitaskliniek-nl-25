@@ -76,7 +76,7 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
 <nav class="nok25-section nok25-nav nok25-text-darkerblue"
      data-requires="./nok-toggler.mjs">
     <div class="nok25-nav-mask nok25-bg-darkerblue nok25-dark-bg-darkerblue--darker nok25-z-1"
-         data-toggles="open"></div>
+         data-toggles-class="open"></div>
     <div class="nok25-bg-body nok25-text-darkerblue nok25-dark-text-contrast nok25-nav-control-dropdown nok25-bg-blur nok25-bg-alpha-9"
          data-requires="./nok-user-prefs.mjs">
         <h5>Toegankelijkheid</h5>
@@ -122,7 +122,7 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
             </button>
             <button class="nok25-button nok25-button-menu nok25-dark-bg-darkerblue nok25-text-contrast no-shadow"
                     tabindex="0"
-                    data-toggles="open" data-target=".nok25-nav-control-dropdown"
+                    data-toggles-class="open" data-target=".nok25-nav-control-dropdown"
                     data-swipe-close=".nok25-nav-control-dropdown" data-autohide="10">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
                     <path stroke="currentColor"
@@ -132,7 +132,7 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
             </button>
             <button class="nok25-button nok25-button-menu nok25-nav-menu-toggler nok25-dark-bg-darkerblue nok25-text-contrast no-shadow nok25-fill-yellow"
                     tabindex="0"
-                    data-toggles="open">
+                    data-toggles-class="open">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
                     <path class="open" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10"
                           stroke-width="1.5" d="M2.7 3.9h11m-11 4h11m-11 4h11"/>
@@ -208,14 +208,14 @@ $logo = '<nok25-logo><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 463.58
                 <div>+31 12345678</div>
                 <div>Zoek</div>
                 <div>NL</div>
-                <a href="#" data-toggles="open" data-target=".nok25-nav-control-dropdown" data-autohide="10">
+                <a href="#" data-toggles-class="open" data-target=".nok25-nav-control-dropdown" data-autohide="10">
                     <span style="font-variant: all-small-caps;">a</span>A
                 </a>
             </div>
         </div>
         <div class="nok25-section__inner nok25-section__inner--collapsed nok25-nav-menubar-row nok25-z-3">
             <div class="nok25-nav-menubar nok25-bg-white nok25-dark-bg-darkerblue nok25-dark-text-contrast"
-                 data-toggles="open">
+                 data-toggles-class="open">
                 <div>
                     <?= $logo; ?>
                 </div>

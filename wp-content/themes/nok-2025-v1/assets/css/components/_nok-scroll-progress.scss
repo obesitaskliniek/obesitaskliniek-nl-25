@@ -1,0 +1,112 @@
+@use "sass:math";
+@use "shared" as components-base;
+
+$component-name: #{components-base.$prefix}-scroll-progress;
+
+.#{$component-name} {
+  --size: 48px;
+  --stroke-width: 0.3em;
+  --radius: calc((var(--size) - var(--stroke-width)) / 2);
+  --scroll-progress-circumference: calc(2 * 3.14159 * var(--radius));
+  --stroke-color: var(--nok-lightblue);
+  --stroke-highlight-color: var(--nok-yellow);
+  --stroke-color-hover: oklch(from var(--nok-lightblue) calc(l * .95) c h / 1);
+
+  // Define threshold (default 10%)
+  --scroll-threshold: 0.05;
+
+  position: fixed;
+  right: var(--#{components-base.$prefix}-padding-base, 1.5rem);
+  bottom: var(--#{components-base.$prefix}-padding-base, 1.5rem);
+  z-index: components-base.$z-stack-top;
+
+  width: var(--size);
+  height: var(--size);
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+
+  // Calculate opacity with dynamic threshold
+  opacity: clamp(
+          0,
+          (var(--doc-scrolled-float, 0) - (var(--scroll-threshold) - 0.001)) * 1000,
+          1
+  );
+  // Hide by transforming
+  transform: scale(
+                  clamp(0, (var(--doc-scrolled-float, 0) - (var(--scroll-threshold) - 0.001)) * 1000, 1)
+  );
+  transform-origin: center;
+
+  transition: transform components-base.$animation-duration ease-in-out, opacity components-base.$animation-duration ease-in-out;
+
+  @include components-base.nok-shadow-filter;
+  &__svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg); // Start from top
+  }
+
+  &__track {
+    fill: var(--nok-body);
+    stroke: transparent;
+    stroke-width: var(--stroke-width);
+    cx: 50%;
+    cy: 50%;
+    r: var(--radius);
+  }
+
+  &__progress {
+    fill: none;
+    stroke: var(--stroke-color);
+    stroke-width: var(--stroke-width);
+    stroke-linecap: round;
+    cx: 50%;
+    cy: 50%;
+    r: var(--radius);
+
+    // Calculate offset from scroll percentage
+    stroke-dasharray: var(--scroll-progress-circumference);
+    stroke-dashoffset: calc(var(--scroll-progress-circumference) * (1 - var(--doc-scrolled-float, 0)));
+    transition: stroke-dashoffset 0.1s linear;
+  }
+
+  // Trigger flash animation at 100%
+  @at-root body.scrolled-100 .#{$component-name}__progress {
+    animation: scroll-complete-flash 3s ease-out;
+  }
+
+  @keyframes scroll-complete-flash {
+    0% {
+      stroke: var(--stroke-highlight-color);
+    }
+    100% {
+      stroke: var(--stroke-color);
+    }
+  }
+
+  &__icon.nok-icon {
+    position: absolute;
+    inset: 0;
+    width: 50%;
+    height: 50%;
+    margin: auto;
+    fill: none;
+    stroke: var(--stroke-color);
+    pointer-events: none;
+  }
+
+  // Hover effect
+  &:hover {
+    transform: scale(1.05);
+    --stroke-color: var(--stroke-color-hover);
+  }
+
+  // Active/pressed state
+  &:active {
+    transform: scale(0.95);
+  }
+}

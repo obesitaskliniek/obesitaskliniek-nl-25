@@ -13,11 +13,12 @@
 @use "./components/nok-forms";
 @use "./components/nok-quotes";
 @use "./components/nok-articles";
-@use "components/nok-video-block";
+@use "./components/nok-video-block";
 
 @use "./components/nok-screen-mask";
 @use "./components/nok-popup";
 @use "./components/nok-accessibility-helper";
+@use "./components/nok-scroll-progress";
 
 @use "./components/nok-top-navigation";
 @use "./components/nok-hero";
