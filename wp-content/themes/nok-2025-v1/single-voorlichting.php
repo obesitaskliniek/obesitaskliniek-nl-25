@@ -29,9 +29,7 @@ $alternatives = get_posts( [
         nok-m-0 nok-border-radius-to-sm-0
 nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10 nok-subtle-shadow">
             <div class="article">
-                <h2 class="nok-fs-2 nok-fs-to-md-1">
-                    kruimelpad (todo)
-                </h2>
+                <?php Helpers::render_breadcrumbs(); ?>
 	            <?php printf( '<h1 class="nok-fs-6">%s %s (%s)</h1>',
 		            ucfirst( $hubspotData['soort'] ),
 		            $hubspotData['locatie'],

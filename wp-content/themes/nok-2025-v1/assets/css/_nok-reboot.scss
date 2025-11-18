@@ -125,9 +125,9 @@ p {
   text-wrap: pretty;
   margin-top: 0;
   margin-bottom: 0;
-  & + p {
-    margin-top: 1em;
-  }
+  //& + p {
+  //  margin-top: 1em;
+  //}
 
  // @for $i from 1 through 6 {
   //  & + h#{$i} {

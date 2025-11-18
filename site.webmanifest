@@ -3,12 +3,12 @@
     "short_name": "NOK",
     "icons": [
         {
-            "src": "/wp-content/themes/nok-2025-v1/img/icon/android-chrome-192x192.png",
+            "src": "/wp-content/themes/nok-2022-v1/img/icon/android-chrome-192x192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "/wp-content/themes/nok-2025-v1/img/icon/android-chrome-512x512.png",
+            "src": "/wp-content/themes/nok-2022-v1/img/icon/android-chrome-512x512.png",
             "sizes": "512x512",
             "type": "image/png"
         }

@@ -18,10 +18,6 @@ $star = Assets::getIcon('ui_star');
 $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg') .'</nok-logo>';
 ?>
 
-<div style="position: fixed;left: 50%;top: 50%;background:#0008;color: #FFF;padding:15px;z-index:1000;transform: translate(-50%, -50%);" id="scroll-percentage">
-    0%
-</div>
-
 <nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs">
     <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkestblue--darker nok-z-1">
 

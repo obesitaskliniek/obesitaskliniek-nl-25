@@ -232,7 +232,7 @@ const PostMetaPanel = () => {
                     if (updated[day] && updated[day].length > 0) {
                         updated[day] = [];
                     } else {
-                        updated[day] = [{opens: '09:00', closes: '17:00'}];
+                        updated[day] = [{opens: '08:30', closes: '17:00'}];
                     }
                     updateMeta(metaKey, updated);
                 };
@@ -245,7 +245,7 @@ const PostMetaPanel = () => {
                         const current = updated[day][0];
                         if (current.closed) {
                             // Toggle from closed to open
-                            updated[day] = [{opens: '09:00', closes: '17:00'}];
+                            updated[day] = [{opens: '08:30', closes: '17:00'}];
                         } else {
                             // Toggle from open to closed
                             updated[day] = [{closed: true}];
@@ -257,7 +257,7 @@ const PostMetaPanel = () => {
                 const updateDayTime = (day, timeType, newTime) => {
                     const updated = {...hoursData};
                     if (!updated[day] || updated[day].length === 0) {
-                        updated[day] = [{opens: '09:00', closes: '17:00'}];
+                        updated[day] = [{opens: '08:30', closes: '17:00'}];
                     }
                     updated[day][0][timeType] = newTime;
                     updateMeta(metaKey, updated);
@@ -266,7 +266,7 @@ const PostMetaPanel = () => {
                 const renderDayRow = (day, label, highlightColor = null) => {
                     const dayHours = hoursData[day] || [];
                     const isOpen = dayHours.length > 0;
-                    const hours = isOpen ? dayHours[0] : {opens: '09:00', closes: '17:00'};
+                    const hours = isOpen ? dayHours[0] : {opens: '08:30', closes: '17:00'};
                     const isClosed = isOpen && hours.closed === true;
                     const isWeekdaysTemplate = day === 'weekdays';
 
@@ -303,7 +303,7 @@ const PostMetaPanel = () => {
                                                 <div style={{fontSize: '11px', marginBottom: '4px', color: '#757575'}}>Van</div>
                                                 <TextControl
                                                     type="time"
-                                                    value={hours.opens || '09:00'}
+                                                    value={hours.opens || '08:30'}
                                                     onChange={(newTime) => updateDayTime(day, 'opens', newTime)}
                                                     __nextHasNoMarginBottom
                                                     __next40pxDefaultSize

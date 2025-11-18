@@ -15,6 +15,11 @@ $component-name: #{components-base.$prefix}-scroll-progress;
   // Define threshold (default 10%)
   --scroll-threshold: 0.05;
 
+  @at-root body.no-scrollbars &,
+  body:not(.substantial-scrolling) & {
+    display: none !important;
+  }
+
   position: fixed;
   right: var(--#{components-base.$prefix}-padding-base, 1.5rem);
   bottom: var(--#{components-base.$prefix}-padding-base, 1.5rem);

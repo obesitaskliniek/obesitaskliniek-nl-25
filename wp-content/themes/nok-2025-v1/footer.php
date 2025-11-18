@@ -9,8 +9,7 @@ $theme->embed_page_part_template('nok-footer', []); ?>
 <button class="nok-scroll-progress scroll-to-top"
         aria-label="<?php esc_attr_e('Klik om terug naar de bovenkant van de pagina te gaan', 'nok'); ?>"
         title="<?php esc_attr_e('Klik om terug naar de bovenkant van de pagina te gaan', 'nok'); ?>"
-        data-visible="false"
->
+        data-visible="false">
     <svg class="nok-scroll-progress__svg" viewBox="0 0 48 48" aria-hidden="true">
         <!-- Background track circle -->
         <circle class="nok-scroll-progress__track" />
