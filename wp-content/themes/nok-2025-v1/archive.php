@@ -1,8 +1,6 @@
 <?php
 /**
- * Archive Template: Vestigingen
- *
- * Displays an archive of all clinic locations (vestigingen).
+ * Archive Template: Kennisbank
  *
  * @package NOK2025_V1
  * @since   1.0.0
@@ -13,7 +11,7 @@ use NOK2025\V1\Helpers;
 
 get_header('generic');
 
-query_posts(array_merge($wp_query->query, ['posts_per_page' => -1]));
+query_posts(array_merge($wp_query->query, ['posts_per_page' => 9]));
 ?>
 
 	<nok-hero class="nok-section">
