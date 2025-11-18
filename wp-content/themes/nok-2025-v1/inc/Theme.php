@@ -88,6 +88,7 @@ final class Theme {
 		);
 		$this->post_meta_registrar = new PostMeta\MetaRegistrar();
 		$this->register_post_custom_fields();
+		$this->register_archive_settings();
 	}
 
 	/**
@@ -617,5 +618,78 @@ final class Theme {
 			opening- en sluitingstijd, en daarvan afwijken door een individuele dag aan te vinken en daar andere waardes 
 			in te vullen. Of selecteer enkel de dagen waarop de vestiging geopend is.',
 		] );
+	}
+
+	/**
+	 * Register archive settings page for custom post types
+	 *
+	 * Adds submenu under Vestigingen CPT for managing archive page intro text.
+	 * Accessible at: Vestigingen → Archive Settings
+	 *
+	 * @return void
+	 */
+	private function register_archive_settings(): void {
+		add_action('admin_menu', function() {
+			add_submenu_page(
+				'edit.php?post_type=vestiging',
+				__('Instellingen', THEME_TEXT_DOMAIN),
+				__('Instellingen', THEME_TEXT_DOMAIN),
+				'manage_options',
+				'vestiging-settings',
+				[$this, 'render_vestiging_settings_page']
+			);
+		});
+
+		add_action('admin_init', function() {
+			register_setting('nok_archive_settings', 'vestigingen_beschrijving', [
+				'type' => 'string',
+				'sanitize_callback' => 'wp_kses_post',
+				'default' => '',
+			]);
+		});
+	}
+
+	/**
+	 * Render vestiging archive settings page
+	 *
+	 * @return void
+	 */
+	public function render_vestiging_settings_page(): void {
+		if (!current_user_can('manage_options')) {
+			return;
+		}
+		?>
+		<div class="wrap">
+			<h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+			<form method="post" action="options.php">
+				<?php settings_fields('nok_archive_settings'); ?>
+				<table class="form-table">
+					<tr>
+						<th scope="row">
+							<label for="vestiging_intro">
+								<?php _e('Introductietekst', THEME_TEXT_DOMAIN); ?>
+							</label>
+						</th>
+						<td>
+							<?php
+							wp_editor(
+								get_option('vestigingen_beschrijving', ''),
+								'vestigingen_beschrijving',
+								[
+									'textarea_rows' => 10,
+									'media_buttons' => false,
+								]
+							);
+							?>
+							<p class="description">
+								<?php _e('Deze tekst wordt getoond bovenaan de pagina /vestigingen/', THEME_TEXT_DOMAIN); ?>
+							</p>
+						</td>
+					</tr>
+				</table>
+				<?php submit_button(); ?>
+			</form>
+		</div>
+		<?php
 	}
 }
