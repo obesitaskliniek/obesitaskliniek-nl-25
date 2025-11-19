@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="non-bs-unminified-css" pattern="file[obesitaskliniek-nl-25]:wp-content/themes/nok-2025-v1/assets/css//*&amp;&amp;!file:*.min.*&amp;&amp;!file[obesitaskliniek-nl-25]:wp-content/themes/nok-2025-v1/assets/css/bs//*||file[obesitaskliniek-nl-25]:wp-content/themes/nok-2025-v1/template-parts//*" />
+  <scope name="non-bs-unminified-css" pattern="file[obesitaskliniek-nl-25]:wp-content/themes/nok-2025-v1/assets/css//*&amp;&amp;!file:*.min.*&amp;&amp;!file[obesitaskliniek-nl-25]:wp-content/themes/nok-2025-v1/assets/css/bs//*||file[obesitaskliniek-nl-25]:wp-content/themes/nok-2025-v1/template-parts//*&amp;&amp;!file:*.min.*" />
 </component>
