@@ -22,12 +22,10 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 				<h1 class="nok-fs-giant"><?php post_type_archive_title(); ?></h1>
                 <p class="nok-intro-text">
                     <?php
-                    $intro = get_option('vestigingen_beschrijving', '');
+                    $intro = NOK2025\V1\Theme::get_archive_intro(get_queried_object()->name, '');
                     if ($intro) :
-                        echo '<div class="vestiging-archive-intro">' . wpautop( $intro ) . '</div>';
-                    else : ?>
-                    Bekijk hieronder alle vestigingen van de Nederlandse Obesitas Kliniek.
-                    <?php endif; ?>
+                        echo '<div class="archive-intro">' . wpautop( $intro ) . '</div>';
+                    endif; ?>
 				</p>
 			</header>
 		</div>

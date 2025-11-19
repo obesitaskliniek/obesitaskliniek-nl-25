@@ -24,6 +24,8 @@ namespace NOK2025\V1;
  * @package NOK2025\V1
  */
 class PostTypes {
+	/** @var array Track post types with archives for dynamic settings pages */
+	private static array $archive_post_types = [];
 	public function __construct() {
 		add_action( 'init', [ $this, 'register_post_types' ] );
 		add_action( 'template_redirect', [ $this, 'protect_post_types' ] );
@@ -37,6 +39,7 @@ class PostTypes {
 		$this->register_template_layout_post_type();
 		$this->register_vestiging_post_type();
 		// Add other post types here as needed
+		$this->track_archive_post_types();
 	}
 
 	/**
@@ -217,6 +220,14 @@ class PostTypes {
 		];
 
 		register_post_type( 'vestiging', $args );
+
+		// Track for archive settings
+		if ($args['has_archive']) {
+			self::$archive_post_types['vestiging'] = [
+				'slug' => is_string($args['has_archive']) ? $args['has_archive'] : 'vestiging',
+				'label' => $labels['name'],
+			];
+		}
 	}
 
 	/**
@@ -263,5 +274,37 @@ class PostTypes {
 			wp_safe_redirect( home_url( '/' ) );
 			exit;
 		}
+	}
+
+	/**
+	 * Track all registered post types that have archives
+	 *
+	 * Iterates through all registered post types and builds registry
+	 * for dynamic archive settings page generation.
+	 *
+	 * @return void
+	 */
+	private function track_archive_post_types(): void {
+		$post_types = get_post_types(['_builtin' => false], 'objects');
+
+		foreach ($post_types as $post_type => $post_type_obj) {
+			if ($post_type_obj->has_archive) {
+				self::$archive_post_types[$post_type] = [
+					'slug' => is_string($post_type_obj->has_archive)
+						? $post_type_obj->has_archive
+						: $post_type,
+					'label' => $post_type_obj->labels->name,
+				];
+			}
+		}
+	}
+
+	/**
+	 * Get all registered post types with archives
+	 *
+	 * @return array Associative array of post_type => ['slug', 'label']
+	 */
+	public static function get_archive_post_types(): array {
+		return self::$archive_post_types;
 	}
 }

@@ -88,7 +88,6 @@ final class Theme {
 		);
 		$this->post_meta_registrar = new PostMeta\MetaRegistrar();
 		$this->register_post_custom_fields();
-		$this->register_archive_settings();
 	}
 
 	/**
@@ -128,6 +127,9 @@ final class Theme {
 		$this->yoast_integration->register_hooks();
 		$this->block_renderers->register_hooks();
 
+
+        // Register archive settings AFTER init (priority 20)
+        add_action('init', [$this, 'register_archive_settings'], 20);
 		// Customizer
 		add_action( 'customize_register', [ $this, 'register_customizer' ] );
 
@@ -620,76 +622,108 @@ final class Theme {
 		] );
 	}
 
-	/**
-	 * Register archive settings page for custom post types
-	 *
-	 * Adds submenu under Vestigingen CPT for managing archive page intro text.
-	 * Accessible at: Vestigingen → Archive Settings
-	 *
-	 * @return void
-	 */
-	private function register_archive_settings(): void {
-		add_action('admin_menu', function() {
-			add_submenu_page(
-				'edit.php?post_type=vestiging',
-				__('Instellingen', THEME_TEXT_DOMAIN),
-				__('Instellingen', THEME_TEXT_DOMAIN),
-				'manage_options',
-				'vestiging-settings',
-				[$this, 'render_vestiging_settings_page']
-			);
-		});
+    /**
+     * Register archive settings pages for all post types with archives
+     *
+     * Automatically creates Settings submenu for each CPT with has_archive=true.
+     * Stores intro text as {post_type}_archive_intro option.
+     *
+     * @return void
+     */
+    public function register_archive_settings(): void {
+        $archive_types = PostTypes::get_archive_post_types();
 
-		add_action('admin_init', function() {
-			register_setting('nok_archive_settings', 'vestigingen_beschrijving', [
-				'type' => 'string',
-				'sanitize_callback' => 'wp_kses_post',
-				'default' => '',
-			]);
-		});
-	}
+        foreach ($archive_types as $post_type => $config) {
+            // Register admin menu page
+            add_action('admin_menu', function() use ($post_type, $config) {
+                add_submenu_page(
+                        "edit.php?post_type={$post_type}",
+                        __('Instellingen', THEME_TEXT_DOMAIN),
+                        __('Instellingen', THEME_TEXT_DOMAIN),
+                        'manage_options',
+                        "{$post_type}-settings",
+                        function() use ($post_type, $config) {
+                            $this->render_archive_settings_page($post_type, $config);
+                        }
+                );
+            });
 
-	/**
-	 * Render vestiging archive settings page
-	 *
-	 * @return void
-	 */
-	public function render_vestiging_settings_page(): void {
-		if (!current_user_can('manage_options')) {
-			return;
-		}
-		?>
-		<div class="wrap">
-			<h1><?php echo esc_html(get_admin_page_title()); ?></h1>
-			<form method="post" action="options.php">
-				<?php settings_fields('nok_archive_settings'); ?>
-				<table class="form-table">
-					<tr>
-						<th scope="row">
-							<label for="vestiging_intro">
-								<?php _e('Introductietekst', THEME_TEXT_DOMAIN); ?>
-							</label>
-						</th>
-						<td>
-							<?php
-							wp_editor(
-								get_option('vestigingen_beschrijving', ''),
-								'vestigingen_beschrijving',
-								[
-									'textarea_rows' => 10,
-									'media_buttons' => false,
-								]
-							);
-							?>
-							<p class="description">
-								<?php _e('Deze tekst wordt getoond bovenaan de pagina /vestigingen/', THEME_TEXT_DOMAIN); ?>
-							</p>
-						</td>
-					</tr>
-				</table>
-				<?php submit_button(); ?>
-			</form>
-		</div>
-		<?php
-	}
+            // Register setting
+            add_action('admin_init', function() use ($post_type) {
+                register_setting(
+                        "{$post_type}_archive_settings",
+                        "{$post_type}_archive_intro",
+                        [
+                                'type' => 'string',
+                                'sanitize_callback' => 'wp_kses_post',
+                                'default' => '',
+                        ]
+                );
+            });
+        }
+    }
+
+    /**
+     * Render archive settings page for any post type
+     *
+     * @param string $post_type The post type slug
+     * @param array $config Configuration array with 'slug' and 'label' keys
+     * @return void
+     */
+    private function render_archive_settings_page(string $post_type, array $config): void {
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+
+        $option_name = "{$post_type}_archive_intro";
+        ?>
+        <div class="wrap">
+            <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+            <form method="post" action="options.php">
+                <?php settings_fields("{$post_type}_archive_settings"); ?>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row">
+                            <label for="<?php echo esc_attr($option_name); ?>">
+                                <?php _e('Introductietekst', THEME_TEXT_DOMAIN); ?>
+                            </label>
+                        </th>
+                        <td>
+                            <?php
+                            wp_editor(
+                                    get_option($option_name, ''),
+                                    $option_name,
+                                    [
+                                            'textarea_rows' => 10,
+                                            'media_buttons' => false,
+                                    ]
+                            );
+                            ?>
+                            <p class="description">
+                                <?php
+                                printf(
+                                        __('Deze tekst wordt getoond bovenaan de pagina /%s/', THEME_TEXT_DOMAIN),
+                                        esc_html($config['slug'])
+                                );
+                                ?>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                <?php submit_button(); ?>
+            </form>
+        </div>
+        <?php
+    }
+
+    /**
+     * Get archive intro text for a post type
+     *
+     * @param string $post_type Post type slug
+     * @param string $fallback Fallback text if option not set
+     * @return string Archive intro text
+     */
+    public static function get_archive_intro(string $post_type, string $fallback = ''): string {
+        return get_option("{$post_type}_archive_intro", $fallback);
+    }
 }
