@@ -90,6 +90,12 @@ button.nok-button,
     --size-factor: 1.6;
     font-weight: bold;
   }
+  &--circle {
+    border-radius: 50%;
+    aspect-ratio: 1;
+    padding: var(--flex-gap);
+    min-height: calc(1lh + (var(--flex-gap) * 2));
+  }
 
   svg {
     height: 1.2em;

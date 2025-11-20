@@ -77,18 +77,20 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 									</div>
 								<?php endif; ?>
 
-								<?php if ($phone): ?>
-									<div>
-										<a href="tel:<?= esc_attr(preg_replace('/[^0-9+]/', '', $phone)); ?>">
-											<?= esc_html(Helpers::format_phone($phone)); ?>
-										</a>
-									</div>
-								<?php endif; ?>
-
-								<a href="<?php the_permalink(); ?>" class="nok-button nok-bg-lightblue nok-text-white nok-mt-1">
-									<?php esc_html_e('Meer informatie', THEME_TEXT_DOMAIN); ?>
-									<?= Assets::getIcon('ui_arrow-right', 'nok-text-white'); ?>
-								</a>
+                                <div class="nok-layout-flex nok-layout-flex-row nok-column-gap-0_5 nok-mt-1">
+                                     <?php if ($phone): ?>
+                                    <a href="tel:<?= esc_attr(preg_replace('/[^0-9+]/', '', $phone)); ?>" class="nok-button nok-button--circle nok-bg-body--darker nok-text-darkerblue">
+                                        <?= Assets::getIcon('ui_telefoon') ;?>
+                                    </a>
+                                    <?php endif; ?>
+                                    <a href="<?php the_permalink(); ?>" class="nok-button nok-button--circle nok-bg-body--darker nok-text-darkerblue">
+                                        <?= Assets::getIcon('ui_calendar'); ?>
+                                    </a>
+                                    <a href="<?php the_permalink(); ?>" class="nok-button nok-bg-lightblue nok-text-white">
+                                        <?php esc_html_e('Meer informatie', THEME_TEXT_DOMAIN); ?>
+                                        <?= Assets::getIcon('ui_arrow-right', 'nok-text-white'); ?>
+                                    </a>
+                                </div>
 							</div>
 						</article>
 
