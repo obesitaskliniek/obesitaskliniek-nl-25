@@ -162,7 +162,7 @@ class BlockRenderers {
 
 		if ( $heading2 ) {
 			$existing = $heading2->getAttribute( 'class' );
-			$heading2->setAttribute( 'class', trim( $existing . ' nok-fs-5 fw-400 nok-my-1' ) );
+			$heading2->setAttribute( 'class', trim( $existing . ' nok-fs-6' ) );
 		}
 
 		return $dom->saveHTML();

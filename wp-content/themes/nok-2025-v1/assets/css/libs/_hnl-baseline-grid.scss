@@ -27,7 +27,7 @@
   > *:not(.no-conform-to-baseline):not(.baseline-grid) {
     --required-height: calc(1em + var(--min-interline-spacing, 2px));
     --calculated-line-height: round(up, var(--required-height), var(--line-height-px, var(--lh-fallback, 24px)));
-    --baseline-padding: round(nearest, ((var(--calculated-line-height, var(--lh-fallback, 24px)) - 1ex) / 2) - (1em * var(--font-bl-ratio, 0)), 1px);
+    --baseline-padding: round(nearest, (((var(--calculated-line-height, var(--lh-fallback, 24px)) - 1ex) / 2) - (1em * var(--font-bl-ratio, 0))), 1px);
     --bottom-padding-correction: calc(var(--line-height-px, var(--lh-fallback, 24px)) - var(--baseline-padding, 4px));
 
     margin-top: 0;

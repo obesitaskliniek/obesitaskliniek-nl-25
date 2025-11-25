@@ -47,11 +47,11 @@ $featured_image = Helpers::get_featured_image($border_class);
                         nok-align-items-start">
             <div class="nok-align-self-to-lg-stretch nok-column-first-5 nok-mb-section-padding">
 				<?php if ($c->has('tagline')) : ?>
-                    <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-5 nok-mb-0_5">
+                    <h2 class="nok-fs-6 nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-mb-0_5">
 						<?= $c->tagline ?>
                     </h2>
 				<?php endif; ?>
-				<?php the_title('<h1 class="nok-fs-giant">', '</h1>'); ?>
+				<?php the_title('<h2 class="nok-fs-6">', '</h2>'); ?>
             </div>
 			<?php if ($left) : ?>
                 <div class="nok-column-first-lg-4

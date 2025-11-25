@@ -31,7 +31,7 @@ $block_colors = $c->colors->is('Blauw op donkerblauw',
             <div class="nok-square-block__icon">
 				<?= Assets::getIcon($c->icon->raw()) ?>
             </div>
-			<?php the_title('<h1 class="nok-square-block__heading nok-fs-5">', '</h1>'); ?>
+			<?php the_title('<h2 class="nok-fs-5 nok-square-block__heading">', '</h2>'); ?>
             <div class="nok-square-block__text"><?php the_content(); ?></div>
 
 			<?php if ($c->has('button_url')): ?>

@@ -30,7 +30,7 @@ $blocks = $c->blocks->json(array_fill(0, 6, [
         <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
 
             <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start">
-				<?php the_title('<h2 class="nok-fs-5">', '</h1>'); ?>
+				<?php the_title('<h2 class="nok-fs-6">', '</h2>'); ?>
                 <div class="nok-text-content"><?php the_content(); ?></div>
 
                 <!-- Component: drag-scrollable block carousel -->

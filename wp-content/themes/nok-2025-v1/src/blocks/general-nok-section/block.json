@@ -1,0 +1,43 @@
+{
+  "apiVersion": 2,
+  "name": "nok2025/general-nok-section",
+  "title": "General Section",
+  "description": "A general section wrapper with nok-section styling for regular content.",
+  "category": "nok-blocks",
+  "icon": "layout",
+  "supports": {
+    "align": ["wide", "full"],
+    "anchor": true,
+    "html": false
+  },
+  "attributes": {
+    "backgroundColor": {
+      "type": "string",
+      "default": "white"
+    },
+    "textColor": {
+      "type": "string",
+      "default": "darkerblue"
+    },
+    "layoutWidth": {
+      "type": "string",
+      "default": "1-column"
+    },
+    "enablePullUp": {
+      "type": "boolean",
+      "default": false
+    },
+    "enableNoAos": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "textdomain": "nok-2025-v1",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./editor.scss",
+  "render": "file:./render.php",
+  "style": [
+    "nok-components-css",
+    "nok-colors-css"
+  ]
+}

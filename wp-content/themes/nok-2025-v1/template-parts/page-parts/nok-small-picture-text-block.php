@@ -37,11 +37,11 @@ $featuredImage = Helpers::get_featured_image('nok-rounded-border-large');
 
             <div class="nok-order-<?= $order ?> nok-layout-flex-column nok-align-items-start">
 				<?php if ($c->has('tagline')) : ?>
-                    <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-5 nok-mb-0_5">
+                    <h2 class="nok-fs-6 nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-mb-0_5">
 						<?= $c->tagline ?>
                     </h2>
 				<?php endif; ?>
-				<?php the_title('<h1 class="nok-fs-giant nok-mb-1">', '</h1>'); ?>
+				<?php the_title('<h2 class="nok-fs-6 nok-mb-1">', '</h2>'); ?>
 				<?php the_content(); ?>
 				<?php if ($c->has('button_url')) : ?>
                     <a role="button" href="<?= $c->button_url->url() ?>"

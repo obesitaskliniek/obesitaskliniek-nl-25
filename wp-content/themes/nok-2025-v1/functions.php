@@ -80,6 +80,17 @@ spl_autoload_register( function( $class ) {
 add_action( 'after_setup_theme', [ NOK2025\V1\Theme::class, 'get_instance' ] );
 
 
+//register custom block category
+add_filter( 'block_categories_all', function( $categories ) {
+    // Add NOK Blocks category at the beginning
+    array_unshift( $categories, [
+        'slug'  => 'nok-blocks',
+        'title' => 'NOK Blocks',
+        'icon'  => 'layout',
+    ] );
+    return $categories;
+} );
+
 //register blocks
 add_action( 'init', function() {
     foreach ( glob( THEME_ROOT_ABS . '/blocks/*', GLOB_ONLYDIR ) as $dir ) {

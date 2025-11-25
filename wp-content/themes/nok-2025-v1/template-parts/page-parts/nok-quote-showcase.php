@@ -60,14 +60,14 @@ $circle_offset = "--circle-offset:" . $c->layout->is('left', 'calc(50vw - (var(-
         <article class="nok-layout-grid nok-columns-1 nok-columns-xl-6 nok-columns-xxl-5 nok-align-items-start nok-column-gap-3">
             <?php
             if ( $c->layout->is( 'accordion-left-title-top' ) ) {
-                the_title( ' <div class="nok-span-all-columns nok-mb-1"><h2 class="nok-fs-5 nok-mb-0_5">', '</h2></div>' );
+                the_title( ' <div class="nok-span-all-columns nok-mb-1"><h2 class="nok-fs-6 nok-mb-0_5">', '</h2></div>' );
             }
             ?>
 
             <div class="nok-layout-flex-column nok-align-items-stretch <?= $quote_column_class; ?>" style="order:<?= $quote_column_order; ?>">
                 <?php
                 if ( ! $c->layout->is( 'accordion-left-title-top' ) ) {
-                    the_title( '<h2 class="nok-fs-5">', '</h2>' );
+                    the_title( '<h2 class="nok-fs-6">', '</h2>' );
                 }
                 ?>
 

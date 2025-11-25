@@ -93,6 +93,9 @@ h2 {
   @extend %heading;
   @include nok-rfs.font-size(nok-variables.$h2-font-size);
 }
+.nok-general-content h2 {
+  font-size: nok-rfs.rfs-fluid-value(nok-variables.$h1-font-size);
+}
 
 h3 {
   @extend %heading;

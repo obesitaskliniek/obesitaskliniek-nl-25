@@ -36,7 +36,7 @@ $featuredImage = Helpers::get_featured_image();
                         <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-3 nok-fs-to-md-2">
 							<?= $c->tagline ?>
                         </h2>
-						<?php the_title('<h1>', '</h1>'); ?>
+						<?php the_title('<h2 class="nok-fs-6">', '</h1>'); ?>
                     </div>
                     <div class="nok-square-block__text nok-layout-grid nok-layout-grid__1-column">
 						<?php the_content(); ?>
@@ -65,7 +65,7 @@ $featuredImage = Helpers::get_featured_image();
                         <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-3 nok-fs-to-md-2">
 							<?= $c->tagline ?>
                         </h2>
-						<?php the_title('<h1>', '</h1>'); ?>
+						<?php the_title('<h2 class="nok-fs-6">', '</h1>'); ?>
                     </div>
                     <div class="nok-square-block__text nok-layout-grid nok-layout-grid__1-column">
 						<?php the_content(); ?>

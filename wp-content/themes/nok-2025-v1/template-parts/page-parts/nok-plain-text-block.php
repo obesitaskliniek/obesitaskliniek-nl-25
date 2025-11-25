@@ -19,7 +19,7 @@ $c = $context;
 <nok-section class="<?= $c->colors ?> <?= $c->collapse_bottom->isTrue('collapse-bottom', '') ?>">
     <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
         <article class="nok-layout-flex-column nok-align-items-<?= $c->layout->attr() ?> nok-column-gap-3 text-<?= $c->layout->attr() ?>">
-			<?php the_title('<h1>', '</h1>'); ?>
+			<?php the_title('<h2 class="nok-fs-6">', '</h1>'); ?>
 
             <div class="nok-layout-grid nok-layout-grid__1-column
                         pull-down-correction

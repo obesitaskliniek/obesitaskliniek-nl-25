@@ -27,7 +27,7 @@ $c = $context;
 
     <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
         <article class="nok-layout-grid nok-layout-grid__1-column nok-align-items-start">
-            <?php the_title('<h1 class="nok-span-all-columns">', '</h1>'); ?>
+            <?php the_title('<h2 class="nok-fs-6 nok-span-all-columns">', '</h1>'); ?>
 
             <?php the_content(); ?>
 
