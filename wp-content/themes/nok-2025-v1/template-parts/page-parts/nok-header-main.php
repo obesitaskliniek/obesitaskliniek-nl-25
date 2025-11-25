@@ -167,7 +167,6 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                 </div>
 				<?php $menu_manager->render_desktop_menu_bar('primary'); ?>
                 <div>Behandelingen</div>
-                <div>Over NOK</div>
                 <div>Agenda</div>
                 <div>Verwijzers</div>
                 <div>

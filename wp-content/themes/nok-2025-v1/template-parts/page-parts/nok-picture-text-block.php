@@ -68,7 +68,7 @@ $featured_image = Helpers::get_featured_image($border_class);
 						<?php if ($c->has('button_url')) : ?>
                             <a role="button" href="<?= $c->button_url->url() ?>"
                                class="nok-button nok-align-self-to-sm-stretch nok-bg-darkblue nok-text-contrast fill-mobile">
-								<?= $c->button_text ?> <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
+                                <span><?= $c->button_text ?></span><?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
                             </a>
 						<?php endif; ?>
                     </div>
@@ -83,7 +83,7 @@ $featured_image = Helpers::get_featured_image($border_class);
 						<?php if ($c->has('button_url')) : ?>
                             <a role="button" href="<?= $c->button_url->url() ?>"
                                class="nok-button nok-align-self-to-sm-stretch nok-bg-darkblue nok-text-contrast fill-mobile">
-								<?= $c->button_text ?> <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
+                                <span><?= $c->button_text ?></span><?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
                             </a>
 						<?php endif; ?>
                     </div>

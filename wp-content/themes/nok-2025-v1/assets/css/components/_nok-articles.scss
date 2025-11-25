@@ -2,11 +2,15 @@
 
 article {
   @include components-base.media-breakpoint-up(components-base.$mobile-breakpoint) {
+    .narrow-paragraphs,
     &.narrow-paragraphs {
       padding-inline: var(--nok-spacing-section-ends);
-      //.wp-block-image {
-      //  margin-inline: calc( -1 * var(--nok-spacing-section-ends));
-      //}
+    }
+    .margin-paragraphs,
+    &.margin-paragraphs {
+      > p {
+        margin-bottom: 1em;
+      }
     }
   }
 }

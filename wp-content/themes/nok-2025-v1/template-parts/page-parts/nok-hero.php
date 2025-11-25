@@ -5,19 +5,19 @@
  * Slug: nok-hero
  * Featured Image Overridable: true
  * Custom Fields:
- * - tagline:text
- * - button_blauw_text:text!default(Lees meer)
- * - button_blauw_url:url
- * - button_transparant_text:text!default(Bekijk meer)
- * - button_transparant_url:url
- * - usp_1_text:text
- * - usp_1_icon:icon-selector!page-editable!default(ui_arrow-right-long)
- * - usp_2_text:text
- * - usp_2_icon:icon-selector!page-editable!default(ui_arrow-right-long)
- * - usp_3_text:text
- * - usp_3_icon:icon-selector!page-editable!default(ui_arrow-right-long)
- * - button_vestiging_text:text!default(Onze vestigingen)
- * - button_vestiging_url:url
+ * - tagline:text!page-editable
+ * - button_blauw_text:text!page-editable
+ * - button_blauw_url:url!page-editable
+ * - button_transparant_text:text!page-editable
+ * - button_transparant_url:url!page-editable
+ * - usp_1_icon:icon-selector!page-editable!default(nok_kosten)
+ * - usp_1_text:text!page-editable!default(Vergoed door je zorgverzekering)
+ * - usp_2_icon:icon-selector!page-editable!default(nok_30_jaar_ervaring)
+ * - usp_2_text:text!page-editable!default(Meer dan 30 jaar ervaring)
+ *  - usp_3_icon:icon-selector!page-editable!default(nok_hospital)
+ * - usp_3_text:text!page-editable!default(Samenwerking met de beste ziekenhuizen))
+ * - button_vestiging_text:text!page-editable!default(Onze vestigingen)
+ * - button_vestiging_url:url!page-editable!default(/vestigingen)
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -34,11 +34,14 @@ $featuredImage = Helpers::get_featured_image();
 nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10">
 
             <article class="nok-pl-section-padding nok-px-to-lg-section-padding">
+                <?php Helpers::render_breadcrumbs(); ?>
+                <?php if ($c->has('tagline')) : ?>
                 <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading">
 					<?= $c->tagline ?>
                 </h2>
+                <?php endif; ?>
 				<?php the_title( '<h1 class="nok-fs-giant">', '</h1>' ); ?>
-                <div>
+                <div class="nok-layout-grid">
 					<?php the_content(); ?>
                 </div>
                 <div class="nok-button-group nok-justify-items-start">
@@ -46,13 +49,13 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                         <a role="button" href="<?= $c->button_blauw_url->url() ?>"
                            class="nok-button nok-justify-self-center nok-bg-darkerblue nok-text-contrast fill-group-column"
                            tabindex="0">
-							<?= $c->button_blauw_text ?>
+                            <span><?= $c->button_blauw_text ?></span>
                         </a>
 					<?php endif; ?>
 					<?php if ( $c->has( 'button_transparant_url' ) ): ?>
                         <a role="button" href="<?= $c->button_transparant_url->url() ?>"
                            class="nok-hyperlink nok-justify-self-center fw-bold">
-							<?= $c->button_transparant_text ?>
+                            <span><?= $c->button_transparant_text ?></span>
                         </a>
 					<?php endif; ?>
                 </div>
@@ -119,30 +122,22 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
             </figure>
 
             <footer class="nok-px-section-padding nok-bg-body--lighter nok-dark-bg-darkerblue nok-bg-blur--large nok-bg-alpha-6">
-				<?php if ( $c->has( 'usp_1_text' ) ): ?>
-                    <div class="nok-fs-buttons nok-usp nok-invisible-to-lg">
-	                    <?= Assets::getIcon($c->usp_1_icon->raw(), 'nok-text-lightblue') ?>
-						<?= $c->usp_1_text ?>
-                    </div>
-				<?php endif; ?>
-				<?php if ( $c->has( 'usp_2_text' ) ): ?>
-                    <div class="nok-fs-buttons nok-usp nok-invisible-to-xl">
-	                    <?= Assets::getIcon($c->usp_2_icon->raw(), 'nok-text-lightblue') ?>
-						<?= $c->usp_2_text ?>
-                    </div>
-				<?php endif; ?>
-				<?php if ( $c->has( 'usp_3_text' ) ): ?>
-                    <div class="nok-fs-buttons nok-usp nok-invisible-to-xxxl">
-	                    <?= Assets::getIcon($c->usp_3_icon->raw(), 'nok-text-lightblue') ?>
-						<?= $c->usp_3_text ?>
-                    </div>
-				<?php endif; ?>
-				<?php if ( $c->has( 'button_vestiging_url' ) ): ?>
-                    <a role="button" href="<?= $c->button_vestiging_url->url() ?>"
-                       class="nok-button nok-bg-white nok-text-darkerblue nok-visible-xs nok-align-self-stretch"
-                       tabindex="0"><?= $c->button_vestiging_text ?>
-                    </a>
-				<?php endif; ?>
+                <div class="nok-fs-buttons nok-usp nok-invisible-to-lg">
+                    <?= Assets::getIcon($c->usp_1_icon->raw(), 'nok-text-lightblue') ?>
+                    <?= $c->usp_1_text ?>
+                </div>
+                <div class="nok-fs-buttons nok-usp nok-invisible-to-xl">
+                    <?= Assets::getIcon($c->usp_2_icon->raw(), 'nok-text-lightblue') ?>
+                    <?= $c->usp_2_text ?>
+                </div>
+                <div class="nok-fs-buttons nok-usp nok-invisible-to-xxxl">
+                    <?= Assets::getIcon($c->usp_3_icon->raw(), 'nok-text-lightblue') ?>
+                    <?= $c->usp_3_text ?>
+                </div>
+                <a role="button" href="<?= $c->button_vestiging_url->url() ?>"
+                   class="nok-button nok-bg-white nok-text-darkerblue nok-visible-xs nok-align-self-stretch"
+                   tabindex="0"><span><?= $c->button_vestiging_text ?></span>
+                </a>
             </footer>
         </div>
     </nok-hero>

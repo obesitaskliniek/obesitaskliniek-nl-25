@@ -9,6 +9,7 @@
  * - button_text:text!default(Lees meer)
  * - button_url:url
  * - layout:select(left|right)!page-editable!default(left)
+ * - perspective:checkbox!default(false)!descr[Afbeelding 3D draaien]!page-editable
  * - achtergrondkleur:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue|Transparant::)!page-editable
  * - tekstkleur:select(Standaard::nok-text-darkerblue|Contrast::nok-text-contrast|Wit::nok-text-white|Zwart::nok-text-black)!page-editable!default(nok-text-darkerblue)
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
@@ -22,7 +23,7 @@ use NOK2025\V1\Helpers;
 $c = $context;
 $left = $c->layout->is('left');
 $order = $left ? 1 : 2;
-$featuredImage = Helpers::get_featured_image();
+$featuredImage = Helpers::get_featured_image('nok-rounded-border-large');
 ?>
 <nok-section class="<?= $c->achtergrondkleur ?>">
     <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
@@ -45,11 +46,11 @@ $featuredImage = Helpers::get_featured_image();
 				<?php if ($c->has('button_url')) : ?>
                     <a role="button" href="<?= $c->button_url->url() ?>"
                        class="nok-button nok-align-self-to-sm-stretch nok-bg-darkblue nok-text-contrast fill-mobile nok-mt-1">
-						<?= $c->button_text ?> <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
+						<span><?= $c->button_text ?></span><?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
                     </a>
 				<?php endif; ?>
             </div>
-            <div class="nok-image-cover nok-rounded-border-large nok-order-<?= ($order % 2) + 1 ?>">
+            <div class="nok-image-cover <?= $c->perspective->isTrue('nok-image-perspective'); ?> nok-order-<?= ($order % 2) + 1 ?>">
 				<?= $featuredImage ?>
             </div>
         </article>

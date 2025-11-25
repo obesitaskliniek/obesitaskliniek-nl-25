@@ -76,10 +76,12 @@ class FieldValue {
 	 * Get URL-escaped value
 	 * Use for href/src attributes
 	 *
+	 * @param string $fallback
+	 *
 	 * @return string
 	 */
-	public function url(): string {
-		return $this->is_placeholder ? $this->value : esc_url( $this->value );
+	public function url( string $fallback = ''): string {
+		return $this->value ? ($this->is_placeholder ? $this->value : esc_url( $this->value )) : $fallback;
 	}
 
 	/**
@@ -96,10 +98,12 @@ class FieldValue {
 	 * Get raw unescaped value
 	 * Use only for logic/comparisons, never for output
 	 *
+	 * @param string $fallback
+	 *
 	 * @return mixed
 	 */
-	public function raw(): mixed {
-		return $this->value;
+	public function raw( string $fallback = ''): mixed {
+		return $this->value ?: $fallback;
 	}
 
 	/**
@@ -136,38 +140,6 @@ class FieldValue {
 		}
 
 		return $matches;
-	}
-
-	/**
-	 * Check if field has a non-empty value
-	 * Optionally return values based on result
-	 *
-	 * Returns false for:
-	 * - Missing fields
-	 * - Empty strings
-	 * - Unchecked checkboxes ('0')
-	 * - Empty JSON structures ('[]', '{}')
-	 *
-	 * @param string $key Field name
-	 * @param mixed $ifTrue Optional: return this if field has value
-	 * @param mixed $ifFalse Optional: return this if field is empty
-	 *
-	 * @return bool|mixed
-	 */
-	public function has( string $key, mixed $ifTrue = null, mixed $ifFalse = null ): mixed {
-		if ( ! isset( $this->fields[ $key ] ) ) {
-			$exists = false;
-		} else {
-			$value = $this->fields[ $key ];
-			// Empty, unchecked checkbox, or empty JSON structures
-			$exists = ! ( $value === '' || $value === '0' || $value === '[]' || $value === '{}' );
-		}
-
-		if ( $ifTrue !== null ) {
-			return $exists ? $ifTrue : $ifFalse;
-		}
-
-		return $exists;
 	}
 
 	/**

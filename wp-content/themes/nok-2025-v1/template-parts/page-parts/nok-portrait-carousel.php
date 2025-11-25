@@ -30,7 +30,7 @@ $c = $context;
 				<?php if ($c->has('button_url')) : ?>
                     <a role="button" href="<?= $c->button_url->url() ?>"
                        class="nok-button nok-column-last-1 nok-bg-darkestblue nok-text-contrast fill-mobile">
-						<?= $c->button_text ?> <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
+                        <span><?= $c->button_text ?></span><?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
                     </a>
 				<?php endif; ?>
                 <!-- Component: drag-scrollable blokkengroep -->

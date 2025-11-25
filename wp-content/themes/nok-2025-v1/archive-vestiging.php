@@ -38,7 +38,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 	<nok-section class="no-aos z-ascend">
 		<div class="nok-section__inner nok-pull-up-2">
 			<?php if (have_posts()): ?>
-				<div class="nok-layout-grid nok-layout-grid__3-column nok-grid-gap-3">
+				<div class="nok-layout-grid nok-layout-grid__3-column nok-grid-gap-2">
 					<?php while (have_posts()): the_post();
 						// Get vestiging meta fields
 						$street      = get_post_meta(get_the_ID(), '_street', true);
@@ -52,47 +52,45 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 						$has_featured_image = has_post_thumbnail(get_the_ID()) && $featured_image !== '';
 						?>
 
-						<article class="nok-vestiging-card nok-bg-white nok-dark-bg-darkestblue nok-rounded-border-large nok-subtle-shadow">
-							<?php if ($has_featured_image): ?>
-								<figure class="nok-vestiging-card__image nok-aspect-16x9 nok-image-cover">
-									<a href="<?php the_permalink(); ?>">
-										<?= $featured_image; ?>
-									</a>
-								</figure>
-							<?php endif; ?>
+                        <nok-square-block class="nok-bg-white nok-dark-bg-darkestblue" data-shadow="true">
+                            <?php if ($has_featured_image): ?>
+                            <div class="nok-square-block__heading_image">
+                                <figure class="nok-vestiging-card__image nok-aspect-16x9 nok-image-cover">
+                                    <a href="<?php the_permalink(); ?>">
+                                        <?= $featured_image; ?>
+                                    </a>
+                                </figure>
+                            </div>
+                            <?php endif; ?>
 
-							<div class="nok-p-3">
-								<h2 class="nok-fs-3 nok-mb-1">
-									<a href="<?php the_permalink(); ?>" class="nok-text-darkerblue nok-dark-text-white">
-										<?php the_title(); ?>
-									</a>
-								</h2>
+                            <h2 class="nok-square-block__heading">
+                                <a href="<?php the_permalink(); ?>" class="nok-text-darkerblue nok-dark-text-white">
+                                    <?php the_title(); ?>
+                                </a>
+                            </h2>
 
-								<?php if ($street && $city): ?>
-									<div>
-										<p>
-											<?= esc_html($street) ?> <?= esc_html($housenumber) ?><br>
-											<?= esc_html($postal_code) ?> <?= esc_html($city) ?>
-										</p>
-									</div>
-								<?php endif; ?>
+                            <?php if ($street && $city): ?>
+                            <div class="nok-square-block__text">
+                                <?= esc_html($street) ?> <?= esc_html($housenumber) ?><br>
+                                <?= esc_html($postal_code) ?> <?= esc_html($city) ?>
+                            </div>
+                            <?php endif; ?>
 
-                                <div class="nok-layout-flex nok-layout-flex-row nok-column-gap-0_5 nok-mt-1">
-                                     <?php if ($phone): ?>
+                            <div class="nok-layout-flex nok-layout-flex-row nok-column-gap-0_5">
+                                <?php if ($phone): ?>
                                     <a href="tel:<?= esc_attr(preg_replace('/[^0-9+]/', '', $phone)); ?>" class="nok-button nok-button--circle nok-bg-body--darker nok-text-darkerblue">
                                         <?= Assets::getIcon('ui_telefoon') ;?>
                                     </a>
-                                    <?php endif; ?>
-                                    <a href="<?php the_permalink(); ?>" class="nok-button nok-button--circle nok-bg-body--darker nok-text-darkerblue">
-                                        <?= Assets::getIcon('ui_calendar'); ?>
-                                    </a>
-                                    <a href="<?php the_permalink(); ?>" class="nok-button nok-bg-lightblue nok-text-white">
-                                        <?php esc_html_e('Meer informatie', THEME_TEXT_DOMAIN); ?>
-                                        <?= Assets::getIcon('ui_arrow-right', 'nok-text-white'); ?>
-                                    </a>
-                                </div>
-							</div>
-						</article>
+                                <?php endif; ?>
+                                <a href="<?php the_permalink(); ?>" class="nok-button nok-button--circle nok-bg-body--darker nok-text-darkerblue">
+                                    <?= Assets::getIcon('ui_calendar'); ?>
+                                </a>
+                                <a href="<?php the_permalink(); ?>" class="nok-button nok-bg-lightblue nok-text-white">
+                                    <?php esc_html_e('Meer informatie', THEME_TEXT_DOMAIN); ?>
+                                    <?= Assets::getIcon('ui_arrow-right', 'nok-text-white'); ?>
+                                </a>
+                            </div>
+                        </nok-square-block>
 
 					<?php endwhile; ?>
 				</div>

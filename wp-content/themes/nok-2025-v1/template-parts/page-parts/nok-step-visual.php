@@ -11,6 +11,7 @@
  * - layout:select(left|right)!page-editable!default(left)
  * - colors:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white)!page-editable
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
+ * - linked_section:checkbox!default(true)!descr[Link deze page part met een volgend (identiek) "Step visual" page part dmv een verbindend lijntje]!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -23,7 +24,7 @@ $left = $c->layout->is('left');
 $featuredImage = Helpers::get_featured_image();
 ?>
 
-<nok-section class="linked <?= $c->colors ?>">
+<nok-section class="<?= $c->linked_section->isTrue('linked'); ?> <?= $c->colors ?>">
     <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
 		<?php if ($left) : ?>
             <div class="nok-align-self-stretch
@@ -37,13 +38,13 @@ $featuredImage = Helpers::get_featured_image();
                         </h2>
 						<?php the_title('<h1>', '</h1>'); ?>
                     </div>
-                    <div class="nok-square-block__text">
+                    <div class="nok-square-block__text nok-layout-grid nok-layout-grid__1-column">
 						<?php the_content(); ?>
                     </div>
 					<?php if ($c->has('button_blauw_url')) : ?>
                         <a role="button" href="<?= $c->button_blauw_url->url() ?>" class="nok-button nok-justify-self-start
                     nok-bg-darkblue nok-text-contrast fill-mobile" tabindex="0">
-							<?= $c->button_blauw_text ?> <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
+                            <span><?= $c->button_blauw_text ?></span><?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
                         </a>
 					<?php endif; ?>
                 </nok-square-block>
@@ -66,13 +67,13 @@ $featuredImage = Helpers::get_featured_image();
                         </h2>
 						<?php the_title('<h1>', '</h1>'); ?>
                     </div>
-                    <div class="nok-square-block__text">
+                    <div class="nok-square-block__text nok-layout-grid nok-layout-grid__1-column">
 						<?php the_content(); ?>
                     </div>
 					<?php if ($c->has('button_blauw_url')) : ?>
                         <a role="button" href="<?= $c->button_blauw_url->url() ?>" class="nok-button nok-justify-self-start
                 nok-bg-darkblue nok-text-contrast fill-mobile" tabindex="0">
-							<?= $c->button_blauw_text ?> <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
+                            <span><?= $c->button_blauw_text ?></span><?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
                         </a>
 					<?php endif; ?>
                 </nok-square-block>

@@ -53,6 +53,7 @@ nok-hero {
       margin: 0;
       grid-row: 1/-1;
       grid-column: 2 / 3;
+      max-height: 750px;
 
       @include components-base.media-breakpoint-down(xxl) {
         grid-column: 2 / 4;

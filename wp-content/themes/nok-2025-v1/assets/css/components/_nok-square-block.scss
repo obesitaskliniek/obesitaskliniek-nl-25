@@ -86,6 +86,9 @@ nok-square-block {
     &__heading {
       color: var(--text-color--heading);
       font-weight: 500;
+      &_image {
+        margin: -#{map-get(components-base.$padding-base-values, 2)} -#{map-get(components-base.$padding-base-values, 2)} 0;
+      }
     }
 
     &__text {

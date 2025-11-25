@@ -89,6 +89,20 @@
     }
   }
 
+  &-perspective {
+    perspective: 100cqi;
+    img {
+      transform-style: preserve-3d;
+      transform-origin: center;
+      @at-root nok-section[data-visible="true"] & {
+        @include components-base.transition-properties {
+          animation: perspective-rotation 4s ease-in-out 0s;
+          animation-fill-mode: forwards;
+        }
+      }
+    }
+  }
+
   &-full-width {
     @include commmon-styles;
     img {

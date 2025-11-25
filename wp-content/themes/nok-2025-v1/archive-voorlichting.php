@@ -1,6 +1,8 @@
 <?php
 /**
- * Archive Template: Kennisbank
+ * Archive Template: Vestigingen
+ *
+ * Displays an archive of all clinic locations (vestigingen).
  *
  * @package NOK2025_V1
  * @since   1.0.0
@@ -11,7 +13,7 @@ use NOK2025\V1\Helpers;
 
 get_header('generic');
 
-query_posts(array_merge($wp_query->query, ['posts_per_page' => 9]));
+query_posts(array_merge($wp_query->query, ['posts_per_page' => -1]));
 ?>
 
 	<nok-hero class="nok-section">
@@ -22,10 +24,12 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 				<h1 class="nok-fs-giant"><?php post_type_archive_title(); ?></h1>
                 <p class="nok-intro-text">
                     <?php
-                    $intro = NOK2025\V1\Theme::get_archive_intro(get_queried_object()->name, '');
+                    $intro = get_option('vestigingen_beschrijving', '');
                     if ($intro) :
-                        echo '<div class="archive-intro">' . wpautop( $intro ) . '</div>';
-                    endif; ?>
+                        echo '<div class="vestiging-archive-intro">' . wpautop( $intro ) . '</div>';
+                    else : ?>
+                    Bekijk hieronder alle voorlichting van de Nederlandse Obesitas Kliniek.
+                    <?php endif; ?>
 				</p>
 			</header>
 		</div>
@@ -34,7 +38,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 	<nok-section class="no-aos z-ascend">
 		<div class="nok-section__inner nok-pull-up-2">
 			<?php if (have_posts()): ?>
-				<div class="nok-layout-grid nok-layout-grid__3-column nok-grid-gap-2">
+				<div class="nok-layout-grid nok-layout-grid__3-column nok-grid-gap-3">
 					<?php while (have_posts()): the_post();
 						// Get vestiging meta fields
 						$street      = get_post_meta(get_the_ID(), '_street', true);

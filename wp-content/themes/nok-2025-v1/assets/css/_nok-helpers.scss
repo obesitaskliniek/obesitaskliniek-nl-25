@@ -256,6 +256,17 @@
       transform: scale3d(1, 1, 1);
     }
   }
+
+  @keyframes perspective-rotation {
+    from {
+      transform: translateZ(0) rotateY(0deg) rotateX(0deg);
+      box-shadow: 0 0 0 transparent;
+    }
+    to {
+      transform: translateZ(-10rem) rotateY(-25deg) rotateX(7deg);
+      box-shadow: 7rem 1rem 3rem #0002;
+    }
+  }
 }
 
 /* accessibility */

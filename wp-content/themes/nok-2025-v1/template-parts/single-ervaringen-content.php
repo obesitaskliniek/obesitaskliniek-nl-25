@@ -47,11 +47,11 @@ if ( $has_featured_image ) {
 					<?= $featured_image; ?>
 				</figure>
 			<?php endif; ?>
-			<article class="narrow-paragraphs">
+			<div class="narrow-paragraphs margin-paragraphs">
 				<?php Helpers::the_content_rest(); ?>
-			</article>
-            <time datetime="<?php echo get_the_date('c'); ?>">
-                <?php echo get_the_date('j F Y'); ?>
-            </time>
+                <time datetime="<?php echo get_the_date('c'); ?>">
+                    <?php echo get_the_date('j F Y'); ?>
+                </time>
+			</div>
 		</article>
 	</nok-section>

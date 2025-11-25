@@ -14,15 +14,87 @@ const blockName = 'nok2025/embed-nok-page-part';
 const CustomPagePartSelector = ({value, options, onChange, onOpen}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [hoveredOption, setHoveredOption] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
     const buttonRef = useRef();
+    const searchInputRef = useRef();
     const selectedOption = options.find(opt => opt.value === value);
 
     const handleOpen = () => {
         const newOpenState = !isOpen;
         setIsOpen(newOpenState);
+        setSearchQuery(''); // Reset search when opening
         if (newOpenState && onOpen) {
             onOpen();
         }
+    };
+
+    // Focus search input when dropdown opens
+    useEffect(() => {
+        if (isOpen && searchInputRef.current) {
+            setTimeout(() => searchInputRef.current?.focus(), 50);
+        }
+    }, [isOpen]);
+
+    // Fuzzy search function
+    const fuzzyMatch = (text, query) => {
+        if (!query) return { matches: true, score: 0, indices: [] };
+
+        const lowerText = text.toLowerCase();
+        const lowerQuery = query.toLowerCase();
+
+        let queryIndex = 0;
+        let textIndex = 0;
+        const indices = [];
+        let score = 0;
+
+        while (queryIndex < lowerQuery.length && textIndex < lowerText.length) {
+            if (lowerQuery[queryIndex] === lowerText[textIndex]) {
+                indices.push(textIndex);
+                score += (100 - textIndex); // Favor matches earlier in string
+                queryIndex++;
+            }
+            textIndex++;
+        }
+
+        const matches = queryIndex === lowerQuery.length;
+        return { matches, score, indices };
+    };
+
+    // Filter and sort options based on search query
+    const filteredOptions = searchQuery
+        ? options
+            .map(option => {
+                // Search in both label and template name
+                const labelMatch = fuzzyMatch(option.label.replace(/<[^>]*>/g, ''), searchQuery);
+                const templateMatch = fuzzyMatch(option.template || '', searchQuery);
+                const bestMatch = labelMatch.score > templateMatch.score ? labelMatch : templateMatch;
+
+                return {
+                    ...option,
+                    matchData: bestMatch,
+                    searchScore: bestMatch.score
+                };
+            })
+            .filter(option => option.matchData.matches)
+            .sort((a, b) => b.searchScore - a.searchScore)
+        : options.filter(opt => opt.value !== 0); // Exclude placeholder option when not searching
+
+    // Highlight matching characters in text
+    const highlightMatch = (text, indices) => {
+        if (!indices || indices.length === 0) return text;
+
+        const stripped = text.replace(/<[^>]*>/g, '');
+        let result = '';
+        let lastIndex = 0;
+
+        indices.forEach(index => {
+            result += stripped.slice(lastIndex, index);
+            result += `<mark style="background: #ffd700; padding: 0; font-weight: bold;">${stripped[index]}</mark>`;
+            lastIndex = index + 1;
+        });
+        result += stripped.slice(lastIndex);
+
+        return result;
     };
 
     return (
@@ -83,57 +155,112 @@ const CustomPagePartSelector = ({value, options, onChange, onOpen}) => {
                         top: buttonRef.current?.getBoundingClientRect().bottom + window.scrollY,
                         left: buttonRef.current?.getBoundingClientRect().left + window.scrollX,
                         width: buttonRef.current?.offsetWidth || 'auto',
-                        maxHeight: '300px',
-                        overflowY: 'auto',
+                        maxHeight: '400px',
                         backgroundColor: 'white',
                         border: '1px solid #ccc',
                         borderRadius: '2px',
                         boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
                         zIndex: 100000,
+                        display: 'flex',
+                        flexDirection: 'column',
                     }}>
-                        {options.map(option => {
-                            const color = ColorTool.new(option.template);
-                            return (
-                                <Button
-                                    key={option.value}
-                                    onClick={() => {
-                                        onChange(option.value);
+                        {/* Search input */}
+                        <div style={{
+                            padding: '8px',
+                            borderBottom: '1px solid #ddd',
+                            position: 'sticky',
+                            top: 0,
+                            backgroundColor: 'white',
+                            zIndex: 1,
+                        }}>
+                            <input
+                                ref={searchInputRef}
+                                type="text"
+                                placeholder="Zoek page part..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Escape') {
                                         setIsOpen(false);
-                                    }}
-                                    onMouseEnter={() => setHoveredOption(option.value)}
-                                    onMouseLeave={() => setHoveredOption(null)}
-                                    style={{
-                                        width: '100%',
-                                        textAlign: 'left',
-                                        padding: '8px 12px',
-                                        border: 'none',
-                                        borderBottom: '1px solid #f0f0f1',
-                                        borderRadius: '0',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '8px',
-                                        justifyContent: 'space-between',
-                                        backgroundColor: option.value === value
-                                            ? 'var(--wp-admin-theme-color)' : (hoveredOption === option.value
-                                                ? '#e6f3ff'
-                                                : 'transparent'),
-                                        color: option.value === value ? 'white' : 'inherit',
-                                    }}
-                                >
-                                    <span dangerouslySetInnerHTML={{__html: option.label}}/>
-                                    {option.value ?
-                                        <span dangerouslySetInnerHTML={{__html: `${option.template}`}}
-                                              style={{
-                                                  padding: '2px 6px',
-                                                  backgroundColor: color.adjust({sat: 0.7}).string,
-                                                  borderRadius: '6px',
-                                                  fontSize: '1em',
-                                                  color: color.contra
-                                              }}/> : null}
-                                </Button>
-                            )
-                        })}
+                                    } else if (e.key === 'Enter' && filteredOptions.length > 0) {
+                                        onChange(filteredOptions[0].value);
+                                        setIsOpen(false);
+                                    }
+                                }}
+                                style={{
+                                    width: '100%',
+                                    padding: '6px 8px',
+                                    border: '1px solid #ccc',
+                                    borderRadius: '3px',
+                                    fontSize: '13px',
+                                    outline: 'none',
+                                }}
+                            />
+                        </div>
+
+                        {/* Options list */}
+                        <div style={{
+                            overflowY: 'auto',
+                            maxHeight: '300px',
+                        }}>
+                            {filteredOptions.length === 0 ? (
+                                <div style={{
+                                    padding: '16px',
+                                    textAlign: 'center',
+                                    color: '#666',
+                                    fontSize: '13px',
+                                }}>
+                                    Geen resultaten gevonden
+                                </div>
+                            ) : (
+                                filteredOptions.map(option => {
+                                    const color = ColorTool.new(option.template);
+                                    const labelMatch = fuzzyMatch(option.label.replace(/<[^>]*>/g, ''), searchQuery);
+                                    const displayLabel = searchQuery ? highlightMatch(option.label, labelMatch.indices) : option.label;
+
+                                    return (
+                                        <Button
+                                            key={option.value}
+                                            onClick={() => {
+                                                onChange(option.value);
+                                                setIsOpen(false);
+                                            }}
+                                            onMouseEnter={() => setHoveredOption(option.value)}
+                                            onMouseLeave={() => setHoveredOption(null)}
+                                            style={{
+                                                width: '100%',
+                                                textAlign: 'left',
+                                                padding: '8px 12px',
+                                                border: 'none',
+                                                borderBottom: '1px solid #f0f0f1',
+                                                borderRadius: '0',
+                                                cursor: 'pointer',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '8px',
+                                                justifyContent: 'space-between',
+                                                backgroundColor: option.value === value
+                                                    ? 'var(--wp-admin-theme-color)' : (hoveredOption === option.value
+                                                        ? '#e6f3ff'
+                                                        : 'transparent'),
+                                                color: option.value === value ? 'white' : 'inherit',
+                                            }}
+                                        >
+                                            <span dangerouslySetInnerHTML={{__html: displayLabel}}/>
+                                            {option.value ?
+                                                <span dangerouslySetInnerHTML={{__html: `${option.template}`}}
+                                                      style={{
+                                                          padding: '2px 6px',
+                                                          backgroundColor: color.adjust({sat: 0.7}).string,
+                                                          borderRadius: '6px',
+                                                          fontSize: '1em',
+                                                          color: color.contra
+                                                      }}/> : null}
+                                        </Button>
+                                    )
+                                })
+                            )}
+                        </div>
                     </div>
                 </div>
             )}

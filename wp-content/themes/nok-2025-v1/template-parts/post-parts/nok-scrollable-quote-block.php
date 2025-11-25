@@ -5,13 +5,14 @@ use NOK2025\V1\Helpers;
 
 $scroller_id              = $args['scroller_id'] ?? 'scroller-' . time() . rand( 0, 1000 );
 $quote_data               = $args['quotes'] ?? [];
+$autoscroll               = $args['autoscroll'] ? 'true' : 'false';
 $class                    = $args['class'] ?? '';
 $quote_block_style        = $args['block_color'] ?? '';
 $quote_block_button_style = $args['block_button_color'] ?? 'nok-bg-darkestblue nok-text-contrast'; ?>
 <div class="<?= $class ?> nok-align-self-to-lg-stretch nok-column-last-3">
     <div class="nok-scrollable__horizontal nok-subtle-shadow-compensation"
          data-scroll-snapping="true" data-draggable="true"
-         id="<?= $scroller_id; ?>" data-autoscroll="false">
+         id="<?= $scroller_id; ?>" data-autoscroll="<?= $autoscroll; ?>">
         <?php foreach ( $quote_data as $quote ): ?>
             <nok-square-block class="<?= $quote_block_style ?> nok-alpha-10 nok-p-3" data-shadow="true">
                 <div class="nok-square-block__heading">
