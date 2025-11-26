@@ -57,6 +57,7 @@ class FieldContext implements \ArrayAccess {
 	public function __construct(array $fields, array $defaults = [], array $generic_overrides = []) {
 		$this->fields = $fields;
 		$this->defaults = $defaults;
+		$this->generic_overrides = $generic_overrides;
 	}
 
 	/**
