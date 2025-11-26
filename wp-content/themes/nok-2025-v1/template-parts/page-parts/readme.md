@@ -64,7 +64,7 @@ $value = $c->field_name->raw();
 
 // Conditionals
 $c->field_name->is('value')                      // bool
-$c->field_name->is('value', 'if-true', 'else')  // inline if
+$c->field_name->is('value', 'if-true', 'else')   // inline if
 $c->field_name->in('val1', 'val2')               // bool
 $c->field_name->contains('substring')            // bool
 $c->field_name->isTrue()                         // checkbox check
@@ -113,13 +113,52 @@ foreach ($items as $item) {
 <?php endif; ?>
 ```
 
+## Title & Content
+
+Templates use `$context->title()` and `$context->content()` for post title and content.
+These methods support per-page overrides when the same page part appears on multiple pages.
+
+```php
+// Title (HTML-escaped)
+<h1><?= $context->title() ?></h1>
+<h1 class="nok-fs-giant"><?= $c->title() ?></h1>
+
+// Content (with wpautop formatting)
+<?= $context->content() ?>
+<div class="nok-fs-body"><?= $c->content() ?></div>
+```
+
+### Why Not the_title() / the_content()?
+
+Using `$context->title()` and `$context->content()` instead of WordPress's `the_title()`
+and `the_content()` enables **per-page overrides** for SEO duplicate content prevention.
+
+When the same page part is embedded on multiple pages, editors can override the title
+and/or content specifically for that page via the block editor sidebar panel
+"Pagina-afhankelijke overrides".
+
+**Migration from old pattern:**
+```php
+// Before (deprecated)
+<?php the_title('<h1 class="nok-fs-giant">', '</h1>'); ?>
+<?php the_content(); ?>
+
+// After (current)
+<h1 class="nok-fs-giant"><?= $c->title() ?></h1>
+<?= $c->content() ?>
+```
+
+### Override Storage
+
+Overrides are stored in block attributes (not post meta):
+- `_override_title` - Alternative title for this page
+- `_override_content` - Alternative content for this page
+
+Empty override = use original page part title/content.
+
 ## WordPress Integration
 
 ```php
-// Title and content
-<?php the_title('<h1>', '</h1>'); ?>
-<?= $c->content(); ?>
-
 // Featured image
 use NOK2025\V1\Helpers;
 $featured_image = Helpers::get_featured_image('class-name');
@@ -134,6 +173,7 @@ use NOK2025\V1\Assets;
 - Always use `$c = $context;` shorthand
 - Use `->attr()` for values in HTML attributes
 - Use `->url()` for href/src attributes
+- Use `$c->title()` and `$c->content()` instead of `the_title()` / `the_content()`
 - Set defaults in field headers, not inline
 - Check field existence with `$c->has()` before output
 - Manual `esc_html()` for repeater array values
