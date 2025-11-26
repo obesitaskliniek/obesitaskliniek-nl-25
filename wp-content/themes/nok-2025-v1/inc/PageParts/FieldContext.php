@@ -46,6 +46,7 @@ namespace NOK2025\V1\PageParts;
 class FieldContext implements \ArrayAccess {
 	private array $fields;
 	private array $defaults;
+	private array $generic_overrides;
 
 	/**
 	 * Constructor
@@ -53,7 +54,7 @@ class FieldContext implements \ArrayAccess {
 	 * @param array $fields Field values from post meta
 	 * @param array $defaults Default values from template registry
 	 */
-	public function __construct(array $fields, array $defaults = []) {
+	public function __construct(array $fields, array $defaults = [], array $generic_overrides = []) {
 		$this->fields = $fields;
 		$this->defaults = $defaults;
 	}
@@ -236,5 +237,21 @@ class FieldContext implements \ArrayAccess {
 	 */
 	private function is_placeholder(mixed $value): bool {
 		return is_string($value) && str_starts_with($value, '<span class="placeholder-field');
+	}
+
+	public function title(): string {
+		if (!empty($this->generic_overrides['_override_title'])) {
+			return esc_html($this->generic_overrides['_override_title']);
+		}
+		global $post;
+		return $post ? esc_html($post->post_title) : '';
+	}
+
+	public function content(): string {
+		if (!empty($this->generic_overrides['_override_content'])) {
+			return wp_kses_post(wpautop($this->generic_overrides['_override_content']));
+		}
+		global $post;
+		return $post ? wpautop(wptexturize($post->post_content)) : '';
 	}
 }

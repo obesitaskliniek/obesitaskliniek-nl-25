@@ -94,7 +94,7 @@ class TemplateRenderer {
 		setup_postdata($post);
 
 		// Include the actual template
-		$this->render_page_part($design, $args['page_part_fields'] ?? []);
+		$this->render_page_part($design, $args['page_part_fields'] ?? [], $args['generic_overrides'] ?? []);
 
 		wp_reset_postdata();
 	}
@@ -102,9 +102,13 @@ class TemplateRenderer {
 	/**
 	 * Render a page part template directly
 	 * Used for embedding and preview scenarios
+	 *
+	 * @param string $design Design slug
+	 * @param array $fields Field values
+	 * @param array $generic_overrides Generic overrides for title/content
 	 */
-	public function render_page_part(string $design, array $fields): void {
-		$this->render_template('page-parts', $design, $fields);
+	public function render_page_part(string $design, array $fields, array $generic_overrides = []): void {
+		$this->render_template('page-parts', $design, $fields, $generic_overrides);
 	}
 
 	/**
@@ -196,31 +200,38 @@ class TemplateRenderer {
 
 	/**
 	 * Core template rendering logic
+	 *
+	 * @param string $template_type Template type ('page-parts' or 'post-parts')
+	 * @param string $design Design slug
+	 * @param array $fields Field values
+	 * @param array $generic_overrides Generic overrides for title/content
 	 */
-	private function render_template(string $template_type, string $design, array $fields): void {
+	private function render_template(string $template_type, string $design, array $fields, array $generic_overrides = []): void {
 		// Build defaults from registry
-		$registry = (new Registry())->get_registry();
-		$template_data = $registry[$design] ?? [];
-		$defaults = [];
-		foreach (($template_data['custom_fields'] ?? []) as $field) {
-			if (!empty($field['default'])) {
-				$defaults[$field['name']] = $field['default'];
+		$registry      = ( new Registry() )->get_registry();
+		$template_data = $registry[ $design ] ?? [];
+		$defaults      = [];
+		foreach ( ( $template_data['custom_fields'] ?? [] ) as $field ) {
+			if ( ! empty( $field['default'] ) ) {
+				$defaults[ $field['name'] ] = $field['default'];
 			}
 		}
 
 		// Replace tokens in field values
-		$fields = $this->replace_tokens($fields);
+		$fields = $this->replace_tokens( $fields );
 
-		$context = new FieldContext($fields, $defaults);
-		$template_path = get_theme_file_path("template-parts/{$template_type}/{$design}.php");
+		// Create context with generic overrides
+		$context = new FieldContext($fields, $defaults, $generic_overrides);
+		$template_path = get_theme_file_path( "template-parts/{$template_type}/{$design}.php" );
 
-		if (!file_exists($template_path)) {
-			$this->render_template_error($design, $template_type);
+		if ( ! file_exists( $template_path ) ) {
+			$this->render_template_error( $design, $template_type );
+
 			return;
 		}
 
 		// Handle CSS based on context and template type
-		$this->handle_template_css($template_type, $design);
+		$this->handle_template_css( $template_type, $design );
 
 		include $template_path;
 	}

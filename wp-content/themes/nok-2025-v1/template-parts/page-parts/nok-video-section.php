@@ -60,9 +60,9 @@ if ( $c->has( 'video_url' ) ) {
 				<?php endif; ?>
 
 				<div class="nok-video-section__text">
-					<?php the_title( '<h2 class="nok-fs-6">', '</h2>' ); ?>
+                    <h2 class="nok-fs-6"><?= $c->title() ?></h2>
 					<div class="nok-fs-body">
-						<?php the_content(); ?>
+						<?= $c->content(); ?>
 					</div>
 				</div>
 

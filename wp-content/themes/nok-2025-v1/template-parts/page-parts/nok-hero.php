@@ -40,9 +40,9 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 					<?= $c->tagline ?>
                 </h2>
                 <?php endif; ?>
-				<?php the_title( '<h1 class="nok-fs-giant">', '</h1>' ); ?>
+                <h1 class="nok-fs-giant"><?= $c->title() ?></h1>
                 <div class="nok-layout-grid">
-					<?php the_content(); ?>
+					<?= $c->content(); ?>
                 </div>
                 <div class="nok-button-group nok-justify-items-start">
 					<?php if ( $c->has( 'button_blauw_url' ) ): ?>

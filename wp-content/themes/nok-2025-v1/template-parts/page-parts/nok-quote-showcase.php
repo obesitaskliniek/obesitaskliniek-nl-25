@@ -59,21 +59,20 @@ $circle_offset = "--circle-offset:" . $c->layout->is('left', 'calc(50vw - (var(-
         <!--<article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start nok-column-gap-3">-->
         <article class="nok-layout-grid nok-columns-1 nok-columns-xl-6 nok-columns-xxl-5 nok-align-items-start nok-column-gap-3">
             <?php
-            if ( $c->layout->is( 'accordion-left-title-top' ) ) {
-                the_title( ' <div class="nok-span-all-columns nok-mb-1"><h2 class="nok-fs-6 nok-mb-0_5">', '</h2></div>' );
-            }
+            if ( $c->layout->is( 'accordion-left-title-top' ) ) : ?>
+                <div class="nok-span-all-columns nok-mb-1"><h2 class="nok-fs-6 nok-mb-0_5"><?= $c->title() ?></h2></div>
+            <?php endif;
             ?>
 
             <div class="nok-layout-flex-column nok-align-items-stretch <?= $quote_column_class; ?>" style="order:<?= $quote_column_order; ?>">
                 <?php
-                if ( ! $c->layout->is( 'accordion-left-title-top' ) ) {
-                    the_title( '<h2 class="nok-fs-6">', '</h2>' );
-                }
-                ?>
+                if ( ! $c->layout->is( 'accordion-left-title-top' ) ) : ?>
+                    <h2 class="nok-fs-6"><?= $c->title() ?></h2>
+                <?php endif; ?>
 
                 <?php
-                if (get_the_content() !== '') : ?>
-                    <div><?php the_content(); ?></div>
+                if ($c->content() !== '') : ?>
+                    <div><?= $c->content(); ?></div>
                 <?php endif; ?>
 
                 <?php if ( $c->has( 'quote_items' ) || $c->has( 'quote_posts' ) ):

@@ -1,6 +1,6 @@
 import {registerBlockType} from '@wordpress/blocks';
 import {InspectorControls, BlockControls, useBlockProps, MediaUpload, MediaUploadCheck} from '@wordpress/block-editor';
-import {SelectControl, PanelBody, Button, Popover, TextControl, CheckboxControl, Icon} from '@wordpress/components';
+import {SelectControl, PanelBody, Button, Popover, TextControl, TextareaControl, CheckboxControl, Icon} from '@wordpress/components';
 import {pencil} from '@wordpress/icons';
 import {useSelect, useDispatch} from '@wordpress/data';
 import {__} from '@wordpress/i18n';
@@ -517,6 +517,35 @@ registerBlockType(blockName, {
                                     Deze page part biedt de mogelijkheid om enkele instellingen specifek voor deze
                                     pagina te overschrijven/herdefinieren:
                                 </p>
+                                <TextControl
+                                    label={__('Alternatieve titel', textDomain)}
+                                    value={overrides._override_title || ''}
+                                    onChange={(newValue) => {
+                                        const newOverrides = {...overrides};
+                                        if (newValue === '') {
+                                            delete newOverrides._override_title;
+                                        } else {
+                                            newOverrides._override_title = newValue;
+                                        }
+                                        setAttributes({overrides: newOverrides});
+                                    }}
+                                    placeholder="— Gebruik originele titel —"
+                                />
+                                <TextareaControl
+                                    label={__('Alternatieve inhoud', textDomain)}
+                                    value={overrides._override_content || ''}
+                                    onChange={(newValue) => {
+                                        const newOverrides = {...overrides};
+                                        if (newValue === '') {
+                                            delete newOverrides._override_content;
+                                        } else {
+                                            newOverrides._override_content = newValue;
+                                        }
+                                        setAttributes({overrides: newOverrides});
+                                    }}
+                                    placeholder="— Gebruik originele inhoud —"
+                                    rows={4}
+                                />
                                 {pageEditableFields.map(field => {
                                     const currentValue = overrides[field.meta_key] || '';
                                     const updateOverride = (newValue) => {

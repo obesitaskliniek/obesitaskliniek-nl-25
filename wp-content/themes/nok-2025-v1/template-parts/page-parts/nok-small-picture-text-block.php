@@ -41,8 +41,8 @@ $featuredImage = Helpers::get_featured_image('nok-rounded-border-large');
 						<?= $c->tagline ?>
                     </h2>
 				<?php endif; ?>
-				<?php the_title('<h2 class="nok-fs-6 nok-mb-1">', '</h2>'); ?>
-				<?php the_content(); ?>
+                <h2 class="nok-fs-6 nok-mb-1"><?= $c->title() ?></h2>
+				<?= $c->content(); ?>
 				<?php if ($c->has('button_url')) : ?>
                     <a role="button" href="<?= $c->button_url->url() ?>"
                        class="nok-button nok-align-self-to-sm-stretch nok-bg-darkblue nok-text-contrast fill-mobile nok-mt-1">

@@ -51,7 +51,7 @@ $featured_image = Helpers::get_featured_image($border_class);
 						<?= $c->tagline ?>
                     </h2>
 				<?php endif; ?>
-				<?php the_title('<h2 class="nok-fs-6">', '</h2>'); ?>
+				<h2 class="nok-fs-6"><?= $c->title() ?></h2>
             </div>
 			<?php if ($left) : ?>
                 <div class="nok-column-first-lg-4
@@ -63,7 +63,7 @@ $featured_image = Helpers::get_featured_image($border_class);
                 <div class="nok-layout-grid nok-layout-grid__1-column
                         pull-down-correction
                         nok-column-last-xl-3 nok-column-last-lg-4 nok-text-wrap-balance nok-order-1">
-					<?php the_content(); ?>
+					<?= $c->content(); ?>
                     <div>
 						<?php if ($c->has('button_url')) : ?>
                             <a role="button" href="<?= $c->button_url->url() ?>"
@@ -78,7 +78,7 @@ $featured_image = Helpers::get_featured_image($border_class);
                         pull-down-correction
                         nok-column-first-xl-3 nok-column-first-lg-4
                         nok-text-wrap-balance nok-order-0">
-					<?php the_content(); ?>
+					<?= $c->content(); ?>
                     <div>
 						<?php if ($c->has('button_url')) : ?>
                             <a role="button" href="<?= $c->button_url->url() ?>"

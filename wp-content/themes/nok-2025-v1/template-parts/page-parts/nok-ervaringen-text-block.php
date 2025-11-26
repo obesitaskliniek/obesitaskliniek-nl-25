@@ -52,8 +52,8 @@ $scroller_id = 'ervaringen-scroller';
                             nok-align-items-center
                             nok-column-gap-3">
             <div class="nok-align-self-to-lg-stretch nok-column-first-2 nok-layout-flex-column nok-align-items-stretch nok-fs-2">
-				<?php the_title('<h2 class="nok-fs-6">', '</h1>'); ?>
-				<?php the_content(); ?>
+				<h2 class="nok-fs-6"><?= $c->title() ?></h2>
+				<?= $c->content(); ?>
                 <?php if ($c->carousel_buttons->isTrue()) : ?>
                 <div class="nok-button-group">
                     <button class="nok-button nok-bg-lightgrey nok-dark-bg-darkblue nok-text-contrast fill-group-column"

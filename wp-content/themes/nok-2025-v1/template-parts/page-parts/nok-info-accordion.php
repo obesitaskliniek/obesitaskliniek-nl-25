@@ -27,9 +27,9 @@ $c = $context;
 
     <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
         <article class="nok-layout-grid nok-layout-grid__1-column nok-align-items-start">
-            <?php the_title('<h2 class="nok-fs-6 nok-span-all-columns">', '</h1>'); ?>
+            <h2 class="nok-fs-6  nok-span-all-columns"><?= $c->title() ?></h2>
 
-            <?php the_content(); ?>
+            <?= $c->content(); ?>
 
             <?php if ( $c->has( 'accordion_items' ) ): ?>
                 <div class="nok-layout-grid nok-layout-grid__1-column <?= $c->accordion_bordered->isTrue('nok-grid-gap-0', '' ); ?>" data-requires="./nok-accordion.mjs" data-require-lazy="true">

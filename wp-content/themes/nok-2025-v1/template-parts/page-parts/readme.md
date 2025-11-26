@@ -118,7 +118,7 @@ foreach ($items as $item) {
 ```php
 // Title and content
 <?php the_title('<h1>', '</h1>'); ?>
-<?php the_content(); ?>
+<?= $c->content(); ?>
 
 // Featured image
 use NOK2025\V1\Helpers;
