@@ -390,6 +390,15 @@ class RestEndpoints {
 			}, 10, 2 );
 		}
 
+		// Extract generic overrides (title/content)
+		$generic_overrides = [];
+		if ( isset( $overrides['_override_title'] ) && $overrides['_override_title'] !== '' ) {
+			$generic_overrides['_override_title'] = sanitize_text_field( $overrides['_override_title'] );
+		}
+		if ( isset( $overrides['_override_content'] ) && $overrides['_override_content'] !== '' ) {
+			$generic_overrides['_override_content'] = wp_kses_post( $overrides['_override_content'] );
+		}
+
 		$wp_query->the_post();
 
 		ob_start();
@@ -416,7 +425,7 @@ class RestEndpoints {
 			}
 		}
 
-		$this->renderer->render_page_part( $design, $page_part_fields );
+		$this->renderer->render_page_part( $design, $page_part_fields, $generic_overrides );
 		$output = ob_get_clean();
 
 		$post     = $original_post;

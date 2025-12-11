@@ -4,9 +4,11 @@
  * Description: Displays title, content, and a horizontally scrollable carousel of blocks
  * Slug: nok-block-carousel
  * Custom Fields:
- * - blocks:repeater(icon:icon-selector,title:text,content:textarea,link_url:url)
+ * - alternatieve_layout:checkbox!default(false)!page-editable!descr[Gebruik alternatieve layout]
  * - aantal_blocks:select(2|3|4)!default(3)!descr[Aantal blokken dat in beeld is]
+ * - shuffle_blocks:checkbox!default(false)!descr[Willekeurige volgorde?]
  * - read_more:text!default(Lees verder)
+ * - blocks:repeater(icon:icon-selector,title:text,content:textarea,link_url:url)
  * - colors:select(Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue)!page-editable!default(nok-bg-darkerblue nok-text-white)
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  *
@@ -29,14 +31,15 @@ $blocks = $c->blocks->json(array_fill(0, 6, [
     <div class="nok-section__inner--stretched">
         <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
 
-            <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start">
-				<h2 class="nok-fs-6"><?= $c->title() ?></h2>
-                <div class="nok-text-content"><?= $c->content(); ?></div>
+            <article class="nok-layout-grid nok-columns-10 nok-align-items-start nok-column-gap-3">
+                <h2 class="nok-fs-6 nok-align-self-stretch nok-mb-2"><?= $c->title() ?></h2>
+
+                <div class="nok-text-content <?= $c->alternatieve_layout->is(true,'nok-align-self-stretch nok-column-first-xl-4', 'nok-align-self-stretch'); ?>"><?= $c->content(); ?></div>
 
                 <!-- Component: drag-scrollable block carousel -->
-                <div class="nok-mt-2 nok-align-self-stretch">
-                    <div class="nok-layout-grid nok-layout-grid__<?= $c->aantal_blocks->raw(); ?>-column
-            nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="true">
+                <div class="<?= $c->alternatieve_layout->is(true,'nok-align-self-stretch nok-column-last-xl-6', 'nok-mt-2 nok-align-self-stretch'); ?>">
+                    <div class="nok-layout-grid nok-layout-grid__<?= $c->alternatieve_layout->is(true, '2', $c->aantal_blocks->raw()); ?>-column
+            nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="true" <?= $c->shuffle_blocks->isTrue() ? 'data-nok-shuffle' : '' ?>>
 						<?php foreach ($blocks as $block) : ?>
                             <nok-square-block class="nok-bg-darkblue nok-text-white">
 								<?php if (!empty($block['icon'])) : ?>

@@ -513,3 +513,28 @@ export function setupFakeScrollbar(scrollElement) {
 
   updateScrollbar(); // Initial update
 }
+
+/**
+ * Shuffles direct children of elements with [data-nok-shuffle] attribute.
+ * Uses Fisher-Yates algorithm. Removes attribute after shuffle to trigger visibility.
+ *
+ * @param {NodeList|HTMLElement[]} elements - Elements to shuffle
+ */
+export function shuffleChildren(elements) {
+    elements.forEach(container => {
+        const children = Array.from(container.children);
+        if (children.length < 2) {
+            container.removeAttribute('data-nok-shuffle');
+            return;
+        }
+
+        // Fisher-Yates shuffle
+        for (let i = children.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            container.appendChild(children[j]);
+            [children[i], children[j]] = [children[j], children[i]];
+        }
+
+        container.removeAttribute('data-nok-shuffle');
+    });
+}

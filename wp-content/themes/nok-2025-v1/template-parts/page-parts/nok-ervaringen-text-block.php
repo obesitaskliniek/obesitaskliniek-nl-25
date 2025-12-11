@@ -6,6 +6,7 @@
  * Custom Fields:
  * - layout:select(left|right)!page-editable!default(left)
  * - achtergrond:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue|Transparant::nok-text-darkerblue)!page-editable!default(nok-text-darkerblue)
+ * - shuffle_quotes:checkbox!default(false)!descr[Willekeurige volgorde?]
  * - quote_items:repeater(quote:text,name:text,subname:text,excerpt:text,link_url:url,image_url:url)!descr[Voeg handmatige quotes toe om te tonen]
  * - quote_posts:post_repeater(post:ervaringen)!descr[Kies specifieke ervaringsverhalen om te tonen]
  * - random_quotes:checkbox!default(true)!descr[Vul aan met willekeurige ervaringen indien minder dan 5 quotes aanwezig zijn]
@@ -72,6 +73,7 @@ $scroller_id = 'ervaringen-scroller';
 	        <?php get_template_part( 'template-parts/post-parts/nok-scrollable-quote-block', null,
 		        array(
                     'scroller_id' => $scroller_id,
+                    'shuffle'     => $c->shuffle_quotes->isTrue(),
 			        'quotes'      => $testimonial_data,
                     'block_color' => $c->quote_block_colors->raw()
 		        )

@@ -5,6 +5,7 @@
  * Slug: nok-quote-showcase
  * Custom Fields:
  * - quote_posts:post_repeater(post:ervaringen)!descr[Kies specifieke ervaringsverhalen om te tonen in de quote showcase]
+ * - shuffle_quotes:checkbox!default(false)!descr[Willekeurige volgorde?]
  * - quote_items:repeater(quote:text,name:text,subname:text)!descr[Voeg handmatige quotes toe om te tonen in de quote showcase]
  * - quote_autoscroll:checkbox!default(true)!descr[Auto-scroll quotes]
  * - random_quotes:checkbox!default(true)!descr[Vul aan met willekeurige ervaringen indien minder dan 5 quotes aanwezig zijn]
@@ -87,6 +88,7 @@ $circle_offset = "--circle-offset:" . $c->layout->is('left', 'calc(50vw - (var(-
                             array(
                                     'class'         => $c->layout->is( 'accordion-left-title-top', 'nok-mt-5'),
                                     'quotes'      => $quote_data,
+                                    'shuffle'     => $c->shuffle_quotes->isTrue(),
                                     'autoscroll'    => $c->quote_autoscroll->isTrue(),
                                     'block_color' => $c->quote_block_colors->raw()
                             )

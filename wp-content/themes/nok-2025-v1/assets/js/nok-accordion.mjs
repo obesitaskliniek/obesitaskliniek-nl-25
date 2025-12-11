@@ -140,6 +140,8 @@ class Accordion {
     if (!this.summary || !this.content) {
       logger.warn(NAME, '<details> missing <summary> or .accordion-content');
       return;
+    } else if (!this.content) {
+        logger.warn(NAME, '<details> missing .accordion-content');
     }
 
     // Register click handler

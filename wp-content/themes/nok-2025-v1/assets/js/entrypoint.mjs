@@ -12,7 +12,7 @@ import {loadModules} from './domule/core.loader.mjs';
 import {logger} from './domule/core.log.mjs';
 import {classToggler} from './domule/modules/hnl.classtoggler.mjs';
 import {pageScrollPercentage} from "./domule/util.perf.mjs";
-import {setupScrollbarControl, setupFakeScrollbar} from "./nok-scrollbar.mjs";
+import {setupScrollbarControl, setupFakeScrollbar, shuffleChildren} from "./nok-scrollbar.mjs";
 import AOS from './nok-aos.mjs';
 import {singleClick} from "./domule/modules/hnl.clickhandlers.mjs";
 
@@ -42,6 +42,9 @@ events.docReady(function () {
     //https://stackoverflow.com/questions/3885018/active-pseudo-class-doesnt-work-in-mobile-safari
     document.addEventListener('touchstart', function () {
     }, false);
+
+    // Shuffle children of elements marked for randomization
+    shuffleChildren(document.querySelectorAll('[data-nok-shuffle]'));
 
     // sets up fake scrollbars
     document.querySelectorAll('.nok-scrollable__horizontal, .nok-scrollable__vertical').forEach(setupFakeScrollbar);

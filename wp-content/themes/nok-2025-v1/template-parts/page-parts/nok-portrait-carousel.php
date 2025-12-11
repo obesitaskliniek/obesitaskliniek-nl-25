@@ -6,6 +6,7 @@
  * Custom Fields:
  * - button_text:text!default(Bekijk alle specialisten)
  * - button_url:url,
+ * - shuffle:checkbox!default(false)!descr[Willekeurige volgorde?]
  * - team_members:repeater
  * - colors:select(Blauw::nok-bg-darkblue nok-text-white|Wit::nok-bg-white nok-text-darkblue nok-dark-bg-body--darker nok-dark-text-contrast)!page-editable
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
@@ -36,7 +37,7 @@ $c = $context;
                 <!-- Component: drag-scrollable blokkengroep -->
                 <div class="nok-mt-2 nok-align-self-stretch">
                     <div class="nok-layout-grid nok-layout-grid__4-column nok-columns-to-lg-2
-                nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="false">
+                nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="false" <?= $c->shuffle->isTrue() ? 'data-nok-shuffle' : '' ?>>
 						<?php
 						$specialisten = array('Arts', 'Internist', 'Diëtist', 'Psycholoog', 'Bewegingsdeskundige', 'Chirurg');
 						$people_dir = THEME_ROOT_ABS . '/assets/img/people';

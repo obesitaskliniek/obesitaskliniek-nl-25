@@ -125,7 +125,7 @@ p {
   /* Avoid text overflows */
   overflow-wrap: break-word;
   /* Improve line wrapping */
-  text-wrap: pretty;
+  //text-wrap: pretty;
   margin-top: 0;
   margin-bottom: 0;
   //& + p {
@@ -635,6 +635,11 @@ progress {
 
 [hidden] {
   display: none !important;
+}
+
+// Shuffle containers - hidden until JS shuffles and removes attribute
+[data-nok-shuffle] {
+  visibility: hidden;
 }
 
 /* Create a root stacking context */

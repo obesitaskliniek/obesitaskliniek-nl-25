@@ -75,7 +75,7 @@ class AssetManager {
 		wp_register_style(
 			'nok-components-css',
 			$this->resolve_asset_url( '/assets/css/nok-components.css', $dev_mode ),
-			[],
+			['nok-colors-css'],
 			$this->get_asset_version( '/assets/css/nok-components.css', $dev_mode )
 		);
 
