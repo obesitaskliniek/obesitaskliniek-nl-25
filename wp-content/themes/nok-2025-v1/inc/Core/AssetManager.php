@@ -72,14 +72,14 @@ class AssetManager {
 		$theme    = \NOK2025\V1\Theme::get_instance();
 		$dev_mode = $theme->is_development_mode();
 
-		wp_register_style(
+		wp_enqueue_style(
 			'nok-components-css',
 			$this->resolve_asset_url( '/assets/css/nok-components.css', $dev_mode ),
 			['nok-colors-css'],
 			$this->get_asset_version( '/assets/css/nok-components.css', $dev_mode )
 		);
 
-		wp_register_style(
+		wp_enqueue_style(
 			'nok-colors-css',
 			$this->resolve_asset_url( '/assets/css/color_tests-v2.css', $dev_mode ),
 			[],

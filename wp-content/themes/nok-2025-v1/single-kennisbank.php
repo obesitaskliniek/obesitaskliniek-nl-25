@@ -1,7 +1,7 @@
 <?php
 /* Template Name: Event */
 
-get_header( 'faq_items' );
+get_header( 'kennisbank' );
 
 use NOK2025\V1\Assets;
 use NOK2025\V1\Helpers;
@@ -24,7 +24,7 @@ function nok_cat_slug_to_icon($slug) {
 }
 
 function nok_get_categories($as_title = false) : string {
-    $terms = get_the_terms( get_the_ID(), 'faq_categories' );
+    $terms = get_the_terms( get_the_ID(), 'kennisbank_categories' );
     if ( !$terms || is_wp_error( $terms ) ) {
         return '';
     }
@@ -35,7 +35,7 @@ function nok_get_categories($as_title = false) : string {
     }
 
     return Assets::getIcon( nok_cat_slug_to_icon($terms[0]->slug ) ) . ' '
-           . get_the_term_list( get_the_ID(), 'faq_categories', '', ', ' );
+           . get_the_term_list( get_the_ID(), 'kennisbank_categories', '', ', ' );
 }
 
 ?>
@@ -82,8 +82,8 @@ function nok_get_categories($as_title = false) : string {
 
 <?php
 if ( function_exists( 'yarpp_get_related' ) ) :
-    $faq_items = yarpp_get_related( array(), get_the_ID() );
-    if ( $faq_items ) :
+    $kennisbank_items = yarpp_get_related( array(), get_the_ID() );
+    if ( $kennisbank_items ) :
         $accordion_id = 'gerelateerde-vragen-' . sanitize_title( get_the_title() );
         ?>
         <nok-section class="nok-bg-body--darker gradient-background nok-text-darkblue">
@@ -92,11 +92,11 @@ if ( function_exists( 'yarpp_get_related' ) ) :
                 <div class="nok-layout-grid nok-layout-grid__1-column nok-mt-1" data-requires="./nok-accordion.mjs"
                      data-require-lazy="true">
                     <?php
-                    foreach ( $faq_items as $post ) {
+                    foreach ( $kennisbank_items as $post ) {
 
                         $post_id       = $post->ID;
                         $item_title    = get_the_title( $post_id );
-                        $items_cats    = get_the_terms( $post_id, 'faq_categories' );
+                        $items_cats    = get_the_terms( $post_id, 'kennisbank_categories' );
                         $item_category = $items_cats[0]->name;
                         $cat_slug      = $items_cats[0]->slug;
                         $item_id       = $cat_slug . '-' . $post_id; ?>
