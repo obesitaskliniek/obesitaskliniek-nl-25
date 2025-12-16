@@ -82,29 +82,39 @@ $c = $context;  // Standard shorthand
 | `select` (labeled) | `pos:select(Left::left\|Center::center)` | String | Display vs value |
 | `checkbox` | `featured:checkbox` | '1' or '0' | Boolean |
 | `repeater` | `items:repeater(title:text,url:url)` | JSON array | Dynamic rows |
+| `post_repeater` | `posts:post_repeater(post:category)` | JSON array | Post selector |
 | `icon-selector` | `icon:icon-selector` | String | Icon picker |
 
 ### Field Flags
 
 - `!page-editable` — Field can be overridden per-page when embedded
 - `!default(value)` — Default value if not set
+- `!descr[text]` — Help text shown below field in editor
 
 ## FieldContext Usage
 
 ```php
 $c = $context;  // Standard shorthand
 
-// Output (auto-escaped)
-<?= $c->field_name ?>
-<?= $c->field_name->html() ?>   // Explicit HTML escaping
-<?= $c->field_name->url() ?>    // URL encoding
-<?= $c->field_name->attr() ?>   // Attribute encoding
-$c->field_name->raw()           // Raw value (logic only, never output)
+// Output methods (auto-escaped)
+<?= $c->field ?>                  // HTML-escaped (default)
+<?= $c->field->url() ?>           // URL-escaped
+<?= $c->field->url('/fallback') ?>// With fallback
+<?= $c->field->attr() ?>          // Attribute-escaped
+$c->field->raw()                  // Unescaped (logic only)
 
-// Conditionals
-$c->has('field_name')           // Existence check
-$c->field_name->is('value')     // Equality check
-$c->field_name->isTrue()        // Checkbox check
+// Conditional methods (return bool, or $ifTrue/$ifFalse when provided)
+$c->has('field')                              // Existence check
+$c->has('field', 'yes', 'no')                 // Inline conditional
+$c->field->is('value', 'match', 'no-match')   // Equality check
+$c->field->isTrue('active', '')               // Checkbox check
+$c->field->in(['a', 'b'], 'found', '')        // Array membership
+$c->field->contains('sub', 'has-it', '')      // Substring check
+
+// Utility methods
+$c->field->otherwise('fallback')              // Default if empty
+$c->field->json([])                           // Parse JSON to array
+$c->field->css_var('bg-color')                // Returns "--bg-color:value"
 
 // Title & content (with per-page override support)
 <?= $c->title() ?>

@@ -40,41 +40,114 @@ template-parts/page-parts/
 | Select (labeled) | `position:select(Left::left\|Right::right)` | string |
 | Icon Selector | `icon:icon-selector` | string |
 | Repeater | `items:repeater(title:text,url:url)` | JSON array |
+| Post Repeater | `posts:post_repeater(post:category)` | JSON array |
 
 ### Field Flags
 
 - `!default(value)` - Default value in template header
 - `!page-editable` - Overridable in page editor
+- `!descr[text]` - Help text shown below field in editor
+
+Example: `narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable`
 
 ## FieldContext Usage
 
 ```php
 $c = $context;  // Standard shorthand
-
-// Access fields (auto-escaped HTML)
-<?= $c->field_name ?>
-
-// Explicit escaping
-<?= $c->field_name->html() ?>   // HTML entities
-<?= $c->field_name->url() ?>    // URL encoding
-<?= $c->field_name->attr() ?>   // Attribute encoding
-
-// Raw value (logic only, never output)
-$value = $c->field_name->raw();
-
-// Conditionals
-$c->field_name->is('value')                      // bool
-$c->field_name->is('value', 'if-true', 'else')   // inline if
-$c->field_name->in('val1', 'val2')               // bool
-$c->field_name->contains('substring')            // bool
-$c->field_name->isTrue()                         // checkbox check
-$c->has('field_name')                            // existence check
-
-// Utilities
-$c->field_name->otherwise('fallback')            // default if empty
-$c->field_name->css_var('property-name')         // CSS custom property
-$c->repeater_field->json($fallback_array)        // parse JSON repeater
 ```
+
+### Output Methods (FieldValue)
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `$c->field` | string | Auto-escaped HTML (same as `->html()`) |
+| `->html()` | string | HTML entity escaped |
+| `->url($fallback)` | string | URL encoded. Returns `$fallback` if empty |
+| `->attr()` | string | Attribute escaped for use in HTML attributes |
+| `->raw($fallback)` | mixed | Unescaped value. **Never output directly**. Returns `$fallback` if empty |
+
+```php
+<h1><?= $c->title ?></h1>                         // Auto-escaped
+<a href="<?= $c->link->url() ?>">                 // URL-escaped
+<a href="<?= $c->link->url('/fallback') ?>">     // With fallback URL
+<div data-id="<?= $c->id->attr() ?>">            // Attribute-escaped
+$value = $c->field->raw();                        // For logic only
+$value = $c->field->raw('default');               // With fallback
+```
+
+### Conditional Methods (FieldValue)
+
+All conditional methods return `bool` when called without arguments, or return `$ifTrue`/`$ifFalse` values when provided.
+
+| Method | Description |
+|--------|-------------|
+| `->is($value, $ifTrue, $ifFalse)` | Exact equality check |
+| `->isTrue($ifTrue, $ifFalse)` | Checkbox/boolean check (matches '1' or 'true') |
+| `->in($array, $ifTrue, $ifFalse)` | Check if value is in array |
+| `->contains($needle, $ifTrue, $ifFalse)` | Substring check |
+
+```php
+// Boolean usage
+if ($c->layout->is('left')) { }
+if ($c->featured->isTrue()) { }
+if ($c->status->in(['active', 'live'])) { }
+if ($c->colors->contains('dark')) { }
+
+// Inline conditional (returns $ifTrue or $ifFalse)
+$class = $c->layout->is('left', 'order-1', 'order-2');
+$class = $c->featured->isTrue('active', '');
+$class = $c->status->in(['active', 'live'], 'visible', 'hidden');
+$class = $c->colors->contains('dark', 'light-text', 'dark-text');
+```
+
+### Utility Methods (FieldValue)
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `->otherwise($fallback)` | mixed | Returns field value, or `$fallback` if empty |
+| `->json($fallback)` | array | Parses JSON string to array. Returns `$fallback` on invalid/empty |
+| `->css_var($name)` | string | Generates CSS custom property: `--name:value` or empty string |
+
+```php
+// Fallback for empty fields
+$title = $c->custom_title->otherwise('Default Title');
+
+// Parse repeater JSON
+$items = $c->items->json([]);                     // Empty array fallback
+$items = $c->items->json($defaultItems);          // Custom fallback
+
+// CSS custom properties (for inline styles)
+<div style="<?= $c->bg_color->css_var('background-color') ?>">
+// Outputs: style="--background-color:#ff0000" or style="" if empty
+```
+
+### Context Methods (FieldContext)
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `$c->has($key, $ifTrue, $ifFalse)` | bool\|mixed | Check if field has non-empty value |
+| `$c->title()` | string | Post title (HTML-escaped, supports per-page override) |
+| `$c->content()` | string | Post content (with wpautop, supports per-page override) |
+
+```php
+// Existence check (returns bool)
+if ($c->has('button_url')) { }
+
+// Inline conditional (returns $ifTrue or $ifFalse)
+$class = $c->has('image', 'has-image', 'no-image');
+
+// Title and content with override support
+<h1><?= $c->title() ?></h1>
+<?= $c->content() ?>
+```
+
+### Empty Value Detection
+
+`has()` and `otherwise()` consider these values as empty:
+- Empty string `''`
+- Unchecked checkbox `'0'`
+- Empty JSON `'[]'` or `'{}'`
+- `null`
 
 ## Common Patterns
 
