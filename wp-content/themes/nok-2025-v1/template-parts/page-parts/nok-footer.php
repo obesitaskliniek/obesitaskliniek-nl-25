@@ -10,9 +10,12 @@
  */
 
 use NOK2025\V1\Assets;
+use NOK2025\V1\Theme;
 
 $c = $context;
 
+$theme = Theme::get_instance();
+$menu_manager = $theme->get_menu_manager();
 $block_colors = $c->colors->contains('nok-bg-darkestblue',
 	'nok-bg-darkblue nok-bg-alpha-6 nok-alpha-10',
 	'nok-bg-body nok-dark-bg-body--darker nok-alpha-10 nok-alpha-10'
@@ -36,36 +39,7 @@ $block_colors = $c->colors->contains('nok-bg-darkestblue',
                     </button>
                 </nok-square-block>
                 <div class="nok-layout-grid nok-layout-grid__3-column" data-requires="./nok-accordion.mjs" data-require-lazy="true">
-                    <nok-accordion class="nok-border-bottom-to-lg-1 nok-pt-to-lg-1 nok-pb-to-lg-0_5">
-                        <details data-opened-at="lg" name="footer-accordion-group">
-                            <summary class="nok-fs-2 nok-fs-to-lg-3 fw-bold nok-mb-0_5">Behandeling</summary>
-                            <div class="accordion-content">
-                                <ul class="nok-ul-list">
-                                    <li>Advies over obesitas</li>
-                                    <li>Behandeling met operatie</li>
-                                    <li>Ons behandelprogramma</li>
-                                    <li>Kosten van de behandeling</li>
-                                    <li>Onze specialisten</li>
-                                    <li>Verwijzers</li>
-                                </ul>
-                            </div>
-                        </details>
-                    </nok-accordion>
-                    <nok-accordion class="nok-border-bottom-to-lg-1 nok-pt-to-lg-1 nok-pb-to-lg-0_5">
-                        <details data-opened-at="lg" name="footer-accordion-group">
-                            <summary class="nok-fs-2 nok-fs-to-lg-3 fw-bold nok-mb-0_5">Over de NOK</summary>
-                            <div class="accordion-content">
-                                <ul class="nok-ul-list">
-                                    <li>Over ons</li>
-                                    <li>Ervaringen</li>
-                                    <li>Kennisbank</li>
-                                    <li>Werken bij</li>
-                                    <li>Vestigingen</li>
-                                    <li>Contact</li>
-                                </ul>
-                            </div>
-                        </details>
-                    </nok-accordion>
+					<?php $menu_manager->render_footer_columns( 'footer' ); ?>
                     <div>
                         <h4 class="nok-fs-2 fw-bold">Neem contact op</h4>
                         <ul class="nok-ul-list">

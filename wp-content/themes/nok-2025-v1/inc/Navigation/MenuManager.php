@@ -95,18 +95,24 @@ class MenuManager {
 		foreach ( $items as $item ) {
 			if ( $item->menu_item_parent == $parent_id ) {
 				$children = $this->build_menu_tree( $items, $item->ID );
+				$classes  = is_array( $item->classes ) ? $item->classes : [];
+
+				// Detect header items: URL is # or empty, or has menu-header class
+				$is_header = in_array( $item->url, [ '#', '' ], true )
+				             || in_array( 'menu-header', $classes, true );
 
 				$branch[] = [
 					'id'                  => $item->ID,
 					'title'               => $item->title,
 					'url'                 => $item->url,
-					'classes'             => $item->classes,
+					'classes'             => $classes,
 					'target'              => $item->target,
 					'attr_title'          => $item->attr_title,
 					'description'         => $item->description,
 					'object_id'           => $item->object_id,
-					'is_current'          => in_array( 'current-menu-item', $item->classes ),
-					'is_current_ancestor' => in_array( 'current-menu-ancestor', $item->classes ),
+					'is_current'          => in_array( 'current-menu-item', $classes ),
+					'is_current_ancestor' => in_array( 'current-menu-ancestor', $classes ),
+					'is_header'           => $is_header,
 					'has_children'        => ! empty( $children ),
 					'children'            => $children,
 				];
@@ -179,6 +185,30 @@ class MenuManager {
 			                                     'menu_items' => $menu_items,
 			                                     'location'   => $location,
 		                                     ] + $context );
+	}
+
+	/**
+	 * Render footer columns with accordion behavior
+	 *
+	 * Top-level items with is_header flag render as column headers.
+	 * Their children render as links beneath. On mobile, headers become
+	 * accordion toggles.
+	 *
+	 * @param string $location Menu location
+	 * @param array<string, mixed> $context Additional variables to pass to template
+	 * @return void
+	 */
+	public function render_footer_columns( string $location = 'footer', array $context = [] ): void {
+		$menu_items = $this->get_menu_tree( $location );
+
+		if ( empty( $menu_items ) && ! current_user_can( 'manage_options' ) ) {
+			return; // Silent fail for non-admins
+		}
+
+		$this->load_template( 'footer-columns', [
+			'menu_items' => $menu_items,
+			'location'   => $location,
+		] + $context );
 	}
 
 	/**
