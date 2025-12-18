@@ -35,3 +35,7 @@ yarn-error.log*
 # Temporary files
 *.tmp
 *~
+
+# Claude Code context (contains credentials)
+CLAUDE.md
+token-debug.log

@@ -37,7 +37,7 @@ $featuredImage = Helpers::get_featured_image('nok-rounded-border-large');
 
             <div class="nok-order-<?= $order ?> nok-layout-flex-column nok-align-items-start">
 				<?php if ($c->has('tagline')) : ?>
-                    <h2 class="nok-fs-6 nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-mb-0_5">
+                    <h2 class="nok-fs-4 nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-mb-0">
 						<?= $c->tagline ?>
                     </h2>
 				<?php endif; ?>

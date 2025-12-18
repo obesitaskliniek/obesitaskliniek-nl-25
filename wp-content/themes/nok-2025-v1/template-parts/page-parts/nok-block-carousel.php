@@ -4,13 +4,14 @@
  * Description: Displays title, content, and a horizontally scrollable carousel of blocks
  * Slug: nok-block-carousel
  * Custom Fields:
+ * - colors:select(Transparant::nok-bg-body|Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue)!page-editable!default(nok-bg-darkerblue nok-text-white)
+ * - block_colors:select(Transparant::|Blauw::nok-bg-darkerblue nok-text-white|Lichter blauw::nok-bg-darkblue--darker nok-text-white|Donkerblauw::nok-bg-darkerblue--darker nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue)!page-editable!default(nok-bg-darkerblue nok-text-white)!default(Blauw)
+ * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  * - alternatieve_layout:checkbox!default(false)!page-editable!descr[Gebruik alternatieve layout]
  * - aantal_blocks:select(2|3|4)!default(3)!descr[Aantal blokken dat in beeld is]
  * - shuffle_blocks:checkbox!default(false)!descr[Willekeurige volgorde?]
  * - read_more:text!default(Lees verder)
  * - blocks:repeater(icon:icon-selector,title:text,content:textarea,link_url:url)
- * - colors:select(Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue)!page-editable!default(nok-bg-darkerblue nok-text-white)
- * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -41,7 +42,7 @@ $blocks = $c->blocks->json(array_fill(0, 6, [
                     <div class="nok-layout-grid nok-layout-grid__<?= $c->alternatieve_layout->is(true, '2', $c->aantal_blocks->raw()); ?>-column
             nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="true" <?= $c->shuffle_blocks->isTrue() ? 'data-nok-shuffle' : '' ?>>
 						<?php foreach ($blocks as $block) : ?>
-                            <nok-square-block class="nok-bg-darkblue nok-text-white">
+                            <nok-square-block class="<?= $c->block_colors ?>">
 								<?php if (!empty($block['icon'])) : ?>
                                     <div class="nok-square-block__icon">
 										<?= Assets::getIcon(esc_attr($block['icon'])); ?>

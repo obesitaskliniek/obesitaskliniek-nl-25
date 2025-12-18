@@ -5,13 +5,14 @@
  * Slug: nok-info-accordion
  * Custom Fields:
  * - colors:select(Transparant::nok-bg-body nok-text-darkerblue nok-dark-text-contrast|Grijs::nok-bg-body--darker gradient-background nok-text-darkerblue nok-dark-text-contrast|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Blauw::nok-bg-darkerblue nok-text-contrast)!page-editable!default(Blauw)
+ * - accordion_block_colors:select(Transparant::|Blauw::nok-bg-darkerblue nok-text-white|Lichter blauw::nok-bg-darkblue--darker nok-text-white|Donkerblauw::nok-bg-darkerblue--darker nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Grijs::nok-bg-body--darker gradient-background nok-text-darkerblue nok-dark-text-contrast)!page-editable!default(Transparent)
  * - accordion_open_first:checkbox!default(true)!descr[Open het eerste accordion item standaard]!page-editable
  * - accordion_bordered:checkbox!default(false)!descr[Lijn tussen accordion items?]
  * - accordion_framed:checkbox!default(true)!descr[Voeg een kader toe rondom de accordion items]
  * - accordion_checkmarks:select(Vraagtekens met vinkjes::question-marks|Vinkjes::checkmarks)!descr[Vinkjes of vraagtekens voor de titels plaatsen?]
  * - accordion_checkmarks_colors:select(Blauw::var(--nok-lightblue)|Groen::var(--nok-green)|Geel::var(--nok-yellow)|Lightgroen::var(--nok-greenblue--lighter))!default(Blauw)!descr[Kleur van de vinkjes]
- * - accordion_items:repeater(title:text,content:textarea,button_url:url,button_text:text)!descr[Voeg accordion items toe]
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
+ * - accordion_items:repeater(title:text,content:textarea,button_url:url,button_text:text)!descr[Voeg accordion items toe]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
