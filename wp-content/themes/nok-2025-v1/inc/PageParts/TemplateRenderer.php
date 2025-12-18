@@ -51,6 +51,13 @@ namespace NOK2025\V1\PageParts;
 class TemplateRenderer {
 	private RenderContext $context;
 
+	/**
+	 * The original queried object (page/post being viewed) for token replacement.
+	 * Captured before any WP_Query manipulation to ensure tokens resolve
+	 * against the actual page context, not the page_part being rendered.
+	 */
+	private ?\WP_Post $context_post = null;
+
 	public function __construct() {
 		$this->context = new RenderContext();
 	}
@@ -61,6 +68,29 @@ class TemplateRenderer {
 	public function register_hooks(): void {
 		// Process tokens in page part titles
 		add_filter('the_title', [$this, 'process_title_tokens'], 10, 2);
+
+		// Process tokens in all rendered content (catches tokens in layout templates, blocks, etc.)
+		add_filter('the_content', [$this, 'process_content_tokens_filter'], 20);
+	}
+
+	/**
+	 * Filter callback for the_content to process tokens
+	 *
+	 * Runs after block rendering (priority 20) to catch tokens in:
+	 * - Layout template content
+	 * - Regular Gutenberg blocks (headings, paragraphs)
+	 * - Any other content that goes through the_content
+	 *
+	 * @param string $content The post content
+	 * @return string Content with tokens replaced
+	 */
+	public function process_content_tokens_filter(string $content): string {
+		// Only process if content contains tokens (performance optimization)
+		if (strpos($content, '{{') === false) {
+			return $content;
+		}
+
+		return $this->process_content_tokens($content);
 	}
 
 	/**
@@ -88,6 +118,11 @@ class TemplateRenderer {
 	 * Used for frontend rendering and high-level template inclusion
 	 */
 	public function include_page_part_template(string $design, array $args = []): void {
+		// Capture original queried object BEFORE any query/post manipulation
+		// This ensures token replacement resolves against the page being viewed
+		$queried_object = get_queried_object();
+		$this->context_post = ($queried_object instanceof \WP_Post) ? $queried_object : null;
+
 		// Standardized setup that every template needs
 		global $post;
 		$post = $args['post'] ?? null;
@@ -97,6 +132,9 @@ class TemplateRenderer {
 		$this->render_page_part($design, $args['page_part_fields'] ?? [], $args['generic_overrides'] ?? []);
 
 		wp_reset_postdata();
+
+		// Clear context post after rendering
+		$this->context_post = null;
 	}
 
 	/**
@@ -145,6 +183,11 @@ class TemplateRenderer {
 			return '';
 		}
 
+		// Capture original queried object BEFORE replacing $wp_query
+		// This ensures token replacement resolves against the page being viewed
+		$queried_object = get_queried_object();
+		$this->context_post = ($queried_object instanceof \WP_Post) ? $queried_object : null;
+
 		global $wp_query;
 		$original_post = $GLOBALS['post'] ?? null;
 		$original_query = $wp_query;
@@ -176,6 +219,9 @@ class TemplateRenderer {
 		wp_reset_postdata();
 		$GLOBALS['post'] = $original_post;
 		$wp_query = $original_query;
+
+		// Clear context post after rendering
+		$this->context_post = null;
 
 		return $output;
 	}
@@ -342,8 +388,9 @@ class TemplateRenderer {
 	 * @return array Fields with tokens replaced
 	 */
 	private function replace_tokens(array $fields): array {
-		// Use queried object (the actual page being viewed), not current loop post
-		$post = get_queried_object();
+		// Use stored context_post (captured before query manipulation) if available,
+		// otherwise fall back to get_queried_object() for backward compatibility
+		$post = $this->context_post ?? get_queried_object();
 
 		// Only process if we have a post context
 		if (!$post || !($post instanceof \WP_Post)) {
