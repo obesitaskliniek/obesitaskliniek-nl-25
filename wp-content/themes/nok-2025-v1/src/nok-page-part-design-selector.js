@@ -2,9 +2,11 @@ import {useSelect, useDispatch} from '@wordpress/data';
 import {registerPlugin} from '@wordpress/plugins';
 import {PluginDocumentSettingPanel} from '@wordpress/editor';
 import {SelectControl, TextControl, TextareaControl, CheckboxControl, Button, Draggable} from '@wordpress/components';
+import apiFetch from '@wordpress/api-fetch';
 import {logger} from '../assets/js/domule/core.log.mjs';
 import {Fragment, useRef, useState, useEffect, useMemo} from '@wordpress/element';
 import IconSelector from './components/IconSelector';
+import FieldImportWizard from './components/FieldImportWizard';
 
 const NAME = 'nok-page-part-design-selector';
 
@@ -462,6 +464,10 @@ function DesignSlugPanel() {
     const [isInitialized, setIsInitialized] = useState(false);
     const debounceRef = useRef({});
 
+    // 6b) State for field import wizard
+    const [showImportWizard, setShowImportWizard] = useState(false);
+    const [hasOrphanedFields, setHasOrphanedFields] = useState(false);
+
     // Initialize local state from meta when meta changes (but not from our own updates)
     useEffect(() => {
         if (meta && customFields.length > 0) {
@@ -481,6 +487,31 @@ function DesignSlugPanel() {
             }
         }
     }, [currentTemplate, meta?.design_slug]);
+
+    // Check for orphaned fields when template changes
+    useEffect(() => {
+        if (!postId || !currentTemplate) {
+            setHasOrphanedFields(false);
+            return;
+        }
+
+        apiFetch({
+            path: `/nok/v1/page-part/${postId}/orphaned-fields?current_template=${currentTemplate}`
+        }).then(response => {
+            setHasOrphanedFields(response.sources?.length > 0);
+        }).catch(() => setHasOrphanedFields(false));
+    }, [postId, currentTemplate]);
+
+    // Handle import from wizard
+    const handleImport = (importData) => {
+        const newMeta = {...meta, ...importData};
+        editPost({meta: newMeta});
+
+        // Update local state for immediate UI feedback
+        setLocalFieldValues(prev => ({...prev, ...importData}));
+
+        logger.log(NAME, `Imported ${Object.keys(importData).length} fields from previous template`);
+    };
 
     const updateMetaField = (fieldName, value) => {
         // Don't trigger updates during initialization
@@ -727,6 +758,27 @@ function DesignSlugPanel() {
                     const newMeta = {...meta, design_slug: newSlug};
                     editPost({meta: newMeta});
                 }}
+            />
+
+            {/* Import from previous template button */}
+            {hasOrphanedFields && (
+                <Button
+                    variant="secondary"
+                    onClick={() => setShowImportWizard(true)}
+                    style={{width: '100%', justifyContent: 'center', marginTop: '12px'}}
+                >
+                    Import from previous template
+                </Button>
+            )}
+
+            {/* Field Import Wizard Modal */}
+            <FieldImportWizard
+                isOpen={showImportWizard}
+                onClose={() => setShowImportWizard(false)}
+                postId={postId}
+                currentTemplate={currentTemplate}
+                targetFields={customFields}
+                onImport={handleImport}
             />
 
             {/* Render custom fields for selected template */}

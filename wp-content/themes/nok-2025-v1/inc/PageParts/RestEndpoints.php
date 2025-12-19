@@ -47,6 +47,7 @@ class RestEndpoints {
 		add_action('rest_api_init', [$this, 'register_rest_routes' ] );
 		add_action('rest_api_init', [$this, 'register_prune_endpoint']);
 		add_action('rest_api_init', [$this, 'register_post_query_endpoint']);
+		add_action('rest_api_init', [$this, 'register_orphaned_fields_endpoint']);
 	}
 
 	/**
@@ -119,6 +120,170 @@ class RestEndpoints {
 			'deleted' => $deleted,
 			'count' => count($deleted)
 		]);
+	}
+
+	/**
+	 * Register endpoint for getting orphaned template fields
+	 *
+	 * Returns meta fields from previous templates that can be imported
+	 * into the current template.
+	 *
+	 * @return void
+	 */
+	public function register_orphaned_fields_endpoint(): void {
+		register_rest_route('nok/v1', '/page-part/(?P<id>\d+)/orphaned-fields', [
+			'methods'             => 'GET',
+			'callback'            => [$this, 'get_orphaned_fields'],
+			'permission_callback' => function() {
+				return current_user_can('edit_posts');
+			},
+			'args'                => [
+				'id' => [
+					'required'          => true,
+					'validate_callback' => fn($param) => is_numeric($param)
+				],
+				'current_template' => [
+					'required' => true,
+					'type'     => 'string'
+				]
+			]
+		]);
+	}
+
+	/**
+	 * Get orphaned fields from previous templates
+	 *
+	 * Returns all meta fields that have values but don't belong to the current template.
+	 * Groups fields by source template with type information for mapping.
+	 *
+	 * @param \WP_REST_Request $request Request with id and current_template parameters
+	 * @return \WP_REST_Response Response with sources array containing orphaned fields
+	 */
+	public function get_orphaned_fields(\WP_REST_Request $request): \WP_REST_Response {
+		$post_id          = (int) $request->get_param('id');
+		$current_template = $request->get_param('current_template');
+
+		$all_meta = get_post_meta($post_id);
+		$registry = \NOK2025\V1\Theme::get_instance()->get_page_part_registry();
+
+		// Group orphaned fields by source template
+		$sources = [];
+
+		foreach ($all_meta as $meta_key => $values) {
+			$value = $values[0] ?? '';
+
+			// Skip empty values
+			if ($value === '' || $value === '[]' || $value === '0') {
+				continue;
+			}
+
+			// Skip current template's fields
+			if (str_starts_with($meta_key, $current_template . '_')) {
+				continue;
+			}
+
+			// Skip non-page-part fields (must match slug_fieldname pattern)
+			if (!preg_match('/^([a-z0-9-]+)_([a-z0-9_]+)$/i', $meta_key, $matches)) {
+				continue;
+			}
+
+			$source_slug = $matches[1];
+			$field_name  = $matches[2];
+
+			// Skip special fields
+			if ($field_name === 'design_slug') {
+				continue;
+			}
+
+			// Find source template in registry to get field definitions
+			$source_template = null;
+			$field_def       = null;
+
+			foreach ($registry as $template) {
+				if ($template['slug'] === $source_slug) {
+					$source_template = $template;
+					foreach ($template['custom_fields'] ?? [] as $f) {
+						if ($f['name'] === $field_name) {
+							$field_def = $f;
+							break;
+						}
+					}
+					break;
+				}
+			}
+
+			// Initialize source group if needed
+			if (!isset($sources[$source_slug])) {
+				$sources[$source_slug] = [
+					'template_slug' => $source_slug,
+					'template_name' => $source_template['name'] ?? ucfirst(str_replace('-', ' ', $source_slug)),
+					'fields'        => []
+				];
+			}
+
+			// Build field info
+			$field_info = [
+				'meta_key' => $meta_key,
+				'name'     => $field_name,
+				'type'     => $field_def['type'] ?? $this->infer_field_type($value),
+				'label'    => $field_def['label'] ?? ucfirst(str_replace('_', ' ', $field_name)),
+				'value'    => $value
+			];
+
+			// Add schema for repeaters
+			if ($field_info['type'] === 'repeater' && isset($field_def['schema'])) {
+				$field_info['schema'] = $field_def['schema'];
+			} elseif ($field_info['type'] === 'repeater') {
+				// Infer schema from value
+				$decoded = json_decode($value, true);
+				if (is_array($decoded) && !empty($decoded[0])) {
+					$field_info['schema'] = [];
+					foreach (array_keys($decoded[0]) as $key) {
+						if ($key === '_id') {
+							continue;
+						}
+						$field_info['schema'][] = [
+							'name'  => $key,
+							'label' => ucfirst(str_replace('_', ' ', $key)),
+							'type'  => 'text' // Default assumption
+						];
+					}
+				}
+			}
+
+			// Add options for select fields
+			if ($field_info['type'] === 'select' && isset($field_def['options'])) {
+				$field_info['options'] = $field_def['options'];
+			}
+
+			$sources[$source_slug]['fields'][] = $field_info;
+		}
+
+		return new \WP_REST_Response([
+			'sources' => array_values($sources)
+		], 200);
+	}
+
+	/**
+	 * Infer field type from value when template definition unavailable
+	 *
+	 * @param string $value The meta value to analyze
+	 * @return string Inferred field type
+	 */
+	private function infer_field_type(string $value): string {
+		if ($value === '0' || $value === '1') {
+			return 'checkbox';
+		}
+		if (str_starts_with($value, '[') && json_decode($value) !== null) {
+			return 'repeater';
+		}
+		if (filter_var($value, FILTER_VALIDATE_URL)) {
+			return 'url';
+		}
+		if (str_contains($value, "\n")) {
+			return 'textarea';
+		}
+		return 'text';
 	}
 
 	/**

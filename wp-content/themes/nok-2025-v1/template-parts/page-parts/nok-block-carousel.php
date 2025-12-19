@@ -35,7 +35,7 @@ $blocks = $c->blocks->json(array_fill(0, 6, [
             <article class="nok-layout-grid nok-columns-10 nok-align-items-start nok-column-gap-3">
                 <h2 class="nok-fs-6 nok-align-self-stretch nok-mb-2"><?= $c->title() ?></h2>
 
-                <div class="nok-text-content <?= $c->alternatieve_layout->is(true,'nok-align-self-stretch nok-column-first-xl-4', 'nok-align-self-stretch'); ?>"><?= $c->content(); ?></div>
+                <div class="nok-layout-grid nok-layout-grid__1-column nok-text-content <?= $c->alternatieve_layout->is(true,'nok-align-self-stretch nok-column-first-xl-4', 'nok-align-self-stretch'); ?>"><?= $c->content(); ?></div>
 
                 <!-- Component: drag-scrollable block carousel -->
                 <div class="<?= $c->alternatieve_layout->is(true,'nok-align-self-stretch nok-column-last-xl-6', 'nok-mt-2 nok-align-self-stretch'); ?>">

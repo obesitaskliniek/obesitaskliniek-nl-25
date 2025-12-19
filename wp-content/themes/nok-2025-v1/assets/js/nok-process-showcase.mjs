@@ -26,6 +26,7 @@
  */
 
 import { logger } from './domule/core.log.mjs';
+import { ViewportScroller } from './domule/util.ensure-visibility.mjs';
 
 export const NAME = 'process-showcase';
 
@@ -38,9 +39,6 @@ const DEFAULT_INTERVAL = 5000;
 
 /** @type {number} Panel fade transition duration in milliseconds */
 const FADE_DURATION = 300;
-
-/** @type {string} CSS class for fade transition */
-const FADE_CLASS = 'nok-fade-transition';
 
 // ============================================================================
 // STATE MANAGEMENT
@@ -76,6 +74,7 @@ class ProcessShowcase {
         // Elements
         this.tabs = Array.from(this.article.querySelectorAll('[role="tab"]'));
         this.panels = Array.from(this.article.querySelectorAll('[role="tabpanel"]'));
+        this.panelContainer = this.panels[0]?.parentElement;
 
         if (this.tabs.length === 0 || this.panels.length === 0) {
             logger.warn(NAME, 'No tabs or panels found');
@@ -92,10 +91,17 @@ class ProcessShowcase {
         this.autoplayEnabled = this.article.dataset.autoplay === 'true';
         this.autoplayInterval = parseInt(this.article.dataset.autoplayInterval, 10) || DEFAULT_INTERVAL;
         this.autoplayTimer = null;
-        this.autoplayStopped = false; // Permanent stop flag
+        this.autoplayStopped = false;
 
         // Current state
         this.currentIndex = 0;
+        this.isUserInteraction = false;
+
+        // Visibility correction (only scrolls if panel not in view)
+        this._visibilityCorrector = new ViewportScroller(this.panelContainer || this.panels[0], {
+            behavior: 'smooth',
+            extraOffset: 20
+        });
 
         this._init();
     }
@@ -109,7 +115,7 @@ class ProcessShowcase {
         this.tabs.forEach((tab, index) => {
             tab.addEventListener('click', () => {
                 this._stopAutoplay();
-                this._switchTo(index);
+                this._switchTo(index, true);
             });
         });
 
@@ -128,11 +134,14 @@ class ProcessShowcase {
      * Switch to tab at given index
      * @private
      * @param {number} index - Target tab index
+     * @param {boolean} [isUserInteraction=false] - Whether triggered by user
      */
-    _switchTo(index) {
+    _switchTo(index, isUserInteraction = false) {
         if (index === this.currentIndex || index < 0 || index >= this.tabs.length) {
             return;
         }
+
+        this.isUserInteraction = isUserInteraction;
 
         const oldTab = this.tabs[this.currentIndex];
         const oldPanel = this.panels[this.currentIndex];
@@ -188,6 +197,8 @@ class ProcessShowcase {
      * @param {HTMLElement} newPanel - Panel to show
      */
     _fadePanel(oldPanel, newPanel) {
+        const shouldEnsureVisible = this.isUserInteraction;
+
         // Fade out
         oldPanel.style.opacity = '0';
         oldPanel.style.transition = `opacity ${FADE_DURATION}ms ease-out`;
@@ -210,6 +221,13 @@ class ProcessShowcase {
             setTimeout(() => {
                 newPanel.style.opacity = '';
                 newPanel.style.transition = '';
+
+                // Ensure panel is visible (only scrolls if needed)
+                if (shouldEnsureVisible) {
+                    this._visibilityCorrector.ensureVisible();
+                }
+
+                this.isUserInteraction = false;
             }, FADE_DURATION);
         }, FADE_DURATION);
     }
@@ -251,7 +269,7 @@ class ProcessShowcase {
         }
 
         this._stopAutoplay();
-        this._switchTo(newIndex);
+        this._switchTo(newIndex, true);
         this.tabs[newIndex].focus();
     }
 
@@ -264,7 +282,7 @@ class ProcessShowcase {
 
         this.autoplayTimer = setInterval(() => {
             const nextIndex = (this.currentIndex + 1) % this.tabs.length;
-            this._switchTo(nextIndex);
+            this._switchTo(nextIndex, false);
         }, this.autoplayInterval);
     }
 
