@@ -22,6 +22,7 @@ namespace NOK2025\V1\PageParts;
  * <?= $context->field->html() ?>  // HTML escape
  * <?= $context->field->url() ?>   // URL escape
  * <?= $context->field->attr() ?>  // Attribute escape
+ * <?= $context->field->link() ?>  // Link resolution (post:123 → permalink)
  *
  * @example Comparisons and conditionals
  * $left = $context->layout->is('left');                              // Boolean
@@ -82,6 +83,66 @@ class FieldValue {
 	 */
 	public function url( string $fallback = ''): string {
 		return $this->value ? ($this->is_placeholder ? $this->value : esc_url( $this->value )) : $fallback;
+	}
+
+	/**
+	 * Resolve link value to URL
+	 * Handles post:123, term:123, and archive:post_type formats
+	 * Falls back to regular URL escaping for other values
+	 *
+	 * @param string $fallback Fallback URL if empty or item not found
+	 * @return string Resolved and escaped URL
+	 */
+	public function link( string $fallback = '' ): string {
+		if ( ! $this->value ) {
+			return $fallback;
+		}
+
+		if ( $this->is_placeholder ) {
+			return $this->value;
+		}
+
+		// Check for post:123 format (posts and pages)
+		if ( is_string( $this->value ) && str_starts_with( $this->value, 'post:' ) ) {
+			$post_id = (int) substr( $this->value, 5 );
+			if ( $post_id > 0 ) {
+				$permalink = get_permalink( $post_id );
+				if ( $permalink ) {
+					return esc_url( $permalink );
+				}
+			}
+			// Post not found, return fallback
+			return $fallback;
+		}
+
+		// Check for term:123 format (categories, tags, custom taxonomies)
+		if ( is_string( $this->value ) && str_starts_with( $this->value, 'term:' ) ) {
+			$term_id = (int) substr( $this->value, 5 );
+			if ( $term_id > 0 ) {
+				$term_link = get_term_link( $term_id );
+				if ( $term_link && ! is_wp_error( $term_link ) ) {
+					return esc_url( $term_link );
+				}
+			}
+			// Term not found, return fallback
+			return $fallback;
+		}
+
+		// Check for archive:post_type format (post type archives)
+		if ( is_string( $this->value ) && str_starts_with( $this->value, 'archive:' ) ) {
+			$post_type = substr( $this->value, 8 );
+			if ( $post_type ) {
+				$archive_link = get_post_type_archive_link( $post_type );
+				if ( $archive_link ) {
+					return esc_url( $archive_link );
+				}
+			}
+			// Archive not found, return fallback
+			return $fallback;
+		}
+
+		// Regular URL
+		return esc_url( $this->value );
 	}
 
 	/**

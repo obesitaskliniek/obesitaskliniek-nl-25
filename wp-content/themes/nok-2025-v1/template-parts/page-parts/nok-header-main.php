@@ -89,7 +89,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                 <div class="nok-nav-carousel__inner nok-text-darkerblue nok-dark-text-white">
                     <div class="nok-nav-carousel__slide">
                         <div class="nok-nav-menu-items" id="topmenu">
-                            <a href="#submenu-behandelingen" class="nok-nav-menu-item nok-nav-menu-item--active">Behandelingen</a>
+                            <a href="#submenu-behandelingen" class="nok-nav-menu-item">Behandelingen</a>
                             <a href="#submenu-over-nok" class="nok-nav-menu-item">Over NOK</a>
                             <a href="#" class="nok-nav-menu-item">Agenda</a>
                             <a href="#" class="nok-nav-menu-item">Verwijzers</a>
@@ -100,7 +100,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                             <a href="#topmenu" class="nok-nav-menu-item nok-nav-menu-item__back">&laquo; Terug naar
                                 overzicht</a>
                             <a href="#" class="nok-nav-menu-item">Wat is obesitas?</a>
-                            <a href="#" class="nok-nav-menu-item nok-nav-menu-item--active">Onze behandeling van
+                            <a href="#" class="nok-nav-menu-item">Onze behandeling van
                                 obesitas</a>
                             <a href="#" class="nok-nav-menu-item">Ons behandelprogramma</a>
                             <a href="#" class="nok-nav-menu-item">De operatie</a>
@@ -120,7 +120,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
             </div>
             <div class="nok-section__inner--stretched nok-nav-footer nok-text-contrast nok-bg-darkerblue nok-dark-bg-darkestblue nok-z-1">
                 <div class="nok-nav-menu-items nok-nav-menu-items--compact">
-                    <a href="#" class="nok-nav-menu-item nok-nav-menu-item--active">Werken bij</a>
+                    <a href="#" class="nok-nav-menu-item">Werken bij</a>
                     <a href="#" class="nok-nav-menu-item nok-popup-trigger" data-toggles-class="popup-open" data-class-target="nok-top-navigation" data-toggle-event="click"
                        data-toggles-attribute="data-state" data-toggles-attribute-value="open" data-attribute-target="#popup-bmi-calculator">BMI berekenen</a>
                     <a href="#" class="nok-nav-menu-item">Mijn NOK</a>
@@ -166,9 +166,6 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
 					<?= $logo; ?>
                 </div>
 				<?php $menu_manager->render_desktop_menu_bar('primary'); ?>
-                <div>Behandelingen</div>
-                <div>Agenda</div>
-                <div>Verwijzers</div>
                 <div>
                     <button class="nok-button nok-bg-yellow nok-text-contrast" tabindex="0">Gratis
                         voorlichtingsavond

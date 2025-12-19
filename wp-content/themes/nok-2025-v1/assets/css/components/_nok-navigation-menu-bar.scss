@@ -84,6 +84,10 @@ nok-navigation-menu-bar {
 
       &-menu {
         align-self: flex-start;
+
+        .nok-nav-menu-item--active {
+          color: var(--nok-lightblue);
+        }
         @include components-base.transition-properties {
           animation: fade--in .5s ease-out;
         }

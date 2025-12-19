@@ -39,9 +39,13 @@ if ( empty( $menu_items ) ) {
 		<?php
 		$classes = [ 'nok-nav-menu-item' ];
 
-		// Add active class
-		if ( $item['is_current'] || $item['is_current_ancestor'] ) {
+		// Add active/current classes
+		if ( $item['is_current'] ) {
 			$classes[] = 'nok-nav-menu-item--active';
+			$classes[] = 'is-current-page';
+		} elseif ( $item['is_current_ancestor'] ) {
+			$classes[] = 'nok-nav-menu-item--active';
+			$classes[] = 'is-current-ancestor';
 		}
 
 		// Add custom classes from admin

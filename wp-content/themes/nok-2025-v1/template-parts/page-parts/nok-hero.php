@@ -7,17 +7,17 @@
  * Custom Fields:
  * - tagline:text!page-editable
  * - button_blauw_text:text!page-editable
- * - button_blauw_url:url!page-editable
+ * - button_blauw_url:link!page-editable
  * - button_transparant_text:text!page-editable
- * - button_transparant_url:url!page-editable
+ * - button_transparant_url:link!page-editable
  * - usp_1_icon:icon-selector!page-editable!default(nok_kosten)
  * - usp_1_text:text!page-editable!default(Vergoed door je zorgverzekering)
  * - usp_2_icon:icon-selector!page-editable!default(nok_30_jaar_ervaring)
  * - usp_2_text:text!page-editable!default(Meer dan 30 jaar ervaring)
- *  - usp_3_icon:icon-selector!page-editable!default(nok_hospital)
+ * - usp_3_icon:icon-selector!page-editable!default(nok_hospital)
  * - usp_3_text:text!page-editable!default(Samenwerking met de beste ziekenhuizen))
  * - button_vestiging_text:text!page-editable!default(Onze vestigingen)
- * - button_vestiging_url:url!page-editable!default(/vestigingen)
+ * - button_vestiging_url:link!page-editable!default(/vestigingen)
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -46,14 +46,14 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                 </div>
                 <div class="nok-button-group nok-justify-items-start">
 					<?php if ( $c->has( 'button_blauw_url' ) ): ?>
-                        <a role="button" href="<?= $c->button_blauw_url->url() ?>"
+                        <a role="button" href="<?= $c->button_blauw_url->link() ?>"
                            class="nok-button nok-justify-self-center nok-bg-darkerblue nok-text-contrast fill-group-column"
                            tabindex="0">
                             <span><?= $c->button_blauw_text ?></span>
                         </a>
 					<?php endif; ?>
 					<?php if ( $c->has( 'button_transparant_url' ) ): ?>
-                        <a role="button" href="<?= $c->button_transparant_url->url() ?>"
+                        <a role="button" href="<?= $c->button_transparant_url->link() ?>"
                            class="nok-hyperlink nok-justify-self-center fw-bold">
                             <span><?= $c->button_transparant_text ?></span>
                         </a>
@@ -134,7 +134,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                     <?= Assets::getIcon($c->usp_3_icon->raw(), 'nok-text-lightblue') ?>
                     <?= $c->usp_3_text ?>
                 </div>
-                <a role="button" href="<?= $c->button_vestiging_url->url() ?>"
+                <a role="button" href="<?= $c->button_vestiging_url->link() ?>"
                    class="nok-button nok-bg-white nok-text-darkerblue nok-visible-xs nok-align-self-stretch"
                    tabindex="0"><span><?= $c->button_vestiging_text ?></span>
                 </a>

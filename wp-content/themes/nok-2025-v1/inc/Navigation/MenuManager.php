@@ -101,6 +101,10 @@ class MenuManager {
 				$is_header = in_array( $item->url, [ '#', '' ], true )
 				             || in_array( 'menu-header', $classes, true );
 
+				// Determine current page status
+				$is_current          = $this->is_menu_item_current( $item );
+				$is_current_ancestor = $this->is_menu_item_ancestor( $item, $children );
+
 				$branch[] = [
 					'id'                  => $item->ID,
 					'title'               => $item->title,
@@ -110,8 +114,8 @@ class MenuManager {
 					'attr_title'          => $item->attr_title,
 					'description'         => $item->description,
 					'object_id'           => $item->object_id,
-					'is_current'          => in_array( 'current-menu-item', $classes ),
-					'is_current_ancestor' => in_array( 'current-menu-ancestor', $classes ),
+					'is_current'          => $is_current,
+					'is_current_ancestor' => $is_current_ancestor,
 					'is_header'           => $is_header,
 					'has_children'        => ! empty( $children ),
 					'children'            => $children,
@@ -120,6 +124,55 @@ class MenuManager {
 		}
 
 		return $branch;
+	}
+
+	/**
+	 * Check if menu item points to current page
+	 *
+	 * @param object $item Menu item object
+	 * @return bool True if item links to current page
+	 */
+	private function is_menu_item_current( object $item ): bool {
+		$current_id = get_queried_object_id();
+
+		// Check by object ID (works for posts, pages, custom post types)
+		if ( $item->object_id && (int) $item->object_id === $current_id ) {
+			return true;
+		}
+
+		// Check by URL comparison for custom links
+		if ( $item->type === 'custom' && $item->url ) {
+			$current_url  = home_url( $_SERVER['REQUEST_URI'] ?? '' );
+			$current_path = wp_parse_url( $current_url, PHP_URL_PATH );
+			$item_path    = wp_parse_url( $item->url, PHP_URL_PATH );
+
+			// Normalize: compare paths, ignore trailing slashes
+			if ( $current_path && $item_path ) {
+				return strcasecmp(
+					untrailingslashit( $current_path ),
+					untrailingslashit( $item_path )
+				) === 0;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if menu item is ancestor of current page
+	 *
+	 * @param object $item Menu item object
+	 * @param array $children Processed children array
+	 * @return bool True if item is ancestor of current page
+	 */
+	private function is_menu_item_ancestor( object $item, array $children ): bool {
+		foreach ( $children as $child ) {
+			if ( $child['is_current'] || $child['is_current_ancestor'] ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

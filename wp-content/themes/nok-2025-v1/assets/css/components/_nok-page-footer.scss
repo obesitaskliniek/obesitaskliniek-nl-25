@@ -16,5 +16,8 @@ nok-page-footer {
     }
   }
   .#{&}__inner {
+    .nok-nav-menu-item--active {
+      color: var(--nok-lightblue);
+    }
   }
 }

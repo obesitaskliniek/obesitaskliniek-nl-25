@@ -279,6 +279,9 @@ class TemplateRenderer {
 		// Handle CSS based on context and template type
 		$this->handle_template_css( $template_type, $design );
 
+		// Output template identifier comment for debugging
+		echo "\n<!-- {$template_type}: {$design} -->\n";
+
 		include $template_path;
 	}
 

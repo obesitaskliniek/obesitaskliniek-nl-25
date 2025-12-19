@@ -7,6 +7,7 @@ import {logger} from '../assets/js/domule/core.log.mjs';
 import {Fragment, useRef, useState, useEffect, useMemo} from '@wordpress/element';
 import IconSelector from './components/IconSelector';
 import FieldImportWizard from './components/FieldImportWizard';
+import LinkField from './components/LinkField';
 
 const NAME = 'nok-page-part-design-selector';
 
@@ -579,6 +580,21 @@ function DesignSlugPanel() {
                         />
                     </FieldGroup>
                 );
+
+            case 'link':
+                return (
+                    <FieldGroup key={field.meta_key} label={field.label}>
+                        {field.description && (
+                            <p style={helpStyle}>{field.description}</p>
+                        )}
+                        <LinkField
+                            value={fieldValue}
+                            onChange={(value) => updateMetaField(field.meta_key, value)}
+                            placeholder="Search pages or enter URL..."
+                        />
+                    </FieldGroup>
+                );
+
             case 'repeater':
                 if (field.repeater_subtype === 'post') {
                     return (
