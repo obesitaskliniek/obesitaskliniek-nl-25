@@ -55,7 +55,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
 
     <nok-navigation-mobile>
         <nok-navigation-top-row class="nok-section__inner--stretched  nok-bg-white nok-dark-bg-darkestblue nok-text-contrast nok-fill-contrast  nok-z-3">
-			<?= $logo; ?>
+            <a href="<?= esc_url(home_url('/')) ?>"><?= $logo; ?></a>
             <button class="nok-button nok-button--small nok-bg-yellow nok-text-contrast nok-invisible-to-sm"
                     tabindex="0">Gratis voorlichtingsavond
             </button>
@@ -163,7 +163,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
             <div class="nok-navigation-menu-bar__inner
             nok-bg-white nok-dark-bg-darkerblue nok-dark-text-contrast">
                 <div>
-					<?= $logo; ?>
+                    <a href="<?= esc_url(home_url('/')) ?>"><?= $logo; ?></a>
                 </div>
 				<?php $menu_manager->render_desktop_menu_bar('primary'); ?>
                 <div>
