@@ -58,8 +58,8 @@ $c = $context;
                                         <?php if ( ! empty( $item['button_url'] ) ) : ?>
                                             <a href="<?= esc_url( $item['button_url'] ) ?>" role="button"
                                                class="nok-button nok-text-contrast nok-bg-darkblue--darker nok-dark-bg-darkestblue nok-visible-xs nok-align-self-stretch fill-mobile"
-                                               tabindex="0">
-                                                <?= ! empty( trim( $item['button_text'] ) ) ? esc_html( $item['button_text'] ) : $c->accordion_button_text ?>
+                                               tabindex="0"><span>
+                                                <?= ! empty( trim( $item['button_text'] ) ) ? esc_html( $item['button_text'] ) : $c->accordion_button_text ?></span>
                                                 <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ) ?>
                                             </a>
                                         <?php endif; ?>

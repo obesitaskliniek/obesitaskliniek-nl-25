@@ -128,7 +128,7 @@ $circle_offset = "--circle-offset:" . $c->layout->is( 'left', 'calc(50vw - (var(
                                             <a href="<?= esc_url( $item['button_url'] ) ?>" role="button"
                                                class="nok-button nok-visible-xs nok-align-self-stretch fill-mobile <?= $c->accordion_button_color->raw(); ?>"
                                                tabindex="0">
-                                                <?= ! empty( trim( $item['button_text'] ) ) ? esc_html( $item['button_text'] ) : $c->accordion_button_text ?>
+                                                <span><?= ! empty( trim( $item['button_text'] ) ) ? esc_html( $item['button_text'] ) : $c->accordion_button_text ?></span>
                                                 <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ) ?>
                                             </a>
                                         <?php endif; ?>
