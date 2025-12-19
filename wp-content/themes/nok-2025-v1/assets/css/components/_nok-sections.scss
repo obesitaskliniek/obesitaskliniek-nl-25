@@ -134,7 +134,7 @@
         &::after {
           content: "";
           position: fixed;
-          top: calc(2 * var(--nok-spacing-section-ends, 1.5rem));
+          top: var(--circle-top, calc(2 * var(--nok-spacing-section-ends, 1.5rem)));
           left: var(--circle-offset, 75%);
           transform: translateX(-50%);
           z-index: -1;

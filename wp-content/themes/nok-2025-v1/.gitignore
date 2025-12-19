@@ -39,3 +39,9 @@ yarn-error.log*
 # Claude Code context (contains credentials)
 CLAUDE.md
 token-debug.log
+.claude/
+
+# ignore compiled css and minified (m)js
+*.min.*
+*.css
+*.css.map
