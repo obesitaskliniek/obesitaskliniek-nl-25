@@ -202,7 +202,7 @@ $dark_mode_rules: ();
 @mixin extended_variables($type, $alpha_values) {
   --#{$type}-color--contrast: oklch(from var(--#{$type}-base-contrast) l c h / #{map.get($alpha_values, 'text')});
   --#{$type}-color--hover: oklch(from var(--#{$type}-base) calc(l * 1.25) calc(c * 0.9) h / #{map.get($alpha_values, $type)});
-  --#{$type}-color--active: oklch(from var(--#{$type}-base) calc(l * 1.05) calc(c * 1.1) h / #{map.get($alpha_values, $type)});
+  --#{$type}-color--active: oklch(from var(--#{$type}-base) calc(l * 1.05) c h / #{map.get($alpha_values, $type)});
   --#{$type}-color--grayscale: oklch(from var(--#{$type}-base) l 0 h / #{map.get($alpha_values, $type)});
 }
 
@@ -246,6 +246,12 @@ body { //helps increase specificity
   }
   .#{nok-variables.$prefix}-bg-contrast {
     background-color: var(--bg-color--contrast, inherit) !important;
+  }
+  .#{nok-variables.$prefix}-bg-transparent {
+    --bg-color: transparent;
+    --bg-color--active: transparent;
+    --bg-color--hover: transparent;
+    background-color: var(--bg-color, inherit) !important;
   }
   .#{nok-variables.$prefix}-bg-contrast.#{nok-variables.$prefix}-text-contrast {
     color: var(--bg-color, inherit) !important;

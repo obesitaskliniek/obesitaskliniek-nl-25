@@ -7,6 +7,13 @@ CLAUDE.md
 node_modules/
 wp-includes/
 wp-admin/
+/wp-content/themes/nok-2022-v1
 /wp-content/themes/nok-2022-v1/*.*
 *.7z
 wp-config.php
+
+# ignore compiled css and minified (m)js, but keep WP required style.css
+!style.css
+*.min.*
+*.css
+*.css.map

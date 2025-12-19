@@ -79,6 +79,7 @@ nok-accordion {
     &[open]:not(.accordion-closing) {
       // the .accordion-closing class is added in the polyfill as soon as collapsing starts,
       // so we can kick off the animation for the closing marker in time
+      background: var(--bg-color--hover);
       summary::after {
         @include components-base.transition-properties {
           transform: rotate(180deg);

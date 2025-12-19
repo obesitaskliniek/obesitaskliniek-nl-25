@@ -100,6 +100,7 @@ class ProcessShowcase {
         // Visibility correction (only scrolls if panel not in view)
         this._visibilityCorrector = new ViewportScroller(this.panelContainer || this.panels[0], {
             behavior: 'smooth',
+            partial: true,
             extraOffset: 20
         });
 

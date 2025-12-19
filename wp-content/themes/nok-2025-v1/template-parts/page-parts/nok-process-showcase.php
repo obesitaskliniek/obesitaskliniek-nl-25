@@ -6,9 +6,9 @@
  * Custom Fields:
  *  - autoplay:checkbox!default(true)!descr[Automatisch wisselen tussen items]
  *  - autoplay_interval:select(3 seconden::3000|5 seconden::5000|7 seconden::7000|10 seconden::10000)!default(5000)!descr[Interval voor automatisch wisselen]
- *  - colors:select(Transparant::nok-bg-body nok-text-darkerblue|Grijs::nok-bg-body--darker gradient-background nok-text-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Blauw::nok-bg-darkerblue nok-text-contrast)!page-editable!default(Transparant)
- *  - block_item_colors:select(Transparant::|Blauw::nok-bg-darkerblue nok-text-white|Lichter blauw::nok-bg-darkblue--darker nok-text-white|Donkerblauw::nok-bg-darkerblue--darker nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Grijs::nok-bg-lightgrey nok-text-darkblue)!page-editable!default(Wit)
- *  - circle_color:select(Blauw::var(--nok-darkerblue)|Wit::var(--nok-darkerblue)|Automatisch-lichter::oklch(from var(--bg-color) calc(l * 1.2) c h / 1)|Automatisch-donkerder::oklch(from var(--bg-color) calc(l * .8) c h / 1)|Uit::transparent)!page-editable!default(Uit)
+ *  - colors:select(Transparant::nok-bg-body nok-text-darkerblue|Grijs::nok-bg-body--darker gradient-background nok-text-darkerblue|Geel::nok-bg-yellow nok-text-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Blauw::nok-bg-darkerblue nok-text-contrast)!page-editable!default(Transparant)
+ *  - block_item_colors:select(Blauw::nok-bg-darkerblue nok-text-white|Lichter blauw::nok-bg-darkblue--darker nok-text-white|Donkerblauw::nok-bg-darkerblue--darker nok-text-white|Geel::nok-bg-yellow nok-text-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Grijs::nok-bg-lightgrey nok-text-darkblue)!page-editable!default(Wit)
+ *  - circle_color:select(Blauw::var(--nok-darkerblue)|Wit::var(--nok-darkerblue)|Geel::var(--nok-yellow--darker)|Automatisch-lichter::oklch(from var(--bg-color) calc(l * 1.1) c h / 1)|Automatisch-donkerder::oklch(from var(--bg-color) calc(l * .9) c h / 1)|Uit::transparent)!page-editable!default(Uit)
  *  - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  * - items:repeater(tab_title:text,panel_title:text,panel_content:textarea,button_text:text,button_url:url)!descr[Voeg proces stappen toe]
  *
@@ -56,10 +56,10 @@ $arrow_inactive_class = 'nok-text-darkblue';
             <?= $c->content(); ?>
 
             <?php if ( ! empty( $items ) ) : ?>
-                <div class="nok-layout-grid nok-layout-grid__2-column nok-column-gap-3">
+                <div class="nok-layout-grid nok-layout-grid__2-column nok-grid-gap-3">
 
                     <!-- Tab navigation (left column) -->
-                    <nav class="nok-layout-flex-column nok-row-gap-0_5" role="tablist"
+                    <nav class="nok-layout-flex-column" role="tablist"
                          aria-label="<?= esc_attr( $c->title() ) ?>">
                         <?php foreach ( $items as $index => $item ) :
                             $is_active = ( $index === 0 );
@@ -89,7 +89,7 @@ $arrow_inactive_class = 'nok-text-darkblue';
                             ?>
                             <div role="tabpanel"
                                  id="<?= esc_attr( $panel_id ) ?>"
-                                 class="nok-layout-flex-column nok-row-gap-1 nok-mx-0 nok-mx-xl-5 nok-align-items-start"
+                                 class="nok-layout-flex-column nok-mx-0 nok-ms-xl-5 nok-align-items-start"
                                  aria-labelledby="<?= esc_attr( $tab_id ) ?>"
                                     <?= $is_active ? '' : 'hidden' ?>>
 

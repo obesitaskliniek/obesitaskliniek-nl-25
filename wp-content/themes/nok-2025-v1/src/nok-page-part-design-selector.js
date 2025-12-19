@@ -767,7 +767,7 @@ function DesignSlugPanel() {
                     onClick={() => setShowImportWizard(true)}
                     style={{width: '100%', justifyContent: 'center', marginTop: '12px'}}
                 >
-                    Import from previous template
+                    Importeer...
                 </Button>
             )}
 
