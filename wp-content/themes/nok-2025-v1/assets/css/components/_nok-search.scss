@@ -1,0 +1,220 @@
+@use "sass:map";
+@use "shared" as components-base;
+
+// Search autocomplete component styles
+nok-search {
+  display: flex;
+  flex-direction: column;
+  gap: map.get(components-base.$padding-base-values, 1);
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.nok-search-input {
+  --bg-base: var(--nok-body--lighter);
+  --bg-base-contrast: var(--nok-body--lighter-contrast);
+  --bg-color: oklch(from var(--bg-base) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1)));
+  --form-element-padding: 1.25ex;
+
+  display: block;
+  width: 100%;
+  padding: var(--form-element-padding) calc(var(--form-element-padding) * 1.5);
+  font-size: 1.1rem;
+  line-height: 1.5;
+
+  background-color: var(--bg-color);
+  color: var(--nok-darkerblue);
+  border: 1px solid transparent;
+  outline: none;
+
+  @include components-base.nok-border-radius;
+
+  @include components-base.transition-properties {
+    transition:
+      border-color components-base.$animation-duration,
+      box-shadow components-base.$animation-duration;
+  }
+
+  &::placeholder {
+    color: var(--nok-lightgrey--darker);
+    opacity: 0.8;
+  }
+
+  &:focus {
+    @include components-base.nok-focus-ring(false);
+  }
+
+  // Dark mode support
+  @at-root .nok-dark-mode & {
+    --bg-base: var(--nok-darkerblue--lighter);
+    color: var(--nok-white);
+
+    &::placeholder {
+      color: var(--nok-lightgrey);
+    }
+  }
+}
+
+nok-search-results {
+  display: block;
+  min-height: 0;
+  max-height: 400px;
+  overflow-y: auto;
+
+  @include components-base.nok-border-radius;
+
+  // Subtle scrollbar styling
+  @include components-base.native-scrollbar-styling(
+    $scrollbarVertical: true,
+    $scrollbarSize: 8px,
+    $scrollbarTrackColor: transparent,
+    $scrollbarHandleColor: var(--nok-lightgrey),
+    $scrollbarHandleColorActive: var(--nok-lightblue)
+  );
+}
+
+.nok-search-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: map.get(components-base.$padding-base-values, 1);
+  padding: map.get(components-base.$padding-base-values, 0_5) map.get(components-base.$padding-base-values, 1);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+
+  @include components-base.nok-border-radius;
+
+  @include components-base.transition-properties {
+    transition: background-color components-base.$animation-duration;
+  }
+
+  &:hover,
+  &:focus,
+  &--selected {
+    background-color: var(--nok-lightblue--lighter);
+    outline: none;
+
+    @at-root .nok-dark-mode & {
+      background-color: var(--nok-darkblue);
+    }
+  }
+
+  &:focus-visible {
+    @include components-base.nok-focus-ring(false);
+  }
+
+  // Result title
+  &__title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  // Type badge
+  &__badge {
+    flex-shrink: 0;
+    padding: 0.15em 0.5em;
+    font-size: 0.75em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    border-radius: 0.25rem;
+    background-color: var(--nok-lightgrey--lighter);
+    color: var(--nok-darkerblue);
+
+    // Type-specific badge colors
+    &--page {
+      background-color: var(--nok-lightblue--lighter);
+      color: var(--nok-darkblue);
+    }
+
+    &--post {
+      background-color: var(--nok-yellow--lighter);
+      color: var(--nok-darkerblue);
+    }
+
+    &--vestiging {
+      background-color: var(--nok-green--lighter, var(--nok-lightgreen--lighter));
+      color: var(--nok-darkerblue);
+    }
+
+    &--kennisbank {
+      background-color: var(--nok-purple--lighter, var(--nok-lightblue--lighter));
+      color: var(--nok-darkerblue);
+    }
+
+    @at-root .nok-dark-mode & {
+      background-color: var(--nok-darkerblue);
+      color: var(--nok-white);
+    }
+  }
+}
+
+// View all results link
+.nok-search-view-all {
+  display: block;
+  padding: map.get(components-base.$padding-base-values, 0_5) map.get(components-base.$padding-base-values, 1);
+  margin-top: map.get(components-base.$padding-base-values, 0_5);
+  text-align: center;
+  font-size: 0.9em;
+  font-weight: 500;
+  color: var(--nok-lightblue);
+  text-decoration: none;
+  border-top: 1px solid var(--nok-lightgrey--lighter);
+
+  @include components-base.transition-properties {
+    transition: color components-base.$animation-duration;
+  }
+
+  &:hover,
+  &:focus {
+    color: var(--nok-darkblue);
+    text-decoration: underline;
+  }
+
+  @at-root .nok-dark-mode & {
+    border-top-color: var(--nok-darkerblue);
+    color: var(--nok-lightblue--lighter);
+
+    &:hover,
+    &:focus {
+      color: var(--nok-white);
+    }
+  }
+}
+
+// Loading state
+.nok-search-loading {
+  padding: map.get(components-base.$padding-base-values, 1);
+  text-align: center;
+  color: var(--nok-lightgrey--darker);
+  font-style: italic;
+}
+
+// No results state
+.nok-search-no-results {
+  padding: map.get(components-base.$padding-base-values, 1);
+  text-align: center;
+  color: var(--nok-lightgrey--darker);
+}
+
+// Error state
+.nok-search-error {
+  padding: map.get(components-base.$padding-base-values, 1);
+  text-align: center;
+  color: var(--nok-error);
+}
+
+// Search popup specific adjustments
+#popup-search {
+  nok-popup-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-bottom: map.get(components-base.$padding-base-values, 1);
+  }
+}

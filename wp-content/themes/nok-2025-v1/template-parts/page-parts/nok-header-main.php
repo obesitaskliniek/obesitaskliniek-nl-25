@@ -34,6 +34,25 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
             </nok-popup-body>
         </nok-popup>
 
+        <nok-popup class="nok-bg-body nok-dark-bg-darkerblue" id="popup-search">
+            <nok-popup-header>
+                <nok-popup-title>Zoeken</nok-popup-title>
+                <button title="Sluiten" class="nok-button nok-button--small"
+                        data-unsets-class="popup-open" data-class-target="nok-top-navigation"
+                        data-toggle-event="click"
+                        data-unsets-attribute="data-state" data-unsets-attribute-value="open"
+                        data-attribute-target="#popup-search">
+                    <?= Assets::getIcon('ui_close') ?>
+                </button>
+            </nok-popup-header>
+            <nok-popup-body>
+                <nok-search data-requires="./nok-search.mjs" data-max-results="5">
+                    <input type="search" placeholder="Zoek op trefwoord..." class="nok-search-input" autocomplete="off" />
+                    <nok-search-results></nok-search-results>
+                </nok-search>
+            </nok-popup-body>
+        </nok-popup>
+
     </nok-screen-mask>
 
     <nok-accessibility-helper class="nok-bg-body nok-text-darkerblue nok-dark-text-contrast nok-nav-control-dropdown" data-requires="./nok-user-prefs.mjs" data-require-lazy="true">
@@ -63,8 +82,12 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                     tabindex="0">
                 <?= Assets::getIcon('ui_telefoon') ?>
             </button>
-            <button class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
-                    tabindex="0">
+            <button class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow nok-popup-trigger"
+                    tabindex="0"
+                    data-toggles-class="popup-open" data-class-target="nok-top-navigation"
+                    data-toggle-event="click"
+                    data-toggles-attribute="data-state" data-toggles-attribute-value="open"
+                    data-attribute-target="#popup-search">
                 <?= Assets::getIcon('ui_search') ?>
             </button>
             <button class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
@@ -150,7 +173,11 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                 <div>Mijn NOK</div>
                 <div>NOK App</div>
                 <div>+31 12345678</div>
-                <div>Zoek</div>
+                <a href="#" class="nok-nav-menu-item nok-popup-trigger"
+                   data-toggles-class="popup-open" data-class-target="nok-top-navigation"
+                   data-toggle-event="click"
+                   data-toggles-attribute="data-state" data-toggles-attribute-value="open"
+                   data-attribute-target="#popup-search">Zoek</a>
                 <div>NL</div>
                 <a href="#"
                    data-toggles-class="open" data-target=".nok-nav-control-dropdown" data-toggle-event="click" data-toggle-outside="unset"

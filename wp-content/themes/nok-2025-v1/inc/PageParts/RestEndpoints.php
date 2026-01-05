@@ -48,6 +48,7 @@ class RestEndpoints {
 		add_action('rest_api_init', [$this, 'register_prune_endpoint']);
 		add_action('rest_api_init', [$this, 'register_post_query_endpoint']);
 		add_action('rest_api_init', [$this, 'register_orphaned_fields_endpoint']);
+		add_action('rest_api_init', [$this, 'register_search_endpoint']);
 	}
 
 	/**
@@ -261,6 +262,102 @@ class RestEndpoints {
 
 		return new \WP_REST_Response([
 			'sources' => array_values($sources)
+		], 200);
+	}
+
+	/**
+	 * Post type to Dutch label mapping for search results
+	 *
+	 * @var array<string, string>
+	 */
+	private const POST_TYPE_LABELS = [
+		'page'       => 'Pagina',
+		'post'       => 'Artikel',
+		'vestiging'  => 'Vestiging',
+		'kennisbank' => 'Kennisbank',
+	];
+
+	/**
+	 * Post types to include in search results
+	 *
+	 * @var array<string>
+	 */
+	private const SEARCH_POST_TYPES = ['page', 'post', 'vestiging', 'kennisbank'];
+
+	/**
+	 * Register endpoint for search autocomplete
+	 *
+	 * @return void
+	 */
+	public function register_search_endpoint(): void {
+		register_rest_route('nok-2025-v1/v1', '/search/autocomplete', [
+			'methods'             => 'GET',
+			'callback'            => [$this, 'search_autocomplete_callback'],
+			'permission_callback' => '__return_true',
+			'args'                => [
+				'q' => [
+					'required'          => true,
+					'type'              => 'string',
+					'sanitize_callback' => 'sanitize_text_field',
+					'validate_callback' => fn($param) => is_string($param) && strlen(trim($param)) > 0,
+				],
+				'limit' => [
+					'required'          => false,
+					'type'              => 'integer',
+					'default'           => 5,
+					'sanitize_callback' => 'absint',
+					'validate_callback' => fn($param) => is_numeric($param) && $param > 0 && $param <= 20,
+				],
+			],
+		]);
+	}
+
+	/**
+	 * REST callback: Search autocomplete
+	 *
+	 * Performs content-aware search using Relevanssi if available,
+	 * falling back to standard WP_Query search.
+	 *
+	 * @param \WP_REST_Request $request Request with q and limit parameters
+	 * @return \WP_REST_Response Response with results array and total count
+	 */
+	public function search_autocomplete_callback(\WP_REST_Request $request): \WP_REST_Response {
+		$query_string = trim($request->get_param('q'));
+		$limit        = (int) $request->get_param('limit');
+
+		$args = [
+			'post_type'      => self::SEARCH_POST_TYPES,
+			'post_status'    => 'publish',
+			'posts_per_page' => $limit,
+			's'              => $query_string,
+			'orderby'        => 'relevance',
+			'order'          => 'DESC',
+		];
+
+		$query = new \WP_Query($args);
+
+		// Use Relevanssi if available for better content-aware ranking
+		if (function_exists('relevanssi_do_query')) {
+			relevanssi_do_query($query);
+		}
+
+		$results = [];
+		$total   = $query->found_posts;
+
+		foreach ($query->posts as $post) {
+			$post_type = get_post_type($post);
+			$results[] = [
+				'id'         => $post->ID,
+				'title'      => html_entity_decode(get_the_title($post), ENT_QUOTES, 'UTF-8'),
+				'url'        => get_permalink($post),
+				'type'       => $post_type,
+				'type_label' => self::POST_TYPE_LABELS[$post_type] ?? ucfirst($post_type),
+			];
+		}
+
+		return new \WP_REST_Response([
+			'results' => $results,
+			'total'   => $total,
 		], 200);
 	}
 
