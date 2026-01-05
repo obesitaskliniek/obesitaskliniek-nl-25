@@ -9,6 +9,8 @@ wp-includes/
 wp-admin/
 /wp-content/themes/nok-2022-v1
 /wp-content/themes/nok-2022-v1/*.*
+/wp-content/themes/nok-2025-v1/assets/js/domule/
+/wp-content/themes/nok-2025-v1/assets/js/mobileConsole/
 *.7z
 wp-config.php
 
