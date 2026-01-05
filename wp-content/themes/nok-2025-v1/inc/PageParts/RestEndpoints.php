@@ -285,6 +285,15 @@ class RestEndpoints {
 	private const SEARCH_POST_TYPES = ['page', 'post', 'vestiging', 'kennisbank'];
 
 	/**
+	 * Meta fields to include in search for specific post types
+	 *
+	 * @var array<string, array<string>>
+	 */
+	private const SEARCHABLE_META_FIELDS = [
+		'vestiging' => ['_city', '_street'],
+	];
+
+	/**
 	 * Register endpoint for search autocomplete
 	 *
 	 * @return void
@@ -316,7 +325,7 @@ class RestEndpoints {
 	 * REST callback: Search autocomplete
 	 *
 	 * Performs content-aware search using Relevanssi if available,
-	 * falling back to standard WP_Query search.
+	 * falling back to standard WP_Query search with meta field support.
 	 *
 	 * @param \WP_REST_Request $request Request with q and limit parameters
 	 * @return \WP_REST_Response Response with results array and total count
@@ -341,10 +350,34 @@ class RestEndpoints {
 			relevanssi_do_query($query);
 		}
 
-		$results = [];
-		$total   = $query->found_posts;
+		// Collect post IDs from title/content search
+		$found_ids = wp_list_pluck($query->posts, 'ID');
 
-		foreach ($query->posts as $post) {
+		// Search meta fields for post types that have searchable meta
+		$meta_results = $this->search_meta_fields($query_string, $limit, $found_ids);
+
+		// Merge results, prioritizing title/content matches
+		$all_posts = array_merge($query->posts, $meta_results);
+
+		// Remove duplicates and limit results
+		$seen_ids = [];
+		$unique_posts = [];
+		foreach ($all_posts as $post) {
+			$post_id = is_object($post) ? $post->ID : $post;
+			if (!in_array($post_id, $seen_ids, true)) {
+				$seen_ids[] = $post_id;
+				$unique_posts[] = is_object($post) ? $post : get_post($post_id);
+			}
+			if (count($unique_posts) >= $limit) {
+				break;
+			}
+		}
+
+		$results = [];
+		foreach ($unique_posts as $post) {
+			if (!$post) {
+				continue;
+			}
 			$post_type = get_post_type($post);
 			$results[] = [
 				'id'         => $post->ID,
@@ -355,10 +388,50 @@ class RestEndpoints {
 			];
 		}
 
+		// Calculate total including meta matches
+		$total = $query->found_posts + count($meta_results);
+
 		return new \WP_REST_Response([
 			'results' => $results,
 			'total'   => $total,
 		], 200);
+	}
+
+	/**
+	 * Search meta fields for matching posts
+	 *
+	 * @param string $query_string Search query
+	 * @param int $limit Maximum results
+	 * @param array $exclude_ids Post IDs to exclude (already found)
+	 * @return array Array of WP_Post objects
+	 */
+	private function search_meta_fields(string $query_string, int $limit, array $exclude_ids): array {
+		$meta_posts = [];
+
+		foreach (self::SEARCHABLE_META_FIELDS as $post_type => $meta_keys) {
+			$meta_query = ['relation' => 'OR'];
+
+			foreach ($meta_keys as $meta_key) {
+				$meta_query[] = [
+					'key'     => $meta_key,
+					'value'   => $query_string,
+					'compare' => 'LIKE',
+				];
+			}
+
+			$args = [
+				'post_type'      => $post_type,
+				'post_status'    => 'publish',
+				'posts_per_page' => $limit,
+				'meta_query'     => $meta_query,
+				'post__not_in'   => $exclude_ids,
+			];
+
+			$query = new \WP_Query($args);
+			$meta_posts = array_merge($meta_posts, $query->posts);
+		}
+
+		return $meta_posts;
 	}
 
 	/**
