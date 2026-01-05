@@ -13,6 +13,7 @@ nok-popup {
   @include components-base.media-breakpoint-down(components-base.$mobile-breakpoint){
     --row-gap: #{map-get(components-base.$padding-base-values, 1)};
   }
+  position: absolute;
   //display: none !important;
   display: grid;
 
