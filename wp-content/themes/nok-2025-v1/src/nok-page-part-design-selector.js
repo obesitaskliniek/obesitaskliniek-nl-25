@@ -211,6 +211,19 @@ const RepeaterField = ({field, schema, value, onChange}) => {
     });
     const [draggedIndex, setDraggedIndex] = useState(null);
 
+    // Sync items when value prop changes externally (e.g., from import wizard)
+    useEffect(() => {
+        try {
+            const parsedValue = JSON.parse(value || '[]');
+            // Compare serialized versions to detect actual external changes
+            if (JSON.stringify(parsedValue) !== JSON.stringify(items)) {
+                setItems(parsedValue);
+            }
+        } catch {
+            // Invalid JSON, ignore
+        }
+    }, [value]);
+
     const createEmptyItem = () => {
         const emptyItem = {
             _id: `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
