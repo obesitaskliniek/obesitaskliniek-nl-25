@@ -63,6 +63,8 @@ class MetaManager {
 		add_action( 'restrict_manage_posts', [ $this, 'add_template_filter' ] );
 		add_action( 'parse_query', [ $this, 'filter_by_template' ] );
 		add_action( 'add_meta_boxes', [ $this, 'add_usage_meta_box' ] );
+		add_action( 'wp_ajax_nok_check_page_part_usage', [ $this, 'ajax_check_page_part_usage' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_usage_warning_scripts' ] );
 		if ( ! isset( $_GET['show_custom_fields'] ) ) {
 			add_filter( 'is_protected_meta', [ $this, 'protect_page_part_meta' ], 10, 2 );
 		}
@@ -624,5 +626,90 @@ class MetaManager {
 			$count
 		);
 		echo '</p>';
+	}
+
+	/**
+	 * AJAX handler to check page part usage
+	 *
+	 * Returns JSON with usage data for a specific page part.
+	 *
+	 * @return void
+	 */
+	public function ajax_check_page_part_usage(): void {
+		check_ajax_referer( 'nok_page_part_usage', 'nonce' );
+
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_send_json_error( [ 'message' => __( 'Geen toegang.', THEME_TEXT_DOMAIN ) ] );
+		}
+
+		$post_id = absint( $_POST['post_id'] ?? 0 );
+		if ( ! $post_id ) {
+			wp_send_json_error( [ 'message' => __( 'Ongeldig post ID.', THEME_TEXT_DOMAIN ) ] );
+		}
+
+		$usages = $this->get_page_part_usage( $post_id );
+		$count  = count( $usages );
+
+		if ( $count > 0 ) {
+			$page_titles = array_map( function ( $usage ) {
+				return $usage['post_title'] ?: __( '(geen titel)', THEME_TEXT_DOMAIN );
+			}, $usages );
+
+			wp_send_json_success( [
+				'in_use' => true,
+				'count'  => $count,
+				'pages'  => $page_titles,
+			] );
+		} else {
+			wp_send_json_success( [
+				'in_use' => false,
+				'count'  => 0,
+				'pages'  => [],
+			] );
+		}
+	}
+
+	/**
+	 * Enqueue usage warning scripts for page_part admin screens
+	 *
+	 * @param string $hook Current admin page hook
+	 *
+	 * @return void
+	 */
+	public function enqueue_usage_warning_scripts( string $hook ): void {
+		$screen = get_current_screen();
+
+		// Only load on page_part list and edit screens
+		if ( ! $screen || $screen->post_type !== 'page_part' ) {
+			return;
+		}
+
+		// Load on edit.php (list) and post.php (edit) screens
+		if ( ! in_array( $hook, [ 'edit.php', 'post.php' ], true ) ) {
+			return;
+		}
+
+		wp_enqueue_script(
+			'nok-page-part-usage-warning',
+			get_template_directory_uri() . '/assets/js/nok-page-part-usage-warning.js',
+			[ 'jquery', 'wp-data', 'wp-plugins', 'wp-edit-post', 'wp-element', 'wp-components', 'wp-i18n' ],
+			filemtime( get_template_directory() . '/assets/js/nok-page-part-usage-warning.js' ),
+			true
+		);
+
+		wp_localize_script( 'nok-page-part-usage-warning', 'nokPagePartUsage', [
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'nok_page_part_usage' ),
+			'i18n'    => [
+				'warningTitle'       => __( 'Let op: Page Part in gebruik', THEME_TEXT_DOMAIN ),
+				'warningMessage'     => __( 'Deze page part wordt gebruikt op de volgende pagina\'s:', THEME_TEXT_DOMAIN ),
+				'trashWarning'       => __( 'Als je deze page part naar de prullenbak verplaatst, zal het blok niet meer zichtbaar zijn op deze pagina\'s.', THEME_TEXT_DOMAIN ),
+				'unpublishWarning'   => __( 'Als je deze page part depubliceert, zal het blok niet meer zichtbaar zijn voor bezoekers op deze pagina\'s.', THEME_TEXT_DOMAIN ),
+				'confirmTrash'       => __( 'Naar prullenbak verplaatsen', THEME_TEXT_DOMAIN ),
+				'confirmUnpublish'   => __( 'Toch depubliceren', THEME_TEXT_DOMAIN ),
+				'cancel'             => __( 'Annuleren', THEME_TEXT_DOMAIN ),
+				'andMorePages'       => __( 'en %d andere pagina\'s...', THEME_TEXT_DOMAIN ),
+			],
+		] );
 	}
 }
