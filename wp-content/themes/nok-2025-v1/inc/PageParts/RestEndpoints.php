@@ -567,6 +567,12 @@ class RestEndpoints {
 		$posts = [];
 
 		foreach ($query->posts as $post) {
+
+			// Skip revisions - they can appear when using post_type 'any'
+			if ($post->post_type === 'revision') {
+				continue;
+			}
+
 			$posts[] = [
 				'id' => $post->ID,
 				'title' => html_entity_decode(get_the_title($post->ID), ENT_QUOTES, 'UTF-8'),

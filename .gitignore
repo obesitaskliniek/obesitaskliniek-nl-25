@@ -19,3 +19,4 @@ wp-config.php
 *.min.*
 *.css
 *.css.map
+.idea/laravel-idea.xml

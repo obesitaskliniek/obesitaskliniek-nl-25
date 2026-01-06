@@ -13,6 +13,7 @@
  * - accordion_checkmarks_colors:select(Blauw::var(--nok-lightblue)|Groen::var(--nok-green)|Geel::var(--nok-yellow)|Lightgroen::var(--nok-greenblue--lighter))!default(Blauw)!descr[Kleur van de vinkjes]
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  * - accordion_items:repeater(title:text,content:textarea,button_url:url,button_text:text)!descr[Voeg accordion items toe]
+ * - accordion_posts:post_repeater(kennisbank)!descr[Kies specifieke kennisbank items om te tonen in de accordion]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -32,7 +33,7 @@ $c = $context;
 
             <?= $c->content(); ?>
 
-            <?php if ( $c->has( 'accordion_items' ) ): ?>
+            <?php if ( $c->has( 'accordion_items' ) || $c->has( 'accordion_posts' ) ): ?>
                 <div class="nok-layout-grid nok-layout-grid__1-column <?= $c->accordion_bordered->isTrue('nok-grid-gap-0', '' ); ?>" data-requires="./nok-accordion.mjs" data-require-lazy="true">
 
                     <div class="<?= $c->accordion_block_colors->raw(); ?> nok-subtle-shadow nok-rounded-border-large nok-p-1"
@@ -40,9 +41,21 @@ $c = $context;
                         <?php
                         $accordion_group = 'accordion-group';
 
-                        $accordion_data = $c->accordion_items->json();
+                        $accordion_data = array_merge($c->accordion_items->json(), $c->accordion_posts->json());
 
-                        foreach ( $accordion_data as $index => $item ) :?>
+                        foreach ( $accordion_data as $index => $item ) :
+                            if (is_int($item)) :
+                                $post = get_post($item);
+                                if (!$post) continue;
+
+                                $item = [
+                                        'title'       => get_the_title($post),
+                                        'content'     => get_the_content(null,false,$post),
+                                        'button_url'  => get_permalink($post),
+                                        'button_text' => 'Lees meer',
+                                ];
+                            endif;
+                            ?>
                             <nok-accordion class="<?= $c->accordion_bordered->isTrue(($index < count($accordion_data) - 1 ? 'nok-border-bottom-1' : '')); ?> <?= $c->accordion_checkmarks->is('checkmarks', 'checkmarks'); ?> <?= $c->accordion_checkmarks->is('question-marks', 'question-marks'); ?>">
                                 <details
                                         class="<?= $c->accordion_block_colors->raw() ?> nok-rounded-border"
@@ -52,9 +65,9 @@ $c = $context;
                                     </summary>
                                     <?php if ( ! empty( $item['content'] ) ) : ?>
                                     <div class="accordion-content nok-p-2 nok-pt-0">
-                                        <p class="<?= ! empty( $item['button_url'] ) ? 'nok-mb-1' : '' ?>">
+                                        <div class="<?= ! empty( $item['button_url'] ) ? 'nok-mb-1' : '' ?>">
                                             <?= wp_kses_post( $item['content'] ) ?>
-                                        </p>
+                                        </div>
                                         <?php if ( ! empty( $item['button_url'] ) ) : ?>
                                             <a href="<?= esc_url( $item['button_url'] ) ?>" role="button"
                                                class="nok-button nok-text-contrast nok-bg-darkblue--darker nok-dark-bg-darkestblue nok-visible-xs nok-align-self-stretch fill-mobile"
