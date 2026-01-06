@@ -539,7 +539,7 @@ class MetaManager {
 	public function add_usage_meta_box(): void {
 		add_meta_box(
 			'nok-page-part-usage',
-			__( 'Page Part Usage', THEME_TEXT_DOMAIN ),
+			__( 'Page Part gebruik', THEME_TEXT_DOMAIN ),
 			[ $this, 'render_usage_meta_box' ],
 			'page_part',
 			'side',
@@ -591,13 +591,13 @@ class MetaManager {
 		$usages = $this->get_page_part_usage( $post->ID );
 
 		if ( empty( $usages ) ) {
-			echo '<p><em>' . esc_html__( 'This page part is not used on any pages.', THEME_TEXT_DOMAIN ) . '</em></p>';
+			echo '<p><em>' . esc_html__( 'Deze page part wordt niet gebruikt op pagina\'s.', THEME_TEXT_DOMAIN ) . '</em></p>';
 			return;
 		}
 
 		$count = count( $usages );
 		printf(
-			'<p>' . esc_html__( 'Used on %d page(s):', THEME_TEXT_DOMAIN ) . '</p>',
+			'<p>' . esc_html__( 'Gebruikt op %d pagina(\'s):', THEME_TEXT_DOMAIN ) . '</p>',
 			$count
 		);
 
@@ -611,16 +611,16 @@ class MetaManager {
 			printf(
 				'<li><a href="%s" target="_blank">%s</a>%s</li>',
 				esc_url( $edit_url ),
-				esc_html( $usage['post_title'] ?: __( '(no title)', THEME_TEXT_DOMAIN ) ),
+				esc_html( $usage['post_title'] ?: __( '(geen titel)', THEME_TEXT_DOMAIN ) ),
 				$status_label
 			);
 		}
 		echo '</ul>';
 
 		echo '<p style="margin-top: 1em; padding: 8px; background: #fff8e5; border-left: 4px solid #ffb900;">';
-		echo '<strong>' . esc_html__( 'Note:', THEME_TEXT_DOMAIN ) . '</strong> ';
+		echo '<strong>' . esc_html__( 'Let op:', THEME_TEXT_DOMAIN ) . '</strong> ';
 		printf(
-			esc_html__( 'Changes to this page part will affect all %d page(s) listed above.', THEME_TEXT_DOMAIN ),
+			esc_html__( 'Wijzigingen aan deze page part hebben effect op alle %d pagina(\'s) hierboven.', THEME_TEXT_DOMAIN ),
 			$count
 		);
 		echo '</p>';
