@@ -62,6 +62,7 @@ class MetaManager {
 		add_action( 'manage_page_part_posts_custom_column', [ $this, 'render_page_part_column' ], 10, 2 );
 		add_action( 'restrict_manage_posts', [ $this, 'add_template_filter' ] );
 		add_action( 'parse_query', [ $this, 'filter_by_template' ] );
+		add_action( 'add_meta_boxes', [ $this, 'add_usage_meta_box' ] );
 		if ( ! isset( $_GET['show_custom_fields'] ) ) {
 			add_filter( 'is_protected_meta', [ $this, 'protect_page_part_meta' ], 10, 2 );
 		}
@@ -528,5 +529,100 @@ class MetaManager {
 				'compare' => '='
 			]
 		] );
+	}
+
+	/**
+	 * Add usage meta box to page_part edit screen
+	 *
+	 * @return void
+	 */
+	public function add_usage_meta_box(): void {
+		add_meta_box(
+			'nok-page-part-usage',
+			__( 'Page Part gebruik', THEME_TEXT_DOMAIN ),
+			[ $this, 'render_usage_meta_box' ],
+			'page_part',
+			'side',
+			'default'
+		);
+	}
+
+	/**
+	 * Get pages/posts that use a specific page part
+	 *
+	 * Searches post_content for the embed block with matching postId attribute.
+	 *
+	 * @param int $post_id Page part post ID
+	 *
+	 * @return array Array of posts using this page part
+	 */
+	public function get_page_part_usage( int $post_id ): array {
+		global $wpdb;
+
+		// Search for the embed block with this page_part's ID
+		// Pattern: "postId":123 (where 123 is the page_part ID)
+		$results = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT ID, post_title, post_type, post_status
+				 FROM {$wpdb->posts}
+				 WHERE post_content LIKE %s
+				 AND post_type IN ('page', 'post')
+				 AND post_status IN ('publish', 'draft', 'private', 'pending')
+				 ORDER BY post_title ASC",
+				'%"postId":' . $post_id . '%'
+			),
+			ARRAY_A
+		);
+
+		return $results ?: [];
+	}
+
+	/**
+	 * Render the usage meta box content
+	 *
+	 * Displays a list of pages/posts that embed this page part,
+	 * with edit links and status indicators.
+	 *
+	 * @param \WP_Post $post Current page part post
+	 *
+	 * @return void
+	 */
+	public function render_usage_meta_box( \WP_Post $post ): void {
+		$usages = $this->get_page_part_usage( $post->ID );
+
+		if ( empty( $usages ) ) {
+			echo '<p><em>' . esc_html__( 'Deze page part wordt niet gebruikt op pagina\'s.', THEME_TEXT_DOMAIN ) . '</em></p>';
+			return;
+		}
+
+		$count = count( $usages );
+		printf(
+			'<p>' . esc_html__( 'Gebruikt op %d pagina(\'s):', THEME_TEXT_DOMAIN ) . '</p>',
+			$count
+		);
+
+		echo '<ul style="margin: 0; padding-left: 1.2em;">';
+		foreach ( $usages as $usage ) {
+			$edit_url     = get_edit_post_link( $usage['ID'] );
+			$status_label = $usage['post_status'] !== 'publish'
+				? ' <span style="color: #666;">(' . esc_html( $usage['post_status'] ) . ')</span>'
+				: '';
+
+			printf(
+				'<li><a href="%s" target="_blank">%s</a>%s</li>',
+				esc_url( $edit_url ),
+				esc_html( $usage['post_title'] ?: __( '(geen titel)', THEME_TEXT_DOMAIN ) ),
+				$status_label
+			);
+		}
+		echo '</ul>';
+
+		echo '<p style="margin-top: 1em; padding: 8px; background: #fff8e5; border-left: 4px solid #ffb900;">';
+		echo '<strong>' . esc_html__( 'Let op:', THEME_TEXT_DOMAIN ) . '</strong> ';
+		printf(
+			esc_html__( 'Wijzigingen aan deze page part hebben effect op alle %d pagina(\'s) hierboven.', THEME_TEXT_DOMAIN ),
+			$count
+		);
+		echo '</p>';
 	}
 }
