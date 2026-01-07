@@ -173,7 +173,7 @@ class Assets {
 			return [];
 		}
 
-		$icons = ['ui' => [], 'nok' => []];
+		$icons = ['ui' => [], 'nok' => [], 'logo' => []];
 
 		foreach (glob(self::$iconsPath . '*.svg') as $filepath) {
 			$filename = basename($filepath, '.svg');
@@ -184,6 +184,8 @@ class Assets {
 				$icons['ui'][$filename] = $svg;
 			} elseif (str_starts_with($filename, 'nok_')) {
 				$icons['nok'][$filename] = $svg;
+			} elseif (str_starts_with($filename, 'logo_')) {
+				$icons['logo'][$filename] = $svg;
 			}
 		}
 

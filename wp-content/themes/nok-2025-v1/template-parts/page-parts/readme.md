@@ -35,12 +35,14 @@ template-parts/page-parts/
 | Text | `title:text` | string |
 | Textarea | `content:textarea` | string |
 | URL | `link:url` | string |
+| Link | `button_url:link` | string (alias for URL) |
 | Checkbox | `featured:checkbox` | '1' or '0' |
 | Select | `layout:select(left\|right)` | string |
 | Select (labeled) | `position:select(Left::left\|Right::right)` | string |
 | Icon Selector | `icon:icon-selector` | string |
 | Repeater | `items:repeater(title:text,url:url)` | JSON array |
-| Post Repeater | `posts:post_repeater(post:category)` | JSON array |
+| Post Repeater | `posts:post_repeater(post:ervaringen)` | JSON array |
+| Post Repeater | `posts:post_repeater(kennisbank)` | JSON array (short form) |
 
 ### Field Flags
 
