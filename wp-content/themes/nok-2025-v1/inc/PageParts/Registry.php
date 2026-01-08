@@ -168,7 +168,7 @@ class Registry {
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s AND option_name != %s AND option_name != %s",
-				'_transient_' . self::CACHE_KEY . '_%',
+				$wpdb->esc_like( '_transient_' . self::CACHE_KEY . '_' ) . '%',
 				'_transient_' . $current_key,
 				'_transient_timeout_' . $current_key
 			)
@@ -187,7 +187,7 @@ class Registry {
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
-				'_transient%' . self::CACHE_KEY . '%'
+				'%' . $wpdb->esc_like( self::CACHE_KEY ) . '%'
 			)
 		);
 	}
