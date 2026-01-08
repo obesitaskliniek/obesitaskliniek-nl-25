@@ -1301,9 +1301,41 @@ function get_csp( $nonce ): string {
 	);
 }
 
+/**
+ * Send additional security headers
+ *
+ * Includes CSP in Report-Only mode for violation auditing without breaking functionality.
+ *
+ * ARCHITECTURAL DECISION: CSP Report-Only Mode
+ * ============================================
+ * The CSP header uses Content-Security-Policy-Report-Only instead of enforcing mode because:
+ *
+ * 1. WordPress ecosystem incompatibility: Gutenberg, many plugins, and WordPress core
+ *    rely on inline scripts and eval(). Enforcing CSP would break core functionality.
+ *
+ * 2. The current CSP includes 'unsafe-inline' and 'unsafe-eval' which essentially
+ *    defeats the purpose of CSP for XSS protection anyway.
+ *
+ * 3. Report-Only mode allows us to:
+ *    - Monitor potential violations in browser console
+ *    - Audit third-party script behavior
+ *    - Prepare for stricter CSP in future WordPress versions
+ *
+ * 4. XSS protection is achieved through proper output escaping (FieldContext, esc_*
+ *    functions) rather than CSP.
+ *
+ * To enable violation reporting to a server endpoint, add report-uri or report-to
+ * directives to the CSP configuration in get_csp().
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy-Report-Only
+ *
+ * @param string $nonce Security nonce (currently unused, reserved for future nonce-based CSP)
+ * @return void
+ */
 function do_extra_header_data( $nonce = '' ): void {
 	if ( defined( 'is_admin' ) && ! is_admin() ) {
-		header( 'Content-Security-Policy:' . get_csp( $nonce ) );
+		// Report-Only mode: logs violations without blocking - see docblock for rationale
+		header( 'Content-Security-Policy-Report-Only:' . get_csp( $nonce ) );
 	}
 	header( 'X-Frame-Options: Allow' );
 	header( 'X-Content-Type-Options: nosniff' );

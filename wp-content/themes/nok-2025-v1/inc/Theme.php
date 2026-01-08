@@ -26,6 +26,29 @@ use WP_Post;
  * - Post meta field registration
  * - Content filters and template hierarchy customization
  *
+ * ARCHITECTURAL DECISION: Singleton Pattern
+ * =========================================
+ * This class uses the singleton pattern (get_instance()) despite it being generally
+ * considered an anti-pattern in modern PHP. This is an intentional decision for
+ * the following reasons:
+ *
+ * 1. WordPress ecosystem compatibility: WordPress lacks a dependency injection
+ *    container. The singleton ensures hooks are registered exactly once, preventing
+ *    duplicate action/filter registration which would cause bugs.
+ *
+ * 2. Theme lifecycle: This is a single-deployment theme, not a reusable library.
+ *    The testability concerns that make singletons problematic in libraries are
+ *    less relevant here.
+ *
+ * 3. Refactoring cost: Converting to DI would require significant architecture
+ *    changes with minimal practical benefit. The theme works correctly as-is.
+ *
+ * If you're building a plugin or reusable library, DO use dependency injection
+ * with a container (e.g., PHP-DI, League Container). For single-deployment themes,
+ * the singleton is an acceptable pragmatic choice.
+ *
+ * Future consideration: If WordPress core adds DI support, this could be refactored.
+ *
  * @example Get theme instance and access registry
  * $theme = Theme::get_instance();
  * $registry = $theme->get_page_part_registry();

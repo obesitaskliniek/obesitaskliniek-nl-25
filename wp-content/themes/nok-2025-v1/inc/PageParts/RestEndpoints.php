@@ -10,6 +10,35 @@ namespace NOK2025\V1\PageParts;
  * - Embedding page parts with live preview support
  * - Pruning orphaned template field metadata
  * - Rendering page parts with override parameters
+ * - Post querying with flexible filtering
+ * - Search autocomplete
+ *
+ * SECURITY NOTE: Rate Limiting
+ * ============================
+ * These public REST endpoints (/posts/query, /embed-page-part/, /search/autocomplete)
+ * do not implement application-level rate limiting. This is an intentional architectural
+ * decision for the following reasons:
+ *
+ * 1. Server-level rate limiting is more efficient: It blocks requests before PHP/WordPress
+ *    loads, saving significant server resources compared to application-level checks.
+ *
+ * 2. Recommended implementation (nginx):
+ *    ```
+ *    limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
+ *    location ~ /wp-json/nok-2025-v1/ {
+ *        limit_req zone=api burst=20 nodelay;
+ *    }
+ *    ```
+ *
+ * 3. Alternatively, use a WAF plugin (Wordfence, Sucuri) or hosting-level protection
+ *    (Cloudflare, AWS WAF) which handle rate limiting at the edge.
+ *
+ * 4. Application-level rate limiting (via transients) would still load WordPress on every
+ *    request, defeating the purpose of blocking abuse.
+ *
+ * If you must implement application-level rate limiting, consider:
+ * - Redis-based rate limiting for multi-server deployments
+ * - Transient-based limiting as fallback (see WordPress Rate Limiting plugins)
  *
  * @example Register endpoints in theme initialization
  * $endpoints = new RestEndpoints($renderer, $meta_manager);

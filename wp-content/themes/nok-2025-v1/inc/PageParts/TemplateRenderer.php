@@ -116,6 +116,22 @@ class TemplateRenderer {
 	/**
 	 * Include a page part template with standardized setup
 	 * Used for frontend rendering and high-level template inclusion
+	 *
+	 * NOTE: Global $post restoration for nested page parts
+	 * =====================================================
+	 * This method saves and restores the original global $post rather than
+	 * just calling wp_reset_postdata(). This is important because:
+	 *
+	 * 1. wp_reset_postdata() restores to the main query's post, not the
+	 *    previous post in a nested rendering scenario.
+	 *
+	 * 2. When page parts are nested (a page part embedding another page part),
+	 *    the inner part would corrupt the outer part's $post context if we
+	 *    only used wp_reset_postdata().
+	 *
+	 * 3. By saving $original_post before manipulation and restoring it after,
+	 *    nested page parts work correctly with each level maintaining its
+	 *    own post context.
 	 */
 	public function include_page_part_template(string $design, array $args = []): void {
 		// Capture original queried object BEFORE any query/post manipulation
@@ -123,15 +139,24 @@ class TemplateRenderer {
 		$queried_object = get_queried_object();
 		$this->context_post = ($queried_object instanceof \WP_Post) ? $queried_object : null;
 
-		// Standardized setup that every template needs
+		// Save original post for proper restoration (supports nested page parts)
 		global $post;
+		$original_post = $post;
+
+		// Standardized setup that every template needs
 		$post = $args['post'] ?? null;
 		setup_postdata($post);
 
 		// Include the actual template
 		$this->render_page_part($design, $args['page_part_fields'] ?? [], $args['generic_overrides'] ?? []);
 
-		wp_reset_postdata();
+		// Restore original post (not just reset to main query post)
+		$post = $original_post;
+		if ($original_post) {
+			setup_postdata($original_post);
+		} else {
+			wp_reset_postdata();
+		}
 
 		// Clear context post after rendering
 		$this->context_post = null;
