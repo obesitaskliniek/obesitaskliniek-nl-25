@@ -352,39 +352,7 @@ registerBlockType(blockName, {
         const iframeRef = useRef(null);
         const [height, setHeight] = useState(400);
 
-        const onLoad = () => {
-            updateHeight();
-
-            // Extract semantic content from iframe for Yoast
-            try {
-                const doc = iframe.contentDocument || iframe.contentWindow.document;
-                const meta = doc.querySelector('meta[name="yoast-content"]');
-                if (meta && postId) {
-                    const content = meta.getAttribute('content');
-
-                    // Store in global for Yoast integration
-                    window.nokPagePartData = window.nokPagePartData || {};
-                    window.nokPagePartData[postId] = content;
-
-                    if (window.nokYoastIntegration?.debug) {
-                        console.log(`[Yoast] Stored content for part ${postId}:`, content.length, 'chars');
-                    }
-                }
-            } catch (e) {
-                // Cross-origin or not ready - ignore
-            }
-
-            // Watch for any DOM changes inside the iframe
-            if (iframe.contentDocument && iframe.contentDocument.body) {
-                mo = new MutationObserver(updateHeight);
-                mo.observe(iframe.contentDocument.body, {
-                    childList: true,
-                    subtree: true,
-                    attributes: true,
-                });
-            }
-        };
-
+        // Effect to handle iframe load events and height tracking
         useEffect(() => {
             const iframe = iframeRef.current;
             if (!iframe) {
@@ -428,7 +396,13 @@ registerBlockType(blockName, {
                     // Cross-origin or not ready - ignore
                 }
 
-                // watch for any DOM changes inside the iframe
+                // Disconnect previous observer if iframe reloads (prevents memory leak)
+                if (mo) {
+                    mo.disconnect();
+                    mo = null;
+                }
+
+                // Watch for any DOM changes inside the iframe
                 if (iframe.contentDocument && iframe.contentDocument.body) {
                     mo = new MutationObserver(updateHeight);
                     mo.observe(iframe.contentDocument.body, {

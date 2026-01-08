@@ -43,11 +43,22 @@ namespace NOK2025\V1\PageParts;
 class Registry {
 	private ?array $part_registry = null;
 
+	/** @var string Transient key for cached registry */
+	private const CACHE_KEY = 'nok_page_parts_registry';
+
+	/** @var int Cache duration in seconds (1 hour in production, 0 in dev) */
+	private const CACHE_DURATION = HOUR_IN_SECONDS;
+
 	/**
 	 * Get complete page part registry
 	 *
 	 * Scans all page-part template files and parses their header metadata,
-	 * including custom field definitions. Results are cached after first scan.
+	 * including custom field definitions. Results are cached:
+	 * - Instance cache: Prevents re-parsing during same request
+	 * - Transient cache: Persists across requests (production only)
+	 *
+	 * Cache invalidation: Automatic when any template file is modified
+	 * (uses max mtime of all template files as cache key component)
 	 *
 	 * @return array Associative array keyed by page part slug containing:
 	 *               - 'name' (string): Template display name
@@ -72,11 +83,35 @@ class Registry {
 	 * $fields = $registry['nok-cta']['custom_fields'];
 	 */
 	public function get_registry(): array {
+		// Level 1: Instance cache (same request)
 		if ( $this->part_registry !== null ) {
 			return $this->part_registry;
 		}
 
-		$files               = glob( THEME_ROOT_ABS . '/template-parts/page-parts/*.php' );
+		$files = glob( THEME_ROOT_ABS . '/template-parts/page-parts/*.php' );
+
+		// Calculate cache key based on latest file modification time
+		// This auto-invalidates cache when any template file changes
+		$max_mtime = 0;
+		foreach ( $files as $file ) {
+			$mtime = filemtime( $file );
+			if ( $mtime > $max_mtime ) {
+				$max_mtime = $mtime;
+			}
+		}
+		$cache_key = self::CACHE_KEY . '_' . $max_mtime;
+
+		// Level 2: Transient cache (across requests) - only in production
+		$use_transient_cache = defined( 'SITE_LIVE' ) && SITE_LIVE;
+		if ( $use_transient_cache ) {
+			$cached = get_transient( $cache_key );
+			if ( $cached !== false && is_array( $cached ) ) {
+				$this->part_registry = $cached;
+				return $this->part_registry;
+			}
+		}
+
+		// Parse all template files
 		$this->part_registry = [];
 
 		foreach ( $files as $file ) {
@@ -106,7 +141,55 @@ class Registry {
 			$this->part_registry[ $data['slug'] ] = $data;
 		}
 
+		// Store in transient cache (production only)
+		if ( $use_transient_cache ) {
+			set_transient( $cache_key, $this->part_registry, self::CACHE_DURATION );
+
+			// Clean up old cache keys (different mtime)
+			$this->cleanup_old_cache_keys( $cache_key );
+		}
+
 		return $this->part_registry;
+	}
+
+	/**
+	 * Cleanup old transient cache keys
+	 *
+	 * When template files are modified, the cache key changes. This removes
+	 * stale cache entries to prevent database bloat.
+	 *
+	 * @param string $current_key Current valid cache key to preserve
+	 */
+	private function cleanup_old_cache_keys( string $current_key ): void {
+		global $wpdb;
+
+		// Delete old transients matching our prefix but not current key
+		// This is a simple approach - for high-traffic sites, consider a scheduled cleanup
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s AND option_name != %s AND option_name != %s",
+				'_transient_' . self::CACHE_KEY . '_%',
+				'_transient_' . $current_key,
+				'_transient_timeout_' . $current_key
+			)
+		);
+	}
+
+	/**
+	 * Clear the registry cache
+	 *
+	 * Call this when you need to force a refresh (e.g., after saving a template file).
+	 */
+	public static function clear_cache(): void {
+		global $wpdb;
+
+		// Clear all registry transients
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+				'_transient%' . self::CACHE_KEY . '%'
+			)
+		);
 	}
 
 	/**

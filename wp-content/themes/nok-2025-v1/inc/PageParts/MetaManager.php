@@ -42,12 +42,51 @@ class MetaManager {
 	private Registry $registry;
 
 	/**
+	 * Cached set of protected meta keys for O(1) lookup
+	 * Built lazily on first access to avoid unnecessary work
+	 *
+	 * @var array<string, true>|null
+	 */
+	private ?array $protected_meta_keys = null;
+
+	/**
 	 * Constructor
 	 *
 	 * @param Registry $registry Page part registry instance
 	 */
 	public function __construct( Registry $registry ) {
 		$this->registry = $registry;
+	}
+
+	/**
+	 * Build the protected meta keys lookup set
+	 *
+	 * Creates a hash set of all meta keys that should be protected from
+	 * the Custom Fields panel. Called once per request and cached.
+	 *
+	 * @return array<string, true> Hash set of protected meta keys
+	 */
+	private function get_protected_meta_keys(): array {
+		if ( $this->protected_meta_keys !== null ) {
+			return $this->protected_meta_keys;
+		}
+
+		$this->protected_meta_keys = [
+			'design_slug' => true,
+		];
+
+		$registry = $this->registry->get_registry();
+		foreach ( $registry as $template_data ) {
+			if ( empty( $template_data['custom_fields'] ) ) {
+				continue;
+			}
+
+			foreach ( $template_data['custom_fields'] as $field ) {
+				$this->protected_meta_keys[ $field['meta_key'] ] = true;
+			}
+		}
+
+		return $this->protected_meta_keys;
 	}
 
 	/**
@@ -73,29 +112,20 @@ class MetaManager {
 	/**
 	 * Mark page part meta fields as protected from Custom Fields panel
 	 *
+	 * Uses a cached hash set for O(1) lookup instead of iterating through
+	 * all templates and fields for every meta key (which was O(n*m) per call).
+	 *
 	 * @param bool $protected Whether the key is protected
 	 * @param string $meta_key Meta key being checked
 	 *
 	 * @return bool Whether to protect this meta key
 	 */
 	public function protect_page_part_meta( bool $protected, string $meta_key ): bool {
-		// Protect design_slug
-		if ( $meta_key === 'design_slug' ) {
+		// O(1) lookup in cached hash set
+		$protected_keys = $this->get_protected_meta_keys();
+
+		if ( isset( $protected_keys[ $meta_key ] ) ) {
 			return true;
-		}
-
-		// Protect all registered template fields
-		$registry = $this->registry->get_registry();
-		foreach ( $registry as $template_data ) {
-			if ( empty( $template_data['custom_fields'] ) ) {
-				continue;
-			}
-
-			foreach ( $template_data['custom_fields'] as $field ) {
-				if ( $field['meta_key'] === $meta_key ) {
-					return true;
-				}
-			}
 		}
 
 		return $protected;

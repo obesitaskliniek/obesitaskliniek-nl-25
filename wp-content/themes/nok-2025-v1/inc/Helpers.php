@@ -41,15 +41,25 @@ use WP_Query;
  * @package NOK2025\V1
  */
 class Helpers {
-	public static function makeRandomString( $bits = 256 ): string {
-		#generates nonce (for Google Tag Manager etc)
-		$bytes  = ceil( $bits / 8 );
-		$return = '';
-		for ( $i = 0; $i < $bytes; $i ++ ) {
-			$return .= chr( mt_rand( 0, 255 ) );
+	/**
+	 * Generate cryptographically secure random string
+	 *
+	 * Used for nonces, CSP tokens, cache busters, etc.
+	 * Uses random_bytes() which is cryptographically secure (CSPRNG).
+	 *
+	 * @param int $bits Number of bits of randomness (default 256)
+	 * @return string Random binary string
+	 */
+	public static function makeRandomString( int $bits = 256 ): string {
+		$bytes = (int) ceil( $bits / 8 );
+		try {
+			return random_bytes( $bytes );
+		} catch ( \Exception $e ) {
+			// Fallback for edge cases where random_bytes fails (extremely rare)
+			// Log the error and use wp_generate_password as fallback
+			error_log( 'NOK Theme: random_bytes() failed: ' . $e->getMessage() );
+			return wp_generate_password( $bytes, true, true );
 		}
-
-		return $return;
 	}
 
 	/**
@@ -1302,198 +1312,28 @@ function do_extra_header_data( $nonce = '' ): void {
 	header( 'Connection: keep-alive' );
 }
 
-function makeRandomString( $bits = 256 ): string {
-#generate nonce (for Google Tag Manager etc)
-	$bytes  = ceil( $bits / 8 );
-	$return = '';
-	for ( $i = 0; $i < $bytes; $i ++ ) {
-		$return .= chr( mt_rand( 0, 255 ) );
-	}
-
-	return $return;
+/**
+ * Generate cryptographically secure random string (global wrapper)
+ *
+ * @deprecated Use \NOK2025\V1\Helpers::makeRandomString() instead
+ * @param int $bits Number of bits of randomness
+ * @return string Random binary string
+ */
+function makeRandomString( int $bits = 256 ): string {
+	return \NOK2025\V1\Helpers::makeRandomString( $bits );
 }
 
-//format a phonenumber
-function format_phone( $phone, $landcode = '31' ): string {
-	$phone     = str_replace( ' ', '', $phone );
-	$kentallen = array(
-		'06',
-		'0909',
-		'0906',
-		'0900',
-		'0842',
-		'0800',
-		'0676',
-		'010',
-		'046',
-		'0111',
-		'0475',
-		'0113',
-		'0478',
-		'0114',
-		'0481',
-		'0115',
-		'0485',
-		'0117',
-		'0486',
-		'0118',
-		'0487',
-		'013',
-		'0488',
-		'015',
-		'0492',
-		'0161',
-		'0493',
-		'0162',
-		'0495',
-		'0164',
-		'0497',
-		'0165',
-		'0499',
-		'0166',
-		'050',
-		'0167',
-		'0511',
-		'0168',
-		'0512',
-		'0172',
-		'0513',
-		'0174',
-		'0514',
-		'0180',
-		'0515',
-		'0181',
-		'0516',
-		'0182',
-		'0517',
-		'0183',
-		'0518',
-		'0184',
-		'0519',
-		'0186',
-		'0521',
-		'0187',
-		'0522',
-		'020',
-		'0523',
-		'0222',
-		'0524',
-		'0223',
-		'0525',
-		'0224',
-		'0527',
-		'0226',
-		'0528',
-		'0227',
-		'0529',
-		'0228',
-		'053',
-		'0229',
-		'0541',
-		'023',
-		'0543',
-		'024',
-		'0544',
-		'0251',
-		'0545',
-		'0252',
-		'0546',
-		'0255',
-		'0547',
-		'026',
-		'0548',
-		'0294',
-		'055',
-		'0297',
-		'0561',
-		'0299',
-		'0562',
-		'030',
-		'0566',
-		'0313',
-		'0570',
-		'0314',
-		'0571',
-		'0315',
-		'0572',
-		'0316',
-		'0573',
-		'0317',
-		'0575',
-		'0318',
-		'0577',
-		'0320',
-		'0578',
-		'0321',
-		'058',
-		'033',
-		'0591',
-		'0341',
-		'0592',
-		'0342',
-		'0593',
-		'0343',
-		'0594',
-		'0344',
-		'0595',
-		'0345',
-		'0596',
-		'0346',
-		'0597',
-		'0347',
-		'0598',
-		'0348',
-		'0599',
-		'035',
-		'070',
-		'036',
-		'071',
-		'038',
-		'072',
-		'040',
-		'073',
-		'0411',
-		'074',
-		'0412',
-		'075',
-		'0413',
-		'076',
-		'0416',
-		'077',
-		'0418',
-		'078',
-		'043',
-		'079',
-		'045'
-	);
-	if ( substr( $phone, 0, 3 ) == '+31' || substr( $phone, 0, 2 ) == '31' ) {
-		$phone = str_replace( '+31', '0', $phone );
-	}
-	$netnummer = '0'; //def
-	for ( $i = 4; $i >= 0; $i -- ) {
-		$netnummer = substr( $phone, 0, $i );
-		if ( in_array( $netnummer, $kentallen ) ) {
-			break;
-		} else {
-			$netnummer = substr( $phone, 0, 3 ); //def eerste 3 cijfers.
-		}
-	}
-	$search = '/' . preg_quote( $netnummer, '/' ) . '/';
-	$nummer = preg_replace( $search, '', $phone, 1 ); //haal netnummer van oorspronkelijke nummer af
-	if ( strlen( $nummer ) < 8 ) {
-		preg_match( '/(\d{2,3})(\d{2}+)(\d{2}+)/', $nummer, $matches ); //maakt groepjes: XXX XX XX of XX XX XX in het geval van een 4 cijferig netnummer
-	} else {
-		preg_match( '/(\d{2})(\d{2})(\d{2}+)(\d{2}+)/', $nummer, $matches ); //maakt groepjes: XXX XX XX of XX XX XX in het geval van een 4 cijferig netnummer
-	}
-	array_shift( $matches ); //remove first item (original string)
-	if ( $landcode ) {
-		$landcode = ( substr( $landcode, 0, 1 ) == '+' ) ? $landcode : '+' . $landcode;
-		$search   = '/' . preg_quote( '0', '/' ) . '/';
-
-		return preg_replace( $search, $landcode . ' ', $netnummer, 1 ) . ' ' . implode( ' ', $matches );
-	} else {
-		return $netnummer . ' ' . implode( ' ', $matches );
-	}
+/**
+ * Format Dutch phone number (global wrapper)
+ *
+ * @deprecated Use \NOK2025\V1\Helpers::format_phone() instead
+ * @param string $phone Phone number to format
+ * @param string $landcode Country code (deprecated, ignored - class method auto-detects)
+ * @return string Formatted phone number
+ */
+function format_phone( string $phone, string $landcode = '31' ): string {
+	// Note: $landcode parameter is ignored - the class method handles international prefixes automatically
+	return \NOK2025\V1\Helpers::format_phone( $phone );
 }
 
 //print an element from a multidimensional array

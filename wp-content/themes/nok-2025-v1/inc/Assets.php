@@ -25,20 +25,32 @@ namespace NOK2025\V1;
  * @package NOK2025\V1
  */
 class Assets {
+	/** @var string Transient cache key for icons */
+	private const CACHE_KEY = 'nok_icons_cache';
+
+	/** @var int Cache duration in seconds (1 hour) */
+	private const CACHE_DURATION = HOUR_IN_SECONDS;
+
 	/** @var array<string, string> Legacy icons during transition */
 	private array $legacyIcons = [
 		'star'               => '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="nok-icon %s" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/> </svg>',
 		// ... rest of legacy icons
 	];
 
-	/** @var array<string, string>|null Cached filesystem icons */
+	/** @var array<string, string>|null Cached filesystem icons (instance level) */
 	private static ?array $iconCache = null;
 
 	/** @var string Icons directory path */
 	private static string $iconsPath;
 
+	/** @var bool Whether instance has been initialized */
+	private static bool $initialized = false;
+
 	public function __construct() {
-		self::$iconsPath = get_template_directory() . '/assets/icons/';
+		if ( ! self::$initialized ) {
+			self::$iconsPath = get_template_directory() . '/assets/icons/';
+			self::$initialized = true;
+		}
 	}
 
 	/**
@@ -100,25 +112,79 @@ class Assets {
 	}
 
 	/**
-	 * Load all icons from filesystem
+	 * Load all icons from filesystem with transient caching
+	 *
+	 * Uses a two-level cache:
+	 * 1. Static instance cache (same request)
+	 * 2. WordPress transient (across requests, production only)
+	 *
+	 * Cache key includes max mtime of all icon files for automatic invalidation.
 	 *
 	 * @return array<string, string> Icon name => SVG content
 	 */
 	private function loadIconsFromFilesystem(): array {
-		$icons = [];
-
-		if (!is_dir(self::$iconsPath)) {
-			return $icons;
+		if ( ! is_dir( self::$iconsPath ) ) {
+			return [];
 		}
 
-		foreach (glob(self::$iconsPath . '*.svg') as $filepath) {
-			$filename = basename($filepath, '.svg');
+		$files = glob( self::$iconsPath . '*.svg' );
+		if ( empty( $files ) ) {
+			return [];
+		}
 
-			// Use full filename WITH prefix as key
-			$icons[$filename] = file_get_contents($filepath);
+		// Calculate cache key based on latest file modification time
+		$max_mtime = 0;
+		foreach ( $files as $filepath ) {
+			$mtime = filemtime( $filepath );
+			if ( $mtime > $max_mtime ) {
+				$max_mtime = $mtime;
+			}
+		}
+		$cache_key = self::CACHE_KEY . '_' . $max_mtime;
+
+		// Try transient cache first (production only)
+		$use_transient_cache = defined( 'SITE_LIVE' ) && SITE_LIVE;
+		if ( $use_transient_cache ) {
+			$cached = get_transient( $cache_key );
+			if ( $cached !== false && is_array( $cached ) ) {
+				return $cached;
+			}
+		}
+
+		// Load icons from filesystem
+		$icons = [];
+		foreach ( $files as $filepath ) {
+			$filename = basename( $filepath, '.svg' );
+			$icons[ $filename ] = file_get_contents( $filepath );
+		}
+
+		// Store in transient cache (production only)
+		if ( $use_transient_cache && ! empty( $icons ) ) {
+			set_transient( $cache_key, $icons, self::CACHE_DURATION );
+
+			// Clean up old cache entries
+			$this->cleanupOldCacheKeys( $cache_key );
 		}
 
 		return $icons;
+	}
+
+	/**
+	 * Cleanup old transient cache keys
+	 *
+	 * @param string $current_key Current valid cache key to preserve
+	 */
+	private function cleanupOldCacheKeys( string $current_key ): void {
+		global $wpdb;
+
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s AND option_name != %s AND option_name != %s",
+				'_transient_' . self::CACHE_KEY . '_%',
+				'_transient_' . $current_key,
+				'_transient_timeout_' . $current_key
+			)
+		);
 	}
 
 	/**
@@ -156,9 +222,21 @@ class Assets {
 
 	/**
 	 * Clear icon cache (useful for development)
+	 *
+	 * Clears both the static instance cache and all transient caches.
 	 */
 	public static function clearCache(): void {
+		// Clear static cache
 		self::$iconCache = null;
+
+		// Clear all transient caches
+		global $wpdb;
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+				'_transient%' . self::CACHE_KEY . '%'
+			)
+		);
 	}
 
 	/**

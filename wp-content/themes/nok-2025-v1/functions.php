@@ -34,10 +34,18 @@
  * @version 1.0.0
  */
 
-// Only do this in development!
-ini_set( 'display_errors', '1' );
-ini_set( 'display_startup_errors', '1' );
-error_reporting( E_ALL );
+// Development error reporting - respects WordPress WP_DEBUG settings
+// NEVER display errors in production - attackers can exploit stack traces
+if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_DISPLAY' ) && WP_DEBUG_DISPLAY ) {
+	ini_set( 'display_errors', '1' );
+	ini_set( 'display_startup_errors', '1' );
+	error_reporting( E_ALL );
+} else {
+	// Production: hide all errors from output (still logged if WP_DEBUG_LOG is true)
+	ini_set( 'display_errors', '0' );
+	ini_set( 'display_startup_errors', '0' );
+	error_reporting( E_ALL & ~E_DEPRECATED & ~E_STRICT );
+}
 
 // 1) Define constants for easy paths/URIs
 define( 'THEME_ROOT_ABS', get_template_directory() );

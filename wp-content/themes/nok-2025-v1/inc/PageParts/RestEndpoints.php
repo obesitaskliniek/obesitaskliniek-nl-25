@@ -25,6 +25,33 @@ class RestEndpoints {
 	private MetaManager $meta_manager;
 
 	/**
+	 * Post types that are explicitly blocked from being queried via REST API
+	 * These are internal WordPress types that should never be publicly accessible
+	 *
+	 * @var array<string>
+	 */
+	private const BLOCKED_POST_TYPES = [
+		'revision',
+		'nav_menu_item',
+		'custom_css',
+		'customize_changeset',
+		'oembed_cache',
+		'user_request',
+		'wp_block',
+		'wp_template',
+		'wp_template_part',
+		'wp_global_styles',
+		'wp_navigation',
+		'wp_font_family',
+		'wp_font_face',
+		'acf-field',
+		'acf-field-group',
+		'acf-post-type',
+		'acf-taxonomy',
+		'acf-ui-options-page',
+	];
+
+	/**
 	 * Constructor
 	 *
 	 * @param TemplateRenderer $template_renderer Template rendering service
@@ -36,6 +63,58 @@ class RestEndpoints {
 	) {
 		$this->renderer           = $template_renderer;
 		$this->meta_manager       = $meta_manager;
+	}
+
+	/**
+	 * Validate that post types are not in the blocked list
+	 *
+	 * @param string $post_type Post type or comma-separated list of post types
+	 * @return bool True if all post types are allowed
+	 */
+	public function validate_post_type( string $post_type ): bool {
+		// Handle comma-separated list
+		$types = strpos( $post_type, ',' ) !== false
+			? array_map( 'trim', explode( ',', $post_type ) )
+			: [ $post_type ];
+
+		foreach ( $types as $type ) {
+			// Block internal post types
+			if ( in_array( $type, self::BLOCKED_POST_TYPES, true ) ) {
+				return false;
+			}
+
+			// Block 'any' as it could expose internal types
+			if ( $type === 'any' ) {
+				return false;
+			}
+
+			// Must be a registered post type (prevents probing for non-existent types)
+			if ( ! post_type_exists( $type ) ) {
+				return false;
+			}
+
+			// Must be a public post type
+			$post_type_obj = get_post_type_object( $type );
+			if ( ! $post_type_obj || ! $post_type_obj->public ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Sanitize post type parameter
+	 *
+	 * @param string $post_type Post type or comma-separated list
+	 * @return string|array Sanitized post type(s)
+	 */
+	public function sanitize_post_type( string $post_type ) {
+		$types = strpos( $post_type, ',' ) !== false
+			? array_map( 'sanitize_key', array_map( 'trim', explode( ',', $post_type ) ) )
+			: sanitize_key( $post_type );
+
+		return $types;
 	}
 
 	/**
@@ -459,6 +538,9 @@ class RestEndpoints {
 	/**
 	 * Register endpoint for querying posts
 	 *
+	 * Security: post_type parameter is validated to only allow public post types
+	 * and explicitly blocks internal WordPress types to prevent data leakage.
+	 *
 	 * @return void
 	 */
 	public function register_post_query_endpoint(): void {
@@ -470,27 +552,33 @@ class RestEndpoints {
 				'post_type' => [
 					'required' => false,
 					'type' => 'string',
-					'default' => 'post'
+					'default' => 'post',
+					'validate_callback' => [ $this, 'validate_post_type' ],
+					'sanitize_callback' => [ $this, 'sanitize_post_type' ],
 				],
 				'categories' => [
 					'required' => false,
 					'type' => 'string',
-					'default' => ''
+					'default' => '',
+					'sanitize_callback' => 'sanitize_text_field',
 				],
 				'include' => [
 					'required' => false,
 					'type' => 'string',
-					'default' => ''
+					'default' => '',
+					'sanitize_callback' => 'sanitize_text_field',
 				],
 				'exclude' => [
 					'required' => false,
 					'type' => 'string',
-					'default' => ''
+					'default' => '',
+					'sanitize_callback' => 'sanitize_text_field',
 				],
 				'search' => [
 					'required' => false,
 					'type' => 'string',
-					'default' => ''
+					'default' => '',
+					'sanitize_callback' => 'sanitize_text_field',
 				]
 			]
 		]);
@@ -499,24 +587,24 @@ class RestEndpoints {
 	/**
 	 * REST callback: Query posts by date, excluding specified IDs
 	 *
+	 * Security: post_type is pre-validated by validate_post_type() and sanitized
+	 * by sanitize_post_type(). Additional defense-in-depth filtering is applied
+	 * to query results to ensure blocked post types never leak.
+	 *
 	 * @param \WP_REST_Request $request
 	 * @return \WP_REST_Response
 	 */
 	public function query_posts_callback(\WP_REST_Request $request): \WP_REST_Response {
+		// Post type is already validated and sanitized by REST API args
 		$post_type = $request->get_param('post_type');
 		$exclude = $request->get_param('exclude');
 		$search = $request->get_param('search');
-
-		// Handle comma-separated post types
-		if (is_string($post_type) && strpos($post_type, ',') !== false) {
-			$post_type = array_map('trim', explode(',', $post_type));
-		}
 
 		$args = [
 			'post_type' => $post_type,
 			'post_status' => 'publish',
 			'posts_per_page' => 50,
-			'orderby' => !empty($search) ? 'relevance' : 'date',  // ← Key change
+			'orderby' => !empty($search) ? 'relevance' : 'date',
 			'order' => 'DESC'
 		];
 
@@ -526,7 +614,7 @@ class RestEndpoints {
 				[
 					'taxonomy' => 'category',
 					'field' => 'slug',
-					'terms' => array_map('trim', explode(',', $categories)),
+					'terms' => array_map('sanitize_key', array_map('trim', explode(',', $categories))),
 					'operator' => 'IN'
 				]
 			];
@@ -540,7 +628,9 @@ class RestEndpoints {
 		if (!empty($include)) {
 			$args['post__in'] = array_map('intval', explode(',', $include));
 			$args['orderby'] = 'post__in';
-			$args['post_type'] = 'any'; // Allow any post type when fetching by ID
+			// When including specific IDs, use the validated post_type(s) instead of 'any'
+			// to prevent exposing internal post types via ID enumeration
+			// If caller needs multiple types, they should specify them explicitly
 		}
 
 		if (!empty($search)) {
@@ -567,9 +657,14 @@ class RestEndpoints {
 		$posts = [];
 
 		foreach ($query->posts as $post) {
+			// Defense in depth: skip any blocked post types that might slip through
+			if ( in_array( $post->post_type, self::BLOCKED_POST_TYPES, true ) ) {
+				continue;
+			}
 
-			// Skip revisions - they can appear when using post_type 'any'
-			if ($post->post_type === 'revision') {
+			// Also verify the post type is public (additional safety check)
+			$post_type_obj = get_post_type_object( $post->post_type );
+			if ( ! $post_type_obj || ! $post_type_obj->public ) {
 				continue;
 			}
 
