@@ -28,6 +28,12 @@ nok-navigation-menu-bar {
     padding-left: var(--#{components-base.$prefix}-padding-base, 1.5rem);
 
     pointer-events: all;
+
+    .nok-nav-menu-item {
+      &:hover {
+        color: var(--nok-lightblue);
+      }
+    }
   }
 
   img, svg {
@@ -84,6 +90,12 @@ nok-navigation-menu-bar {
 
       &-menu {
         align-self: flex-start;
+
+        .nok-nav-menu-item {
+          &:hover {
+            color: var(--nok-lightblue);
+          }
+        }
 
         .nok-nav-menu-item--parent {
           font-size: 1.5rem;

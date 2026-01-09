@@ -24,11 +24,11 @@ if (empty($parents_with_children)) {
 	<?php foreach ($parents_with_children as $parent): ?>
 		<div class="dropdown-contents-menu nok-ul-list nok-mt-0"
 			 data-submenu-id="submenu-<?= esc_attr($parent['id']); ?>">
-			<div>
+			<!--<div>
 				<a href="<?= esc_url($parent['url']); ?>" class="nok-nav-menu-item nok-nav-menu-item--parent<?= $parent['is_current'] ? ' nok-nav-menu-item--active' : ''; ?>">
 					<?= esc_html($parent['title']); ?>
 				</a>
-			</div>
+			</div>-->
 			<?php foreach ($parent['children'] as $child):
 				$classes = ['nok-nav-menu-item'];
 
