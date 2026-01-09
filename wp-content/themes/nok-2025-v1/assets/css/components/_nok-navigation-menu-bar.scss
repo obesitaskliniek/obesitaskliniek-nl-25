@@ -85,6 +85,12 @@ nok-navigation-menu-bar {
       &-menu {
         align-self: flex-start;
 
+        .nok-nav-menu-item--parent {
+          font-size: 1.5rem;
+          font-weight: 700;
+          @include components-base.rfs(1.5rem, font-size);
+        }
+
         .nok-nav-menu-item--active {
           color: var(--nok-lightblue);
         }

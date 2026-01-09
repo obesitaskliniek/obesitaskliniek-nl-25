@@ -23,17 +23,11 @@ use NOK2025\V1\Theme;
 return function( array $attributes ): string {
 	$post_id = absint( $attributes['postId'] ?? 0 );
 	if ( ! $post_id || get_post_type( $post_id ) !== 'page_part' ) {
-		// Only show message for logged-in users (editors), hide from visitors
-		return is_user_logged_in()
-			? '<p>' . esc_html__( 'Geen blok geselecteerd.', THEME_TEXT_DOMAIN ) . '</p>'
-			: '';
+		return '<p>' . esc_html__( 'Geen blok geselecteerd.', THEME_TEXT_DOMAIN ) . '</p>';
 	}
 	$post = get_post( $post_id );
-	if ( ! $post || $post->post_status !== 'publish' ) {
-		// Only show message for logged-in users, hide from visitors
-		return is_user_logged_in()
-			? '<p>' . esc_html__( 'Page part niet gevonden of niet gepubliceerd.', THEME_TEXT_DOMAIN ) . '</p>'
-			: '';
+	if ( ! $post ) {
+		return '<p>' . esc_html__( 'Part not found.', THEME_TEXT_DOMAIN ) . '</p>';
 	}
 
 	$design = get_post_meta( $post_id, 'design_slug', true ) ?: 'header-top-level';
