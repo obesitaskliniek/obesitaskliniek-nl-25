@@ -12,7 +12,7 @@
  * - all_link_url:url!default(/kennisbank)!descr[URL voor "Alle items" link]
  * - all_link_text:text!default(Alle items)
  * - show_nav_buttons:checkbox!default(true)!descr[Toon navigatieknoppen voor de carousel]
- * - category_filter:text!descr[Filter op categorie slug, bijv. "medisch" (optioneel, laat leeg voor alle)]
+ * - category_filter:taxonomy(kennisbank_categories)!descr[Filter op categorieën (laat leeg voor alle)]!page-editable
  * - max_items:select(3|6|9|12)!default(6)!descr[Maximum aantal artikelen]
  * - read_more_text:text!default(Lees meer)
  * - show_date:checkbox!default(true)!descr[Toon publicatiedatum]
@@ -27,17 +27,22 @@ use NOK2025\V1\Helpers;
 
 $c = $context;
 
-// Build taxonomy query if category filter is set
+// Build taxonomy query if category filter is set (comma-separated term IDs)
 $tax_query = [];
 $category_filter = trim($c->category_filter->raw());
 if (!empty($category_filter)) {
-	$tax_query = [
-		[
-			'taxonomy' => 'kennisbank_categories',
-			'field'    => 'slug',
-			'terms'    => $category_filter,
-		]
-	];
+	// Parse comma-separated term IDs
+	$term_ids = array_map('intval', array_filter(explode(',', $category_filter)));
+	if (!empty($term_ids)) {
+		$tax_query = [
+			[
+				'taxonomy' => 'kennisbank_categories',
+				'field'    => 'term_id',
+				'terms'    => $term_ids,
+				'operator' => 'IN',
+			]
+		];
+	}
 }
 
 // Query kennisbank posts

@@ -19,6 +19,7 @@ namespace NOK2025\V1\PageParts;
  * - Select fields: "position:select(left|right)"
  * - Checkbox fields: "enabled:checkbox(true)"
  * - Icon selector: "icon:icon-selector"
+ * - Taxonomy selector: "cats:taxonomy(category)" or "cat:taxonomy(category)!single"
  * - Repeaters: "items:repeater(title:text,url:url)"
  * - Post repeaters: "posts:post_repeater(post:news,events)"
  * - Flags: !page-editable, !default(value), !descr[description]
@@ -454,7 +455,34 @@ class Registry {
 					'description'      => $description
 				];
 			}
-			// Field Type 5: Post repeater field
+			// Field Type 5: Taxonomy selector field
+			// Pattern: "name:taxonomy(taxonomy_slug)" for multi-select (default)
+			// Pattern: "name:taxonomy(taxonomy_slug)!single" for single-select
+			// Example: "category_filter:taxonomy(kennisbank_categories)"
+			// Creates UI for selecting taxonomy terms from REST API
+			elseif ( preg_match( '/^([^:]+):taxonomy\(([^)]+)\)(.*)$/', $definition, $matches ) ) {
+				$field_name    = trim( $matches[1] );
+				$taxonomy_slug = trim( $matches[2] );
+				$flags         = trim( $matches[3] ?? '' );
+
+				// Check for !single flag (default is multi-select)
+				$is_single = str_contains( $flags, '!single' );
+
+				$meta_key = $template_slug . '_' . $field_name;
+
+				$fields[] = [
+					'name'          => $field_name,
+					'type'          => 'taxonomy',
+					'meta_key'      => $meta_key,
+					'label'         => $this->generate_field_label( $field_name ),
+					'taxonomy'      => $taxonomy_slug,
+					'multiple'      => ! $is_single,
+					'page_editable' => $is_page_editable,
+					'default'       => $default_value,
+					'description'   => $description
+				];
+			}
+			// Field Type 6: Post repeater field
 			// Pattern: "name:post_repeater(post_type)" or "name:post_repeater(post_type:cat1,cat2)"
 			// Multiple post types: "name:post_repeater(post|page|custom_type)"
 			// With categories: "name:post_repeater(post:news,events)"
@@ -492,7 +520,7 @@ class Registry {
 					'description'      => $description
 				];
 			}
-			// Field Type 6: Regular simple fields
+			// Field Type 7: Regular simple fields
 			// Pattern: "name:type"
 			// Example: "title:text", "content:textarea", "email:email", "url:url"
 			// Handles all standard field types (text, textarea, email, url, number, date, etc.)

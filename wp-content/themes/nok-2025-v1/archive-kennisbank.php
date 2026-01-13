@@ -42,39 +42,39 @@ $current_term = $is_taxonomy_archive ? get_queried_object() : null;
 				endif;
 				?>
 			<?php endif; ?>
+
+            <?php
+            // Category pill navigation
+            $all_categories = get_terms([
+                    'taxonomy'   => 'kennisbank_categories',
+                    'hide_empty' => true,
+                    'orderby'    => 'count',
+                    'order'      => 'DESC',
+            ]);
+
+            if ($all_categories && !is_wp_error($all_categories)):
+                $archive_url = get_post_type_archive_link('kennisbank');
+                $current_slug = $current_term ? $current_term->slug : null;
+                ?>
+                <nav class="nok-category-pills nok-mb-2" aria-label="<?php esc_attr_e('Filter op categorie', THEME_TEXT_DOMAIN); ?>">
+                    <a href="<?= esc_url($archive_url); ?>"
+                       class="nok-pill <?= !$is_taxonomy_archive ? 'nok-pill--active' : ''; ?>">
+                        Alles
+                    </a>
+                    <?php foreach ($all_categories as $category): ?>
+                        <a href="<?= esc_url(get_term_link($category)); ?>"
+                           class="nok-pill <?= $current_slug === $category->slug ? 'nok-pill--active' : ''; ?>">
+                            <?= esc_html($category->name); ?>
+                        </a>
+                    <?php endforeach; ?>
+                </nav>
+            <?php endif; ?>
 		</header>
 	</div>
 </nok-hero>
 
 <nok-section class="no-aos z-ascend">
 	<div class="nok-section__inner nok-pull-up-2">
-
-		<?php
-		// Category pill navigation
-		$all_categories = get_terms([
-			'taxonomy'   => 'kennisbank_categories',
-			'hide_empty' => true,
-			'orderby'    => 'count',
-			'order'      => 'DESC',
-		]);
-
-		if ($all_categories && !is_wp_error($all_categories)):
-			$archive_url = get_post_type_archive_link('kennisbank');
-			$current_slug = $current_term ? $current_term->slug : null;
-			?>
-			<nav class="nok-category-pills nok-mb-2" aria-label="<?php esc_attr_e('Filter op categorie', THEME_TEXT_DOMAIN); ?>">
-				<a href="<?= esc_url($archive_url); ?>"
-				   class="nok-pill <?= !$is_taxonomy_archive ? 'nok-pill--active' : ''; ?>">
-					Alles
-				</a>
-				<?php foreach ($all_categories as $category): ?>
-					<a href="<?= esc_url(get_term_link($category)); ?>"
-					   class="nok-pill <?= $current_slug === $category->slug ? 'nok-pill--active' : ''; ?>">
-						<?= esc_html($category->name); ?>
-					</a>
-				<?php endforeach; ?>
-			</nav>
-		<?php endif; ?>
 
 		<?php if (have_posts()): ?>
 			<div class="nok-layout-grid nok-layout-grid__3-column nok-grid-gap-2">

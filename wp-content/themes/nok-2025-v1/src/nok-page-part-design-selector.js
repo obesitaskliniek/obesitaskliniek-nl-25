@@ -6,6 +6,7 @@ import apiFetch from '@wordpress/api-fetch';
 import {logger} from '../assets/js/domule/core.log.mjs';
 import {Fragment, useRef, useState, useEffect, useMemo} from '@wordpress/element';
 import IconSelector from './components/IconSelector';
+import TaxonomySelector from './components/TaxonomySelector';
 import FieldImportWizard from './components/FieldImportWizard';
 import LinkField from './components/LinkField';
 
@@ -712,6 +713,23 @@ function DesignSlugPanel() {
                             help={field.description || ''}
                             checked={fieldValue === '1' || fieldValue === true}
                             onChange={(checked) => updateMetaField(field.meta_key, checked ? '1' : '0')}
+                        />
+                    </FieldGroup>
+                );
+
+            case 'taxonomy':
+                return (
+                    <FieldGroup key={field.meta_key} label={field.label}>
+                        {field.description && (
+                            <p style={helpStyle}>
+                                {field.description}
+                            </p>
+                        )}
+                        <TaxonomySelector
+                            taxonomy={field.taxonomy}
+                            value={fieldValue}
+                            onChange={(value) => updateMetaField(field.meta_key, value)}
+                            multiple={field.multiple !== false}
                         />
                     </FieldGroup>
                 );

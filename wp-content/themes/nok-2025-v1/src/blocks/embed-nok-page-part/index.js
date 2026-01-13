@@ -41,6 +41,7 @@ import {useSelect, useDispatch} from '@wordpress/data';
 import {__} from '@wordpress/i18n';
 import {useRef, useState, useEffect} from '@wordpress/element';
 import IconSelector from '../../components/IconSelector';
+import TaxonomySelector from '../../components/TaxonomySelector';
 import ColorTool from "../../../assets/js/domule/util.color.mjs";
 
 const textDomain = 'nok-2025-v1';
@@ -637,6 +638,18 @@ registerBlockType(blockName, {
                                                         {label: 'Nee', value: '0'}
                                                     ]}
                                                     onChange={updateOverride}
+                                                />
+                                            );
+
+                                        case 'taxonomy':
+                                            return (
+                                                <TaxonomySelector
+                                                    key={field.meta_key}
+                                                    taxonomy={field.taxonomy}
+                                                    value={currentValue}
+                                                    onChange={updateOverride}
+                                                    multiple={field.multiple !== false}
+                                                    label={`Override ${field.label}`}
                                                 />
                                             );
 

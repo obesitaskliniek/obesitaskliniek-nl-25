@@ -20,8 +20,8 @@
   text-decoration: none;
   white-space: nowrap;
 
-  background-color: var(--bg-color, oklch(from var(--nok-white) l c h / 0.8));
-  color: var(--text-color, var(--nok-darkerblue));
+  background-color: var(--bg-color--contrast, oklch(from var(--nok-white) l c h / 0.8));
+  color: var(--bg-color, var(--nok-darkerblue));
   border: 1px solid oklch(from var(--nok-darkerblue) l c h / 0.15);
   border-radius: 2em;
 
@@ -35,7 +35,7 @@
 
   &--active,
   &--active:hover {
-    --bg-color: var(--nok-yellow);
-    --text-color:  var(--nok-darkerblue);
+    background-color: var(--nok-yellow);
+    color:  var(--nok-darkerblue);
   }
 }
