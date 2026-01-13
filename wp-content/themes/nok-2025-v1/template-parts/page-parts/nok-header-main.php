@@ -76,7 +76,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
         <nok-navigation-top-row class="nok-section__inner--stretched  nok-bg-white nok-dark-bg-darkestblue nok-text-contrast nok-fill-contrast  nok-z-3">
             <a href="<?= esc_url(home_url('/')) ?>"><?= $logo; ?></a>
             <button class="nok-button nok-button--small nok-bg-yellow nok-text-contrast nok-invisible-to-sm"
-                    tabindex="0">Gratis voorlichtingsavond
+                    tabindex="0">Gratis voorlichting
             </button>
             <button class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
                     tabindex="0">
@@ -149,7 +149,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                     <a href="#" class="nok-nav-menu-item">Mijn NOK</a>
                     <a href="#" class="nok-nav-menu-item">NOK App</a>
                     <button class="nok-button nok-button--small nok-bg-yellow nok-text-contrast nok-invisible-sm"
-                            tabindex="0">Gratis voorlichtingsavond
+                            tabindex="0">Gratis voorlichting
                     </button>
                 </div>
             </div>
@@ -195,7 +195,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
 				<?php $menu_manager->render_desktop_menu_bar('primary'); ?>
                 <div>
                     <button class="nok-button nok-bg-yellow nok-text-contrast" tabindex="0">Gratis
-                        voorlichtingsavond
+                        voorlichting
                     </button>
                 </div>
             </div>

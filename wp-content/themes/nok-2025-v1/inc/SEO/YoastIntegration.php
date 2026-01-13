@@ -47,34 +47,106 @@ class YoastIntegration {
 	}
 
 	/**
-	 * Fix breadcrumb archive URLs for custom post types
+	 * Fix breadcrumb archive URLs and add taxonomy breadcrumbs for custom post types
 	 *
-	 * Yoast's breadcrumb system has an architectural limitation where it doesn't
-	 * automatically respect WordPress's has_archive custom slugs. When a post type
-	 * is registered with has_archive set to a custom string (e.g., 'vestigingen'
-	 * for post type 'vestiging'), Yoast constructs breadcrumb URLs from the post
-	 * type name rather than querying WordPress's rewrite system.
+	 * Yoast's breadcrumb system has architectural limitations:
+	 * 1. It doesn't respect WordPress's has_archive custom slugs
+	 * 2. It doesn't automatically insert taxonomy terms for CPTs with taxonomy in URL
 	 *
-	 * This method uses Yoast's official wpseo_breadcrumb_links extension point
-	 * to correct archive URLs by calling WordPress core's get_post_type_archive_link()
-	 * function, ensuring breadcrumbs respect the has_archive configuration.
+	 * This method:
+	 * - Corrects archive URLs using WordPress core's get_post_type_archive_link()
+	 * - Inserts category breadcrumb for kennisbank posts (between archive and post)
 	 *
 	 * @param array $links Array of breadcrumb items from Yoast
-	 * @return array Modified breadcrumb array with corrected archive URLs
+	 * @return array Modified breadcrumb array with corrected URLs and added taxonomy
 	 */
 	public function fix_breadcrumb_archive_urls(array $links): array {
-		// Only process on vestiging-related pages
-		if (!is_singular('vestiging') && !is_post_type_archive('vestiging')) {
+		// Handle vestiging archive URLs
+		if (is_singular('vestiging') || is_post_type_archive('vestiging')) {
+			foreach ($links as $key => $link) {
+				if (isset($link['ptarchive']) && $link['ptarchive'] === 'vestiging') {
+					$links[$key]['url'] = get_post_type_archive_link('vestiging');
+				}
+			}
+		}
+
+		// Handle kennisbank: fix archive URL and insert category breadcrumb
+		if (is_singular('kennisbank')) {
+			$links = $this->add_kennisbank_category_breadcrumb($links);
+		}
+
+		// Handle kennisbank taxonomy archive: add Kennisbank parent before category
+		if (is_tax('kennisbank_categories')) {
+			$links = $this->add_kennisbank_archive_breadcrumb($links);
+		}
+
+		return $links;
+	}
+
+	/**
+	 * Add category breadcrumb for kennisbank posts
+	 *
+	 * Inserts the primary category between the archive and post title breadcrumbs.
+	 * Structure: Home / Kennisbank / {Category} / {Post Title}
+	 *
+	 * @param array $links Breadcrumb links array
+	 * @return array Modified links with category inserted
+	 */
+	private function add_kennisbank_category_breadcrumb(array $links): array {
+		$post_id = get_the_ID();
+		$terms = get_the_terms($post_id, 'kennisbank_categories');
+
+		if (!$terms || is_wp_error($terms)) {
 			return $links;
 		}
 
+		$primary_term = $terms[0];
+		$category_breadcrumb = [
+			'url'  => get_term_link($primary_term),
+			'text' => $primary_term->name,
+		];
+
+		// Find the position to insert (after the archive, before the post)
+		$insert_position = null;
 		foreach ($links as $key => $link) {
-			// Identify the vestiging archive breadcrumb by its ptarchive reference
-			if (isset($link['ptarchive']) && $link['ptarchive'] === 'vestiging') {
-				// Use WordPress core function to get the correct archive URL
-				$links[$key]['url'] = get_post_type_archive_link('vestiging');
+			// Find the kennisbank archive breadcrumb
+			if (isset($link['ptarchive']) && $link['ptarchive'] === 'kennisbank') {
+				$insert_position = $key + 1;
+				// Also fix the archive URL while we're here
+				$links[$key]['url'] = get_post_type_archive_link('kennisbank');
+				break;
 			}
 		}
+
+		// Insert the category breadcrumb
+		if ($insert_position !== null) {
+			array_splice($links, $insert_position, 0, [$category_breadcrumb]);
+		}
+
+		return $links;
+	}
+
+	/**
+	 * Add Kennisbank archive breadcrumb for taxonomy archives
+	 *
+	 * Inserts the Kennisbank archive link before the category name.
+	 * Structure: Home / Kennisbank / {Category}
+	 *
+	 * @param array $links Breadcrumb links array
+	 * @return array Modified links with archive inserted
+	 */
+	private function add_kennisbank_archive_breadcrumb(array $links): array {
+		$archive_breadcrumb = [
+			'url'  => get_post_type_archive_link('kennisbank'),
+			'text' => get_post_type_object('kennisbank')->labels->name ?? 'Kennisbank',
+		];
+
+		// Find position to insert (after home, before the taxonomy term)
+		// Yoast typically puts: Home / {Term} for taxonomy archives
+		// We want: Home / Kennisbank / {Term}
+		$insert_position = 1; // After home by default
+
+		array_splice($links, $insert_position, 0, [$archive_breadcrumb]);
 
 		return $links;
 	}

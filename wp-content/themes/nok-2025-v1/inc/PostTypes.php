@@ -9,6 +9,8 @@ namespace NOK2025\V1;
  * - page_part: Reusable page components for embedding
  * - template_layout: Block editor templates for single post types
  * - vestiging: Clinic locations with address and contact info
+ * - kennisbank: Knowledge base with FAQ and informational articles
+ *   URL structure: /kennisbank/{category}/{post-slug}/
  *
  * Protects internal post types from public access:
  * - Returns 404 for page_part and template_layout single views
@@ -28,7 +30,9 @@ class PostTypes {
 	private static array $archive_post_types = [];
 	public function __construct() {
 		add_action( 'init', [ $this, 'register_post_types' ] );
+		add_action( 'init', [ $this, 'register_kennisbank_permalink_filter' ] );
 		add_action( 'template_redirect', [ $this, 'protect_post_types' ] );
+		add_filter( 'single_template', [ $this, 'kennisbank_category_template' ] );
 	}
 
 	/**
@@ -38,7 +42,8 @@ class PostTypes {
 		$this->register_page_part_post_type();
 		$this->register_template_layout_post_type();
 		$this->register_vestiging_post_type();
-		// Add other post types here as needed
+		$this->register_kennisbank_taxonomy();
+		$this->register_kennisbank_post_type();
 		$this->track_archive_post_types();
 	}
 
@@ -228,6 +233,189 @@ class PostTypes {
 				'label' => $labels['name'],
 			];
 		}
+	}
+
+	/**
+	 * Register the kennisbank_categories taxonomy
+	 *
+	 * Must be registered BEFORE the kennisbank post type for rewrite rules to work.
+	 */
+	private function register_kennisbank_taxonomy(): void {
+		$labels = [
+			'name'              => __( 'Kennisbank Categorieën', THEME_TEXT_DOMAIN ),
+			'singular_name'     => __( 'Kennisbank Categorie', THEME_TEXT_DOMAIN ),
+			'search_items'      => __( 'Zoek categorieën', THEME_TEXT_DOMAIN ),
+			'all_items'         => __( 'Alle categorieën', THEME_TEXT_DOMAIN ),
+			'parent_item'       => __( 'Bovenliggende categorie', THEME_TEXT_DOMAIN ),
+			'parent_item_colon' => __( 'Bovenliggende categorie:', THEME_TEXT_DOMAIN ),
+			'edit_item'         => __( 'Categorie bewerken', THEME_TEXT_DOMAIN ),
+			'update_item'       => __( 'Categorie bijwerken', THEME_TEXT_DOMAIN ),
+			'add_new_item'      => __( 'Nieuwe categorie toevoegen', THEME_TEXT_DOMAIN ),
+			'new_item_name'     => __( 'Nieuwe categorienaam', THEME_TEXT_DOMAIN ),
+			'menu_name'         => __( 'Categorieën', THEME_TEXT_DOMAIN ),
+		];
+
+		$args = [
+			'labels'            => $labels,
+			'hierarchical'      => true,
+			'public'            => true,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'show_in_nav_menus' => true,
+			'show_in_rest'      => true,
+			'rest_base'         => 'kennisbank_categories',
+			'rewrite'           => [
+				'slug'         => 'kennisbank',
+				'with_front'   => false,
+				'hierarchical' => true,
+			],
+		];
+
+		register_taxonomy( 'kennisbank_categories', [ 'kennisbank' ], $args );
+	}
+
+	/**
+	 * Register the kennisbank custom post type
+	 *
+	 * Kennisbank (knowledge base) contains FAQ items and informational articles.
+	 * URL structure: /kennisbank/{category}/{post-slug}/
+	 *
+	 * Previously registered via ACF - migrated to theme for custom permalink structure.
+	 */
+	private function register_kennisbank_post_type(): void {
+		$labels = [
+			'name'               => __( 'Kennisbank', THEME_TEXT_DOMAIN ),
+			'singular_name'      => __( 'Kennisbank item', THEME_TEXT_DOMAIN ),
+			'add_new_item'       => __( 'Nieuw item toevoegen', THEME_TEXT_DOMAIN ),
+			'edit_item'          => __( 'Item bewerken', THEME_TEXT_DOMAIN ),
+			'new_item'           => __( 'Nieuw item', THEME_TEXT_DOMAIN ),
+			'view_item'          => __( 'Item bekijken', THEME_TEXT_DOMAIN ),
+			'view_items'         => __( 'Items bekijken', THEME_TEXT_DOMAIN ),
+			'search_items'       => __( 'Items zoeken', THEME_TEXT_DOMAIN ),
+			'not_found'          => __( 'Geen items gevonden.', THEME_TEXT_DOMAIN ),
+			'not_found_in_trash' => __( 'Geen items gevonden in prullenbak.', THEME_TEXT_DOMAIN ),
+			'all_items'          => __( 'Alle items', THEME_TEXT_DOMAIN ),
+			'archives'           => __( 'Kennisbank archief', THEME_TEXT_DOMAIN ),
+		];
+
+		$args = [
+			'labels'              => $labels,
+			'description'         => __( 'In de kennisbank vind je naast veelgestelde vragen ook veel extra informatie over de behandeling van obesitas.', THEME_TEXT_DOMAIN ),
+			'public'              => true,
+			'publicly_queryable'  => true,
+			'show_ui'             => true,
+			'show_in_menu'        => true,
+			'show_in_nav_menus'   => true,
+			'show_in_admin_bar'   => true,
+			'show_in_rest'        => true,
+			'rest_base'           => 'kennisbank',
+			'menu_position'       => 7,
+			'menu_icon'           => 'dashicons-excerpt-view',
+			'capability_type'     => 'post',
+			'hierarchical'        => false,
+			'supports'            => [
+				'title',
+				'editor',
+				'thumbnail',
+				'excerpt',
+				'revisions',
+				'custom-fields',
+			],
+			'taxonomies'          => [ 'kennisbank_categories' ],
+			'has_archive'         => 'kennisbank',
+			'rewrite'             => [
+				'slug'       => 'kennisbank/%kennisbank_categories%',
+				'with_front' => false,
+			],
+			'query_var'           => true,
+			'can_export'          => true,
+			'delete_with_user'    => false,
+		];
+
+		register_post_type( 'kennisbank', $args );
+
+		// Track for archive settings
+		self::$archive_post_types['kennisbank'] = [
+			'slug'  => 'kennisbank',
+			'label' => $labels['name'],
+		];
+	}
+
+	/**
+	 * Register permalink filter and rewrite rules for kennisbank posts
+	 *
+	 * - Adds filter to replace %kennisbank_categories% placeholder in URLs
+	 * - Adds rewrite rule to parse /kennisbank/{category}/{post}/ URLs
+	 */
+	public function register_kennisbank_permalink_filter(): void {
+		add_filter( 'post_type_link', [ $this, 'kennisbank_permalink' ], 10, 2 );
+
+		// Add rewrite rule to match /kennisbank/{category}/{post-slug}/
+		// Must be added after post type registration, before 'parse_request'
+		add_rewrite_rule(
+			'^kennisbank/([^/]+)/([^/]+)/?$',
+			'index.php?kennisbank=$matches[2]',
+			'top'
+		);
+	}
+
+	/**
+	 * Filter kennisbank permalinks to include category slug
+	 *
+	 * @param string   $permalink The post permalink
+	 * @param \WP_Post $post      The post object
+	 * @return string Modified permalink
+	 */
+	public function kennisbank_permalink( string $permalink, \WP_Post $post ): string {
+		if ( $post->post_type !== 'kennisbank' ) {
+			return $permalink;
+		}
+
+		$terms = get_the_terms( $post->ID, 'kennisbank_categories' );
+
+		if ( $terms && ! is_wp_error( $terms ) ) {
+			// Use the first (primary) category
+			$category_slug = $terms[0]->slug;
+		} else {
+			// Fallback for uncategorized posts
+			$category_slug = 'uncategorized';
+		}
+
+		return str_replace( '%kennisbank_categories%', $category_slug, $permalink );
+	}
+
+	/**
+	 * Load category-specific single template for kennisbank posts
+	 *
+	 * Allows different templates per category:
+	 * - single-kennisbank-blogs.php (for "blogs" category)
+	 * - single-kennisbank-medisch.php (for "medisch" category)
+	 * - single-kennisbank.php (fallback)
+	 *
+	 * @param string $template Default template path
+	 * @return string Modified template path if category-specific template exists
+	 */
+	public function kennisbank_category_template( string $template ): string {
+		if ( ! is_singular( 'kennisbank' ) ) {
+			return $template;
+		}
+
+		$post = get_queried_object();
+		$terms = get_the_terms( $post->ID, 'kennisbank_categories' );
+
+		if ( ! $terms || is_wp_error( $terms ) ) {
+			return $template;
+		}
+
+		// Try to find a category-specific template
+		$category_slug = $terms[0]->slug;
+		$category_template = locate_template( "single-kennisbank-{$category_slug}.php" );
+
+		if ( $category_template ) {
+			return $category_template;
+		}
+
+		return $template;
 	}
 
 	/**

@@ -1,0 +1,42 @@
+@use "shared" as components-base;
+
+// Category pill navigation
+// Used for filtering archives by taxonomy terms
+
+.nok-category-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.nok-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4em 1em;
+
+  @include components-base.nok-heading-font;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+
+  background-color: var(--bg-color, oklch(from var(--nok-white) l c h / 0.8));
+  color: var(--text-color, var(--nok-darkerblue));
+  border: 1px solid oklch(from var(--nok-darkerblue) l c h / 0.15);
+  border-radius: 2em;
+
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    background-color: var(--nok-lightblue--lighter);
+    border-color: oklch(from var(--nok-darkerblue) l c h / 0.3);
+    text-decoration: none;
+  }
+
+  &--active,
+  &--active:hover {
+    --bg-color: var(--nok-darkerblue);
+    --text-color: var(--nok-white);
+    border-color: var(--nok-darkerblue);
+  }
+}

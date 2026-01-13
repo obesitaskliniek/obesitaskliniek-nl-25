@@ -6,11 +6,11 @@ article {
     &.narrow-paragraphs {
       padding-inline: var(--nok-spacing-section-ends);
     }
-    .margin-paragraphs,
-    &.margin-paragraphs {
-      > p {
-        margin-bottom: 1em;
-      }
+  }
+  .margin-paragraphs,
+  &.margin-paragraphs {
+    > p {
+      margin-bottom: 1em;
     }
   }
 }

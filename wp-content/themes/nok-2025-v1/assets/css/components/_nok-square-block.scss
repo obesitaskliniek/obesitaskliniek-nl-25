@@ -63,10 +63,15 @@ nok-square-block {
 
   padding: #{map-get(components-base.$padding-base-values, 2)};
 
-  background-color: var(--background-color);
+  //background-color: var(--background-color);
 
   &[data-shadow="true"] {
     @include components-base.nok-subtle-shadow;
+  }
+
+  // Modifier: align link at bottom (for cards with variable content height)
+  &.link-bottom {
+    grid-template-rows: auto auto 1fr auto;
   }
 
   > * {
@@ -164,7 +169,66 @@ nok-square-block {
       }
     }
 
+    // Featured image container with optional badge overlay support
+    &__image {
+      position: relative;
+      margin: -#{map-get(components-base.$padding-base-values, 2)};
+      margin-bottom: 0;
+      overflow: hidden;
+      @include components-base.nok-border-radius('large');
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+
+      img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16/9;
+        object-fit: cover;
+        object-position: center;
+      }
+
+      // Placeholder when no image available
+      &--placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        aspect-ratio: 16/9;
+        background: linear-gradient(135deg, var(--#{components-base.$prefix}-lightblue) 0%, var(--#{components-base.$prefix}-darkerblue) 100%);
+
+        svg {
+          width: 3rem;
+          height: 3rem;
+          opacity: 0.4;
+          color: var(--#{components-base.$prefix}-white);
+        }
+      }
+    }
+
+    // Badge container positioned over image
+    &__badges {
+      position: absolute;
+      bottom: #{map-get(components-base.$padding-base-values, 1)};
+      left: #{map-get(components-base.$padding-base-values, 1)};
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.375rem;
+      max-width: calc(100% - #{map-get(components-base.$padding-base-values, 2)});
+    }
+
   }
+}
+
+// Badge component - small rounded labels for categories, dates, tags
+.nok-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+  @include components-base.nok-border-radius;
+  @include components-base.nok-heading-font;
+  white-space: nowrap;
 }
 
 .nok-square-block {

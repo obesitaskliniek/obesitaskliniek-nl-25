@@ -930,9 +930,27 @@ class Helpers {
 
 	/**
 	 * Echo first paragraph from post content
+	 *
+	 * @param string $extra_class Optional CSS class to add to the paragraph
 	 */
-	public static function the_content_first_paragraph(): void {
-		echo self::get_content_first_paragraph();
+	public static function the_content_first_paragraph( string $extra_class = '' ): void {
+		$html = self::get_content_first_paragraph();
+
+		if ( $extra_class !== '' && $html !== '' ) {
+			// Add class to existing class attribute or create one
+			if ( preg_match( '/<p\s+class="([^"]*)"/', $html, $matches ) ) {
+				$html = preg_replace(
+					'/<p\s+class="([^"]*)"/',
+					'<p class="$1 ' . esc_attr( $extra_class ) . '"',
+					$html,
+					1
+				);
+			} else {
+				$html = preg_replace( '/<p(\s|>)/', '<p class="' . esc_attr( $extra_class ) . '"$1', $html, 1 );
+			}
+		}
+
+		echo $html;
 	}
 
 	/**

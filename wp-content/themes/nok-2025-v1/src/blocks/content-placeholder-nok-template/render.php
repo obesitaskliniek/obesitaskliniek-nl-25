@@ -20,9 +20,27 @@ return function(): string {
 
 	// Check for custom post type template first
 	if ($post->post_type !== 'post') {
-		$template_path = "template-parts/single-{$post->post_type}-content.php";
-		if (locate_template($template_path)) {
-			$content_template = $post->post_type;
+		// For CPTs, check for category-specific template first (e.g., single-kennisbank-blogs-content.php)
+		$taxonomies = get_object_taxonomies($post->post_type, 'names');
+		foreach ($taxonomies as $taxonomy) {
+			$terms = get_the_terms($post->ID, $taxonomy);
+			if ($terms && !is_wp_error($terms)) {
+				foreach ($terms as $term) {
+					$template_path = "template-parts/single-{$post->post_type}-{$term->slug}-content.php";
+					if (locate_template($template_path)) {
+						$content_template = "{$post->post_type}-{$term->slug}";
+						break 2;
+					}
+				}
+			}
+		}
+
+		// Fall back to generic CPT template (e.g., single-kennisbank-content.php)
+		if (!$content_template) {
+			$template_path = "template-parts/single-{$post->post_type}-content.php";
+			if (locate_template($template_path)) {
+				$content_template = $post->post_type;
+			}
 		}
 	} else {
 		// For regular posts, check category-specific templates
