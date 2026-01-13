@@ -520,11 +520,11 @@ registerBlockType(blockName, {
                             </PanelBody>
                         )}
 
-                        {pageEditableFields.length > 0 && postId !== 0 && (
+                        {postId !== 0 && (
                             <PanelBody title={__('Pagina-afhankelijke overrides', textDomain)} initialOpen={false}>
                                 <p style={{fontSize: '12px', color: '#666', marginBottom: '12px'}}>
-                                    Deze page part biedt de mogelijkheid om enkele instellingen specifek voor deze
-                                    pagina te overschrijven/herdefinieren:
+                                    Overschrijf titel of inhoud specifiek voor deze pagina.
+                                    {pageEditableFields.length > 0 && ' Deze page part biedt ook extra velden die overschreven kunnen worden.'}
                                 </p>
                                 <TextControl
                                     label={__('Alternatieve titel', textDomain)}

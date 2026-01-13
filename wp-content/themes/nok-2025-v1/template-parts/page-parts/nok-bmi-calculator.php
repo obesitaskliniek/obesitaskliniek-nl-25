@@ -4,7 +4,8 @@
  * Description: Page wrapper for BMI calculator post part - displays calculator with title
  * Slug: nok-bmi-calculator
  * Custom Fields:
- *
+ * - show_title:checkbox!default(true)!descr[Toon/verberg titel]!page-editable
+ * - font_size:select(Kleiner::nok-fs-4|Normaal::nok-fs-6)!default(Normaal)!page-editable
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
 
@@ -17,7 +18,9 @@ $c = $context;
     <div class="nok-section__inner nok-layout-grid nok-layout-grid__1-column nok-align-items-start">
 
         <article class="nok-layout-flex-column nok-align-items-left nok-column-gap-3 text-left">
-            <h2 class="nok-fs-6"><?= $c->title() ?></h2>
+            <?php if ($c->show_title->isTrue()) : ?>
+            <h2 class="<?= $c->font_size->attr() ?>"><?= $c->title() ?></h2>
+            <?php endif;?>
 
             <div class="nok-layout-grid nok-layout-grid__1-column
                         pull-down-correction

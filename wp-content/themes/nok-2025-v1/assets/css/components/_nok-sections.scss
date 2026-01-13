@@ -34,9 +34,10 @@
     padding-left: var(--#{components-base.$prefix}-nok-spacing-section-sides, (components-base.$padding-base * 2));
     margin: var(--nok-spacing-section-ends, components-base.$padding-base) auto;
 
-    //For page parts that have been embedded inside articles/posts, remove the inline padding
+    //For page parts that have been embedded inside articles/posts, remove the inline padding and block margin
     @at-root article .nok-section__inner {
       padding-inline: 0;
+      margin-block: 0;
     }
 
     &.double-margin {

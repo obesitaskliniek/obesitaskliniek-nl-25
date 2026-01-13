@@ -47,6 +47,11 @@ nok-bmi-calculator {
   font-size: 1rem;
 
   --grid-template-columns: 3fr 4fr;
+  @at-root article ~ nok-bmi-calculator {
+    @include components-base.media-breakpoint-up(xxl) {
+      --grid-template-columns: 1fr 1fr;
+    }
+  }
   @include components-base.media-breakpoint-down(xxl) {
     --grid-template-columns: 1fr 1fr;
   }

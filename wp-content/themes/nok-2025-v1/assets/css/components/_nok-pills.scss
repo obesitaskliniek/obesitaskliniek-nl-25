@@ -35,8 +35,7 @@
 
   &--active,
   &--active:hover {
-    --bg-color: var(--nok-darkerblue);
-    --text-color: var(--nok-white);
-    border-color: var(--nok-darkerblue);
+    --bg-color: var(--nok-yellow);
+    --text-color:  var(--nok-darkerblue);
   }
 }
