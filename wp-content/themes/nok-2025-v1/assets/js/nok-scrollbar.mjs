@@ -325,7 +325,7 @@ export function setupFakeScrollbar(scrollElement) {
   // Throttle the update function
   const updateScrollbar = RAFThrottle(updateSelf);
 
-  eventHandler.addListener('docShift', updateScrollbar);
+  events.addListener('docShift', updateScrollbar);
   scrollElement.addEventListener('scroll', updateScrollbar, { passive: true });
 
   function handlePointerUp(el, pointerId, moveFn, upFn, snapping) {
@@ -496,7 +496,7 @@ export function setupFakeScrollbar(scrollElement) {
           }, { passive: true })
       );
     })
-    eventHandler.addListener('docShift', () => {
+    events.addListener('docShift', () => {
       //will only restart autoscrolling when the user has scrolled past the element, and it has gone out of view
       isVisible(scrollElement, function(visible) {
         if (!timerId && !visible) {
