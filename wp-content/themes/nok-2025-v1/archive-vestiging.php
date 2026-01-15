@@ -41,11 +41,12 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 				<div class="nok-layout-grid nok-layout-grid__3-column nok-grid-gap-2">
 					<?php while (have_posts()): the_post();
 						// Get vestiging meta fields
-						$street      = get_post_meta(get_the_ID(), '_street', true);
-						$housenumber = get_post_meta(get_the_ID(), '_housenumber', true);
-						$postal_code = get_post_meta(get_the_ID(), '_postal_code', true);
-						$city        = get_post_meta(get_the_ID(), '_city', true);
-						$phone       = get_post_meta(get_the_ID(), '_phone', true);
+						$street        = get_post_meta(get_the_ID(), '_street', true);
+						$housenumber   = get_post_meta(get_the_ID(), '_housenumber', true);
+						$postal_code   = get_post_meta(get_the_ID(), '_postal_code', true);
+						$city          = get_post_meta(get_the_ID(), '_city', true);
+						$phone         = get_post_meta(get_the_ID(), '_phone', true);
+						$opening_hours = get_post_meta(get_the_ID(), '_opening_hours', true);
 
 						// Get featured image
 						$featured_image     = Helpers::get_featured_image();
@@ -73,21 +74,26 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                             <div class="nok-square-block__text">
                                 <?= esc_html($street) ?> <?= esc_html($housenumber) ?><br>
                                 <?= esc_html($postal_code) ?> <?= esc_html($city) ?>
+                                <?php
+                                $hours_summary = $opening_hours ? Helpers::format_opening_hours_summary($opening_hours) : '';
+                                if ($hours_summary): ?>
+                                <br><?= esc_html($hours_summary) ?>
+                                <?php endif; ?>
                             </div>
                             <?php endif; ?>
 
                             <div class="nok-layout-flex nok-layout-flex-row nok-column-gap-0_5">
                                 <?php if ($phone): ?>
-                                    <a href="tel:<?= esc_attr(preg_replace('/[^0-9+]/', '', $phone)); ?>" class="nok-button nok-button--circle nok-bg-body--darker nok-text-darkerblue">
+                                    <a href="tel:<?= esc_attr(preg_replace('/[^0-9+]/', '', $phone)); ?>" class="nok-button nok-button--circle nok-bg-body nok-text-darkerblue">
                                         <?= Assets::getIcon('ui_telefoon') ;?>
                                     </a>
                                 <?php endif; ?>
-                                <a href="<?php the_permalink(); ?>" class="nok-button nok-button--circle nok-bg-body--darker nok-text-darkerblue">
+                                <a href="<?php the_permalink(); ?>" class="nok-button nok-button--circle nok-bg-body nok-text-darkerblue">
                                     <?= Assets::getIcon('ui_calendar'); ?>
                                 </a>
-                                <a href="<?php the_permalink(); ?>" class="nok-button nok-bg-lightblue nok-text-white">
+                                <a href="<?php the_permalink(); ?>" class="nok-button nok-bg-darkblue nok-text-white">
                                     <?php esc_html_e('Meer informatie', THEME_TEXT_DOMAIN); ?>
-                                    <?= Assets::getIcon('ui_arrow-right', 'nok-text-white'); ?>
+                                    <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow'); ?>
                                 </a>
                             </div>
                         </nok-square-block>

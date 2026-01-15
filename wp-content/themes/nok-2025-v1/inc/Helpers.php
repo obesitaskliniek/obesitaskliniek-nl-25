@@ -482,6 +482,179 @@ class Helpers {
 	}
 
 	/**
+	 * Format opening hours into a single-line summary
+	 *
+	 * Creates a condensed summary like "ma-vr 8.30 - 17.00 uur" for use in cards and listings.
+	 * Groups consecutive days with identical hours and handles non-consecutive days with "&".
+	 *
+	 * Output examples:
+	 * - All weekdays same: "ma-vr 8.30 - 17.00 uur"
+	 * - Wednesday closed: "ma-di & do-vr 8.30 - 17.00 uur"
+	 * - Single day: "ma 9.00 - 17.00 uur"
+	 * - Non-consecutive: "ma-wo & vr 8.30 - 17.00 uur"
+	 *
+	 * @param string $opening_hours_json JSON string of opening hours
+	 * @return string Single-line summary or empty string if no valid hours
+	 *
+	 * @example format_opening_hours_summary('{"monday":[{"opens":"08:30","closes":"17:00"}],"tuesday":[{"opens":"08:30","closes":"17:00"}]}')
+	 * Returns: "ma-di 8.30 - 17.00 uur"
+	 */
+	public static function format_opening_hours_summary( string $opening_hours_json ): string {
+		if ( empty( $opening_hours_json ) || $opening_hours_json === '{}' ) {
+			return '';
+		}
+
+		$hours = json_decode( $opening_hours_json, true );
+		if ( ! is_array( $hours ) ) {
+			return '';
+		}
+
+		$day_abbrevs = [
+			'monday'    => 'ma',
+			'tuesday'   => 'di',
+			'wednesday' => 'wo',
+			'thursday'  => 'do',
+			'friday'    => 'vr',
+		];
+		$weekday_keys = array_keys( $day_abbrevs );
+
+		// Get weekdays template if exists
+		$weekdays_template = isset( $hours['weekdays'] ) && ! empty( $hours['weekdays'] ) ? $hours['weekdays'][0] : null;
+
+		// Build array of [day_key => "opens-closes" or null if closed]
+		$day_times = [];
+		foreach ( $weekday_keys as $day_key ) {
+			$day_hours = isset( $hours[ $day_key ] ) && ! empty( $hours[ $day_key ] ) ? $hours[ $day_key ] : [];
+
+			$time_block = null;
+			if ( count( $day_hours ) > 0 ) {
+				$time_block = $day_hours[0];
+				if ( isset( $time_block['closed'] ) && $time_block['closed'] === true ) {
+					$day_times[ $day_key ] = null; // explicitly closed
+					continue;
+				}
+			} elseif ( $weekdays_template ) {
+				$time_block = $weekdays_template;
+			}
+
+			if ( $time_block && isset( $time_block['opens'] ) && isset( $time_block['closes'] ) ) {
+				$day_times[ $day_key ] = $time_block['opens'] . '-' . $time_block['closes'];
+			} else {
+				$day_times[ $day_key ] = null;
+			}
+		}
+
+		// Group consecutive days with same hours
+		$groups = [];
+		$current_group = null;
+		$current_time = null;
+
+		foreach ( $weekday_keys as $index => $day_key ) {
+			$time = $day_times[ $day_key ];
+
+			if ( $time === null ) {
+				// Day is closed - end current group if any
+				if ( $current_group !== null ) {
+					$groups[] = [ 'days' => $current_group, 'time' => $current_time ];
+					$current_group = null;
+					$current_time = null;
+				}
+				continue;
+			}
+
+			if ( $current_time === $time ) {
+				// Same hours, extend group
+				$current_group[] = $day_key;
+			} else {
+				// Different hours - save previous group and start new one
+				if ( $current_group !== null ) {
+					$groups[] = [ 'days' => $current_group, 'time' => $current_time ];
+				}
+				$current_group = [ $day_key ];
+				$current_time = $time;
+			}
+		}
+
+		// Don't forget the last group
+		if ( $current_group !== null ) {
+			$groups[] = [ 'days' => $current_group, 'time' => $current_time ];
+		}
+
+		if ( empty( $groups ) ) {
+			return '';
+		}
+
+		// Merge groups with same hours (for non-consecutive days)
+		$merged = [];
+		foreach ( $groups as $group ) {
+			$found = false;
+			foreach ( $merged as &$m ) {
+				if ( $m['time'] === $group['time'] ) {
+					$m['days'] = array_merge( $m['days'], $group['days'] );
+					$found = true;
+					break;
+				}
+			}
+			if ( ! $found ) {
+				$merged[] = $group;
+			}
+		}
+
+		// Format output - find most common time (for simplicity, use first/largest group)
+		usort( $merged, fn( $a, $b ) => count( $b['days'] ) - count( $a['days'] ) );
+		$primary = $merged[0];
+
+		// Format day ranges from array of day keys
+		$format_day_range = function( array $days ) use ( $day_abbrevs, $weekday_keys ): string {
+			// Find consecutive sequences
+			$sequences = [];
+			$current_seq = [];
+
+			foreach ( $weekday_keys as $day_key ) {
+				if ( in_array( $day_key, $days, true ) ) {
+					$current_seq[] = $day_key;
+				} elseif ( ! empty( $current_seq ) ) {
+					$sequences[] = $current_seq;
+					$current_seq = [];
+				}
+			}
+			if ( ! empty( $current_seq ) ) {
+				$sequences[] = $current_seq;
+			}
+
+			// Format each sequence
+			$parts = [];
+			foreach ( $sequences as $seq ) {
+				if ( count( $seq ) === 1 ) {
+					$parts[] = $day_abbrevs[ $seq[0] ];
+				} else {
+					$parts[] = $day_abbrevs[ $seq[0] ] . '-' . $day_abbrevs[ end( $seq ) ];
+				}
+			}
+
+			return implode( ' & ', $parts );
+		};
+
+		// Format time (08:30 -> 8.30)
+		$format_time = function( string $time ): string {
+			$parts = explode( ':', $time );
+			$hour = ltrim( $parts[0], '0' ) ?: '0';
+			$minute = $parts[1] ?? '00';
+			return $hour . '.' . $minute;
+		};
+
+		$day_part = $format_day_range( $primary['days'] );
+		list( $opens, $closes ) = explode( '-', $primary['time'] );
+
+		return sprintf(
+			'%s %s - %s uur',
+			$day_part,
+			$format_time( $opens ),
+			$format_time( $closes )
+		);
+	}
+
+	/**
 	 * Format opening hours JSON into readable HTML
 	 *
 	 * Converts opening hours JSON structure into formatted HTML output
