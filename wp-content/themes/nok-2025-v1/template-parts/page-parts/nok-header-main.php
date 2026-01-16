@@ -47,7 +47,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
             </nok-popup-header>
             <nok-popup-body>
                 <nok-search data-requires="./nok-search.mjs" data-max-results="5">
-                    <input type="search" placeholder="Zoek op trefwoord..." class="nok-search-input" autocomplete="off" />
+                    <input type="search" placeholder="Zoek op trefwoord..." class="nok-search-input" autocomplete="off" aria-label="Zoeken" />
                     <nok-search-results></nok-search-results>
                 </nok-search>
             </nok-popup-body>

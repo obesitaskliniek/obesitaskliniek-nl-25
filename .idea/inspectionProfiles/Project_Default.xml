@@ -40,7 +40,7 @@
     <inspection_tool class="HtmlUnknownTag" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="32">
+          <list size="34">
             <item index="0" class="java.lang.String" itemvalue="nobr" />
             <item index="1" class="java.lang.String" itemvalue="noembed" />
             <item index="2" class="java.lang.String" itemvalue="comment" />
@@ -73,6 +73,8 @@
             <item index="29" class="java.lang.String" itemvalue="nok-popup-body" />
             <item index="30" class="java.lang.String" itemvalue="nok-bmi-calculator" />
             <item index="31" class="java.lang.String" itemvalue="nok-video-section" />
+            <item index="32" class="java.lang.String" itemvalue="nok-search-results" />
+            <item index="33" class="java.lang.String" itemvalue="nok-search" />
           </list>
         </value>
       </option>

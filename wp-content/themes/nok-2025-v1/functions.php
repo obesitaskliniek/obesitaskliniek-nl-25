@@ -132,7 +132,9 @@ define( 'CACHE_URI_STRING',    (SITE_LIVE ? '' : '?cache=' . hash('sha256', Help
 // ACF settings
 add_action('acf/init', 'my_acf_init');
 function my_acf_init() {
-	acf_update_setting('remove_wp_meta_box', false);
+	if ( function_exists( 'acf_update_setting' ) ) {
+		acf_update_setting('remove_wp_meta_box', false);
+	}
 }
 
 // GRAVITY FORMS settings

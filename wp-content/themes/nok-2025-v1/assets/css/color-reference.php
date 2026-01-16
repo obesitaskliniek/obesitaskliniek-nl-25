@@ -171,29 +171,6 @@ use NOK2025\V1\Assets;
             margin-top: 0.182em;
         }
 
-        .color-card__hex {
-            position: absolute;
-            top: 0.364em;
-            right: 0.364em;
-            font-size: 0.727em;
-            opacity: 0.6;
-            background: rgba(0,0,0,0.2);
-            padding: 0.091em 0.364em;
-            border-radius: 0.182em;
-        }
-
-        /* Border color cards need special treatment */
-        .color-card--border {
-            background: transparent !important;
-            border-width: 0.273em;
-            border-style: solid;
-        }
-
-        .color-card--border .color-card__name,
-        .color-card--border .color-card__class {
-            color: inherit;
-        }
-
         /* Text color cards */
         .color-card--text {
             background: #fff !important;
@@ -211,24 +188,6 @@ use NOK2025\V1\Assets;
         .color-card--text .color-card__name {
             font-size: 1em;
             font-weight: 600;
-        }
-
-        /* Variants row */
-        .variant-group {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.182em;
-            margin-bottom: var(--grid-gap);
-        }
-
-        .variant-group .color-card {
-            aspect-ratio: 2;
-            min-height: 4.545em;
-        }
-
-        .variant-group .color-card--main {
-            grid-column: 1 / -1;
-            aspect-ratio: 4;
         }
 
         /* Color family groups */
@@ -280,18 +239,6 @@ use NOK2025\V1\Assets;
         .utility-card .desc {
             opacity: 0.7;
             font-size: 0.818em;
-        }
-
-        /* Icon demo */
-        .icon-demo {
-            display: flex;
-            gap: 0.5em;
-            align-items: center;
-            margin-top: 0.5em;
-        }
-        .icon-demo svg {
-            width: 2em;
-            height: 2em;
         }
 
         /* Alpha demo */
