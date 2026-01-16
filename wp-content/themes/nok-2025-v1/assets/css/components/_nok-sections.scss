@@ -113,9 +113,16 @@
     }
   }
 
-  &.collapse-bottom {
-    .nok-section__inner {
-      margin-bottom: 0 !important;
+  &.collapse {
+    &-bottom {
+      .nok-section__inner {
+        margin-bottom: 0 !important;
+      }
+    }
+    &-top {
+      .nok-section__inner {
+        margin-top: 0 !important;
+      }
     }
   }
   /* Cosmetics */

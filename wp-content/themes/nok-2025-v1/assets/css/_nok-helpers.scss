@@ -108,6 +108,10 @@
   display: flex;
   justify-content: center;
 }
+.halign-space-between {
+  display: flex;
+  justify-content: space-between;
+}
 
 .align-center {
   align-self: center;

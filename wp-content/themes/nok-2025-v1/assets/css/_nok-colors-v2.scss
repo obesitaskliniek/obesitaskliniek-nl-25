@@ -12,7 +12,7 @@ $color-contrast-light: #f3f4f9;
 $generate_classes: (
     'bg' : true,
     'text': true,
-    'border': true,
+    'border': false,
     'fill' : true
 );
 
@@ -290,7 +290,7 @@ body { //helps increase specificity
 /**
  * Gradients
  */
-.#{nok-variables.$prefix}-gradient-1 {
+.#{nok-variables.$prefix}-portrait-gradient-1 {
   --color-from: rgba(var(--nok-darkblue--darker-rgb), 0.25);
   --color-to: rgba(var(--nok-lightblue--darker-rgb), 0.15);
 
