@@ -48,6 +48,12 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 						$phone         = get_post_meta(get_the_ID(), '_phone', true);
 						$opening_hours = get_post_meta(get_the_ID(), '_opening_hours', true);
 
+						// Extract city from title for voorlichting matching (e.g., "NOK Amsterdam" -> "Amsterdam")
+						$vestiging_city_for_match = preg_replace('/^NOK\s+/i', '', get_the_title());
+
+						// Count upcoming voorlichtingen for this vestiging
+						$voorlichting_count = $vestiging_city_for_match ? Helpers::count_upcoming_voorlichtingen($vestiging_city_for_match) : 0;
+
 						// Get featured image
 						$featured_image     = Helpers::get_featured_image();
 						$has_featured_image = has_post_thumbnail(get_the_ID()) && $featured_image !== '';
@@ -88,9 +94,14 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                                         <?= Assets::getIcon('ui_telefoon') ;?>
                                     </a>
                                 <?php endif; ?>
-                                <a href="<?php the_permalink(); ?>" class="nok-button nok-button--circle nok-bg-body nok-text-darkerblue">
-                                    <?= Assets::getIcon('ui_calendar'); ?>
-                                </a>
+                                <span class="nok-button-badge-wrapper">
+                                    <a href="<?php the_permalink(); ?>#voorlichtingen" class="nok-button nok-button--circle nok-bg-body nok-text-darkerblue" title="<?= esc_attr( sprintf( _n( '%d voorlichting', '%d voorlichtingen', $voorlichting_count, THEME_TEXT_DOMAIN ), $voorlichting_count ) ); ?>">
+                                        <?= Assets::getIcon('ui_calendar'); ?>
+                                    </a>
+                                    <?php if ( $voorlichting_count > 0 ) : ?>
+                                    <span class="nok-button-badge nok-bg-yellow nok-text-darkerblue"><?= esc_html( $voorlichting_count ); ?></span>
+                                    <?php endif; ?>
+                                </span>
                                 <a href="<?php the_permalink(); ?>" class="nok-button nok-bg-darkblue nok-text-white">
                                     <?php esc_html_e('Meer informatie', THEME_TEXT_DOMAIN); ?>
                                     <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow'); ?>

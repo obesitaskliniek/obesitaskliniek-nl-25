@@ -749,7 +749,7 @@ export function api(action, ...args) {
  * @param {NodeList|Array} elements - Elements requiring this module
  * @returns {string} Initialization status
  */
-export function init(elements) {
+export function init(elements, context) {
     initGUI(elements);
     return `Initialized ${elements.length} calculator(s)`;
 }

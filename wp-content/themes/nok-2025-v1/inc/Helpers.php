@@ -227,6 +227,30 @@ class Helpers {
 	 *
 	 * @return WP_Query|false   Query object or false on failure
 	 */
+	/**
+	 * Get Dutch month name
+	 *
+	 * @param int $month Month number (1-12)
+	 * @return string Dutch month name (lowercase)
+	 */
+	public static function dutchMonth( int $month ): string {
+		$months = [
+			1  => 'januari',
+			2  => 'februari',
+			3  => 'maart',
+			4  => 'april',
+			5  => 'mei',
+			6  => 'juni',
+			7  => 'juli',
+			8  => 'augustus',
+			9  => 'september',
+			10 => 'oktober',
+			11 => 'november',
+			12 => 'december',
+		];
+		return $months[ $month ] ?? '';
+	}
+
 	public static function get_latest_custom_posts( $post_type, $count, $meta_query = [], $tax_query = [], $timestamp_field = null ): WP_Query|bool {
 		// Validate post type exists
 		if ( ! post_type_exists( $post_type ) ) {
@@ -292,6 +316,244 @@ class Helpers {
 
 		//inschrijvingsstatus = open, gesloten, vol en geannuleerd
 		return $eventData;
+	}
+
+	/**
+	 * Vestiging name aliases for Hubspot data mapping
+	 *
+	 * Maps Hubspot vestiging names to WordPress vestiging names when they differ.
+	 * Key = Hubspot name (lowercase), Value = WordPress vestiging name (city part of title)
+	 * Example: If Hubspot uses "Velp" but WordPress has "NOK Arnhem", add: 'velp' => 'Arnhem'
+	 */
+	private static array $vestiging_aliases = [
+		// Add aliases here if Hubspot uses different names than WordPress vestiging titles
+		// 'hubspot-name' => 'WordPress City Name',
+	];
+
+	/**
+	 * Normalize vestiging name, applying aliases
+	 *
+	 * Converts Hubspot vestiging names to their canonical WordPress equivalents.
+	 *
+	 * @param string $city City name from voorlichting
+	 * @return string Normalized city name
+	 */
+	public static function normalize_vestiging_name( string $city ): string {
+		$lowercase = strtolower( trim( $city ) );
+		return self::$vestiging_aliases[ $lowercase ] ?? $city;
+	}
+
+	/**
+	 * Get all vestiging names that map to a canonical name
+	 *
+	 * Returns array of names including aliases that should match a vestiging.
+	 * Used for meta queries to match both "Arnhem" and "Velp".
+	 *
+	 * @param string $city Canonical city name
+	 * @return string[] Array of matching names
+	 */
+	public static function get_vestiging_name_variants( string $city ): array {
+		$variants = [ $city ];
+		$city_lower = strtolower( trim( $city ) );
+
+		// Add any aliases that map to this city
+		foreach ( self::$vestiging_aliases as $alias => $canonical ) {
+			if ( strtolower( $canonical ) === $city_lower ) {
+				$variants[] = ucfirst( $alias );
+			}
+		}
+
+		return $variants;
+	}
+
+	/**
+	 * Get vestiging post by city name from voorlichting
+	 *
+	 * Matches voorlichting's vestiging field (city name like "Amsterdam", "Den Haag")
+	 * to the corresponding vestiging CPT post by sanitizing to slug format.
+	 * Handles aliases (e.g., "Velp" -> "Arnhem").
+	 *
+	 * @param string $city City name from voorlichting vestiging field
+	 * @return \WP_Post|null Vestiging post or null if not found
+	 *
+	 * @example
+	 * $vestiging = Helpers::get_vestiging_by_city('Den Haag');
+	 * // Returns vestiging post with slug 'den-haag'
+	 *
+	 * @example
+	 * $vestiging = Helpers::get_vestiging_by_city('Velp');
+	 * // Returns vestiging post with slug 'arnhem' (via alias)
+	 */
+	public static function get_vestiging_by_city( string $city ): ?\WP_Post {
+		if ( empty( $city ) ) {
+			return null;
+		}
+
+		// Apply alias mapping and sanitize to slug format
+		$normalized = self::normalize_vestiging_name( $city );
+		$slug = sanitize_title( $normalized );
+
+		$posts = get_posts( [
+			'post_type'      => 'vestiging',
+			'name'           => $slug,
+			'posts_per_page' => 1,
+			'post_status'    => 'publish',
+			'no_found_rows'  => true,
+		] );
+
+		return ! empty( $posts ) ? $posts[0] : null;
+	}
+
+	/**
+	 * Count upcoming voorlichtingen for a vestiging
+	 *
+	 * Counts voorlichting posts where the vestiging field matches the given city
+	 * and the start date/time is in the future.
+	 *
+	 * @param string $city City name to filter by (e.g., "Amsterdam")
+	 * @param bool $open_only Only count voorlichtingen with status "open"
+	 * @return int Count of upcoming voorlichtingen
+	 *
+	 * @example
+	 * $count = Helpers::count_upcoming_voorlichtingen('Amsterdam');
+	 * // Returns number of upcoming voorlichtingen in Amsterdam
+	 */
+	public static function count_upcoming_voorlichtingen( string $city, bool $open_only = false ): int {
+		if ( empty( $city ) ) {
+			return 0;
+		}
+
+		// Get all name variants (e.g., "Arnhem" also matches "Velp")
+		$variants = self::get_vestiging_name_variants( $city );
+
+		$meta_query = [
+			[
+				'key'     => 'aanvangsdatum_en_tijd',
+				'value'   => current_time( 'mysql' ),
+				'compare' => '>=',
+				'type'    => 'DATETIME',
+			],
+			[
+				'key'     => 'vestiging',
+				'value'   => $variants,
+				'compare' => 'IN',
+			],
+		];
+
+		if ( $open_only ) {
+			$meta_query[] = [
+				'key'     => 'inschrijvingsstatus',
+				'value'   => 'open',
+				'compare' => '=',
+			];
+		}
+
+		$query = new \WP_Query( [
+			'post_type'      => 'voorlichting',
+			'posts_per_page' => -1,
+			'post_status'    => 'publish',
+			'meta_query'     => $meta_query,
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+		] );
+
+		return $query->post_count;
+	}
+
+	/**
+	 * Get upcoming voorlichtingen for a vestiging
+	 *
+	 * Retrieves voorlichting posts where the vestiging field matches the given city
+	 * and the start date/time is in the future, ordered by date ascending.
+	 *
+	 * @param string $city City name to filter by (e.g., "Amsterdam")
+	 * @param int $limit Maximum number of results
+	 * @param bool $open_only Only include voorlichtingen with status "open"
+	 * @return \WP_Post[] Array of voorlichting posts
+	 *
+	 * @example
+	 * $voorlichtingen = Helpers::get_voorlichtingen_for_vestiging('Amsterdam', 3);
+	 * foreach ($voorlichtingen as $post) {
+	 *     $data = Helpers::setup_hubspot_metadata($post->ID);
+	 * }
+	 */
+	public static function get_voorlichtingen_for_vestiging( string $city, int $limit = 6, bool $open_only = false ): array {
+		if ( empty( $city ) ) {
+			return [];
+		}
+
+		// Get all name variants (e.g., "Arnhem" also matches "Velp")
+		$variants = self::get_vestiging_name_variants( $city );
+
+		$meta_query = [
+			[
+				'key'     => 'aanvangsdatum_en_tijd',
+				'value'   => current_time( 'mysql' ),
+				'compare' => '>=',
+				'type'    => 'DATETIME',
+			],
+			[
+				'key'     => 'vestiging',
+				'value'   => $variants,
+				'compare' => 'IN',
+			],
+		];
+
+		if ( $open_only ) {
+			$meta_query[] = [
+				'key'     => 'inschrijvingsstatus',
+				'value'   => 'open',
+				'compare' => '=',
+			];
+		}
+
+		return get_posts( [
+			'post_type'      => 'voorlichting',
+			'posts_per_page' => $limit,
+			'post_status'    => 'publish',
+			'meta_query'     => $meta_query,
+			'meta_key'       => 'aanvangsdatum_en_tijd',
+			'orderby'        => 'meta_value',
+			'order'          => 'ASC',
+			'no_found_rows'  => true,
+		] );
+	}
+
+	/**
+	 * Get vestiging address data for voorlichting display
+	 *
+	 * Attempts to get address from vestiging CPT post, falls back to
+	 * Hubspot-synced vestiging_* fields if vestiging post not found.
+	 *
+	 * @param string $city City name from voorlichting
+	 * @param array $hubspot_data Raw Hubspot metadata for fallback
+	 * @return array{street: string, housenumber: string, postal_code: string, city: string, phone: string, email: string}
+	 */
+	public static function get_voorlichting_address( string $city, array $hubspot_data ): array {
+		$vestiging = self::get_vestiging_by_city( $city );
+
+		if ( $vestiging ) {
+			// Use vestiging CPT data
+			$meta = get_post_meta( $vestiging->ID );
+			return [
+				'street'      => $meta['_street'][0] ?? '',
+				'housenumber' => $meta['_housenumber'][0] ?? '',
+				'postal_code' => $meta['_postal_code'][0] ?? '',
+				'city'        => $meta['_city'][0] ?? $city,
+				'phone'       => $meta['_phone'][0] ?? '',
+				'email'       => $meta['_email'][0] ?? '',
+			];
+		}
+
+		// Fallback to Hubspot vestiging_* fields
+		return [
+			'street'      => $hubspot_data['vestiging_straat'][0] ?? '',
+			'housenumber' => '',
+			'postal_code' => $hubspot_data['vestiging_postcode'][0] ?? '',
+			'city'        => $hubspot_data['vestiging_plaats'][0] ?? $city,
+			'phone'       => $hubspot_data['vestiging_telefoonnummer'][0] ?? '',
+			'email'       => $hubspot_data['vestiging__e_mail'][0] ?? '',
+		];
 	}
 
 	public static function has_field( $field ): bool {
