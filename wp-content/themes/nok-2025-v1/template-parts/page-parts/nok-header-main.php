@@ -78,10 +78,10 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
             <button class="nok-button nok-button--small nok-bg-yellow nok-text-contrast nok-invisible-to-sm"
                     tabindex="0">Gratis voorlichting
             </button>
-            <button class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
+            <a href="tel:+31888832444" role="button" class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
                     tabindex="0">
                 <?= Assets::getIcon('ui_telefoon') ?>
-            </button>
+            </a>
             <button class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow nok-popup-trigger"
                     tabindex="0"
                     data-toggles-class="popup-open" data-class-target="nok-top-navigation"
@@ -143,7 +143,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
             </div>
             <div class="nok-section__inner--stretched nok-nav-footer nok-text-contrast nok-bg-darkerblue nok-dark-bg-darkestblue nok-z-1">
                 <div class="nok-nav-menu-items nok-nav-menu-items--compact">
-                    <a href="#" class="nok-nav-menu-item">Werken bij</a>
+                    <a href="https://werkenbijdenok.nl" target="_blank" class="nok-nav-menu-item">Werken bij</a>
                     <a href="#" class="nok-nav-menu-item nok-popup-trigger" data-toggles-class="popup-open" data-class-target="nok-top-navigation" data-toggle-event="click"
                        data-toggles-attribute="data-state" data-toggles-attribute-value="open" data-attribute-target="#popup-bmi-calculator">BMI berekenen</a>
                     <a href="#" class="nok-nav-menu-item">Mijn NOK</a>
@@ -166,19 +166,18 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                         op basis van 12.030 beoordelingen
                     </small>
                 </div>
-                <div>Werken bij</div>
+                <a href="/verwijzers" class="nok-nav-menu-item">Voor verwijzers</a>
+                <a href="https://werkenbijdenok.nl" target="_blank" class="nok-nav-menu-item">Werken bij</a>
                 <div><a href="#" class="nok-nav-menu-item nok-popup-trigger"
                         data-toggles-class="popup-open" data-class-target="nok-top-navigation" data-toggle-event="click"
                         data-toggles-attribute="data-state" data-toggles-attribute-value="open" data-attribute-target="#popup-bmi-calculator">BMI berekenen</a></div>
-                <div>Mijn NOK</div>
-                <div>NOK App</div>
-                <div>+31 12345678</div>
+                <div><a href="tel:+31888832444" class="nok-nav-menu-item">088 88 32 444</a></div>
+                <a href="/kennisbank/veelgestelde-vragen" class="nok-nav-menu-item">Veelgestelde vragen</a>
                 <a href="#" class="nok-nav-menu-item nok-popup-trigger"
                    data-toggles-class="popup-open" data-class-target="nok-top-navigation"
                    data-toggle-event="click"
                    data-toggles-attribute="data-state" data-toggles-attribute-value="open"
                    data-attribute-target="#popup-search">Zoek</a>
-                <div>NL</div>
                 <a href="#"
                    data-toggles-class="open" data-target=".nok-nav-control-dropdown" data-toggle-event="click" data-toggle-outside="unset"
                    data-swipe="unset" data-auto-restore="10">

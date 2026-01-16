@@ -116,11 +116,12 @@ add_action( 'init', function() {
     }
 } );
 
-// Register custom query variables for voorlichting archive filtering
+// Register custom query variables for archive filtering
 add_filter( 'query_vars', function( $vars ) {
     $vars[] = 'week';
     $vars[] = 'jaar';
     $vars[] = 'locatie';
+    $vars[] = 'exclude';         // Kennisbank category exclusion
     return $vars;
 } );
 

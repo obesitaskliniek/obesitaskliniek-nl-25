@@ -49,6 +49,11 @@ use NOK2025\V1\Assets;
             }
         }
 
+        .wrapper {
+            max-width: 80vw;
+            margin: 0 auto;
+        }
+
         h1 {
             font-size: 1.5em;
             font-weight: 600;
@@ -416,7 +421,7 @@ use NOK2025\V1\Assets;
     </style>
 </head>
 <body>
-
+<div class="wrapper">
 <h1>NOK Color System Reference</h1>
 
 <div class="intro">
@@ -905,9 +910,11 @@ use NOK2025\V1\Assets;
 
     <div class="section">
         <div class="section-title">State Colors <span class="badge">Built-in</span></div>
-        <p>The color system uses local CSS custom properties set by the background class. When you apply a class like <code class="inline">nok-bg-darkblue</code>, it sets the background color
+        <p>The color system uses local CSS custom properties in the background & text classes. When you apply a class like <code class="inline">nok-bg-darkblue</code>, it sets the background color
         and defines local CSS variables for state variants: <code class="inline">--bg-color--hover</code>, <code class="inline">--bg-color--active</code>,
-            <code class="inline">--bg-color--grayscale</code> and <code class="inline">--bg-color--contrast</code>. The same applies to <code class="inline">nok-text-*</code> classes.</p>
+            <code class="inline">--bg-color--grayscale</code> and <code class="inline">--bg-color--contrast</code>. The same applies to <code class="inline">nok-text-*</code> classes,
+            setting <code class="inline">--text-color--hover</code>, <code class="inline">--text-color--active</code>, <code class="inline">--text-color--grayscale</code> and
+            <code class="inline">--text-color--contrast</code>.</p>
         <p>Examples:</p>
         <div class="utility-grid">
             <div class="utility-card">
@@ -1062,6 +1069,8 @@ use NOK2025\V1\Assets;
     <span><span class="legend-swatch nok-bg-error"></span> Error/warning states</span>
 </div>
 
+</div>
+
 <div class="copied" id="copied">Copied!</div>
 
 <script>
@@ -1123,6 +1132,5 @@ document.querySelectorAll('.state-demo__item').forEach(item => {
     });
 });
 </script>
-
 </body>
 </html>

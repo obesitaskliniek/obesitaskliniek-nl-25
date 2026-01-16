@@ -34,9 +34,14 @@ $block_colors = $c->colors->contains('nok-bg-darkestblue',
                     <p class="nok-square-block__text nok-fs-2">
                         Wil je meer weten over de behandeling? Bel of mail ons dan gerust.
                     </p>
-                    <button class="nok-button nok-justify-self-start fill-mobile nok-bg-darkblue nok-text-contrast" tabindex="0">
-                        Neem contact op <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
-                    </button>
+                    <div class="nok-layout-flex nok-column-gap-0_5">
+                        <a href="#" role="button" class="nok-button nok-justify-self-start fill-mobile nok-bg-darkblue nok-text-contrast" tabindex="0">
+                            Neem contact op <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
+                        </a>
+                        <a href="#" role="button" class="nok-button nok-justify-self-start fill-mobile nok-bg-body--darker nok-text-contrast" tabindex="0">
+                            Bekijk veelgestelde vragen <?= Assets::getIcon('ui_question', 'nok-text-darkblue') ?>
+                        </a>
+                    </div>
                 </nok-square-block>
                 <div class="nok-layout-grid nok-layout-grid__3-column" data-requires="./nok-accordion.mjs" data-require-lazy="true">
 					<?php $menu_manager->render_footer_columns( 'footer' ); ?>

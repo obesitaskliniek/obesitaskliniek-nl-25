@@ -344,14 +344,24 @@ class PostTypes {
 	/**
 	 * Register permalink filter and rewrite rules for kennisbank posts
 	 *
-	 * - Adds filter to replace %kennisbank_categories% placeholder in URLs
-	 * - Adds rewrite rule to parse /kennisbank/{category}/{post}/ URLs
+	 * Supports hierarchical category URLs:
+	 * - /kennisbank/{parent}/{child}/{post}/ (3 segments)
+	 * - /kennisbank/{category}/{post}/ (2 segments, for top-level categories)
+	 *
+	 * Note: 3-segment rule must come first to match before 2-segment rule.
 	 */
 	public function register_kennisbank_permalink_filter(): void {
 		add_filter( 'post_type_link', [ $this, 'kennisbank_permalink' ], 10, 2 );
 
-		// Add rewrite rule to match /kennisbank/{category}/{post-slug}/
-		// Must be added after post type registration, before 'parse_request'
+		// Add rewrite rule for hierarchical categories: /kennisbank/{parent}/{child}/{post-slug}/
+		// Must come BEFORE the 2-segment rule
+		add_rewrite_rule(
+			'^kennisbank/([^/]+)/([^/]+)/([^/]+)/?$',
+			'index.php?kennisbank=$matches[3]',
+			'top'
+		);
+
+		// Add rewrite rule for top-level categories: /kennisbank/{category}/{post-slug}/
 		add_rewrite_rule(
 			'^kennisbank/([^/]+)/([^/]+)/?$',
 			'index.php?kennisbank=$matches[2]',
@@ -360,7 +370,10 @@ class PostTypes {
 	}
 
 	/**
-	 * Filter kennisbank permalinks to include category slug
+	 * Filter kennisbank permalinks to include full category path
+	 *
+	 * Builds hierarchical category path for URLs like:
+	 * /kennisbank/veelgestelde-vragen/afvallen/{post-slug}/
 	 *
 	 * @param string   $permalink The post permalink
 	 * @param \WP_Post $post      The post object
@@ -375,13 +388,38 @@ class PostTypes {
 
 		if ( $terms && ! is_wp_error( $terms ) ) {
 			// Use the first (primary) category
-			$category_slug = $terms[0]->slug;
+			$term = $terms[0];
+			// Build full hierarchical path (parent/child)
+			$category_slug = $this->get_term_hierarchy_path( $term );
 		} else {
 			// Fallback for uncategorized posts
 			$category_slug = 'uncategorized';
 		}
 
 		return str_replace( '%kennisbank_categories%', $category_slug, $permalink );
+	}
+
+	/**
+	 * Build hierarchical path for a term (parent/child/grandchild)
+	 *
+	 * @param \WP_Term $term The term to build path for
+	 * @return string Slash-separated path of term slugs
+	 */
+	private function get_term_hierarchy_path( \WP_Term $term ): string {
+		$path = [ $term->slug ];
+
+		// Walk up the parent chain
+		$parent_id = $term->parent;
+		while ( $parent_id > 0 ) {
+			$parent = get_term( $parent_id, $term->taxonomy );
+			if ( ! $parent || is_wp_error( $parent ) ) {
+				break;
+			}
+			array_unshift( $path, $parent->slug );
+			$parent_id = $parent->parent;
+		}
+
+		return implode( '/', $path );
 	}
 
 	/**

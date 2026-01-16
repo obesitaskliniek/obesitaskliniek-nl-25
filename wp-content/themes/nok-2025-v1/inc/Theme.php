@@ -667,7 +667,12 @@ final class Theme {
                         'manage_options',
                         "{$post_type}-settings",
                         function () use ( $post_type, $config ) {
-                            $this->render_archive_settings_page( $post_type, $config );
+                            // Use specialized renderer for kennisbank
+                            if ( $post_type === 'kennisbank' ) {
+                                $this->render_kennisbank_settings_page( $config );
+                            } else {
+                                $this->render_archive_settings_page( $post_type, $config );
+                            }
                         }
                 );
             } );
@@ -685,6 +690,7 @@ final class Theme {
                 );
             } );
         }
+
     }
 
     /**
@@ -751,5 +757,54 @@ final class Theme {
      */
     public static function get_archive_intro( string $post_type, string $fallback = '' ): string {
         return get_option( "{$post_type}_archive_intro", $fallback );
+    }
+
+    /**
+     * Render specialized settings page for Kennisbank
+     *
+     * Includes:
+     * - Kennisbank archive intro text
+     *
+     * @param array $config Configuration array with 'slug' and 'label' keys
+     * @return void
+     */
+    private function render_kennisbank_settings_page( array $config ): void {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+        ?>
+        <div class="wrap">
+            <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+
+            <form method="post" action="options.php">
+                <?php settings_fields( 'kennisbank_archive_settings' ); ?>
+
+                <h2><?php _e( 'Kennisbank Archief', THEME_TEXT_DOMAIN ); ?></h2>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row">
+                            <label for="kennisbank_archive_intro">
+                                <?php _e( 'Introductietekst', THEME_TEXT_DOMAIN ); ?>
+                            </label>
+                        </th>
+                        <td>
+                            <?php
+                            wp_editor(
+                                get_option( 'kennisbank_archive_intro', '' ),
+                                'kennisbank_archive_intro',
+                                [ 'textarea_rows' => 6, 'media_buttons' => false ]
+                            );
+                            ?>
+                            <p class="description">
+                                <?php _e( 'Getoond bovenaan /kennisbank/', THEME_TEXT_DOMAIN ); ?>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+                <?php submit_button(); ?>
+            </form>
+        </div>
+        <?php
     }
 }
