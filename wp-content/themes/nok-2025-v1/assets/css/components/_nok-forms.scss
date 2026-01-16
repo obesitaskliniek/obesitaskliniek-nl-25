@@ -28,6 +28,10 @@
   align-self: stretch;
   width: 100%;
 
+  &.nok-layout-flex-row {
+    flex-direction: row;
+  }
+
   &-element {
     display: flex;
     position: relative;

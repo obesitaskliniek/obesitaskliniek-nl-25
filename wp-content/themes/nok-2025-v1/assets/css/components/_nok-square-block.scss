@@ -100,7 +100,7 @@ nok-square-block {
       }
     }
     &__banner {
-      margin: calc(-1 * var(--padding)) calc(-1 * var(--padding)) 0;
+      margin: calc(-1 * var(--padding)) calc(-1 * var(--padding)) calc(var(--padding) / 2);
       height: var(--padding);
       border-radius: 0;
       padding: 0 calc(var(--padding) / 2);

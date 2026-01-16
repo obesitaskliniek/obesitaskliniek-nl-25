@@ -104,15 +104,6 @@
   display: flex;
   align-items: center;
 }
-.halign-center {
-  display: flex;
-  justify-content: center;
-}
-.halign-space-between {
-  display: flex;
-  justify-content: space-between;
-}
-
 .align-center {
   align-self: center;
 }
@@ -575,6 +566,19 @@ $utilities: (
                         stretch: stretch,
                         start: flex-start,
                         end: flex-end,
+                )
+        ),
+        "justify-content": (
+                responsive: false,
+                responsive-up-to: true,
+                property: justify-content,
+                class: #{nok-variables.$prefix}-justify-content,
+                values: (
+                        center: center,
+                        stretch: stretch,
+                        start: flex-start,
+                        end: flex-end,
+                        space-between: space-between,
                 )
         ),
         "text-wrap": (

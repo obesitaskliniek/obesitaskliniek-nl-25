@@ -80,6 +80,11 @@ class YoastIntegration {
 			$links = $this->add_kennisbank_archive_breadcrumb($links);
 		}
 
+		// Handle voorlichting: format date in Dutch and fix archive URL
+		if (is_singular('voorlichting')) {
+			$links = $this->format_voorlichting_breadcrumb($links);
+		}
+
 		return $links;
 	}
 
@@ -147,6 +152,49 @@ class YoastIntegration {
 		$insert_position = 1; // After home by default
 
 		array_splice($links, $insert_position, 0, [$archive_breadcrumb]);
+
+		return $links;
+	}
+
+	/**
+	 * Format voorlichting breadcrumb with Dutch date
+	 *
+	 * Replaces the post title breadcrumb with a properly formatted version
+	 * that includes the event type, location, and Dutch date format.
+	 * Structure: Home / Agenda / Voorlichting {Location} - {Dutch Date}
+	 *
+	 * @param array $links Breadcrumb links array
+	 * @return array Modified links with formatted voorlichting title
+	 */
+	private function format_voorlichting_breadcrumb(array $links): array {
+		$post_id = get_the_ID();
+		if (!$post_id) {
+			return $links;
+		}
+
+		// Get HubSpot metadata for Dutch date formatting
+		$hubspotData = \NOK2025\V1\Helpers::setup_hubspot_metadata($post_id);
+		if (empty($hubspotData['timestamp']['niceDateFull'])) {
+			return $links;
+		}
+
+		// Build formatted breadcrumb text: "Voorlichting {Location} - {Dutch Date}"
+		$soort = ucfirst($hubspotData['soort']);
+		$locatie = ucfirst($hubspotData['locatie']);
+		$date = $hubspotData['timestamp']['niceDateFull'];
+		$formatted_text = "$soort $locatie - $date";
+
+		// Find and update the voorlichting breadcrumbs
+		foreach ($links as $key => $link) {
+			// Fix archive URL
+			if (isset($link['ptarchive']) && $link['ptarchive'] === 'voorlichting') {
+				$links[$key]['url'] = get_post_type_archive_link('voorlichting');
+			}
+			// Update post title breadcrumb (last item, has 'id' key)
+			if (isset($link['id']) && $link['id'] === $post_id) {
+				$links[$key]['text'] = $formatted_text;
+			}
+		}
 
 		return $links;
 	}

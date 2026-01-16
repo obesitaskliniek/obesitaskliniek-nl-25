@@ -1,0 +1,274 @@
+@use "sass:map";
+@use "shared" as components-base;
+
+// NOK Datepicker Component
+// Matches select dropdown styling for consistency
+
+$prefix: 'nok-datepicker';
+
+// Trigger button - styled like the select dropdown
+.#{$prefix} {
+  position: relative;
+  display: inline-flex;
+
+  &__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: var(--form-element-padding, 1ex) calc(var(--form-element-padding, 1ex) * 1.5);
+
+    background-color: var(--bg-color, var(--#{components-base.$prefix}-white));
+    color: var(--text-color, var(--#{components-base.$prefix}-darkerblue));
+
+    @include components-base.nok-border-radius;
+    border: 1px inset #8882;
+    outline: 0 none;
+
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    text-align: left;
+    white-space: nowrap;
+
+    cursor: pointer;
+    user-select: none;
+
+    @include components-base.transition-properties {
+      transition: opacity 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    opacity: 0.9;
+
+    svg {
+      width: 1.25em;
+      height: 1.25em;
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &:focus,
+    &:focus-visible {
+      opacity: 1;
+      @include components-base.nok-focus-ring;
+    }
+
+    &[aria-expanded="true"] {
+      opacity: 1;
+    }
+  }
+
+  &__display {
+    min-width: 8em;
+  }
+
+  // Popup container
+  &__popup {
+    position: absolute;
+    z-index: 1000;
+
+    display: none;
+    flex-direction: column;
+
+    width: 280px;
+    padding: 0.75rem;
+
+    background: var(--#{components-base.$prefix}-white);
+    color: var(--#{components-base.$prefix}-darkerblue);
+
+    @include components-base.nok-border-radius('large');
+    @include components-base.nok-subtle-shadow;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+
+    &--open {
+      display: flex;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      background: var(--#{components-base.$prefix}-darkestblue);
+      color: var(--#{components-base.$prefix}-white);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  // Header with month/year and nav arrows
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+  }
+
+  &__title {
+    flex: 1;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-transform: capitalize;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+
+    background: transparent;
+    color: inherit;
+    border: none;
+    @include components-base.nok-border-radius;
+
+    cursor: pointer;
+
+    @include components-base.transition-properties {
+      transition: background-color 0.15s ease;
+    }
+
+    &:hover {
+      background: rgba(128, 128, 128, 0.15);
+    }
+
+    &:focus-visible {
+      @include components-base.nok-focus-ring;
+    }
+
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+
+  // Calendar container
+  &__calendar {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  // Week row (7 columns)
+  &__week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0;
+
+    @include components-base.transition-properties {
+      transition: background-color 0.1s ease;
+    }
+
+    // Header row with weekday names
+    &--header {
+      margin-bottom: 0.25rem;
+
+      span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 0.75rem;
+        font-weight: 500;
+        opacity: 0.6;
+        padding: 0.25rem;
+      }
+    }
+  }
+
+  // Individual day button
+  &__day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    aspect-ratio: 1;
+    padding: 0;
+
+    background: transparent;
+    color: inherit;
+    border: none;
+    border-radius: 0;
+
+    font-size: 0.875rem;
+    font-weight: 400;
+
+    cursor: pointer;
+
+    @include components-base.transition-properties {
+      transition: background-color 0.1s ease, color 0.1s ease, transform 0.1s ease;
+    }
+
+    &:hover:not(&--empty) {
+      background: var(--#{components-base.$prefix}-lightblue);
+      color: var(--#{components-base.$prefix}-white);
+    }
+
+    &:focus-visible {
+      @include components-base.nok-focus-ring;
+    }
+
+    &:active:not(&--empty) {
+      transform: scale(0.95);
+    }
+
+    &--empty {
+      cursor: default;
+    }
+
+    &--disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+
+      &:hover {
+        background: transparent;
+        color: inherit;
+      }
+    }
+
+    &--other-month {
+      opacity: 0.4;
+    }
+
+    &--today {
+      position: relative;
+      &::after {
+        display: block;
+        position: absolute;
+        content: "";
+        inset: 0;
+        background-color: rgba(var(--nok-lightblue-rgb), 0.25);
+        border-radius: 50%;
+        z-index: -1;
+      }
+    }
+
+    &--selected {
+      background: var(--#{components-base.$prefix}-darkblue) !important;
+      color: var(--#{components-base.$prefix}-white) !important;
+      font-weight: 600;
+    }
+    // First day (Monday) - round left
+    &:first-of-type {
+      border-radius: 50% 0 0 50%;
+    }
+    // Last day (Sunday) - round right
+    &:last-of-type {
+      border-radius: 0 50% 50% 0;
+    }
+  }
+}
+
+// Week selection mode - row-based hover and selection
+.#{$prefix}__popup--week-mode {
+  // Hovered week row (subtle background on siblings, pill shape)
+  .#{$prefix}__week:not(.#{$prefix}__week--header):hover {
+    .#{$prefix}__day:not(:hover) {
+      background: color-mix(in oklch, var(--#{components-base.$prefix}-lightblue) 25%, transparent);
+    }
+  }
+}

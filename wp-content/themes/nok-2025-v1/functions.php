@@ -116,6 +116,13 @@ add_action( 'init', function() {
     }
 } );
 
+// Register custom query variables for voorlichting archive filtering
+add_filter( 'query_vars', function( $vars ) {
+    $vars[] = 'week';
+    $vars[] = 'jaar';
+    $vars[] = 'locatie';
+    return $vars;
+} );
 
 use NOK2025\V1\Helpers;
 define( 'NONCE',         hash('sha256', Helpers::makeRandomString()));

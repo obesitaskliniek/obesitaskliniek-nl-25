@@ -105,6 +105,16 @@ use NOK2025\V1\Assets;
             background: rgba(0,0,0,0.1);
         }
 
+        .section > .section-title + p {
+            font-size: 0.9em;
+            opacity: 0.7;
+            margin: 0 0 0.75em;
+            code {
+                background: rgb(255 229 0 / 36%);
+                padding: 0.1em 0.2em;
+            }
+        }
+
         /* Color grids */
         .color-grid {
             display: grid;
@@ -420,6 +430,7 @@ use NOK2025\V1\Assets;
 <div class="tabs">
     <button class="tab active" data-tab="backgrounds">Backgrounds</button>
     <button class="tab" data-tab="text">Text Colors</button>
+    <button class="tab" data-tab="fill">Fill Colors</button>
     <button class="tab" data-tab="utilities">Utilities</button>
     <button class="tab" data-tab="variables">CSS Variables</button>
 </div>
@@ -651,6 +662,10 @@ use NOK2025\V1\Assets;
 <div id="text" class="tab-content">
     <div class="section">
         <div class="section-title">Text Colors <span class="badge">Use on any background</span></div>
+        <p>
+            <strong>Note:</strong> <code>--darker</code> and <code>--lighter</code> variants are also available
+            (e.g., <code>.nok-text-yellow--darker</code>) but not shown here.
+        </p>
         <div class="color-grid color-grid--wide">
             <div class="color-card color-card--text nok-text-lightblue" data-class="nok-text-lightblue">
                 <span class="color-card__name">lightblue</span>
@@ -742,6 +757,95 @@ use NOK2025\V1\Assets;
     </div>
 </div>
 
+<!-- FILL COLORS TAB -->
+<div id="fill" class="tab-content">
+    <div class="section">
+        <div class="section-title">Fill Colors <span class="badge">For SVG icons</span></div>
+        <p>
+            <strong>Note:</strong> <code>--darker</code> and <code>--lighter</code> variants are also available
+            (e.g., <code>.nok-fill-yellow--darker</code>) but not shown here.
+        </p>
+        <div class="color-grid color-grid--wide">
+            <?php
+            $fill_colors = [
+                'lightblue', 'darkblue', 'darkerblue', 'darkestblue',
+                'green', 'greenblue', 'greenyellow', 'lightgreenblue',
+                'yellow', 'error', 'white', 'black', 'lightgrey'
+            ];
+            foreach ($fill_colors as $color): ?>
+            <div class="color-card color-card--text nok-fill-<?= $color ?>" data-class="nok-fill-<?= $color ?>">
+                <span class="nok-fill-<?= $color ?>"><?= Assets::getIcon('ui_calendar') ?></span>
+                <span class="color-card__name"><?= $color ?></span>
+                <span class="color-card__class">.nok-fill-<?= $color ?></span>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Fill on Colored Backgrounds <span class="badge">Auto-contrast</span></div>
+        <p>
+            <strong>Note:</strong> Use <code>.nok-fill-contrast</code> to automatically pick a contrasting fill color based on the parent background.
+        </p>
+        <div class="color-grid color-grid--wide">
+            <div class="color-card nok-bg-lightblue" data-class="nok-fill-contrast" style="justify-content: center; align-items: center;">
+                <span class="nok-fill-contrast" style="display: flex; gap: 0.5em;">
+                    <?= Assets::getIcon('logo_nok') ?>
+                    <?= Assets::getIcon('ui_calendar') ?>
+                    <?= Assets::getIcon('ui_arrow-right') ?>
+                </span>
+                <span class="color-card__name nok-text-contrast">.nok-fill-contrast</span>
+                <span class="color-card__class nok-text-contrast">on .nok-bg-lightblue</span>
+            </div>
+            <div class="color-card nok-bg-darkblue" data-class="nok-fill-contrast" style="justify-content: center; align-items: center;">
+                <span class="nok-fill-contrast" style="display: flex; gap: 0.5em;">
+                    <?= Assets::getIcon('logo_nok') ?>
+                    <?= Assets::getIcon('ui_calendar') ?>
+                    <?= Assets::getIcon('ui_arrow-right') ?>
+                </span>
+                <span class="color-card__name nok-text-contrast">.nok-fill-contrast</span>
+                <span class="color-card__class nok-text-contrast">on .nok-bg-darkblue</span>
+            </div>
+            <div class="color-card nok-bg-darkerblue" data-class="nok-fill-contrast" style="justify-content: center; align-items: center;">
+                <span class="nok-fill-contrast" style="display: flex; gap: 0.5em;">
+                    <?= Assets::getIcon('logo_nok') ?>
+                    <?= Assets::getIcon('ui_calendar') ?>
+                    <?= Assets::getIcon('ui_arrow-right') ?>
+                </span>
+                <span class="color-card__name nok-text-contrast">.nok-fill-contrast</span>
+                <span class="color-card__class nok-text-contrast">on .nok-bg-darkerblue</span>
+            </div>
+            <div class="color-card nok-bg-yellow" data-class="nok-fill-contrast" style="justify-content: center; align-items: center;">
+                <span class="nok-fill-contrast" style="display: flex; gap: 0.5em;">
+                    <?= Assets::getIcon('logo_nok') ?>
+                    <?= Assets::getIcon('ui_calendar') ?>
+                    <?= Assets::getIcon('ui_arrow-right') ?>
+                </span>
+                <span class="color-card__name nok-text-contrast">.nok-fill-contrast</span>
+                <span class="color-card__class nok-text-contrast">on .nok-bg-yellow</span>
+            </div>
+            <div class="color-card nok-bg-green" data-class="nok-fill-contrast" style="justify-content: center; align-items: center;">
+                <span class="nok-fill-contrast" style="display: flex; gap: 0.5em;">
+                    <?= Assets::getIcon('logo_nok') ?>
+                    <?= Assets::getIcon('ui_calendar') ?>
+                    <?= Assets::getIcon('ui_arrow-right') ?>
+                </span>
+                <span class="color-card__name nok-text-contrast">.nok-fill-contrast</span>
+                <span class="color-card__class nok-text-contrast">on .nok-bg-green</span>
+            </div>
+            <div class="color-card nok-bg-error" data-class="nok-fill-contrast" style="justify-content: center; align-items: center;">
+                <span class="nok-fill-contrast" style="display: flex; gap: 0.5em;">
+                    <?= Assets::getIcon('logo_nok') ?>
+                    <?= Assets::getIcon('ui_calendar') ?>
+                    <?= Assets::getIcon('ui_arrow-right') ?>
+                </span>
+                <span class="color-card__name nok-text-contrast">.nok-fill-contrast</span>
+                <span class="color-card__class nok-text-contrast">on .nok-bg-error</span>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- UTILITIES TAB -->
 <div id="utilities" class="tab-content">
     <div class="section">
@@ -760,26 +864,6 @@ use NOK2025\V1\Assets;
             <div class="utility-card">
                 <code>.nok-bg-transparent</code>
                 <span class="desc">Transparent background with hover/active states disabled</span>
-            </div>
-            <div class="utility-card nok-bg-darkblue nok-text-contrast">
-                <code>.nok-fill-contrast</code>
-                <span class="desc">SVG fill using contrast color (for icons on colored bg)</span>
-                <div class="icon-demo">
-                    <span class="nok-fill-contrast"><?= Assets::getIcon('logo_nok') ?></span>
-                    <span class="nok-fill-contrast"><?= Assets::getIcon('ui_arrow-right') ?></span>
-                    <span class="nok-fill-contrast"><?= Assets::getIcon('ui_arrow-up-long') ?></span>
-                    <span class="nok-fill-contrast"><?= Assets::getIcon('ui_calendar') ?></span>
-                    <span class="nok-fill-contrast"><?= Assets::getIcon('nok_darmen') ?></span>
-                </div>
-                <div class="nok-bg-yellow nok-text-contrast" style="padding: 0.25em 0.5em; border-radius: 0.25em; margin-top: 0.25em;">
-                    <div class="icon-demo">
-                        <span class="nok-fill-contrast"><?= Assets::getIcon('logo_nok') ?></span>
-                        <span class="nok-fill-contrast"><?= Assets::getIcon('ui_arrow-right') ?></span>
-                        <span class="nok-fill-contrast"><?= Assets::getIcon('ui_arrow-up-long') ?></span>
-                        <span class="nok-fill-contrast"><?= Assets::getIcon('ui_calendar') ?></span>
-                        <span class="nok-fill-contrast"><?= Assets::getIcon('nok_darmen') ?></span>
-                    </div>
-                </div>
             </div>
             <div class="utility-card nok-bg-darkblue nok-text-contrast nok-dark-bg-body">
                 <code>.nok-dark-*</code>

@@ -271,6 +271,13 @@ For complex types like `opening_hours`, the schema is defined in `MetaRegistrar.
 - Prefers `.min.css` when available
 - Falls back to `.css`
 
+**Color Reference Chart:**
+Interactive reference for all color utility classes available at:
+```
+/wp-content/themes/nok-2025-v1/assets/css/color-reference.php
+```
+Shows backgrounds, text colors, fill colors (SVG), utilities, and CSS variables with click-to-copy functionality.
+
 **Context-aware loading:**
 
 | Context | CSS Method |
