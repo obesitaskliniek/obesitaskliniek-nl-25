@@ -365,6 +365,45 @@ use NOK2025\V1\Assets;
             border-radius: 0.182em;
             border: 1px solid rgba(128,128,128,0.3);
         }
+
+        /* Variable card with color swatch */
+        .utility-card--var {
+            display: flex;
+            align-items: center;
+            gap: 0.75em;
+        }
+
+        .utility-card--var .var-swatch {
+            width: 2em;
+            height: 2em;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 2px solid rgba(128,128,128,0.2);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .utility-card--var .var-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .utility-card--var code {
+            margin-bottom: 0.182em;
+        }
+
+        .utility-card--var[data-var] {
+            cursor: pointer;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+
+        .utility-card--var[data-var]:hover {
+            transform: translateY(-0.125em);
+            box-shadow: 0 0.25em 0.75em rgba(0,0,0,0.1);
+        }
+
+        .utility-card--var[data-var]:active {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
@@ -949,61 +988,103 @@ use NOK2025\V1\Assets;
         </div>
 
         <div class="utility-grid" style="margin-top: 1em;">
-            <div class="utility-card">
-                <code>--nok-lightblue</code>
-                <span class="desc">#00b0e4</span>
+            <div class="utility-card utility-card--var" data-var="--nok-lightblue">
+                <span class="var-swatch" style="background-color: var(--nok-lightblue);"></span>
+                <span class="var-info">
+                    <code>--nok-lightblue</code>
+                    <span class="desc">#00b0e4</span>
+                </span>
             </div>
-            <div class="utility-card">
-                <code>--nok-darkblue</code>
-                <span class="desc">#14477c</span>
+            <div class="utility-card utility-card--var" data-var="--nok-darkblue">
+                <span class="var-swatch" style="background-color: var(--nok-darkblue);"></span>
+                <span class="var-info">
+                    <code>--nok-darkblue</code>
+                    <span class="desc">#14477c</span>
+                </span>
             </div>
-            <div class="utility-card">
-                <code>--nok-darkerblue</code>
-                <span class="desc">#0b2355</span>
+            <div class="utility-card utility-card--var" data-var="--nok-darkerblue">
+                <span class="var-swatch" style="background-color: var(--nok-darkerblue);"></span>
+                <span class="var-info">
+                    <code>--nok-darkerblue</code>
+                    <span class="desc">#0b2355</span>
+                </span>
             </div>
-            <div class="utility-card">
-                <code>--nok-darkestblue</code>
-                <span class="desc">#00132f</span>
+            <div class="utility-card utility-card--var" data-var="--nok-darkestblue">
+                <span class="var-swatch" style="background-color: var(--nok-darkestblue);"></span>
+                <span class="var-info">
+                    <code>--nok-darkestblue</code>
+                    <span class="desc">#00132f</span>
+                </span>
             </div>
-            <div class="utility-card">
-                <code>--nok-yellow</code>
-                <span class="desc">#ffd41f</span>
+            <div class="utility-card utility-card--var" data-var="--nok-yellow">
+                <span class="var-swatch" style="background-color: var(--nok-yellow);"></span>
+                <span class="var-info">
+                    <code>--nok-yellow</code>
+                    <span class="desc">#ffd41f</span>
+                </span>
             </div>
-            <div class="utility-card">
-                <code>--nok-green</code>
-                <span class="desc">#54b085</span>
+            <div class="utility-card utility-card--var" data-var="--nok-green">
+                <span class="var-swatch" style="background-color: var(--nok-green);"></span>
+                <span class="var-info">
+                    <code>--nok-green</code>
+                    <span class="desc">#54b085</span>
+                </span>
             </div>
-            <div class="utility-card">
-                <code>--nok-greenyellow</code>
-                <span class="desc">#CCCC33</span>
+            <div class="utility-card utility-card--var" data-var="--nok-greenyellow">
+                <span class="var-swatch" style="background-color: var(--nok-greenyellow);"></span>
+                <span class="var-info">
+                    <code>--nok-greenyellow</code>
+                    <span class="desc">#CCCC33</span>
+                </span>
             </div>
-            <div class="utility-card">
-                <code>--nok-greenblue</code>
-                <span class="desc">#35aba5</span>
+            <div class="utility-card utility-card--var" data-var="--nok-greenblue">
+                <span class="var-swatch" style="background-color: var(--nok-greenblue);"></span>
+                <span class="var-info">
+                    <code>--nok-greenblue</code>
+                    <span class="desc">#35aba5</span>
+                </span>
             </div>
-            <div class="utility-card">
-                <code>--nok-lightgreenblue</code>
-                <span class="desc">#93e1f4</span>
+            <div class="utility-card utility-card--var" data-var="--nok-lightgreenblue">
+                <span class="var-swatch" style="background-color: var(--nok-lightgreenblue);"></span>
+                <span class="var-info">
+                    <code>--nok-lightgreenblue</code>
+                    <span class="desc">#93e1f4</span>
+                </span>
             </div>
-            <div class="utility-card">
-                <code>--nok-error</code>
-                <span class="desc">#d82510</span>
+            <div class="utility-card utility-card--var" data-var="--nok-error">
+                <span class="var-swatch" style="background-color: var(--nok-error);"></span>
+                <span class="var-info">
+                    <code>--nok-error</code>
+                    <span class="desc">#d82510</span>
+                </span>
             </div>
-            <div class="utility-card">
-                <code>--nok-body</code>
-                <span class="desc">#f3f4f9 (light) / #00132f (dark)</span>
+            <div class="utility-card utility-card--var" data-var="--nok-body">
+                <span class="var-swatch" style="background-color: var(--nok-body);"></span>
+                <span class="var-info">
+                    <code>--nok-body</code>
+                    <span class="desc">#f3f4f9 (light) / #00132f (dark)</span>
+                </span>
             </div>
-            <div class="utility-card">
-                <code>--nok-white</code>
-                <span class="desc">#FFF</span>
+            <div class="utility-card utility-card--var" data-var="--nok-white">
+                <span class="var-swatch" style="background-color: var(--nok-white);"></span>
+                <span class="var-info">
+                    <code>--nok-white</code>
+                    <span class="desc">#FFF</span>
+                </span>
             </div>
-            <div class="utility-card">
-                <code>--nok-black</code>
-                <span class="desc">#222</span>
+            <div class="utility-card utility-card--var" data-var="--nok-black">
+                <span class="var-swatch" style="background-color: var(--nok-black);"></span>
+                <span class="var-info">
+                    <code>--nok-black</code>
+                    <span class="desc">#222</span>
+                </span>
             </div>
-            <div class="utility-card">
-                <code>--nok-lightgrey</code>
-                <span class="desc">#CCC</span>
+            <div class="utility-card utility-card--var" data-var="--nok-lightgrey">
+                <span class="var-swatch" style="background-color: var(--nok-lightgrey);"></span>
+                <span class="var-info">
+                    <code>--nok-lightgrey</code>
+                    <span class="desc">#CCC</span>
+                </span>
             </div>
         </div>
     </div>
@@ -1057,6 +1138,20 @@ document.querySelectorAll('[data-class]').forEach(card => {
         navigator.clipboard.writeText(className).then(() => {
             const copied = document.getElementById('copied');
             copied.textContent = `Copied: ${className}`;
+            copied.classList.add('show');
+            setTimeout(() => copied.classList.remove('show'), 1500);
+        });
+    });
+});
+
+// Copy CSS variable on click
+document.querySelectorAll('[data-var]').forEach(card => {
+    card.addEventListener('click', () => {
+        const varName = card.dataset.var;
+        const copyText = `var(${varName})`;
+        navigator.clipboard.writeText(copyText).then(() => {
+            const copied = document.getElementById('copied');
+            copied.textContent = `Copied: ${copyText}`;
             copied.classList.add('show');
             setTimeout(() => copied.classList.remove('show'), 1500);
         });

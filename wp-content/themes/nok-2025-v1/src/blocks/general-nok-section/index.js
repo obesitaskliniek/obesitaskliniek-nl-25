@@ -52,7 +52,7 @@ const LAYOUT_OPTIONS = [
 
 registerBlockType(blockName, {
     edit: ({ attributes, setAttributes }) => {
-        const { backgroundColor, textColor, layoutWidth, enablePullUp, enableNoAos } = attributes;
+        const { backgroundColor, textColor, layoutWidth, narrowSection, enablePullUp, enableNoAos } = attributes;
 
         const blockProps = useBlockProps({
             className: 'nok-general-section-editor',
@@ -82,6 +82,13 @@ registerBlockType(blockName, {
                             options={LAYOUT_OPTIONS}
                             onChange={(value) => setAttributes({ layoutWidth: value })}
                             help={__('Bepaalt het aantal kolommen in de layout grid', textDomain)}
+                        />
+
+                        <ToggleControl
+                            label={__('Smalle sectie', textDomain)}
+                            help={__('Maakt de sectie smaller (max-width beperkt)', textDomain)}
+                            checked={narrowSection}
+                            onChange={(value) => setAttributes({ narrowSection: value })}
                         />
                     </PanelBody>
 
@@ -115,6 +122,7 @@ registerBlockType(blockName, {
                             {__('Achtergrond:', textDomain)} {COLOR_OPTIONS.find(opt => opt.value === backgroundColor)?.label || backgroundColor} |&nbsp;
                             {__('Tekst:', textDomain)} {TEXT_COLOR_OPTIONS.find(opt => opt.value === textColor)?.label || textColor} |&nbsp;
                             {__('Layout:', textDomain)} {LAYOUT_OPTIONS.find(opt => opt.value === layoutWidth)?.label || layoutWidth}
+                            {narrowSection && <> | <strong>{__('Smal', textDomain)}</strong></>}
                         </div>
                     </div>
                     <InnerBlocks

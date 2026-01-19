@@ -1,0 +1,186 @@
+@use "sass:map";
+@use "shared" as components-base;
+
+// Table styling for Gutenberg block tables
+// Applies to .wp-block-table (wrapper) and figure.wp-block-table table
+
+.wp-block-table {
+  margin-block: components-base.$padding-base;
+  overflow-x: auto; // Horizontal scroll on small screens
+
+  // The table element
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    @include components-base.nok-border-radius('large');
+    overflow: hidden;
+    background-color: transparent;
+  }
+
+  // Header row
+  thead {
+    tr {
+      background-color: transparent;
+    }
+
+    th {
+      @include components-base.nok-heading-font;
+      font-size: 1.6em;
+      line-height: components-base.$default-heading-line-height;
+      padding: calc(components-base.$padding-base * 0.75) components-base.$padding-base;
+      text-align: left;
+      border: none;
+    }
+  }
+
+  // Body rows
+  tbody {
+    tr {
+      @include components-base.transition-properties {
+        transition: background-color components-base.$animation-duration ease;
+      }
+
+      &:first-child {
+        // First cell - round top-left
+        td:first-child {
+          border-top-left-radius: components-base.$default-border-radius--large;
+        }
+
+        // Last cell - round top-right
+        td:last-child {
+          border-top-right-radius: components-base.$default-border-radius--large;
+        }
+      }
+
+      // Bottom border between rows
+      &:not(:last-child) {
+        td {
+          border-bottom: 1px solid var(--nok-lightgrey--lighter);
+
+          @media (prefers-color-scheme: dark) {
+            border-bottom-color: var(--nok-darkerblue);
+          }
+        }
+      }
+
+      // Last row - round bottom corners
+      &:last-child {
+        td:first-child {
+          border-bottom-left-radius: components-base.$default-border-radius--large;
+        }
+        td:last-child {
+          border-bottom-right-radius: components-base.$default-border-radius--large;
+        }
+      }
+    }
+
+    td {
+      padding: calc(components-base.$padding-base * 0.75) components-base.$padding-base;
+      line-height: components-base.$default-line-height;
+      color: var(--nok-darkerblue);
+      border: none;
+      vertical-align: top;
+
+      @media (prefers-color-scheme: dark) {
+        color: var(--nok-body--contrast);
+      }
+
+      // First column styling - slightly bolder for labels
+      &:first-child {
+        font-weight: 500;
+        white-space: nowrap;
+
+        @include components-base.media-breakpoint-down(sm) {
+          white-space: normal;
+        }
+      }
+    }
+  }
+
+  // Gutenberg "Stripes" style class (adds explicit striping)
+  &.is-style-stripes {
+    tbody tr {
+
+      // Striped rows - odd rows get subtle background
+      &:nth-child(odd) {
+        background-color: rgba(var(--nok-lightgrey-rgb), 0.4);
+
+        @media (prefers-color-scheme: dark) {
+          background-color: var(--nok-darkerblue);
+        }
+      }
+
+      &:nth-child(even) {
+        background-color: rgba(var(--nok-lightgrey-rgb), 0.2);
+
+        @media (prefers-color-scheme: dark) {
+          background-color: var(--nok-darkestblue--lighter);
+        }
+      }
+    }
+    border: 0 none;
+  }
+
+  // Caption styling
+  figcaption {
+    margin-top: calc(components-base.$padding-base * 0.5);
+    font-size: 0.875rem;
+    color: var(--nok-darkerblue--lighter);
+    text-align: center;
+
+    @media (prefers-color-scheme: dark) {
+      color: var(--nok-lightgrey);
+    }
+  }
+}
+
+// Responsive: stack cells on very small screens for tables with 2 columns
+@include components-base.media-breakpoint-down(sm) {
+  .wp-block-table.is-stacked-on-mobile {
+    table, thead, tbody, tr, th, td {
+      display: block;
+    }
+
+    thead {
+      // Hide header but keep accessible
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    tbody tr {
+      margin-bottom: calc(components-base.$padding-base * 0.5);
+      @include components-base.nok-border-radius;
+      border: 1px solid var(--nok-lightgrey--lighter);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      td {
+        padding: calc(components-base.$padding-base * 0.5) components-base.$padding-base;
+        border-bottom: 1px solid var(--nok-lightgrey--lighter);
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &:first-child {
+          background-color: var(--nok-body--darker);
+          font-weight: 600;
+
+          @media (prefers-color-scheme: dark) {
+            background-color: var(--nok-darkerblue);
+          }
+        }
+      }
+    }
+  }
+}

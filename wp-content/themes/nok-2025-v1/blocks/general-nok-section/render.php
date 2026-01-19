@@ -30,6 +30,7 @@ return function( array $attributes, string $content ): string {
     $background_color = $attributes['backgroundColor'] ?? 'white';
     $text_color       = $attributes['textColor'] ?? 'darkerblue';
     $layout_width     = $attributes['layoutWidth'] ?? '1-column';
+    $narrow_section   = $attributes['narrowSection'] ?? false;
     $enable_pull_up   = $attributes['enablePullUp'] ?? false;
     $enable_no_aos    = $attributes['enableNoAos'] ?? false;
 
@@ -56,6 +57,11 @@ return function( array $attributes, string $content ): string {
         'nok-text-' . $text_color,
         'nok-dark-text-' . ( $text_color === 'darkerblue' ? 'contrast' : $text_color ),
     ];
+
+    // Add narrow section class if enabled
+    if ( $narrow_section ) {
+        $inner_classes[] = 'nok-section-narrow';
+    }
 
     // Add pull-up class if enabled
     if ( $enable_pull_up ) {

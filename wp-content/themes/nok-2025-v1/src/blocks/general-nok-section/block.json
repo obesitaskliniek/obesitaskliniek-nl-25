@@ -23,6 +23,10 @@
       "type": "string",
       "default": "1-column"
     },
+    "narrowSection": {
+      "type": "boolean",
+      "default": false
+    },
     "enablePullUp": {
       "type": "boolean",
       "default": false
