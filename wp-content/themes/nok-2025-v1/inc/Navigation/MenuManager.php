@@ -50,6 +50,7 @@ class MenuManager {
 		register_nav_menus( [
 			'primary'        => __( 'Primary Navigation', THEME_TEXT_DOMAIN ),
 			'mobile_primary' => __( 'Mobile Primary Navigation', THEME_TEXT_DOMAIN ),
+			'top_row'        => __( 'Desktop Top Row', THEME_TEXT_DOMAIN ),
 			'footer'         => __( 'Footer Navigation', THEME_TEXT_DOMAIN ),
 		] );
 	}
@@ -101,6 +102,15 @@ class MenuManager {
 				$is_header = in_array( $item->url, [ '#', '' ], true )
 				             || in_array( 'menu-header', $classes, true );
 
+				// Detect popup triggers: URL format #popup-{name} (e.g., #popup-search, #popup-bmi-calculator)
+				$is_popup_trigger = false;
+				$popup_id         = null;
+
+				if ( preg_match( '/^#(popup-.+)$/', $item->url, $matches ) ) {
+					$is_popup_trigger = true;
+					$popup_id         = sanitize_html_class( $matches[1] );
+				}
+
 				// Determine current page status
 				$is_current          = $this->is_menu_item_current( $item );
 				$is_current_ancestor = $this->is_menu_item_ancestor( $item, $children );
@@ -118,6 +128,8 @@ class MenuManager {
 					'is_current_ancestor' => $is_current_ancestor,
 					'is_header'           => $is_header,
 					'has_children'        => ! empty( $children ),
+					'is_popup_trigger'    => $is_popup_trigger,
+					'popup_id'            => $popup_id,
 					'children'            => $children,
 				];
 			}
@@ -213,6 +225,29 @@ class MenuManager {
 			                                          'menu_items' => $menu_items,
 			                                          'location'   => $location,
 		                                          ] + $context );
+	}
+
+	/**
+	 * Render desktop top row (utility links above main nav)
+	 *
+	 * Flat menu for secondary links like "Voor verwijzers", "Werken bij", etc.
+	 * Supports popup triggers via #popup-{id} URL format.
+	 *
+	 * @param string $location Menu location
+	 * @param array<string, mixed> $context Additional variables to pass to template
+	 * @return void
+	 */
+	public function render_top_row( string $location = 'top_row', array $context = [] ): void {
+		$menu_items = $this->get_menu_tree( $location );
+
+		if ( empty( $menu_items ) && ! current_user_can( 'manage_options' ) ) {
+			return; // Silent fail for non-admins
+		}
+
+		$this->load_template( 'top-row', [
+			'menu_items' => $menu_items,
+			'location'   => $location,
+		] + $context );
 	}
 
 	/**

@@ -166,20 +166,9 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                         op basis van 12.030 beoordelingen
                     </small>
                 </div>
-                <a href="/verwijzers" class="nok-nav-menu-item">Voor verwijzers</a>
-                <a href="https://werkenbijdenok.nl" target="_blank" class="nok-nav-menu-item">Werken bij</a>
-                <div><a href="#" class="nok-nav-menu-item nok-popup-trigger"
-                        data-toggles-class="popup-open" data-class-target="nok-top-navigation" data-toggle-event="click"
-                        data-toggles-attribute="data-state" data-toggles-attribute-value="open" data-attribute-target="#popup-bmi-calculator">BMI berekenen</a></div>
-                <div><a href="tel:+31888832444" class="nok-nav-menu-item">088 88 32 444</a></div>
-                <a href="/kennisbank/veelgestelde-vragen" class="nok-nav-menu-item">Veelgestelde vragen</a>
-                <a href="#" class="nok-nav-menu-item nok-popup-trigger"
-                   data-toggles-class="popup-open" data-class-target="nok-top-navigation"
-                   data-toggle-event="click"
-                   data-toggles-attribute="data-state" data-toggles-attribute-value="open"
-                   data-attribute-target="#popup-search">Zoek</a>
+                <?php $menu_manager->render_top_row('top_row'); ?>
                 <a href="#"
-                   data-toggles-class="open" data-target=".nok-nav-control-dropdown" data-toggle-event="click" data-toggle-outside="unset"
+                   data-toggles-class="open" data-class-target=".nok-nav-control-dropdown" data-toggle-event="click" data-toggle-outside="unset"
                    data-swipe="unset" data-auto-restore="10">
                     <?= Assets::getIcon('ui_font_size') ?>
                 </a>

@@ -50,9 +50,23 @@ if (empty($parents_with_children)) {
 					$attrs[] = 'title="' . esc_attr($child['attr_title']) . '"';
 				}
 				$attr_string = !empty($attrs) ? ' ' . implode(' ', $attrs) : '';
+
+				// Popup triggers use # instead of their URL
+				$url = !empty($child['is_popup_trigger']) ? '#' : $child['url'];
+
+				// Popup trigger data-attributes
+				$popup_attrs = '';
+				if (!empty($child['is_popup_trigger']) && !empty($child['popup_id'])) {
+					$popup_attrs = sprintf(
+						' data-toggles-class="popup-open" data-class-target="nok-top-navigation"'
+						. ' data-toggle-event="click" data-toggles-attribute="data-state"'
+						. ' data-toggles-attribute-value="open" data-attribute-target="#%s"',
+						esc_attr($child['popup_id'])
+					);
+				}
 				?>
 				<div>
-					<a href="<?= esc_url($child['url']); ?>" class="<?= $class_string; ?>"<?= $attr_string; ?>>
+					<a href="<?= esc_url($url); ?>" class="<?= $class_string; ?>"<?= $attr_string; ?><?= $popup_attrs; ?>>
 						<?= esc_html($child['title']); ?>
 					</a>
 				</div>

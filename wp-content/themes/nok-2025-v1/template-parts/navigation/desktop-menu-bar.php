@@ -55,7 +55,8 @@ if ( empty( $menu_items ) ) {
 
 		$class_string = implode( ' ', array_map( 'esc_attr', $classes ) );
 
-        $url = $item['url'] ?: '#';
+		// Popup triggers use # instead of their URL
+		$url = ! empty( $item['is_popup_trigger'] ) ? '#' : ( $item['url'] ?: '#' );
 
 		// Build attributes
 		$attrs = [];
@@ -67,8 +68,19 @@ if ( empty( $menu_items ) ) {
 		}
 
 		$attr_string = ! empty( $attrs ) ? ' ' . implode( ' ', $attrs ) : '';
+
+		// Popup trigger data-attributes
+		$popup_attrs = '';
+		if ( ! empty( $item['is_popup_trigger'] ) && ! empty( $item['popup_id'] ) ) {
+			$popup_attrs = sprintf(
+				' data-toggles-class="popup-open" data-class-target="nok-top-navigation"'
+				. ' data-toggle-event="click" data-toggles-attribute="data-state"'
+				. ' data-toggles-attribute-value="open" data-attribute-target="#%s"',
+				esc_attr( $item['popup_id'] )
+			);
+		}
 		?>
-        <a href="<?= esc_url( $url ); ?>" class="<?= $class_string; ?>"<?= $attr_string; ?>>
+        <a href="<?= esc_url( $url ); ?>" class="<?= $class_string; ?>"<?= $attr_string; ?><?= $popup_attrs; ?>>
 			<?= esc_html( $item['title'] ); ?>
         </a>
     </div>

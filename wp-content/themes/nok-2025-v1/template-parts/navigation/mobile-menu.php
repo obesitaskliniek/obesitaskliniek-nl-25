@@ -43,15 +43,30 @@ $parents_with_children = array_filter($menu_items, function($item) {
 
 				$class_string = implode(' ', array_map('esc_attr', $classes));
 
-				// If has children, link to submenu anchor, otherwise use actual URL
-				if ($item['has_children']) {
+				// Determine URL and popup attributes
+				$popup_attrs = '';
+
+				if (!empty($item['is_popup_trigger']) && !empty($item['popup_id'])) {
+					// Popup trigger: close menu AND open popup
+					$url = '#';
+					$popup_attrs = sprintf(
+						' data-unsets-class="sidebar-open" data-class-target="nok-top-navigation"'
+						. ' data-toggle-event="click"'
+						. ' data-toggles-class="popup-open"'
+						. ' data-toggles-attribute="data-state" data-toggles-attribute-value="open"'
+						. ' data-attribute-target="#%s"',
+						esc_attr($item['popup_id'])
+					);
+				} elseif ($item['has_children']) {
+					// Has children: link to submenu anchor
 					$url = '#submenu-' . sanitize_title($item['title']);
 				} else {
+					// Regular link
 					$url = $item['url'] ?: '#';
 				}
 
 				$attrs = [];
-				if (!empty($item['target']) && !$item['has_children']) {
+				if (!empty($item['target']) && !$item['has_children'] && empty($item['is_popup_trigger'])) {
 					$attrs[] = 'target="' . esc_attr($item['target']) . '"';
 				}
 				if (!empty($item['attr_title'])) {
@@ -59,7 +74,7 @@ $parents_with_children = array_filter($menu_items, function($item) {
 				}
 				$attr_string = !empty($attrs) ? ' ' . implode(' ', $attrs) : '';
 				?>
-				<a href="<?= esc_url($url); ?>" class="<?= $class_string; ?>"<?= $attr_string; ?>>
+				<a href="<?= esc_url($url); ?>" class="<?= $class_string; ?>"<?= $attr_string; ?><?= $popup_attrs; ?>>
 					<?= esc_html($item['title']); ?>
 				</a>
 			<?php endforeach; ?>
@@ -87,8 +102,25 @@ $parents_with_children = array_filter($menu_items, function($item) {
 
 						$class_string = implode(' ', array_map('esc_attr', $classes));
 
+						// Determine URL and popup attributes
+						$popup_attrs = '';
+						$url = $child['url'];
+
+						if (!empty($child['is_popup_trigger']) && !empty($child['popup_id'])) {
+							// Popup trigger: close menu AND open popup
+							$url = '#';
+							$popup_attrs = sprintf(
+								' data-unsets-class="sidebar-open" data-class-target="nok-top-navigation"'
+								. ' data-toggle-event="click"'
+								. ' data-toggles-class="popup-open"'
+								. ' data-toggles-attribute="data-state" data-toggles-attribute-value="open"'
+								. ' data-attribute-target="#%s"',
+								esc_attr($child['popup_id'])
+							);
+						}
+
 						$attrs = [];
-						if (!empty($child['target'])) {
+						if (!empty($child['target']) && empty($child['is_popup_trigger'])) {
 							$attrs[] = 'target="' . esc_attr($child['target']) . '"';
 						}
 						if (!empty($child['attr_title'])) {
@@ -96,7 +128,7 @@ $parents_with_children = array_filter($menu_items, function($item) {
 						}
 						$attr_string = !empty($attrs) ? ' ' . implode(' ', $attrs) : '';
 						?>
-						<a href="<?= esc_url($child['url']); ?>" class="<?= $class_string; ?>"<?= $attr_string; ?>>
+						<a href="<?= esc_url($url); ?>" class="<?= $class_string; ?>"<?= $attr_string; ?><?= $popup_attrs; ?>>
 							<?= esc_html($child['title']); ?>
 						</a>
 					<?php endforeach; ?>
