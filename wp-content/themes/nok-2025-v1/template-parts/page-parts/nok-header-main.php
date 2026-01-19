@@ -109,37 +109,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
             nok-z-2"
                  data-scroll-snapping="true" data-requires="./nok-menu-carousel.mjs" data-require-lazy="true">
 
-                <div class="nok-nav-carousel__inner nok-text-darkerblue nok-dark-text-white">
-                    <div class="nok-nav-carousel__slide">
-                        <div class="nok-nav-menu-items" id="topmenu">
-                            <a href="#submenu-behandelingen" class="nok-nav-menu-item">Behandelingen</a>
-                            <a href="#submenu-over-nok" class="nok-nav-menu-item">Over NOK</a>
-                            <a href="#" class="nok-nav-menu-item">Agenda</a>
-                            <a href="#" class="nok-nav-menu-item">Verwijzers</a>
-                        </div>
-                    </div>
-                    <div class="nok-nav-carousel__slide">
-                        <div class="nok-nav-menu-items" id="submenu-behandelingen">
-                            <a href="#topmenu" class="nok-nav-menu-item nok-nav-menu-item__back">&laquo; Terug naar
-                                overzicht</a>
-                            <a href="#" class="nok-nav-menu-item">Wat is obesitas?</a>
-                            <a href="#" class="nok-nav-menu-item">Onze behandeling van
-                                obesitas</a>
-                            <a href="#" class="nok-nav-menu-item">Ons behandelprogramma</a>
-                            <a href="#" class="nok-nav-menu-item">De operatie</a>
-                            <a href="#" class="nok-nav-menu-item">De kosten van de behandeling</a>
-                        </div>
-                        <div class="nok-nav-menu-items" id="submenu-over-nok">
-                            <a href="#topmenu" class="nok-nav-menu-item nok-nav-menu-item__back">&laquo; Terug naar
-                                overzicht</a>
-                            <a href="#" class="nok-nav-menu-item">Over ons</a>
-                            <a href="#" class="nok-nav-menu-item">Team van specialisten</a>
-                            <a href="#" class="nok-nav-menu-item">Vestigingen</a>
-                            <a href="#" class="nok-nav-menu-item">Ervaringen</a>
-                            <a href="#" class="nok-nav-menu-item">Veelgestelde vragen</a>
-                        </div>
-                    </div>
-                </div>
+				<?php $menu_manager->render_mobile_carousel('mobile_primary'); ?>
             </div>
             <div class="nok-section__inner--stretched nok-nav-footer nok-text-contrast nok-bg-darkerblue nok-dark-bg-darkestblue nok-z-1">
                 <div class="nok-nav-menu-items nok-nav-menu-items--compact">

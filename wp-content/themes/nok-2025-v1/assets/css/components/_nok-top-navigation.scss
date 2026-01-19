@@ -47,7 +47,7 @@ nok-top-navigation {
       top: 0;
       bottom: 0;
       justify-content: flex-start;
-      z-index: components-base.$z-stack-top;
+      z-index: components-base.$z-stack-top !important;
       pointer-events: none;
     }
   }

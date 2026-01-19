@@ -23,7 +23,7 @@ $component-name: #{components-base.$prefix}-scroll-progress;
   position: fixed;
   right: var(--#{components-base.$prefix}-padding-base, 1.5rem);
   bottom: var(--#{components-base.$prefix}-padding-base, 1.5rem);
-  z-index: components-base.$z-stack-top;
+  z-index: components-base.$z-stack-top - 1;
 
   width: var(--size);
   height: var(--size);
