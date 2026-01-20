@@ -199,3 +199,6 @@
 .half-flex-gap {
   gap: calc(var(--flex-gap) / 2);
 }
+.quart-flex-gap {
+  gap: calc(var(--flex-gap) / 4);
+}

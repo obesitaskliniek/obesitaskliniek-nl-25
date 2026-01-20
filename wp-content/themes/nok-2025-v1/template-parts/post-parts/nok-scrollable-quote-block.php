@@ -32,12 +32,17 @@ $quote_block_button_style = $args['block_button_color'] ?? 'nok-bg-darkestblue n
                 <?php endif; ?>
                 <?php if ( ! empty( $quote['link_url'] ) ) : ?>
                     <div class="nok-layout-flex-row space-between">
-                        <a role="button" href="<?= esc_url( $quote['link_url'] ) ?>"
-                           class="nok-button nok-justify-self-start <?= $quote_block_button_style ?> fill-mobile"
-                           title="Lees het hele verhaal van <?= esc_attr( $quote['name'] ?? 'deze patiënt' ) ?>"
-                           tabindex="0">
-                            Lees het verhaal <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ); ?>
-                        </a>
+                        <div class="nok-layout-flex-column quart-flex-gap">
+                            <a role="button" href="<?= esc_url( $quote['link_url'] ) ?>"
+                               class="nok-button nok-justify-self-start <?= $quote_block_button_style ?> fill-mobile"
+                               title="Lees het hele verhaal van <?= esc_attr( $quote['name'] ?? 'deze patiënt' ) ?>"
+                               tabindex="0">
+                                Lees het verhaal <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ); ?>
+                            </a>
+                            <a role="button" href="#" class="nok-hyperlink nok-justify-self-center">
+                                <span>Bekijk alle ervaringen</span>
+                            </a>
+                        </div>
                         <?php if ( ! empty( $quote['image_url'] ) ): ?>
                         <div class="nok-square-block__thumbnail">
                             <img src="<?= esc_url( $quote['image_url'] ) ?>" loading="lazy">
