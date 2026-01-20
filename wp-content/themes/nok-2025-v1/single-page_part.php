@@ -21,3 +21,5 @@ if (!$design || !locate_template("template-parts/page-parts/{$design}.php")) {
 		'page_part_fields' => $page_part_fields
 	]);
 }
+
+get_footer();

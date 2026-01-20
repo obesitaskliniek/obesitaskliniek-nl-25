@@ -12,6 +12,7 @@ use NOK2025\V1\PageParts\PreviewSystem;
 use NOK2025\V1\PageParts\TemplateRenderer;
 use NOK2025\V1\PageParts\RestEndpoints;
 use NOK2025\V1\SEO\YoastIntegration;
+use NOK2025\V1\VoorlichtingForm;
 use WP_Post;
 
 /**
@@ -85,6 +86,7 @@ final class Theme {
     private RestEndpoints $rest_endpoints;
     private YoastIntegration $yoast_integration;
     private BlockRenderers $block_renderers;
+    private VoorlichtingForm $voorlichting_form;
 
     // Settings store (can hold customizer values)
     private array $settings = [];
@@ -105,6 +107,7 @@ final class Theme {
         $this->template_renderer   = new TemplateRenderer();
         $this->yoast_integration   = new YoastIntegration();
         $this->block_renderers     = new BlockRenderers();
+        $this->voorlichting_form   = new VoorlichtingForm();
         $this->rest_endpoints      = new RestEndpoints(
                 $this->template_renderer,
                 $this->meta_manager
@@ -149,6 +152,7 @@ final class Theme {
         $this->rest_endpoints->register_hooks();
         $this->yoast_integration->register_hooks();
         $this->block_renderers->register_hooks();
+        $this->voorlichting_form->register_hooks();
 
 
         // Register archive settings AFTER init (priority 20)
