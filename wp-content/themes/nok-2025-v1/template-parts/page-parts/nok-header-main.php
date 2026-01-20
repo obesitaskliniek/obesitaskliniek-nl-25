@@ -75,9 +75,9 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
     <nok-navigation-mobile>
         <nok-navigation-top-row class="nok-section__inner--stretched  nok-bg-white nok-dark-bg-darkestblue nok-text-contrast nok-fill-contrast  nok-z-3">
             <a href="<?= esc_url(home_url('/')) ?>"><?= $logo; ?></a>
-            <button class="nok-button nok-button--small nok-bg-yellow nok-text-contrast nok-invisible-to-sm"
+            <a href="/aanmelden-gratis-voorlichting" role="button" class="nok-button nok-button--small nok-bg-yellow nok-text-contrast nok-invisible-to-sm"
                     tabindex="0">Gratis voorlichting
-            </button>
+            </a>
             <a href="tel:+31888832444" role="button" class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
                     tabindex="0">
                 <?= Assets::getIcon('ui_telefoon') ?>
@@ -118,9 +118,9 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                        data-toggles-attribute="data-state" data-toggles-attribute-value="open" data-attribute-target="#popup-bmi-calculator">BMI berekenen</a>
                     <a href="#" class="nok-nav-menu-item">Mijn NOK</a>
                     <a href="#" class="nok-nav-menu-item">NOK App</a>
-                    <button class="nok-button nok-button--small nok-bg-yellow nok-text-contrast nok-invisible-sm"
+                    <a href="/aanmelden-gratis-voorlichting" role="button" class="nok-button nok-button--small nok-bg-yellow nok-text-contrast nok-invisible-sm"
                             tabindex="0">Gratis voorlichting
-                    </button>
+                    </a>
                 </div>
             </div>
         </nok-navigation-drawer>
@@ -152,9 +152,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                 </div>
 				<?php $menu_manager->render_desktop_menu_bar('primary'); ?>
                 <div>
-                    <button class="nok-button nok-bg-yellow nok-text-contrast" tabindex="0">Gratis
-                        voorlichting
-                    </button>
+                    <a href="/aanmelden-gratis-voorlichting" role="button" class="nok-button nok-bg-yellow nok-text-contrast" tabindex="0">Gratis voorlichting</a>
                 </div>
             </div>
             <nok-nav-menu-bar-dropdown>

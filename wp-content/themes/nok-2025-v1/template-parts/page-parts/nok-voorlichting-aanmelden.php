@@ -47,7 +47,7 @@ foreach ($vestigingen as $vestiging) {
 ?>
 
 <nok-section class="<?= $section_colors ?>" data-requires="./nok-voorlichting-form.mjs">
-	<div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
+	<div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>" id="nok-voorlichting-form">
 
 		<?php if ($c->show_intro->isTrue()): ?>
 			<div class="nok-layout-grid nok-mb-2">
@@ -60,7 +60,6 @@ foreach ($vestigingen as $vestiging) {
 			<?php if ($has_voorlichtingen): ?>
 				<?php if (function_exists('gravity_form')): ?>
 					<div class="nok-voorlichting-form"
-                         id="nok-voorlichting-form"
 					     data-voorlichting-form
 					     data-api-url="<?= esc_url(rest_url('nok-2025-v1/v1/voorlichtingen/options')) ?>"
 					     data-location-field="input_<?= VoorlichtingForm::FORM_ID ?>_<?= VoorlichtingForm::FIELD_LOCATION ?>"

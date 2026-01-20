@@ -189,8 +189,8 @@ class FormInstance {
             const option = document.createElement('option');
             option.value = location.value;
             option.textContent = location.count > 0
-                ? `${location.label} (${location.count} beschikbaar)`
-                : `${location.label} (vol)`;
+                ? `${location.label} (${location.count} gepland)`
+                : `${location.label} (geen voorlichting gepland)`;
 
             // Disable locations with no open events
             if (location.count === 0) {

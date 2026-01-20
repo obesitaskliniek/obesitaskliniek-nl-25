@@ -137,7 +137,7 @@ $base_week_url = add_query_arg( 'week', $week_start->format( 'Y-m-d' ), get_post
     <nok-hero class="nok-section">
         <div class="nok-section__inner nok-columns-1 nok-hero__inner nok-mt-0 nok-px-0 nok-border-radius-to-sm-0
 		nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10">
-            <header class="nok-section__inner nok-mt-0 nok-mb-section-padding">
+            <header class="nok-section__inner nok-my-0">
                 <?php Helpers::render_breadcrumbs(); ?>
                 <h1 class="nok-fs-giant"><?php esc_html_e( 'Agenda', THEME_TEXT_DOMAIN ); ?></h1>
                 <p class="nok-intro-text">
@@ -160,6 +160,7 @@ $base_week_url = add_query_arg( 'week', $week_start->format( 'Y-m-d' ), get_post
             <!-- Week selector and filters -->
             <div class="nok-agenda-controls
             nok-layout-grid
+            nok-align-items-center
             nok-columns-2 nok-columns-to-lg-1
             nok-mb-3 nok-row-gap-1 nok-column-gap-2">
                 <div class="nok-agenda-week-selector">
