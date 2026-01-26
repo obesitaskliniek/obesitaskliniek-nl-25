@@ -1,9 +1,9 @@
 /**
- * NOK Video Playback Handler
- * Handles play button visibility for all video types (YouTube, Vimeo, self-hosted)
+ * NOK Video Block Handler
+ * Handles play button visibility for embed-nok-video block (YouTube, Vimeo, self-hosted)
  */
 
-export const NAME = 'nokVideoPlayback';
+export const NAME = 'videoBlock';
 
 /**
  * Handle YouTube iframe API

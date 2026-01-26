@@ -111,6 +111,73 @@ class Helpers {
 		return 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:300x0-25-0-0-center-0.jpg';
 	}
 
+	/**
+	 * Renders a video thumbnail with popup trigger.
+	 *
+	 * At least one of $webm_url or $mp4_url must be provided.
+	 * Uses separate data attributes to avoid JSON escaping issues.
+	 *
+	 * @param string      $webm_url    Video URL (WebM format). Can be empty if MP4 provided.
+	 * @param string      $mp4_url     Video URL (MP4 format). Can be empty if WebM provided.
+	 * @param string      $poster_url  Poster image URL (required for thumbnail display).
+	 * @param string      $title       Video title (for popup header and accessibility).
+	 * @param string|null $classes     Additional CSS classes.
+	 *
+	 * @return string HTML output, or empty string if no valid video sources.
+	 */
+	public static function render_video_thumbnail(
+		string $webm_url,
+		string $mp4_url,
+		string $poster_url,
+		string $title = '',
+		?string $classes = null
+	): string {
+		// Validate: at least one video source required
+		if ( empty( $webm_url ) && empty( $mp4_url ) ) {
+			return '';
+		}
+
+		// Validate: poster required for thumbnail
+		if ( empty( $poster_url ) ) {
+			return '';
+		}
+
+		$icon = Assets::getIcon( 'ui_play' );
+
+		// Build data attributes conditionally (avoid empty attributes)
+		$data_attrs = [];
+		if ( ! empty( $webm_url ) ) {
+			$data_attrs[] = sprintf( 'data-video-webm="%s"', esc_url( $webm_url ) );
+		}
+		if ( ! empty( $mp4_url ) ) {
+			$data_attrs[] = sprintf( 'data-video-mp4="%s"', esc_url( $mp4_url ) );
+		}
+		$data_attrs[] = sprintf( 'data-video-title="%s"', esc_attr( $title ) );
+
+		return sprintf(
+			'<div class="nok-video-thumbnail %s"
+              %s
+              tabindex="0"
+              role="button"
+              aria-label="Video afspelen: %s"
+              data-toggles-class="popup-open"
+              data-class-target="nok-top-navigation"
+              data-toggles-attribute="data-state"
+              data-toggles-attribute-value="open"
+              data-attribute-target="#popup-video">
+            <img class="nok-video-thumbnail__poster" src="%s" alt="" loading="lazy">
+            <div class="nok-video-thumbnail__play" aria-hidden="true">
+                <span class="nok-video-background__play-icon">%s</span>
+            </div>
+        </div>',
+			esc_attr( $classes ?? '' ),
+			implode( "\n              ", $data_attrs ),
+			esc_attr( $title ),
+			esc_url( $poster_url ),
+			$icon
+		);
+	}
+
 	public static function get_featured_image( $class = null ): string {
 		if ( has_post_thumbnail() ) {
 			$featuredImage = wp_get_attachment_image(

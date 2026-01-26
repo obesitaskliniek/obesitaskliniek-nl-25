@@ -1,0 +1,105 @@
+@use "shared" as *;
+
+// ============================================================================
+// INLINE VIDEO BACKGROUND (for page parts)
+// ============================================================================
+
+.nok-video-background {
+    position: relative;
+    overflow: hidden;
+
+    video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        max-height: 90vh;
+    }
+
+    // Play button overlay - colors applied via utility classes in HTML
+    &__play-trigger {
+        // Reset button styles
+        border: none;
+        padding: 0;
+        font: inherit;
+
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        // Alpha controlled via --bg-alpha-value set in HTML class
+        @include transition-properties {
+            transition: background-color $animation-duration;
+        }
+
+        --bg-alpha-value: 0;
+        &:hover,
+        &:focus-visible {
+            --bg-alpha-value: 0.5;
+        }
+
+        // Focus ring for keyboard navigation
+        &:focus-visible {
+            outline: 3px solid var(--nok-yellow);
+            outline-offset: -3px;
+        }
+    }
+
+    &__play-icon {
+        width: clamp(48px, 8vw, 80px);
+        height: clamp(48px, 8vw, 80px);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        @include nok-shadow(8px, 0.2);
+        pointer-events: none;
+
+        svg {
+            width: 40%;
+            height: 40%;
+            margin-left: 4px; // Visual centering for play icon
+        }
+    }
+}
+
+// ============================================================================
+// VIDEO THUMBNAIL CARD (for carousels)
+// ============================================================================
+
+.nok-video-thumbnail {
+    position: relative;
+    cursor: pointer;
+
+    &__poster {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        display: block;
+    }
+
+    &__play {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        // Alpha controlled via --bg-alpha-value set in HTML class
+        @include transition-properties {
+            transition: background-color $animation-duration;
+        }
+    }
+
+    &:hover &__play,
+    &:focus-visible &__play {
+        --bg-alpha-value: 0.4;
+    }
+
+    &:focus-visible {
+        outline: 3px solid var(--nok-yellow);
+        outline-offset: 2px;
+    }
+}

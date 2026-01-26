@@ -7,11 +7,14 @@
  * Custom Fields:
  * - video_url:url!default(https://www.youtube.com/watch?v=dQw4w9WgXcQ)
  * - video_type:select(YouTube::youtube|Vimeo::vimeo|Self-hosted::self)!default(youtube)
+ * - full_section:checkbox!default(true)!descr[Bedek de hele sectie tot max 90% de hoogte van het browserscherm]!page-editable
  * - achtergrondkleur:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue|Donkerder::nok-bg-body--darker|Transparant::)!page-editable
  * - tekstkleur:select(Standaard::nok-text-contrast|Wit::nok-text-white|Blauw::nok-text-darkerblue)!page-editable
-*  - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
+*  - narrow_section:checkbox!default(false)!descr[Smalle sectie - heeft geen invloed als full section aan staat]!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
+ * @todo: You cannot use comma's for the 'descr' section in the custom field definitions. Perhaps we should introduce the option to quote the value, which then treats the entire part as a string (from " to ") instead.
+ * @todo: Add an way for options to cancel eachother. So if two booleans conflict, one could disable the other, if checked. Something like `narrow_section:checkbox|disables(full_section)`. Should not only disable, but also unset?
  */
 
 use NOK2025\V1\Helpers;
@@ -44,29 +47,41 @@ if ( $c->has( 'video_url' ) ) {
 }
 ?>
 
-<nok-video-section>
-	<nok-section class="<?= $c->achtergrondkleur ?>">
-		<div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
-			<article class="nok-video-section__content <?= $c->tekstkleur ?>">
+<nok-section class="<?= $c->achtergrondkleur ?>">
+    <?php if ($c->full_section->isTrue()) : ?>
 
-				<?php if ( $video_html ): ?>
-					<div class="nok-video-section__video-wrapper">
-						<?= $video_html ?>
-					</div>
-				<?php else: ?>
-					<div class="nok-video-section__video-wrapper nok-video-section__empty">
-						<p>Geen video URL opgegeven</p>
-					</div>
-				<?php endif; ?>
+        <?php if ( $video_html ): ?>
+            <div class="nok-video-background w-100">
+                <?= $video_html ?>
+            </div>
+        <?php else: ?>
+            <div class="nok-video-section__video-wrapper nok-video-section__empty">
+                <p>Geen video URL opgegeven</p>
+            </div>
+        <?php endif; ?>
 
-				<div class="nok-video-section__text">
-                    <h2 class="nok-fs-6"><?= $c->title() ?></h2>
-					<div class="nok-fs-body">
-						<?= $c->content(); ?>
-					</div>
-				</div>
+    <?php else: ?>
+    <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
+        <article class="nok-video-section__content <?= $c->tekstkleur ?>">
 
-			</article>
-		</div>
-	</nok-section>
-</nok-video-section>
+            <div class="nok-video-section__text">
+                <h2 class="nok-fs-6"><?= $c->title() ?></h2>
+                <div class="nok-fs-body">
+                    <?= $c->content(); ?>
+                </div>
+            </div>
+
+            <?php if ( $video_html ): ?>
+                <div class="nok-video-section__video-wrapper">
+                    <?= $video_html ?>
+                </div>
+            <?php else: ?>
+                <div class="nok-video-section__video-wrapper nok-video-section__empty">
+                    <p>Geen video URL opgegeven</p>
+                </div>
+            <?php endif; ?>
+
+        </article>
+    </div>
+    <?php endif; ?>
+</nok-section>

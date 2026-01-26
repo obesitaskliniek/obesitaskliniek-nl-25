@@ -15,7 +15,7 @@
  * - Accepts YouTube video IDs (e.g., 'dQw4w9WgXcQ') and converts to full URL
  * - Automatic oEmbed for YouTube/Vimeo
  * - Play button overlay (hidden via JavaScript when playing)
- * - Lazy-loads nok-video-playback.mjs module
+ * - Lazy-loads nok-video-block.mjs module
  * - 16:9 aspect ratio wrapper
  * - Fallback for missing video URL
  *
@@ -68,7 +68,7 @@ return function( array $attributes, string $content, WP_Block $block ): string {
 
 	ob_start();
 	?>
-	<div <?php echo $wrapper_attributes; ?> data-requires="./nok-video-playback.mjs" data-require-lazy="true">
+	<div <?php echo $wrapper_attributes; ?> data-requires="./nok-video-block.mjs" data-require-lazy="true">
 		<div class="nok-video-block__content">
 
 			<?php if ( $video_html ): ?>
