@@ -480,16 +480,7 @@ npm run start        # Development watch mode
 - REST API endpoints
 - Yoast page part logic integration
 
-**TODO - High Priority:**
-- Cache invalidation when page parts change
-- Enhanced SEO integration
-- Sitemaps
-
-**TODO - Medium Priority:**
-- Usage tracking system
-- Additional field types (image gallery, color picker)
-- Bulk operations for page parts
-- Partner logo system, like the icon-selector
+**Roadmap & Technical Debt:** See [TODO.md](TODO.md) for tracked items.
 
 ## External Dependencies
 

@@ -626,7 +626,7 @@ final class Theme {
                 'description' => 'De plaatsnaam van deze vestiging',
         ] );
 
-        // TODO: Change to 'tel' type once MetaRegistry supports it
+        // See TODO.md MED-001 for planned 'tel' type support
         PostMeta\MetaRegistry::register_field( 'vestiging', 'phone', [
                 'type'        => 'text',
                 'label'       => 'Telefoonnummer',

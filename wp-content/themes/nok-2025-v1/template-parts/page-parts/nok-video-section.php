@@ -13,8 +13,7 @@
 *  - narrow_section:checkbox!default(false)!descr[Smalle sectie - heeft geen invloed als full section aan staat]!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
- * @todo: You cannot use comma's for the 'descr' section in the custom field definitions. Perhaps we should introduce the option to quote the value, which then treats the entire part as a string (from " to ") instead.
- * @todo: Add an way for options to cancel eachother. So if two booleans conflict, one could disable the other, if checked. Something like `narrow_section:checkbox|disables(full_section)`. Should not only disable, but also unset?
+ * @see TODO.md LOW-001, LOW-002 for field parser enhancements
  */
 
 use NOK2025\V1\Helpers;
