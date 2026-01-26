@@ -15,6 +15,7 @@
  * - video_lq:url!page-editable!descr[Video LQ (achtergrond, zonder geluid)]
  * - video_hq:url!page-editable!descr[Video HQ (fullscreen, met geluid)]
  * - video_poster:url!page-editable!descr[Video poster afbeelding URL]
+ * - video_start:text!page-editable!descr[Video starttijd in seconden (bijv. 2.5). Laat leeg voor begin.]!page-editable
  * - mobile_layout:select(Verbergen::collapse|Stapelen::stack)!page-editable!default(collapse)!descr[Hoe visual (afbeelding/video) tonen op mobiel? Verbergen: visual niet zichtbaar op mobiel (video toont compacte link). Stapelen: visual onder content.]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
@@ -32,6 +33,7 @@ $has_video = $c->has('video_lq');
 $video_lq = $c->has('video_lq') ? $c->video_lq->url() : '';
 $video_hq = $c->has('video_hq') ? $c->video_hq->url() : $video_lq;
 $video_poster_url = $c->has('video_poster') ? $c->video_poster->url() : '';
+$video_start = $c->has('video_start') ? floatval($c->video_start->raw()) : 0;
 $video_title = esc_attr(get_the_title());
 
 // Mobile layout: stack shows visual below content, collapse hides visual (with inline trigger for video)
@@ -94,13 +96,15 @@ if ($has_video) : ?>
     <div class="nok-video-background nok-rounded-border-large <?= $visual_mobile_hide ?> <?= $visual_order_mobile ?> nok-h-100 <?= $visual_z ?>"
          data-requires="./nok-video.mjs"
          data-video-lq="<?= esc_url($video_lq) ?>"
-         data-video-hq="<?= esc_url($video_hq) ?>">
+         data-video-hq="<?= esc_url($video_hq) ?>"
+         <?php if ($video_start > 0) : ?>data-video-start="<?= esc_attr($video_start) ?>"<?php endif; ?>>
         <video muted loop playsinline preload="none"
                aria-label="Achtergrondvideo: <?= $video_title ?>"
                <?php if ($video_poster_url) : ?>poster="<?= esc_url($video_poster_url) ?>"<?php endif; ?>>
             <source src="<?= esc_url($video_lq) ?>" type="video/mp4">
         </video>
         <button type="button"
+                title="Bekijk de video op volledig scherm"
                 class="nok-video-background__play-trigger nok-bg-darkestblue"
                 aria-label="Video fullscreen afspelen"
                 data-video-play>
