@@ -161,6 +161,24 @@ const PostMetaPanel = () => {
                     </FieldGroup>
                 );
 
+            case 'tel':
+                return (
+                    <FieldGroup key={field.meta_key} label={field.label}>
+                        <TextControl
+                            {...commonProps}
+                            type="tel"
+                            placeholder={field.placeholder}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
+                        />
+                        {field.description && (
+                            <p style={helpStyle}>
+                                {field.description}
+                            </p>
+                        )}
+                    </FieldGroup>
+                );
+
             case 'checkbox':
                 return (
                     <FieldGroup key={field.meta_key}>

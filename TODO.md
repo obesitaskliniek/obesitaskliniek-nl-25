@@ -11,6 +11,7 @@ Inline TODO comments have been removed from the codebase in favor of this centra
 
 ### SECURITY-001: Verify REST API Rate Limiting
 **Priority:** Critical
+**Status:** Verification Required
 **Related File:** `inc/PageParts/RestEndpoints.php`
 
 The public REST endpoints do not implement application-level rate limiting by design.
@@ -37,6 +38,7 @@ location ~ /wp-json/nok-2025-v1/ {
 
 ### SECURITY-002: dangerouslySetInnerHTML Code Review Policy
 **Priority:** Critical
+**Status:** Policy (No Code Changes Needed)
 **Related File:** `src/blocks/embed-nok-page-part/index.js`
 
 The Gutenberg block uses `dangerouslySetInnerHTML` for admin-only UI rendering.
@@ -47,74 +49,7 @@ If user content is ever needed, implement DOMPurify sanitization first.
 
 ---
 
-## High Priority
-
-### HIGH-001: Cache Invalidation for Page Parts
-**Priority:** High
-**Related File:** `inc/PageParts/`
-
-Implement cache invalidation when page parts are modified.
-Critical for healthcare content where stale information can have material impact.
-
-**Considerations:**
-- Hook into `save_post_nok_page_part` action
-- Clear relevant object cache keys
-- Consider fragment caching with proper invalidation
-
----
-
-### HIGH-002: SEO Integration
-**Priority:** High
-
-Enhance SEO integration for page parts system.
-
-**Tasks:**
-- Schema.org structured data for page parts
-- Open Graph meta tag support
-- XML sitemap generation
-
----
-
 ## Medium Priority
-
-### MED-001: Add `tel` Field Type to MetaRegistry
-**Priority:** Medium
-**Related File:** `inc/PostMeta/MetaRegistry.php`, `inc/Theme.php:631`
-
-The phone field for vestiging currently uses `type: 'text'` instead of proper `tel` type.
-
-**Implementation Steps:**
-1. Add `'tel'` case to `MetaRegistry::get_sanitize_callback()` - same as text
-2. Add `'tel'` case to `MetaRegistry::get_rest_type()` - returns `'string'`
-3. Add `'tel'` case to `MetaRegistry::get_default_value()` - returns `''`
-4. Update `nok-post-meta-panel.js` to render `TextControl` with `type="tel"`
-5. Change `Theme.php:631` from `'text'` to `'tel'`
-
-**Benefits:**
-- Mobile devices show numeric keyboard
-- Better accessibility for screen readers
-- HTML5 semantic correctness
-
----
-
-### MED-002: Integrate Voorlichtingen Carousel into Vestiging Pages
-**Priority:** Medium
-**Related File:** `template-parts/post-parts/nok-vestiging-voorlichtingen.php`
-
-The voorlichtingen carousel component is complete but not integrated into vestiging pages.
-
-**Integration Options:**
-1. Add to vestiging template layout via Customizer
-2. Add to fallback template `template-parts/single-vestiging-content.php`
-
-**Usage:**
-```php
-$theme->embed_post_part_template('nok-vestiging-voorlichtingen')
-```
-
-**Context:** See memory.md entry "2026-01-15 - Voorlichting-Vestiging Linkage System"
-
----
 
 ### MED-003: Usage Tracking System
 **Priority:** Medium
@@ -197,37 +132,77 @@ Create a partner logo management system similar to the icon-selector.
 
 ---
 
-## Deprecated APIs (Migration Tracking)
-
-### DEP-001: Global Helper Functions
-**Status:** Deprecated, still in use
-**Related File:** `inc/Helpers.php:1870-1889`
-
-| Deprecated Function | Replacement | Used In |
-|---------------------|-------------|---------|
-| `makeRandomString()` | `\NOK2025\V1\Helpers::makeRandomString()` | Unknown |
-| `format_phone()` | `\NOK2025\V1\Helpers::format_phone()` | Templates |
-
-**Migration:** Update call sites to use class methods, then remove global wrappers.
-
----
-
-### DEP-002: FieldContext Legacy Methods
-**Status:** Deprecated, NOT in use
-**Related File:** `inc/PageParts/FieldContext.php:120-204`
-
-| Deprecated Method | Replacement |
-|-------------------|-------------|
-| `get_esc_html($key)` | `$context->field->html()` |
-| `get_esc_url($key)` | `$context->field->url()` |
-| `get_link($key)` | `$context->field->link()` |
-| `get_esc_attr($key)` | `$context->field->attr()` |
-
-**Migration:** Safe to remove - no usage found in templates.
-
----
-
 ## Completed / Resolved
+
+### ~~RESOLVED: HIGH-001: Cache Invalidation for Page Parts~~
+**Resolved:** 2026-01-26
+**Implementation:** `inc/PageParts/Registry.php`
+
+Added cache invalidation hooks:
+- `save_post_page_part` - clears cache when page part is saved
+- `before_delete_post` - clears cache when page part is deleted
+- `updated_post_meta` / `added_post_meta` - clears cache when design_slug changes
+
+---
+
+### ~~RESOLVED: HIGH-002: SEO Integration~~
+**Resolved:** 2026-01-26
+**Implementation:** `inc/SEO/PagePartSchema.php`
+
+Added Schema.org structured data support:
+- FAQPage schema for FAQ page parts
+- MedicalOrganization schema for team sections
+- MedicalClinic schema for vestiging (location) sections
+- EducationEvent schema for voorlichting sections
+- Hook `nok_page_part_rendered` fires after page part rendering for schema collection
+
+---
+
+### ~~RESOLVED: MED-001: Add `tel` Field Type to MetaRegistry~~
+**Resolved:** 2026-01-26
+**Implementation:** `inc/PostMeta/MetaRegistry.php`, `src/nok-post-meta-panel.js`, `inc/Theme.php`
+
+Added `tel` field type:
+- Sanitization: `sanitize_text_field`
+- REST type: `string`
+- Default: `''`
+- UI: TextControl with `type="tel"` (mobile numeric keyboard)
+- Updated vestiging phone field to use `tel` type
+
+---
+
+### ~~RESOLVED: MED-002: Integrate Voorlichtingen Carousel into Vestiging Pages~~
+**Resolved:** 2026-01-26
+**Implementation:** `template-parts/single-vestiging-content.php`
+
+Integrated voorlichtingen carousel into vestiging pages:
+- Added `get_template_part('template-parts/post-parts/nok-vestiging-voorlichtingen')`
+- Carousel auto-detects city from vestiging title
+- Shows upcoming voorlichtingen for that location
+
+---
+
+### ~~RESOLVED: DEP-001: Global Helper Functions~~
+**Resolved:** 2026-01-26
+**Was In:** `inc/Helpers.php:1870-1889`
+
+Removed deprecated global wrapper functions:
+- `makeRandomString()` - all usages already use `Helpers::makeRandomString()`
+- `format_phone()` - all usages already use `Helpers::format_phone()`
+
+---
+
+### ~~RESOLVED: DEP-002: FieldContext Legacy Methods~~
+**Resolved:** 2026-01-26
+**Was In:** `inc/PageParts/FieldContext.php:120-204`
+
+Removed deprecated methods (no usage found):
+- `get_esc_html()` - use `$context->field->html()`
+- `get_esc_url()` - use `$context->field->url()`
+- `get_link()` - use `$context->field->link()`
+- `get_esc_attr()` - use `$context->field->attr()`
+
+---
 
 ### ~~RESOLVED: post_select Field Implementation~~
 **Resolved:** 2026-01-26

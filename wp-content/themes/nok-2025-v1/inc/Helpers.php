@@ -1864,30 +1864,6 @@ function do_extra_header_data( $nonce = '' ): void {
 	header( 'Connection: keep-alive' );
 }
 
-/**
- * Generate cryptographically secure random string (global wrapper)
- *
- * @deprecated Use \NOK2025\V1\Helpers::makeRandomString() instead
- * @param int $bits Number of bits of randomness
- * @return string Random binary string
- */
-function makeRandomString( int $bits = 256 ): string {
-	return \NOK2025\V1\Helpers::makeRandomString( $bits );
-}
-
-/**
- * Format Dutch phone number (global wrapper)
- *
- * @deprecated Use \NOK2025\V1\Helpers::format_phone() instead
- * @param string $phone Phone number to format
- * @param string $landcode Country code (deprecated, ignored - class method auto-detects)
- * @return string Formatted phone number
- */
-function format_phone( string $phone, string $landcode = '31' ): string {
-	// Note: $landcode parameter is ignored - the class method handles international prefixes automatically
-	return \NOK2025\V1\Helpers::format_phone( $phone );
-}
-
 //print an element from a multidimensional array
 function array_to_element( $type, $attributes, $innerHTML = '', $pre = '' ): string {
 	$mapper = function ( $v, $k ) {

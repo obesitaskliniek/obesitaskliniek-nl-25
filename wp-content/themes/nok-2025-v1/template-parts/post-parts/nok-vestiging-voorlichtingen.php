@@ -19,8 +19,6 @@
  * @since   1.0.0
  */
 
-// Integration status: See TODO.md MED-002
-
 use NOK2025\V1\Assets;
 use NOK2025\V1\Helpers;
 

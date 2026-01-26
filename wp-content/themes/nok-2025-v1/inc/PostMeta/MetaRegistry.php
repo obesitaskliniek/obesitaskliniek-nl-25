@@ -85,6 +85,7 @@ class MetaRegistry {
 			'textarea' => 'sanitize_textarea_field',
 			'url' => 'esc_url_raw',
 			'email' => 'sanitize_email',
+			'tel' => 'sanitize_text_field',
 			'number', 'post_select' => 'absint',
 			'checkbox' => fn( $v ) => in_array( $v, [ '1', 1, true ], true ) ? '1' : '0',
 			'opening_hours' => fn( $v ) => is_string( $v ) ? $v : wp_json_encode( $v ),
