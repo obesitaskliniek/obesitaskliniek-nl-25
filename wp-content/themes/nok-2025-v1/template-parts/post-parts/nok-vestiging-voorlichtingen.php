@@ -19,10 +19,7 @@
  * @since   1.0.0
  */
 
-// TODO: Integrate this post-part into single-vestiging.php template layout.
-// This carousel shows upcoming voorlichtingen for the current vestiging.
-// Usage: $theme->embed_post_part_template('nok-vestiging-voorlichtingen')
-// See memory.md entry "2026-01-15 - Voorlichting-Vestiging Linkage System" for context.
+// Integration status: See TODO.md MED-002
 
 use NOK2025\V1\Assets;
 use NOK2025\V1\Helpers;
