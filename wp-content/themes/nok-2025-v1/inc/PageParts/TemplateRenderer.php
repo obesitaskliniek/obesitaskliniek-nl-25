@@ -449,9 +449,7 @@ class TemplateRenderer {
 			$value = preg_replace_callback('/\{\{vestiging_meta:([a-zA-Z0-9_-]+)\}\}/', function($matches) use ($post) {
 				$field_name = $matches[1];
 
-				// Get behandeld_door post ID from current post meta
-				// TODO: Once post_select field is implemented, this will return an integer
-				// For now, it may contain text that needs to be parsed
+				// Get behandeld_door post ID from current post meta (returns integer from post_select field)
 				$vestiging_id = get_post_meta($post->ID, '_behandeld_door', true);
 
 				if (!$vestiging_id || !is_numeric($vestiging_id)) {
