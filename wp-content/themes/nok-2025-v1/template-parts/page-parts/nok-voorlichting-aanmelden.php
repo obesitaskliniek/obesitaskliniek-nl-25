@@ -5,7 +5,6 @@
  * Slug: nok-voorlichting-aanmelden
  * Custom Fields:
  * - colors:select(Wit op lichtgrijs|Wit op donkerblauw)!page-editable!default(Wit op lichtgrijs)
- * - form_id:number!default(2)!descr[Gravity Forms ID voor het algemene aanmeldformulier]
  * - show_intro:checkbox!default(true)!descr[Toon introductietekst boven het formulier]
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  *
@@ -27,9 +26,6 @@ $block_colors = $c->colors->is('Wit op donkerblauw',
 	'nok-bg-body nok-text-contrast'
 );
 
-// Get form ID (default to 2 for the general registration form)
-$form_id = (int) $c->form_id->raw() ?: 2;
-
 // Check if there are any upcoming voorlichtingen
 $has_voorlichtingen = false;
 $vestigingen = get_posts([
@@ -44,6 +40,10 @@ foreach ($vestigingen as $vestiging) {
 		break;
 	}
 }
+
+// Form configuration
+$form_id = VoorlichtingForm::FORM_ID;
+$voorlichting_id_field = 'input_' . $form_id . '_' . VoorlichtingForm::FIELD_VOORLICHTING_ID;
 ?>
 
 <nok-section class="<?= $section_colors ?>" data-requires="./nok-voorlichting-form.mjs">
@@ -59,18 +59,44 @@ foreach ($vestigingen as $vestiging) {
 		<nok-square-block class="<?= $block_colors ?>" data-shadow="true">
 			<?php if ($has_voorlichtingen): ?>
 				<?php if (function_exists('gravity_form')): ?>
-					<div class="nok-voorlichting-form"
-					     data-voorlichting-form
+					<!-- Voorlichting selector (OUTSIDE form) -->
+					<div class="nok-voorlichting-selector nok-mb-1_5"
+					     data-voorlichting-selector
 					     data-api-url="<?= esc_url(rest_url('nok-2025-v1/v1/voorlichtingen/options')) ?>"
-					     data-location-field="input_<?= VoorlichtingForm::FORM_ID ?>_<?= VoorlichtingForm::FIELD_LOCATION ?>"
-					     data-datetime-field="input_<?= VoorlichtingForm::FORM_ID ?>_<?= VoorlichtingForm::FIELD_DATETIME ?>"
-					     data-voorlichting-id-field="input_<?= VoorlichtingForm::FORM_ID ?>_<?= VoorlichtingForm::FIELD_VOORLICHTING_ID ?>">
-						<?php
-						// Render Gravity Form
-						// Field IDs expected: see data-<x>-field attributes
-						gravity_form($form_id, false, false, false, null, true, 0);
-						?>
+					     data-target-form="#gform_<?= $form_id ?>"
+					     data-voorlichting-id-field="<?= esc_attr($voorlichting_id_field) ?>">
+
+						<div class="nok-form-row nok-layout-grid" style="--cols: 2; --gap: var(--spacing-1);">
+							<div class="nok-form-field">
+								<label for="voorlichting-location" class="gfield_label gform-field-label">
+									<?php esc_html_e('Vestiging', THEME_TEXT_DOMAIN); ?>
+									<span class="gfield_required gfield_required_asterisk">*</span>
+								</label>
+								<select id="voorlichting-location"
+								        class="gfield_select"
+								        required>
+									<option value=""><?php esc_html_e('Selecteer een vestiging', THEME_TEXT_DOMAIN); ?></option>
+								</select>
+							</div>
+							<div class="nok-form-field">
+								<label for="voorlichting-datetime" class="gfield_label gform-field-label">
+									<?php esc_html_e('Datum en tijd', THEME_TEXT_DOMAIN); ?>
+									<span class="gfield_required gfield_required_asterisk">*</span>
+								</label>
+								<select id="voorlichting-datetime"
+								        class="gfield_select"
+								        disabled
+								        required>
+									<option value=""><?php esc_html_e('Selecteer eerst een vestiging', THEME_TEXT_DOMAIN); ?></option>
+								</select>
+							</div>
+						</div>
 					</div>
+
+					<!-- Gravity Form 1 (same as single-voorlichting), disabled until voorlichting selected -->
+					<fieldset data-voorlichting-form-fieldset disabled>
+						<?php gravity_form($form_id, false, false); ?>
+					</fieldset>
 				<?php else: ?>
 					<p class="nok-text-muted">
 						<?php esc_html_e('Gravity Forms is niet actief. Neem contact op met de beheerder.', THEME_TEXT_DOMAIN); ?>

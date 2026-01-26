@@ -3,8 +3,6 @@
 
 namespace NOK2025\V1;
 
-use DateTime;
-use DateTimeZone;
 use WP_REST_Response;
 
 /**
@@ -29,15 +27,14 @@ class VoorlichtingForm {
 	/**
 	 * Form configuration - single source of truth for Gravity Forms field IDs
 	 *
-	 * These constants define the Gravity Forms form and field IDs used for
-	 * voorlichting registration. Referenced by:
+	 * Uses Form 1 (same as single-voorlichting page). Location/datetime
+	 * selection is handled by external dropdowns, not form fields.
+	 *
+	 * Referenced by:
 	 * - Template data attributes (nok-voorlichting-aanmelden.php)
-	 * - PHP form hooks (functions.php)
 	 * - JavaScript form handler (nok-voorlichting-form.mjs)
 	 */
-	public const FORM_ID = 2;
-	public const FIELD_LOCATION = 21;
-	public const FIELD_DATETIME = 22;
+	public const FORM_ID = 1;
 	public const FIELD_VOORLICHTING_ID = 18;
 
 	/**
@@ -178,39 +175,5 @@ class VoorlichtingForm {
 		$response->header( 'Expires', '0' );
 
 		return $response;
-	}
-
-	/**
-	 * Get Gravity Forms dropdown choices for vestiging field
-	 *
-	 * Returns choices array formatted for Gravity Forms field population.
-	 * Only includes locations with at least one open voorlichting.
-	 *
-	 * @return array Gravity Forms choices array
-	 */
-	public static function get_vestiging_choices(): array {
-		$choices = [];
-
-		$vestigingen = get_posts( [
-			'post_type'      => 'vestiging',
-			'posts_per_page' => -1,
-			'post_status'    => 'publish',
-			'orderby'        => 'title',
-			'order'          => 'ASC',
-		] );
-
-		foreach ( $vestigingen as $vestiging ) {
-			$city  = preg_replace( '/^NOK\s+/i', '', $vestiging->post_title );
-			$count = Helpers::count_upcoming_voorlichtingen( $city, true );
-
-			if ( $count > 0 ) {
-				$choices[] = [
-					'text'  => $city,
-					'value' => sanitize_title( $city ),
-				];
-			}
-		}
-
-		return $choices;
 	}
 }

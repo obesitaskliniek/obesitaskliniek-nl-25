@@ -25,7 +25,7 @@ $c = $context;
 
 ?>
 
-<nok-section class="<?= $c->colors ?> gradient-background">
+<nok-section class="<?= $c->colors ?> gradient-background">de
 
     <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
         <article class="nok-layout-grid nok-layout-grid__1-column nok-align-items-start">

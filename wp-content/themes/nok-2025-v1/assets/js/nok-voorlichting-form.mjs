@@ -4,15 +4,21 @@
  * Handles dynamic population of location and date/time dropdowns
  * for the general voorlichting registration form.
  *
+ * Architecture:
+ * - Dropdowns are OUTSIDE the Gravity Form (not submitted to HubSpot)
+ * - They serve as UI for selecting a voorlichting post ID
+ * - Selected ID is set in a hidden field inside Form 1
+ * - Form is disabled until a voorlichting is selected
+ *
  * Features:
  * - Fetches voorlichting options via REST API (bypasses page caching)
  * - Populates location dropdown with vestigingen that have upcoming events
  * - Cascading date/time dropdown based on selected location
  * - Shows disabled options for full events (status "vol")
- * - Sets hidden field with voorlichting post ID for form processing
+ * - Disables form submit until both dropdowns are selected
  *
  * @module nok-voorlichting-form
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 export const NAME = 'nokVoorlichtingForm';
@@ -21,7 +27,7 @@ export const NAME = 'nokVoorlichtingForm';
 // STATE
 // ============================================================================
 
-/** @type {WeakMap<HTMLElement, FormInstance>} */
+/** @type {WeakMap<HTMLElement, SelectorInstance>} */
 const instances = new WeakMap();
 
 // ============================================================================
@@ -29,44 +35,44 @@ const instances = new WeakMap();
 // ============================================================================
 
 /**
- * Initialize voorlichting form(s).
+ * Initialize voorlichting selector(s).
  *
- * @param {HTMLElement[]} elements - Elements with [data-voorlichting-form] attribute
+ * @param {HTMLElement[]} elements - Elements containing [data-voorlichting-selector]
  *
  * @example
  * // Auto-init via data attribute
- * <div data-voorlichting-form
+ * <div data-voorlichting-selector
  *      data-api-url="/wp-json/nok-2025-v1/v1/voorlichtingen/options"
- *      data-location-field="input_10"
- *      data-datetime-field="input_11"
- *      data-voorlichting-id-field="input_12">
- *   <!-- Gravity Form renders here -->
+ *      data-target-form="#gform_1"
+ *      data-voorlichting-id-field="input_1_18">
+ *   <select id="voorlichting-location">...</select>
+ *   <select id="voorlichting-datetime">...</select>
  * </div>
  */
 export function init(elements) {
     elements.forEach(element => {
         if (!(element instanceof HTMLElement)) return;
 
-        // Find all form containers within element
-        const containers = element.matches('[data-voorlichting-form]')
+        // Find all selector containers within element
+        const containers = element.matches('[data-voorlichting-selector]')
             ? [element]
-            : Array.from(element.querySelectorAll('[data-voorlichting-form]'));
+            : Array.from(element.querySelectorAll('[data-voorlichting-selector]'));
 
         containers.forEach(container => {
             if (instances.has(container)) return; // Already initialized
-            const instance = new FormInstance(container);
+            const instance = new SelectorInstance(container);
             instances.set(container, instance);
         });
     });
 }
 
 /**
- * Destroy form instance(s).
+ * Destroy selector instance(s).
  *
  * @param {HTMLElement[]} [elements] - Specific elements to destroy, or all if omitted
  */
 export function destroy(elements) {
-    const targets = elements || document.querySelectorAll('[data-voorlichting-form]');
+    const targets = elements || document.querySelectorAll('[data-voorlichting-selector]');
     targets.forEach(container => {
         const instance = instances.get(container);
         if (instance) {
@@ -77,12 +83,12 @@ export function destroy(elements) {
 }
 
 // ============================================================================
-// FORM INSTANCE CLASS
+// SELECTOR INSTANCE CLASS
 // ============================================================================
 
-class FormInstance {
+class SelectorInstance {
     /**
-     * @param {HTMLElement} container - The form container element
+     * @param {HTMLElement} container - The selector container element
      */
     constructor(container) {
         this.container = container;
@@ -90,14 +96,17 @@ class FormInstance {
 
         // Configuration from data attributes
         this.apiUrl = container.dataset.apiUrl;
-        this.locationFieldId = container.dataset.locationField || 'input_2_10';
-        this.datetimeFieldId = container.dataset.datetimeField || 'input_2_11';
-        this.voorlichtingIdFieldId = container.dataset.voorlichtingIdField || 'input_2_12';
+        this.targetFormSelector = container.dataset.targetForm || '#gform_1';
+        this.voorlichtingIdFieldId = container.dataset.voorlichtingIdField || 'input_1_18';
 
-        // Get form field elements
-        this.locationSelect = container.querySelector(`#${this.locationFieldId}`);
-        this.datetimeSelect = container.querySelector(`#${this.datetimeFieldId}`);
-        this.voorlichtingIdInput = container.querySelector(`#${this.voorlichtingIdFieldId}`);
+        // Find dropdown elements (by fixed IDs from template)
+        this.locationSelect = container.querySelector('#voorlichting-location');
+        this.datetimeSelect = container.querySelector('#voorlichting-datetime');
+
+        // Find target form and its elements
+        this.form = document.querySelector(this.targetFormSelector);
+        this.voorlichtingIdInput = this.form?.querySelector(`#${this.voorlichtingIdFieldId}`);
+        this.formFieldset = document.querySelector('[data-voorlichting-form-fieldset]');
 
         // Data storage
         this.data = null;
@@ -107,23 +116,29 @@ class FormInstance {
     }
 
     /**
-     * Initialize the form.
+     * Initialize the selector.
      * @private
      */
     async _init() {
         if (!this.locationSelect || !this.datetimeSelect) {
-            console.warn('NOK Voorlichting Form: Required form fields not found', {
-                selectors: {
-                    location: this.locationFieldId,
-                    date: this.datetimeFieldId,
-                },
+            console.warn('NOK Voorlichting Selector: Required dropdowns not found', {
                 locationSelect: this.locationSelect,
                 datetimeSelect: this.datetimeSelect
             });
             return;
         }
 
-        // Show loading state
+        if (!this.form) {
+            console.warn('NOK Voorlichting Selector: Target form not found', {
+                selector: this.targetFormSelector
+            });
+            return;
+        }
+
+        // Disable form until selection is made
+        this._setFormDisabled(true);
+
+        // Show loading state on dropdowns
         this._setLoadingState(true);
 
         // Fetch data
@@ -131,11 +146,47 @@ class FormInstance {
             this.data = await this._fetchOptions();
             this._populateLocationDropdown();
             this._bindEvents();
+            this._restoreFromHiddenField();
         } catch (error) {
-            console.error('NOK Voorlichting Form: Failed to fetch options', error);
+            console.error('NOK Voorlichting Selector: Failed to fetch options', error);
             this._showError('Er is een fout opgetreden bij het laden van de voorlichtingen.');
         } finally {
             this._setLoadingState(false);
+        }
+    }
+
+    /**
+     * Restore dropdown selections from hidden field value (e.g., after validation failure).
+     * @private
+     */
+    _restoreFromHiddenField() {
+        const savedId = this.voorlichtingIdInput?.value;
+        if (!savedId || !this.data?.events) return;
+
+        // Find which location contains this voorlichting ID
+        for (const [locationKey, events] of Object.entries(this.data.events)) {
+            const matchingEvent = events.find(e => String(e.id) === String(savedId));
+            if (matchingEvent) {
+                // Select the location
+                this.locationSelect.value = locationKey;
+
+                // Populate datetime dropdown for this location
+                this._populateDatetimeDropdown(locationKey);
+
+                // Select the datetime and restore hidden field value
+                this.datetimeSelect.value = savedId;
+                this._updateVoorlichtingId(savedId);
+
+                // Update placeholder text
+                const placeholderOption = this.datetimeSelect.querySelector('option[value=""]');
+                if (placeholderOption) {
+                    placeholderOption.textContent = 'Selecteer een datum/tijd';
+                }
+
+                // Enable form
+                this._setFormDisabled(false);
+                return;
+            }
         }
     }
 
@@ -170,21 +221,7 @@ class FormInstance {
             return;
         }
 
-        // Clear existing options (except placeholder)
-        const placeholder = this.locationSelect.querySelector('option[value=""]');
-        this.locationSelect.innerHTML = '';
-
-        // Add placeholder back
-        if (placeholder) {
-            this.locationSelect.appendChild(placeholder);
-        } else {
-            const option = document.createElement('option');
-            option.value = '';
-            option.textContent = 'Selecteer een vestiging';
-            this.locationSelect.appendChild(option);
-        }
-
-        // Add location options
+        // Keep placeholder, add new options
         this.data.locations.forEach(location => {
             const option = document.createElement('option');
             option.value = location.value;
@@ -199,9 +236,6 @@ class FormInstance {
 
             this.locationSelect.appendChild(option);
         });
-
-        // Clear datetime dropdown
-        this._clearDatetimeDropdown();
     }
 
     /**
@@ -213,8 +247,12 @@ class FormInstance {
         this._clearDatetimeDropdown();
 
         if (!locationKey || !this.data?.events?.[locationKey]) {
+            this.datetimeSelect.disabled = true;
             return;
         }
+
+        // Enable datetime dropdown
+        this.datetimeSelect.disabled = false;
 
         const events = this.data.events[locationKey];
 
@@ -236,6 +274,7 @@ class FormInstance {
         if (availableOptions.length === 1) {
             this.datetimeSelect.value = availableOptions[0].id;
             this._updateVoorlichtingId(availableOptions[0].id);
+            this._setFormDisabled(false);
         }
     }
 
@@ -244,30 +283,38 @@ class FormInstance {
      * @private
      */
     _clearDatetimeDropdown() {
-        const placeholder = this.datetimeSelect.querySelector('option[value=""]');
+        // Reset to just the placeholder
         this.datetimeSelect.innerHTML = '';
 
-        if (placeholder) {
-            this.datetimeSelect.appendChild(placeholder);
-        } else {
-            const option = document.createElement('option');
-            option.value = '';
-            option.textContent = 'Selecteer eerst een vestiging';
-            this.datetimeSelect.appendChild(option);
-        }
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = 'Selecteer eerst een vestiging';
+        this.datetimeSelect.appendChild(placeholder);
 
-        // Clear hidden field
+        // Clear hidden field and disable form
         this._updateVoorlichtingId('');
+        this._setFormDisabled(true);
     }
 
     /**
-     * Update the hidden voorlichting ID field.
+     * Update the hidden voorlichting ID field in the target form.
      * @param {string|number} id - The voorlichting post ID
      * @private
      */
     _updateVoorlichtingId(id) {
         if (this.voorlichtingIdInput) {
             this.voorlichtingIdInput.value = id;
+        }
+    }
+
+    /**
+     * Enable or disable the target form via native fieldset disabled attribute.
+     * @param {boolean} disabled
+     * @private
+     */
+    _setFormDisabled(disabled) {
+        if (this.formFieldset) {
+            this.formFieldset.disabled = disabled;
         }
     }
 
@@ -294,37 +341,36 @@ class FormInstance {
 
         // Datetime change handler
         this.datetimeSelect.addEventListener('change', (e) => {
-            this._updateVoorlichtingId(e.target.value);
+            const selectedId = e.target.value;
+            this._updateVoorlichtingId(selectedId);
+
+            // Enable form when a valid selection is made
+            this._setFormDisabled(!selectedId);
         }, { signal });
     }
 
     /**
-     * Set loading state on form fields.
+     * Set loading state on dropdown fields.
      * @param {boolean} isLoading
      * @private
      */
     _setLoadingState(isLoading) {
         if (this.locationSelect) {
             this.locationSelect.disabled = isLoading;
-            if (isLoading) {
-                this.locationSelect.classList.add('is-loading');
-            } else {
-                this.locationSelect.classList.remove('is-loading');
-            }
+            this.locationSelect.classList.toggle('is-loading', isLoading);
         }
 
         if (this.datetimeSelect) {
-            this.datetimeSelect.disabled = isLoading;
+            this.datetimeSelect.classList.toggle('is-loading', isLoading);
             if (isLoading) {
-                this.datetimeSelect.classList.add('is-loading');
-            } else {
-                this.datetimeSelect.classList.remove('is-loading');
+                this.datetimeSelect.disabled = true;
             }
+            // When not loading, don't change disabled state - let other logic control it
         }
     }
 
     /**
-     * Show error message in form container.
+     * Show error message above the selector.
      * @param {string} message
      * @private
      */
@@ -333,13 +379,8 @@ class FormInstance {
         errorDiv.className = 'nok-alert nok-bg-red--lighter nok-p-1 nok-rounded-border nok-mb-1';
         errorDiv.textContent = message;
 
-        // Insert at top of form
-        const form = this.container.querySelector('form');
-        if (form) {
-            form.insertBefore(errorDiv, form.firstChild);
-        } else {
-            this.container.insertBefore(errorDiv, this.container.firstChild);
-        }
+        // Insert before the selector
+        this.container.parentNode.insertBefore(errorDiv, this.container);
     }
 
     /**
@@ -347,5 +388,8 @@ class FormInstance {
      */
     destroy() {
         this.controller.abort();
+
+        // Re-enable form on destroy
+        this._setFormDisabled(false);
     }
 }

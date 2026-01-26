@@ -109,6 +109,7 @@ events.docReady(function () {
 
         // Handle href="#" (no target) - just prevent scroll to top
         if (url.hash === '#' || !url.hash) {
+            console.log('Should not scroll');
             e.preventDefault();
             return;
         }

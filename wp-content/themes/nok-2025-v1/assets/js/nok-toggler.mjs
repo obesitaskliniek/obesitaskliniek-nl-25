@@ -233,6 +233,11 @@ export function init(elements) {
     elements.forEach(element => {
         if (!(element instanceof Element)) return;
         try {
+            // Check if the element itself is a toggler
+            if (element.matches(TRIGGER_SELECTOR)) {
+                createToggleHandler(element);
+            }
+            // Also check for child togglers
             element.querySelectorAll(TRIGGER_SELECTOR).forEach(toggler => {
                 createToggleHandler(toggler);
             });
@@ -316,8 +321,9 @@ function createToggleHandler(trigger) {
 
     // Attach event listener (update to pass autoRestore)
     trigger.addEventListener(triggerEvent, (e) => {
+        e.preventDefault();
         handleTriggerEvent(e, trigger, dataset, actions, targets, restoreState, swipeRestore, autoRestore, triggerEvent);
-    }, {passive: true});
+    }, {passive: false});
 }
 
 /**

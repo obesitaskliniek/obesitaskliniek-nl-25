@@ -21,6 +21,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
 <nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs">
     <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkestblue--darker nok-z-1">
 
+        <!-- POPUP: BMI CALCULATOR -->
         <nok-popup class="nok-bg-body nok-dark-bg-darkerblue nok-align-items-stretch" id="popup-bmi-calculator">
             <nok-popup-header>
                 <nok-popup-title>BMI Calculator</nok-popup-title>
@@ -34,6 +35,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
             </nok-popup-body>
         </nok-popup>
 
+        <!-- POPUP: SEARCH -->
         <nok-popup class="nok-bg-body nok-dark-bg-darkerblue" id="popup-search">
             <nok-popup-header>
                 <nok-popup-title>Zoeken</nok-popup-title>

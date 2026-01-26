@@ -145,6 +145,7 @@ function navigateToTarget(e, carousel, targetElement, closestSlide) {
  * @param {HTMLElement} slide - Slide to process
  */
 function setupSlide(carousel, slide) {
+    //@todo: this doesn't understand popup links yet, it seems.
     const links = slide.querySelectorAll('a.nok-nav-menu-item');
 
     links.forEach(link => {
@@ -159,6 +160,7 @@ function setupSlide(carousel, slide) {
 
         if (!targetElement) {
             logger.warn(NAME, `Target not found: ${href}`);
+            logger.warn(NAME, link);
             return;
         }
 

@@ -490,6 +490,7 @@ $utilities: (
         ),
         "order": (
                 responsive: true,
+                responsive-up-to: true,
                 property: order,
                 class: #{nok-variables.$prefix}-order,
                 values: (
@@ -827,4 +828,64 @@ $utilities: (
     }
   }
 }
+}
+
+// Glue together: removes gaps and seams between adjacent children
+// Children connect seamlessly (no gap, shared border-radius edges)
+@mixin glue-together-styles {
+  gap: 0;
+
+  > * {
+    // Remove bottom radius from all except last
+    &:not(:last-child) {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      margin-bottom: 0;
+    }
+    // Remove top radius from all except first
+    &:not(:first-child) {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      margin-top: 0;
+    }
+  }
+}
+
+.#{nok-variables.$prefix}-glue-together {
+  @include glue-together-styles;
+
+  // Responsive "up to" variant - applies below lg breakpoint
+  &-to-lg {
+    @include nok-mixins.media-breakpoint-down(nok-variables.$mobile-breakpoint) {
+      @include glue-together-styles;
+    }
+
+    // Reversed: when CSS order makes visual order opposite of DOM order
+    // DOM first-child is visually LAST (bottom), DOM last-child is visually FIRST (top)
+    &--reversed {
+      @include nok-mixins.media-breakpoint-down(nok-variables.$mobile-breakpoint) {
+        $radius: var(--nok-default-border-radius--large, 1rem);
+
+        > :first-child {
+          // DOM first, but visually LAST (bottom): top corners glued, bottom corners rounded
+          border-top-left-radius: 0;
+          border-top-right-radius: 0;
+          border-bottom-left-radius: $radius;
+          border-bottom-right-radius: $radius;
+          margin-top: 0;
+          margin-bottom: 0;
+        }
+
+        > :last-child {
+          // DOM last, but visually FIRST (top): bottom corners glued, top corners rounded
+          border-top-left-radius: $radius;
+          border-top-right-radius: $radius;
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+          margin-top: 0;
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
 }

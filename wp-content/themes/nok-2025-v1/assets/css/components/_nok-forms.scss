@@ -274,3 +274,64 @@
   }
 
 }
+
+// Voorlichting selector (external dropdowns for voorlichting form)
+.nok-voorlichting-selector {
+  .nok-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5ex;
+  }
+
+  select {
+    --bg-base: var(--nok-body--lighter);
+    --bg-base-contrast: var(--nok-body--lighter-contrast);
+    --bg-color: oklch(from var(--bg-base) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1)));
+
+    background-color: var(--bg-color);
+    color: var(--text-color, inherit);
+    padding: 1ex 4ex 1ex 1.5ex;
+    border: 1px inset #8882;
+    outline: 0 none;
+    opacity: 0.9;
+    width: 100%;
+
+    @include components-base.nok-border-radius;
+
+    // Arrow styling
+    --arrow-down: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    background-image: var(--arrow-down);
+    background-repeat: no-repeat;
+    background-position: right 1ex center;
+    background-size: 2ex;
+    appearance: none;
+
+    &:focus,
+    &:focus-visible {
+      opacity: 1;
+      @include components-base.nok-focus-ring(false);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    @media (hover: hover) {
+      &:hover:not(:disabled) {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+// Fieldset used to disable form until voorlichting is selected
+[data-voorlichting-form-fieldset] {
+  border: 0;
+  padding: 0;
+  margin: 0;
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}

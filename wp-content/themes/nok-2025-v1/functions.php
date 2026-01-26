@@ -127,6 +127,7 @@ add_filter( 'query_vars', function( $vars ) {
 
 use NOK2025\V1\Helpers;
 use NOK2025\V1\VoorlichtingForm;
+
 define( 'NONCE',         hash('sha256', Helpers::makeRandomString()));
 define( 'CACHE_URI_STRING',    (SITE_LIVE ? '' : '?cache=' . hash('sha256', Helpers::makeRandomString())));
 
@@ -154,103 +155,54 @@ add_filter( 'gform_required_legend', function( $legend, $form ) {
 }, 10, 2 );
 
 /**
- * Gravity Forms: Pre-populate vestiging dropdown for general voorlichting form
- *
- * Form and field IDs are defined in VoorlichtingForm class as single source of truth.
- * Choices are populated via PHP but options are refreshed via AJAX on page load.
- */
-add_filter( 'gform_pre_render_' . VoorlichtingForm::FORM_ID, 'nok_populate_voorlichting_form_choices' );
-add_filter( 'gform_pre_submission_filter_' . VoorlichtingForm::FORM_ID, 'nok_populate_voorlichting_form_choices' );
-add_filter( 'gform_admin_pre_render_' . VoorlichtingForm::FORM_ID, 'nok_populate_voorlichting_form_choices' );
-
-/**
- * Populate vestiging and datetime dropdown choices
- *
- * Field IDs are defined in VoorlichtingForm class.
- *
- * @param array $form The form object
- * @return array Modified form object
- */
-function nok_populate_voorlichting_form_choices( $form ) {
-	foreach ( $form['fields'] as &$field ) {
-		// Vestiging dropdown
-		if ( $field->id === VoorlichtingForm::FIELD_LOCATION ) {
-			$choices = VoorlichtingForm::get_vestiging_choices();
-
-			// Add placeholder option
-			array_unshift( $choices, [
-				'text'       => __( 'Selecteer een vestiging', THEME_TEXT_DOMAIN ),
-				'value'      => '',
-				'isSelected' => true,
-			] );
-
-			$field->choices = $choices;
-			$field->placeholder = __( 'Selecteer een vestiging', THEME_TEXT_DOMAIN );
-		}
-
-		// Datum/Tijd dropdown (placeholder only, populated via JS)
-		if ( $field->id === VoorlichtingForm::FIELD_DATETIME ) {
-			$field->choices = [
-				[
-					'text'       => __( 'Selecteer eerst een vestiging', THEME_TEXT_DOMAIN ),
-					'value'      => '',
-					'isSelected' => true,
-				],
-			];
-			$field->placeholder = __( 'Selecteer eerst een vestiging', THEME_TEXT_DOMAIN );
-		}
-	}
-
-	return $form;
-}
-
-/**
  * Gravity Forms: Validate voorlichting selection
  *
  * Ensures the selected voorlichting is still available (not full/closed)
- * at the time of form submission. Field IDs defined in VoorlichtingForm class.
+ * at the time of form submission. Used by both single-voorlichting pages
+ * (hidden field pre-populated by PHP) and general registration page
+ * (hidden field populated by JavaScript).
  */
 add_filter( 'gform_validation_' . VoorlichtingForm::FORM_ID, function( $validation_result ) {
 	$form = $validation_result['form'];
 
 	// Get the voorlichting ID from hidden field
-	$voorlichting_id = rgpost( 'input_' . VoorlichtingForm::FIELD_VOORLICHTING_ID );
+	$voorlichting_id = rgpost( 'input_' . VoorlichtingForm::FORM_ID . '_' . VoorlichtingForm::FIELD_VOORLICHTING_ID );
 
 	if ( empty( $voorlichting_id ) ) {
-		// Find datetime field and mark as invalid
+		// Mark hidden field as invalid
 		foreach ( $form['fields'] as &$field ) {
-			if ( $field->id === VoorlichtingForm::FIELD_DATETIME ) {
-				$field->failed_validation = true;
-				$field->validation_message = __( 'Selecteer een datum en tijd.', THEME_TEXT_DOMAIN );
+			if ( $field->id == VoorlichtingForm::FIELD_VOORLICHTING_ID ) {
+				$field->failed_validation  = true;
+				$field->validation_message = __( 'Selecteer een voorlichting.', THEME_TEXT_DOMAIN );
 				break;
 			}
 		}
 		$validation_result['is_valid'] = false;
-		$validation_result['form'] = $form;
+		$validation_result['form']     = $form;
 		return $validation_result;
 	}
 
-	// Verify the voorlichting is still open
+	// Verify the voorlichting exists and is correct type
 	$post = get_post( (int) $voorlichting_id );
 	if ( ! $post || $post->post_type !== 'voorlichting' ) {
 		foreach ( $form['fields'] as &$field ) {
-			if ( $field->id === VoorlichtingForm::FIELD_DATETIME ) {
-				$field->failed_validation = true;
+			if ( $field->id == VoorlichtingForm::FIELD_VOORLICHTING_ID ) {
+				$field->failed_validation  = true;
 				$field->validation_message = __( 'De geselecteerde voorlichting is niet meer beschikbaar.', THEME_TEXT_DOMAIN );
 				break;
 			}
 		}
 		$validation_result['is_valid'] = false;
-		$validation_result['form'] = $form;
+		$validation_result['form']     = $form;
 		return $validation_result;
 	}
 
-	// Check status
+	// Check registration status
 	$status = strtolower( get_post_meta( $voorlichting_id, 'inschrijvingsstatus', true ) );
 	if ( $status !== 'open' ) {
 		foreach ( $form['fields'] as &$field ) {
-			if ( $field->id === VoorlichtingForm::FIELD_DATETIME ) {
-				$field->failed_validation = true;
+			if ( $field->id == VoorlichtingForm::FIELD_VOORLICHTING_ID ) {
+				$field->failed_validation  = true;
 				$field->validation_message = sprintf(
 					__( 'Deze voorlichting is helaas %s. Kies een andere datum.', THEME_TEXT_DOMAIN ),
 					esc_html( $status )
@@ -259,7 +211,7 @@ add_filter( 'gform_validation_' . VoorlichtingForm::FORM_ID, function( $validati
 			}
 		}
 		$validation_result['is_valid'] = false;
-		$validation_result['form'] = $form;
+		$validation_result['form']     = $form;
 	}
 
 	return $validation_result;

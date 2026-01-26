@@ -18,13 +18,22 @@ const videoStates = new WeakMap();
 const observers = new WeakMap();
 
 /**
- * Initialize video containers.
+ * Initialize video containers and standalone triggers.
  * @param {HTMLElement[]} elements
  */
 export function init(elements) {
     elements.forEach(container => {
         const video = container.querySelector('video');
         const playButton = container.querySelector('[data-video-play]');
+
+        // Standalone trigger (no video element inside) - e.g., mobile inline trigger
+        if (!video && container.dataset.videoHq) {
+            container.addEventListener('click', (e) => {
+                e.preventDefault();
+                playFullscreenVideo(container.dataset.videoHq);
+            });
+            return;
+        }
 
         if (!video) return;
 
@@ -133,6 +142,55 @@ function exitFullscreen(video) {
         video.currentTime = (state.currentTime > video.duration - 1) ? 0 : state.currentTime;
         video.play().catch(() => {});
     }, { once: true });
+}
+
+/**
+ * Play a video fullscreen without a background video element.
+ * Used for standalone triggers (e.g., mobile inline trigger).
+ * Creates a temporary video element, plays fullscreen, removes on close.
+ */
+async function playFullscreenVideo(src) {
+    const video = document.createElement('video');
+    video.src = src;
+    video.controls = true;
+    video.playsInline = true;
+    video.autoplay = true;
+    video.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;z-index:9999;background:#000;object-fit:contain;';
+
+    document.body.appendChild(video);
+
+    let closeBtn = null;
+
+    const cleanup = () => {
+        video.pause();
+        video.remove();
+        closeBtn?.remove();
+    };
+
+    // Fullscreen change handler
+    const onFullscreenChange = () => {
+        const isFullscreen = document.fullscreenElement === video || document.webkitFullscreenElement === video;
+        if (!isFullscreen) cleanup();
+    };
+
+    video.addEventListener('fullscreenchange', onFullscreenChange);
+    video.addEventListener('webkitfullscreenchange', onFullscreenChange);
+    video.addEventListener('webkitendfullscreen', cleanup); // iOS
+    video.addEventListener('ended', cleanup);
+
+    // Try fullscreen, fallback to inline overlay
+    try {
+        await video.play();
+        await (video.requestFullscreen?.() || video.webkitRequestFullscreen?.() || video.webkitEnterFullscreen?.());
+    } catch {
+        // Fallback: inline overlay with close button
+        closeBtn = document.createElement('button');
+        closeBtn.textContent = '×';
+        closeBtn.setAttribute('aria-label', 'Video sluiten');
+        closeBtn.style.cssText = 'position:fixed;top:1rem;right:1rem;z-index:10000;background:#fff;border:none;border-radius:50%;width:2.5rem;height:2.5rem;font-size:1.5rem;cursor:pointer;';
+        closeBtn.onclick = cleanup;
+        document.body.appendChild(closeBtn);
+    }
 }
 
 /**
