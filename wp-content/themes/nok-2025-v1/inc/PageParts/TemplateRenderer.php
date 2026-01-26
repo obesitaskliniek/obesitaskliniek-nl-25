@@ -308,6 +308,19 @@ class TemplateRenderer {
 		echo "\n<!-- {$template_type}: {$design} -->\n";
 
 		include $template_path;
+
+		// Fire action for SEO schema collection (frontend only)
+		if ( $this->context->get_context() === RenderContext::CONTEXT_FRONTEND ) {
+			$post_id = $fields['_post_id'] ?? 0;
+			/**
+			 * Fires after a page part is rendered on the frontend.
+			 *
+			 * @param int    $post_id Page part post ID (0 if not available)
+			 * @param string $design  Template/design slug
+			 * @param array  $fields  Field values passed to template
+			 */
+			do_action( 'nok_page_part_rendered', $post_id, $design, $fields );
+		}
 	}
 
 	/**

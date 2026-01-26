@@ -77,3 +77,8 @@ $has_featured_image = has_post_thumbnail( get_the_ID() ) && $featured_image !== 
             </aside>
         </div>
     </nok-section>
+
+<?php
+// Voorlichtingen carousel - shows upcoming sessions for this location
+get_template_part( 'template-parts/post-parts/nok-vestiging-voorlichtingen' );
+?>

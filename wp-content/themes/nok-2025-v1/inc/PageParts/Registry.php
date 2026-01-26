@@ -194,6 +194,89 @@ class Registry {
 	}
 
 	/**
+	 * Register cache invalidation hooks
+	 *
+	 * Hooks into WordPress actions to automatically clear cache when
+	 * page part content is modified. Important for healthcare content
+	 * where stale information can have material impact.
+	 */
+	public static function register_invalidation_hooks(): void {
+		// Invalidate on page_part save
+		add_action( 'save_post_page_part', [ self::class, 'on_page_part_save' ], 10, 2 );
+
+		// Invalidate on page_part delete
+		add_action( 'before_delete_post', [ self::class, 'on_page_part_delete' ], 10, 2 );
+
+		// Invalidate when design_slug meta changes (template switch)
+		add_action( 'updated_post_meta', [ self::class, 'on_meta_update' ], 10, 4 );
+		add_action( 'added_post_meta', [ self::class, 'on_meta_update' ], 10, 4 );
+	}
+
+	/**
+	 * Handle page_part save event
+	 *
+	 * @param int      $post_id Post ID
+	 * @param \WP_Post $post    Post object
+	 */
+	public static function on_page_part_save( int $post_id, \WP_Post $post ): void {
+		// Skip autosaves and revisions
+		if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		self::clear_cache();
+
+		// Log in development for debugging
+		if ( ! defined( 'SITE_LIVE' ) || ! SITE_LIVE ) {
+			error_log( "[NOK Cache] Registry cleared: page_part {$post_id} saved" );
+		}
+	}
+
+	/**
+	 * Handle page_part delete event
+	 *
+	 * @param int      $post_id Post ID being deleted
+	 * @param \WP_Post $post    Post object
+	 */
+	public static function on_page_part_delete( int $post_id, \WP_Post $post ): void {
+		if ( $post->post_type !== 'page_part' ) {
+			return;
+		}
+
+		self::clear_cache();
+
+		if ( ! defined( 'SITE_LIVE' ) || ! SITE_LIVE ) {
+			error_log( "[NOK Cache] Registry cleared: page_part {$post_id} deleted" );
+		}
+	}
+
+	/**
+	 * Handle meta update event (for design_slug changes)
+	 *
+	 * @param int    $meta_id    Meta ID
+	 * @param int    $object_id  Post ID
+	 * @param string $meta_key   Meta key
+	 * @param mixed  $meta_value New meta value
+	 */
+	public static function on_meta_update( int $meta_id, int $object_id, string $meta_key, $meta_value ): void {
+		// Only care about design_slug changes on page_parts
+		if ( $meta_key !== 'design_slug' ) {
+			return;
+		}
+
+		$post = get_post( $object_id );
+		if ( ! $post || $post->post_type !== 'page_part' ) {
+			return;
+		}
+
+		self::clear_cache();
+
+		if ( ! defined( 'SITE_LIVE' ) || ! SITE_LIVE ) {
+			error_log( "[NOK Cache] Registry cleared: page_part {$object_id} design_slug changed to {$meta_value}" );
+		}
+	}
+
+	/**
 	 * Extract custom metadata from template file header
 	 *
 	 * Parses the PHPDoc comment block at the top of template files to extract

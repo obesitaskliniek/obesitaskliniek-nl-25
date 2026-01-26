@@ -8,7 +8,6 @@ namespace NOK2025\V1\PageParts;
  * Provides field values to templates with:
  * - Default value resolution from template headers
  * - Magic getter returning FieldValue objects for auto-escaping
- * - Legacy get_esc_* methods for backward compatibility
  * - ArrayAccess for backward compatibility with old templates
  *
  * @example Basic usage in templates
@@ -27,7 +26,6 @@ namespace NOK2025\V1\PageParts;
  *
  * @example Backward compatible usage
  * $value = $context->get('field_name', 'fallback');
- * $escaped = $context->get_esc_html('field_name');
  * $old_style = $context['field_name']; // ArrayAccess
  *
  * @property-read FieldValue $layout Common layout field
@@ -112,98 +110,6 @@ class FieldContext implements \ArrayAccess {
 			return $default;
 		}
 		return $this->defaults[$key] ?? '';
-	}
-
-	/**
-	 * Get HTML-escaped field value (legacy method)
-	 *
-	 * @deprecated Use magic getter: $context->field->html() or just $context->field
-	 * @param string $key Field name
-	 * @param string $default Fallback value
-	 * @return string
-	 */
-	public function get_esc_html(string $key, $default = ''): string {
-		$value = $this->get($key, $default);
-		return $this->is_placeholder($value) ? $value : esc_html($value);
-	}
-
-	/**
-	 * Get URL-escaped field value (legacy method)
-	 *
-	 * @deprecated Use magic getter: $context->field->url()
-	 * @param string $key Field name
-	 * @param string $default Fallback value
-	 * @return string
-	 */
-	public function get_esc_url(string $key, $default = ''): string {
-		$value = $this->get($key, $default);
-		return $this->is_placeholder($value) ? $value : esc_url($value);
-	}
-
-	/**
-	 * Get link field value with post:123/term:123/archive:type resolution (legacy method)
-	 *
-	 * Resolves post:123, term:123, and archive:type formats to permalinks
-	 *
-	 * @deprecated Use magic getter: $context->field->link()
-	 * @param string $key Field name
-	 * @param string $default Fallback value
-	 * @return string Resolved URL
-	 */
-	public function get_link(string $key, $default = ''): string {
-		$value = $this->get($key, $default);
-
-		if ($this->is_placeholder($value)) {
-			return $value;
-		}
-
-		if (is_string($value) && str_starts_with($value, 'post:')) {
-			$post_id = (int) substr($value, 5);
-			if ($post_id > 0) {
-				$permalink = get_permalink($post_id);
-				if ($permalink) {
-					return esc_url($permalink);
-				}
-			}
-			return $default;
-		}
-
-		if (is_string($value) && str_starts_with($value, 'term:')) {
-			$term_id = (int) substr($value, 5);
-			if ($term_id > 0) {
-				$term_link = get_term_link($term_id);
-				if ($term_link && !is_wp_error($term_link)) {
-					return esc_url($term_link);
-				}
-			}
-			return $default;
-		}
-
-		if (is_string($value) && str_starts_with($value, 'archive:')) {
-			$post_type = substr($value, 8);
-			if ($post_type) {
-				$archive_link = get_post_type_archive_link($post_type);
-				if ($archive_link) {
-					return esc_url($archive_link);
-				}
-			}
-			return $default;
-		}
-
-		return $value ? esc_url($value) : $default;
-	}
-
-	/**
-	 * Get attribute-escaped field value (legacy method)
-	 *
-	 * @deprecated Use magic getter: $context->field->attr()
-	 * @param string $key Field name
-	 * @param string $default Fallback value
-	 * @return string
-	 */
-	public function get_esc_attr(string $key, $default = ''): string {
-		$value = $this->get($key, $default);
-		return $this->is_placeholder($value) ? $value : esc_attr($value);
 	}
 
 	/**
