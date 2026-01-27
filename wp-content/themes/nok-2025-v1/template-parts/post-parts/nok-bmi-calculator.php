@@ -79,7 +79,7 @@ $rand_id = rand( 1000, 9999 );
                     <span class="show-behandeling-nok-regulier">
                             Op basis van deze BMI komt u <span class="show-bmi-obesitas-2">mogelijk</span> in aanmerking voor onze behandeling.
                             Wilt u meer weten? Meld u <a
-                                href="https://www.obesitaskliniek.nl/aanmelden-gratis-voorlichting/"
+                                href="/aanmelden-gratis-voorlichting/#nok-voorlichting-form"
                                 target="_blank">hier</a> aan voor een gratis voorlichting.
                         </span>
                 </p>
