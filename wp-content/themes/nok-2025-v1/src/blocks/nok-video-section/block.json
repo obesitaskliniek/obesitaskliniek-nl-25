@@ -1,0 +1,63 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "nok2025/nok-video-section",
+  "title": "NOK Video Sectie",
+  "category": "nok-blocks",
+  "icon": "video-alt3",
+  "description": "Video sectie met YouTube, Vimeo of zelf-gehoste video",
+  "keywords": ["video", "youtube", "vimeo", "embed", "sectie"],
+  "textdomain": "nok-2025-v1",
+  "attributes": {
+    "videoUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "videoType": {
+      "type": "string",
+      "default": "youtube"
+    },
+    "videoHq": {
+      "type": "string",
+      "default": ""
+    },
+    "videoPoster": {
+      "type": "string",
+      "default": ""
+    },
+    "videoStart": {
+      "type": "string",
+      "default": ""
+    },
+    "fullSection": {
+      "type": "boolean",
+      "default": true
+    },
+    "backgroundColor": {
+      "type": "string",
+      "default": "nok-bg-darkerblue"
+    },
+    "textColor": {
+      "type": "string",
+      "default": "nok-text-contrast"
+    },
+    "narrowSection": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "supports": {
+    "html": false,
+    "anchor": true,
+    "align": ["wide", "full"]
+  },
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php",
+  "editorStyle": [
+    "nok-components-css"
+  ],
+  "style": [
+    "nok-components-css",
+    "nok-colors-css"
+  ]
+}

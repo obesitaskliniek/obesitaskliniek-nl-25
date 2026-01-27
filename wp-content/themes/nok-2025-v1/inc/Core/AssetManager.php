@@ -216,6 +216,7 @@ class AssetManager {
 	 *
 	 * Makes PHP data available to JavaScript via wp_localize_script:
 	 * - registry: Complete page part registry with field definitions
+	 * - blockPartsRegistry: Block parts registry with field definitions
 	 * - icons: Available icon set for icon-selector fields
 	 * - ajaxurl: WordPress AJAX endpoint URL
 	 * - nonce: Security nonce for AJAX requests
@@ -230,11 +231,15 @@ class AssetManager {
 		$theme    = \NOK2025\V1\Theme::get_instance();
 		$registry = $theme->get_page_part_registry();
 
+		// Get block-parts registry
+		$block_parts_registry = ( new \NOK2025\V1\PageParts\Registry() )->get_block_parts_registry();
+
 		$data = [
-			'registry' => $registry,
-			'icons'    => \NOK2025\V1\Assets::getIconsForAdmin(),
-			'ajaxurl'  => admin_url( 'admin-ajax.php' ),
-			'nonce'    => wp_create_nonce( 'nok_preview_state_nonce' )
+			'registry'           => $registry,
+			'blockPartsRegistry' => $block_parts_registry,
+			'icons'              => \NOK2025\V1\Assets::getIconsForAdmin(),
+			'ajaxurl'            => admin_url( 'admin-ajax.php' ),
+			'nonce'              => wp_create_nonce( 'nok_preview_state_nonce' )
 		];
 
 		// For page_part editor

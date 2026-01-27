@@ -10,6 +10,7 @@
  * - video_hq:url!page-editable!descr[Video HQ URL voor fullscreen (optioneel, anders zelfde als video_url)]
  * - video_poster:url!page-editable!descr[Poster afbeelding URL (optioneel)]
  * - video_start:text!page-editable!descr[Starttijd in seconden bijv. 2.5 (optioneel)]
+ * - autoplay:select(Automatisch::visibility|Klik om af te spelen::click|Klik om fullscreen af te spelen::off)!default(visibility)!descr[Autoplay gedrag voor achtergrondvideo]!page-editable
  * - full_section:checkbox!default(true)!descr[Bedek de hele sectie tot max 90% de hoogte van het browserscherm]!page-editable
  * - achtergrondkleur:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue|Donkerder::nok-bg-body--darker|Transparant::)!page-editable
  * - tekstkleur:select(Standaard::nok-text-contrast|Wit::nok-text-white|Blauw::nok-text-darkerblue)!page-editable
@@ -26,6 +27,7 @@ $video_url       = $c->has( 'video_url' ) ? $c->video_url->url() : '';
 $video_hq        = $c->has( 'video_hq' ) ? $c->video_hq->url() : $video_url;
 $video_poster    = $c->has( 'video_poster' ) ? $c->video_poster->url() : '';
 $video_start     = $c->has( 'video_start' ) ? floatval( $c->video_start->raw() ) : 0;
+$autoplay        = $c->has( 'autoplay' ) ? $c->autoplay->raw() : 'visibility';
 $is_self_hosted  = $c->video_type->is( 'self' );
 $is_full_section = $c->full_section->isTrue();
 
@@ -52,6 +54,7 @@ if ( $video_url && ! $is_self_hosted ) {
                  data-requires="./nok-video.mjs"
                  data-video-lq="<?= esc_url( $video_url ) ?>"
                  data-video-hq="<?= esc_url( $video_hq ) ?>"
+                 data-video-autoplay="<?= esc_attr( $autoplay ) ?>"
                  <?php if ( $video_start > 0 ) : ?>data-video-start="<?= esc_attr( $video_start ) ?>"<?php endif; ?>>
                 <video muted loop playsinline preload="none"
                        aria-label="Achtergrondvideo: <?= esc_attr( get_the_title() ) ?>"
@@ -90,6 +93,7 @@ if ( $video_url && ! $is_self_hosted ) {
                      data-requires="./nok-video.mjs"
                      data-video-lq="<?= esc_url( $video_url ) ?>"
                      data-video-hq="<?= esc_url( $video_hq ) ?>"
+                     data-video-autoplay="<?= esc_attr( $autoplay ) ?>"
                      <?php if ( $video_start > 0 ) : ?>data-video-start="<?= esc_attr( $video_start ) ?>"<?php endif; ?>>
                     <video muted loop playsinline preload="none"
                            aria-label="Achtergrondvideo: <?= esc_attr( get_the_title() ) ?>"

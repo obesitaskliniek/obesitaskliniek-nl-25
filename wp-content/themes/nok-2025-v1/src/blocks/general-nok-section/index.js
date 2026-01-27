@@ -56,6 +56,12 @@ registerBlockType(blockName, {
 
         const blockProps = useBlockProps({
             className: 'nok-general-section-editor',
+            style: {
+                width: '100%',
+                maxWidth: '100%',
+                padding: '15px 3vw',
+                boxSizing: 'border-box',
+            },
         });
 
         return (

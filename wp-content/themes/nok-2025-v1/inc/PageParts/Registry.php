@@ -43,9 +43,13 @@ namespace NOK2025\V1\PageParts;
  */
 class Registry {
 	private ?array $part_registry = null;
+	private ?array $block_parts_registry = null;
 
-	/** @var string Transient key for cached registry */
+	/** @var string Transient key for cached page-parts registry */
 	private const CACHE_KEY = 'nok_page_parts_registry';
+
+	/** @var string Transient key for cached block-parts registry */
+	private const BLOCK_PARTS_CACHE_KEY = 'nok_block_parts_registry';
 
 	/** @var int Cache duration in seconds (1 hour in production, 0 in dev) */
 	private const CACHE_DURATION = HOUR_IN_SECONDS;
@@ -184,13 +188,149 @@ class Registry {
 	public static function clear_cache(): void {
 		global $wpdb;
 
-		// Clear all registry transients
+		// Clear all page-parts registry transients
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
 				'%' . $wpdb->esc_like( self::CACHE_KEY ) . '%'
 			)
 		);
+
+		// Clear all block-parts registry transients
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s",
+				'%' . $wpdb->esc_like( self::BLOCK_PARTS_CACHE_KEY ) . '%'
+			)
+		);
+	}
+
+	/**
+	 * Get block parts registry
+	 *
+	 * Scans template-parts/block-parts/ for block templates.
+	 * Uses same header parsing as page parts.
+	 *
+	 * @return array Associative array keyed by block part slug containing:
+	 *               - 'name' (string): Template display name
+	 *               - 'description' (string): Template description
+	 *               - 'slug' (string): URL-safe identifier
+	 *               - 'icon' (string): Icon identifier
+	 *               - 'keywords' (array): Search keywords
+	 *               - 'custom_fields' (array): Parsed field definitions
+	 *
+	 * @example Get all block parts
+	 * $registry = $this->get_block_parts_registry();
+	 * // Returns: ['general-section' => [...], 'video-section' => [...], ...]
+	 */
+	public function get_block_parts_registry(): array {
+		// Level 1: Instance cache (same request)
+		if ( $this->block_parts_registry !== null ) {
+			return $this->block_parts_registry;
+		}
+
+		$folder_path = THEME_ROOT_ABS . '/template-parts/block-parts';
+
+		// Return empty if folder doesn't exist yet
+		if ( ! is_dir( $folder_path ) ) {
+			$this->block_parts_registry = [];
+			return $this->block_parts_registry;
+		}
+
+		$files = glob( $folder_path . '/*.php' );
+
+		if ( empty( $files ) ) {
+			$this->block_parts_registry = [];
+			return $this->block_parts_registry;
+		}
+
+		// Calculate cache key based on latest file modification time
+		$max_mtime = 0;
+		foreach ( $files as $file ) {
+			$mtime = filemtime( $file );
+			if ( $mtime > $max_mtime ) {
+				$max_mtime = $mtime;
+			}
+		}
+		$cache_key = self::BLOCK_PARTS_CACHE_KEY . '_' . $max_mtime;
+
+		// Level 2: Transient cache (across requests) - only in production
+		$use_transient_cache = defined( 'SITE_LIVE' ) && SITE_LIVE;
+		if ( $use_transient_cache ) {
+			$cached = get_transient( $cache_key );
+			if ( $cached !== false && is_array( $cached ) ) {
+				$this->block_parts_registry = $cached;
+				return $this->block_parts_registry;
+			}
+		}
+
+		// Parse all template files
+		$this->block_parts_registry = [];
+
+		foreach ( $files as $file ) {
+			$data = $this->get_custom_file_data( $file, [
+				'name'          => 'Block Part',
+				'description'   => 'Description',
+				'slug'          => 'Slug',
+				'icon'          => 'Icon',
+				'keywords'      => 'Keywords',
+				'custom_fields' => 'Custom Fields',
+			] );
+
+			if ( empty( $data['slug'] ) ) {
+				$data['slug'] = sanitize_title( $data['name'] ?? basename( $file, '.php' ) );
+			}
+
+			// Parse custom fields
+			$data['custom_fields'] = $this->parse_custom_fields( $data['custom_fields'], $data['slug'] );
+
+			// Parse keywords into array
+			$data['keywords'] = $this->parse_keywords( $data['keywords'] ?? '' );
+
+			$this->block_parts_registry[ $data['slug'] ] = $data;
+		}
+
+		// Store in transient cache (production only)
+		if ( $use_transient_cache ) {
+			set_transient( $cache_key, $this->block_parts_registry, self::CACHE_DURATION );
+
+			// Clean up old cache keys (different mtime)
+			$this->cleanup_old_block_parts_cache_keys( $cache_key );
+		}
+
+		return $this->block_parts_registry;
+	}
+
+	/**
+	 * Cleanup old block-parts transient cache keys
+	 *
+	 * @param string $current_key Current valid cache key to preserve
+	 */
+	private function cleanup_old_block_parts_cache_keys( string $current_key ): void {
+		global $wpdb;
+
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s AND option_name != %s AND option_name != %s",
+				$wpdb->esc_like( '_transient_' . self::BLOCK_PARTS_CACHE_KEY . '_' ) . '%',
+				'_transient_' . $current_key,
+				'_transient_timeout_' . $current_key
+			)
+		);
+	}
+
+	/**
+	 * Parse keywords string into array
+	 *
+	 * @param string $keywords_string Comma-separated keywords
+	 * @return array Array of keywords
+	 */
+	private function parse_keywords( string $keywords_string ): array {
+		if ( empty( $keywords_string ) ) {
+			return [];
+		}
+
+		return array_map( 'trim', explode( ',', $keywords_string ) );
 	}
 
 	/**

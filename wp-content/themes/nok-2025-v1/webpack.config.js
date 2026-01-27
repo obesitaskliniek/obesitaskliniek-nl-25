@@ -58,6 +58,11 @@ module.exports = {
             __dirname,
             'src/blocks/general-nok-section/index.js'
         ),
+
+        'blocks/nok-video-section/index': path.resolve(
+            __dirname,
+            'src/blocks/nok-video-section/index.js'
+        ),
     },
 
     // 3) keep the default filename pattern

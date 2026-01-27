@@ -259,6 +259,62 @@ class TemplateRenderer {
 	}
 
 	/**
+	 * Render a block part template and return HTML
+	 *
+	 * Used for Gutenberg blocks that render via block-parts templates.
+	 * Handles CSS loading and creates FieldContext from block attributes.
+	 *
+	 * @param string $slug Block part template slug (e.g., 'general-section')
+	 * @param array $fields Field values from block attributes
+	 * @param array $extra Extra variables to pass to template (e.g., 'content', 'attributes')
+	 * @return string Rendered HTML
+	 *
+	 * @example Render general-section block part
+	 * $html = $renderer->render_block_part('general-section', $fields, [
+	 *     'content' => $inner_blocks_content,
+	 *     'attributes' => $block_attributes
+	 * ]);
+	 */
+	public function render_block_part(string $slug, array $fields, array $extra = []): string {
+		// Get defaults from block-parts registry
+		$registry = (new Registry())->get_block_parts_registry();
+		$template_data = $registry[$slug] ?? [];
+		$defaults = [];
+
+		foreach (($template_data['custom_fields'] ?? []) as $field) {
+			if (!empty($field['default'])) {
+				$defaults[$field['name']] = $field['default'];
+			}
+		}
+
+		// Create FieldContext from fields
+		$context = new FieldContext($fields, $defaults);
+
+		// Build template path
+		$template_path = get_theme_file_path("template-parts/block-parts/{$slug}.php");
+
+		if (!file_exists($template_path)) {
+			return '<p class="nok-bg-error nok-p-3">Error: ' . sprintf(
+				esc_html__('Block part template "%s" not found!', THEME_TEXT_DOMAIN),
+				esc_html($slug)
+			) . '</p>';
+		}
+
+		// Handle CSS loading for block-parts
+		$this->handle_template_css('block-parts', $slug);
+
+		// Extract extra variables for template scope
+		$content = $extra['content'] ?? '';
+		$attributes = $extra['attributes'] ?? [];
+
+		// Render template
+		ob_start();
+		echo "\n<!-- block-parts: {$slug} -->\n";
+		include $template_path;
+		return ob_get_clean();
+	}
+
+	/**
 	 * Legacy method names for backward compatibility
 	 */
 	public function embed_page_part_template(string $design, array $fields, bool $register_css = false): void {

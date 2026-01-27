@@ -18,7 +18,7 @@ video {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        max-height: 90vh;
+        max-height: min(80vh, 56.25vw); //16:9 aspect ratio, with a hard max
     }
 
     // Play button overlay - colors applied via utility classes in HTML
@@ -68,6 +68,71 @@ video {
             height: 40%;
             margin-left: 4px; // Visual centering for play icon
         }
+    }
+
+    // -------------------------------------------------------------------------
+    // Click-to-play mode: Shows overlay with play icon, plays once on click
+    // -------------------------------------------------------------------------
+    &--click-to-play {
+        cursor: pointer;
+
+        // Semi-transparent overlay
+        &::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            @include transition-properties {
+                transition: background-color $animation-duration;
+            }
+        }
+
+        // Centered play icon (triangle)
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+
+            // Triangle play icon using border trick
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 20px 0 20px 32px;
+            border-color: transparent transparent transparent white;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+            @include transition-properties {
+                transition: transform $animation-duration, filter $animation-duration;
+            }
+        }
+
+        &:hover::before,
+        &:focus-visible::before {
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        &:hover::after,
+        &:focus-visible::after {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        // When playing, hide the overlay
+        &.is-playing::before,
+        &.is-playing::after {
+            display: none;
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Static mode: Poster only, no video playback
+    // Video element stays with preload="none" so poster attribute displays
+    // -------------------------------------------------------------------------
+    &--static {
+        // No additional styles needed - video with preload="none" shows poster
+        // The video element remains but won't load/play
     }
 }
 

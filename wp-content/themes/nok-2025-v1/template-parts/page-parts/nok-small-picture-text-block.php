@@ -16,6 +16,7 @@
  * - video:url!page-editable!descr[Video URL (vervangt afbeelding)]
  * - video_poster:url!page-editable!descr[Video poster afbeelding URL]
  * - video_start:text!page-editable!descr[Video starttijd in seconden (bijv. 2.5)]
+ * - autoplay:select(Automatisch::visibility|Klik om af te spelen::click|Klik om fullscreen af te spelen::off)!default(visibility)!descr[Autoplay gedrag voor achtergrondvideo]!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -33,6 +34,7 @@ $has_video = $c->has('video');
 $video_url = $has_video ? $c->video->url() : '';
 $video_poster = $c->has('video_poster') ? $c->video_poster->url() : '';
 $video_start = $c->has('video_start') ? floatval($c->video_start->raw()) : 0;
+$autoplay = $c->has('autoplay') ? $c->autoplay->raw() : 'visibility';
 ?>
 <nok-section class="<?= $c->achtergrondkleur ?>">
     <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
@@ -62,6 +64,7 @@ $video_start = $c->has('video_start') ? floatval($c->video_start->raw()) : 0;
             <?php if ($has_video) : ?>
                 <div class="nok-video-background nok-rounded-border-large nok-order-<?= ($order % 2) + 1 ?>"
                      data-requires="./nok-video.mjs"
+                     data-video-autoplay="<?= esc_attr($autoplay) ?>"
                      <?php if ($video_start > 0) : ?>data-video-start="<?= esc_attr($video_start) ?>"<?php endif; ?>>
                     <video muted loop playsinline preload="none"
                            aria-label="Achtergrondvideo: <?= esc_attr(get_the_title()) ?>"

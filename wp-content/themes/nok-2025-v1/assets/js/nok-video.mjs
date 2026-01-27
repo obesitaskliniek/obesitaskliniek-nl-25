@@ -8,6 +8,12 @@
  * - data-video-lq: Low quality source (background, muted loop)
  * - data-video-hq: High quality source (fullscreen, with audio)
  * - data-video-start: Start time offset in seconds (e.g., "2.5")
+ * - data-video-autoplay: Autoplay behavior (visibility|click|off), default "visibility"
+ *
+ * Autoplay modes:
+ * - visibility: Current behavior - plays automatically when visible, loops
+ * - click: Shows poster with play overlay, user clicks to play once (no loop), pauses on last frame
+ * - off: Static poster only, no background playback (fullscreen HQ still works)
  *
  * Behavior:
  * - Background: muted loop, lazy-loaded, visibility-based play/pause
@@ -128,43 +134,90 @@ export function init(elements) {
         const lqSrc = container.dataset.videoLq || video.currentSrc || video.querySelector('source')?.src;
         const hqSrc = container.dataset.videoHq || lqSrc;
         const startTime = parseFloat(container.dataset.videoStart) || 0;
+        const autoplayMode = container.dataset.videoAutoplay || 'visibility';
 
         // Store state
-        videoStates.set(video, { lqSrc, hqSrc, startTime, currentTime: startTime });
+        videoStates.set(video, { lqSrc, hqSrc, startTime, currentTime: startTime, autoplayMode });
 
         // Set up background playback
         video.muted = true;
         video.controls = false;
         video.playsInline = true;
-        video.preload = 'metadata'; // Ensures first frame renders without playing
 
-        // Handle looping: use native loop only if no start offset
-        if (startTime > 0) {
-            video.loop = false;
-            // Manual loop back to start time
-            video.addEventListener('ended', () => {
-                video.currentTime = startTime;
-                video.play().catch(() => {});
-            });
-        } else {
-            video.loop = true;
+        // Handle autoplay mode
+        switch (autoplayMode) {
+            case 'click':
+                // Click-to-play mode: show overlay, play once on click, pause on last frame
+                video.loop = false;
+                video.preload = 'metadata';
+                container.classList.add('nok-video-background--click-to-play');
+
+                // Set initial frame position
+                const seekToStartClick = () => { video.currentTime = startTime; };
+                if (video.readyState >= 1) {
+                    seekToStartClick();
+                } else {
+                    video.addEventListener('loadedmetadata', seekToStartClick, { once: true });
+                    video.load();
+                }
+
+                container.addEventListener('click', (e) => {
+                    // Don't trigger if clicking the fullscreen play button
+                    if (e.target.closest('[data-video-play]')) return;
+
+                    // Only play if not already playing
+                    if (video.paused && !video.ended) {
+                        video.muted = true;
+                        video.play().catch(() => {});
+                        container.classList.add('is-playing');
+                        container.classList.remove('nok-video-background--click-to-play');
+                    }
+                });
+
+                // On ended, stay on last frame (don't reset)
+                video.addEventListener('ended', () => {
+                    container.classList.remove('is-playing');
+                });
+                break;
+
+            case 'off':
+                // Static mode: no background playback, poster only
+                // Don't load video - keep preload="none" from HTML, let poster show
+                container.classList.add('nok-video-background--static');
+                break;
+
+            case 'visibility':
+            default:
+                // Current behavior: visibility-based autoplay with looping
+                video.preload = 'metadata';
+
+                // Set initial frame position (renders first frame without playing)
+                const seekToStartVis = () => { video.currentTime = startTime; };
+                if (video.readyState >= 1) {
+                    seekToStartVis();
+                } else {
+                    video.addEventListener('loadedmetadata', seekToStartVis, { once: true });
+                    video.load();
+                }
+
+                // Handle looping: use native loop only if no start offset
+                if (startTime > 0) {
+                    video.loop = false;
+                    // Manual loop back to start time
+                    video.addEventListener('ended', () => {
+                        video.currentTime = startTime;
+                        video.play().catch(() => {});
+                    });
+                } else {
+                    video.loop = true;
+                }
+
+                // Register with shared observer for visibility-based playback
+                getSharedObserver().observe(container);
+                break;
         }
 
-        // Set initial frame position (renders first frame without playing)
-        const seekToStart = () => { video.currentTime = startTime; };
-        if (video.readyState >= 1) {
-            // Metadata already loaded
-            seekToStart();
-        } else {
-            // Wait for metadata, then seek
-            video.addEventListener('loadedmetadata', seekToStart, { once: true });
-            video.load();
-        }
-
-        // Register with shared observer for visibility-based playback
-        getSharedObserver().observe(container);
-
-        // Play button → fullscreen
+        // Play button → fullscreen (works in all modes)
         if (playButton) {
             playButton.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -257,14 +310,20 @@ function exitFullscreen(video) {
     }
 
     video.muted = true;
-    video.loop = true;
     video.controls = false;
+
+    // Restore loop setting based on autoplay mode
+    const autoplayMode = state.autoplayMode || 'visibility';
+    video.loop = (autoplayMode === 'visibility' && state.startTime === 0);
 
     video.addEventListener('loadeddata', () => {
         // If near end, reset to start time; otherwise resume from current position
         video.currentTime = (state.currentTime > video.duration - 1) ? state.startTime : state.currentTime;
-        // Don't auto-play here; let updateActiveVideo decide which video should play
-        updateActiveVideo();
+
+        // Only trigger visibility-based playback in visibility mode
+        if (autoplayMode === 'visibility') {
+            updateActiveVideo();
+        }
     }, { once: true });
 }
 
