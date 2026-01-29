@@ -11,11 +11,11 @@
  * - accordion_framed:checkbox!default(true)!descr[Voeg een kader toe rondom de accordion items]
  * - accordion_button_text:text!default(Lees meer)!descr[Standaardtekst voor de knop (als die er is) in een accordion item]
  * - layout:select(quotes-left|quotes-right|accordion-left-title-top)!page-editable!default(left)
- * - colors:select(Transparant::nok-bg-body|Grijs::nok-bg-body--darker gradient-background|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Blauw::nok-bg-darkerblue nok-text-contrast)!page-editable!default(Transparant)
+ * - colors:color-selector(section-colors)!page-editable!default(nok-bg-body)
  * - circle_color:select(Blauw::var(--nok-darkerblue)|Wit::var(--nok-darkerblue)|Automatisch-lichter::oklch(from var(--bg-color) calc(l * 1.2) c h / 1)|Automatisch-donkerder::oklch(from var(--bg-color) calc(l * .8) c h / 1)|Uit::transparent)!page-editable!default(Uit)
- * - accordion_block_colors:select(Body::nok-bg-body nok-text-contrast|Wit::nok-bg-white nok-text-darkestblue|Blauw::nok-bg-darkblue nok-text-contrast)!page-editable!default(Wit)
- * - quote_block_colors:select(Body::nok-bg-body nok-text-contrast|Wit::nok-bg-white nok-text-darkestblue|Blauw::nok-bg-darkblue nok-text-contrast)!page-editable!default(Wit)
- * - accordion_button_color:select(Wit::nok-bg-white nok-text-contrast nok-dark-bg-darkestblue|Blauw::nok-bg-darkblue--darker nok-text-contrast nok-dark-bg-darkestblue|Donkerblauw::nok-bg-darkerblue--darker nok-text-contrast)!page-editable!default(Blauw)
+ * - accordion_block_colors:color-selector(quote-block-colors)!page-editable!default(nok-bg-white nok-text-darkestblue)
+ * - quote_block_colors:color-selector(quote-block-colors)!page-editable!default(nok-bg-white nok-text-darkestblue)
+ * - accordion_button_color:color-selector(accordion-button-colors)!page-editable!default(nok-bg-darkblue--darker nok-text-contrast nok-dark-bg-darkestblue)
  * - quote_items:repeater(quote:text,name:text,subname:text)!descr[Voeg handmatige quotes toe om te tonen in de quote showcase]
  * - accordion_items:repeater(title:text,content:textarea,button_text:text,button_url:url)!descr[Voeg accordion items toe die naast de quote showcase getoond worden]
  * - quote_posts:post_repeater(post:ervaringen)!descr[Kies specifieke ervaringsverhalen om te tonen in de quote showcase]

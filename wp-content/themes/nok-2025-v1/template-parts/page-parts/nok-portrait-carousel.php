@@ -8,7 +8,7 @@
  * - button_url:url,
  * - shuffle:checkbox!default(false)!descr[Willekeurige volgorde?]
  * - team_members:repeater
- * - colors:select(Blauw::nok-bg-darkblue nok-text-white|Wit::nok-bg-white nok-text-darkblue nok-dark-bg-body--darker nok-dark-text-contrast)!page-editable
+ * - colors:color-selector(section-colors)!page-editable!default(nok-bg-darkblue nok-text-contrast)
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  *
  * todo: work out the repeater

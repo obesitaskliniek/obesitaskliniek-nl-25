@@ -6,8 +6,8 @@
  * Custom Fields:
  *  - autoplay:checkbox!default(true)!descr[Automatisch wisselen tussen items]
  *  - autoplay_interval:select(3 seconden::3000|5 seconden::5000|7 seconden::7000|10 seconden::10000)!default(5000)!descr[Interval voor automatisch wisselen]
- *  - colors:select(Transparant::nok-bg-body nok-text-darkerblue|Grijs::nok-bg-body--darker gradient-background nok-text-darkerblue|Geel::nok-bg-yellow nok-text-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Blauw::nok-bg-darkerblue nok-text-contrast)!page-editable!default(Transparant)
- *  - block_item_colors:select(Blauw::nok-bg-darkerblue nok-text-white|Lichter blauw::nok-bg-darkblue--darker nok-text-white|Donkerblauw::nok-bg-darkerblue--darker nok-text-white|Geel::nok-bg-yellow nok-text-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue|Grijs::nok-bg-lightgrey nok-text-darkblue)!page-editable!default(Wit)
+ *  - colors:color-selector(section-colors)!page-editable!default(nok-bg-body nok-text-darkerblue nok-dark-text-contrast)
+ *  - block_item_colors:color-selector(block-colors)!page-editable!default(nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue)
  *  - circle_color:select(Blauw::var(--nok-darkerblue)|Wit::var(--nok-darkerblue)|Geel::var(--nok-yellow--darker)|Automatisch-lichter::oklch(from var(--bg-color) calc(l * 1.1) c h / 1)|Automatisch-donkerder::oklch(from var(--bg-color) calc(l * .9) c h / 1)|Uit::transparent)!page-editable!default(Uit)
  *  - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  * - items:repeater(tab_title:text,panel_title:text,panel_content:textarea,button_text:text,button_url:url)!descr[Voeg proces stappen toe]

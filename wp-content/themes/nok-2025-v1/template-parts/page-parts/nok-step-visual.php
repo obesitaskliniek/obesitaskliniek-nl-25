@@ -9,7 +9,7 @@
  * - button_blauw_text:text!default(Lees meer)
  * - button_blauw_url:url
  * - layout:select(left|right)!page-editable!default(left)
- * - colors:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white)!page-editable
+ * - colors:color-selector(step-visual-colors)!page-editable
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  * - linked_section:checkbox!default(true)!descr[Link deze page part met een volgend (identiek) "Step visual" page part dmv een verbindend lijntje]!page-editable
  * - video_lq:url!page-editable!descr[Video LQ (achtergrond, zonder geluid)]

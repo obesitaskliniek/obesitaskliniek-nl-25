@@ -12,8 +12,8 @@
  * - video_start:text!page-editable!descr[Starttijd in seconden bijv. 2.5 (optioneel)]
  * - autoplay:select(Automatisch::visibility|Klik om af te spelen::click|Klik om fullscreen af te spelen::off)!default(visibility)!descr[Autoplay gedrag voor achtergrondvideo]!page-editable
  * - full_section:checkbox!default(true)!descr[Bedek de hele sectie tot max 90% de hoogte van het browserscherm]!page-editable
- * - achtergrondkleur:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue|Donkerder::nok-bg-body--darker|Transparant::)!page-editable
- * - tekstkleur:select(Standaard::nok-text-contrast|Wit::nok-text-white|Blauw::nok-text-darkerblue)!page-editable
+ * - achtergrondkleur:color-selector(backgrounds-simple)!page-editable
+ * - tekstkleur:color-selector(text-extended)!page-editable!default(nok-text-contrast)
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie - heeft geen invloed als full section aan staat]!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context

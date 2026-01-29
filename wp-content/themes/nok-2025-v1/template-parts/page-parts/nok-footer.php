@@ -4,7 +4,7 @@
  * Description: Site footer with contact CTA, navigation accordions, and legal links
  * Slug: nok-footer
  * Custom Fields:
- * - colors:select(Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue nok-dark-text-white|Donkerblauw::nok-bg-darkestblue nok-text-white--darker)!default(nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue nok-dark-text-white)
+ * - colors:color-selector(footer-colors)!default(nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue nok-dark-text-white)
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */

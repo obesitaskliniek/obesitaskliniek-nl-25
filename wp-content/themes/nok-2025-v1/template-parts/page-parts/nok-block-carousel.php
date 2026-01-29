@@ -4,8 +4,8 @@
  * Description: Displays title, content, and a horizontally scrollable carousel of blocks
  * Slug: nok-block-carousel
  * Custom Fields:
- * - colors:select(Transparant::nok-bg-body|Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue)!page-editable!default(nok-bg-darkerblue nok-text-white)
- * - block_colors:select(Transparant::|Blauw::nok-bg-darkerblue nok-text-white|Lichter blauw::nok-bg-darkblue--darker nok-text-white|Donkerblauw::nok-bg-darkerblue--darker nok-text-white|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue)!page-editable!default(nok-bg-darkerblue nok-text-white)!default(Blauw)
+ * - colors:color-selector(section-colors)!page-editable!default(nok-bg-darkerblue nok-text-contrast)
+ * - block_colors:color-selector(block-colors)!page-editable!default(nok-bg-darkerblue nok-text-white)
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  * - alternatieve_layout:checkbox!default(false)!page-editable!descr[Gebruik alternatieve layout]
  * - aantal_blocks:select(2|3|4)!default(3)!descr[Aantal blokken dat in beeld is]

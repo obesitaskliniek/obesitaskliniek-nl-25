@@ -92,7 +92,7 @@ $block_2 = [
 	'bg'                 => $c->block_2_bg,
 	'text'               => $c->block_2_text,
 	'order'              => $left_first ? 2 : 1,
-	'delay'              => 150,
+	'delay'              => 250,
 ];
 
 $blocks = [$block_1, $block_2];
@@ -120,7 +120,7 @@ $blocks = [$block_1, $block_2];
 					<nok-square-block
 							class="link-bottom nok-order-<?= $block['order'] ?> <?= $block['bg'] ?> <?= $block['text'] ?>"
 							data-shadow="<?= $shadow ?>"
-							<?php if ($block['delay'] > 0) : ?>style="animation-delay: <?= $block['delay'] ?>ms"<?php endif; ?>>
+							<?php if ($block['delay'] > 0) : ?>style="animation-fill-mode: both; animation-delay: <?= $block['delay'] ?>ms"<?php endif; ?>>
 
 						<?php if ($block['title']->raw()) : ?>
 							<h3 class="nok-square-block__heading nok-fs-5">

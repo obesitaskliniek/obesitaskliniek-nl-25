@@ -4,9 +4,9 @@
  * Description: Displays title, intro, and scrollable carousel of kennisbank articles with featured images
  * Slug: nok-kennisbank-carousel
  * Custom Fields:
- * - colors:select(Transparant::nok-bg-body|Grijs::nok-bg-body--darker gradient-background|Wit::nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue)!page-editable!default(Transparant)
- * - card_colors:select(Wit::nok-bg-white nok-text-darkblue|Blauw::nok-bg-darkerblue nok-text-white)!page-editable!default(Wit)
- * - badge_colors:select(Blauw::nok-bg-darkerblue nok-text-white|Wit::nok-bg-white nok-text-darkerblue)!page-editable!default(Blauw)
+ * - colors:color-selector(section-colors)!page-editable!default(nok-bg-body)
+ * - card_colors:color-selector(card-colors)!page-editable!default(nok-bg-white nok-text-darkblue)
+ * - badge_colors:color-selector(badge-colors)!page-editable!default(nok-bg-darkerblue nok-text-white)
  * - shuffle:checkbox!default(false)!descr[Willekeurige volgorde?]
  * - show_all_link:checkbox!default(true)!descr[Toon "Alle items" link]
  * - all_link_url:url!default(/kennisbank)!descr[URL voor "Alle items" link]

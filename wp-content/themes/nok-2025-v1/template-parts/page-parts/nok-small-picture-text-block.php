@@ -10,8 +10,8 @@
  * - button_url:url
  * - layout:select(left|right)!page-editable!default(left)
  * - perspective:checkbox!default(false)!descr[Afbeelding 3D draaien]!page-editable
- * - achtergrondkleur:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue|Transparant::)!page-editable
- * - tekstkleur:select(Standaard::nok-text-darkerblue|Contrast::nok-text-contrast|Wit::nok-text-white|Zwart::nok-text-black)!page-editable!default(nok-text-darkerblue)
+ * - achtergrondkleur:color-selector(backgrounds-simple)!page-editable
+ * - tekstkleur:color-selector(text-extended)!page-editable!default(nok-text-darkerblue)
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  * - video:url!page-editable!descr[Video URL (vervangt afbeelding)]
  * - video_poster:url!page-editable!descr[Video poster afbeelding URL]
