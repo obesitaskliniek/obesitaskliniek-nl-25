@@ -644,6 +644,35 @@ class Registry {
 					'description'   => $description
 				];
 			}
+			// Field Type 3b: Color selector field
+			// Pattern: "name:color-selector(palette-name)"
+			// Example: "bg_color:color-selector(backgrounds)"
+			// Provides visual swatch picker for selecting from centralized color palettes
+			elseif ( preg_match( '/^([^:]+):color-selector\(([^)]+)\)$/', $definition, $matches ) ) {
+				$field_name   = trim( $matches[1] );
+				$palette_name = trim( $matches[2] );
+				$meta_key     = $template_slug . '_' . $field_name;
+
+				// Get palette options from Colors class
+				$palette = \NOK2025\V1\Colors::getPalette( $palette_name );
+
+				// Extract options and labels from palette
+				$options       = array_column( $palette, 'value' );
+				$option_labels = array_column( $palette, 'label' );
+
+				$fields[] = [
+					'name'          => $field_name,
+					'type'          => 'color-selector',
+					'meta_key'      => $meta_key,
+					'label'         => $this->generate_field_label( $field_name ),
+					'palette'       => $palette_name,
+					'options'       => $options,
+					'option_labels' => $option_labels,
+					'page_editable' => $is_page_editable,
+					'default'       => $this->resolve_select_default( $default_value, $options, $option_labels ),
+					'description'   => $description
+				];
+			}
 			// Field Type 4: Repeater field (custom fields)
 			// Pattern: "name:repeater(field1:type1,field2:type2,...)"
 			// Example: "team_members:repeater(name:text,role:text,photo:image)"

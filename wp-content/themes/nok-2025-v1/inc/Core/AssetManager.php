@@ -238,6 +238,7 @@ class AssetManager {
 			'registry'           => $registry,
 			'blockPartsRegistry' => $block_parts_registry,
 			'icons'              => \NOK2025\V1\Assets::getIconsForAdmin(),
+			'colorPalettes'      => \NOK2025\V1\Colors::getColorsForAdmin(),
 			'ajaxurl'            => admin_url( 'admin-ajax.php' ),
 			'nonce'              => wp_create_nonce( 'nok_preview_state_nonce' )
 		];

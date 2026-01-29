@@ -7,6 +7,7 @@ import {logger} from '../assets/js/domule/core.log.mjs';
 import {Fragment, useRef, useState, useEffect, useMemo} from '@wordpress/element';
 import IconSelector from './components/IconSelector';
 import TaxonomySelector from './components/TaxonomySelector';
+import ColorSelector from './components/ColorSelector';
 import FieldImportWizard from './components/FieldImportWizard';
 import LinkField from './components/LinkField';
 
@@ -665,6 +666,21 @@ function DesignSlugPanel() {
                             icons={availableIcons}
                             onChange={(value) => updateMetaField(field.meta_key, value)}
                         />
+                    </FieldGroup>
+                );
+            case 'color-selector':
+                return (
+                    <FieldGroup key={field.meta_key} label={field.label}>
+                        <ColorSelector
+                            value={fieldValue}
+                            palette={field.palette}
+                            onChange={(value) => updateMetaField(field.meta_key, value)}
+                        />
+                        {field.description && (
+                            <p style={helpStyle}>
+                                {field.description}
+                            </p>
+                        )}
                     </FieldGroup>
                 );
             case 'select':

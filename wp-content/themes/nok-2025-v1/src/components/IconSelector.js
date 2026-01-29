@@ -1,8 +1,10 @@
-import { useState } from '@wordpress/element';
+import { useState, useRef } from '@wordpress/element';
+import { Popover } from '@wordpress/components';
 
 const IconSelector = ({ value, onChange, icons }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [search, setSearch] = useState('');
+    const triggerRef = useRef(null);
 
     const iconStyles = `
         svg.nok-icon {
@@ -43,6 +45,7 @@ const IconSelector = ({ value, onChange, icons }) => {
             {/* Selected icon preview */}
             <div style={{ position: 'relative' }}>
                 <div
+                    ref={triggerRef}
                     onClick={() => setIsOpen(!isOpen)}
                     style={{
                         border: '1px solid #ddd',
@@ -96,94 +99,101 @@ const IconSelector = ({ value, onChange, icons }) => {
                 )}
             </div>
 
-            {/* Dropdown */}
+            {/* Dropdown using WordPress Popover */}
             {isOpen && (
-                <div style={{
-                    position: 'absolute',
-                    zIndex: 9999,
-                    background: '#fff',
-                    border: '1px solid #ddd',
-                    borderRadius: '4px',
-                    marginTop: '4px',
-                    maxHeight: '400px',
-                    width: '300px',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                    overflow: 'hidden'
-                }}>
-                    {/* Search */}
-                    <input
-                        type="text"
-                        placeholder="Search icons..."
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        style={{
-                            width: '100%',
-                            padding: '8px',
-                            border: 'none',
-                            borderBottom: '1px solid #ddd',
-                            fontSize: '13px',
-                            outline: 'none'
-                        }}
-                    />
-
-                    {/* Icon grid */}
+                <Popover
+                    anchor={triggerRef.current}
+                    onClose={() => {
+                        setIsOpen(false);
+                        setSearch('');
+                    }}
+                    placement="bottom-start"
+                    shift={true}
+                    resize={true}
+                >
                     <div style={{
-                        overflowY: 'auto',
-                        maxHeight: '350px',
-                        padding: '8px'
+                        background: '#fff',
+                        maxHeight: '400px',
+                        width: '280px',
+                        overflow: 'hidden'
                     }}>
-                        {filteredIcons.length === 0 ? (
-                            <div style={{ padding: '16px', textAlign: 'center', color: '#757575', fontSize: '13px' }}>
-                                No icons found
-                            </div>
-                        ) : (
-                            <div style={{
-                                display: 'grid',
-                                gridTemplateColumns: 'repeat(4, 1fr)',
-                                gap: '8px'
-                            }}>
-                                {filteredIcons.map(icon => (
-                                    <div
-                                        key={icon.name}
-                                        onClick={() => {
-                                            onChange(icon.name);
-                                            setIsOpen(false);
-                                            setSearch('');
-                                        }}
-                                        title={icon.name}
-                                        style={{
-                                            padding: '2px',
-                                            border: '1px solid #ddd',
-                                            borderRadius: '4px',
-                                            cursor: 'pointer',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            background: value === icon.name ? '#e0f0ff' : '#fff',
-                                            transition: 'all 0.15s',
-                                            aspectRatio: '1'
-                                        }}
-                                        onMouseEnter={(e) => {
-                                            if (value !== icon.name) {
-                                                e.currentTarget.style.background = '#f5f5f5';
-                                            }
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            if (value !== icon.name) {
-                                                e.currentTarget.style.background = '#fff';
-                                            }
-                                        }}
-                                    >
+                        {/* Search */}
+                        <input
+                            type="text"
+                            placeholder="Search icons..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            style={{
+                                width: '100%',
+                                padding: '8px',
+                                border: 'none',
+                                borderBottom: '1px solid #ddd',
+                                fontSize: '13px',
+                                outline: 'none',
+                                boxSizing: 'border-box'
+                            }}
+                            autoFocus
+                        />
+
+                        {/* Icon grid */}
+                        <div style={{
+                            overflowY: 'auto',
+                            maxHeight: '350px',
+                            padding: '8px'
+                        }}>
+                            {filteredIcons.length === 0 ? (
+                                <div style={{ padding: '16px', textAlign: 'center', color: '#757575', fontSize: '13px' }}>
+                                    No icons found
+                                </div>
+                            ) : (
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(4, 1fr)',
+                                    gap: '8px'
+                                }}>
+                                    {filteredIcons.map(icon => (
                                         <div
-                                            style={{ width: '3em', height: '3em' }}
-                                            dangerouslySetInnerHTML={{ __html: icon.svg }}
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                                            key={icon.name}
+                                            onClick={() => {
+                                                onChange(icon.name);
+                                                setIsOpen(false);
+                                                setSearch('');
+                                            }}
+                                            title={icon.name}
+                                            style={{
+                                                padding: '2px',
+                                                border: '1px solid #ddd',
+                                                borderRadius: '4px',
+                                                cursor: 'pointer',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                background: value === icon.name ? '#e0f0ff' : '#fff',
+                                                transition: 'all 0.15s',
+                                                aspectRatio: '1'
+                                            }}
+                                            onMouseEnter={(e) => {
+                                                if (value !== icon.name) {
+                                                    e.currentTarget.style.background = '#f5f5f5';
+                                                }
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                if (value !== icon.name) {
+                                                    e.currentTarget.style.background = '#fff';
+                                                }
+                                            }}
+                                        >
+                                            <div
+                                                style={{ width: '3em', height: '3em' }}
+                                                dangerouslySetInnerHTML={{ __html: icon.svg }}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </div>
+                </Popover>
             )}
         </div>
         </>
