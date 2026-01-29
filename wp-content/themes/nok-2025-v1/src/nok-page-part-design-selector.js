@@ -8,6 +8,7 @@ import {Fragment, useRef, useState, useEffect, useMemo} from '@wordpress/element
 import IconSelector from './components/IconSelector';
 import TaxonomySelector from './components/TaxonomySelector';
 import ColorSelector from './components/ColorSelector';
+import ImageSelector from './components/ImageSelector';
 import FieldImportWizard from './components/FieldImportWizard';
 import LinkField from './components/LinkField';
 
@@ -674,6 +675,20 @@ function DesignSlugPanel() {
                         <ColorSelector
                             value={fieldValue}
                             palette={field.palette}
+                            onChange={(value) => updateMetaField(field.meta_key, value)}
+                        />
+                        {field.description && (
+                            <p style={helpStyle}>
+                                {field.description}
+                            </p>
+                        )}
+                    </FieldGroup>
+                );
+            case 'image':
+                return (
+                    <FieldGroup key={field.meta_key} label={field.label}>
+                        <ImageSelector
+                            value={fieldValue}
                             onChange={(value) => updateMetaField(field.meta_key, value)}
                         />
                         {field.description && (

@@ -300,6 +300,66 @@ class FieldValue {
 	}
 
 	/**
+	 * Render an image tag from attachment ID
+	 * Returns empty string if field empty or attachment not found
+	 *
+	 * @param string $size WordPress image size (e.g., 'large', 'medium', 'full', 'thumbnail')
+	 * @param array $attr Additional attributes for the img tag (e.g., ['class' => 'my-class', 'alt' => 'My alt'])
+	 * @return string HTML img tag or empty string
+	 *
+	 * @example Basic usage
+	 * <?= $context->block_image->image() ?>
+	 *
+	 * @example With custom size and attributes
+	 * <?= $context->block_image->image('full', ['class' => 'hero-image', 'loading' => 'eager']) ?>
+	 */
+	public function image(string $size = 'large', array $attr = []): string {
+		if ($this->value === '' || $this->value === null || $this->value === '0') {
+			return '';
+		}
+
+		$attachment_id = (int) $this->value;
+		if ($attachment_id <= 0) {
+			return '';
+		}
+
+		$image = wp_get_attachment_image($attachment_id, $size, false, $attr);
+		return $image ?: '';
+	}
+
+	/**
+	 * Get image URL from attachment ID
+	 * Returns fallback if field empty or attachment not found
+	 *
+	 * @param string $size WordPress image size (e.g., 'large', 'medium', 'full', 'thumbnail')
+	 * @param string $fallback Fallback URL if image not found
+	 * @return string Image URL or fallback
+	 *
+	 * @example Basic usage
+	 * <div style="background-image: url(<?= $context->block_image->imageUrl() ?>)">
+	 *
+	 * @example With custom size
+	 * <img src="<?= $context->block_image->imageUrl('full') ?>">
+	 */
+	public function imageUrl(string $size = 'large', string $fallback = ''): string {
+		if ($this->value === '' || $this->value === null || $this->value === '0') {
+			return $fallback;
+		}
+
+		$attachment_id = (int) $this->value;
+		if ($attachment_id <= 0) {
+			return $fallback;
+		}
+
+		$image_src = wp_get_attachment_image_src($attachment_id, $size);
+		if (!$image_src || empty($image_src[0])) {
+			return $fallback;
+		}
+
+		return esc_url($image_src[0]);
+	}
+
+	/**
 	 * Default string conversion uses HTML escaping
 	 * Allows echo/interpolation without explicit ->html()
 	 *

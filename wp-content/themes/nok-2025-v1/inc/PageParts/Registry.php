@@ -673,6 +673,24 @@ class Registry {
 					'description'   => $description
 				];
 			}
+			// Field Type 3c: Image field (WordPress Media Library)
+			// Pattern: "name:image"
+			// Example: "block_image:image"
+			// Stores attachment ID, provides media library picker in editor
+			elseif ( preg_match( '/^([^:]+):image$/', $definition, $matches ) ) {
+				$field_name = trim( $matches[1] );
+				$meta_key   = $template_slug . '_' . $field_name;
+
+				$fields[] = [
+					'name'          => $field_name,
+					'type'          => 'image',
+					'meta_key'      => $meta_key,
+					'label'         => $this->generate_field_label( $field_name ),
+					'page_editable' => $is_page_editable,
+					'default'       => $default_value,
+					'description'   => $description
+				];
+			}
 			// Field Type 4: Repeater field (custom fields)
 			// Pattern: "name:repeater(field1:type1,field2:type2,...)"
 			// Example: "team_members:repeater(name:text,role:text,photo:image)"

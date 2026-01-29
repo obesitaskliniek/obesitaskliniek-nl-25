@@ -43,6 +43,7 @@ import {useRef, useState, useEffect} from '@wordpress/element';
 import IconSelector from '../../components/IconSelector';
 import TaxonomySelector from '../../components/TaxonomySelector';
 import ColorSelector from '../../components/ColorSelector';
+import ImageSelector from '../../components/ImageSelector';
 import ColorTool from "../../../assets/js/domule/util.color.mjs";
 
 const textDomain = 'nok-2025-v1';
@@ -701,6 +702,42 @@ registerBlockType(blockName, {
                                                     onChange={updateOverride}
                                                     placeholder="— Gebruik de ingestelde waarde —"
                                                 />
+                                            );
+
+                                        case 'image':
+                                            return (
+                                                <div key={field.meta_key} style={{marginBottom: '12px'}}>
+                                                    <label style={{
+                                                        display: 'block',
+                                                        fontSize: '11px',
+                                                        fontWeight: '600',
+                                                        marginBottom: '4px',
+                                                        color: '#666'
+                                                    }}>
+                                                        Override {field.label}
+                                                    </label>
+                                                    {currentValue && (
+                                                        <button
+                                                            onClick={() => updateOverride('')}
+                                                            style={{
+                                                                fontSize: '11px',
+                                                                color: '#d63638',
+                                                                background: 'none',
+                                                                border: 'none',
+                                                                padding: '0',
+                                                                marginBottom: '8px',
+                                                                cursor: 'pointer',
+                                                                textDecoration: 'underline'
+                                                            }}
+                                                        >
+                                                            Clear override (gebruik de ingestelde waarde)
+                                                        </button>
+                                                    )}
+                                                    <ImageSelector
+                                                        value={currentValue}
+                                                        onChange={updateOverride}
+                                                    />
+                                                </div>
                                             );
 
                                         default:
