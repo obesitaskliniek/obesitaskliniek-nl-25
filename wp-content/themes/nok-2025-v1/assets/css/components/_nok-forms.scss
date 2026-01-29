@@ -334,4 +334,18 @@
   &:disabled {
     opacity: 0.5;
   }
+
+  // When confirmation is shown, remove disabled opacity
+  &:has(.gform_confirmation_wrapper) {
+    opacity: 1;
+  }
+}
+
+// Hide selector dropdowns when form shows confirmation
+.nok-voorlichting-selector:has(~ [data-voorlichting-form-fieldset] .gform_confirmation_wrapper) {
+  display: none;
+}
+
+.gform_confirmation_message {
+  color: var(--nok-green);
 }

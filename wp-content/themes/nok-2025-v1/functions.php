@@ -165,8 +165,8 @@ add_filter( 'gform_required_legend', function( $legend, $form ) {
 add_filter( 'gform_validation_' . VoorlichtingForm::FORM_ID, function( $validation_result ) {
 	$form = $validation_result['form'];
 
-	// Get the voorlichting ID from hidden field
-	$voorlichting_id = rgpost( 'input_' . VoorlichtingForm::FORM_ID . '_' . VoorlichtingForm::FIELD_VOORLICHTING_ID );
+	// Get the voorlichting ID from hidden field (POST uses "input_{field_id}", not "input_{form_id}_{field_id}")
+	$voorlichting_id = rgpost( 'input_' . VoorlichtingForm::FIELD_VOORLICHTING_ID );
 
 	if ( empty( $voorlichting_id ) ) {
 		// Mark hidden field as invalid
