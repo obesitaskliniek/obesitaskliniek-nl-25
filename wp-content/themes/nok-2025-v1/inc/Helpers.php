@@ -1102,24 +1102,31 @@ class Helpers {
 			/** @noinspection PhpUndefinedFunctionInspection */
 			$breadcrumb_html = yoast_breadcrumb('', '', false);
 
-			if (!empty($breadcrumb_html)) {
+			if (!empty($breadcrumb_html) && !is_front_page()) {
 				// Inject home icon into the first breadcrumb link via DOM manipulation
-				$breadcrumb_html = self::inject_home_icon_in_breadcrumb_html($breadcrumb_html, $home_icon);
+				$breadcrumb_html = self::inject_home_icon_in_breadcrumb_html( $breadcrumb_html, $home_icon );
 
-				$classes = 'nok-breadcrumbs' . ($wrapper_class ? ' ' . esc_attr($wrapper_class) : '');
-				$output = sprintf(
+				$classes = 'nok-breadcrumbs' . ( $wrapper_class ? ' ' . esc_attr( $wrapper_class ) : '' );
+				$output  = sprintf(
 					'<nav class="%s" aria-label="%s">%s</nav>',
 					$classes,
-					esc_attr__('Breadcrumb', THEME_TEXT_DOMAIN),
+					esc_attr__( 'Breadcrumb', THEME_TEXT_DOMAIN ),
 					$breadcrumb_html
 				);
 
-				if ($echo) {
+				if ( $echo ) {
 					echo $output;
+
 					return null;
 				}
+
 				return $output;
 			}
+		}
+
+		// No breadcrumbs on front page
+		if (is_front_page()) {
+			return null;
 		}
 
 		// Fallback: Simple home link with icon (matches Yoast structure)
