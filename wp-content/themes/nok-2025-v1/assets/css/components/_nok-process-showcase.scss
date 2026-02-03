@@ -1,0 +1,98 @@
+@use "../nok-variables";
+@use "../tools/nok-mixins";
+
+/**
+ * Process Showcase Component
+ *
+ * Tab-based showcase that transforms to accordion on mobile.
+ * - Desktop: Side-by-side layout (tabs left, panels right)
+ * - Mobile: Accordion layout (each panel below its trigger)
+ *
+ * DOM structure: interleaved button-panel pairs
+ * <div class="nok-process-showcase" role="tablist">
+ *   <button role="tab">...</button>
+ *   <div role="tabpanel">...</div>
+ *   <button role="tab">...</button>
+ *   <div role="tabpanel">...</div>
+ * </div>
+ */
+
+.nok-process-showcase {
+  display: grid;
+  gap: var(--grid-gap, var(--nok-padding-base, 1rem));
+
+  // Mobile: single column, natural flow (button → panel → button → panel)
+  grid-template-columns: 1fr;
+
+  // Desktop: two columns with buttons in col 1, panels in col 2
+  @include nok-mixins.media-breakpoint-up(nok-variables.$mobile-breakpoint) {
+    grid-template-columns: 1fr 1fr;
+    grid-auto-flow: dense; // Allow items to fill gaps
+    align-items: start;
+
+    // All buttons go in column 1, auto-placed in sequential rows
+    > [role="tab"] {
+      grid-column: 1;
+    }
+
+    // All panels stack in column 2, spanning all rows
+    // They overlap visually - only the active one is visible
+    > [role="tabpanel"] {
+      grid-column: 2;
+      grid-row: 1 / span 100; // Span many rows to cover all buttons
+
+      // Hidden panels stay in layout but are invisible
+      // This prevents grid reflow when switching tabs
+      &[hidden] {
+        visibility: hidden;
+        height: 0;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+      }
+
+      // Active panel is visible
+      &:not([hidden]) {
+        visibility: visible;
+        height: auto;
+      }
+    }
+  }
+
+  // Mobile-specific styles
+  @include nok-mixins.media-breakpoint-down(nok-variables.$mobile-breakpoint) {
+    // Panels appear below their corresponding button
+    > [role="tabpanel"] {
+      overflow: hidden;
+
+      &[hidden] {
+        display: none;
+      }
+
+      // Add visual separation - indented with accent border
+      padding-left: var(--nok-padding-base, 1rem);
+      border-left: 3px solid var(--nok-lightblue, #5FBEEB);
+      margin-bottom: calc(var(--grid-gap, 1rem) / 2);
+    }
+
+    // Reduce gap between button and its panel on mobile
+    gap: calc(var(--grid-gap, 1rem) / 2);
+  }
+
+  // Tab button styling
+  > [role="tab"] {
+    // Arrow icon rotation for mobile accordion
+    .nok-icon, svg {
+      transition: transform 0.2s ease;
+    }
+
+    // On mobile, rotate arrow to point down when panel is open
+    @include nok-mixins.media-breakpoint-down(nok-variables.$mobile-breakpoint) {
+      &[aria-selected="true"] {
+        .nok-icon, svg {
+          transform: rotate(90deg);
+        }
+      }
+    }
+  }
+}

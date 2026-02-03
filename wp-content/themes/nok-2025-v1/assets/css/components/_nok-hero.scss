@@ -170,6 +170,7 @@ nok-hero {
       article {
         grid-row: 3 / 5;
         align-self: end;
+        max-width: 100vw;
       }
       figure {
         grid-row: 1 / 4;

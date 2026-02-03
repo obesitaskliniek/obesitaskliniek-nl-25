@@ -134,10 +134,12 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                     <?= Assets::getIcon($c->usp_3_icon->raw(), 'nok-text-lightblue') ?>
                     <?= $c->usp_3_text ?>
                 </div>
+                <?php if ( $c->has( 'button_vestiging_url' ) ): ?>
                 <a role="button" href="<?= $c->button_vestiging_url->link() ?>"
                    class="nok-button nok-bg-white nok-text-darkerblue nok-visible-xs nok-align-self-stretch"
                    tabindex="0"><span><?= $c->button_vestiging_text ?></span>
                 </a>
+                <?php endif; ?>
             </footer>
         </div>
     </nok-hero>
