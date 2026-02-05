@@ -1,7 +1,7 @@
 /**
  * @fileoverview Process Showcase - Tab-based content switcher with autoplay
  * @module nok-process-showcase
- * @version 1.0.0
+ * @version 1.1.0
  * @author hnldesign
  * @since 2025
  *
@@ -10,15 +10,18 @@
  * navigation. Reads styling classes from data attributes to keep PHP as source
  * of truth for visual states.
  *
+ * Mobile accordion layout: buttons and panels are interleaved in the DOM.
+ * CSS Grid positions them side-by-side on desktop.
+ *
  * @example
  * <div data-requires="./nok-process-showcase.mjs"
  *      data-tab-class-active="nok-bg-darkerblue nok-text-white"
  *      data-tab-class-inactive="nok-bg-white nok-text-darkerblue">
  *   <article data-autoplay="true" data-autoplay-interval="5000">
- *     <nav role="tablist">
- *       <button role="tab" aria-selected="true">...</button>
- *     </nav>
- *     <div>
+ *     <div class="nok-process-showcase" role="tablist">
+ *       <button role="tab">...</button>
+ *       <div role="tabpanel">...</div>
+ *       <button role="tab">...</button>
  *       <div role="tabpanel">...</div>
  *     </div>
  *   </article>
@@ -71,10 +74,10 @@ class ProcessShowcase {
             return;
         }
 
-        // Elements
+        // Elements - tabs and panels are now interleaved siblings in .nok-process-showcase
+        this.tablist = this.article.querySelector('[role="tablist"]');
         this.tabs = Array.from(this.article.querySelectorAll('[role="tab"]'));
         this.panels = Array.from(this.article.querySelectorAll('[role="tabpanel"]'));
-        this.panelContainer = this.panels[0]?.parentElement;
 
         if (this.tabs.length === 0 || this.panels.length === 0) {
             logger.warn(NAME, 'No tabs or panels found');
@@ -97,12 +100,8 @@ class ProcessShowcase {
         this.currentIndex = 0;
         this.isUserInteraction = false;
 
-        // Visibility correction (only scrolls if panel not in view)
-        this._visibilityCorrector = new ViewportScroller(this.panelContainer || this.panels[0], {
-            behavior: 'smooth',
-            partial: true,
-            extraOffset: 20
-        });
+        // Cache ViewportScrollers per panel for mobile accordion scroll-into-view
+        this._panelScrollers = new WeakMap();
 
         this._init();
     }
@@ -120,8 +119,9 @@ class ProcessShowcase {
             });
         });
 
-        // Keyboard navigation
-        this.article.addEventListener('keydown', (e) => this._handleKeydown(e));
+        // Keyboard navigation on the tablist container
+        const keyboardTarget = this.tablist || this.article;
+        keyboardTarget.addEventListener('keydown', (e) => this._handleKeydown(e));
 
         // Start autoplay if enabled
         if (this.autoplayEnabled) {
@@ -223,14 +223,33 @@ class ProcessShowcase {
                 newPanel.style.opacity = '';
                 newPanel.style.transition = '';
 
-                // Ensure panel is visible (only scrolls if needed)
+                // Ensure panel is visible on mobile (scrolls the specific panel into view)
                 if (shouldEnsureVisible) {
-                    this._visibilityCorrector.ensureVisible();
+                    this._ensurePanelVisible(newPanel);
                 }
 
                 this.isUserInteraction = false;
             }, FADE_DURATION);
         }, FADE_DURATION);
+    }
+
+    /**
+     * Scroll panel into view if needed (primarily for mobile accordion layout)
+     * @private
+     * @param {HTMLElement} panel - Panel to ensure is visible
+     */
+    _ensurePanelVisible(panel) {
+        // Get or create scroller for this panel
+        let scroller = this._panelScrollers.get(panel);
+        if (!scroller) {
+            scroller = new ViewportScroller(panel, {
+                behavior: 'smooth',
+                partial: true,
+                extraOffset: 20
+            });
+            this._panelScrollers.set(panel, scroller);
+        }
+        scroller.ensureVisible();
     }
 
     /**

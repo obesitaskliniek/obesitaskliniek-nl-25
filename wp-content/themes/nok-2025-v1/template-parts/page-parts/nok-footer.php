@@ -32,7 +32,7 @@ $block_colors = $c->colors->contains('nok-bg-darkestblue',
                         <h3 class="fw-400">We helpen je graag</h3>
                     </div>
                     <p class="nok-square-block__text nok-fs-2">
-                        Wil je meer weten over de behandeling? Bel of mail ons dan gerust.
+                        Neem contact met ons op via telefoon: <a href="tel:0888832444" class="nok-hyperlink">088 - 88 32 444</a> of e-mail: <a href="mailto:info@obesitaskliniek.nl" class="nok-hyperlink">info@obesitaskliniek.nl</a>
                     </p>
                     <div class="nok-layout-flex nok-column-gap-0_5 flex-wrap">
                         <a href="#" role="button" class="nok-button nok-justify-self-start fill-mobile nok-bg-darkblue nok-text-contrast" tabindex="0">
@@ -50,8 +50,9 @@ $block_colors = $c->colors->contains('nok-bg-darkestblue',
             <div class="nok-layout-grid__span-all nok-layout-flex-row">
                 <a href="#" class="nok-hyperlink">Privacy Policy</a>
                 <a href="#" class="nok-hyperlink">Algemene voorwaarden</a>
+                <!--
                 <a href="mailto:info@obesitaskliniek.nl" class="nok-hyperlink">info@obesitaskliniek.nl</a>
-                <a href="tel:+31888832444" class="nok-hyperlink">088 - 88 32 444</a>
+                <a href="tel:+31888832444" class="nok-hyperlink">088 - 88 32 444</a>-->
             </div>
         </div>
     </div>

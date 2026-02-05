@@ -118,8 +118,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
                     <a href="https://werkenbijdenok.nl" target="_blank" class="nok-nav-menu-item">Werken bij</a>
                     <a href="#" class="nok-nav-menu-item nok-popup-trigger" data-toggles-class="popup-open" data-class-target="nok-top-navigation" data-toggle-event="click"
                        data-toggles-attribute="data-state" data-toggles-attribute-value="open" data-attribute-target="#popup-bmi-calculator">BMI berekenen</a>
-                    <a href="#" class="nok-nav-menu-item">Mijn NOK</a>
-                    <a href="#" class="nok-nav-menu-item">NOK App</a>
+                    <a href="#" class="nok-nav-menu-item">Voor patiënten</a>
                     <a href="/aanmelden-gratis-voorlichting#nok-voorlichting-form" role="button" class="nok-button nok-button--small nok-bg-yellow nok-text-contrast nok-invisible-sm"
                             tabindex="0">Gratis voorlichting
                     </a>

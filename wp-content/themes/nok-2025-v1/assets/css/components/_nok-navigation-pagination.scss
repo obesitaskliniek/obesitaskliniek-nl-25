@@ -7,14 +7,14 @@
 
   border-top: 2px solid var(--nok-body--darker, #8888);
   display: flex;
-  gap: 0.5rem;
+  gap: var(--nok-space-fluid-sm);
   justify-content: center;
   margin-block: var(--nok-section-padding, 3rem);
   padding-top: var(--nok-section-padding, 3rem);
 
   .nav-links {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--nok-space-fluid-sm);
     width: 100%;
   }
 
@@ -26,7 +26,7 @@
     min-width: 3rem;
     min-height: 3rem;
 
-    padding: 0.5rem 1rem;
+    padding: var(--nok-space-fluid-sm) var(--nok-space-fluid-md);
     gap: 0.3em;
 
     text-decoration: none;

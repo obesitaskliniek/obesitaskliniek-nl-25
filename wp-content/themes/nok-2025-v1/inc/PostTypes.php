@@ -33,6 +33,7 @@ class PostTypes {
 		add_action( 'init', [ $this, 'register_kennisbank_permalink_filter' ] );
 		add_action( 'template_redirect', [ $this, 'protect_post_types' ] );
 		add_filter( 'single_template', [ $this, 'kennisbank_category_template' ] );
+		add_filter( 'request', [ $this, 'disambiguate_kennisbank_urls' ] );
 	}
 
 	/**
@@ -367,6 +368,53 @@ class PostTypes {
 			'index.php?kennisbank=$matches[2]',
 			'top'
 		);
+	}
+
+	/**
+	 * Disambiguate kennisbank URLs between taxonomy archives and posts
+	 *
+	 * The 2-segment rewrite rule (kennisbank/{a}/{b}) matches both:
+	 * - Child category archives: /kennisbank/parent-cat/child-cat/
+	 * - Posts in top-level categories: /kennisbank/category/post-slug/
+	 *
+	 * This filter checks if the matched slug is a taxonomy term. If so,
+	 * it rewrites the query to target the taxonomy archive instead of a post.
+	 *
+	 * For hierarchical taxonomies, WordPress needs the full path (parent/child)
+	 * in the query var, so we extract it from the request URI.
+	 *
+	 * @param array $query_vars The parsed query variables
+	 * @return array Modified query variables
+	 */
+	public function disambiguate_kennisbank_urls( array $query_vars ): array {
+		// Only process if this looks like a kennisbank post query
+		if ( empty( $query_vars['kennisbank'] ) ) {
+			return $query_vars;
+		}
+
+		$slug = $query_vars['kennisbank'];
+
+		// Check if this slug is a kennisbank_categories term
+		$term = get_term_by( 'slug', $slug, 'kennisbank_categories' );
+
+		if ( $term && ! is_wp_error( $term ) ) {
+			// It's a taxonomy term, not a post - rewrite to taxonomy query
+			// Must unset all post-related query vars to prevent post lookup
+			unset( $query_vars['kennisbank'] );
+			unset( $query_vars['post_type'] );
+			unset( $query_vars['name'] );
+
+			// For hierarchical taxonomies, extract full path from request URI
+			// URL: /kennisbank/parent/child/ → taxonomy path: parent/child
+			$uri = $_SERVER['REQUEST_URI'] ?? '';
+			if ( preg_match( '#^/kennisbank/(.+?)/?$#', $uri, $matches ) ) {
+				$query_vars['kennisbank_categories'] = $matches[1];
+			} else {
+				$query_vars['kennisbank_categories'] = $slug;
+			}
+		}
+
+		return $query_vars;
 	}
 
 	/**

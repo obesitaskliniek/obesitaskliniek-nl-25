@@ -19,10 +19,10 @@
   &:has(.size-large),
   &:has(.size-full) {
     &:has(figcaption) {
-      margin-top: 2rem;
-      margin-bottom: 1rem;
+      margin-top: var(--nok-space-fluid-lg);
+      margin-bottom: var(--nok-space-fluid-md);
     }
-    margin-block: 2rem;
+    margin-block: var(--nok-space-fluid-lg);
   }
 
   > img,
@@ -33,11 +33,11 @@
   }
   &.alignleft {
     float: left;
-    margin: 0 2em .5em 0;
+    margin: 0 var(--nok-space-fluid-lg) var(--nok-space-fluid-sm) 0;
   }
   &.alignright {
     float: right;
-    margin: 0 0 .5em 2em;
+    margin: 0 0 var(--nok-space-fluid-sm) var(--nok-space-fluid-lg);
   }
   &.size-large img {
     width: 100%;

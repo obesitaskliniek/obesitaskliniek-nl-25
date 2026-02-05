@@ -11,7 +11,7 @@
  * - layout:select(left|right)!page-editable!default(left)
  * - perspective:checkbox!default(false)!descr[Afbeelding 3D draaien]!page-editable
  * - achtergrondkleur:color-selector(backgrounds-simple)!page-editable
- * - tekstkleur:color-selector(text-extended)!page-editable!default(nok-text-darkerblue)
+ * - tekstkleur:color-selector(text-extended)!page-editable!default(nok-text-darkerblue nok-dark-text-contrast)
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  * - video:url!page-editable!descr[Video URL (vervangt afbeelding)]
  * - video_poster:url!page-editable!descr[Video poster afbeelding URL]
@@ -40,7 +40,7 @@ $autoplay = $c->has('autoplay') ? $c->autoplay->raw() : 'visibility';
     <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
 
         <article class="nok-align-self-stretch
-                        <?= $c->tekstkleur ?>
+                        <?= $c->tekstkleur ?> nok-dark-text-contrast
                         text-start
                         nok-layout-grid
                         fill-fill nok-columns-to-lg-1 nok-column-gap-3

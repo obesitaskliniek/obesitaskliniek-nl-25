@@ -1,0 +1,157 @@
+// NOK Unified Spacing System
+// =============================================================================
+//
+// A centralized, fluid-responsive spacing system using CSS custom properties.
+// Based on a 1.5rem (24px) base unit with semantic naming.
+//
+// USAGE:
+// - Components: Use var(--nok-space-fluid-{size}) for automatic responsive scaling
+// - Static contexts: Use var(--nok-space-{size}) when fixed spacing is needed
+// - Utilities: Class names like .nok-p-md, .nok-gap-lg use semantic tokens
+//
+// SCALE:
+// | Token | Multiplier | Static (rem) | Fluid (clamp)
+// |-------|------------|--------------|------------------------
+// | 0     | 0          | 0            | 0
+// | xs    | 0.25       | 0.375        | 0.25rem → 0.375rem
+// | sm    | 0.5        | 0.75         | 0.5rem → 0.75rem
+// | md    | 1          | 1.5          | 1rem → 1.5rem
+// | lg    | 1.5        | 2.25         | 1.5rem → 2.25rem
+// | xl    | 2          | 3            | 2rem → 3rem
+// | 2xl   | 3          | 4.5          | 2.5rem → 4.5rem
+// | 3xl   | 4          | 6            | 3rem → 6rem
+// | 4xl   | 6          | 9            | 4rem → 9rem
+//
+// MIGRATION from legacy keys:
+// | Old   | New | Notes
+// |-------|-----|------
+// | 0     | 0   | Same
+// | 0_25  | xs  | 0.25× base
+// | 0_5   | sm  | 0.5× base
+// | 1     | md  | 1× base (default)
+// | 2     | lg  | Was 1.5× (confusing), now lg = 1.5×
+// | 3     | xl  | Was 2×, now xl = 2×
+// | 4     | 2xl | Was 3×, now 2xl = 3×
+// | 5     | 3xl | Was 4×, now 3xl = 4×
+//
+// =============================================================================
+
+@use "sass:map";
+
+// Base unit (matches existing $padding-base)
+$spacing-base: 1.5rem !default;
+
+// Static spacing scale (fixed rem values)
+$spacing-static: (
+  0:    0,
+  xs:   0.375rem,   // 0.25 × 1.5 = 0.375
+  sm:   0.75rem,    // 0.5 × 1.5 = 0.75
+  md:   1.5rem,     // 1 × 1.5 = 1.5
+  lg:   2.25rem,    // 1.5 × 1.5 = 2.25
+  xl:   3rem,       // 2 × 1.5 = 3
+  2xl:  4.5rem,     // 3 × 1.5 = 4.5
+  3xl:  6rem,       // 4 × 1.5 = 6
+  4xl:  9rem,       // 6 × 1.5 = 9
+);
+
+// Fluid spacing scale (responsive clamp values)
+// Formula: clamp(min, preferred, max)
+// - min: ~66% of static value (comfortable on small screens)
+// - preferred: viewport-relative scaling
+// - max: full static value (caps on large screens)
+$spacing-fluid: (
+  xs:   clamp(0.25rem, 0.5vw + 0.125rem, 0.375rem),
+  sm:   clamp(0.5rem, 1vw + 0.25rem, 0.75rem),
+  md:   clamp(1rem, 2vw + 0.5rem, 1.5rem),
+  lg:   clamp(1.5rem, 3vw + 0.75rem, 2.25rem),
+  xl:   clamp(2rem, 4vw + 1rem, 3rem),
+  2xl:  clamp(2.5rem, 6vw + 1rem, 4.5rem),
+  3xl:  clamp(3rem, 8vw + 1rem, 6rem),
+  4xl:  clamp(4rem, 10vw + 2rem, 9rem),
+);
+
+// Generate CSS custom properties at :root
+// Called from nok-components.scss alongside other root variables
+@mixin spacing-custom-properties {
+  // Static scale
+  --nok-space-0: 0;
+  @each $key, $value in $spacing-static {
+    @if $key != 0 {
+      --nok-space-#{$key}: #{$value};
+    }
+  }
+
+  // Fluid scale
+  @each $key, $value in $spacing-fluid {
+    --nok-space-fluid-#{$key}: #{$value};
+  }
+
+  // Section spacing (legacy compatibility)
+  // These use the fluid scale for responsive section padding
+  --nok-spacing-section-inline: var(--nok-space-fluid-xl);
+  --nok-spacing-section-block: var(--nok-space-fluid-2xl);
+}
+
+// Semantic spacing scale map for utility generation
+// Uses fluid values by default for responsive behavior
+$spacing-scale: (
+  0:    var(--nok-space-0),
+  xs:   var(--nok-space-fluid-xs),
+  sm:   var(--nok-space-fluid-sm),
+  md:   var(--nok-space-fluid-md),
+  lg:   var(--nok-space-fluid-lg),
+  xl:   var(--nok-space-fluid-xl),
+  2xl:  var(--nok-space-fluid-2xl),
+  3xl:  var(--nok-space-fluid-3xl),
+  4xl:  var(--nok-space-fluid-4xl),
+);
+
+// Legacy-compatible map using new CSS vars
+// This replaces $padding-base-values in _nok-variables.scss
+$spacing-legacy: (
+  0:    var(--nok-space-0),
+  0_25: var(--nok-space-fluid-xs),
+  0_5:  var(--nok-space-fluid-sm),
+  1:    var(--nok-space-fluid-md),
+  2:    var(--nok-space-fluid-lg),
+  3:    var(--nok-space-fluid-xl),
+  4:    var(--nok-space-fluid-2xl),
+  5:    var(--nok-space-fluid-3xl),
+);
+
+// Combined map for utilities (includes both semantic and legacy keys)
+// Used by _nok-helpers.scss for generating utility classes
+$spacing-utility-values: map.merge(
+  $spacing-scale,
+  (
+    // Legacy numeric aliases for backward compatibility
+    0_25: var(--nok-space-fluid-xs),
+    0_5:  var(--nok-space-fluid-sm),
+    1:    var(--nok-space-fluid-md),
+    2:    var(--nok-space-fluid-lg),
+    3:    var(--nok-space-fluid-xl),
+    4:    var(--nok-space-fluid-2xl),
+    5:    var(--nok-space-fluid-3xl),
+    // Special values (keep from existing system)
+    gap: var(--gap),
+    grid-gap: var(--grid-gap),
+    column-gap: var(--column-gap),
+    section-padding: var(--nok-spacing-section-ends),
+    double-section-padding: calc(2 * var(--nok-spacing-section-ends)),
+  )
+);
+
+// Convenience function to get spacing value
+// @param $key - Spacing key (xs, sm, md, lg, xl, 2xl, 3xl, 4xl)
+// @param $static - If true, returns static value instead of fluid
+// @return CSS custom property reference
+@function space($key, $static: false) {
+  @if $static {
+    @return var(--nok-space-#{$key});
+  } @else {
+    @if $key == 0 {
+      @return var(--nok-space-0);
+    }
+    @return var(--nok-space-fluid-#{$key});
+  }
+}

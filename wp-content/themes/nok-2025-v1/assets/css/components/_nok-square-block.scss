@@ -125,7 +125,7 @@ nok-square-block {
           vertical-align: middle;
 
           &:first-child {
-            padding-right: 0.5rem;
+            padding-right: var(--nok-space-sm);
             width: 1.25em;
             text-align: center;
 
@@ -241,7 +241,7 @@ nok-square-block {
       left: #{map-get(components-base.$padding-base-values, 1)};
       display: flex;
       flex-wrap: wrap;
-      gap: 0.375rem;
+      gap: var(--nok-space-fluid-xs);
       max-width: calc(100% - var(--padding));
     }
 
@@ -266,7 +266,7 @@ nok-square-block {
 .nok-badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.25rem 0.625rem;
+  padding: var(--nok-space-xs) var(--nok-space-sm);
   font-size: 0.8125rem;
   font-weight: 500;
   line-height: 1.4;

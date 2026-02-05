@@ -6,7 +6,7 @@
 .nok-category-pills {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: var(--nok-space-fluid-sm);
 }
 
 .nok-pill {

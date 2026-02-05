@@ -2,6 +2,7 @@
 @use "sass:map";
 @use "tools/nok-utilities";
 @use "tools/nok-rfs";
+@use "nok-spacing";
 
 $prefix : 'nok';
 $theme_root :                   "https://dev.obesitaskliniek.nl/wp-content/themes/nok-2025-v1/";
@@ -93,22 +94,12 @@ $section-max-widths: (
 
 $section-max-widths-narrow: nok-utilities.shift-section-widths($section-max-widths, 1, lg) !default;
 
-$padding-base-values: (
-        0 : 0rem,
-        0_25: #{(.25 * $padding-base)},
-        0_5: #{(.5 * $padding-base)},
-        1: #{(1 * $padding-base)},
-    //1_5: #{(1.5 * $padding-base)},
-        2: #{(1.5 * $padding-base)},
-        3: #{(2 * $padding-base)},
-        4: #{(3 * $padding-base)},
-        5: #{(4 * $padding-base)},
-        gap: var(--gap),
-        grid-gap: var(--grid-gap),
-        column-gap: var(--column-gap),
-        section-padding: var(--nok-spacing-section-ends),
-        double-section-padding: calc(2 * var(--nok-spacing-section-ends)),
-);
+// Legacy spacing values - now aliased to CSS custom properties from _nok-spacing.scss
+// Use semantic keys (xs, sm, md, lg, xl, 2xl, 3xl, 4xl) in new code
+$padding-base-values: nok-spacing.$spacing-utility-values;
+
+// Semantic spacing scale for new code (fluid by default)
+$spacing-scale: nok-spacing.$spacing-scale;
 
 $aspect-ratios: (
         "16x5": 16 / 5,
@@ -120,4 +111,6 @@ $aspect-ratios: (
     @each $key, $value in $exposed-variables {
         --#{$prefix}-#{$key}: #{$value};
     }
+    // Include spacing custom properties
+    @include nok-spacing.spacing-custom-properties;
 }

@@ -8,7 +8,7 @@
   &-grid {
     display: grid;
 
-    --grid-gap: var(--#{nok-variables.$prefix}-padding-base, var(--#{nok-variables.$prefix}-global-grid-gap, 1.5rem));
+    --grid-gap: var(--nok-space-fluid-md, var(--#{nok-variables.$prefix}-padding-base, 1.5rem));
     @include nok-mixins.nok-grid-gap;
 
     grid-template-columns: var(--grid-template-columns, repeat(var(--grid-columns, 1), var(--grid-column-size, 1fr)));
@@ -162,7 +162,7 @@
 
   &-flex {
     display: flex;
-    --flex-gap: var(--#{nok-variables.$prefix}-padding-base, var(--#{nok-variables.$prefix}-global-grid-gap, 1.5rem));
+    --flex-gap: var(--nok-space-fluid-md, var(--#{nok-variables.$prefix}-padding-base, 1.5rem));
     @include nok-mixins.nok-flex-gap;
 
     &-row, &-column {
