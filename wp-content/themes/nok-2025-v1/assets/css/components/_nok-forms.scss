@@ -17,7 +17,7 @@
 
   --animation-duration--in: #{$dur_in};
   --animation-duration--out: #{$dur_out};
-  --form-element-padding: 1ex;
+  --form-element-padding: var(--nok-space-xs, 1ex);
 
   display: flex;
   position: relative;
@@ -280,7 +280,7 @@
   .nok-form-field {
     display: flex;
     flex-direction: column;
-    gap: 0.5ex;
+    gap: var(--nok-space-fluid-xs);
   }
 
   select {

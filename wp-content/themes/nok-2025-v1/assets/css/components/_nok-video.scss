@@ -205,7 +205,7 @@ video {
     &__label {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: var(--nok-space-fluid-sm);
         font-weight: 500;
     }
 

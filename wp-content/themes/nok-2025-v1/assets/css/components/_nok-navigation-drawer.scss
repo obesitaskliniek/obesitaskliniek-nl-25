@@ -95,13 +95,13 @@ nok-navigation-drawer {
     font-weight: 400;
     overflow-y: auto; //make sure we can scroll the submenus on really small screens (or many items)
     flex-direction: column;
-    padding: 1rem var(--#{components-base.$prefix}-nok-spacing-section-sides);
-    --item-padding: clamp(0.5rem, 2vw, 1rem);
+    padding: var(--nok-space-fluid-md) var(--#{components-base.$prefix}-nok-spacing-section-sides);
+    --item-padding: var(--nok-space-fluid-sm);
     @mixin __local_compact {
       font-size: 1rem;
       @include components-base.rfs(1rem, font-size);
       font-weight: 400;
-      --item-padding: 0.5rem;
+      --item-padding: var(--nok-space-sm);
     }
 
     &--compact {

@@ -27,7 +27,7 @@ nok-navigation-top-row {
   }
 
   @at-root  nok-navigation-mobile & {
-    --grid-gap: 0.25rem;
+    --grid-gap: var(--nok-space-xs);
 
     display: flex;
 
@@ -37,7 +37,7 @@ nok-navigation-top-row {
     flex-wrap: nowrap;
     justify-content: space-between;
 
-    padding: 1rem var(--#{components-base.$prefix}-nok-spacing-section-sides);
+    padding: var(--nok-space-fluid-md) var(--#{components-base.$prefix}-nok-spacing-section-sides);
     padding-top: max(1rem, env(safe-area-inset-top));
     gap: var(--grid-gap, var(--#{components-base.$prefix}-global-grid-gap));
   }
