@@ -35,7 +35,7 @@ $block_colors = $c->colors->contains('nok-bg-darkestblue',
                         Neem contact met ons op via telefoon: <a href="tel:0888832444" class="nok-hyperlink">088 - 88 32 444</a> of e-mail: <a href="mailto:info@obesitaskliniek.nl" class="nok-hyperlink">info@obesitaskliniek.nl</a>
                     </p>
                     <div class="nok-layout-flex nok-column-gap-0_5 flex-wrap">
-                        <a href="#" role="button" class="nok-button nok-justify-self-start fill-mobile nok-bg-darkblue nok-text-contrast" tabindex="0">
+                        <a href="/contact/" role="button" class="nok-button nok-justify-self-start fill-mobile nok-bg-darkblue nok-text-contrast" tabindex="0">
                             Neem contact op <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
                         </a>
                         <a href="/kennisbank/veelgestelde-vragen" role="button" class="nok-button nok-justify-self-start fill-mobile nok-bg-body--darker nok-text-contrast" tabindex="0">

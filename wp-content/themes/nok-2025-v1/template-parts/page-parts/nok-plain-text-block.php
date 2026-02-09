@@ -7,7 +7,7 @@
  * - layout:select(left|center|right)!page-editable!default(center)
  * - collapse_bottom:checkbox!page-editable
  * - lettergrootte:select(Vergroot::nok-fs-2|Normaal::)!page-editable!default(Vergroot)
- * - colors:color-selector(section-colors)!page-editable!default(nok-bg-body nok-text-darkerblue nok-dark-text-contrast)
+ * - colors:color-selector(section-colors)!page-editable!default(nok-text-darkerblue nok-dark-text-contrast)
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context

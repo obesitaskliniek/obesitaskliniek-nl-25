@@ -61,6 +61,9 @@ $has_featured_image = has_post_thumbnail( get_the_ID() ) && $featured_image !== 
                             <span class="nok-layout-flex-row email" id="email"><?= Assets::getIcon('ui_email') ;?> <a href="mailto:<?= esc_attr( $email ); ?>" class="nok-hyperlink"><?= esc_html( $email ); ?></a></span>
                         </address>
                     </div>
+                    <a href="#nok-contactformulier" role="button" class="nok-button nok-justify-self-stretch nok-bg-darkblue nok-text-contrast" tabindex="0">
+                        Neem contact met ons op <?= Assets::getIcon('ui_email', 'nok-text-yellow') ?>
+                    </a>
                 </nok-square-block>
 
                 <?php if ( $opening_hours ) : ?>

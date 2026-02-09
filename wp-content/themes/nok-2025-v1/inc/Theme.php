@@ -14,6 +14,7 @@ use NOK2025\V1\PageParts\RestEndpoints;
 use NOK2025\V1\SEO\YoastIntegration;
 use NOK2025\V1\SEO\PagePartSchema;
 use NOK2025\V1\VoorlichtingForm;
+use NOK2025\V1\ContactForm;
 use WP_Post;
 
 /**
@@ -89,6 +90,7 @@ final class Theme {
     private PagePartSchema $page_part_schema;
     private BlockRenderers $block_renderers;
     private VoorlichtingForm $voorlichting_form;
+    private ContactForm $contact_form;
 
     // Settings store (can hold customizer values)
     private array $settings = [];
@@ -111,6 +113,7 @@ final class Theme {
         $this->page_part_schema    = new PagePartSchema( $this->registry );
         $this->block_renderers     = new BlockRenderers();
         $this->voorlichting_form   = new VoorlichtingForm();
+        $this->contact_form        = new ContactForm();
         $this->rest_endpoints      = new RestEndpoints(
                 $this->template_renderer,
                 $this->meta_manager
@@ -157,6 +160,7 @@ final class Theme {
         $this->page_part_schema->register_hooks();
         $this->block_renderers->register_hooks();
         $this->voorlichting_form->register_hooks();
+        $this->contact_form->register_hooks();
         PageParts\Registry::register_invalidation_hooks();
 
 
