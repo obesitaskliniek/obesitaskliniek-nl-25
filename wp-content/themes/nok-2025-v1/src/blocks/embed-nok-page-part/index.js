@@ -193,7 +193,7 @@ const CustomPagePartSelector = ({value, options, onChange, onOpen}) => {
                         top: buttonRef.current?.getBoundingClientRect().bottom + window.scrollY,
                         left: buttonRef.current?.getBoundingClientRect().left + window.scrollX,
                         width: buttonRef.current?.offsetWidth || 'auto',
-                        maxHeight: '400px',
+                        maxHeight: '180px',
                         backgroundColor: 'white',
                         border: '1px solid #ccc',
                         borderRadius: '2px',
@@ -388,7 +388,7 @@ registerBlockType(blockName, {
 
         // Refs & state for dynamic height
         const iframeRef = useRef(null);
-        const [height, setHeight] = useState(400);
+        const [height, setHeight] = useState(180);
 
         // Effect to handle iframe load events and height tracking
         useEffect(() => {

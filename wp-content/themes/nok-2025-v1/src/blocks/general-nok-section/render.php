@@ -20,8 +20,8 @@ return function( array $attributes, string $content ): string {
 
 	// Map block attributes to field names expected by block-part template
 	$fields = [
-		'background_color' => $attributes['backgroundColor'] ?? 'white',
-		'text_color'       => $attributes['textColor'] ?? 'darkerblue',
+		'background_color' => $attributes['backgroundColor'] ?? '',
+		'text_color'       => $attributes['textColor'] ?? 'nok-text-darkerblue',
 		'layout_width'     => $attributes['layoutWidth'] ?? '1-column',
 		'narrow_section'   => ( $attributes['narrowSection'] ?? false ) ? '1' : '0',
 		'enable_pull_up'   => ( $attributes['enablePullUp'] ?? false ) ? '1' : '0',

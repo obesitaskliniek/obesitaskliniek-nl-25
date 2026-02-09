@@ -13,11 +13,11 @@
   "attributes": {
     "backgroundColor": {
       "type": "string",
-      "default": "white"
+      "default": ""
     },
     "textColor": {
       "type": "string",
-      "default": "darkerblue"
+      "default": "nok-text-darkerblue"
     },
     "layoutWidth": {
       "type": "string",

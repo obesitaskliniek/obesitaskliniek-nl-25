@@ -1,0 +1,6 @@
+//disables the dropdown menu's so height calculation for the iframe isn't affected by these
+nok-top-navigation nok-accessibility-helper,
+nok-navigation-menu-bar nok-nav-menu-bar-dropdown {
+  display: none !important;
+  visibility: hidden !important;
+}

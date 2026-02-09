@@ -218,12 +218,13 @@ class AssetManager {
 	 * - registry: Complete page part registry with field definitions
 	 * - blockPartsRegistry: Block parts registry with field definitions
 	 * - icons: Available icon set for icon-selector fields
+	 * - colorPalettes: Color palettes for color-selector fields
 	 * - ajaxurl: WordPress AJAX endpoint URL
 	 * - nonce: Security nonce for AJAX requests
 	 *
-	 * Localizes to appropriate script handles:
-	 * - PagePartDesignSettings for page_part editor
-	 * - PagePartDesignSettings for embed-nok-page-part block
+	 * Localizes to:
+	 * - nok-page-part-design-selector for page_part editor (non-block context)
+	 * - wp-blocks for all block editor contexts (available to all custom blocks)
 	 *
 	 * @return void
 	 */
@@ -243,15 +244,15 @@ class AssetManager {
 			'nonce'              => wp_create_nonce( 'nok_preview_state_nonce' )
 		];
 
-		// For page_part editor
+		// For page_part editor (non-block context)
 		if ( wp_script_is( 'nok-page-part-design-selector', 'enqueued' ) ) {
 			wp_localize_script( 'nok-page-part-design-selector', 'PagePartDesignSettings', $data );
 		}
 
-		// For block editor (pages)
-		$block_handle = 'nok2025-embed-nok-page-part-editor-script';
-		if ( wp_script_is( $block_handle, 'enqueued' ) || wp_script_is( $block_handle, 'registered' ) ) {
-			wp_localize_script( $block_handle, 'PagePartDesignSettings', $data );
+		// For block editor - always available via wp-blocks
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( $screen && $screen->is_block_editor() ) {
+			wp_localize_script( 'wp-blocks', 'PagePartDesignSettings', $data );
 		}
 	}
 

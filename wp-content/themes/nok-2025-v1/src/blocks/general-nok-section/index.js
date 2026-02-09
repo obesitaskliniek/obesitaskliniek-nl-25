@@ -2,6 +2,7 @@ import { registerBlockType } from '@wordpress/blocks';
 import { InnerBlocks, useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import ColorSelector from '../../components/ColorSelector';
 
 const textDomain = 'nok-2025-v1';
 const blockName = 'nok2025/general-nok-section';
@@ -22,25 +23,6 @@ const ALLOWED_BLOCKS = [
     'core/button',
     'core/html',
     'core/shortcode',
-];
-
-// Color options matching theme colors
-const COLOR_OPTIONS = [
-    { label: __('Wit', textDomain), value: 'white' },
-    { label: __('Lichtblauw', textDomain), value: 'lightblue' },
-    { label: __('Blauw', textDomain), value: 'blue' },
-    { label: __('Donkerblauw', textDomain), value: 'darkblue' },
-    { label: __('Donkerder blauw', textDomain), value: 'darkerblue' },
-    { label: __('Donkerste blauw', textDomain), value: 'darkestblue' },
-    { label: __('Transparant', textDomain), value: 'transparent' },
-];
-
-// Text color options
-const TEXT_COLOR_OPTIONS = [
-    { label: __('Donkerder blauw', textDomain), value: 'darkerblue' },
-    { label: __('Wit', textDomain), value: 'white' },
-    { label: __('Contrast', textDomain), value: 'contrast' },
-    { label: __('Lichtblauw', textDomain), value: 'lightblue' },
 ];
 
 // Layout width options
@@ -64,22 +46,33 @@ registerBlockType(blockName, {
             },
         });
 
+        // Get labels for selected colors from palettes
+        const palettes = window.PagePartDesignSettings?.colorPalettes || {};
+        const bgColors = palettes['backgrounds'] || [];
+        const txtColors = palettes['text'] || [];
+        const selectedBg = bgColors.find(c => c.value === backgroundColor);
+        const selectedTxt = txtColors.find(c => c.value === textColor);
+
         return (
             <>
                 <InspectorControls>
                     <PanelBody title={__('Sectie instellingen', textDomain)} initialOpen={true}>
-                        <SelectControl
-                            label={__('Achtergrondkleur', textDomain)}
+                        <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
+                            {__('Achtergrondkleur', textDomain)}
+                        </label>
+                        <ColorSelector
                             value={backgroundColor}
-                            options={COLOR_OPTIONS}
                             onChange={(value) => setAttributes({ backgroundColor: value })}
+                            palette="backgrounds"
                         />
 
-                        <SelectControl
-                            label={__('Tekstkleur', textDomain)}
+                        <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
+                            {__('Tekstkleur', textDomain)}
+                        </label>
+                        <ColorSelector
                             value={textColor}
-                            options={TEXT_COLOR_OPTIONS}
                             onChange={(value) => setAttributes({ textColor: value })}
+                            palette="text"
                         />
 
                         <SelectControl
@@ -125,8 +118,8 @@ registerBlockType(blockName, {
                     }}>
                         <strong>{__('NOK Generieke sectie', textDomain)}</strong>
                         <div style={{ fontSize: '12px', marginTop: '8px', color: '#666' }}>
-                            {__('Achtergrond:', textDomain)} {COLOR_OPTIONS.find(opt => opt.value === backgroundColor)?.label || backgroundColor} |&nbsp;
-                            {__('Tekst:', textDomain)} {TEXT_COLOR_OPTIONS.find(opt => opt.value === textColor)?.label || textColor} |&nbsp;
+                            {__('Achtergrond:', textDomain)} {selectedBg?.label || backgroundColor || 'Transparant'} |&nbsp;
+                            {__('Tekst:', textDomain)} {selectedTxt?.label || textColor} |&nbsp;
                             {__('Layout:', textDomain)} {LAYOUT_OPTIONS.find(opt => opt.value === layoutWidth)?.label || layoutWidth}
                             {narrowSection && <> | <strong>{__('Smal', textDomain)}</strong></>}
                         </div>
