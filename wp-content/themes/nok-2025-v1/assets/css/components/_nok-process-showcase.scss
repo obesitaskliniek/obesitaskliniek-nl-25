@@ -39,7 +39,7 @@
     // They overlap visually - only the active one is visible
     > [role="tabpanel"] {
       grid-column: 2;
-      grid-row: 1 / span 100; // Span many rows to cover all buttons
+      grid-row: 1 / -1; // Span many rows to cover all buttons
 
       // Hidden panels stay in layout but are invisible
       // This prevents grid reflow when switching tabs

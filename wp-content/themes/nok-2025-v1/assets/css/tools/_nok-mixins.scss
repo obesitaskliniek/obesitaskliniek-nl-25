@@ -195,6 +195,8 @@
   --text-decoration-thickness: .25ex;
   --text-decoration-thickness-hover: .5ex;
 
+  white-space: nowrap;
+
   padding: 0 var(--padding-y) var(--padding);
   margin: auto calc(-1 * var(--padding));
 

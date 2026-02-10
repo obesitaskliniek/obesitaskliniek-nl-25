@@ -41,13 +41,19 @@ $has_featured_image = has_post_thumbnail( get_the_ID() ) && $featured_image !== 
 
     <nok-section class="no-aos z-ascend">
         <div class="nok-section__inner
-            nok-layout-grid nok-layout-grid__3-column fill-one
+            nok-layout-grid nok-layout-grid nok-columns-6
             nok-grid-gap-section-padding nok-mt-0">
-            <article class="nok-column-first-2 nok-layout-flex-column nok-align-items-start text-start">
+            <article class="nok-order-1 nok-order-xl-1
+            nok-column-first-6 nok-column-first-xl-3 nok-column-first-xxl-4
+            nok-layout-flex-column
+            nok-align-items-start text-start">
                 <?php Helpers::the_content_rest(); ?>
             </article>
-            <aside class="nok-column-first-2 nok-column-last-xl-1 nok-order-0 nok-order-lg-1 nok-grid-gap-1 nok-pull-up-xl-3
-            nok-align-self-start nok-layout-grid nok-columns-xl-1">
+            <aside class="nok-order-0 nok-order-xl-2
+            nok-span-all-columns nok-column-last-xl-3 nok-column-last-xxl-2
+            nok-grid-gap-1 nok-pull-up-xl-3
+            nok-align-self-start
+            nok-layout-grid nok-columns-1 nok-columns-lg-2 nok-columns-xl-1">
                 <nok-square-block class="nok-bg-darkerblue nok-text-contrast nok-alpha-10"
                                   data-shadow="true">
                     <div class="nok-square-block__heading">
@@ -72,7 +78,7 @@ $has_featured_image = has_post_thumbnail( get_the_ID() ) && $featured_image !== 
                     <div class="nok-square-block__heading">
                         <?php printf( '<h2>Openingstijden</h2>', get_the_title()); ?>
                     </div>
-                    <div class="nok-square-block__text">
+                    <div class="nok-square-block__text nok-fs-1">
                         <?= Helpers::format_opening_hours( $opening_hours ); ?>
                     </div>
                 </nok-square-block>
