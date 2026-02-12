@@ -9,6 +9,8 @@ namespace NOK2025\V1;
  * - page_part: Reusable page components for embedding
  * - template_layout: Block editor templates for single post types
  * - vestiging: Clinic locations with address and contact info
+ * - regio: SEO landing pages for regions near a vestiging
+ *   URL structure: /vestigingen/{vestiging-slug}/{regio-slug}/
  * - kennisbank: Knowledge base with FAQ and informational articles
  *   URL structure: /kennisbank/{category}/{post-slug}/
  *
@@ -31,6 +33,7 @@ class PostTypes {
 	public function __construct() {
 		add_action( 'init', [ $this, 'register_post_types' ] );
 		add_action( 'init', [ $this, 'register_kennisbank_permalink_filter' ] );
+		add_action( 'init', [ $this, 'register_regio_permalink_filter' ] );
 		add_action( 'template_redirect', [ $this, 'protect_post_types' ] );
 		add_filter( 'single_template', [ $this, 'kennisbank_category_template' ] );
 		add_filter( 'request', [ $this, 'disambiguate_kennisbank_urls' ] );
@@ -43,6 +46,7 @@ class PostTypes {
 		$this->register_page_part_post_type();
 		$this->register_template_layout_post_type();
 		$this->register_vestiging_post_type();
+		$this->register_regio_post_type();
 		$this->register_kennisbank_taxonomy();
 		$this->register_kennisbank_post_type();
 		$this->track_archive_post_types();
@@ -237,6 +241,70 @@ class PostTypes {
 	}
 
 	/**
+	 * Register the regio custom post type
+	 *
+	 * Regio's are SEO landing pages for regions near a vestiging.
+	 * Each regio links to a parent vestiging via the _parent_vestiging meta field.
+	 * Unlike vestigingen, regio's have no address or contact info of their own.
+	 *
+	 * Meta fields (registered in Theme.php):
+	 * - _parent_vestiging (post_select → vestiging)
+	 *
+	 * URLs (via custom rewrite rules):
+	 * - Single: /vestigingen/{vestiging-slug}/{regio-slug}/
+	 *
+	 * Templates:
+	 * - single-regio.php
+	 * - template-parts/single-regio-content.php
+	 */
+	private function register_regio_post_type(): void {
+		$labels = [
+			'name'               => __( "Regio's", THEME_TEXT_DOMAIN ),
+			'singular_name'      => __( 'Regio', THEME_TEXT_DOMAIN ),
+			'add_new_item'       => __( 'Nieuwe regio toevoegen', THEME_TEXT_DOMAIN ),
+			'edit_item'          => __( 'Regio bewerken', THEME_TEXT_DOMAIN ),
+			'new_item'           => __( 'Nieuwe regio', THEME_TEXT_DOMAIN ),
+			'view_item'          => __( 'Regio bekijken', THEME_TEXT_DOMAIN ),
+			'view_items'         => __( "Regio's bekijken", THEME_TEXT_DOMAIN ),
+			'search_items'       => __( "Regio's zoeken", THEME_TEXT_DOMAIN ),
+			'not_found'          => __( "Geen regio's gevonden.", THEME_TEXT_DOMAIN ),
+			'not_found_in_trash' => __( "Geen regio's gevonden in prullenbak.", THEME_TEXT_DOMAIN ),
+			'all_items'          => __( "Regio's", THEME_TEXT_DOMAIN ),
+			'archives'           => __( 'Regio archieven', THEME_TEXT_DOMAIN ),
+			'attributes'         => __( 'Regio attributen', THEME_TEXT_DOMAIN ),
+		];
+
+		$args = [
+			'labels'              => $labels,
+			'description'         => __( "SEO-landingspagina's voor regio's rondom vestigingen.", THEME_TEXT_DOMAIN ),
+			'public'              => true,
+			'publicly_queryable'  => true,
+			'show_ui'             => true,
+			'show_in_menu'        => 'edit.php?post_type=vestiging',
+			'show_in_nav_menus'   => true,
+			'show_in_admin_bar'   => true,
+			'show_in_rest'        => true,
+			'rest_base'           => 'regios',
+			'capability_type'     => 'post',
+			'hierarchical'        => false,
+			'supports'            => [
+				'title',
+				'editor',
+				'thumbnail',
+				'revisions',
+				'custom-fields',
+			],
+			'has_archive'         => false,
+			'rewrite'             => false, // Custom rewrite rules in register_regio_permalink_filter()
+			'query_var'           => true,
+			'can_export'          => true,
+			'delete_with_user'    => false,
+		];
+
+		register_post_type( 'regio', $args );
+	}
+
+	/**
 	 * Register the kennisbank_categories taxonomy
 	 *
 	 * Must be registered BEFORE the kennisbank post type for rewrite rules to work.
@@ -368,6 +436,53 @@ class PostTypes {
 			'index.php?kennisbank=$matches[2]',
 			'top'
 		);
+	}
+
+	/**
+	 * Register permalink filter and rewrite rule for regio posts
+	 *
+	 * Generates nested URLs under vestigingen:
+	 * - /vestigingen/{vestiging-slug}/{regio-slug}/
+	 *
+	 * Uses negative lookahead to avoid matching pagination URLs (/vestigingen/page/2/).
+	 */
+	public function register_regio_permalink_filter(): void {
+		add_filter( 'post_type_link', [ $this, 'regio_permalink' ], 10, 2 );
+
+		// Rewrite rule for nested URLs: /vestigingen/{vestiging-slug}/{regio-slug}/
+		// Negative lookahead excludes /vestigingen/page/{n}/ (archive pagination)
+		add_rewrite_rule(
+			'^vestigingen/(?!page/)([^/]+)/([^/]+)/?$',
+			'index.php?regio=$matches[2]',
+			'top'
+		);
+	}
+
+	/**
+	 * Filter regio permalinks to nest under parent vestiging
+	 *
+	 * Generates URLs like /vestigingen/beverwijk/alkmaar/
+	 * where "beverwijk" is the parent vestiging slug and "alkmaar" is the regio slug.
+	 *
+	 * @param string   $permalink The post permalink
+	 * @param \WP_Post $post      The post object
+	 * @return string Modified permalink
+	 */
+	public function regio_permalink( string $permalink, \WP_Post $post ): string {
+		if ( $post->post_type !== 'regio' ) {
+			return $permalink;
+		}
+
+		$parent_vestiging_id = get_post_meta( $post->ID, '_parent_vestiging', true );
+		if ( $parent_vestiging_id ) {
+			$parent = get_post( $parent_vestiging_id );
+			if ( $parent ) {
+				return home_url( '/vestigingen/' . $parent->post_name . '/' . $post->post_name . '/' );
+			}
+		}
+
+		// Fallback if no parent vestiging set
+		return home_url( '/vestigingen/' . $post->post_name . '/' );
 	}
 
 	/**
