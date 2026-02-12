@@ -102,12 +102,3 @@ $has_featured_image = has_post_thumbnail( get_the_ID() ) && $featured_image !== 
             <?php endif; ?>
         </div>
     </nok-section>
-
-<?php
-// Voorlichtingen carousel - shows upcoming sessions for parent vestiging
-if ( ! empty( $vestiging_city ) ) {
-	get_template_part( 'template-parts/post-parts/nok-vestiging-voorlichtingen', null, [
-		'city' => $vestiging_city,
-	] );
-}
-?>

@@ -10,7 +10,7 @@ namespace NOK2025\V1;
  * - template_layout: Block editor templates for single post types
  * - vestiging: Clinic locations with address and contact info
  * - regio: SEO landing pages for regions near a vestiging
- *   URL structure: /vestigingen/{vestiging-slug}/{regio-slug}/
+ *   URL structure: /vestigingen/{vestiging-slug}/regio/{regio-slug}/
  * - kennisbank: Knowledge base with FAQ and informational articles
  *   URL structure: /kennisbank/{category}/{post-slug}/
  *
@@ -251,7 +251,7 @@ class PostTypes {
 	 * - _parent_vestiging (post_select → vestiging)
 	 *
 	 * URLs (via custom rewrite rules):
-	 * - Single: /vestigingen/{vestiging-slug}/{regio-slug}/
+	 * - Single: /vestigingen/{vestiging-slug}/regio/{regio-slug}/
 	 *
 	 * Templates:
 	 * - single-regio.php
@@ -442,17 +442,14 @@ class PostTypes {
 	 * Register permalink filter and rewrite rule for regio posts
 	 *
 	 * Generates nested URLs under vestigingen:
-	 * - /vestigingen/{vestiging-slug}/{regio-slug}/
-	 *
-	 * Uses negative lookahead to avoid matching pagination URLs (/vestigingen/page/2/).
+	 * - /vestigingen/{vestiging-slug}/regio/{regio-slug}/
 	 */
 	public function register_regio_permalink_filter(): void {
 		add_filter( 'post_type_link', [ $this, 'regio_permalink' ], 10, 2 );
 
-		// Rewrite rule for nested URLs: /vestigingen/{vestiging-slug}/{regio-slug}/
-		// Negative lookahead excludes /vestigingen/page/{n}/ (archive pagination)
+		// Rewrite rule: /vestigingen/{vestiging-slug}/regio/{regio-slug}/
 		add_rewrite_rule(
-			'^vestigingen/(?!page/)([^/]+)/([^/]+)/?$',
+			'^vestigingen/([^/]+)/regio/([^/]+)/?$',
 			'index.php?regio=$matches[2]',
 			'top'
 		);
@@ -461,7 +458,7 @@ class PostTypes {
 	/**
 	 * Filter regio permalinks to nest under parent vestiging
 	 *
-	 * Generates URLs like /vestigingen/beverwijk/alkmaar/
+	 * Generates URLs like /vestigingen/beverwijk/regio/alkmaar/
 	 * where "beverwijk" is the parent vestiging slug and "alkmaar" is the regio slug.
 	 *
 	 * @param string   $permalink The post permalink
@@ -477,12 +474,12 @@ class PostTypes {
 		if ( $parent_vestiging_id ) {
 			$parent = get_post( $parent_vestiging_id );
 			if ( $parent ) {
-				return home_url( '/vestigingen/' . $parent->post_name . '/' . $post->post_name . '/' );
+				return home_url( '/vestigingen/' . $parent->post_name . '/regio/' . $post->post_name . '/' );
 			}
 		}
 
 		// Fallback if no parent vestiging set
-		return home_url( '/vestigingen/' . $post->post_name . '/' );
+		return home_url( '/vestigingen/regio/' . $post->post_name . '/' );
 	}
 
 	/**
