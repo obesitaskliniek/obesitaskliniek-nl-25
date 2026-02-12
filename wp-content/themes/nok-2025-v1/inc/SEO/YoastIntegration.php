@@ -35,6 +35,8 @@ class YoastIntegration {
 		add_filter('wpseo_sitemap_exclude_post_type', [$this, 'exclude_page_parts_from_sitemap'], 10, 2);
 		// Fix breadcrumb archive URLs for custom post types
 		add_filter('wpseo_breadcrumb_links', [$this, 'fix_breadcrumb_archive_urls']);
+		// Enhance Yoast schema graph with MedicalOrganization data
+		add_filter('wpseo_schema_graph', [$this, 'enhance_schema_graph'], 10, 2);
 	}
 
 	public function exclude_page_parts_from_indexables(array $excluded): array {
@@ -197,6 +199,224 @@ class YoastIntegration {
 		}
 
 		return $links;
+	}
+
+	/**
+	 * Enhance Yoast's schema graph with MedicalOrganization data
+	 *
+	 * Modifies the Organization piece to MedicalOrganization with bariatric surgery
+	 * specialty and adds all vestigingen as department entries. On singular vestiging
+	 * pages, also adds a detailed MedicalClinic piece with address, phone, and
+	 * opening hours.
+	 *
+	 * @param array                              $graph   Schema graph pieces
+	 * @param \Yoast\WP\SEO\Context\Meta_Tags_Context $context Yoast meta tags context
+	 * @return array Modified schema graph
+	 */
+	public function enhance_schema_graph(array $graph, $context): array {
+		foreach ($graph as &$piece) {
+			if (!isset($piece['@type'])) {
+				continue;
+			}
+
+			// Upgrade Organization to MedicalOrganization
+			$type = $piece['@type'];
+			$is_org = ($type === 'Organization')
+				|| (is_array($type) && in_array('Organization', $type, true));
+
+			if ($is_org) {
+				$piece['@type'] = ['Organization', 'MedicalOrganization'];
+				$piece['medicalSpecialty'] = 'Bariatric Surgery';
+				$piece['department'] = $this->build_vestiging_departments();
+			}
+		}
+		unset($piece);
+
+		// On singular vestiging pages, add a detailed MedicalClinic piece
+		if (is_singular('vestiging')) {
+			$clinic_piece = $this->build_vestiging_clinic_schema(get_the_ID());
+			if ($clinic_piece) {
+				$graph[] = $clinic_piece;
+			}
+		}
+
+		return $graph;
+	}
+
+	/**
+	 * Build department array with all vestigingen as MedicalClinic entries
+	 *
+	 * Queries all published vestigingen and builds a compact MedicalClinic entry
+	 * for each, suitable for the Organization's `department` property.
+	 *
+	 * @return array Array of MedicalClinic schema entries
+	 */
+	private function build_vestiging_departments(): array {
+		$departments = [];
+		$vestigingen = get_posts([
+			'post_type'      => 'vestiging',
+			'posts_per_page' => -1,
+			'orderby'        => 'title',
+			'order'          => 'ASC',
+			'post_status'    => 'publish',
+		]);
+
+		foreach ($vestigingen as $vestiging) {
+			$id          = $vestiging->ID;
+			$street      = get_post_meta($id, '_street', true);
+			$housenumber = get_post_meta($id, '_housenumber', true);
+			$postal_code = get_post_meta($id, '_postal_code', true);
+			$city        = get_post_meta($id, '_city', true);
+			$phone       = get_post_meta($id, '_phone', true);
+
+			$department = [
+				'@type' => 'MedicalClinic',
+				'name'  => $vestiging->post_title,
+				'url'   => get_permalink($id),
+			];
+
+			if ($street || $city) {
+				$department['address'] = [
+					'@type'           => 'PostalAddress',
+					'streetAddress'   => trim("$street $housenumber"),
+					'postalCode'      => $postal_code,
+					'addressLocality' => $city,
+					'addressCountry'  => 'NL',
+				];
+			}
+
+			if ($phone) {
+				$department['telephone'] = $phone;
+			}
+
+			$departments[] = $department;
+		}
+
+		return $departments;
+	}
+
+	/**
+	 * Build detailed MedicalClinic schema piece for a single vestiging
+	 *
+	 * Includes full address, contact info, opening hours specifications,
+	 * and a parentOrganization reference back to the main Organization piece.
+	 *
+	 * @param int $post_id Vestiging post ID
+	 * @return array|null MedicalClinic schema piece, or null if insufficient data
+	 */
+	private function build_vestiging_clinic_schema(int $post_id): ?array {
+		$title       = get_the_title($post_id);
+		$street      = get_post_meta($post_id, '_street', true);
+		$housenumber = get_post_meta($post_id, '_housenumber', true);
+		$postal_code = get_post_meta($post_id, '_postal_code', true);
+		$city        = get_post_meta($post_id, '_city', true);
+		$phone       = get_post_meta($post_id, '_phone', true);
+		$email       = get_post_meta($post_id, '_email', true);
+		$hours_json  = get_post_meta($post_id, '_opening_hours', true);
+
+		if (!$title) {
+			return null;
+		}
+
+		$piece = [
+			'@type'              => 'MedicalClinic',
+			'@id'                => get_permalink($post_id) . '#medical-clinic',
+			'name'               => $title,
+			'url'                => get_permalink($post_id),
+			'medicalSpecialty'   => 'Bariatric Surgery',
+			'parentOrganization' => [
+				'@id' => home_url('/#organization'),
+			],
+		];
+
+		if ($street || $city) {
+			$piece['address'] = [
+				'@type'           => 'PostalAddress',
+				'streetAddress'   => trim("$street $housenumber"),
+				'postalCode'      => $postal_code,
+				'addressLocality' => $city,
+				'addressCountry'  => 'NL',
+			];
+		}
+
+		if ($phone) {
+			$piece['telephone'] = $phone;
+		}
+
+		if ($email) {
+			$piece['email'] = $email;
+		}
+
+		if ($hours_json) {
+			$opening_hours = $this->parse_opening_hours_to_schema($hours_json);
+			if ($opening_hours) {
+				$piece['openingHoursSpecification'] = $opening_hours;
+			}
+		}
+
+		return $piece;
+	}
+
+	/**
+	 * Convert opening hours JSON meta to Schema.org OpeningHoursSpecification array
+	 *
+	 * Parses the vestiging `_opening_hours` JSON format, which supports a "weekdays"
+	 * template with per-day overrides, into an array of OpeningHoursSpecification
+	 * objects for each open day.
+	 *
+	 * @param string $opening_hours_json JSON string from `_opening_hours` meta field
+	 * @return array Array of OpeningHoursSpecification entries
+	 */
+	private function parse_opening_hours_to_schema(string $opening_hours_json): array {
+		if (empty($opening_hours_json) || $opening_hours_json === '{}') {
+			return [];
+		}
+
+		$hours = json_decode($opening_hours_json, true);
+		if (!is_array($hours)) {
+			return [];
+		}
+
+		$day_map = [
+			'monday'    => 'Monday',
+			'tuesday'   => 'Tuesday',
+			'wednesday' => 'Wednesday',
+			'thursday'  => 'Thursday',
+			'friday'    => 'Friday',
+		];
+
+		$weekdays_template = isset($hours['weekdays']) && !empty($hours['weekdays'])
+			? $hours['weekdays'][0]
+			: null;
+
+		$specs = [];
+		foreach ($day_map as $day_key => $schema_day) {
+			$day_hours = isset($hours[$day_key]) && !empty($hours[$day_key])
+				? $hours[$day_key]
+				: [];
+
+			$time_block = null;
+			if (count($day_hours) > 0) {
+				$time_block = $day_hours[0];
+				// Skip explicitly closed days
+				if (isset($time_block['closed']) && $time_block['closed'] === true) {
+					continue;
+				}
+			} elseif ($weekdays_template) {
+				$time_block = $weekdays_template;
+			}
+
+			if ($time_block && isset($time_block['opens'], $time_block['closes'])) {
+				$specs[] = [
+					'@type'     => 'OpeningHoursSpecification',
+					'dayOfWeek' => $schema_day,
+					'opens'     => $time_block['opens'],
+					'closes'    => $time_block['closes'],
+				];
+			}
+		}
+
+		return $specs;
 	}
 
 	/**

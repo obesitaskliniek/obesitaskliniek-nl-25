@@ -167,16 +167,13 @@ query_posts($query_args);
 								</div>
 							<?php endif; ?>
 
+                            <?php if ($primary_category): ?>
 							<div class="nok-square-block__badges">
-								<?php if ($primary_category): ?>
-									<span class="nok-badge nok-bg-darkerblue nok-text-white">
-										<?= esc_html($primary_category->name); ?>
-									</span>
-								<?php endif; ?>
-								<span class="nok-badge nok-bg-white nok-text-darkerblue">
-									<?= esc_html($date); ?>
-								</span>
+                                <span class="nok-badge nok-bg-darkerblue nok-text-white">
+                                    <?= esc_html($primary_category->name); ?>
+                                </span>
 							</div>
+                            <?php endif; ?>
 						</figure>
 
 						<!-- Card content -->

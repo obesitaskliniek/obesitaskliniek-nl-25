@@ -17,7 +17,7 @@ if ( ! empty( $args ) ) {
         <div class="nok-section__inner">
 
             <article class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start">
-                <h1>Meer voorlichtingen</h1>
+                <h2>Meer voorlichtingen</h2>
 
                 <!-- Component: drag-scrollable blokkengroep -->
                 <div class="nok-mt-2 nok-align-self-stretch">

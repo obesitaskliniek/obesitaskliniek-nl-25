@@ -142,19 +142,13 @@ $scroller_id = 'kennisbank-carousel-' . wp_unique_id();
 										</div>
 									<?php endif; ?>
 
+                                    <?php if ($c->show_category->isTrue() && $primary_category) : ?>
 									<div class="nok-square-block__badges">
-										<?php if ($c->show_category->isTrue() && $primary_category) : ?>
-											<span class="nok-badge <?= $c->badge_colors ?>">
-												<?= esc_html($primary_category->name) ?>
-											</span>
-										<?php endif; ?>
-
-										<?php if ($c->show_date->isTrue()) : ?>
-											<span class="nok-badge nok-bg-white nok-text-darkerblue">
-												<?= esc_html($date) ?>
-											</span>
-										<?php endif; ?>
+                                        <span class="nok-badge <?= $c->badge_colors ?>">
+                                            <?= esc_html($primary_category->name) ?>
+                                        </span>
 									</div>
+                                    <?php endif; ?>
 								</figure>
 
 								<!-- Card content -->

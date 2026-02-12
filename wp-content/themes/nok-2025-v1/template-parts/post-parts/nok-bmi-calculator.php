@@ -21,7 +21,7 @@ $rand_id = rand( 1000, 9999 );
         </form>
         <nok-square-block class="calculator-conclusion nok-layout nok-layout-grid half-grid-gap
                 nok-bg-white nok-dark-bg-darkestblue nok-text-contrast nok-alpha-10" data-shadow="true">
-            <h1 class="bmi-class-color">U heeft <span data-output-for="category.classification"></span></h1>
+            <h2 class="bmi-class-color">U heeft <span data-output-for="category.classification"></span></h2>
             <div class="conclusion-text">
                 <p>
                         <span class="show-bmi-normaal">Met <span data-output-for="healthyWeightRange.current"
