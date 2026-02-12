@@ -569,6 +569,7 @@ final class Theme {
      * Registers meta fields for:
      * - Post type (ervaringen category): naam_patient, highlighted_excerpt, behandeld_door
      * - Vestiging CPT: street, housenumber, postal_code, city, phone, email, opening_hours
+     * - Regio CPT: parent_vestiging
      *
      * Fields are registered via MetaRegistry and automatically integrated with:
      * - WordPress REST API (show_in_rest)
@@ -652,9 +653,18 @@ final class Theme {
         PostMeta\MetaRegistry::register_field( 'vestiging', 'opening_hours', [
                 'type'        => 'opening_hours',
                 'label'       => 'Openingstijden',
-                'description' => 'Stel hier de standaard openingstijden in. Je kunt alle weekdagen instellen op een vaste 
-			opening- en sluitingstijd, en daarvan afwijken door een individuele dag aan te vinken en daar andere waardes 
+                'description' => 'Stel hier de standaard openingstijden in. Je kunt alle weekdagen instellen op een vaste
+			opening- en sluitingstijd, en daarvan afwijken door een individuele dag aan te vinken en daar andere waardes
 			in te vullen. Of selecteer enkel de dagen waarop de vestiging geopend is.',
+        ] );
+
+        // Regio meta fields
+        PostMeta\MetaRegistry::register_field( 'regio', 'parent_vestiging', [
+                'type'        => 'post_select',
+                'post_type'   => 'vestiging',
+                'label'       => 'Bovenliggende vestiging',
+                'placeholder' => 'Selecteer een vestiging...',
+                'description' => 'De dichtstbijzijnde vestiging voor deze regio. Bepaalt de URL-structuur (/vestigingen/{vestiging}/{regio}/) en welke adresgegevens en voorlichtingen worden getoond.',
         ] );
     }
 

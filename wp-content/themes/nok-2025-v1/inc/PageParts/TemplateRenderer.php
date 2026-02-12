@@ -479,7 +479,7 @@ class TemplateRenderer {
 	 * Supported tokens:
 	 * - {{post_title}} - Current post title
 	 * - {{post_meta:field_name}} - Post meta field value
-	 * - {{vestiging_meta:field_name}} - Vestiging meta field value (via behandeld_door)
+	 * - {{vestiging_meta:field_name}} - Vestiging meta field value (via _behandeld_door or _parent_vestiging relationship)
 	 *
 	 * @param array $fields Field values to process
 	 * @return array Fields with tokens replaced
@@ -518,8 +518,9 @@ class TemplateRenderer {
 			$value = preg_replace_callback('/\{\{vestiging_meta:([a-zA-Z0-9_-]+)\}\}/', function($matches) use ($post) {
 				$field_name = $matches[1];
 
-				// Get behandeld_door post ID from current post meta (returns integer from post_select field)
-				$vestiging_id = get_post_meta($post->ID, '_behandeld_door', true);
+				// Get related vestiging post ID: _behandeld_door (ervaringen) or _parent_vestiging (regio)
+				$vestiging_id = get_post_meta($post->ID, '_behandeld_door', true)
+				             ?: get_post_meta($post->ID, '_parent_vestiging', true);
 
 				if (!$vestiging_id || !is_numeric($vestiging_id)) {
 					return '';
