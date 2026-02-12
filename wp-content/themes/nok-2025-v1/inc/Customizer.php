@@ -107,6 +107,26 @@ class Customizer {
 			'choices' => self::get_template_layout_choices(),
 		]);
 
+		// Regio template layout
+		$wp_customize->add_setting('template_layout_regio', [
+			'default' => 0,
+			'sanitize_callback' => 'absint',
+		]);
+
+		$wp_customize->add_control('template_layout_regio', [
+			'label' => __('Regio Template', THEME_TEXT_DOMAIN),
+			'description' => sprintf(
+				'<a href="%s" target="_blank">%s</a> | <a href="%s" target="_blank">%s</a>',
+				admin_url('post-new.php?post_type=template_layout'),
+				__('Create New Layout', THEME_TEXT_DOMAIN),
+				admin_url('edit.php?post_type=template_layout'),
+				__('Manage Layouts', THEME_TEXT_DOMAIN)
+			),
+			'section' => 'template_layouts',
+			'type' => 'select',
+			'choices' => self::get_template_layout_choices(),
+		]);
+
 		// Kennisbank Blogs template layout
 		$wp_customize->add_setting('template_layout_kennisbank_blogs', [
 			'default' => 0,
