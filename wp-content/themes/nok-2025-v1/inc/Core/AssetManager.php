@@ -238,6 +238,7 @@ class AssetManager {
 		$data = [
 			'registry'           => $registry,
 			'blockPartsRegistry' => $block_parts_registry,
+			'postParts'          => $this->get_available_post_parts(),
 			'icons'              => \NOK2025\V1\Assets::getIconsForAdmin(),
 			'colorPalettes'      => \NOK2025\V1\Colors::getColorsForAdmin(),
 			'ajaxurl'            => admin_url( 'admin-ajax.php' ),
@@ -285,6 +286,36 @@ class AssetManager {
                 }
             </style>';
 		}
+	}
+
+	/**
+	 * Get available post-part templates for the block editor
+	 *
+	 * Scans `template-parts/post-parts/` for `.php` files and builds
+	 * a list of slug/label pairs for the post-part embed block dropdown.
+	 *
+	 * @return array<int, array{slug: string, label: string}> Post-part templates
+	 */
+	private function get_available_post_parts(): array {
+		$post_parts_dir = get_theme_file_path( 'template-parts/post-parts' );
+		$files          = glob( $post_parts_dir . '/*.php' );
+
+		if ( ! $files ) {
+			return [];
+		}
+
+		$parts = [];
+		foreach ( $files as $file ) {
+			$slug  = basename( $file, '.php' );
+			$label = ucwords( str_replace( [ 'nok-', '-' ], [ '', ' ' ], $slug ) );
+
+			$parts[] = [
+				'slug'  => $slug,
+				'label' => $label,
+			];
+		}
+
+		return $parts;
 	}
 
 	/**

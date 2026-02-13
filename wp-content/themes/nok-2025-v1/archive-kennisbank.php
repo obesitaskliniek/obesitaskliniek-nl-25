@@ -159,6 +159,12 @@ query_posts($query_args);
 								     alt="<?= esc_attr($title); ?>"
 								     loading="lazy"
 								     decoding="async">
+							<?php elseif ($primary_category->name == 'Artikelen') : ?>
+								<div class="nok-square-block__image--placeholder">
+									<div style="transform: translateY(1em) rotateZ(45deg) scale(10);">
+										<?= Assets::getIcon('ui_info'); ?>
+									</div>
+								</div>
 							<?php else: ?>
 								<div class="nok-square-block__image--placeholder">
 									<div style="transform: translateY(1em) rotateZ(45deg) scale(10);">

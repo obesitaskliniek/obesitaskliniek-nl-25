@@ -193,6 +193,8 @@ class BlockRenderers {
 		// Extract block attributes
 		$nok_icon          = $block['attrs']['nokIcon'] ?? '';
 		$nok_style         = $block['attrs']['nokStyle'] ?? 'darkblue';
+		$nok_bg_color      = $block['attrs']['nokBgColor'] ?? '';
+		$nok_text_color    = $block['attrs']['nokTextColor'] ?? '';
 		$nok_icon_color    = $block['attrs']['nokIconColor'] ?? '';
 		$nok_icon_position = $block['attrs']['nokIconPosition'] ?? 'after';
 		$fill_mobile       = $block['attrs']['fillMobile'] ?? false;
@@ -218,7 +220,21 @@ class BlockRenderers {
 		$existing_classes = preg_replace( '/\bwp-block-button__link\b/', '', $existing_classes );
 		$existing_classes = preg_replace( '/\bwp-element-button\b/', '', $existing_classes );
 
-		$classes = [ 'nok-button', 'nok-text-contrast', "nok-bg-{$nok_style}" ];
+		$classes = [ 'nok-button' ];
+
+		if ( $nok_bg_color ) {
+			// New format: full class string from palette (e.g., "nok-bg-darkblue nok-text-contrast")
+			$classes[] = $nok_bg_color;
+		} else {
+			// Legacy format: simple color name
+			$classes[] = "nok-bg-{$nok_style}";
+			$classes[] = 'nok-text-contrast';
+		}
+
+		// Explicit text color override (appended last to win specificity)
+		if ( $nok_text_color ) {
+			$classes[] = $nok_text_color;
+		}
 
 		if ( $fill_mobile ) {
 			$classes[] = 'fill-mobile';
@@ -242,9 +258,18 @@ class BlockRenderers {
 
 			if ( ! $has_icon ) {
 				// Get icon SVG from Assets
-				$icon_name  = 'ui_' . $nok_icon;
-				$icon_class = $nok_icon_color ? "nok-text-{$nok_icon_color}" : '';
-				$icon_svg   = Assets::getIcon( $icon_name, $icon_class );
+				$icon_name = 'ui_' . $nok_icon;
+
+				// Resolve icon color class: new format stores full class (e.g., "nok-text-yellow"),
+				// legacy stores simple name (e.g., "yellow")
+				$icon_class = '';
+				if ( $nok_icon_color ) {
+					$icon_class = str_starts_with( $nok_icon_color, 'nok-text-' )
+						? $nok_icon_color
+						: "nok-text-{$nok_icon_color}";
+				}
+
+				$icon_svg = Assets::getIcon( $icon_name, $icon_class );
 
 				if ( ! empty( $icon_svg ) ) {
 					// Parse icon SVG into DOM

@@ -1,7 +1,7 @@
 <?php
 $rand_id = rand( 1000, 9999 );
 ?>
-    <nok-bmi-calculator class="nok-layout-grid nok-grid-gap-3 nok-align-items-start calculating loading"
+    <nok-bmi-calculator class="nok-layout-grid nok-align-items-start calculating loading"
                         data-requires="./nok-bmi-calculator.mjs" data-require-lazy="strict">
         <form id="<?= $rand_id; ?>" style="display: contents;">
         <nok-square-block class="calculator-inputs nok-layout-grid nok-layout-grid__2-column half-grid-gap nok-align-items-center

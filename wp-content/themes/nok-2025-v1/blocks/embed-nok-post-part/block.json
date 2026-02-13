@@ -1,0 +1,27 @@
+{
+  "apiVersion": 2,
+  "name": "nok2025/embed-nok-post-part",
+  "title": "NOK Post Part",
+  "description": "Voeg een post-part widget in (bijv. BMI calculator).",
+  "category": "widgets",
+  "icon": "screenoptions",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "template": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php",
+  "editorStyle": [
+    "nok-components-css",
+    "nok-colors-css"
+  ],
+  "style": [
+    "nok-components-css",
+    "nok-colors-css"
+  ]
+}

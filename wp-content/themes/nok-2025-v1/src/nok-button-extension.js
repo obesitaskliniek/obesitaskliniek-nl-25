@@ -3,10 +3,14 @@
  *
  * Extends core/button block with NOK-specific features:
  * - Icon selector (ui_ icons only)
- * - Style presets (5 color schemes)
- * - Optional icon color override
+ * - Background color via ColorSelector (button-backgrounds palette)
+ * - Optional text color override via ColorSelector (text palette)
+ * - Icon color via ColorSelector (icon-colors palette)
  * - Icon position (before/after text)
  * - Fill-mobile toggle
+ *
+ * Backward compatible: legacy nokStyle/nokIconColor (simple color names)
+ * still render via PHP fallback. New attributes store full CSS class strings.
  */
 
 import { addFilter } from '@wordpress/hooks';
@@ -16,31 +20,7 @@ import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import IconSelector from './components/IconSelector';
-
-// Style presets
-const STYLE_PRESETS = [
-    { label: 'Donkerblauw (standaard)', value: 'darkblue' },
-    { label: 'Donkerste blauw', value: 'darkestblue' },
-    { label: 'Wit', value: 'white' },
-    { label: 'Lichtblauw', value: 'lightblue' },
-    { label: 'Geel', value: 'yellow' },
-];
-
-// Icon color options (same as style presets)
-const ICON_COLOR_OPTIONS = [
-    { label: 'Overnemen van knop', value: '' },
-    { label: 'Standaard (geel)', value: 'yellow' },
-    ...STYLE_PRESETS.filter(preset => preset.value !== 'yellow')
-];
-
-// Color values for editor preview - using CSS custom properties from color_tests-v2.scss
-const COLOR_VALUES = {
-    darkblue: 'var(--nok-darkblue)',
-    darkestblue: 'var(--nok-darkestblue)',
-    white: 'var(--nok-white)',
-    lightblue: 'var(--nok-lightblue)',
-    yellow: 'var(--nok-yellow)',
-};
+import ColorSelector from './components/ColorSelector';
 
 /**
  * Add custom attributes to core/button block
@@ -58,10 +38,22 @@ function addButtonAttributes(settings, name) {
                 type: 'string',
                 default: '',
             },
+            // Legacy: simple color name (only populated on pre-migration blocks)
             nokStyle: {
                 type: 'string',
-                default: 'darkblue',
+                default: '',
             },
+            // Full class string from button-backgrounds palette
+            nokBgColor: {
+                type: 'string',
+                default: 'nok-bg-darkblue nok-text-contrast',
+            },
+            // New: explicit text color override from text palette
+            nokTextColor: {
+                type: 'string',
+                default: '',
+            },
+            // Icon color — stores full class (new) or simple name (legacy)
             nokIconColor: {
                 type: 'string',
                 default: '',
@@ -97,7 +89,8 @@ const withButtonControls = createHigherOrderComponent((BlockEdit) => {
 
         const {
             nokIcon = '',
-            nokStyle = 'darkblue',
+            nokBgColor = '',
+            nokTextColor = '',
             nokIconColor = '',
             nokIconPosition = 'after',
             fillMobile = false
@@ -129,21 +122,35 @@ const withButtonControls = createHigherOrderComponent((BlockEdit) => {
                             />
                         )}
 
-                        <SelectControl
-                            label={__('Knop stijl', 'nok2025')}
-                            value={nokStyle}
-                            options={STYLE_PRESETS}
-                            onChange={(value) => setAttributes({ nokStyle: value })}
+                        <label className="components-base-control__label" style={{ display: 'block', marginBottom: '4px' }}>
+                            {__('Knop kleur', 'nok2025')}
+                        </label>
+                        <ColorSelector
+                            value={nokBgColor}
+                            onChange={(value) => setAttributes({ nokBgColor: value })}
+                            palette="button-backgrounds"
+                        />
+
+                        <label className="components-base-control__label" style={{ display: 'block', marginBottom: '4px' }}>
+                            {__('Tekst kleur (optioneel)', 'nok2025')}
+                        </label>
+                        <ColorSelector
+                            value={nokTextColor}
+                            onChange={(value) => setAttributes({ nokTextColor: value })}
+                            palette="text"
                         />
 
                         {nokIcon && (
-                            <SelectControl
-                                label={__('Icoon kleur', 'nok2025')}
-                                value={nokIconColor}
-                                options={ICON_COLOR_OPTIONS}
-                                onChange={(value) => setAttributes({ nokIconColor: value })}
-                                help={__('Laat leeg om de tekstkleur van de knop over te nemen', 'nok2025')}
-                            />
+                            <>
+                                <label className="components-base-control__label" style={{ display: 'block', marginBottom: '4px' }}>
+                                    {__('Icoon kleur', 'nok2025')}
+                                </label>
+                                <ColorSelector
+                                    value={nokIconColor}
+                                    onChange={(value) => setAttributes({ nokIconColor: value })}
+                                    palette="icon-colors"
+                                />
+                            </>
                         )}
 
                         <ToggleControl
@@ -168,6 +175,8 @@ addFilter(
 /**
  * Apply NOK button classes to wrapper for editor styling ONLY
  * (PHP handles frontend rendering)
+ *
+ * Priority: nokBgColor (new palette) > nokStyle (legacy)
  */
 const applyButtonClassesEditor = createHigherOrderComponent((BlockListBlock) => {
     return (props) => {
@@ -178,11 +187,26 @@ const applyButtonClassesEditor = createHigherOrderComponent((BlockListBlock) => 
         }
 
         const {
+            nokBgColor = '',
+            nokTextColor = '',
             nokStyle = 'darkblue',
             fillMobile = false
         } = attributes;
 
-        const classes = ['nok-button', 'nok-text-contrast', `nok-bg-${nokStyle}`];
+        const classes = ['nok-button'];
+
+        if (nokBgColor) {
+            // New format: full class string from palette (e.g., "nok-bg-darkblue nok-text-contrast")
+            classes.push(nokBgColor);
+        } else {
+            // Legacy fallback
+            classes.push(`nok-bg-${nokStyle}`, 'nok-text-contrast');
+        }
+
+        // Explicit text color override (appended last to win specificity)
+        if (nokTextColor) {
+            classes.push(nokTextColor);
+        }
 
         if (fillMobile) {
             classes.push('fill-mobile');
@@ -241,8 +265,17 @@ const withButtonIconPreview = createHigherOrderComponent((BlockListBlock) => {
             return block;
         }
 
-        // Determine icon color
-        const iconColorValue = nokIconColor ? COLOR_VALUES[nokIconColor] : 'currentColor';
+        // Determine icon color:
+        // - New format (nok-text-yellow): extract color name, use CSS var
+        // - Legacy format (yellow): use CSS var directly
+        // - Empty: use currentColor
+        let iconColorValue = 'currentColor';
+        if (nokIconColor) {
+            const colorName = nokIconColor.startsWith('nok-text-')
+                ? nokIconColor.replace('nok-text-', '')
+                : nokIconColor;
+            iconColorValue = `var(--nok-${colorName})`;
+        }
 
         return (
             <>
