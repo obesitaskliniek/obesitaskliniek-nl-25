@@ -362,8 +362,15 @@ class TemplateRenderer {
 
 		// Output template identifier comment for debugging
 		echo "\n<!-- {$template_type}: {$design} -->\n";
+		if ($template_type === 'post-parts') {
+			echo "<nok-post-part>\n";
+		}
 
 		include $template_path;
+
+		if ($template_type === 'post-parts') {
+			echo "</nok-post-part>\n";
+		}
 
 		// Fire action for SEO schema collection (frontend only)
 		if ( $this->context->get_context() === RenderContext::CONTEXT_FRONTEND ) {
