@@ -35,7 +35,7 @@
 
 import {registerBlockType} from '@wordpress/blocks';
 import {InspectorControls, BlockControls, useBlockProps, MediaUpload, MediaUploadCheck} from '@wordpress/block-editor';
-import {SelectControl, PanelBody, Button, Popover, TextControl, TextareaControl, CheckboxControl, Icon} from '@wordpress/components';
+import {SelectControl, PanelBody, Button, Popover, TextControl, TextareaControl, CheckboxControl, Icon, Notice} from '@wordpress/components';
 import {pencil} from '@wordpress/icons';
 import {useSelect, useDispatch} from '@wordpress/data';
 import {__} from '@wordpress/i18n';
@@ -325,15 +325,18 @@ registerBlockType(blockName, {
         const {postId, overrides, excludeFromSeo} = attributes;
         const {invalidateResolution} = useDispatch('core');
 
-        const parts = useSelect(
-            select => select('core').getEntityRecords('postType', 'page_part', {
-                per_page: -1,
-                _embed: true,
-                orderby: 'modified',
-                order: 'desc'
+        const {parts, currentPostType} = useSelect(
+            select => ({
+                parts: select('core').getEntityRecords('postType', 'page_part', {
+                    per_page: -1,
+                    _embed: true,
+                    orderby: 'modified',
+                    order: 'desc'
+                }) || [],
+                currentPostType: select('core/editor').getCurrentPostType(),
             }),
             []
-        ) || [];
+        );
 
         const refreshPageParts = () => {
             invalidateResolution('getEntityRecords', ['postType', 'page_part', {
@@ -490,6 +493,12 @@ registerBlockType(blockName, {
                         }}>
                             🚫 SEO uitgesloten
                         </div>
+                    )}
+
+                    {currentPostType && currentPostType !== 'page' && currentPostType !== 'page_part' && (
+                        <Notice status="warning" isDismissible={false}>
+                            {__('Let op: Page Parts zijn ontworpen voor gebruik op pagina\'s. Deze invoegen op andere berichttypen geeft mogelijk problemen met de layout.', textDomain)}
+                        </Notice>
                     )}
 
                     <PanelBody title={__('NOK Page Part Blok', textDomain) + (partTitle ? ` - ${partTitle}` : '')}
