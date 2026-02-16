@@ -1,0 +1,234 @@
+// =============================================================================
+// CRITICAL (ABOVE-THE-FOLD) CSS
+// =============================================================================
+// This file produces a small CSS bundle inlined in <head> for instant first paint.
+// It contains ONLY the styles needed to render the navigation + hero section.
+//
+// The full nok-components.css is loaded deferred (non-render-blocking).
+// Selectors duplicated here are harmless — the deferred file simply reinforces them.
+//
+// To update: if above-the-fold templates change, audit which utilities they use
+// and update the hand-picked list at the bottom of this file.
+// =============================================================================
+
+// --- Foundation (no CSS output, just tooling) ---
+@use "nok-variables";
+@use "./libs/hnl-baseline-grid";
+@use "./tools/nok-mixins";
+@use "./tools/nok-rfs";
+
+// --- Color system (generates :root color vars + .nok-bg-*, .nok-text-* classes) ---
+@use "nok-colors-v2";
+
+// --- Reboot / normalize (universal base styles) ---
+@use "nok-reboot";
+
+// --- Layout grid + flex helpers ---
+@use "nok-layout";
+
+// --- Above-the-fold components ---
+@use "./components/nok-buttons";
+@use "./components/nok-links";
+@use "./components/nok-screen-mask";
+@use "./components/nok-top-navigation";
+@use "./components/nok-hero";
+@use "./components/nok-navigation-breadcrumbs";
+
+// --- Root custom properties ---
+:root {
+  @include nok-variables.parsed-variables;
+}
+
+// --- Custom element display rules ---
+section,
+nok-logo, nok-mobile-nav, nok-desktop-nav {
+  display: contents;
+}
+
+// --- HTML + body base styles ---
+html {
+  --font-size-base: var(--nok-html-font-size, 1em);
+  font-size: var(--font-size-base, 1em);
+  @include nok-mixins.media-breakpoint-down(md) {
+    font-size: calc(var(--font-size-base) * .9);
+  }
+}
+
+body {
+  --nok-body-text-color: var(--nok-darkerblue);
+  background: linear-gradient(180deg, var(--nok-body--darker), var(--nok-body));
+  @include nok-mixins.nok-text-font;
+}
+
+@for $i from 1 through 6 {
+  h#{$i} {
+    @include nok-mixins.nok-heading-font;
+  }
+}
+
+.nok-fs-giant {
+  @include nok-rfs.rfs((nok-variables.$h1-font-size * 1.5), font-size);
+}
+
+svg.nok-icon {
+  vertical-align: middle;
+  width: 1em;
+  height: 1em;
+  &.larger {
+    font-size: 1.2em;
+  }
+}
+
+// =============================================================================
+// HAND-PICKED UTILITY CLASSES (only those used above the fold)
+// =============================================================================
+// These are the ~30 utilities referenced by hero + navigation + header templates.
+// Kept manually to avoid importing the full utility generator (~16k lines).
+
+// --- Z-index ---
+@for $i from 1 through 3 {
+  .#{nok-variables.$prefix}-z-#{$i} {
+    --z-base: #{$i};
+    z-index: var(--z-base, $i);
+  }
+}
+
+// --- Spacing: margin ---
+.#{nok-variables.$prefix}-mt-0 {
+  margin-top: var(--nok-space-0) !important;
+}
+.#{nok-variables.$prefix}-my-0 {
+  margin-top: var(--nok-space-0) !important;
+  margin-bottom: var(--nok-space-0) !important;
+}
+.#{nok-variables.$prefix}-mb-0_5 {
+  margin-bottom: var(--nok-space-fluid-sm) !important;
+}
+
+// --- Spacing: padding ---
+.#{nok-variables.$prefix}-px-0 {
+  padding-right: var(--nok-space-0) !important;
+  padding-left: var(--nok-space-0) !important;
+}
+.#{nok-variables.$prefix}-px-section-padding {
+  padding-right: var(--nok-spacing-section-ends) !important;
+  padding-left: var(--nok-spacing-section-ends) !important;
+}
+.#{nok-variables.$prefix}-pl-section-padding {
+  padding-left: var(--nok-spacing-section-ends) !important;
+}
+@include nok-mixins.media-breakpoint-down(lg) {
+  .#{nok-variables.$prefix}-px-to-lg-section-padding {
+    padding-right: var(--nok-spacing-section-ends) !important;
+    padding-left: var(--nok-spacing-section-ends) !important;
+  }
+  .#{nok-variables.$prefix}-pt-to-lg-1 {
+    padding-top: var(--nok-space-fluid-md) !important;
+  }
+  .#{nok-variables.$prefix}-pb-to-lg-0_5 {
+    padding-bottom: var(--nok-space-fluid-sm) !important;
+  }
+}
+
+// --- Font size ---
+.#{nok-variables.$prefix}-fs-buttons {
+  font-size: var(--nok-font-size-buttons);
+}
+.#{nok-variables.$prefix}-fs-2 {
+  font-size: var(--nok-font-size-2) !important;
+}
+@include nok-mixins.media-breakpoint-down(lg) {
+  .#{nok-variables.$prefix}-fs-to-lg-3 {
+    font-size: var(--nok-font-size-3) !important;
+  }
+}
+
+// --- Visibility / responsive display ---
+.#{nok-variables.$prefix}-invisible-sm {
+  @include nok-mixins.media-breakpoint-up(sm) {
+    display: none !important;
+  }
+}
+@include nok-mixins.media-breakpoint-down(sm) {
+  .#{nok-variables.$prefix}-invisible-to-sm {
+    display: none !important;
+  }
+}
+@include nok-mixins.media-breakpoint-down(lg) {
+  .#{nok-variables.$prefix}-invisible-to-lg {
+    display: none !important;
+  }
+}
+@include nok-mixins.media-breakpoint-down(xl) {
+  .#{nok-variables.$prefix}-invisible-to-xl {
+    display: none !important;
+  }
+}
+@include nok-mixins.media-breakpoint-down(xxxl) {
+  .#{nok-variables.$prefix}-invisible-to-xxxl {
+    display: none !important;
+  }
+}
+// visible-xs: show only on xs (hidden sm and up)
+.#{nok-variables.$prefix}-visible-xs {
+  @include nok-mixins.media-breakpoint-up(sm) {
+    display: none !important;
+  }
+}
+
+// --- Alignment ---
+.#{nok-variables.$prefix}-align-self-stretch {
+  align-self: stretch !important;
+  grid-column: 1 / -1 !important;
+}
+.#{nok-variables.$prefix}-align-items-stretch {
+  align-items: stretch !important;
+}
+.#{nok-variables.$prefix}-justify-items-start {
+  justify-items: flex-start !important;
+}
+.#{nok-variables.$prefix}-justify-self-center {
+  justify-self: center !important;
+}
+
+// --- Alpha / opacity ---
+.#{nok-variables.$prefix}-bg-alpha-6 {
+  --bg-alpha-value: 0.6;
+}
+@media (prefers-color-scheme: dark) {
+  .#{nok-variables.$prefix}-dark-bg-alpha-10 {
+    --bg-alpha-value: 1;
+  }
+}
+
+// --- Border ---
+@include nok-mixins.media-breakpoint-down(sm) {
+  .#{nok-variables.$prefix}-border-radius-to-sm-0 {
+    border-radius: 0 !important;
+  }
+}
+@include nok-mixins.media-breakpoint-down(lg) {
+  .#{nok-variables.$prefix}-border-bottom-to-lg-1 {
+    border-bottom: 1px solid oklch(from var(--text-base, var(--text-color)) l c h/0.25) !important;
+  }
+}
+
+// --- Blur ---
+.#{nok-variables.$prefix}-bg-blur {
+  backdrop-filter: blur(5px);
+  &--large {
+    backdrop-filter: blur(10px);
+  }
+}
+
+// --- Fill ---
+body .#{nok-variables.$prefix}-fill-contrast {
+  fill: var(--bg-color--contrast, inherit) !important;
+}
+
+// --- Sticky ---
+.#{nok-variables.$prefix}-sticky {
+  position: sticky;
+  top: 0;
+  z-index: nok-variables.$z-stack-top;
+}

@@ -6,6 +6,10 @@
     "postbuild": "xcopy build\\*.* . /E /H /Y",
     "build": "wp-scripts build --output-path=build",
     "start": "wp-scripts start --output-path=build",
+    "css:build": "sass assets/css/nok-components.scss assets/css/nok-components.css --style=expanded --source-map",
+    "css:min": "csso assets/css/nok-components.css -o assets/css/nok-components.min.css --source-map assets/css/nok-components.min.css.map",
+    "css:critical": "sass assets/css/nok-critical.scss assets/css/nok-critical.css --style=compressed --no-source-map",
+    "css:all": "npm run css:build && npm run css:min && npm run css:critical",
     "icons:normalize": "node normalize-icons.js",
     "icons:watch": "nodemon --watch assets/icons-source --ext svg --exec npm run icons:normalize"
   },

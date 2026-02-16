@@ -24,6 +24,12 @@
         <link rel="modulepreload" href="<?= THEME_ROOT ;?>/assets/js/entrypoint.mjs">
         <script type="module" src="<?= THEME_ROOT ;?>/assets/js/entrypoint.mjs" defer></script>
 
+        <?php // Inline critical CSS for instant above-the-fold rendering
+        $critical_css_path = THEME_ROOT_ABS . '/assets/css/nok-critical.css';
+        if ( file_exists( $critical_css_path ) ) : ?>
+        <style id="nok-critical-css"><?php include $critical_css_path; ?></style>
+        <?php endif; ?>
+
         <!-- head data -->
         <?php wp_head(); ?>
 

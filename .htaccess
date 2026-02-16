@@ -50,6 +50,16 @@ RewriteRule (.*) $1.js [L]
     Header set Expires "0"
 </FilesMatch>
 
+# Long-term caching for CSS (safe: wp_enqueue_style appends ?ver= for cache busting)
+<FilesMatch "\.(css)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+
+# Long-term caching for fonts
+<FilesMatch "\.(woff2?|ttf|otf|eot)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+
 <IfModule mod_filter.c>
 	<IfModule mod_deflate.c>
 # Compress HTML, CSS, JavaScript, Text, XML and fonts
