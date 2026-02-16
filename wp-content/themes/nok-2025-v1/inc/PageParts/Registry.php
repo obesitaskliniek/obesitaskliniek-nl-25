@@ -496,11 +496,12 @@ class Registry {
 
 		$fields = [];
 
-		// Split by commas, but not commas inside parentheses/brackets
-		// Pattern: comma not followed by content between parentheses
-		// Example: "title:text,items:repeater(name:text,url:url),subtitle:text"
-		// Splits into: ["title:text", "items:repeater(name:text,url:url)", "subtitle:text"]
-		$field_definitions = preg_split( '/,(?![^\(]*\))/', $fields_string );
+		// Split by commas, but not commas inside parentheses or square brackets
+		// Parentheses: protects repeater/select/etc. arguments e.g. repeater(name:text,url:url)
+		// Square brackets: protects !descr[text with, commas] descriptions
+		// Example: "title:text!descr[A title, with subtitle],items:repeater(name:text,url:url)"
+		// Splits into: ["title:text!descr[A title, with subtitle]", "items:repeater(name:text,url:url)"]
+		$field_definitions = preg_split( '/,(?![^\(]*\))(?![^\[]*\])/', $fields_string );
 
 		foreach ( $field_definitions as $definition ) {
 			// Clean up definition: remove asterisks, whitespace, and dashes from comment blocks

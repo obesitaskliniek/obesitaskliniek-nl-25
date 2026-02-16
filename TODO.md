@@ -60,20 +60,14 @@ Implement usage tracking for page parts to identify unused components.
 
 ## Low Priority / Enhancements
 
-### LOW-001: Field Parser - Comma Support in Descriptions
-**Priority:** Low
-**Related File:** `inc/PageParts/FieldDefinitionParser.php`
+### ~~RESOLVED: LOW-001: Field Parser - Comma Support in Descriptions~~
+**Resolved:** 2026-02-16
+**Implementation:** `inc/PageParts/Registry.php`
 
-Field definitions use commas as delimiters, which breaks when commas appear in description text.
-
-**Current Syntax:**
-```php
-* - field_name:type!descr[Description text here]
-```
-
-**Proposed Solutions:**
-1. Implement quoted string support: `!descr["Text with, comma"]`
-2. Use alternative delimiter (e.g., `|` instead of `,`)
+Updated the `preg_split` regex in `parse_custom_fields()` to also skip commas
+inside square brackets. The regex changed from `/,(?![^\(]*\))/` to
+`/,(?![^\(]*\))(?![^\[]*\])/`, which protects commas in `!descr[text with, commas]`
+from being treated as field delimiters.
 
 ---
 
