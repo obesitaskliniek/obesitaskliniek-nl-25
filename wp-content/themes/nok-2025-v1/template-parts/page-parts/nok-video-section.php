@@ -17,7 +17,7 @@
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie - heeft geen invloed als full section aan staat]!page-editable
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
- * @see TODO.md LOW-001, LOW-002 for field parser enhancements
+ * @see TODO.md LOW-002 for field parser enhancements
  */
 
 $c = $context;
