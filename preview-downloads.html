@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOK 2025 — Attachment Downloads Component Preview</title>
+<style>
+  /* ============================================================
+     NOK 2025 Theme Tokens (subset for preview)
+     ============================================================ */
+  :root {
+    /* Colors */
+    --nok-darkerblue:   #0b2355;
+    --nok-darkblue:     #14477c;
+    --nok-darkestblue:  #00132f;
+    --nok-lightblue:    #00b0e4;
+    --nok-yellow:       #ffd41f;
+    --nok-white:        #fff;
+    --nok-body:         #f3f4f9;
+    --nok-white-hsl:    0, 0%, 100%;
+
+    /* Spacing – static */
+    --nok-space-0:   0;
+    --nok-space-xs:  0.375rem;
+    --nok-space-sm:  0.75rem;
+    --nok-space-md:  1.5rem;
+    --nok-space-lg:  2.25rem;
+    --nok-space-xl:  3rem;
+    --nok-space-2xl: 4.5rem;
+
+    /* Spacing – fluid */
+    --nok-space-fluid-xs:  clamp(0.25rem, 0.5vw + 0.125rem, 0.375rem);
+    --nok-space-fluid-sm:  clamp(0.5rem, 1vw + 0.25rem, 0.75rem);
+    --nok-space-fluid-md:  clamp(1rem, 2vw + 0.5rem, 1.5rem);
+    --nok-space-fluid-lg:  clamp(1.5rem, 3vw + 0.75rem, 2.25rem);
+    --nok-space-fluid-xl:  clamp(2rem, 4vw + 1rem, 3rem);
+    --nok-space-fluid-2xl: clamp(2.5rem, 6vw + 1rem, 4.5rem);
+
+    /* Typography */
+    --nok-heading-font-family: "Realist", Arial, Helvetica, sans-serif;
+    --nok-text-font-family:    "Inter", Arial, Helvetica, sans-serif;
+    --nok-body-line-height:    1.7;
+    --nok-default-border-radius: 0.375rem;
+
+    /* Animation */
+    --nok-animation-duration: 0.3s;
+  }
+
+  /* ============================================================
+     Base / Reset
+     ============================================================ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--nok-text-font-family);
+    font-size: 1rem;
+    line-height: var(--nok-body-line-height);
+    color: var(--nok-darkestblue);
+    background: var(--nok-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ============================================================
+     Preview Shell
+     ============================================================ */
+  .preview-header {
+    background: var(--nok-darkestblue);
+    color: var(--nok-white);
+    padding: var(--nok-space-fluid-lg) var(--nok-space-fluid-xl);
+    text-align: center;
+  }
+  .preview-header h1 {
+    font-family: var(--nok-heading-font-family);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.25rem;
+  }
+  .preview-header p {
+    opacity: 0.6;
+    font-size: 0.9rem;
+  }
+
+  .preview-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--nok-space-fluid-lg);
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: var(--nok-space-fluid-xl);
+  }
+  @media (min-width: 1200px) {
+    .preview-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .preview-panel {
+    display: flex;
+    flex-direction: column;
+  }
+  .preview-label {
+    font-family: var(--nok-text-font-family);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--nok-darkblue);
+    padding: 0.75rem 1rem;
+    background: hsla(220, 60%, 20%, 0.06);
+    border-radius: var(--nok-default-border-radius) var(--nok-default-border-radius) 0 0;
+  }
+
+  /* ============================================================
+     NOK Section (simplified reproduction)
+     ============================================================ */
+  .nok-section {
+    display: block;
+  }
+  .nok-section.nok-bg-darkerblue {
+    background-color: var(--nok-darkerblue);
+    color: var(--nok-white);
+  }
+  .nok-section__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: var(--nok-space-fluid-2xl) var(--nok-space-fluid-xl);
+  }
+  .nok-layout-grid.nok-layout-grid__1-column {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--nok-space-fluid-md);
+    align-items: start;
+  }
+
+  /* Heading */
+  .nok-fs-6 {
+    font-family: var(--nok-heading-font-family);
+    font-size: clamp(1.75rem, 3vw + 0.5rem, 2.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  /* ============================================================
+     Downloads List Component
+     (Faithful reproduction of _nok-downloads.scss)
+     ============================================================ */
+  .nok-downloads-list {
+    display: grid;
+    gap: var(--nok-space-sm);
+    width: 100%;
+  }
+
+  .nok-download-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--nok-space-md);
+    padding: var(--nok-space-md) var(--nok-space-lg);
+    border-radius: var(--nok-default-border-radius);
+    overflow: hidden;
+    background: hsla(var(--nok-white-hsl) / 0.08);
+    text-decoration: none;
+    color: inherit;
+    transition:
+      background-color var(--nok-animation-duration) ease,
+      box-shadow var(--nok-animation-duration) ease;
+  }
+  .nok-download-item:hover,
+  .nok-download-item:focus-visible {
+    background: hsla(var(--nok-white-hsl) / 0.14);
+    text-decoration: none;
+    color: inherit;
+  }
+  .nok-download-item:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: -2px;
+  }
+
+  @media (max-width: 991px) {
+    .nok-download-item {
+      padding: var(--nok-space-sm) var(--nok-space-md);
+      gap: var(--nok-space-sm);
+    }
+  }
+
+  /* Icon column */
+  .nok-download-item__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nok-download-item__icon svg {
+    width: 1.5em;
+    height: 1.5em;
+    opacity: 0.6;
+  }
+
+  /* Info column (title + meta) */
+  .nok-download-item__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+  .nok-download-item__title {
+    font-family: var(--nok-heading-font-family);
+    font-weight: 500;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  /* When title is a link (site-wide variant) */
+  a.nok-download-item__title {
+    color: inherit;
+    text-decoration: none;
+  }
+  a.nok-download-item__title:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .nok-download-item__meta {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    line-height: 1.3;
+  }
+
+  /* Action column (download arrow) */
+  .nok-download-item__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5;
+    color: inherit;
+    text-decoration: none;
+    transition:
+      opacity var(--nok-animation-duration) ease,
+      transform var(--nok-animation-duration) ease;
+  }
+  .nok-download-item__action svg {
+    width: 1.25em;
+    height: 1.25em;
+  }
+  .nok-download-item__action:hover {
+    opacity: 1;
+    transform: translateY(2px);
+  }
+  .nok-download-item:hover .nok-download-item__action {
+    opacity: 1;
+    transform: translateY(2px);
+  }
+
+  /* Source link row */
+  .nok-download-item__source {
+    grid-column: 2;
+    font-size: 0.85rem;
+  }
+  .nok-download-item__source a {
+    color: inherit;
+    opacity: 0.7;
+    text-decoration: underline;
+    text-decoration-color: currentColor;
+    text-underline-offset: 0.15em;
+    transition: opacity var(--nok-animation-duration) ease;
+  }
+  .nok-download-item__source a:hover {
+    opacity: 1;
+  }
+
+  /* Site-wide variant: two-row grid */
+  .nok-downloads-list--with-sources .nok-download-item {
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: auto auto;
+  }
+  .nok-downloads-list--with-sources .nok-download-item__icon {
+    grid-row: span 2;
+  }
+  .nok-downloads-list--with-sources .nok-download-item__action {
+    grid-row: span 2;
+  }
+
+  /* ============================================================
+     Intro text styling
+     ============================================================ */
+  .intro-text {
+    opacity: 0.8;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    max-width: 60ch;
+  }
+
+  /* ============================================================
+     Annotation markers (for the preview only)
+     ============================================================ */
+  .annotation {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: hsla(var(--nok-white-hsl) / 0.12);
+    padding: 0.2em 0.6em;
+    border-radius: 0.25rem;
+    margin-bottom: var(--nok-space-sm);
+  }
+</style>
+</head>
+<body>
+
+<!-- ================================================================
+     Preview Header
+     ================================================================ -->
+<header class="preview-header">
+  <h1>Attachment Downloads Component</h1>
+  <p>NOK 2025 Theme &mdash; nok-attachment-downloads / page-downloads</p>
+</header>
+
+<div class="preview-grid">
+
+  <!-- ==============================================================
+       VARIANT 1 — Per-page (whole row = clickable link)
+       ============================================================== -->
+  <div class="preview-panel">
+    <div class="preview-label">Variant 1 &mdash; Per-page (nok-attachment-downloads.php)</div>
+    <div class="nok-section nok-bg-darkerblue" style="border-radius: 0 0 var(--nok-default-border-radius) var(--nok-default-border-radius);">
+      <div class="nok-section__inner">
+        <article class="nok-layout-grid nok-layout-grid__1-column">
+          <span class="annotation">whole row is an &lt;a&gt; element</span>
+          <h2 class="nok-fs-6">Downloads</h2>
+          <p class="intro-text">Hier vindt u alle documenten die bij deze pagina horen. Klik op een item om het bestand te downloaden.</p>
+
+          <div class="nok-downloads-list">
+            <!-- Item 1 -->
+            <a href="#" class="nok-download-item" download title="Informatiebrochure behandeltraject downloaden">
+              <span class="nok-download-item__icon">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.50063.50063 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.50063.50063 0 1 0-.708.708z"/></svg>
+              </span>
+              <span class="nok-download-item__info">
+                <span class="nok-download-item__title">Informatiebrochure behandeltraject</span>
+                <span class="nok-download-item__meta">PDF &middot; 2.4 MB</span>
+              </span>
+              <span class="nok-download-item__action">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.50063.50063 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.50063.50063 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/></svg>
+              </span>
+            </a>
+
+            <!-- Item 2 -->
+            <a href="#" class="nok-download-item" download title="Voedingsadvies na operatie downloaden">
+              <span class="nok-download-item__icon">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.50063.50063 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.50063.50063 0 1 0-.708.708z"/></svg>
+              </span>
+              <span class="nok-download-item__info">
+                <span class="nok-download-item__title">Voedingsadvies na operatie</span>
+                <span class="nok-download-item__meta">PDF &middot; 1.8 MB</span>
+              </span>
+              <span class="nok-download-item__action">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.50063.50063 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.50063.50063 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/></svg>
+              </span>
+            </a>
+
+            <!-- Item 3 -->
+            <a href="#" class="nok-download-item" download title="Oefenschema herstelperiode downloaden">
+              <span class="nok-download-item__icon">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.50063.50063 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.50063.50063 0 1 0-.708.708z"/></svg>
+              </span>
+              <span class="nok-download-item__info">
+                <span class="nok-download-item__title">Oefenschema herstelperiode</span>
+                <span class="nok-download-item__meta">Word &middot; 856 KB</span>
+              </span>
+              <span class="nok-download-item__action">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.50063.50063 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.50063.50063 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/></svg>
+              </span>
+            </a>
+
+            <!-- Item 4 -->
+            <a href="#" class="nok-download-item" download title="Veelgestelde vragen downloaden">
+              <span class="nok-download-item__icon">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.50063.50063 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.50063.50063 0 1 0-.708.708z"/></svg>
+              </span>
+              <span class="nok-download-item__info">
+                <span class="nok-download-item__title">Veelgestelde vragen</span>
+                <span class="nok-download-item__meta">PDF &middot; 1.2 MB</span>
+              </span>
+              <span class="nok-download-item__action">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.50063.50063 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.50063.50063 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/></svg>
+              </span>
+            </a>
+
+            <!-- Item 5 -->
+            <a href="#" class="nok-download-item" download title="Vergoedingenoverzicht 2025 downloaden">
+              <span class="nok-download-item__icon">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.50063.50063 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.50063.50063 0 1 0-.708.708z"/></svg>
+              </span>
+              <span class="nok-download-item__info">
+                <span class="nok-download-item__title">Vergoedingenoverzicht 2025</span>
+                <span class="nok-download-item__meta">Excel &middot; 340 KB</span>
+              </span>
+              <span class="nok-download-item__action">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.50063.50063 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.50063.50063 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/></svg>
+              </span>
+            </a>
+          </div>
+
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================================================
+       VARIANT 2 — Site-wide Downloads page (div wrapper, separate links)
+       ============================================================== -->
+  <div class="preview-panel">
+    <div class="preview-label">Variant 2 &mdash; Site-wide Downloads page (page-downloads.php)</div>
+    <div class="nok-section nok-bg-darkerblue" style="border-radius: 0 0 var(--nok-default-border-radius) var(--nok-default-border-radius);">
+      <div class="nok-section__inner">
+        <article class="nok-layout-grid nok-layout-grid__1-column">
+          <span class="annotation">items are &lt;div&gt;s with separate link targets</span>
+          <h1 class="nok-fs-6">Alle downloads</h1>
+
+          <div class="nok-downloads-list nok-downloads-list--with-sources">
+            <!-- Item 1 -->
+            <div class="nok-download-item">
+              <span class="nok-download-item__icon">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.50063.50063 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.50063.50063 0 1 0-.708.708z"/></svg>
+              </span>
+              <span class="nok-download-item__info">
+                <a href="#" class="nok-download-item__title" download>Informatiebrochure behandeltraject</a>
+                <span class="nok-download-item__meta">PDF &middot; 2.4 MB</span>
+              </span>
+              <a href="#" class="nok-download-item__action" download aria-label="Informatiebrochure behandeltraject downloaden">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.50063.50063 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.50063.50063 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/></svg>
+              </a>
+              <span class="nok-download-item__source">
+                <a href="#">Meer informatie</a> &mdash; Over de behandeling
+              </span>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="nok-download-item">
+              <span class="nok-download-item__icon">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.50063.50063 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.50063.50063 0 1 0-.708.708z"/></svg>
+              </span>
+              <span class="nok-download-item__info">
+                <a href="#" class="nok-download-item__title" download>Voedingsadvies na operatie</a>
+                <span class="nok-download-item__meta">PDF &middot; 1.8 MB</span>
+              </span>
+              <a href="#" class="nok-download-item__action" download aria-label="Voedingsadvies na operatie downloaden">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.50063.50063 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.50063.50063 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/></svg>
+              </a>
+              <span class="nok-download-item__source">
+                <a href="#">Meer informatie</a> &mdash; Na de operatie
+              </span>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="nok-download-item">
+              <span class="nok-download-item__icon">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.50063.50063 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.50063.50063 0 1 0-.708.708z"/></svg>
+              </span>
+              <span class="nok-download-item__info">
+                <a href="#" class="nok-download-item__title" download>Oefenschema herstelperiode</a>
+                <span class="nok-download-item__meta">Word &middot; 856 KB</span>
+              </span>
+              <a href="#" class="nok-download-item__action" download aria-label="Oefenschema herstelperiode downloaden">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.50063.50063 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.50063.50063 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/></svg>
+              </a>
+              <span class="nok-download-item__source">
+                <a href="#">Meer informatie</a> &mdash; Na de operatie
+              </span>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="nok-download-item">
+              <span class="nok-download-item__icon">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.50063.50063 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.50063.50063 0 1 0-.708.708z"/></svg>
+              </span>
+              <span class="nok-download-item__info">
+                <a href="#" class="nok-download-item__title" download>Veelgestelde vragen</a>
+                <span class="nok-download-item__meta">PDF &middot; 1.2 MB</span>
+              </span>
+              <a href="#" class="nok-download-item__action" download aria-label="Veelgestelde vragen downloaden">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.50063.50063 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.50063.50063 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/></svg>
+              </a>
+              <span class="nok-download-item__source">
+                <a href="#">Meer informatie</a> &mdash; Veelgestelde vragen
+              </span>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="nok-download-item">
+              <span class="nok-download-item__icon">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.50063.50063 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.50063.50063 0 1 0-.708.708z"/></svg>
+              </span>
+              <span class="nok-download-item__info">
+                <a href="#" class="nok-download-item__title" download>Vergoedingenoverzicht 2025</a>
+                <span class="nok-download-item__meta">Excel &middot; 340 KB</span>
+              </span>
+              <a href="#" class="nok-download-item__action" download aria-label="Vergoedingenoverzicht 2025 downloaden">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.50063.50063 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.50063.50063 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/></svg>
+              </a>
+              <span class="nok-download-item__source">
+                <a href="#">Meer informatie</a> &mdash; Vergoedingen en kosten
+              </span>
+            </div>
+          </div>
+
+        </article>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
