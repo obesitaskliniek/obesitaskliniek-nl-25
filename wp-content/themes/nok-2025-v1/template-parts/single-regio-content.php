@@ -43,7 +43,7 @@ $has_featured_image = has_post_thumbnail( get_the_ID() ) && $featured_image !== 
         <div class="nok-section__inner
         nok-layout-grid nok-layout-grid__4-column fill-fill
         nok-hero__inner nok-mt-0 nok-px-0 nok-border-radius-to-sm-0
-    nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10 nok-faded-background" style="--bg-image:url('<?= $featured_image; ?>');">
+    nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10 nok-faded-background" style="--bg-image:url('<?= esc_url( $featured_image ); ?>');">
 
             <header class="nok-section__inner nok-section-narrow nok-mt-0">
 
@@ -87,7 +87,7 @@ $has_featured_image = has_post_thumbnail( get_the_ID() ) && $featured_image !== 
                             <span class="nok-layout-flex-row postal-code"><?= esc_html( $parent_postal_code ) ?> <?= esc_html( $parent_city ) ?></span>
                             <?php endif; ?>
                             <?php if ( $parent_phone ) : ?>
-                            <span class="nok-layout-flex-row phone"><?= Assets::getIcon('ui_telefoon') ;?> <a href="tel:<?= esc_html( $parent_phone ) ?>" class="nok-hyperlink"><?= $parent_phone; ?></a></span>
+                            <span class="nok-layout-flex-row phone"><?= Assets::getIcon('ui_telefoon') ;?> <a href="tel:<?= esc_attr( $parent_phone ) ?>" class="nok-hyperlink"><?= esc_html( $parent_phone ); ?></a></span>
                             <?php endif; ?>
                             <?php if ( $parent_email ) : ?>
                             <span class="nok-layout-flex-row email"><?= Assets::getIcon('ui_email') ;?> <a href="mailto:<?= esc_attr( $parent_email ); ?>" class="nok-hyperlink"><?= esc_html( $parent_email ); ?></a></span>

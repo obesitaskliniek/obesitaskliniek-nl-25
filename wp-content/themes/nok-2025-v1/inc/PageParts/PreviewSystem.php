@@ -52,6 +52,12 @@ class PreviewSystem {
 				return;
 			}
 
+			// Verify user has permission to edit posts
+			if (!current_user_can('edit_posts')) {
+				wp_send_json_error('Insufficient permissions');
+				return;
+			}
+
 			$post_id = (int) $_POST['post_id'];
 			$meta_fields_raw = $_POST['meta_fields'] ?? '';
 

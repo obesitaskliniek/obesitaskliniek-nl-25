@@ -72,7 +72,7 @@ class Helpers {
 	public static function show_placeholder( string $value ): string {
 		$theme_instance = Theme::get_instance();
 		if ( ! empty( $value ) ) {
-			return '<span class="placeholder-field" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#999;font-style:italic;max-width: 100cqi;font-size:14px;">Vul "' . $theme_instance->generate_field_label( $value ) . '" in</span>';
+			return '<span class="placeholder-field" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#999;font-style:italic;max-width: 100cqi;font-size:14px;">Vul "' . esc_html( $theme_instance->generate_field_label( $value ) ) . '" in</span>';
 		} else {
 			return '';
 		}
@@ -192,7 +192,7 @@ class Helpers {
 				]
 			);
 		} else {
-			$featuredImage = '<img ' . ( $class ? "class='{$class}'" : '' ) . ' src="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:100x0-25-0-0-center-0.jpg" 
+			$featuredImage = '<img ' . ( $class ? "class='" . esc_attr( $class ) . "'" : '' ) . ' src="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:100x0-25-0-0-center-0.jpg"
 					srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:1920x0-65-0-0-center-0.jpg 1920w,
                      https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:768x0-65-0-0-center-0.jpg 768w,
                      https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:320x0-65-0-0-center-0.jpg 320w,
@@ -1864,7 +1864,7 @@ function do_extra_header_data( $nonce = '' ): void {
 		// Report-Only mode: logs violations without blocking - see docblock for rationale
 		header( 'Content-Security-Policy-Report-Only:' . get_csp( $nonce ) );
 	}
-	header( 'X-Frame-Options: Allow' );
+	header( 'X-Frame-Options: SAMEORIGIN' );
 	header( 'X-Content-Type-Options: nosniff' );
 	header( 'X-XSS-Protection: 1; mode=block' );
 	header( 'Strict-Transport-Security: max-age=631138519; includeSubDomains' );
@@ -1875,11 +1875,11 @@ function do_extra_header_data( $nonce = '' ): void {
 function array_to_element( $type, $attributes, $innerHTML = '', $pre = '' ): string {
 	$mapper = function ( $v, $k ) {
 		if ( is_bool( $v ) && $v ) {
-			return $k;
+			return esc_attr( $k );
 		} else {
-			return $k . '="' . $v . '"';
+			return esc_attr( $k ) . '="' . esc_attr( $v ) . '"';
 		}
 	};
 
-	return $pre . '<' . $type . ' ' . implode( ' ', array_map( $mapper, $attributes, array_keys( $attributes ) ) ) . '>' . $innerHTML . ( $innerHTML ? "\n" . $pre : '' ) . '</' . $type . '>' . "\n";
+	return $pre . '<' . esc_attr( $type ) . ' ' . implode( ' ', array_map( $mapper, $attributes, array_keys( $attributes ) ) ) . '>' . $innerHTML . ( $innerHTML ? "\n" . $pre : '' ) . '</' . esc_attr( $type ) . '>' . "\n";
 }
