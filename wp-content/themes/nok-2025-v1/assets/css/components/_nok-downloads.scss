@@ -93,16 +93,6 @@
     @include components-base.transition-properties {
       transition: opacity components-base.$animation-duration ease, transform components-base.$animation-duration ease;
     }
-
-    &:hover {
-      opacity: 1;
-      transform: translateY(2px);
-    }
-  }
-
-  &:hover &__action {
-    opacity: 1;
-    transform: translateY(2px);
   }
 
   // Source link (for downloads page with parent post references)

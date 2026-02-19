@@ -14,7 +14,7 @@
  * @var array $attributes Block attributes
  */
 
-use NOK2025\V1\Assets;
+use NOK2025\V1\Helpers;
 
 $c = $context;
 
@@ -45,26 +45,7 @@ $allowed_html = [
 			<?php endif; ?>
 			<div class="nok-downloads-list">
 				<?php foreach ( $attachments as $file ) : ?>
-					<a href="<?= esc_url( $file['url'] ) ?>"
-					   class="nok-download-item"
-					   download
-					   title="<?= esc_attr( sprintf( '%s downloaden', $file['title'] ) ) ?>">
-						<span class="nok-download-item__icon">
-							<?= Assets::getIcon( 'ui_file', 'nok-text-yellow' ) ?>
-						</span>
-						<span class="nok-download-item__info">
-							<span class="nok-download-item__title"><?= esc_html( $file['title'] ) ?></span>
-							<span class="nok-download-item__meta">
-								<?= esc_html( $file['filetype'] ) ?>
-								<?php if ( $file['filesize'] ) : ?>
-									· <?= esc_html( $file['filesize'] ) ?>
-								<?php endif; ?>
-							</span>
-						</span>
-						<span class="nok-download-item__action">
-							<?= Assets::getIcon( 'ui_arrow-down' ) ?>
-						</span>
-					</a>
+					<?= Helpers::render_download_item( $file ) ?>
 				<?php endforeach; ?>
 			</div>
 		</div>

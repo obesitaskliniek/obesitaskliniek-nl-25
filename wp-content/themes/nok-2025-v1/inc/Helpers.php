@@ -1920,6 +1920,60 @@ class Helpers {
 
 		return $labels[ $extension ] ?? $extension;
 	}
+
+	/**
+	 * Renders a single download item row.
+	 *
+	 * When $with_source is false, the entire row is a single clickable `<a>` element.
+	 * When $with_source is true, the row is a `<div>` with separate link targets
+	 * (title, arrow, source) to avoid nested `<a>` elements.
+	 *
+	 * @param array $file         Attachment data from format_attachment_results().
+	 * @param bool  $with_source  Whether to show the parent post "Meer informatie" link.
+	 *
+	 * @return string HTML for one download item row.
+	 */
+	public static function render_download_item( array $file, bool $with_source = false ): string {
+		$icon_file  = Assets::getIcon( 'ui_file', 'nok-text-yellow' );
+		$icon_arrow = Assets::getIcon( 'ui_arrow-down' );
+		$title_attr = esc_attr( sprintf( '%s downloaden', $file['title'] ) );
+		$url        = esc_url( $file['url'] );
+
+		$meta = esc_html( $file['filetype'] );
+		if ( $file['filesize'] ) {
+			$meta .= ' · ' . esc_html( $file['filesize'] );
+		}
+
+		$info = '<span class="nok-download-item__info">'
+			. '<span class="nok-download-item__title">' . esc_html( $file['title'] ) . '</span>'
+			. '<span class="nok-download-item__meta">' . $meta . '</span>'
+			. '</span>';
+
+		if ( $with_source ) {
+			$source = '';
+			if ( ! empty( $file['parent_url'] ) && ! empty( $file['parent_title'] ) ) {
+				$source = '<span class="nok-download-item__source">'
+					. '<a href="' . esc_url( $file['parent_url'] ) . '">Meer informatie</a>'
+					. '</span>';
+			}
+
+			return '<div class="nok-download-item">'
+				. '<span class="nok-download-item__icon">' . $icon_file . '</span>'
+				. '<span class="nok-download-item__info">'
+					. '<a href="' . $url . '" class="nok-download-item__title" download>' . esc_html( $file['title'] ) . '</a>'
+					. '<span class="nok-download-item__meta">' . $meta . '</span>'
+				. '</span>'
+				. '<a href="' . $url . '" class="nok-download-item__action nok-stretched-link" download aria-label="' . $title_attr . '">' . $icon_arrow . '</a>'
+				. $source
+				. '</div>';
+		}
+
+		return '<a href="' . $url . '" class="nok-download-item nok-stretched-link" download title="' . $title_attr . '">'
+			. '<span class="nok-download-item__icon">' . $icon_file . '</span>'
+			. $info
+			. '<span class="nok-download-item__action">' . $icon_arrow . '</span>'
+			. '</a>';
+	}
 }
 
 
