@@ -1,7 +1,7 @@
 @use "shared" as components-base;
 
-// Downloads list component
-// Used by nok-attachment-downloads page part and page-downloads template
+// Downloads component — download item rows
+// Section layout (title, description, spacing) uses standard nok-layout-grid + utility classes
 
 .nok-downloads-list {
   display: grid;
@@ -17,7 +17,6 @@
   padding: var(--nok-space-md) var(--nok-space-lg);
 
   @include components-base.nok-border-radius;
-  background: hsla(var(--nok-white-hsl) / 0.08);
   text-decoration: none;
   color: inherit;
 
@@ -36,7 +35,6 @@
   }
 
   @include components-base.media-breakpoint-down(components-base.$mobile-breakpoint) {
-    grid-template-columns: auto 1fr auto;
     padding: var(--nok-space-sm) var(--nok-space-md);
     gap: var(--nok-space-sm);
   }
@@ -46,12 +44,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
-    svg {
-      width: 1.5em;
-      height: 1.5em;
-      opacity: 0.6;
-    }
   }
 
   // Title + meta info
@@ -102,11 +94,6 @@
       transition: opacity components-base.$animation-duration ease, transform components-base.$animation-duration ease;
     }
 
-    svg {
-      width: 1.25em;
-      height: 1.25em;
-    }
-
     &:hover {
       opacity: 1;
       transform: translateY(2px);
@@ -144,13 +131,9 @@
 // Variant for site-wide downloads (with source links)
 .nok-downloads-list--with-sources {
   .nok-download-item {
-    grid-template-columns: auto 1fr auto;
     grid-template-rows: auto auto;
 
-    .nok-download-item__icon {
-      grid-row: span 2;
-    }
-
+    .nok-download-item__icon,
     .nok-download-item__action {
       grid-row: span 2;
     }
