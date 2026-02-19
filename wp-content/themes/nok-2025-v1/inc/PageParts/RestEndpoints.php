@@ -662,12 +662,13 @@ class RestEndpoints {
 			// If caller needs multiple types, they should specify them explicitly
 		}
 
+		$search_filter = null;
 		if (!empty($search)) {
 			// WordPress default search
 			$args['s'] = $search;
 
 			// Add explicit title search as fallback
-			add_filter('posts_search', function($search, $wp_query) use ($request) {
+			$search_filter = function($search, $wp_query) use ($request) {
 				global $wpdb;
 				$search_term = $request->get_param('search');
 				if (empty($search_term)) {
@@ -679,10 +680,16 @@ class RestEndpoints {
 				$search .= $wpdb->prepare(" OR {$wpdb->posts}.post_title LIKE %s", $search_term_like);
 
 				return $search;
-			}, 10, 2);
+			};
+			add_filter('posts_search', $search_filter, 10, 2);
 		}
 
 		$query = new \WP_Query($args);
+
+		// Remove search filter to prevent leaking into subsequent queries
+		if ($search_filter) {
+			remove_filter('posts_search', $search_filter, 10);
+		}
 		$posts = [];
 
 		foreach ($query->posts as $post) {

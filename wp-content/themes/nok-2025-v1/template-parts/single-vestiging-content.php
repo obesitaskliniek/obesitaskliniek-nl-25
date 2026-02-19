@@ -24,7 +24,7 @@ $has_featured_image = has_post_thumbnail( get_the_ID() ) && $featured_image !== 
         <div class="nok-section__inner
         nok-layout-grid nok-layout-grid__4-column fill-fill
         nok-hero__inner nok-mt-0 nok-px-0 nok-border-radius-to-sm-0
-    nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10 nok-faded-background" style="--bg-image:url('<?= $featured_image; ?>');">
+    nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10 nok-faded-background" style="--bg-image:url('<?= esc_url( $featured_image ); ?>');">
 
             <header class="nok-section__inner nok-section-narrow nok-mt-0">
 
@@ -57,13 +57,13 @@ $has_featured_image = has_post_thumbnail( get_the_ID() ) && $featured_image !== 
                 <nok-square-block class="nok-bg-darkerblue nok-text-contrast nok-alpha-10"
                                   data-shadow="true">
                     <div class="nok-square-block__heading">
-                        <?php printf( '<h2>Adresgegevens %s</h2>', get_the_title()); ?>
+                        <?php printf( '<h2>Adresgegevens %s</h2>', esc_html( get_the_title() )); ?>
                     </div>
                     <div class="nok-square-block__text nok-fs-1" style="--flex-gap: 0.5rem;">
                         <address>
                             <span class="nok-layout-flex-row street" id="street"><?= esc_html( $street ) ?> <?= esc_html( $housenumber ) ?></span>
                             <span class="nok-layout-flex-row postal-code" id="zipcode"><?= esc_html( $postal_code ) ?> <?= esc_html( $city ) ?></span>
-                            <span class="nok-layout-flex-row phone" id="phone"><?= Assets::getIcon('ui_telefoon') ;?> <a href="tel:<?= esc_html( $phone ) ?>" class="nok-hyperlink"><?= $phone; ?></a></span>
+                            <span class="nok-layout-flex-row phone" id="phone"><?= Assets::getIcon('ui_telefoon') ;?> <a href="tel:<?= esc_attr( $phone ) ?>" class="nok-hyperlink"><?= esc_html( $phone ); ?></a></span>
                             <span class="nok-layout-flex-row email" id="email"><?= Assets::getIcon('ui_email') ;?> <a href="mailto:<?= esc_attr( $email ); ?>" class="nok-hyperlink"><?= esc_html( $email ); ?></a></span>
                         </address>
                     </div>

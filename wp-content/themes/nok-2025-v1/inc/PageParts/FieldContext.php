@@ -212,6 +212,6 @@ class FieldContext implements \ArrayAccess {
 			return wp_kses_post(wpautop($this->generic_overrides['_override_content']));
 		}
 		global $post;
-		return $post ? wpautop(wptexturize($post->post_content)) : '';
+		return $post ? wp_kses_post(wpautop(wptexturize($post->post_content))) : '';
 	}
 }

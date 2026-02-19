@@ -58,19 +58,37 @@ class FieldValue {
 	private mixed $value;
 	private bool $is_placeholder;
 
+	/** Allowed HTML for placeholder markup - used by wp_kses to sanitize placeholders */
+	private const PLACEHOLDER_ALLOWED_HTML = [
+		'span' => [
+			'class' => [],
+			'style' => [],
+		],
+	];
+
 	public function __construct( mixed $value ) {
 		$this->value          = $value;
 		$this->is_placeholder = is_string( $value ) && str_starts_with( $value, '<span class="placeholder-field' );
 	}
 
 	/**
+	 * Sanitize placeholder HTML to only allow expected markup
+	 * Prevents escaping bypass if a field value is crafted to look like a placeholder
+	 *
+	 * @return string Sanitized placeholder HTML
+	 */
+	private function sanitized_placeholder(): string {
+		return wp_kses( $this->value, self::PLACEHOLDER_ALLOWED_HTML );
+	}
+
+	/**
 	 * Get HTML-escaped value
-	 * Placeholders are preserved (not escaped)
+	 * Placeholders are sanitized through wp_kses (not raw output)
 	 *
 	 * @return string
 	 */
 	public function html(): string {
-		return $this->is_placeholder ? $this->value : esc_html( $this->value );
+		return $this->is_placeholder ? $this->sanitized_placeholder() : esc_html( $this->value );
 	}
 
 	/**
@@ -82,7 +100,7 @@ class FieldValue {
 	 * @return string
 	 */
 	public function url( string $fallback = ''): string {
-		return $this->value ? ($this->is_placeholder ? $this->value : esc_url( $this->value )) : $fallback;
+		return $this->value ? ($this->is_placeholder ? $this->sanitized_placeholder() : esc_url( $this->value )) : $fallback;
 	}
 
 	/**
@@ -99,7 +117,7 @@ class FieldValue {
 		}
 
 		if ( $this->is_placeholder ) {
-			return $this->value;
+			return $this->sanitized_placeholder();
 		}
 
 		// Check for post:123 format (posts and pages)
@@ -152,7 +170,7 @@ class FieldValue {
 	 * @return string
 	 */
 	public function attr(): string {
-		return $this->is_placeholder ? $this->value : esc_attr( $this->value );
+		return $this->is_placeholder ? $this->sanitized_placeholder() : esc_attr( $this->value );
 	}
 
 	/**
