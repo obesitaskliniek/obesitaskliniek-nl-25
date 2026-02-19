@@ -86,22 +86,23 @@ class AssetManager {
 
 		// Make it non-render-blocking: media="print" swapped to "all" on load
 		add_filter( 'style_loader_tag', function ( $tag, $handle ) {
-			if ( $handle === 'nok-components-css' ) {
-				// Add onload swap and noscript fallback
-				$tag = str_replace(
-					"media='all'",
-					"media='print' onload=\"this.media='all'\"",
-					$tag
-				);
-				// Add noscript fallback for non-JS browsers
-				$noscript_tag = str_replace(
-					[ "media='print'", " onload=\"this.media='all'\"" ],
-					[ "media='all'", '' ],
-					$tag
-				);
-				$tag .= '<noscript>' . $noscript_tag . '</noscript>';
+			if ( $handle !== 'nok-components-css' ) {
+				return $tag;
 			}
-			return $tag;
+
+			// Replace media attribute (handles both single and double quotes)
+			$deferred_tag = preg_replace(
+				'/media=[\'"]all[\'"]/',
+				'media="print" onload="this.media=\'all\'"',
+				$tag
+			);
+
+			// Only add noscript fallback if the replacement actually worked
+			if ( $deferred_tag !== $tag ) {
+				$deferred_tag .= '<noscript>' . $tag . '</noscript>';
+			}
+
+			return $deferred_tag;
 		}, 10, 2 );
 	}
 

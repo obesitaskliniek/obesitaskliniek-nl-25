@@ -952,7 +952,6 @@ class RestEndpoints {
 	private function output_embed_html( int $id, string $design, array $overrides = [], string $rendered_html = '', string $semantic_content = '' ): void {
 		$css_uris = [
 			'/assets/css/nok-components.css',
-			'/assets/css/color_tests-v2.css',
 			"/template-parts/page-parts/{$design}.preview.css",
 			'/assets/css/nok-page-parts-editor-styles.css',
 		];

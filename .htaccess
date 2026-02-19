@@ -50,12 +50,13 @@ RewriteRule (.*) $1.js [L]
     Header set Expires "0"
 </FilesMatch>
 
-# Long-term caching for CSS (safe: wp_enqueue_style appends ?ver= for cache busting)
+# Cache CSS for 1 day — no filename hashing so avoid immutable
+# (wp_enqueue_style appends ?ver= for busting, but some proxies strip query strings)
 <FilesMatch "\.(css)$">
-    Header set Cache-Control "public, max-age=31536000, immutable"
+    Header set Cache-Control "public, max-age=86400"
 </FilesMatch>
 
-# Long-term caching for fonts
+# Cache fonts for 1 year — these truly never change
 <FilesMatch "\.(woff2?|ttf|otf|eot)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
 </FilesMatch>
