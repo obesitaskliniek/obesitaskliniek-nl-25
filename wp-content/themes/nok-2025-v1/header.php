@@ -26,8 +26,11 @@
 
         <?php // Inline critical CSS for instant above-the-fold rendering
         $critical_css_path = THEME_ROOT_ABS . '/assets/css/nok-critical.css';
-        if ( file_exists( $critical_css_path ) ) : ?>
-        <style id="nok-critical-css"><?php include $critical_css_path; ?></style>
+        if ( file_exists( $critical_css_path ) ) :
+	        $critical_css = file_get_contents( $critical_css_path );
+	        $critical_css = preg_replace( '#/\*[#@]\s*sourceMappingURL=.*?\*/\s*$#s', '', $critical_css );
+        ?>
+        <style id="nok-critical-css"><?php echo $critical_css; ?></style>
         <?php endif; ?>
 
         <!-- head data -->
