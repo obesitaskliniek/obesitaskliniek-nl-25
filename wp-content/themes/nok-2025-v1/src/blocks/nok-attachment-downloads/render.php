@@ -18,9 +18,13 @@ return function( array $attributes ): string {
 		return '';
 	}
 
+	// In the editor, title/description are handled by RichText fields above
+	// the ServerSideRender output — skip them here to avoid double-rendering.
+	$is_editor = defined( 'REST_REQUEST' ) && REST_REQUEST;
+
 	$fields = [
-		'title'       => $attributes['title'] ?? 'Downloads',
-		'description' => $attributes['description'] ?? '',
+		'title'       => $is_editor ? '' : ( $attributes['title'] ?? 'Downloads' ),
+		'description' => $is_editor ? '' : ( $attributes['description'] ?? '' ),
 	];
 
 	$renderer = new TemplateRenderer();

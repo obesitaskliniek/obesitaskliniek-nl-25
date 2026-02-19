@@ -1,8 +1,8 @@
 {
   "apiVersion": 2,
   "name": "nok2025/nok-attachment-downloads",
-  "title": "Downloads",
-  "description": "Toont een lijst van downloadbare bijlagen (PDF, documenten, etc.) die aan deze pagina zijn gekoppeld.",
+  "title": "NOK Downloads Sectie",
+  "description": "Toont een lijst van downloadbare bijlagen (PDF, documenten, etc.) die aan deze pagina/artikel zijn gekoppeld.",
   "category": "nok-blocks",
   "icon": "download",
   "supports": {

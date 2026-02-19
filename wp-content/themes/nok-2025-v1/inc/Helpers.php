@@ -1944,14 +1944,9 @@ class Helpers {
 			$meta .= ' · ' . esc_html( $file['filesize'] );
 		}
 
-		$info = '<span class="nok-download-item__info">'
-			. '<span class="nok-download-item__title">' . esc_html( $file['title'] ) . '</span>'
-			. '<span class="nok-download-item__meta">' . $meta . '</span>'
-			. '</span>';
-
 		if ( $with_source ) {
 			$source = '';
-			if ( ! empty( $file['parent_url'] ) && ! empty( $file['parent_title'] ) ) {
+			if ( ! empty( $file['parent_url'] ) && ! empty( $file['parent_title'] ) && $file['parent_id'] !== get_the_ID() ) {
 				$source = '<span class="nok-download-item__source">'
 					. '<a href="' . esc_url( $file['parent_url'] ) . '">Meer informatie</a>'
 					. '</span>';
@@ -1970,7 +1965,10 @@ class Helpers {
 
 		return '<a href="' . $url . '" class="nok-download-item nok-stretched-link" download title="' . $title_attr . '">'
 			. '<span class="nok-download-item__icon">' . $icon_file . '</span>'
-			. $info
+			. '<span class="nok-download-item__info">'
+				. '<span class="nok-download-item__title">' . esc_html( $file['title'] ) . '</span>'
+				. '<span class="nok-download-item__meta">' . $meta . '</span>'
+			. '</span>'
 			. '<span class="nok-download-item__action">' . $icon_arrow . '</span>'
 			. '</a>';
 	}

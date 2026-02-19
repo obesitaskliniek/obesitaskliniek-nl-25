@@ -1,7 +1,7 @@
 {
   "apiVersion": 2,
   "name": "nok2025/general-nok-section",
-  "title": "General Section",
+  "title": "NOK General Section",
   "description": "A general section wrapper with nok-section styling for regular content.",
   "category": "nok-blocks",
   "icon": "layout",
