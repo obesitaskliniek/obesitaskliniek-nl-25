@@ -1,0 +1,19 @@
+{
+  "apiVersion": 2,
+  "name": "nok2025/nok-attachment-downloads",
+  "title": "Downloads",
+  "description": "Toont een lijst van downloadbare bijlagen (PDF, documenten, etc.) die aan deze pagina zijn gekoppeld.",
+  "category": "nok-blocks",
+  "icon": "download",
+  "supports": {
+    "html": false
+  },
+  "attributes": {},
+  "textdomain": "nok-2025-v1",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php",
+  "style": [
+    "nok-components-css",
+    "nok-colors-css"
+  ]
+}

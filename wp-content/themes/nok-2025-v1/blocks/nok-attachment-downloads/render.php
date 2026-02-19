@@ -1,35 +1,28 @@
 <?php
 /**
- * Template Name: Attachment Downloads
- * Description: Lists non-image attachments (PDFs, documents, etc.) for download
- * Slug: nok-attachment-downloads
- * Icon: ui_download
- * Custom Fields:
- * - colors:color-selector(section-colors)!page-editable!default(nok-bg-darkerblue nok-text-contrast)
- * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
+ * Server-side render callback for NOK Attachment Downloads block
  *
- * @var \NOK2025\V1\PageParts\FieldContext $context
+ * Queries non-image attachments for the current post/page and renders
+ * a download list. Returns empty string when no attachments exist.
+ *
+ * @param array $attributes Block attributes from block.json
+ * @return string Rendered HTML output
  */
 
 use NOK2025\V1\Assets;
 use NOK2025\V1\Helpers;
 
-$c = $context;
+return function( array $attributes ): string {
+	$attachments = Helpers::get_non_image_attachments();
 
-$attachments = Helpers::get_non_image_attachments();
+	if ( empty( $attachments ) ) {
+		return '';
+	}
 
-if ( empty( $attachments ) ) {
-	return;
-}
-?>
-
-<nok-section class="<?= $c->colors ?>">
-	<div class="nok-section__inner <?= $c->narrow_section->isTrue( 'nok-section-narrow' ); ?>">
-		<article class="nok-layout-grid nok-layout-grid__1-column nok-align-items-start">
-			<h2 class="nok-fs-6"><?= $c->title() ?></h2>
-
-			<?= $c->content(); ?>
-
+	ob_start();
+	?>
+	<nok-section class="nok-bg-darkerblue nok-text-contrast">
+		<div class="nok-section__inner">
 			<div class="nok-downloads-list">
 				<?php foreach ( $attachments as $file ) : ?>
 					<a href="<?= esc_url( $file['url'] ) ?>"
@@ -54,6 +47,8 @@ if ( empty( $attachments ) ) {
 					</a>
 				<?php endforeach; ?>
 			</div>
-		</article>
-	</div>
-</nok-section>
+		</div>
+	</nok-section>
+	<?php
+	return ob_get_clean();
+};

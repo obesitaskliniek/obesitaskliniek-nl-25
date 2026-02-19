@@ -68,6 +68,11 @@ module.exports = {
             __dirname,
             'src/blocks/embed-nok-post-part/index.js'
         ),
+
+        'blocks/nok-attachment-downloads/index': path.resolve(
+            __dirname,
+            'src/blocks/nok-attachment-downloads/index.js'
+        ),
     },
 
     // 3) keep the default filename pattern
