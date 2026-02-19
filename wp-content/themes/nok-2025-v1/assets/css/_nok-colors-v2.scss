@@ -3,6 +3,7 @@
 @use "sass:list";
 @use "nok-variables";
 @use "tools/nok-utilities";
+@use "tools/nok-mixins";
 
 $white: #f3f4f9;
 $black: #222;
@@ -164,6 +165,7 @@ $alpha_values: ();
 }
 
 $dark_mode_rules: ();
+$hover-to-selectors: ();
 @each $name, $color in $nok-base-colors {
   @each $type, $selector in $selectors {
     @if (map.get($generate_classes, $type)) {
@@ -179,6 +181,28 @@ $dark_mode_rules: ();
                       "--#{$type}-base-contrast": "var(--#{nok-variables.$prefix}-#{$name}-contrast)"
               )
       ));
+    }
+  }
+
+  // Hover-to utility: .nok-hover-to-{color} sets the hover target for background transitions.
+  // Compose with any nok-bg-* class: <div class="nok-bg-darkblue nok-hover-to-lightblue">
+  $hover-class: ".#{nok-variables.$prefix}-hover-to-#{$name}";
+  $hover-to-selectors: list.append($hover-to-selectors, $hover-class, comma);
+
+  $lightness: color.channel($color, 'lightness', $space: oklch);
+
+  #{$hover-class} {
+    // Contrast color follows the target color's pre-computed contrast (works for OKLCH extremes
+    // too, since those shifts don't cross the light/dark contrast threshold)
+    --bg-hover-target-contrast: var(--#{nok-variables.$prefix}-#{$name}-contrast);
+    @if $lightness > 93% {
+      // End-of-spectrum: near-white colors get a subtle cool tint via OKLCH
+      --bg-hover-target: oklch(from var(--#{nok-variables.$prefix}-#{$name}) calc(l - 0.035) calc(c + 0.01) 250);
+    } @else if $lightness < 15% {
+      // End-of-spectrum: near-black colors get a deeper OKLCH shift
+      --bg-hover-target: oklch(from var(--#{nok-variables.$prefix}-#{$name}) calc(l * 0.55) calc(c * 1.3) h);
+    } @else {
+      --bg-hover-target: var(--#{nok-variables.$prefix}-#{$name});
     }
   }
 }
@@ -230,6 +254,32 @@ $dark_mode_rules: ();
         fill: oklch(from var(--fill-color, inherit) l c h / #{map.get($alpha_values, 'fill')});
         color: oklch(from var(--fill-color, inherit) l c h / #{map.get($alpha_values, 'fill')});
       }
+    }
+  }
+}
+
+/**
+ * Background hover-to utilities
+ * Composable hover target classes — pair with any nok-bg-* class.
+ *
+ * Usage:
+ *   <div class="nok-bg-darkblue nok-hover-to-darkblue--darker">  — hover darkens
+ *   <div class="nok-bg-darkblue nok-hover-to-lightblue">         — hover to different color
+ *   <div class="nok-bg-white nok-hover-to-white--darker">        — subtle hover on white
+ *
+ * On hover, --bg-base is swapped to --bg-hover-target, so the entire computed
+ * cascade (background-color, contrast text color, extended variables) recalculates.
+ */
+@if ($hover-to-selectors != ()) {
+  #{$hover-to-selectors} {
+    @include nok-mixins.transition-properties {
+      transition: background-color nok-variables.$animation-duration ease,
+                  color nok-variables.$animation-duration ease,
+                  box-shadow nok-variables.$animation-duration ease;
+    }
+    &:hover {
+      --bg-base: var(--bg-hover-target);
+      --bg-base-contrast: var(--bg-hover-target-contrast);
     }
   }
 }
