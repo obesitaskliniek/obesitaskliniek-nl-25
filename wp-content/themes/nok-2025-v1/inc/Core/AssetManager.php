@@ -59,32 +59,51 @@ class AssetManager {
 	 * Registers CSS assets for the public-facing site, respecting development
 	 * mode settings for minification and cache busting.
 	 *
-	 * Registered assets:
-	 * - nok-components-css: Component styles
-	 * - nok-colors-css: Color system styles
+	 * Colors are now compiled into nok-components.css (single bundle)
+	 * to eliminate the extra HTTP request and sequential dependency.
+	 *
+	 * The main stylesheet is loaded with media="print" and swapped to "all"
+	 * on load, so it becomes non-render-blocking. Critical above-the-fold
+	 * CSS is inlined in header.php instead.
 	 *
 	 * @return void
-	 *
-	 * @example Enqueue registered asset in template
-	 * wp_enqueue_style('nok-components-css');
 	 */
 	public function frontend_assets(): void {
 		$theme    = \NOK2025\V1\Theme::get_instance();
 		$dev_mode = $theme->is_development_mode();
 
+		$css_url     = $this->resolve_asset_url( '/assets/css/nok-components.css', $dev_mode );
+		$css_version = $this->get_asset_version( '/assets/css/nok-components.css', $dev_mode );
+
+		// Register the full stylesheet — loaded deferred (media="print", swapped on load)
+		// Critical CSS is inlined in header.php for instant first paint
 		wp_enqueue_style(
 			'nok-components-css',
-			$this->resolve_asset_url( '/assets/css/nok-components.css', $dev_mode ),
-			['nok-colors-css'],
-			$this->get_asset_version( '/assets/css/nok-components.css', $dev_mode )
+			$css_url,
+			[],
+			$css_version
 		);
 
-		wp_enqueue_style(
-			'nok-colors-css',
-			$this->resolve_asset_url( '/assets/css/color_tests-v2.css', $dev_mode ),
-			[],
-			$this->get_asset_version( '/assets/css/color_tests-v2.css', $dev_mode )
-		);
+		// Make it non-render-blocking: media="print" swapped to "all" on load
+		add_filter( 'style_loader_tag', function ( $tag, $handle ) {
+			if ( $handle !== 'nok-components-css' ) {
+				return $tag;
+			}
+
+			// Replace media attribute (handles both single and double quotes)
+			$deferred_tag = preg_replace(
+				'/media=[\'"]all[\'"]/',
+				'media="print" onload="this.media=\'all\'"',
+				$tag
+			);
+
+			// Only add noscript fallback if the replacement actually worked
+			if ( $deferred_tag !== $tag ) {
+				$deferred_tag .= '<noscript>' . $tag . '</noscript>';
+			}
+
+			return $deferred_tag;
+		}, 10, 2 );
 	}
 
 	/**

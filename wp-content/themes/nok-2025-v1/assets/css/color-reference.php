@@ -280,6 +280,38 @@ use NOK2025\V1\Assets;
             transform: scale(0.98);
         }
 
+        /* Hover-to demo */
+        .hover-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(12em, 1fr));
+            gap: 0.364em;
+            margin-top: 0.5em;
+        }
+        .hover-demo__card {
+            padding: 0.75em;
+            border-radius: 0.364em;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.818em;
+        }
+        .hover-demo__card code {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85em;
+            margin-bottom: 0.25em;
+        }
+        .hover-demo__card .desc {
+            opacity: 0.7;
+            font-size: 0.8em;
+        }
+        /* Enable hover-to transitions for this reference page
+           (normally gated behind body.__enable-transitions added by JS) */
+        @media (prefers-reduced-motion: no-preference) {
+            .hover-demo__card[class*="nok-hover-to-"] {
+                transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            }
+        }
+
         /* Copy feedback */
         .copied {
             position: fixed;
@@ -860,6 +892,62 @@ use NOK2025\V1\Assets;
                 <code>.nok-dark-*</code>
                 <span class="desc">Prefix for dark-mode-only variants (e.g., .nok-dark-bg-body)</span>
                 <div class="nok-dark-bg-yellow nok-text-contrast" style="padding: 0.25em 0.5em; border-radius: 0.25em; margin-top: 0.25em;">Using <code class="inline">nok-dark-bg-yellow</code>, I should be yellow in dark mode</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Hover-to Utilities <span class="badge">Composable</span></div>
+        <p>Pair <code>.nok-hover-to-{color}</code> with any <code>.nok-bg-*</code> class for smooth background transitions on hover.
+            On hover, the entire cascade recalculates — including auto-contrast text color. <strong>Hover the cards below:</strong></p>
+        <div class="hover-demo">
+            <div class="hover-demo__card nok-bg-darkblue nok-text-contrast nok-hover-to-darkblue--darker" data-class="nok-hover-to-darkblue--darker">
+                <code>.nok-hover-to-darkblue--darker</code>
+                <span class="desc">on nok-bg-darkblue</span>
+            </div>
+            <div class="hover-demo__card nok-bg-darkblue nok-text-contrast nok-hover-to-darkblue--lighter" data-class="nok-hover-to-darkblue--lighter">
+                <code>.nok-hover-to-darkblue--lighter</code>
+                <span class="desc">on nok-bg-darkblue</span>
+            </div>
+            <div class="hover-demo__card nok-bg-darkblue nok-text-contrast nok-hover-to-lightblue" data-class="nok-hover-to-lightblue">
+                <code>.nok-hover-to-lightblue</code>
+                <span class="desc">on nok-bg-darkblue — cross-color</span>
+            </div>
+            <div class="hover-demo__card nok-bg-darkblue nok-text-contrast nok-hover-to-yellow" data-class="nok-hover-to-yellow">
+                <code>.nok-hover-to-yellow</code>
+                <span class="desc">on nok-bg-darkblue — cross-color</span>
+            </div>
+            <div class="hover-demo__card nok-bg-lightblue nok-text-contrast nok-hover-to-lightblue--darker" data-class="nok-hover-to-lightblue--darker">
+                <code>.nok-hover-to-lightblue--darker</code>
+                <span class="desc">on nok-bg-lightblue</span>
+            </div>
+            <div class="hover-demo__card nok-bg-lightblue nok-text-contrast nok-hover-to-lightblue--lighter" data-class="nok-hover-to-lightblue--lighter">
+                <code>.nok-hover-to-lightblue--lighter</code>
+                <span class="desc">on nok-bg-lightblue</span>
+            </div>
+            <div class="hover-demo__card nok-bg-yellow nok-text-contrast nok-hover-to-yellow--darker" data-class="nok-hover-to-yellow--darker">
+                <code>.nok-hover-to-yellow--darker</code>
+                <span class="desc">on nok-bg-yellow</span>
+            </div>
+            <div class="hover-demo__card nok-bg-yellow nok-text-contrast nok-hover-to-darkerblue" data-class="nok-hover-to-darkerblue">
+                <code>.nok-hover-to-darkerblue</code>
+                <span class="desc">on nok-bg-yellow — cross-color</span>
+            </div>
+            <div class="hover-demo__card nok-bg-green nok-text-contrast nok-hover-to-green--darker" data-class="nok-hover-to-green--darker">
+                <code>.nok-hover-to-green--darker</code>
+                <span class="desc">on nok-bg-green</span>
+            </div>
+            <div class="hover-demo__card nok-bg-white nok-text-contrast nok-hover-to-white--darker" data-class="nok-hover-to-white--darker">
+                <code>.nok-hover-to-white--darker</code>
+                <span class="desc">on nok-bg-white — subtle</span>
+            </div>
+            <div class="hover-demo__card nok-bg-darkestblue nok-text-contrast nok-hover-to-darkestblue--lighter" data-class="nok-hover-to-darkestblue--lighter">
+                <code>.nok-hover-to-darkestblue--lighter</code>
+                <span class="desc">on nok-bg-darkestblue</span>
+            </div>
+            <div class="hover-demo__card nok-bg-error nok-text-contrast nok-hover-to-error--darker" data-class="nok-hover-to-error--darker">
+                <code>.nok-hover-to-error--darker</code>
+                <span class="desc">on nok-bg-error</span>
             </div>
         </div>
     </div>

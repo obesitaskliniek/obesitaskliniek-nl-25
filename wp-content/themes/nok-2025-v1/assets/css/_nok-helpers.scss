@@ -373,12 +373,20 @@ $alphas: (
 // Use when you need different values at specific breakpoints, not just scaling.
 // =============================================================================
 
+// =============================================================================
+// UTILITY DEFINITIONS — Responsive flags audited against actual template usage
+// =============================================================================
+// responsive: true       → generates min-width breakpoint variants (e.g. nok-p-lg-4)
+// responsive-up-to: true → generates max-width breakpoint variants (e.g. nok-p-to-lg-4)
+// Flags are set to false when no templates use that direction's variants,
+// eliminating thousands of unused CSS rules.
+// =============================================================================
 $utilities: (
         "gap": (
                 css-var: true,
                 css-variable-name: gap,
                 no-prefix: true,
-                responsive-up-to: true,
+                responsive-up-to: false, // no responsive variants used
                 class: #{nok-variables.$prefix}-gap,
                 values:nok-variables.$padding-base-values
         ),
@@ -386,7 +394,7 @@ $utilities: (
                 css-var: true,
                 css-variable-name: grid-gap,
                 no-prefix: true,
-                responsive-up-to: true,
+                responsive-up-to: false, // no responsive variants used
                 class: #{nok-variables.$prefix}-grid-gap,
                 values:nok-variables.$padding-base-values
         ),
@@ -394,107 +402,107 @@ $utilities: (
                 css-var: true,
                 css-variable-name: column-gap,
                 no-prefix: true,
-                responsive-up-to: true,
+                responsive-up-to: false, // no responsive variants used
                 class: #{nok-variables.$prefix}-column-gap,
                 values:nok-variables.$padding-base-values
         ),
         "padding": (
                 property: padding,
-                responsive: true,
-                responsive-up-to: true,
+                responsive: true, // used: nok-p-lg-4, nok-p-xl-4
+                responsive-up-to: false, // no up-to variants used
                 class: #{nok-variables.$prefix}-p,
                 values:nok-variables.$padding-base-values
         ),
         "padding-top": (
                 property: padding-top,
-                responsive-up-to: true,
+                responsive-up-to: true, // used: nok-pt-to-lg-*
                 class: #{nok-variables.$prefix}-pt,
                 values:nok-variables.$padding-base-values
         ),
         "padding-right": (
                 property: padding-right,
-                responsive-up-to: true,
+                responsive-up-to: false, // no responsive variants used
                 class: #{nok-variables.$prefix}-pr,
                 values:nok-variables.$padding-base-values
         ),
         "padding-bottom": (
                 property: padding-bottom,
-                responsive-up-to: true,
+                responsive-up-to: true, // used: nok-pb-to-lg-*
                 class: #{nok-variables.$prefix}-pb,
                 values:nok-variables.$padding-base-values
         ),
         "padding-left": (
                 property: padding-left,
-                responsive-up-to: true,
+                responsive-up-to: false, // no responsive variants used
                 class: #{nok-variables.$prefix}-pl,
                 values:nok-variables.$padding-base-values
         ),
         "padding-x": (
                 property: padding-right padding-left,
-                responsive: true,
-                responsive-up-to: true,
+                responsive: false, // no min-width variants used
+                responsive-up-to: true, // used: nok-px-to-lg-*
                 class: #{nok-variables.$prefix}-px,
                 values:nok-variables.$padding-base-values
         ),
         "padding-y": (
                 property: padding-top padding-bottom,
-                responsive: true,
-                responsive-up-to: true,
+                responsive: false, // no min-width variants used
+                responsive-up-to: false, // no up-to variants used
                 class: #{nok-variables.$prefix}-py,
                 values:nok-variables.$padding-base-values
         ),
         "margin": (
                 property: margin,
-                responsive: true,
-                responsive-up-to: true,
+                responsive: false, // no min-width variants used
+                responsive-up-to: false, // no up-to variants used
                 class: #{nok-variables.$prefix}-m,
                 values:nok-variables.$padding-base-values
         ),
         "margin-top": (
                 property: margin-top,
-                responsive: true,
-                responsive-up-to: true,
+                responsive: false, // no min-width variants used
+                responsive-up-to: true, // used: nok-mt-to-xl-*
                 class: #{nok-variables.$prefix}-mt,
                 values:nok-variables.$padding-base-values
         ),
         "margin-end": (
                 property: margin-right,
-                responsive: true,
-                responsive-up-to: true,
+                responsive: false, // no min-width variants used
+                responsive-up-to: false, // no up-to variants used
                 class: #{nok-variables.$prefix}-me,
                 values:nok-variables.$padding-base-values
         ),
         "margin-bottom": (
                 property: margin-bottom,
-                responsive: true,
-                responsive-up-to: true,
+                responsive: false, // no min-width variants used
+                responsive-up-to: false, // no up-to variants used
                 class: #{nok-variables.$prefix}-mb,
                 values:nok-variables.$padding-base-values
         ),
         "margin-start": (
                 property: margin-left,
-                responsive: true,
-                responsive-up-to: true,
+                responsive: true, // used: nok-ms-xl-5
+                responsive-up-to: false, // no up-to variants used
                 class: #{nok-variables.$prefix}-ms,
                 values:nok-variables.$padding-base-values
         ),
         "margin-x": (
                 property: margin-right margin-left,
-                responsive: true,
-                responsive-up-to: true,
+                responsive: false, // no min-width variants used
+                responsive-up-to: false, // no up-to variants used
                 class: #{nok-variables.$prefix}-mx,
                 values:nok-variables.$padding-base-values
         ),
         "margin-y": (
                 property: margin-top margin-bottom,
-                responsive: true,
-                responsive-up-to: true,
+                responsive: false, // no min-width variants used
+                responsive-up-to: true, // used: nok-my-to-lg-*
                 class: #{nok-variables.$prefix}-my,
                 values:nok-variables.$padding-base-values
         ),
         "border-bottom": (
                 responsive: false,
-                responsive-up-to: true,
+                responsive-up-to: true, // used: nok-border-bottom-to-lg-1
                 property: border-bottom,
                 class: #{nok-variables.$prefix}-border-bottom,
                 values: (
@@ -503,28 +511,28 @@ $utilities: (
         ),
         "border-radius": (
                 property: border-radius,
-                responsive-up-to: true,
+                responsive-up-to: true, // used: nok-border-radius-to-sm-0
                 class: #{nok-variables.$prefix}-border-radius,
                 values: 0
         ),
         "aspect": (
                 property: aspect-ratio,
                 responsive: false,
-                responsive-up-to: true,
+                responsive-up-to: true, // used: nok-aspect-to-lg-*
                 class: #{nok-variables.$prefix}-aspect,
                 values:nok-variables.$aspect-ratios
         ),
         "invisible": (
                 property: display,
-                responsive: true,
-                responsive-up-to: true,
+                responsive: true, // used: nok-invisible-sm
+                responsive-up-to: true, // used: nok-invisible-to-sm, to-lg, to-xl, to-xxxl
                 class: #{nok-variables.$prefix}-invisible,
                 no-suffix: true,
                 values: none,
         ),
         "order": (
-                responsive: true,
-                responsive-up-to: true,
+                responsive: true, // used: nok-order-lg-*, nok-order-xl-*
+                responsive-up-to: true, // used: nok-order-to-lg-last
                 property: order,
                 class: #{nok-variables.$prefix}-order,
                 values: (
@@ -541,14 +549,14 @@ $utilities: (
                 css-var: true,
                 css-variable-name: grid-columns,
                 no-prefix: true,
-                responsive: true,
-                responsive-up-to: true,
+                responsive: true, // used: nok-columns-md-*, nok-columns-lg-*, nok-columns-xl-*, nok-columns-xxl-*
+                responsive-up-to: true, // used: nok-columns-to-lg-*
                 class: #{nok-variables.$prefix}-columns,
                 values: 0 1 2 3 4 5 6 7 8 9 10 11 12
         ),
         "align-self": (
                 responsive: false,
-                responsive-up-to: true,
+                responsive-up-to: true, // used: nok-align-self-to-sm-*, nok-align-self-to-lg-*
                 class: #{nok-variables.$prefix}-align-self,
                 values: (
                         stretch: (align-self: stretch, grid-column: "1 / -1")
@@ -556,7 +564,7 @@ $utilities: (
         ),
         "align-items": (
                 responsive: false,
-                responsive-up-to: true,
+                responsive-up-to: false, // no responsive variants used
                 property: align-items,
                 class: #{nok-variables.$prefix}-align-items,
                 values: (
@@ -569,7 +577,7 @@ $utilities: (
         ),
         "align-content": (
                 responsive: false,
-                responsive-up-to: true,
+                responsive-up-to: false, // no responsive variants used
                 property: align-content,
                 class: #{nok-variables.$prefix}-align-content,
                 values: (
@@ -581,7 +589,7 @@ $utilities: (
         ),
         "justify-self": (
                 responsive: false,
-                responsive-up-to: true,
+                responsive-up-to: false, // no responsive variants used
                 property: justify-self,
                 class: #{nok-variables.$prefix}-justify-self,
                 values: (
@@ -593,7 +601,7 @@ $utilities: (
         ),
         "justify-items": (
                 responsive: false,
-                responsive-up-to: true,
+                responsive-up-to: false, // no responsive variants used
                 property: justify-items,
                 class: #{nok-variables.$prefix}-justify-items,
                 values: (
@@ -605,7 +613,7 @@ $utilities: (
         ),
         "justify-content": (
                 responsive: false,
-                responsive-up-to: true,
+                responsive-up-to: true, // used: nok-justify-content-to-lg-space-between
                 property: justify-content,
                 class: #{nok-variables.$prefix}-justify-content,
                 values: (
@@ -628,7 +636,7 @@ $utilities: (
         ),
         "column-start": (
                 responsive: false,
-                responsive-up-to: true,
+                responsive-up-to: false, // no responsive variants used
                 property: grid-column-start,
                 class: #{nok-variables.$prefix}-column-start,
                 values: (
@@ -643,7 +651,7 @@ $utilities: (
                 css-var: true,
                 css-variable-name: offset,
                 no-prefix: true,
-                responsive: true,
+                responsive: false, // no responsive variants used (only base nok-column-offset-0/1)
                 responsive-up-to: false,
                 class: #{nok-variables.$prefix}-column-offset,
                 values: (
@@ -656,7 +664,7 @@ $utilities: (
         ),
         'span-all-columns': (
                 responsive: false,
-                responsive-up-to: true,
+                responsive-up-to: true, // used: nok-span-all-columns-to-xl, to-xxl
                 no-suffix: true,
                 property: grid-column,
                 class: #{nok-variables.$prefix}-span-all-columns,
@@ -664,9 +672,8 @@ $utilities: (
                       "1 / -1"
                 )
         ),
-  //conceptual
         "column-last-x": (
-                responsive: true,
+                responsive: true, // used: nok-column-last-lg-*, nok-column-last-xl-*, nok-column-last-xxl-*
                 responsive-up-to: false,
                 property: grid-column,
                 class: #{nok-variables.$prefix}-column-last,
@@ -683,7 +690,7 @@ $utilities: (
                 )
         ),
         "column-first-x": (
-                responsive: true,
+                responsive: true, // used: nok-column-first-lg-*, nok-column-first-xl-*, nok-column-first-xxl-*
                 responsive-up-to: false,
                 property: grid-column,
                 class: #{nok-variables.$prefix}-column-first,
@@ -698,16 +705,16 @@ $utilities: (
         ),
         "font-size": (
                 property: font-size,
-                responsive: true,
-                responsive-up-to: true,
+                responsive: false, // no min-width variants used
+                responsive-up-to: true, // used: nok-fs-to-sm-*, nok-fs-to-md-*, nok-fs-to-lg-*
                 class: #{nok-variables.$prefix}-fs,
                 values: nok-variables.$font-sizes
         ),
         "height": (
                 property: height,
                 no-prefix: true,
-                responsive: true,
-                responsive-up-to: true,
+                responsive: false, // no responsive variants used
+                responsive-up-to: false, // no responsive variants used
                 class: #{nok-variables.$prefix}-h,
                 values: (
                         100: 100%
@@ -717,7 +724,7 @@ $utilities: (
             css-var: true,
             css-variable-name: pull-amount,
             no-prefix: true,
-            responsive: true,
+            responsive: true, // used: nok-pull-up-lg-*, nok-pull-up-xl-*
             responsive-up-to: false,
             class: #{nok-variables.$prefix}-pull-up,
             values: 1 2 3 4

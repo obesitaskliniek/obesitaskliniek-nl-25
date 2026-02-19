@@ -50,6 +50,17 @@ RewriteRule (.*) $1.js [L]
     Header set Expires "0"
 </FilesMatch>
 
+# Cache CSS for 1 day — no filename hashing so avoid immutable
+# (wp_enqueue_style appends ?ver= for busting, but some proxies strip query strings)
+<FilesMatch "\.(css)$">
+    Header set Cache-Control "public, max-age=86400"
+</FilesMatch>
+
+# Cache fonts for 1 year — these truly never change
+<FilesMatch "\.(woff2?|ttf|otf|eot)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+
 <IfModule mod_filter.c>
 	<IfModule mod_deflate.c>
 # Compress HTML, CSS, JavaScript, Text, XML and fonts

@@ -1,0 +1,271 @@
+// =============================================================================
+// CRITICAL (ABOVE-THE-FOLD) CSS — Target: <14KB uncompressed
+// =============================================================================
+// Hand-crafted rules for instant first paint of navigation + hero.
+// NO component @use imports — only Sass tooling (which produces zero output).
+//
+// The full nok-components.css loads deferred (non-render-blocking) and fills in
+// all remaining styles. Duplicated selectors here are harmless.
+//
+// To update: audit which rules cause layout shift in the hero + nav if missing.
+// =============================================================================
+
+// --- Sass tooling only (zero CSS output) ---
+@use "nok-variables";
+@use "./tools/nok-mixins";
+@use "./tools/nok-rfs";
+
+// =============================================================================
+// 1. MINIMAL REBOOT (box-sizing + body reset)
+// =============================================================================
+*, *::before, *::after { box-sizing: border-box; }
+html { line-height: 1.15; -webkit-text-size-adjust: 100%; }
+body { margin: 0; }
+img, svg { vertical-align: middle; }
+img { max-width: 100%; height: auto; }
+h1, h2, h3, h4, h5, h6, p { margin-top: 0; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: 0; background: transparent; font: inherit; }
+ul, ol { list-style: none; padding: 0; margin: 0; }
+
+// =============================================================================
+// 2. COLOR VARIABLES (only the colors used above the fold)
+// =============================================================================
+:root {
+  // Blues
+  --nok-lightblue: rgb(var(--nok-lightblue-rgb));
+  --nok-lightblue-rgb: 0, 176, 228;
+  --nok-lightblue-contrast: rgba(0, 19, 47, var(--alpha, 1));
+  --nok-darkblue: rgb(var(--nok-darkblue-rgb));
+  --nok-darkblue-rgb: 20, 71, 124;
+  --nok-darkblue-contrast: rgba(243, 244, 249, var(--alpha, 1));
+  --nok-darkerblue: rgb(var(--nok-darkerblue-rgb));
+  --nok-darkerblue-rgb: 11, 35, 85;
+  --nok-darkerblue-contrast: rgba(243, 244, 249, var(--alpha, 1));
+  --nok-darkerblue--darker-rgb: 0, 14, 68;
+  --nok-darkestblue: rgb(var(--nok-darkestblue-rgb));
+  --nok-darkestblue-rgb: 0, 19, 47;
+  --nok-darkestblue-contrast: rgba(243, 244, 249, var(--alpha, 1));
+  --nok-darkestblue--darker-rgb: 0, 3, 32;
+  // Yellow
+  --nok-yellow: rgb(var(--nok-yellow-rgb));
+  --nok-yellow-rgb: 255, 212, 31;
+  --nok-yellow-contrast: rgba(0, 19, 47, var(--alpha, 1));
+  // White
+  --nok-white: rgb(var(--nok-white-rgb));
+  --nok-white-rgb: 243, 244, 249;
+  --nok-white-contrast: rgba(0, 19, 47, var(--alpha, 1));
+  --nok-white--darker: rgb(var(--nok-white--darker-rgb));
+  --nok-white--darker-rgb: 228, 230, 238;
+  // Body / derived
+  --nok-body: var(--nok-white);
+  --nok-body-rgb: var(--nok-white-rgb);
+  --nok-body-contrast: var(--nok-white-contrast);
+  --nok-body--darker: var(--nok-white--darker);
+  --nok-body--lighter: var(--nok-white);
+  --nok-body--lighter-rgb: var(--nok-white-rgb);
+}
+
+// =============================================================================
+// 3. COLOR UTILITY CLASSES (only those used above the fold)
+// =============================================================================
+.nok-bg-body        { --bg-color: var(--nok-body); --bg-color--contrast: var(--nok-body-contrast); background-color: rgba(var(--nok-body-rgb) / var(--bg-alpha-value, 1)); color: var(--text-color, var(--nok-body-contrast)); }
+.nok-bg-body--lighter { --bg-color: var(--nok-body--lighter); background-color: rgba(var(--nok-body--lighter-rgb) / var(--bg-alpha-value, 1)); }
+.nok-bg-white       { --bg-color: var(--nok-white); --bg-color--contrast: var(--nok-white-contrast); background-color: rgba(var(--nok-white-rgb) / var(--bg-alpha-value, 1)); color: var(--text-color, var(--nok-white-contrast)); }
+.nok-bg-white--darker { --bg-color: var(--nok-white--darker); background-color: rgba(var(--nok-white--darker-rgb) / var(--bg-alpha-value, 1)); }
+.nok-bg-darkblue    { --bg-color: var(--nok-darkblue); --bg-color--contrast: var(--nok-darkblue-contrast); background-color: rgba(var(--nok-darkblue-rgb) / var(--bg-alpha-value, 1)); color: var(--text-color, var(--nok-darkblue-contrast)); }
+.nok-bg-darkerblue  { --bg-color: var(--nok-darkerblue); --bg-color--contrast: var(--nok-darkerblue-contrast); background-color: rgba(var(--nok-darkerblue-rgb) / var(--bg-alpha-value, 1)); color: var(--text-color, var(--nok-darkerblue-contrast)); }
+.nok-bg-darkestblue { --bg-color: var(--nok-darkestblue); --bg-color--contrast: var(--nok-darkestblue-contrast); background-color: rgba(var(--nok-darkestblue-rgb) / var(--bg-alpha-value, 1)); color: var(--text-color, var(--nok-darkestblue-contrast)); }
+.nok-bg-yellow      { --bg-color: var(--nok-yellow); --bg-color--contrast: var(--nok-yellow-contrast); background-color: rgba(var(--nok-yellow-rgb) / var(--bg-alpha-value, 1)); color: var(--text-color, var(--nok-yellow-contrast)); }
+.nok-text-contrast  { --text-color: var(--bg-color--contrast, inherit); color: var(--text-color); }
+.nok-text-darkerblue { --text-color: var(--nok-darkerblue); color: var(--nok-darkerblue); }
+.nok-text-lightblue { --text-color: var(--nok-lightblue); color: var(--nok-lightblue); }
+.nok-text-yellow    { --text-color: var(--nok-yellow); color: var(--nok-yellow); }
+.nok-fill-contrast  { fill: var(--bg-color--contrast, inherit); }
+
+// Dark mode overrides (only the ones used above fold)
+@media (prefers-color-scheme: dark) {
+  :root {
+    --nok-body: var(--nok-darkestblue);
+    --nok-body-rgb: var(--nok-darkestblue-rgb);
+    --nok-body-contrast: var(--nok-darkestblue-contrast);
+    --nok-body--darker: var(--nok-darkestblue--darker);
+  }
+  .nok-dark-bg-darkerblue          { --bg-color: var(--nok-darkerblue); background-color: rgba(var(--nok-darkerblue-rgb) / var(--bg-alpha-value, 1)); color: var(--text-color, var(--nok-darkerblue-contrast)); }
+  .nok-dark-bg-darkerblue--darker  { --bg-color: var(--nok-darkerblue--darker); background-color: rgba(var(--nok-darkerblue--darker-rgb) / var(--bg-alpha-value, 1)); }
+  .nok-dark-bg-darkestblue         { --bg-color: var(--nok-darkestblue); background-color: rgba(var(--nok-darkestblue-rgb) / var(--bg-alpha-value, 1)); color: var(--text-color, var(--nok-darkestblue-contrast)); }
+  .nok-dark-bg-darkestblue--darker { background-color: rgba(var(--nok-darkestblue--darker-rgb) / var(--bg-alpha-value, 1)); }
+  .nok-dark-text-contrast { color: var(--bg-color--contrast, inherit); }
+  .nok-dark-text-white  { --text-color: var(--nok-white); color: var(--nok-white); }
+  .nok-dark-text-yellow { --text-color: var(--nok-yellow); color: var(--nok-yellow); }
+}
+
+// =============================================================================
+// 4. THEME VARIABLES + BODY/HTML
+// =============================================================================
+:root {
+  @include nok-variables.parsed-variables;
+}
+
+section, nok-logo, nok-mobile-nav, nok-desktop-nav { display: contents; }
+
+html {
+  --font-size-base: var(--nok-html-font-size, 1em);
+  font-size: var(--font-size-base, 1em);
+  @include nok-mixins.media-breakpoint-down(md) {
+    font-size: calc(var(--font-size-base) * .9);
+  }
+}
+body {
+  --nok-body-text-color: var(--nok-darkerblue);
+  background: linear-gradient(180deg, var(--nok-body--darker), var(--nok-body));
+  @include nok-mixins.nok-text-font;
+}
+@for $i from 1 through 6 {
+  h#{$i} { @include nok-mixins.nok-heading-font; }
+}
+.nok-fs-giant { @include nok-rfs.rfs((nok-variables.$h1-font-size * 1.5), font-size); }
+
+svg.nok-icon { vertical-align: middle; width: 1em; height: 1em; }
+
+// =============================================================================
+// 5. NAVIGATION STRUCTURE (position, display, z-index — not decorative styles)
+// =============================================================================
+nok-top-navigation {
+  font-size: 1.2rem;
+}
+@include nok-mixins.media-breakpoint-up(xl) {
+  nok-top-navigation { position: sticky !important; top: 0; z-index: nok-variables.$z-stack-top; }
+  nok-top-navigation nok-navigation-mobile { display: none !important; }
+}
+@include nok-mixins.media-breakpoint-down(xl) {
+  nok-top-navigation {
+    position: fixed !important; top: 0; bottom: 0;
+    justify-content: flex-start;
+    z-index: nok-variables.$z-stack-top !important;
+    pointer-events: none;
+  }
+  nok-top-navigation nok-navigation-desktop { display: none !important; }
+}
+// Menu bar layout
+.nok-navigation-menu-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  pointer-events: auto;
+  min-height: 3.5rem;
+  padding-inline: var(--nok-nok-spacing-section-sides);
+}
+// Top row
+.nok-navigation-top-row {
+  display: flex; align-items: center; justify-content: flex-end;
+  pointer-events: auto;
+  padding-inline: var(--nok-nok-spacing-section-sides);
+  gap: var(--nok-space-fluid-sm);
+}
+
+// =============================================================================
+// 6. HERO STRUCTURE (grid, sizing — not decorative styles)
+// =============================================================================
+nok-hero {
+  --grid-gap: var(--nok-padding-base, var(--nok-global-grid-gap, 1.5rem));
+  --footer-height: 0;
+}
+nok-hero:has(footer) { --footer-height: 6rem; }
+nok-hero:has(figure) { --figure-row-mobile: var(--section-max-width, 50vw); }
+nok-hero .nok-hero__inner {
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  min-height: max(50vh, 500px);
+  width: 100%;
+}
+
+// =============================================================================
+// 7. SECTION BASE (prevents layout shift)
+// =============================================================================
+.nok-section, nok-section {
+  position: relative; display: flex; width: 100%; padding: 0; margin: 0;
+  flex-direction: column; flex-wrap: nowrap;
+  justify-content: center; align-items: center;
+  overflow-x: clip;
+}
+
+// =============================================================================
+// 8. BUTTON BASE (prevents FOUT-triggered reflow from buttons)
+// =============================================================================
+.nok-button {
+  display: inline-flex; align-items: center; gap: 0.5em;
+  padding: 0.5em 1.25em;
+  border-radius: var(--nok-default-border-radius--large);
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  @include nok-mixins.nok-heading-font;
+}
+
+// =============================================================================
+// 9. LAYOUT GRID (used in hero and nav)
+// =============================================================================
+.nok-layout-grid {
+  display: grid;
+  --grid-gap: var(--nok-space-fluid-md, var(--nok-padding-base, 1.5rem));
+  gap: var(--grid-gap);
+  grid-template-columns: repeat(var(--grid-columns, 1), 1fr);
+}
+
+// =============================================================================
+// 10. HAND-PICKED UTILITY CLASSES (~30 used above the fold)
+// =============================================================================
+
+// Z-index
+@for $i from 1 through 3 {
+  .nok-z-#{$i} { --z-base: #{$i}; z-index: var(--z-base, $i); }
+}
+
+// Spacing
+.nok-mt-0    { margin-top: 0 !important; }
+.nok-my-0    { margin-top: 0 !important; margin-bottom: 0 !important; }
+.nok-mb-0_5  { margin-bottom: var(--nok-space-fluid-sm) !important; }
+.nok-px-0    { padding-right: 0 !important; padding-left: 0 !important; }
+.nok-px-section-padding { padding-right: var(--nok-spacing-section-ends) !important; padding-left: var(--nok-spacing-section-ends) !important; }
+.nok-pl-section-padding { padding-left: var(--nok-spacing-section-ends) !important; }
+@include nok-mixins.media-breakpoint-down(lg) {
+  .nok-px-to-lg-section-padding { padding-right: var(--nok-spacing-section-ends) !important; padding-left: var(--nok-spacing-section-ends) !important; }
+  .nok-pt-to-lg-1  { padding-top: var(--nok-space-fluid-md) !important; }
+  .nok-pb-to-lg-0_5 { padding-bottom: var(--nok-space-fluid-sm) !important; }
+}
+
+// Font size
+.nok-fs-buttons { font-size: var(--nok-font-size-buttons); }
+.nok-fs-2 { font-size: var(--nok-font-size-2) !important; }
+@include nok-mixins.media-breakpoint-down(lg) {
+  .nok-fs-to-lg-3 { font-size: var(--nok-font-size-3) !important; }
+}
+
+// Visibility
+@include nok-mixins.media-breakpoint-up(sm) {
+  .nok-invisible-sm { display: none !important; }
+  .nok-visible-xs   { display: none !important; }
+}
+@include nok-mixins.media-breakpoint-down(sm)   { .nok-invisible-to-sm   { display: none !important; } }
+@include nok-mixins.media-breakpoint-down(lg)   { .nok-invisible-to-lg   { display: none !important; } }
+@include nok-mixins.media-breakpoint-down(xl)   { .nok-invisible-to-xl   { display: none !important; } }
+@include nok-mixins.media-breakpoint-down(xxxl) { .nok-invisible-to-xxxl { display: none !important; } }
+
+// Alignment
+.nok-align-self-stretch  { align-self: stretch !important; grid-column: 1 / -1 !important; }
+.nok-align-items-stretch { align-items: stretch !important; }
+.nok-justify-items-start { justify-items: flex-start !important; }
+.nok-justify-self-center { justify-self: center !important; }
+
+// Alpha
+.nok-bg-alpha-6 { --bg-alpha-value: 0.6; }
+@media (prefers-color-scheme: dark) {
+  .nok-dark-bg-alpha-10 { --bg-alpha-value: 1; }
+}
+
+// Border
+@include nok-mixins.media-breakpoint-down(sm) { .nok-border-radius-to-sm-0 { border-radius: 0 !important; } }
+@include nok-mixins.media-breakpoint-down(lg) { .nok-border-bottom-to-lg-1 { border-bottom: 1px solid oklch(from var(--text-base, var(--text-color)) l c h/0.25) !important; } }
+
+// Misc
+.nok-bg-blur { backdrop-filter: blur(5px); &--large { backdrop-filter: blur(10px); } }
+.nok-sticky  { position: sticky; top: 0; z-index: nok-variables.$z-stack-top; }

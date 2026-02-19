@@ -24,6 +24,18 @@
         <link rel="modulepreload" href="<?= THEME_ROOT ;?>/assets/js/entrypoint.mjs">
         <script type="module" src="<?= THEME_ROOT ;?>/assets/js/entrypoint.mjs" defer></script>
 
+        <?php // Inline critical CSS for instant above-the-fold rendering
+        $critical_css_path = THEME_ROOT_ABS . '/assets/css/nok-critical.min.css';
+        if ( ! file_exists( $critical_css_path ) ) {
+	        $critical_css_path = THEME_ROOT_ABS . '/assets/css/nok-critical.css';
+        }
+        if ( file_exists( $critical_css_path ) ) :
+	        $critical_css = @file_get_contents( $critical_css_path );
+	        if ( $critical_css ) : ?>
+        <style id="nok-critical-css"><?php echo $critical_css; ?></style>
+	        <?php endif;
+        endif; ?>
+
         <!-- head data -->
         <?php wp_head(); ?>
 
