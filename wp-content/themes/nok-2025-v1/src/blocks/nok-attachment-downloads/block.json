@@ -1,0 +1,28 @@
+{
+  "apiVersion": 2,
+  "name": "nok2025/nok-attachment-downloads",
+  "title": "NOK Downloads Sectie",
+  "description": "Toont een lijst van downloadbare bijlagen (PDF, documenten, etc.) die aan deze pagina/artikel zijn gekoppeld.",
+  "category": "nok-blocks",
+  "icon": "download",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Downloads"
+    },
+    "description": {
+      "type": "string",
+      "default": "Voor het lezen van PDF bestanden heeft u Adobe Reader nodig. Deze kunt u <a href=\"https://get.adobe.com/reader/\">hier downloaden</a>."
+    }
+  },
+  "textdomain": "nok-2025-v1",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php",
+  "style": [
+    "nok-components-css",
+    "nok-colors-css"
+  ]
+}

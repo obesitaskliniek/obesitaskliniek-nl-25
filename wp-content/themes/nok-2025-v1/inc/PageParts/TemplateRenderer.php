@@ -304,8 +304,10 @@ class TemplateRenderer {
 		$this->handle_template_css('block-parts', $slug);
 
 		// Extract extra variables for template scope
-		$content = $extra['content'] ?? '';
+		$content    = $extra['content'] ?? '';
 		$attributes = $extra['attributes'] ?? [];
+		unset( $extra['content'], $extra['attributes'] );
+		extract( $extra, EXTR_SKIP );
 
 		// Render template
 		ob_start();

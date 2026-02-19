@@ -1725,6 +1725,253 @@ class Helpers {
 		// Not enough root blocks, append at end
 		return $content . $injection;
 	}
+
+	/**
+	 * Get non-image attachments for a specific post
+	 *
+	 * Queries WordPress attachments that are NOT images (excludes image/* MIME types)
+	 * and are attached to the specified post. Returns attachment data ready for
+	 * use in download list templates.
+	 *
+	 * @param int|null $post_id Post ID to get attachments for (defaults to current post)
+	 * @return array Array of attachment data arrays, each containing:
+	 *               - 'id' (int): Attachment post ID
+	 *               - 'title' (string): Attachment title
+	 *               - 'url' (string): Direct file URL
+	 *               - 'filename' (string): Original filename
+	 *               - 'filesize' (string): Human-readable file size
+	 *               - 'filetype' (string): Uppercase file extension label (e.g., 'PDF')
+	 *               - 'mime_type' (string): Full MIME type
+	 *               - 'parent_id' (int): Parent post ID
+	 *               - 'parent_title' (string): Parent post title
+	 *               - 'parent_url' (string): Parent post permalink
+	 */
+	public static function get_non_image_attachments( ?int $post_id = null ): array {
+		if ( $post_id === null ) {
+			$post_id = get_the_ID();
+		}
+
+		if ( ! $post_id ) {
+			return [];
+		}
+
+		$attachments = get_posts( [
+			'post_type'      => 'attachment',
+			'post_parent'    => $post_id,
+			'posts_per_page' => -1,
+			'post_status'    => 'inherit',
+			'orderby'        => 'title',
+			'order'          => 'ASC',
+		] );
+
+		return self::format_attachment_results(
+			array_filter( $attachments, fn( $a ) => ! str_starts_with( $a->post_mime_type, 'image/' ) )
+		);
+	}
+
+	/**
+	 * Get all non-image attachments site-wide
+	 *
+	 * Queries all published attachments across the site that are NOT images.
+	 * Includes parent post information for "Meer informatie" linking.
+	 *
+	 * @return array Array of attachment data arrays (same structure as get_non_image_attachments)
+	 */
+	public static function get_all_non_image_attachments(): array {
+		$attachments = get_posts( [
+			'post_type'      => 'attachment',
+			'posts_per_page' => -1,
+			'post_status'    => 'inherit',
+			'orderby'        => 'title',
+			'order'          => 'ASC',
+			'post_mime_type' => self::get_non_image_mime_query(),
+		] );
+
+		// Filter out any image types that may have slipped through
+		$filtered = array_filter( $attachments, fn( $a ) => ! str_starts_with( $a->post_mime_type, 'image/' ) );
+
+		return self::format_attachment_results( $filtered );
+	}
+
+	/**
+	 * Build MIME type query string that excludes images
+	 *
+	 * Returns common non-image MIME types for WP_Query's post_mime_type parameter.
+	 *
+	 * @return array Array of MIME type strings to include
+	 */
+	private static function get_non_image_mime_query(): array {
+		return [
+			'application/pdf',
+			'application/msword',
+			'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+			'application/vnd.ms-excel',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+			'application/vnd.ms-powerpoint',
+			'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+			'application/zip',
+			'application/x-rar-compressed',
+			'application/x-7z-compressed',
+			'text/plain',
+			'text/csv',
+			'text/xml',
+			'application/xml',
+			'application/json',
+			'audio/mpeg',
+			'audio/wav',
+			'audio/ogg',
+			'audio/mp4',
+			'video/mp4',
+			'video/webm',
+			'video/ogg',
+			'application/epub+zip',
+			'application/rtf',
+			'application/vnd.oasis.opendocument.text',
+			'application/vnd.oasis.opendocument.spreadsheet',
+		];
+	}
+
+	/**
+	 * Format attachment posts into structured data arrays
+	 *
+	 * @param array $attachments Array of WP_Post attachment objects
+	 * @return array Formatted attachment data
+	 */
+	private static function format_attachment_results( array $attachments ): array {
+		$results = [];
+
+		foreach ( $attachments as $attachment ) {
+			$file_path = get_attached_file( $attachment->ID );
+			$file_url  = wp_get_attachment_url( $attachment->ID );
+
+			// Get file size
+			$filesize = '';
+			if ( $file_path && file_exists( $file_path ) ) {
+				$filesize = size_format( filesize( $file_path ), 1 );
+			}
+
+			// Derive extension-based label
+			$extension = strtoupper( pathinfo( $file_path ?: $file_url, PATHINFO_EXTENSION ) );
+			$filetype  = self::get_filetype_label( $extension );
+
+			// Parent post data
+			$parent_id    = $attachment->post_parent;
+			$parent_title = '';
+			$parent_url   = '';
+
+			if ( $parent_id ) {
+				$parent = get_post( $parent_id );
+				if ( $parent && $parent->post_status === 'publish' ) {
+					$parent_title = get_the_title( $parent );
+					$parent_url   = get_permalink( $parent );
+				}
+			}
+
+			$results[] = [
+				'id'           => $attachment->ID,
+				'title'        => get_the_title( $attachment ),
+				'url'          => $file_url,
+				'filename'     => basename( $file_path ?: $file_url ),
+				'filesize'     => $filesize,
+				'filetype'     => $filetype,
+				'extension'    => $extension,
+				'mime_type'    => $attachment->post_mime_type,
+				'parent_id'    => $parent_id,
+				'parent_title' => $parent_title,
+				'parent_url'   => $parent_url,
+			];
+		}
+
+		return $results;
+	}
+
+	/**
+	 * Get a human-readable label for a file extension
+	 *
+	 * @param string $extension Uppercase file extension (e.g., 'PDF', 'DOCX')
+	 * @return string Friendly label
+	 */
+	public static function get_filetype_label( string $extension ): string {
+		$labels = [
+			'PDF'  => 'PDF',
+			'DOC'  => 'Word',
+			'DOCX' => 'Word',
+			'XLS'  => 'Excel',
+			'XLSX' => 'Excel',
+			'PPT'  => 'PowerPoint',
+			'PPTX' => 'PowerPoint',
+			'ZIP'  => 'ZIP',
+			'RAR'  => 'RAR',
+			'7Z'   => '7-Zip',
+			'TXT'  => 'Tekst',
+			'CSV'  => 'CSV',
+			'RTF'  => 'RTF',
+			'XML'  => 'XML',
+			'JSON' => 'JSON',
+			'MP3'  => 'Audio',
+			'WAV'  => 'Audio',
+			'OGG'  => 'Audio',
+			'MP4'  => 'Video',
+			'WEBM' => 'Video',
+			'EPUB' => 'E-book',
+			'ODT'  => 'Document',
+			'ODS'  => 'Spreadsheet',
+		];
+
+		return $labels[ $extension ] ?? $extension;
+	}
+
+	/**
+	 * Renders a single download item row.
+	 *
+	 * When $with_source is false, the entire row is a single clickable `<a>` element.
+	 * When $with_source is true, the row is a `<div>` with separate link targets
+	 * (title, arrow, source) to avoid nested `<a>` elements.
+	 *
+	 * @param array $file         Attachment data from format_attachment_results().
+	 * @param bool  $with_source  Whether to show the parent post "Meer informatie" link.
+	 *
+	 * @return string HTML for one download item row.
+	 */
+	public static function render_download_item( array $file, bool $with_source = false ): string {
+		$icon_file  = Assets::getIcon( 'ui_file', 'nok-text-yellow' );
+		$icon_arrow = Assets::getIcon( 'ui_arrow-down' );
+		$title_attr = esc_attr( sprintf( '%s downloaden', $file['title'] ) );
+		$url        = esc_url( $file['url'] );
+
+		$meta = esc_html( $file['filetype'] );
+		if ( $file['filesize'] ) {
+			$meta .= ' · ' . esc_html( $file['filesize'] );
+		}
+
+		if ( $with_source ) {
+			$source = '';
+			if ( ! empty( $file['parent_url'] ) && ! empty( $file['parent_title'] ) && $file['parent_id'] !== get_the_ID() ) {
+				$source = '<span class="nok-download-item__source">'
+					. '<a href="' . esc_url( $file['parent_url'] ) . '">Meer informatie</a>'
+					. '</span>';
+			}
+
+			return '<div class="nok-download-item">'
+				. '<span class="nok-download-item__icon">' . $icon_file . '</span>'
+				. '<span class="nok-download-item__info">'
+					. '<a href="' . $url . '" class="nok-download-item__title" download>' . esc_html( $file['title'] ) . '</a>'
+					. '<span class="nok-download-item__meta">' . $meta . '</span>'
+				. '</span>'
+				. '<a href="' . $url . '" class="nok-download-item__action nok-stretched-link" download aria-label="' . $title_attr . '">' . $icon_arrow . '</a>'
+				. $source
+				. '</div>';
+		}
+
+		return '<a href="' . $url . '" class="nok-download-item nok-stretched-link" download title="' . $title_attr . '">'
+			. '<span class="nok-download-item__icon">' . $icon_file . '</span>'
+			. '<span class="nok-download-item__info">'
+				. '<span class="nok-download-item__title">' . esc_html( $file['title'] ) . '</span>'
+				. '<span class="nok-download-item__meta">' . $meta . '</span>'
+			. '</span>'
+			. '<span class="nok-download-item__action">' . $icon_arrow . '</span>'
+			. '</a>';
+	}
 }
 
 
