@@ -72,7 +72,8 @@ class MetaManager {
 		}
 
 		$this->protected_meta_keys = [
-			'design_slug' => true,
+			'design_slug'  => true,
+			'_section_id'  => true,
 		];
 
 		$registry = $this->registry->get_registry();
@@ -142,6 +143,17 @@ class MetaManager {
 			'show_in_rest'      => true,
 			'single'            => true,
 			'sanitize_callback' => 'sanitize_key',
+			'auth_callback'     => function () {
+				return current_user_can( 'edit_posts' );
+			},
+			'default'           => '',
+		] );
+
+		register_post_meta( 'page_part', '_section_id', [
+			'type'              => 'string',
+			'show_in_rest'      => true,
+			'single'            => true,
+			'sanitize_callback' => 'sanitize_title',
 			'auth_callback'     => function () {
 				return current_user_can( 'edit_posts' );
 			},

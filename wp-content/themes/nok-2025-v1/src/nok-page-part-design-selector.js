@@ -452,12 +452,15 @@ function DesignSlugPanel() {
         return null;
     }
 
-    // 3) Now safely grab ID + meta
+    // 3) Now safely grab ID + meta + slug
     const postId = useSelect((select) =>
         select('core/editor').getCurrentPostId(), []
     );
     const meta = useSelect((select) =>
         select('core/editor').getEditedPostAttribute('meta'), []
+    );
+    const postSlug = useSelect((select) =>
+        select('core/editor').getEditedPostAttribute('slug'), []
     );
     const {editPost} = useDispatch('core/editor');
 
@@ -858,6 +861,24 @@ function DesignSlugPanel() {
                 targetFields={customFields}
                 onImport={handleImport}
             />
+
+            {/* Section anchor ID override */}
+            {currentTemplate && (
+                <Fragment>
+                    <hr style={{margin: '16px 0'}}/>
+                    <TextControl
+                        label="Section ID"
+                        help={`Anker-ID voor deze sectie (voor #jumplinks). Laat leeg om de slug te gebruiken: "${postSlug || '…'}"`}
+                        value={meta?._section_id || ''}
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize={true}
+                        placeholder={postSlug || ''}
+                        onChange={(value) => {
+                            editPost({meta: {...meta, _section_id: value}});
+                        }}
+                    />
+                </Fragment>
+            )}
 
             {/* Render custom fields for selected template */}
             {customFields.length > 0 && (

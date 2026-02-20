@@ -40,6 +40,12 @@ return function( array $attributes ): string {
 	// Initialize generic overrides array
 	$generic_overrides = [];
 
+	// Per-page section ID override (sanitized downstream by resolve_section_id)
+	$section_id = '';
+	if ( ! empty( $attributes['overrides']['_override_section_id'] ) ) {
+		$section_id = $attributes['overrides']['_override_section_id'];
+	}
+
 	// Apply overrides from block attributes
 	if ( ! empty( $attributes['overrides'] ) && is_array( $attributes['overrides'] ) ) {
 
@@ -79,6 +85,7 @@ return function( array $attributes ): string {
 		'post'              => $post,
 		'page_part_fields'  => $page_part_fields,
 		'generic_overrides' => $generic_overrides,
+		'section_id'        => $section_id,
 	] );
 
 	return ob_get_clean();

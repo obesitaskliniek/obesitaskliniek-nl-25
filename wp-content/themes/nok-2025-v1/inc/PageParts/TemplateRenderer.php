@@ -58,6 +58,20 @@ class TemplateRenderer {
 	 */
 	private ?\WP_Post $context_post = null;
 
+	/**
+	 * Track section IDs used on the current page request for deduplication.
+	 * When the same page part appears multiple times, appends -2, -3, etc.
+	 *
+	 * @var array<string, int> Map of base ID => usage count
+	 */
+	private static array $used_section_ids = [];
+
+	/**
+	 * Per-embed section ID override, set by the embed block's render callback.
+	 * Takes highest priority in resolve_section_id() when non-empty.
+	 */
+	private string $section_id_override = '';
+
 	public function __construct() {
 		$this->context = new RenderContext();
 	}
@@ -147,6 +161,9 @@ class TemplateRenderer {
 		$post = $args['post'] ?? null;
 		setup_postdata($post);
 
+		// Set per-embed section ID override (cleared after rendering)
+		$this->section_id_override = $args['section_id'] ?? '';
+
 		// Include the actual template
 		$this->render_page_part($design, $args['page_part_fields'] ?? [], $args['generic_overrides'] ?? []);
 
@@ -158,8 +175,9 @@ class TemplateRenderer {
 			wp_reset_postdata();
 		}
 
-		// Clear context post after rendering
+		// Clear per-render state
 		$this->context_post = null;
+		$this->section_id_override = '';
 	}
 
 	/**
@@ -245,8 +263,9 @@ class TemplateRenderer {
 		$GLOBALS['post'] = $original_post;
 		$wp_query = $original_query;
 
-		// Clear context post after rendering
+		// Clear per-render state
 		$this->context_post = null;
+		$this->section_id_override = '';
 
 		return $output;
 	}
@@ -368,7 +387,17 @@ class TemplateRenderer {
 			echo "<nok-post-part>\n";
 		}
 
-		include $template_path;
+		if ( $template_type === 'page-parts' ) {
+			$section_id = $this->resolve_section_id();
+
+			ob_start();
+			include $template_path;
+			$html = ob_get_clean();
+
+			echo $section_id !== '' ? $this->inject_section_id( $html, $section_id ) : $html;
+		} else {
+			include $template_path;
+		}
 
 		if ($template_type === 'post-parts') {
 			echo "</nok-post-part>\n";
@@ -480,6 +509,61 @@ class TemplateRenderer {
 	 */
 	public function get_current_context(): string {
 		return $this->context->get_context();
+	}
+
+	/**
+	 * Resolve the section ID for the current page part
+	 *
+	 * Priority: per-embed override > `_section_id` meta > post slug.
+	 * Returns empty string when no post context is available (e.g., orphan preview).
+	 *
+	 * @return string Sanitized section ID, or empty string if unavailable
+	 */
+	private function resolve_section_id(): string {
+		// Per-embed override (set by the embed block's render callback) takes highest priority
+		if ( $this->section_id_override !== '' ) {
+			return sanitize_title( $this->section_id_override );
+		}
+
+		global $post;
+
+		if ( ! $post instanceof \WP_Post ) {
+			return '';
+		}
+
+		$meta_override = get_post_meta( $post->ID, '_section_id', true );
+
+		return sanitize_title( $meta_override !== '' ? $meta_override : $post->post_name );
+	}
+
+	/**
+	 * Inject an `id` attribute into the first `<nok-section` or `<nok-hero` tag in the HTML
+	 *
+	 * Skips elements that already carry an `id` attribute.
+	 * Appends `-2`, `-3`, etc. when the same ID appears multiple times on one page.
+	 *
+	 * @param string $html  Template HTML output
+	 * @param string $id    Desired section ID (already sanitized)
+	 *
+	 * @return string HTML with `id` attribute injected (or unchanged if no match)
+	 */
+	private function inject_section_id( string $html, string $id ): string {
+		// Deduplicate: track how many times this base ID has been used
+		if ( ! isset( self::$used_section_ids[ $id ] ) ) {
+			self::$used_section_ids[ $id ] = 1;
+			$unique_id = $id;
+		} else {
+			self::$used_section_ids[ $id ]++;
+			$unique_id = $id . '-' . self::$used_section_ids[ $id ];
+		}
+
+		// Match first <nok-section or <nok-hero that does NOT already have an id attribute
+		return preg_replace(
+			'/(<nok-(?:section|hero))(?![^>]*\bid\s*=)/i',
+			'$1 id="' . esc_attr( $unique_id ) . '"',
+			$html,
+			1 // Replace only the first match
+		);
 	}
 
 	/**

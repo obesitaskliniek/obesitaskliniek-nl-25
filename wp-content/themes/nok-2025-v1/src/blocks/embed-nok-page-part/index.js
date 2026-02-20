@@ -539,6 +539,21 @@ registerBlockType(blockName, {
                                     {pageEditableFields.length > 0 && ' Deze page part biedt ook extra velden die overschreven kunnen worden.'}
                                 </p>
                                 <TextControl
+                                    label={__('Section ID', textDomain)}
+                                    help={__('Overschrijf het anker-ID van deze sectie op deze pagina.', textDomain)}
+                                    value={overrides._override_section_id || ''}
+                                    onChange={(newValue) => {
+                                        const newOverrides = {...overrides};
+                                        if (newValue === '') {
+                                            delete newOverrides._override_section_id;
+                                        } else {
+                                            newOverrides._override_section_id = newValue;
+                                        }
+                                        setAttributes({overrides: newOverrides});
+                                    }}
+                                    placeholder={`— ${__('Gebruik standaard ID', textDomain)} —`}
+                                />
+                                <TextControl
                                     label={__('Alternatieve titel', textDomain)}
                                     value={overrides._override_title || ''}
                                     onChange={(newValue) => {
