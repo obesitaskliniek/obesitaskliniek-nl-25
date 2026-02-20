@@ -14,6 +14,7 @@
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  * - accordion_items:repeater(title:text,content:textarea,button_url:url,button_text:text)!descr[Voeg accordion items toe]
  * - accordion_posts:post_repeater(kennisbank)!descr[Kies specifieke kennisbank items om te tonen in de accordion]
+ * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -29,7 +30,9 @@ $c = $context;
 
     <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
         <article class="nok-layout-grid nok-layout-grid__1-column nok-align-items-start">
+            <?php if (!$c->hide_title->isTrue()) : ?>
             <h2 class="nok-fs-6  nok-span-all-columns"><?= $c->title() ?></h2>
+            <?php endif; ?>
 
             <?= $c->content(); ?>
 

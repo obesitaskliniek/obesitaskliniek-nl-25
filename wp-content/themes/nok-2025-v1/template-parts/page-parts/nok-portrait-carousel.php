@@ -10,6 +10,7 @@
  * - team_members:repeater
  * - colors:color-selector(section-colors)!page-editable!default(nok-bg-darkblue nok-text-contrast)
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
+ * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * todo: work out the repeater
  * @var \NOK2025\V1\PageParts\FieldContext $context
@@ -25,7 +26,9 @@ $c = $context;
         <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
 
             <article class="nok-layout-grid nok-layout-grid__3-column nok-align-items-start">
+                <?php if (!$c->hide_title->isTrue()) : ?>
                 <h2 class="nok-fs-6 nok-column-first-2 nok-span-all-columns-to-xxl"><?= $c->title() ?></h2>
+                <?php endif; ?>
                 <div class="new-row nok-column-first-2 nok-span-all-columns-to-xxl"><?= $c->content(); ?></div>
 
 				<?php if ($c->has('button_url')) : ?>

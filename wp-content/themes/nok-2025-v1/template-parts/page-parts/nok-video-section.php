@@ -15,6 +15,7 @@
  * - achtergrondkleur:color-selector(backgrounds-simple)!page-editable
  * - tekstkleur:color-selector(text-extended)!page-editable!default(nok-text-contrast)
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie - heeft geen invloed als full section aan staat]!page-editable
+ * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  * @see TODO.md LOW-002 for field parser enhancements
@@ -83,7 +84,9 @@ if ( $video_url && ! $is_self_hosted ) {
     <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
         <article class="nok-video-section__content <?= $c->tekstkleur ?> nok-layout-grid nok-layout-grid__1-column">
 
+            <?php if (!$c->hide_title->isTrue()) : ?>
             <h2 class="nok-fs-6"><?= $c->title() ?></h2>
+            <?php endif; ?>
             <div class="nok-fs-body">
                 <?= $c->content(); ?>
             </div>

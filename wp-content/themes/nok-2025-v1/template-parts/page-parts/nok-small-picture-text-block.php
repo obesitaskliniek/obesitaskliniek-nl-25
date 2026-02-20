@@ -17,6 +17,7 @@
  * - video_poster:url!page-editable!descr[Video poster afbeelding URL]
  * - video_start:text!page-editable!descr[Video starttijd in seconden (bijv. 2.5)]
  * - autoplay:select(Automatisch::visibility|Klik om af te spelen::click|Klik om fullscreen af te spelen::off)!default(visibility)!descr[Autoplay gedrag voor achtergrondvideo]!page-editable
+ * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -52,7 +53,9 @@ $autoplay = $c->has('autoplay') ? $c->autoplay->raw() : 'visibility';
 						<?= $c->tagline ?>
                     </h2>
 				<?php endif; ?>
+                <?php if (!$c->hide_title->isTrue()) : ?>
                 <h2 class="nok-fs-6 nok-mb-1"><?= $c->title() ?></h2>
+                <?php endif; ?>
 				<?= $c->content(); ?>
 				<?php if ($c->has('button_url')) : ?>
                     <a role="button" href="<?= $c->button_url->url() ?>"

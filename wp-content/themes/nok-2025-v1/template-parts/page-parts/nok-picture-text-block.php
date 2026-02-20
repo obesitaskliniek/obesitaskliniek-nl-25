@@ -13,6 +13,7 @@
  * - tekstkleur:color-selector(text-extended)!page-editable!default(nok-text-contrast)
  * - circle_color:select(Blauw::var(--nok-darkerblue)|Wit::var(--nok-darkerblue)|Automatisch-lichter::oklch(from var(--bg-color) calc(l * 1.2) c h / 1)|Automatisch-donkerder::oklch(from var(--bg-color) calc(l * .8) c h / 1)|Uit::transparent)!page-editable!default(Uit)
  * - pull_down:checkbox!default(true)!page-editable
+ * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -51,7 +52,9 @@ $featured_image = Helpers::get_featured_image($border_class);
 						<?= $c->tagline ?>
                     </h2>
 				<?php endif; ?>
+				<?php if (!$c->hide_title->isTrue()) : ?>
 				<h2 class="nok-fs-6"><?= $c->title() ?></h2>
+				<?php endif; ?>
             </div>
 			<?php if ($left) : ?>
                 <div class="nok-column-first-lg-4

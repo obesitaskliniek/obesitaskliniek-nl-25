@@ -9,6 +9,7 @@
  * - lettergrootte:select(Vergroot::nok-fs-2|Normaal::)!page-editable!default(Vergroot)
  * - colors:color-selector(section-colors)!page-editable!default(nok-text-darkerblue nok-dark-text-contrast)
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
+ * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -19,7 +20,9 @@ $c = $context;
 <nok-section class="<?= $c->colors ?> <?= $c->collapse_bottom->isTrue('collapse-bottom', '') ?>">
     <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
         <article class="nok-layout-flex-column nok-align-items-<?= $c->layout->attr() ?> nok-column-gap-3 text-<?= $c->layout->attr() ?>">
+			<?php if (!$c->hide_title->isTrue()) : ?>
 			<h2 class="nok-fs-6"><?= $c->title() ?></h2>
+			<?php endif; ?>
 
             <div class="nok-layout-grid nok-layout-grid__1-column
                         pull-down-correction

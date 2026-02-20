@@ -18,6 +18,7 @@
  * - video_start:text!page-editable!descr[Video starttijd in seconden (bijv. 2.5). Laat leeg voor begin.]!page-editable
  * - autoplay:select(Automatisch::visibility|Klik om af te spelen::click|Klik om fullscreen af te spelen::off)!default(visibility)!descr[Autoplay gedrag voor desktop achtergrondvideo]!page-editable
  * - mobile_layout:select(Verbergen::collapse|Stapelen::stack)!page-editable!default(collapse)!descr[Hoe visual (afbeelding/video) tonen op mobiel? Verbergen: visual niet zichtbaar op mobiel (video toont compacte link). Stapelen: visual onder content.]
+ * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -55,7 +56,9 @@ ob_start();
         <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-3 nok-fs-to-md-2">
             <?= $c->tagline ?>
         </h2>
+        <?php if (!$c->hide_title->isTrue()) : ?>
         <h2 class="nok-fs-6"><?= $c->title() ?></h2>
+        <?php endif; ?>
     </div>
     <div class="nok-square-block__text nok-layout-grid nok-layout-grid__1-column">
         <?= $c->content(); ?>

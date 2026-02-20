@@ -18,6 +18,7 @@
  * - show_date:checkbox!default(true)!descr[Toon publicatiedatum]
  * - show_category:checkbox!default(true)!descr[Toon categorie badge]
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
+ * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -69,7 +70,9 @@ $scroller_id = 'kennisbank-carousel-' . wp_unique_id();
 
 				<!-- Left column: title, content, links, nav buttons -->
 				<div class="nok-layout-flex-column nok-align-items-stretch">
+					<?php if (!$c->hide_title->isTrue()) : ?>
 					<h2 class="nok-fs-6"><?= $c->title() ?></h2>
+					<?php endif; ?>
 
 					<?php if ($c->content()) : ?>
 						<div class="nok-text-content margin-paragraphs"><?= $c->content(); ?></div>

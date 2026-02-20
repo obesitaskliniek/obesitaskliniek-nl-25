@@ -12,6 +12,7 @@
  * - shuffle_blocks:checkbox!default(false)!descr[Willekeurige volgorde?]
  * - read_more:text!default(Lees verder)
  * - blocks:repeater(icon:icon-selector,title:text,content:textarea,link_url:url)
+ * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -33,7 +34,9 @@ $blocks = $c->blocks->json(array_fill(0, 6, [
         <div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>">
 
             <article class="nok-layout-grid nok-columns-10 nok-align-items-start nok-column-gap-3">
+                <?php if (!$c->hide_title->isTrue()) : ?>
                 <h2 class="nok-fs-6 nok-align-self-stretch nok-mb-2"><?= $c->title() ?></h2>
+                <?php endif; ?>
 
                 <div class="nok-layout-grid nok-layout-grid__1-column nok-text-content <?= $c->alternatieve_layout->is(true,'nok-align-self-stretch nok-column-first-xl-4', 'nok-align-self-stretch'); ?>"><?= $c->content(); ?></div>
 

@@ -10,6 +10,7 @@
  * - button_text:text!default(Lees meer)
  * - button_url:url
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
+ * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -31,7 +32,9 @@ $block_colors = $c->colors->is('Blauw op donkerblauw',
             <div class="nok-square-block__icon">
 				<?= Assets::getIcon($c->icon->raw()) ?>
             </div>
+            <?php if (!$c->hide_title->isTrue()) : ?>
             <h2 class="nok-fs-6 nok-square-block__heading"><?= $c->title() ?></h2>
+            <?php endif; ?>
             <div class="nok-square-block__text nok-layout-grid nok-layout-grid__1-column"><?= $c->content(); ?></div>
 
 			<?php if ($c->has('button_url')): ?>

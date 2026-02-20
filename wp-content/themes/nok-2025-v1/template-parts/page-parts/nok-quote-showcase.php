@@ -19,6 +19,7 @@
  * - quote_items:repeater(quote:text,name:text,subname:text)!descr[Voeg handmatige quotes toe om te tonen in de quote showcase]
  * - accordion_items:repeater(title:text,content:textarea,button_text:text,button_url:url)!descr[Voeg accordion items toe die naast de quote showcase getoond worden]
  * - quote_posts:post_repeater(post:ervaringen)!descr[Kies specifieke ervaringsverhalen om te tonen in de quote showcase]
+ * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -62,7 +63,7 @@ $circle_offset = "--circle-offset:" . $c->layout->is( 'left', 'calc(50vw - (var(
         <article
                 class="nok-layout-grid nok-columns-1 nok-columns-xl-6 nok-columns-xxl-5 nok-align-items-start nok-column-gap-3">
             <?php
-            if ( $c->layout->is( 'accordion-left-title-top' ) ) : ?>
+            if ( $c->layout->is( 'accordion-left-title-top' ) && !$c->hide_title->isTrue() ) : ?>
                 <div class="nok-span-all-columns nok-mb-1"><h2 class="nok-fs-6 nok-mb-0_5"><?= $c->title() ?></h2></div>
             <?php endif;
             ?>
@@ -70,7 +71,7 @@ $circle_offset = "--circle-offset:" . $c->layout->is( 'left', 'calc(50vw - (var(
             <div class="nok-layout-flex-column nok-align-items-stretch <?= $quote_column_class; ?>"
                  style="order:<?= $quote_column_order; ?>">
                 <?php
-                if ( ! $c->layout->is( 'accordion-left-title-top' ) ) : ?>
+                if ( ! $c->layout->is( 'accordion-left-title-top' ) && !$c->hide_title->isTrue() ) : ?>
                     <h2 class="nok-fs-6"><?= $c->title() ?></h2>
                 <?php endif; ?>
 

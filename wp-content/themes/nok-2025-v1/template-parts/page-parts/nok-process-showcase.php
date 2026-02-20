@@ -11,6 +11,7 @@
  *  - circle_color:select(Blauw::var(--nok-darkerblue)|Wit::var(--nok-darkerblue)|Geel::var(--nok-yellow--darker)|Automatisch-lichter::oklch(from var(--bg-color) calc(l * 1.1) c h / 1)|Automatisch-donkerder::oklch(from var(--bg-color) calc(l * .9) c h / 1)|Uit::transparent)!page-editable!default(Uit)
  *  - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  * - items:repeater(tab_title:text,panel_title:text,panel_content:textarea,button_text:text,button_url:url)!descr[Voeg proces stappen toe]
+ * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -51,7 +52,9 @@ $arrow_inactive_class = 'nok-text-darkblue';
                  data-autoplay="<?= $c->autoplay->isTrue( 'true', 'false' ) ?>"
                  data-autoplay-interval="<?= $c->autoplay_interval->attr() ?>">
 
+            <?php if (!$c->hide_title->isTrue()) : ?>
             <h2 class="nok-fs-6 nok-mb-2"><?= $c->title() ?></h2>
+            <?php endif; ?>
 
             <?= $c->content(); ?>
 

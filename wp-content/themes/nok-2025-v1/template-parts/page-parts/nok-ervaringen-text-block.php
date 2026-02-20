@@ -15,6 +15,7 @@
  * - circle_color:select(Blauw::var(--nok-darkerblue)|Wit::var(--nok-darkerblue)|Automatisch-lichter::oklch(from var(--bg-color) calc(l * 1.2) c h / 1)|Automatisch-donkerder::oklch(from var(--bg-color) calc(l * .8) c h / 1)|Uit::transparent)!page-editable!default(Uit)
  * - quote_block_colors:color-selector(quote-block-colors)!page-editable!default(nok-bg-white nok-text-darkestblue)
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
+ * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -53,7 +54,9 @@ $scroller_id = 'ervaringen-scroller';
                             nok-align-items-center
                             nok-column-gap-3">
             <div class="nok-align-self-to-lg-stretch nok-column-first-2 nok-layout-flex-column nok-align-items-stretch nok-fs-2">
+				<?php if (!$c->hide_title->isTrue()) : ?>
 				<h2 class="nok-fs-6"><?= $c->title() ?></h2>
+				<?php endif; ?>
 				<?= $c->content(); ?>
                 <?php if ($c->carousel_buttons->isTrue()) : ?>
                 <div class="nok-button-group">

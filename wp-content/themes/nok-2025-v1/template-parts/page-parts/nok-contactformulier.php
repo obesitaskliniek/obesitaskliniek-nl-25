@@ -8,6 +8,7 @@
  * - show_intro:checkbox!default(true)!descr[Toon introductietekst boven het formulier]
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  * - preselect_vestiging:checkbox!page-editable!default(false)!descr[Selecteer automatisch de vestiging van deze pagina (verbergt dropdown)]
+ * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -58,7 +59,9 @@ $field_values = $vestiging_value ? 'contactform_vestiging=' . $vestiging_value :
 
 		<?php if ($c->show_intro->isTrue()): ?>
 			<div class="nok-layout-grid nok-mb-2">
-				<h2 class="nok-fs-6"><?= $c->title() ?></h2>
+				<?php if (!$c->hide_title->isTrue()) : ?>
+			<h2 class="nok-fs-6"><?= $c->title() ?></h2>
+			<?php endif; ?>
 				<?php if ($hide_vestiging_dropdown): ?>
 					<?php
 					// Get city name from vestiging meta

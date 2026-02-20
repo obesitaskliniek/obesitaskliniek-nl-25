@@ -52,6 +52,7 @@
  * - block_2_video_hq:url!page-editable!descr[Video HQ URL blok 2]
  * - block_2_video_poster:url!page-editable!descr[Video poster URL blok 2]
  * - block_2_media_position:select(Boven::top|Onder::bottom)!default(top)!descr[Media positie blok 2]!page-editable
+ * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -229,7 +230,7 @@ function render_media_element(array $block): string {
 					nok-layout-grid nok-layout-grid__1-column
 					nok-align-items-start">
 
-			<?php if ($c->title()) : ?>
+			<?php if ($c->title() && !$c->hide_title->isTrue()) : ?>
 				<h2 class="nok-fs-6 nok-mb-1"><?= $c->title() ?></h2>
 			<?php endif; ?>
 
@@ -239,7 +240,7 @@ function render_media_element(array $block): string {
 				</div>
 			<?php endif; ?>
 
-			<div class="nok-layout-grid fill-fill nok-columns-to-lg-1 nok-column-gap-3 nok-align-items-stretch nok-mt-2">
+			<div class="nok-layout-grid fill-fill nok-columns-to-lg-1 nok-column-gap-3 nok-align-items-stretch <?php $c->hide_title->isTrue(null,'nok-mt-2');?>">
 				<?php foreach ($blocks as $block) :
 					$has_media = $is_media_style && block_has_media($block);
 					$media_at_bottom = $block['media_position'] === 'bottom';
