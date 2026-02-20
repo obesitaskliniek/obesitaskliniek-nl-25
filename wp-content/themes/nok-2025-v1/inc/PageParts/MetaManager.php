@@ -153,7 +153,13 @@ class MetaManager {
 			'type'              => 'string',
 			'show_in_rest'      => true,
 			'single'            => true,
-			'sanitize_callback' => 'sanitize_title',
+			'sanitize_callback' => function ( $value ) {
+				// Cannot use sanitize_title directly as sanitize_callback because
+				// WordPress passes ($value, $meta_key, ...) and sanitize_title
+				// treats the second arg as fallback_title — so empty values
+				// would return the meta key name as the value.
+				return sanitize_title( $value );
+			},
 			'auth_callback'     => function () {
 				return current_user_can( 'edit_posts' );
 			},

@@ -1,25 +1,11 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { InspectorControls, useBlockProps, BlockIcon } from '@wordpress/block-editor';
-import { SelectControl, PanelBody, TextControl, ToggleControl, Placeholder } from '@wordpress/components';
+import { SelectControl, PanelBody, TextControl, TextareaControl, ToggleControl, Placeholder } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { video } from '@wordpress/icons';
+import ColorSelector from '../../components/ColorSelector';
 
 const textDomain = 'nok-2025-v1';
-
-// Background color options matching page-part field
-const BACKGROUND_OPTIONS = [
-    { label: __('Blauw', textDomain), value: 'nok-bg-darkerblue' },
-    { label: __('Wit', textDomain), value: 'nok-bg-white nok-dark-bg-darkestblue' },
-    { label: __('Donkerder', textDomain), value: 'nok-bg-body--darker' },
-    { label: __('Transparant', textDomain), value: '' },
-];
-
-// Text color options matching page-part field
-const TEXT_COLOR_OPTIONS = [
-    { label: __('Standaard', textDomain), value: 'nok-text-contrast' },
-    { label: __('Wit', textDomain), value: 'nok-text-white' },
-    { label: __('Blauw', textDomain), value: 'nok-text-darkerblue' },
-];
 
 // Autoplay options for self-hosted videos
 const AUTOPLAY_OPTIONS = [
@@ -40,7 +26,9 @@ registerBlockType('nok2025/nok-video-section', {
             fullSection,
             backgroundColor,
             textColor,
-            narrowSection
+            narrowSection,
+            sectionTitle,
+            sectionDescription
         } = attributes;
 
         const blockProps = useBlockProps({
@@ -133,7 +121,9 @@ registerBlockType('nok2025/nok-video-section', {
         };
 
         // Get display label for current settings
-        const bgLabel = BACKGROUND_OPTIONS.find(opt => opt.value === backgroundColor)?.label || backgroundColor;
+        const palettes = window.PagePartDesignSettings?.colorPalettes || {};
+        const bgPalette = palettes['backgrounds-simple'] || [];
+        const bgLabel = bgPalette.find(opt => opt.value === backgroundColor)?.label || backgroundColor || __('Transparant', textDomain);
 
         return (
             <>
@@ -200,19 +190,38 @@ registerBlockType('nok2025/nok-video-section', {
                             onChange={(value) => setAttributes({ fullSection: value })}
                         />
 
-                        <SelectControl
-                            label={__('Achtergrondkleur', textDomain)}
+                        <label style={{ display: 'block', fontSize: '11px', fontWeight: '500', textTransform: 'uppercase', marginBottom: '4px' }}>
+                            {__('Achtergrondkleur', textDomain)}
+                        </label>
+                        <ColorSelector
                             value={backgroundColor}
-                            options={BACKGROUND_OPTIONS}
+                            palette="backgrounds-simple"
                             onChange={(value) => setAttributes({ backgroundColor: value })}
                         />
 
                         {!fullSection && (
                             <>
-                                <SelectControl
-                                    label={__('Tekstkleur', textDomain)}
+                                <TextControl
+                                    label={__('Sectie titel', textDomain)}
+                                    value={sectionTitle}
+                                    onChange={(value) => setAttributes({ sectionTitle: value })}
+                                    help={__('Optioneel: wordt als h2 boven de video getoond', textDomain)}
+                                    placeholder={__('Geen titel', textDomain)}
+                                />
+                                <TextareaControl
+                                    label={__('Beschrijving', textDomain)}
+                                    value={sectionDescription}
+                                    onChange={(value) => setAttributes({ sectionDescription: value })}
+                                    help={__('Optioneel: wordt als paragraaf onder de titel getoond', textDomain)}
+                                    rows={3}
+                                />
+
+                                <label style={{ display: 'block', fontSize: '11px', fontWeight: '500', textTransform: 'uppercase', marginBottom: '4px' }}>
+                                    {__('Tekstkleur', textDomain)}
+                                </label>
+                                <ColorSelector
                                     value={textColor}
-                                    options={TEXT_COLOR_OPTIONS}
+                                    palette="text-extended"
                                     onChange={(value) => setAttributes({ textColor: value })}
                                 />
 

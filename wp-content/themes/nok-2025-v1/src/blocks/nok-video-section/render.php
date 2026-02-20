@@ -23,10 +23,13 @@ return function( array $attributes ): string {
 		'video_hq'        => $attributes['videoHq'] ?? '',
 		'video_poster'    => $attributes['videoPoster'] ?? '',
 		'video_start'     => $attributes['videoStart'] ?? '',
+		'autoplay'        => $attributes['autoplay'] ?? 'visibility',
 		'full_section'    => ( $attributes['fullSection'] ?? true ) ? '1' : '0',
 		'achtergrondkleur' => $attributes['backgroundColor'] ?? 'nok-bg-darkerblue',
 		'tekstkleur'      => $attributes['textColor'] ?? 'nok-text-contrast',
 		'narrow_section'  => ( $attributes['narrowSection'] ?? false ) ? '1' : '0',
+		'section_title'       => $attributes['sectionTitle'] ?? '',
+		'section_description' => $attributes['sectionDescription'] ?? '',
 	];
 
 	$renderer = new TemplateRenderer();

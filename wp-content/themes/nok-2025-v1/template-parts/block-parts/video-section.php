@@ -16,6 +16,8 @@
  * - achtergrondkleur:select(Blauw::nok-bg-darkerblue|Wit::nok-bg-white nok-dark-bg-darkestblue|Donkerder::nok-bg-body--darker|Transparant::)
  * - tekstkleur:select(Standaard::nok-text-contrast|Wit::nok-text-white|Blauw::nok-text-darkerblue)
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie - heeft geen invloed als full section aan staat]
+ * - section_title:text
+ * - section_description:text
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  * @var array $attributes Block attributes (includes anchor, align)
@@ -93,6 +95,13 @@ $anchor_attr = ! empty( $attributes['anchor'] )
 	<?php else : ?>
 		<div class="nok-section__inner <?= $c->narrow_section->isTrue( 'nok-section-narrow' ); ?>">
 			<article class="nok-video-section__content <?= $c->tekstkleur ?> nok-layout-grid nok-layout-grid__1-column">
+
+				<?php if ( $c->has( 'section_title' ) && $c->section_title->raw() !== '' ) : ?>
+					<h2 class="nok-fs-6"><?= $c->section_title ?></h2>
+				<?php endif; ?>
+				<?php if ( $c->has( 'section_description' ) && $c->section_description->raw() !== '' ) : ?>
+					<p class="nok-fs-body"><?= nl2br( $c->section_description ) ?></p>
+				<?php endif; ?>
 
 				<?php if ( $video_url && $is_self_hosted ) : ?>
 					<div class="nok-video-background nok-rounded-border-large"

@@ -149,6 +149,16 @@ class Colors {
 				'color' => self::COLOR_DEFINITIONS['nok-bg-white'],
 			],
 			[
+				'label' => 'Body',
+				'value' => 'nok-bg-body',
+				'color' => self::COLOR_DEFINITIONS['nok-bg-body'],
+			],
+			[
+				'label' => 'Body (donkerder)',
+				'value' => 'nok-bg-body--darker',
+				'color' => self::COLOR_DEFINITIONS['nok-bg-body--darker'],
+			],
+			[
 				'label' => 'Transparant',
 				'value' => '',
 				'color' => 'transparent',
@@ -176,7 +186,12 @@ class Colors {
 				'color' => self::COLOR_DEFINITIONS['nok-bg-white'],
 			],
 			[
-				'label' => 'Donkerder',
+				'label' => 'Body',
+				'value' => 'nok-bg-body',
+				'color' => self::COLOR_DEFINITIONS['nok-bg-body'],
+			],
+			[
+				'label' => 'Body (donkerder)',
 				'value' => 'nok-bg-body--darker',
 				'color' => self::COLOR_DEFINITIONS['nok-bg-body--darker'],
 			],

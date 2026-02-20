@@ -29,6 +29,10 @@
       "type": "string",
       "default": ""
     },
+    "autoplay": {
+      "type": "string",
+      "default": "visibility"
+    },
     "fullSection": {
       "type": "boolean",
       "default": true
@@ -44,6 +48,14 @@
     "narrowSection": {
       "type": "boolean",
       "default": false
+    },
+    "sectionTitle": {
+      "type": "string",
+      "default": ""
+    },
+    "sectionDescription": {
+      "type": "string",
+      "default": ""
     }
   },
   "supports": {

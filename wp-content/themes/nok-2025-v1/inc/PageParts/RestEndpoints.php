@@ -78,6 +78,8 @@ class RestEndpoints {
 		'acf-post-type',
 		'acf-taxonomy',
 		'acf-ui-options-page',
+		'page_part',
+		'template_layout',
 	];
 
 	/**
@@ -667,19 +669,22 @@ class RestEndpoints {
 			// WordPress default search
 			$args['s'] = $search;
 
-			// Add explicit title search as fallback
+			// Add full-phrase title match as fallback (WP tokenizes by word)
 			$search_filter = function($search, $wp_query) use ($request) {
 				global $wpdb;
 				$search_term = $request->get_param('search');
-				if (empty($search_term)) {
+				if (empty($search_term) || empty(trim($search))) {
 					return $search;
 				}
 
-				// Add OR condition for exact title match
+				// Insert OR inside the outermost closing paren of the search clause
+				// to keep it grouped under the AND with post_type/post_status conditions.
+				// Without this, the OR would create a top-level condition that bypasses
+				// post_type restrictions (SQL precedence: AND binds tighter than OR).
 				$search_term_like = '%' . $wpdb->esc_like($search_term) . '%';
-				$search .= $wpdb->prepare(" OR {$wpdb->posts}.post_title LIKE %s", $search_term_like);
+				$or_clause = $wpdb->prepare(" OR {$wpdb->posts}.post_title LIKE %s", $search_term_like);
 
-				return $search;
+				return substr_replace($search, $or_clause . ')', -1);
 			};
 			add_filter('posts_search', $search_filter, 10, 2);
 		}
