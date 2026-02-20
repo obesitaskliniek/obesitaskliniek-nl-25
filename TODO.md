@@ -54,7 +54,7 @@ If user content is ever needed, implement DOMPurify sanitization first.
 ### MED-003: Usage Tracking System
 **Priority:** Medium
 
-Implement usage tracking for page parts to identify unused components.
+Implement usage tracking for page parts to identify unused components. For example, to find page parts that are orphaned (defined as posts but not used in any page).
 
 ---
 
