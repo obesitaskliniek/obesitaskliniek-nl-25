@@ -1,5 +1,5 @@
 {
-  "apiVersion": 2,
+  "apiVersion": 3,
   "name": "nok2025/nok-attachment-downloads",
   "title": "NOK Downloads Sectie",
   "description": "Toont een lijst van downloadbare bijlagen (PDF, documenten, etc.) die aan deze pagina/artikel zijn gekoppeld.",

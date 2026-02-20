@@ -1,5 +1,5 @@
 {
-  "apiVersion": 2,
+  "apiVersion": 3,
   "name": "nok2025/embed-nok-post-part",
   "title": "NOK Post Part",
   "description": "Voeg een post-part widget in (bijv. BMI calculator).",

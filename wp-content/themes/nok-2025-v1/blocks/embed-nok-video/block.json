@@ -1,5 +1,5 @@
 {
-  "apiVersion": 2,
+  "apiVersion": 3,
   "name": "nok2025/embed-nok-video",
   "title": "NOK Video",
   "description": "Voeg een video in met afspeel knop overlay.",

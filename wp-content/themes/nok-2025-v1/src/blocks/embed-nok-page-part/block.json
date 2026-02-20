@@ -1,5 +1,5 @@
 {
-  "apiVersion": 2,
+  "apiVersion": 3,
   "name": "nok2025/embed-nok-page-part",
   "title": "Embed NOK Page Part",
   "description": "Voeg een paginablok in.",

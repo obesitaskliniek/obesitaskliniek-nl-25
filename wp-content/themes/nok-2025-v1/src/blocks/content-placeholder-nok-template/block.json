@@ -1,5 +1,5 @@
 {
-  "apiVersion": 2,
+  "apiVersion": 3,
   "name": "nok2025/content-placeholder-nok-template",
   "title": "NOK Template Inhoud Placeholder",
   "description": "Geeft de hoofdinhoud van de post weer binnen een template layout.",
