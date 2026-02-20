@@ -4,7 +4,7 @@
  * Description: Two side-by-side square blocks with customizable content, colors, and buttons. Optionally includes media (image/video) glued to each card.
  * Slug: nok-double-text-block
  * Custom Fields:
- * - colors:color-selector(backgrounds)!page-editable!default()
+ * - colors:color-selector(backgrounds)!page-editable!default(nok-bg-body)
  * - tekstkleur:color-selector(text)!page-editable!default(nok-text-darkerblue)
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  * - layout:select(Links eerst::left|Rechts eerst::right)!page-editable!default(left)
@@ -123,18 +123,22 @@ $blocks = [$block_1, $block_2];
 /**
  * Check if block has media (video takes precedence over image)
  */
+if (!function_exists('block_has_media')) {
 function block_has_media(array $block): bool {
 	return $block['video_lq']->raw() || $block['image']->raw();
+}
 }
 
 /**
  * Render the content block (nok-square-block) HTML
  */
+if (!function_exists('render_content_block')) {
 function render_content_block(array $block, string $shadow): string {
+	$no_padding = !$block['bg']->raw() && $shadow === 'false';
 	ob_start();
 	?>
 	<nok-square-block
-		class="link-bottom <?= esc_attr($block['bg']) ?> <?= esc_attr($block['text']) ?>"
+		class="link-bottom <?= esc_attr($block['bg']) ?> <?= esc_attr($block['text']) ?> <?= $no_padding ? 'nok-p-0' : '' ?>"
 		data-shadow="<?= esc_attr($shadow) ?>">
 
 		<?php if ($block['title']->raw()) : ?>
@@ -180,11 +184,13 @@ function render_content_block(array $block, string $shadow): string {
 	<?php
 	return ob_get_clean();
 }
+}
 
 /**
  * Render media element (video or image)
  * Video takes precedence over image
  */
+if (!function_exists('render_media_element')) {
 function render_media_element(array $block): string {
 	$has_video = $block['video_lq']->raw();
 	$has_image = $block['image']->raw();
@@ -220,6 +226,7 @@ function render_media_element(array $block): string {
 	}
 
 	return ob_get_clean();
+}
 }
 ?>
 <nok-section class="<?= $c->colors ?>">
@@ -269,8 +276,9 @@ function render_media_element(array $block): string {
 							?>
 						</div>
 					<?php else : ?>
+						<?php $no_padding = !$block['bg']->raw() && $shadow === 'false'; ?>
 						<nok-square-block
-								class="link-bottom <?= esc_attr($wrapper_classes) ?> <?= $block['bg'] ?> <?= $block['text'] ?>"
+								class="link-bottom <?= esc_attr($wrapper_classes) ?> <?= $block['bg'] ?> <?= $block['text'] ?> <?= $no_padding ? 'nok-p-0' : '' ?>"
 								data-shadow="<?= $shadow ?>"
 								<?php if ($delay_style) : ?>style="<?= esc_attr($delay_style) ?>"<?php endif; ?>>
 
