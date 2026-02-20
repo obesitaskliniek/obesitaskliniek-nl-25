@@ -19,7 +19,9 @@ article {
     }
   }
   //Overrides
-  @at-root body.nok-single-ervaringen nok-section article h2.wp-block-heading.nok-fs-6 {
+  @at-root body.nok-single-ervaringen nok-section article h2.wp-block-heading.nok-fs-6,
+  body.nok-single-kennisbank nok-section article h2.wp-block-heading.nok-fs-6 {
+    margin-top: var(--nok-space-fluid-md);
     @include components-base.rfs(components-base.$h3-font-size, --nok-font-size-6);
   }
 }
