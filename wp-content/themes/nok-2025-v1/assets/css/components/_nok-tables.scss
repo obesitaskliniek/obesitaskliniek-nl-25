@@ -56,7 +56,7 @@
       // Bottom border between rows
       &:not(:last-child) {
         td {
-          border-bottom: 1px solid var(--nok-lightgrey--lighter);
+          border-bottom: 1px solid rgba(255,255,255,0.15);
 
           @media (prefers-color-scheme: dark) {
             border-bottom-color: var(--nok-darkerblue);
@@ -78,7 +78,7 @@
     td {
       padding: calc(components-base.$padding-base * 0.75) components-base.$padding-base;
       line-height: components-base.$default-line-height;
-      color: var(--nok-darkerblue);
+      //color: var(--nok-darkerblue);
       border: none;
       vertical-align: top;
 
@@ -104,19 +104,11 @@
 
       // Striped rows - odd rows get subtle background
       &:nth-child(odd) {
-        background-color: rgba(var(--nok-lightgrey-rgb), 0.4);
-
-        @media (prefers-color-scheme: dark) {
-          background-color: var(--nok-darkerblue);
-        }
+        background-color: rgba(0, 0, 0, 0.15);
       }
 
       &:nth-child(even) {
-        background-color: rgba(var(--nok-lightgrey-rgb), 0.2);
-
-        @media (prefers-color-scheme: dark) {
-          background-color: var(--nok-darkestblue--lighter);
-        }
+        background-color: rgba(0, 0, 0, 0.05);
       }
     }
     border: 0 none;
@@ -158,7 +150,7 @@
     tbody tr {
       margin-bottom: calc(components-base.$padding-base * 0.5);
       @include components-base.nok-border-radius;
-      border: 1px solid var(--nok-lightgrey--lighter);
+      border: 1px solid rgba(255,255,255,0.15);
 
       &:last-child {
         margin-bottom: 0;
@@ -166,7 +158,7 @@
 
       td {
         padding: calc(components-base.$padding-base * 0.5) components-base.$padding-base;
-        border-bottom: 1px solid var(--nok-lightgrey--lighter);
+        border-bottom: 1px solid rgba(255,255,255,0.15);
 
         &:last-child {
           border-bottom: none;

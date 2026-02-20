@@ -26,7 +26,7 @@ img { max-width: 100%; height: auto; }
 h1, h2, h3, h4, h5, h6, p { margin-top: 0; }
 a { text-decoration: none; color: inherit; }
 button { cursor: pointer; border: 0; background: transparent; font: inherit; }
-ul, ol { list-style: none; padding: 0; margin: 0; }
+ul, ol { padding: 0; margin: 0; }
 
 // =============================================================================
 // 2. COLOR VARIABLES (only the colors used above the fold)
@@ -168,7 +168,7 @@ nok-top-navigation {
 nok-nav-menu-bar-dropdown { transform: translate3d(0%, -100%, 0); }
 nok-navigation-drawer { transform: translate3d(100%, 0%, 0); }
 nok-accessibility-helper { position: absolute; transform: translate3d(0%, -105%, 0); }
-nok-screen-mask { position: fixed; inset: 0; pointer-events: none; opacity: 0; }
+nok-screen-mask { position: fixed; inset: 0; pointer-events: none; }
 
 // =============================================================================
 // 6. HERO STRUCTURE (grid, sizing — not decorative styles)
