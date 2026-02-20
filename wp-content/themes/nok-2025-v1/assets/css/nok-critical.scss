@@ -168,7 +168,8 @@ nok-top-navigation {
 nok-nav-menu-bar-dropdown { transform: translate3d(0%, -100%, 0); }
 nok-navigation-drawer { transform: translate3d(100%, 0%, 0); }
 nok-accessibility-helper { position: absolute; transform: translate3d(0%, -105%, 0); }
-nok-screen-mask { position: fixed; inset: 0; pointer-events: none; }
+nok-screen-mask { position: fixed; inset: 0; pointer-events: none; --bg-alpha-value: 0; }
+nok-popup { opacity: 0; visibility: hidden; pointer-events: none; }
 
 // =============================================================================
 // 6. HERO STRUCTURE (grid, sizing — not decorative styles)
@@ -178,11 +179,15 @@ nok-hero {
   --footer-height: 0;
 }
 nok-hero:has(footer) { --footer-height: 6rem; }
-nok-hero:has(figure) { --figure-row-mobile: var(--section-max-width, 50vw); }
+nok-hero:has(figure) {
+  --figure-row-mobile: var(--section-max-width, 50vw);
+  .nok-hero__inner {
+    min-height: max(50vh, 500px);
+  }
+}
 nok-hero .nok-hero__inner {
   display: grid;
   grid-template-rows: auto 1fr auto auto;
-  min-height: max(50vh, 500px);
   width: 100%;
 }
 

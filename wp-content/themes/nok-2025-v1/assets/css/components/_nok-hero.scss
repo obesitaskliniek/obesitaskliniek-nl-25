@@ -21,6 +21,9 @@ nok-hero {
     position: relative;
     overflow: hidden;
 
+    grid-template-columns: repeat(var(--grid-columns, 2), var(--grid-column-size, 1fr));
+    grid-template-rows: calc(var(--nok-top-navigation-height, 4rem) - 1rem) auto var(--footer-height);
+
     .header,
     header,
     .article,
@@ -139,9 +142,6 @@ nok-hero {
       }
 
     }
-
-    grid-template-columns: repeat(var(--grid-columns, 2), var(--grid-column-size, 1fr));
-    grid-template-rows: calc(var(--nok-top-navigation-height, 4rem) - 1rem) auto var(--footer-height);
 
     /* Mobile */
     @include components-base.media-breakpoint-down(xl) {

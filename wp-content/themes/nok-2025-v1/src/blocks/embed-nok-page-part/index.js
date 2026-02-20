@@ -37,7 +37,8 @@ import {registerBlockType} from '@wordpress/blocks';
 import {InspectorControls, BlockControls, useBlockProps, MediaUpload, MediaUploadCheck} from '@wordpress/block-editor';
 import {SelectControl, PanelBody, Button, Popover, TextControl, TextareaControl, CheckboxControl, Icon, Notice} from '@wordpress/components';
 import {pencil} from '@wordpress/icons';
-import {useSelect, useDispatch} from '@wordpress/data';
+import {useSelect} from '@wordpress/data';
+import apiFetch from '@wordpress/api-fetch';
 import {__} from '@wordpress/i18n';
 import {useRef, useState, useEffect} from '@wordpress/element';
 import IconSelector from '../../components/IconSelector';
@@ -169,36 +170,19 @@ const CustomPagePartSelector = ({value, options, onChange, onOpen}) => {
                 }
             </Button>
             {isOpen && (
-                <div style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    zIndex: 99999
-                }}>
-                    <div
-                        style={{
-                            position: 'fixed',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            background: 'transparent'
-                        }}
-                        onClick={() => setIsOpen(false)}
-                    />
-                    <div style={{
-                        position: 'absolute',
-                        top: buttonRef.current?.getBoundingClientRect().bottom + window.scrollY,
-                        left: buttonRef.current?.getBoundingClientRect().left + window.scrollX,
+                <Popover
+                    anchor={buttonRef.current}
+                    placement="bottom-start"
+                    onClose={() => setIsOpen(false)}
+                    resize={false}
+                    shift
+                    style={{
                         width: buttonRef.current?.offsetWidth || 'auto',
-                        maxHeight: '180px',
-                        backgroundColor: 'white',
-                        border: '1px solid #ccc',
-                        borderRadius: '2px',
-                        boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-                        zIndex: 100000,
+                    }}
+                >
+                    <div style={{
+                        width: buttonRef.current?.offsetWidth || 300,
+                        maxHeight: '300px',
                         display: 'flex',
                         flexDirection: 'column',
                     }}>
@@ -206,10 +190,7 @@ const CustomPagePartSelector = ({value, options, onChange, onOpen}) => {
                         <div style={{
                             padding: '8px',
                             borderBottom: '1px solid #ddd',
-                            position: 'sticky',
-                            top: 0,
                             backgroundColor: 'white',
-                            zIndex: 1,
                         }}>
                             <input
                                 ref={searchInputRef}
@@ -239,7 +220,7 @@ const CustomPagePartSelector = ({value, options, onChange, onOpen}) => {
                         {/* Options list */}
                         <div style={{
                             overflowY: 'auto',
-                            maxHeight: '300px',
+                            flex: 1,
                         }}>
                             {filteredOptions.length === 0 ? (
                                 <div style={{
@@ -300,7 +281,7 @@ const CustomPagePartSelector = ({value, options, onChange, onOpen}) => {
                             )}
                         </div>
                     </div>
-                </div>
+                </Popover>
             )}
         </div>
     );
@@ -323,29 +304,23 @@ registerBlockType(blockName, {
     },
     edit: ({attributes, setAttributes}) => {
         const {postId, overrides, excludeFromSeo} = attributes;
-        const {invalidateResolution} = useDispatch('core');
 
-        const {parts, currentPostType} = useSelect(
-            select => ({
-                parts: select('core').getEntityRecords('postType', 'page_part', {
-                    per_page: -1,
-                    _embed: true,
-                    orderby: 'modified',
-                    order: 'desc'
-                }) || [],
-                currentPostType: select('core/editor').getCurrentPostType(),
-            }),
+        const [parts, setParts] = useState([]);
+
+        const currentPostType = useSelect(
+            select => select('core/editor').getCurrentPostType(),
             []
         );
 
-        const refreshPageParts = () => {
-            invalidateResolution('getEntityRecords', ['postType', 'page_part', {
-                per_page: -1,
-                _embed: true,
-                orderby: 'modified',
-                order: 'desc'
-            }]);
+        const fetchPageParts = () => {
+            apiFetch({
+                path: '/wp/v2/page-parts?per_page=999&orderby=modified&order=desc&_fields=id,title,meta,slug',
+            }).then(setParts).catch(err => console.error('Failed to load page parts:', err));
         };
+
+        useEffect(() => { fetchPageParts(); }, []);
+
+        const refreshPageParts = () => { fetchPageParts(); };
 
         // Get template registry from localized data
         const registry = (typeof window !== 'undefined' && window.PagePartDesignSettings)

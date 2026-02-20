@@ -72,6 +72,12 @@ class AssetManager {
 		$theme    = \NOK2025\V1\Theme::get_instance();
 		$dev_mode = $theme->is_development_mode();
 
+		// Debug mode: ?critical-css-only strips all deferred stylesheets
+		// so only the inlined critical CSS renders. Dev mode only.
+		if ( $dev_mode && isset( $_GET['critical-css-only'] ) ) {
+			return;
+		}
+
 		$css_url     = $this->resolve_asset_url( '/assets/css/nok-components.css', $dev_mode );
 		$css_version = $this->get_asset_version( '/assets/css/nok-components.css', $dev_mode );
 

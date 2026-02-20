@@ -37,6 +37,8 @@ class PostTypes {
 		add_action( 'template_redirect', [ $this, 'protect_post_types' ] );
 		add_filter( 'single_template', [ $this, 'kennisbank_category_template' ] );
 		add_filter( 'request', [ $this, 'disambiguate_kennisbank_urls' ] );
+		add_filter( 'rest_post_search_query', [ $this, 'exclude_internal_types_from_rest_search' ], 10, 2 );
+		add_filter( 'rest_page_part_collection_params', [ $this, 'raise_page_part_per_page_limit' ] );
 	}
 
 	/**
@@ -77,7 +79,7 @@ class PostTypes {
 			'description'         => __( 'Reusable page components that can be embedded into pages.', THEME_TEXT_DOMAIN ),
 			'public'              => true,
 			'publicly_queryable'  => true,
-			'exclude_from_search' => true,
+			'exclude_from_search' => false,
 			'show_ui'             => true,
 			'show_in_menu'        => true,
 			'show_in_nav_menus'   => false,
@@ -661,6 +663,47 @@ class PostTypes {
 			wp_safe_redirect( home_url( '/' ) );
 			exit;
 		}
+	}
+
+	/**
+	 * Raise per_page limit for page_part REST endpoint
+	 *
+	 * WordPress REST API caps per_page at 100 by default. Page parts need
+	 * a higher limit so the embed block selector can load all available parts.
+	 *
+	 * @param array $params Collection parameters.
+	 *
+	 * @return array Modified parameters with raised per_page maximum.
+	 */
+	public function raise_page_part_per_page_limit( array $params ): array {
+		if ( isset( $params['per_page'] ) ) {
+			$params['per_page']['maximum'] = 999;
+		}
+		return $params;
+	}
+
+	/**
+	 * Exclude internal post types from REST search results
+	 *
+	 * Prevents page_part and template_layout from appearing in Gutenberg's
+	 * link autocomplete, which uses the /wp/v2/search endpoint.
+	 *
+	 * Uses rest_post_search_query instead of exclude_from_search because
+	 * the latter also prevents Gutenberg's getEntityRecords() from listing
+	 * page parts in the embed block dropdown.
+	 *
+	 * @param array<string, mixed> $query_args WP_Query arguments for the search
+	 * @param \WP_REST_Request     $request    The REST request
+	 * @return array<string, mixed> Modified query arguments
+	 */
+	public function exclude_internal_types_from_rest_search( array $query_args, \WP_REST_Request $request ): array {
+		$excluded = [ 'page_part', 'template_layout' ];
+
+		if ( ! empty( $query_args['post_type'] ) && is_array( $query_args['post_type'] ) ) {
+			$query_args['post_type'] = array_values( array_diff( $query_args['post_type'], $excluded ) );
+		}
+
+		return $query_args;
 	}
 
 	/**

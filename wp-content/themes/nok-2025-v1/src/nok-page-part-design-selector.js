@@ -1,7 +1,7 @@
 import {useSelect, useDispatch} from '@wordpress/data';
 import {registerPlugin} from '@wordpress/plugins';
 import {PluginDocumentSettingPanel} from '@wordpress/editor';
-import {SelectControl, TextControl, TextareaControl, CheckboxControl, Button, Draggable} from '@wordpress/components';
+import {SelectControl, TextControl, TextareaControl, CheckboxControl, Button} from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import {logger} from '../assets/js/domule/core.log.mjs';
 import {Fragment, useRef, useState, useEffect, useMemo} from '@wordpress/element';
@@ -54,6 +54,9 @@ const PostSelector = ({value, onChange, postTypes = ['post'], categories = []}) 
     const [selectedPosts, setSelectedPosts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+    const [draggedIndex, setDraggedIndex] = useState(null);
+    const debounceTimerRef = useRef(null);
 
     const selectedIds = useMemo(() => {
         try {
@@ -63,54 +66,55 @@ const PostSelector = ({value, onChange, postTypes = ['post'], categories = []}) 
         }
     }, [value]);
 
+    // Debounce search term (300ms)
+    useEffect(() => {
+        debounceTimerRef.current = setTimeout(() => setDebouncedSearchTerm(searchTerm), 300);
+        return () => clearTimeout(debounceTimerRef.current);
+    }, [searchTerm]);
+
     // Fetch selected post details on mount
     useEffect(() => {
-        const fetchSelectedPosts = async () => {
-            if (selectedIds.length === 0) {
-                setSelectedPosts([]);
-                return;
-            }
+        if (selectedIds.length === 0) {
+            setSelectedPosts([]);
+            return;
+        }
 
-            try {
-                const params = new URLSearchParams({
-                    include: selectedIds.join(',')
-                });
-                const response = await fetch(`/wp-json/nok-2025-v1/v1/posts/query?${params}`);
-                const posts = await response.json();
-                setSelectedPosts(posts);
-            } catch (error) {
-                console.error('Failed to fetch selected posts:', error);
-            }
-        };
-
-        fetchSelectedPosts();
-    }, [selectedIds.join(',')]); // Proper dependencies
+        const params = new URLSearchParams({
+            post_type: postTypes.join(','),
+            include: selectedIds.join(',')
+        });
+        apiFetch({
+            path: `/nok-2025-v1/v1/posts/query?${params}`,
+        }).then(posts => {
+            const postsById = Object.fromEntries(posts.map(p => [p.id, p]));
+            setSelectedPosts(selectedIds.map(id => postsById[id]).filter(Boolean));
+        }).catch(error => {
+            console.error('Failed to fetch selected posts:', error);
+        });
+    }, [selectedIds.join(','), postTypes.join(',')]);
 
     // Fetch available posts
     useEffect(() => {
-        const fetchPosts = async () => {
-            setLoading(true);
-            try {
-                const params = new URLSearchParams({
-                    post_type: postTypes.join(','),
-                    exclude: selectedIds.join(','),
-                    search: searchTerm
-                });
+        setLoading(true);
+        const params = new URLSearchParams({
+            post_type: postTypes.join(','),
+            exclude: selectedIds.join(','),
+            search: debouncedSearchTerm
+        });
 
-                if (categories.length > 0) {
-                    params.append('categories', categories.join(','));
-                }
-                const response = await fetch(`/wp-json/nok-2025-v1/v1/posts/query?${params}`);
-                const posts = await response.json();
-                setAvailablePosts(posts);
-            } catch (error) {
-                console.error('Failed to fetch posts:', error);
-            }
+        if (categories.length > 0) {
+            params.append('categories', categories.join(','));
+        }
+        apiFetch({
+            path: `/nok-2025-v1/v1/posts/query?${params}`,
+        }).then(posts => {
+            setAvailablePosts(posts);
+        }).catch(error => {
+            console.error('Failed to fetch posts:', error);
+        }).finally(() => {
             setLoading(false);
-        };
-
-        fetchPosts();
-    }, [selectedIds.join(','), searchTerm, postTypes.join(','), categories.join(',')]);
+        });
+    }, [selectedIds.join(','), debouncedSearchTerm, postTypes.join(','), categories.join(',')]);
 
     const addPost = (post) => {
         const newIds = [...selectedIds, post.id];
@@ -124,8 +128,87 @@ const PostSelector = ({value, onChange, postTypes = ['post'], categories = []}) 
         onChange(JSON.stringify(newIds));
     };
 
+    const movePost = (fromIndex, toIndex) => {
+        const newPosts = [...selectedPosts];
+        const [moved] = newPosts.splice(fromIndex, 1);
+        newPosts.splice(toIndex, 0, moved);
+        setSelectedPosts(newPosts);
+        onChange(JSON.stringify(newPosts.map(p => p.id)));
+    };
+
+    const handleDragStart = (e, index) => {
+        setDraggedIndex(index);
+        e.dataTransfer.effectAllowed = 'move';
+        e.currentTarget.style.opacity = '0.5';
+    };
+
+    const handleDragEnd = (e) => {
+        e.currentTarget.style.opacity = '1';
+        setDraggedIndex(null);
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+    };
+
+    const handleDrop = (e, dropIndex) => {
+        e.preventDefault();
+        if (draggedIndex !== null && draggedIndex !== dropIndex) {
+            movePost(draggedIndex, dropIndex);
+        }
+    };
+
     return (
         <div>
+            {selectedPosts.length > 0 && (
+                <div style={{marginBottom: '8px'}}>
+                    <div style={{fontSize: '11px', fontWeight: '600', color: '#1e1e1e', marginBottom: '4px'}}>
+                        Geselecteerd ({selectedPosts.length})
+                    </div>
+                    {selectedPosts.map((post, index) => (
+                        <div
+                            key={post.id}
+                            draggable
+                            onDragStart={(e) => handleDragStart(e, index)}
+                            onDragEnd={handleDragEnd}
+                            onDragOver={handleDragOver}
+                            onDrop={(e) => handleDrop(e, index)}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                padding: '5px 8px',
+                                background: draggedIndex === index ? '#e0e0e0' : '#f0f0f0',
+                                marginTop: '3px',
+                                borderRadius: '3px',
+                                cursor: 'grab',
+                                transition: 'background 0.15s'
+                            }}
+                        >
+                            <span style={{color: '#999', fontSize: '12px', userSelect: 'none', flexShrink: 0}}>⋮⋮</span>
+                            <span style={{flex: 1, fontSize: '13px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>{post.title}</span>
+                            <button
+                                type="button"
+                                onClick={() => removePost(post.id)}
+                                style={{
+                                    background: 'none',
+                                    border: 'none',
+                                    color: '#cc0000',
+                                    cursor: 'pointer',
+                                    padding: '0 4px',
+                                    fontSize: '16px',
+                                    lineHeight: 1,
+                                    flexShrink: 0
+                                }}
+                            >
+                                ×
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            )}
+
             <div style={{marginBottom: '8px'}}>
                 <input
                     type="text"
@@ -140,37 +223,6 @@ const PostSelector = ({value, onChange, postTypes = ['post'], categories = []}) 
                     }}
                 />
             </div>
-
-            {selectedPosts.length > 0 && (
-                <div style={{marginBottom: '8px'}}>
-                    <strong>Selected:</strong>
-                    {selectedPosts.map(post => (
-                        <div key={post.id} style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            padding: '4px 8px',
-                            background: '#f0f0f0',
-                            marginTop: '4px',
-                            borderRadius: '3px'
-                        }}>
-                            <span>{post.title}</span>
-                            <button
-                                type="button"
-                                onClick={() => removePost(post.id)}
-                                style={{
-                                    background: 'none',
-                                    border: 'none',
-                                    color: '#cc0000',
-                                    cursor: 'pointer',
-                                    padding: '0 4px'
-                                }}
-                            >
-                                ×
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            )}
 
             <div style={{maxHeight: '200px', overflowY: 'auto', border: '1px solid #ddd', borderRadius: '3px'}}>
                 {loading ? (
@@ -189,8 +241,8 @@ const PostSelector = ({value, onChange, postTypes = ['post'], categories = []}) 
                                 cursor: 'pointer',
                                 borderBottom: '1px solid #eee'
                             }}
-                            onMouseEnter={(e) => e.target.style.background = '#f9f9f9'}
-                            onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                            onMouseEnter={(e) => e.currentTarget.style.background = '#f9f9f9'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                         >
                             <div style={{fontWeight: '500'}}>{post.title}</div>
                             <div style={{fontSize: '11px', color: '#666'}}>
