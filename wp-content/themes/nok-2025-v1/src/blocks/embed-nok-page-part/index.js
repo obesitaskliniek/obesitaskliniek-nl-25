@@ -507,8 +507,30 @@ registerBlockType(blockName, {
                             </PanelBody>
                         )}
 
-                        {postId !== 0 && (
-                            <PanelBody title={__('Pagina-afhankelijke overrides', textDomain)} initialOpen={false}>
+                        {postId !== 0 && (() => {
+                            const activeOverrideCount = Object.values(overrides).filter(v => v !== '' && v !== null && v !== undefined).length;
+                            return (
+                            <PanelBody
+                                title={
+                                    <span style={{display: 'inline-flex', alignItems: 'center', gap: '6px'}}>
+                                        {__('Pagina-afhankelijke overrides', textDomain)}
+                                        {activeOverrideCount > 0 && (
+                                            <span style={{
+                                                display: 'inline-flex',
+                                                alignItems: 'center',
+                                                gap: '3px',
+                                                color: '#00a32a',
+                                                fontSize: '12px',
+                                                fontWeight: '600',
+                                            }}>
+                                                <span style={{fontSize: '14px', lineHeight: 1}}>&#10003;</span>
+                                                {activeOverrideCount}
+                                            </span>
+                                        )}
+                                    </span>
+                                }
+                                initialOpen={false}
+                            >
                                 <p style={{fontSize: '12px', color: '#666', marginBottom: '12px'}}>
                                     Overschrijf titel of inhoud specifiek voor deze pagina.
                                     {pageEditableFields.length > 0 && ' Deze page part biedt ook extra velden die overschreven kunnen worden.'}
@@ -744,7 +766,8 @@ registerBlockType(blockName, {
                                     }
                                 })}
                             </PanelBody>
-                        )}
+                            );
+                        })()}
 
                         {/* Featured Image Override - separate section, only when template allows it */}
                         {postId !== 0 && templateData.featured_image_overridable && (

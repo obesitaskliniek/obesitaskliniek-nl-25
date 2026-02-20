@@ -1,0 +1,50 @@
+{
+  "apiVersion": 3,
+  "name": "nok2025/nok-vestiging-voorlichtingen",
+  "title": "NOK Voorlichtingen Carousel",
+  "description": "Toont aankomende voorlichtingen in een carousel. Detecteert automatisch de vestiging op vestiging-pagina's.",
+  "category": "nok-blocks",
+  "icon": "calendar-alt",
+  "keywords": [
+    "voorlichting",
+    "carousel",
+    "vestiging",
+    "agenda"
+  ],
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "vestigingId": {
+      "type": "number",
+      "default": 0
+    },
+    "limit": {
+      "type": "number",
+      "default": 6
+    },
+    "title": {
+      "type": "string",
+      "default": "Voorlichtingen"
+    },
+    "showAllLink": {
+      "type": "boolean",
+      "default": true
+    },
+    "backgroundColor": {
+      "type": "string",
+      "default": "nok-bg-darkerblue"
+    },
+    "textColor": {
+      "type": "string",
+      "default": "nok-text-white"
+    }
+  },
+  "textdomain": "nok-2025-v1",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php",
+  "style": [
+    "nok-components-css",
+    "nok-colors-css"
+  ]
+}
