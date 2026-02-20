@@ -18,6 +18,7 @@
  * - video_start:text!page-editable!descr[Video starttijd in seconden (bijv. 2.5)]
  * - autoplay:select(Automatisch::visibility|Klik om af te spelen::click|Klik om fullscreen af te spelen::off)!default(visibility)!descr[Autoplay gedrag voor achtergrondvideo]!page-editable
  * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
+ * - lightbox:checkbox!page-editable!descr[Afbeelding vergroten bij klikken]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -29,6 +30,12 @@ $c = $context;
 $left = $c->layout->is('left');
 $order = $left ? 1 : 2;
 $featuredImage = Helpers::get_featured_image('nok-rounded-border-large');
+
+// Lightbox support — get full-size URL when enabled and image exists
+$lightbox_src = '';
+if ( $c->lightbox->isTrue() && has_post_thumbnail() ) {
+	$lightbox_src = wp_get_attachment_image_url( get_post_thumbnail_id(), 'full' );
+}
 
 // Video support
 $has_video = $c->has('video');
@@ -76,7 +83,11 @@ $autoplay = $c->has('autoplay') ? $c->autoplay->raw() : 'visibility';
                     </video>
                 </div>
             <?php else : ?>
-                <div class="nok-image-cover <?= $c->perspective->isTrue('nok-image-perspective'); ?> nok-order-<?= ($order % 2) + 1 ?>">
+                <div class="nok-image-cover <?= $c->perspective->isTrue('nok-image-perspective'); ?> nok-order-<?= ($order % 2) + 1 ?>"
+                    <?php if ( $lightbox_src ) : ?>
+                         data-requires="./nok-lightbox.mjs"
+                         data-lightbox-src="<?= esc_url( $lightbox_src ) ?>"
+                    <?php endif; ?>>
                     <?= $featuredImage ?>
                 </div>
             <?php endif; ?>

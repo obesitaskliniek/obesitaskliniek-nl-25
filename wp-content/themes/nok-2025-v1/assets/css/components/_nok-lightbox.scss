@@ -1,0 +1,135 @@
+@use "shared" as components-base;
+
+// =============================================================================
+// Lightbox — Full-screen image viewer
+// Trigger styling + overlay + image presentation
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// Trigger (image container with data-lightbox-src)
+// -----------------------------------------------------------------------------
+.nok-lightbox-trigger {
+  cursor: zoom-in;
+
+  img {
+    @include components-base.transition-properties {
+      transition: transform #{components-base.$animation-duration} ease-out;
+    }
+  }
+
+  &:hover img,
+  &:focus-visible img {
+    transform: scale(1.03);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--nok-lightblue);
+    outline-offset: 4px;
+    border-radius: var(--nok-default-border-radius--large, 1rem);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Overlay (appended to body by JS)
+// -----------------------------------------------------------------------------
+.nok-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: components-base.$z-stack-top + 10;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--nok-space-fluid-lg, 2rem);
+
+  background: rgba(var(--nok-darkestblue--darker-rgb, 0, 14, 68), 0);
+  cursor: zoom-out;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  @include components-base.transition-properties {
+    transition:
+      opacity #{components-base.$animation-duration * 2} ease-out,
+      visibility #{components-base.$animation-duration * 2} ease-out,
+      background #{components-base.$animation-duration * 2} ease-out;
+  }
+
+  &--open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    background: rgba(var(--nok-darkestblue--darker-rgb, 0, 14, 68), 0.92);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Close button
+  // ---------------------------------------------------------------------------
+  &__close {
+    position: absolute;
+    top: var(--nok-space-fluid-md, 1.5rem);
+    right: var(--nok-space-fluid-md, 1.5rem);
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+
+    border-radius: 50%;
+    background: rgba(var(--nok-white-rgb, 243, 244, 249), 0.15);
+    color: var(--nok-white, #f3f4f9);
+
+    @include components-base.transition-properties {
+      transition: background #{components-base.$animation-duration} ease-out;
+    }
+
+    &:hover,
+    &:focus-visible {
+      background: rgba(var(--nok-white-rgb, 243, 244, 249), 0.3);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--nok-lightblue);
+      outline-offset: 2px;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Image
+  // ---------------------------------------------------------------------------
+  &__image {
+    max-width: 90vw;
+    max-height: 85vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+
+    @include components-base.nok-border-radius($size: 'large', $overflowHidden: false);
+    @include components-base.nok-shadow(20px, 0.4);
+
+    // Start hidden, fade in when loaded
+    opacity: 0;
+    transform: scale(0.95);
+    cursor: default;
+
+    @include components-base.transition-properties {
+      transition:
+        opacity #{components-base.$animation-duration} ease-out,
+        transform #{components-base.$animation-duration * 1.5} cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    &--loaded {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+// Prevent body scroll when lightbox is open
+body.nok-lightbox-active {
+  overflow: hidden !important;
+  scrollbar-gutter: stable;
+}
