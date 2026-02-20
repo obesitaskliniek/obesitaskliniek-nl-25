@@ -176,6 +176,9 @@ final class Theme {
 
         // Template hierarchy
         add_filter( 'single_template', [ $this, 'category_based_single_template' ] );
+
+        // Contextual body classes
+        add_filter( 'body_class', [ $this, 'add_body_classes' ] );
         /**
          * Add fallback alt text to images missing it
          *
@@ -532,6 +535,108 @@ final class Theme {
         }
 
         return $show;
+    }
+
+    /**
+     * Add contextual body classes for CSS targeting
+     *
+     * Adds nok-prefixed classes based on current content type and active
+     * template layout. Classes use the Customizer setting key suffix
+     * (not layout post slug) for stability across layout renames.
+     *
+     * @param string[] $classes Existing body classes
+     *
+     * @return string[] Modified body classes
+     */
+    public function add_body_classes( array $classes ): array {
+        $post_type = get_post_type();
+
+        if ( is_singular() && $post_type ) {
+            // Regular posts: use category slug for sub-typing (e.g. ervaringen)
+            if ( $post_type === 'post' ) {
+                $categories = get_the_category();
+                if ( ! empty( $categories ) ) {
+                    $classes[] = 'nok-single-' . $categories[0]->slug;
+                }
+            } elseif ( $post_type === 'kennisbank' ) {
+                $classes[] = 'nok-single-kennisbank';
+                $terms = get_the_terms( get_the_ID(), 'kennisbank_categories' );
+                if ( $terms && ! is_wp_error( $terms ) ) {
+                    $classes[] = 'nok-kennisbank-' . $terms[0]->slug;
+                }
+            } else {
+                $classes[] = 'nok-single-' . $post_type;
+            }
+        } elseif ( is_post_type_archive() && $post_type ) {
+            $classes[] = 'nok-archive-' . $post_type;
+        } elseif ( is_tax( 'kennisbank_categories' ) ) {
+            $classes[]    = 'nok-archive-kennisbank';
+            $queried_term = get_queried_object();
+            if ( $queried_term ) {
+                $classes[] = 'nok-kennisbank-' . $queried_term->slug;
+            }
+        }
+
+        // Template layout class
+        $layout_setting = $this->get_active_template_layout_setting();
+        if ( $layout_setting ) {
+            // Extract suffix from setting key (e.g. 'template_layout_vestiging' → 'vestiging')
+            $suffix    = str_replace( 'template_layout_', '', $layout_setting );
+            $layout_id = get_theme_mod( $layout_setting, 0 );
+            if ( $layout_id ) {
+                $classes[] = 'nok-layout-' . $suffix;
+            }
+        }
+
+        return $classes;
+    }
+
+    /**
+     * Determine the active template layout Customizer setting for the current context
+     *
+     * Maps the current page context to the corresponding template_layout_*
+     * Customizer setting key. Must stay in sync with the settings registered
+     * in Customizer::register() and the single-*.php template files.
+     *
+     * @return string|null Setting key (e.g. 'template_layout_vestiging') or null if no layout applies
+     */
+    private function get_active_template_layout_setting(): ?string {
+        if ( ! is_singular() ) {
+            return null;
+        }
+
+        $post_type = get_post_type();
+
+        // Direct CPT mappings
+        if ( $post_type === 'vestiging' ) {
+            return 'template_layout_vestiging';
+        }
+        if ( $post_type === 'regio' ) {
+            return 'template_layout_regio';
+        }
+
+        // Regular posts: ervaringen category
+        if ( $post_type === 'post' && has_category( 'ervaringen' ) ) {
+            return 'template_layout_ervaringen';
+        }
+
+        // Kennisbank: category-specific layouts
+        if ( $post_type === 'kennisbank' ) {
+            $terms = get_the_terms( get_the_ID(), 'kennisbank_categories' );
+            if ( ! $terms || is_wp_error( $terms ) ) {
+                return null;
+            }
+
+            $category_map = [
+                'blogs'   => 'template_layout_kennisbank_blogs',
+                'artikel' => 'template_layout_kennisbank_artikel',
+            ];
+
+            $slug = $terms[0]->slug;
+            return $category_map[ $slug ] ?? null;
+        }
+
+        return null;
     }
 
     /**

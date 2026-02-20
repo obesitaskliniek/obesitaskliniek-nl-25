@@ -162,6 +162,14 @@ nok-top-navigation {
   gap: var(--nok-space-fluid-sm);
 }
 
+// --- FOUC prevention: hide drawers/panels before full CSS loads ---
+// These transforms match the closed state in the component SCSS.
+// No transitions here — elements start hidden instantly.
+nok-nav-menu-bar-dropdown { transform: translate3d(0%, -100%, 0); }
+nok-navigation-drawer { transform: translate3d(100%, 0%, 0); }
+nok-accessibility-helper { position: absolute; transform: translate3d(0%, -105%, 0); }
+nok-screen-mask { position: fixed; inset: 0; pointer-events: none; opacity: 0; }
+
 // =============================================================================
 // 6. HERO STRUCTURE (grid, sizing — not decorative styles)
 // =============================================================================

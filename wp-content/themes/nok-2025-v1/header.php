@@ -41,4 +41,4 @@
 
     </head>
 
-    <body class="no-js no-debug nok-bg-body nok-text-contrast">
+    <body <?php body_class( 'no-js no-debug nok-bg-body nok-text-contrast' ); ?>>

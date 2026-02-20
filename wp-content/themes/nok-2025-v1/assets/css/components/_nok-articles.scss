@@ -18,4 +18,8 @@ article {
       margin-bottom: 1em;
     }
   }
+  //Overrides
+  @at-root body.nok-single-ervaringen nok-section article h2.wp-block-heading.nok-fs-6 {
+    @include components-base.rfs(components-base.$h3-font-size, --nok-font-size-6);
+  }
 }
