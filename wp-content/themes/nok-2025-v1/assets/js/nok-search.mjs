@@ -225,8 +225,9 @@ function updateSelection(container, index) {
  * @param {KeyboardEvent} event - Keyboard event
  * @param {HTMLElement} searchElement - Search container element
  * @param {HTMLElement} resultsContainer - Results container
+ * @param {HTMLInputElement} input - Search input element
  */
-function handleKeydown(event, searchElement, resultsContainer) {
+function handleKeydown(event, searchElement, resultsContainer, input) {
     const state = getState(searchElement);
     const items = resultsContainer.querySelectorAll('.nok-search-result');
     const maxIndex = items.length - 1;
@@ -245,10 +246,15 @@ function handleKeydown(event, searchElement, resultsContainer) {
             break;
 
         case KEYS.ENTER:
+            event.preventDefault();
             if (state.selectedIndex >= 0 && items[state.selectedIndex]) {
-                event.preventDefault();
-                const selectedItem = items[state.selectedIndex];
-                window.location.href = selectedItem.href;
+                window.location.href = items[state.selectedIndex].href;
+            } else {
+                // No autocomplete result selected — navigate to search results page
+                const query = input.value.trim();
+                if (query.length >= MIN_QUERY_LENGTH) {
+                    window.location.href = `/?s=${encodeURIComponent(query)}`;
+                }
             }
             break;
 
@@ -391,7 +397,7 @@ function initSearchElement(element) {
     state.cleanupFunctions.push(cleanupSearch);
 
     // Set up keyboard navigation
-    const keydownHandler = (event) => handleKeydown(event, element, resultsContainer);
+    const keydownHandler = (event) => handleKeydown(event, element, resultsContainer, input);
     input.addEventListener('keydown', keydownHandler);
     state.cleanupFunctions.push(() => input.removeEventListener('keydown', keydownHandler));
 

@@ -125,6 +125,23 @@ add_filter( 'query_vars', function( $vars ) {
     return $vars;
 } );
 
+// Restrict search results to the same post types as autocomplete
+add_action( 'pre_get_posts', function( $query ) {
+    if ( ! is_admin() && $query->is_search() && $query->is_main_query() ) {
+        $allowed_types = [ 'page', 'post', 'vestiging', 'kennisbank' ];
+
+        // Support ?post_type= filter (single type only, must be in allowed list)
+        $requested_type = $query->get( 'post_type' );
+        if ( $requested_type && in_array( $requested_type, $allowed_types, true ) ) {
+            $query->set( 'post_type', [ $requested_type ] );
+        } else {
+            $query->set( 'post_type', $allowed_types );
+        }
+
+        $query->set( 'posts_per_page', 12 );
+    }
+} );
+
 use NOK2025\V1\Helpers;
 use NOK2025\V1\VoorlichtingForm;
 
