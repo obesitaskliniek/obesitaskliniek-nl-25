@@ -73,6 +73,11 @@ module.exports = {
             __dirname,
             'src/blocks/nok-attachment-downloads/index.js'
         ),
+
+        'blocks/nok-vestiging-voorlichtingen/index': path.resolve(
+            __dirname,
+            'src/blocks/nok-vestiging-voorlichtingen/index.js'
+        ),
     },
 
     // 3) keep the default filename pattern

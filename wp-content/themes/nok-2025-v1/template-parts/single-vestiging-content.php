@@ -88,6 +88,7 @@ $has_featured_image = has_post_thumbnail( get_the_ID() ) && $featured_image !== 
     </nok-section>
 
 <?php
-// Voorlichtingen carousel - shows upcoming sessions for this location
-get_template_part( 'template-parts/post-parts/nok-vestiging-voorlichtingen' );
+// Voorlichtingen carousel — now handled by nok2025/nok-vestiging-voorlichtingen block
+// in the vestiging template_layout. Old post-part kept for reference.
+// get_template_part( 'template-parts/post-parts/nok-vestiging-voorlichtingen' );
 ?>

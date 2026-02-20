@@ -587,6 +587,39 @@ class Helpers {
 	}
 
 	/**
+	 * Get upcoming voorlichtingen, optionally filtered by city
+	 *
+	 * When a city is provided, delegates to get_voorlichtingen_for_vestiging()
+	 * (which handles alias resolution). When city is null, returns all upcoming
+	 * voorlichtingen across all locations.
+	 *
+	 * @param int         $limit Maximum number of results
+	 * @param string|null $city  City name to filter by, or null for all locations
+	 * @return \WP_Post[] Array of voorlichting posts ordered by date ascending
+	 */
+	public static function get_upcoming_voorlichtingen( int $limit = 6, ?string $city = null ): array {
+		if ( $city !== null ) {
+			return self::get_voorlichtingen_for_vestiging( $city, $limit );
+		}
+
+		return get_posts( [
+			'post_type'      => 'voorlichting',
+			'posts_per_page' => $limit,
+			'post_status'    => 'publish',
+			'meta_query'     => [ [
+				'key'     => 'aanvangsdatum_en_tijd',
+				'value'   => current_time( 'mysql' ),
+				'compare' => '>=',
+				'type'    => 'DATETIME',
+			] ],
+			'meta_key'       => 'aanvangsdatum_en_tijd',
+			'orderby'        => 'meta_value',
+			'order'          => 'ASC',
+			'no_found_rows'  => true,
+		] );
+	}
+
+	/**
 	 * Get vestiging address data for voorlichting display
 	 *
 	 * Attempts to get address from vestiging CPT post, falls back to
