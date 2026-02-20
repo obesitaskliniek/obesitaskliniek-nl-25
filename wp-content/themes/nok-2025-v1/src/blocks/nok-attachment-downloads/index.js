@@ -7,7 +7,9 @@
 
 import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps, RichText } from '@wordpress/block-editor';
-import { Placeholder } from '@wordpress/components';
+import { Button, Placeholder } from '@wordpress/components';
+import { useState, useCallback } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import ServerSideRender from '@wordpress/server-side-render';
 
@@ -17,6 +19,20 @@ const blockName = 'nok2025/nok-attachment-downloads';
 registerBlockType(blockName, {
     edit: ({ attributes, setAttributes }) => {
         const { title, description } = attributes;
+        const postId = useSelect((select) => select('core/editor').getCurrentPostId(), []);
+        const [refreshKey, setRefreshKey] = useState(0);
+
+        const openMediaLibrary = useCallback(() => {
+            if (!postId) return;
+            const frame = wp.media({
+                title: __('Documenten beheren', textDomain),
+                button: { text: __('Sluiten', textDomain) },
+                library: { uploadedTo: postId },
+                multiple: true,
+            });
+            frame.on('close', () => setRefreshKey((prev) => prev + 1));
+            frame.open();
+        }, [postId]);
 
         const blockProps = useBlockProps({
             className: 'nok-attachment-downloads-editor',
@@ -62,15 +78,44 @@ registerBlockType(blockName, {
                         }}
                     />
                 </div>
+                <div style={{
+                    padding: '12px 20px',
+                    background: '#f0f0f1',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                }}>
+                    <Button
+                        variant="secondary"
+                        icon="media-document"
+                        onClick={openMediaLibrary}
+                        disabled={!postId}
+                    >
+                        {__('Documenten beheren', textDomain)}
+                    </Button>
+                    <span style={{ fontSize: '13px', color: '#757575' }}>
+                        {__('Upload of verwijder documenten die bij deze pagina horen.', textDomain)}
+                    </span>
+                </div>
                 <ServerSideRender
+                    key={refreshKey}
                     block={blockName}
                     attributes={attributes}
                     EmptyResponsePlaceholder={() => (
                         <Placeholder
                             icon="download"
                             label={__('Downloads', textDomain)}
-                            instructions={__('Er zijn geen downloadbare bijlagen aan deze pagina gekoppeld. Upload bestanden (PDF, Word, etc.) via de Media Bibliotheek en koppel ze aan deze pagina.', textDomain)}
-                        />
+                            instructions={__('Er zijn nog geen documenten aan deze pagina gekoppeld.', textDomain)}
+                        >
+                            <Button
+                                variant="primary"
+                                icon="media-document"
+                                onClick={openMediaLibrary}
+                                disabled={!postId}
+                            >
+                                {__('Documenten toevoegen', textDomain)}
+                            </Button>
+                        </Placeholder>
                     )}
                 />
             </div>

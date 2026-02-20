@@ -77,6 +77,7 @@ class PostTypes {
 			'description'         => __( 'Reusable page components that can be embedded into pages.', THEME_TEXT_DOMAIN ),
 			'public'              => true,
 			'publicly_queryable'  => true,
+			'exclude_from_search' => true,
 			'show_ui'             => true,
 			'show_in_menu'        => true,
 			'show_in_nav_menus'   => false,

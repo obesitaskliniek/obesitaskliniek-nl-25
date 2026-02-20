@@ -34,7 +34,7 @@ $allowed_html = [
 ];
 ?>
 
-<nok-section class="nok-bg-darkerblue nok-text-contrast">
+<nok-section class="nok-bg-darkerblue nok-text-contrast" id="downloads">
 	<div class="nok-section__inner">
 		<div class="nok-layout-grid nok-layout-grid__1-column">
 			<?php if ( $title ) : ?>
