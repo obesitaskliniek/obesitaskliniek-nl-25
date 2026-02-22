@@ -8,6 +8,7 @@
  * Custom Fields:
  * - title:text!default(Downloads)
  * - description:textarea!default()!descr[Optionele beschrijving, ondersteunt links]
+ * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  * @var array $attachments Non-image attachment data from Helpers::get_non_image_attachments()
@@ -35,7 +36,7 @@ $allowed_html = [
 ?>
 
 <nok-section class="nok-bg-darkerblue nok-text-contrast" id="downloads">
-	<div class="nok-section__inner">
+	<div class="nok-section__inner <?= $c->narrow_section->isTrue( 'nok-section-narrow' ) ?>">
 		<div class="nok-layout-grid nok-layout-grid__1-column">
 			<?php if ( $title ) : ?>
 				<h2 class="nok-fs-6"><?= wp_kses( $title, 'post' ) ?></h2>

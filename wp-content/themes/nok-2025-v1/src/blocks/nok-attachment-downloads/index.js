@@ -6,8 +6,8 @@
  */
 
 import { registerBlockType } from '@wordpress/blocks';
-import { useBlockProps, RichText } from '@wordpress/block-editor';
-import { Button, Placeholder } from '@wordpress/components';
+import { useBlockProps, InspectorControls, RichText } from '@wordpress/block-editor';
+import { Button, Placeholder, PanelBody, ToggleControl } from '@wordpress/components';
 import { useState, useCallback } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
@@ -18,7 +18,7 @@ const blockName = 'nok2025/nok-attachment-downloads';
 
 registerBlockType(blockName, {
     edit: ({ attributes, setAttributes }) => {
-        const { title, description } = attributes;
+        const { title, description, narrow_section } = attributes;
         const postId = useSelect((select) => select('core/editor').getCurrentPostId(), []);
         const [refreshKey, setRefreshKey] = useState(0);
 
@@ -45,7 +45,18 @@ registerBlockType(blockName, {
         });
 
         return (
-            <div {...blockProps}>
+            <>
+                <InspectorControls>
+                    <PanelBody title={__('Sectie instellingen', textDomain)} initialOpen={true}>
+                        <ToggleControl
+                            label={__('Smalle sectie', textDomain)}
+                            help={__('Maakt de sectie smaller (max-width beperkt)', textDomain)}
+                            checked={narrow_section}
+                            onChange={(value) => setAttributes({ narrow_section: value })}
+                        />
+                    </PanelBody>
+                </InspectorControls>
+                <div {...blockProps}>
                 <div className="nok-attachment-downloads-editor__header" style={{
                     padding: '20px',
                     background: '#1a2744',
@@ -119,6 +130,7 @@ registerBlockType(blockName, {
                     )}
                 />
             </div>
+            </>
         );
     },
 

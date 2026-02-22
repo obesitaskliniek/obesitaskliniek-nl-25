@@ -23,8 +23,9 @@ return function( array $attributes ): string {
 	$is_editor = defined( 'REST_REQUEST' ) && REST_REQUEST;
 
 	$fields = [
-		'title'       => $is_editor ? '' : ( $attributes['title'] ?? 'Downloads' ),
-		'description' => $is_editor ? '' : ( $attributes['description'] ?? '' ),
+		'title'           => $is_editor ? '' : ( $attributes['title'] ?? 'Downloads' ),
+		'description'     => $is_editor ? '' : ( $attributes['description'] ?? '' ),
+		'narrow_section'  => ! empty( $attributes['narrow_section'] ) ? '1' : '0',
 	];
 
 	$renderer = new TemplateRenderer();
