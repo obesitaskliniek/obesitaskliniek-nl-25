@@ -42,7 +42,7 @@ $allowed_html = [
 				<h2 class="nok-fs-6"><?= wp_kses( $title, 'post' ) ?></h2>
 			<?php endif; ?>
 			<?php if ( $description ) : ?>
-				<p><?= wp_kses( $description, $allowed_html ) ?></p>
+				<small><?= wp_kses( $description, $allowed_html ) ?></small>
 			<?php endif; ?>
 			<div class="nok-downloads-list">
 				<?php foreach ( $attachments as $file ) : ?>

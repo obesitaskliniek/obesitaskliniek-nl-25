@@ -400,6 +400,16 @@ const RepeaterField = ({field, schema, value, onChange}) => {
                     </FieldGroup>
                 );
 
+            case 'link':
+                return (
+                    <FieldGroup key={fieldKey} label={schemaField.label || label}>
+                        <LinkField
+                            value={fieldValue}
+                            onChange={(value) => updateItem(index, fieldKey, value)}
+                        />
+                    </FieldGroup>
+                );
+
             default:
                 return (
                     <FieldGroup key={fieldKey} label={schemaField.label || label}>

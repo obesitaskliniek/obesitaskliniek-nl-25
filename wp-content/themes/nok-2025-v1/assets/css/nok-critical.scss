@@ -278,6 +278,24 @@ nok-hero .nok-hero__inner {
 }
 // Hero responsive breakpoints omitted — deferred CSS covers (budget trim #2)
 
+// --- Fullscreen hero variant (campaign pages) ---
+nok-hero.nok-hero--fullscreen {
+  display: flex; width: 100%;
+  .nok-hero-fullscreen__container {
+    position: relative; display: flex; flex-direction: column;
+    min-height: calc(100svh - var(--nok-top-navigation-height, 4rem) * 2);
+    overflow: hidden; width: 100%; align-self: stretch;
+  }
+  .nok-hero-fullscreen__figure { position: absolute; inset: 0; margin: 0; }
+  .nok-hero-fullscreen__figure img { width: 100%; height: 100%; object-fit: cover; }
+  .nok-hero-fullscreen__overlay { position: absolute; inset: 0; }
+  .nok-hero-fullscreen__content { display: flex; align-items: center; justify-content: center; flex: 1; position: relative; z-index: 2; }
+  @include nok-mixins.media-breakpoint-down(nok-variables.$mobile-breakpoint) {
+    .nok-hero-fullscreen__container { min-height: 100svh; }
+    .nok-hero-fullscreen__content { align-items: flex-end; padding-top: calc(var(--nok-top-navigation-height, 6rem) + 1.5rem); }
+  }
+}
+
 // =============================================================================
 // 7. SECTION BASE (prevents layout shift)
 // =============================================================================

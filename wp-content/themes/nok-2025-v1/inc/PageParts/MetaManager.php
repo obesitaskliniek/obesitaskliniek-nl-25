@@ -424,6 +424,11 @@ class MetaManager {
 					return sanitize_textarea_field( $value );
 				case 'url':
 					return esc_url_raw( $value );
+				case 'link':
+					if ( is_string( $value ) && preg_match( '/^(post|term|archive):/', $value ) ) {
+						return sanitize_text_field( $value );
+					}
+					return esc_url_raw( $value );
 				case 'checkbox':
 					return in_array( $value, [ '1', 1, true, '0', 0, false ], true ) ?
 						( $value ? '1' : '0' ) : '0';

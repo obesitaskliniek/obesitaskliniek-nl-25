@@ -7,7 +7,7 @@
  * Custom Fields:
  * - tagline:text
  * - button_text:text!default(Lees meer)
- * - button_url:url
+ * - button_url:link
  * - layout:select(left|right)!page-editable!default(left)
  * - perspective:checkbox!default(false)!descr[Afbeelding 3D draaien]!page-editable
  * - achtergrondkleur:color-selector(backgrounds-simple)!page-editable
@@ -65,7 +65,7 @@ $autoplay = $c->has('autoplay') ? $c->autoplay->raw() : 'visibility';
                 <?php endif; ?>
 				<?= $c->content(); ?>
 				<?php if ($c->has('button_url')) : ?>
-                    <a role="button" href="<?= $c->button_url->url() ?>"
+                    <a role="button" href="<?= $c->button_url->link() ?>"
                        class="nok-button nok-align-self-to-sm-stretch nok-bg-darkblue nok-text-contrast fill-mobile nok-mt-1">
 						<span><?= $c->button_text ?></span><?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
                     </a>

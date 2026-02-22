@@ -9,7 +9,7 @@
  * - badge_colors:color-selector(badge-colors)!page-editable!default(nok-bg-darkerblue nok-text-white)
  * - shuffle:checkbox!default(false)!descr[Willekeurige volgorde?]
  * - show_all_link:checkbox!default(true)!descr[Toon "Alle items" link]
- * - all_link_url:url!default(/kennisbank)!descr[URL voor "Alle items" link]
+ * - all_link_url:link!default(/kennisbank)!descr[URL voor "Alle items" link]
  * - all_link_text:text!default(Alle items)
  * - show_nav_buttons:checkbox!default(true)!descr[Toon navigatieknoppen voor de carousel]
  * - category_filter:taxonomy(kennisbank_categories)!descr[Filter op categorieën (laat leeg voor alle)]!page-editable
@@ -79,7 +79,7 @@ $scroller_id = 'kennisbank-carousel-' . wp_unique_id();
 					<?php endif; ?>
 
 					<?php if ($c->show_all_link->isTrue()) : ?>
-						<a href="<?= esc_url($c->all_link_url->raw()) ?>"
+						<a href="<?= $c->all_link_url->link() ?>"
 						   class="nok-square-block__link nok-mt-1"
 						   style="position: relative;">
 							<?= strtoupper(esc_html($c->all_link_text->raw())) ?>

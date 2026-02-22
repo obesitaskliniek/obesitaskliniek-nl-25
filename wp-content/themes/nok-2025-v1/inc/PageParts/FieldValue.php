@@ -378,6 +378,21 @@ class FieldValue {
 	}
 
 	/**
+	 * Resolve a raw link value to a URL
+	 *
+	 * Static convenience method for repeater items that aren't FieldValue objects.
+	 * Handles post:123, term:123, archive:slug formats and raw URLs.
+	 *
+	 * @param mixed  $value    Raw link value (may be null for empty repeater fields)
+	 * @param string $fallback Fallback URL if empty or referenced item not found
+	 *
+	 * @return string Resolved and escaped URL, or empty string
+	 */
+	public static function resolve_link( mixed $value, string $fallback = '' ): string {
+		return ( new self( $value ) )->link( $fallback );
+	}
+
+	/**
 	 * Default string conversion uses HTML escaping
 	 * Allows echo/interpolation without explicit ->html()
 	 *

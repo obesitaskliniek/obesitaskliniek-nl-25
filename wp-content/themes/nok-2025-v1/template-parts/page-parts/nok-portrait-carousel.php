@@ -5,7 +5,7 @@
  * Slug: nok-portrait-carousel
  * Custom Fields:
  * - button_text:text!default(Bekijk alle specialisten)
- * - button_url:url,
+ * - button_url:link,
  * - shuffle:checkbox!default(false)!descr[Willekeurige volgorde?]
  * - team_members:repeater
  * - colors:color-selector(section-colors)!page-editable!default(nok-bg-darkblue nok-text-contrast)
@@ -32,7 +32,7 @@ $c = $context;
                 <div class="new-row nok-column-first-2 nok-span-all-columns-to-xxl"><?= $c->content(); ?></div>
 
 				<?php if ($c->has('button_url')) : ?>
-                    <a role="button" href="<?= $c->button_url->url() ?>"
+                    <a role="button" href="<?= $c->button_url->link() ?>"
                        class="nok-button nok-column-last-1 nok-bg-darkestblue nok-text-contrast fill-mobile">
                         <span><?= $c->button_text ?></span><?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
                     </a>

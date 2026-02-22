@@ -15,7 +15,7 @@
     },
     "description": {
       "type": "string",
-      "default": "Voor het lezen van PDF bestanden heeft u Adobe Reader nodig. Deze kunt u <a href=\"https://get.adobe.com/reader/\">hier downloaden</a>."
+      "default": "Voor het lezen van PDF bestanden heeft u Adobe Reader nodig. Deze kunt u <a href=\"https://get.adobe.com/reader/\" class=\"nok-hyperlink\">hier downloaden</a>."
     },
     "narrow_section": {
       "type": "boolean",

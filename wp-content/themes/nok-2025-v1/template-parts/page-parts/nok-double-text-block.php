@@ -15,13 +15,13 @@
  * - block_1_bg:color-selector(backgrounds-full)!default(nok-bg-darkblue)!descr[Achtergrondkleur blok 1]
  * - block_1_text:color-selector(text)!default(nok-text-white)!descr[Tekstkleur blok 1]
  * - block_1_button_text:text!default(Lees meer)!descr[Knoptekst blok 1]
- * - block_1_button_url:url!descr[Knop URL blok 1]
+ * - block_1_button_url:link!descr[Knop URL blok 1]
  * - block_1_button_target:select(Zelfde venster::_self|Nieuw venster::_blank)!default(_self)!descr[Knop target blok 1]
  * - block_1_button_bg:color-selector(button-backgrounds)!default(nok-bg-white nok-text-darkblue)!descr[Knop achtergrondkleur blok 1]
  * - block_1_button_icon:icon-selector!default(ui_arrow-right-long)!descr[Knop icoon blok 1]
  * - block_1_button_icon_color:color-selector(icon-colors)!default(nok-text-lightblue)!descr[Knop icoonkleur blok 1]
  * - block_1_button_2_text:text!default(Lees meer)!descr[Knop 2 tekst blok 1]
- * - block_1_button_2_url:url!descr[Knop 2 URL blok 1]
+ * - block_1_button_2_url:link!descr[Knop 2 URL blok 1]
  * - block_1_button_2_target:select(Zelfde venster::_self|Nieuw venster::_blank)!default(_self)!descr[Knop 2 target blok 1]
  * - block_1_button_2_bg:color-selector(button-backgrounds)!default(nok-bg-white nok-text-darkblue)!descr[Knop 2 achtergrondkleur blok 1]
  * - block_1_button_2_icon:icon-selector!default(ui_arrow-right-long)!descr[Knop 2 icoon blok 1]
@@ -36,13 +36,13 @@
  * - block_2_bg:color-selector(backgrounds-full)!default(nok-bg-darkblue)!descr[Achtergrondkleur blok 2]
  * - block_2_text:color-selector(text)!default(nok-text-white)!descr[Tekstkleur blok 2]
  * - block_2_button_text:text!default(Lees meer)!descr[Knoptekst blok 2]
- * - block_2_button_url:url!descr[Knop URL blok 2]
+ * - block_2_button_url:link!descr[Knop URL blok 2]
  * - block_2_button_target:select(Zelfde venster::_self|Nieuw venster::_blank)!default(_self)!descr[Knop target blok 2]
  * - block_2_button_bg:color-selector(button-backgrounds)!default(nok-bg-white nok-text-darkblue)!descr[Knop achtergrondkleur blok 2]
  * - block_2_button_icon:icon-selector!default(ui_arrow-right-long)!descr[Knop icoon blok 2]
  * - block_2_button_icon_color:color-selector(icon-colors)!default(nok-text-lightblue)!descr[Knop icoonkleur blok 2]
  * - block_2_button_2_text:text!default(Lees meer)!descr[Knop 2 tekst blok 2]
- * - block_2_button_2_url:url!descr[Knop 2 URL blok 2]
+ * - block_2_button_2_url:link!descr[Knop 2 URL blok 2]
  * - block_2_button_2_target:select(Zelfde venster::_self|Nieuw venster::_blank)!default(_self)!descr[Knop 2 target blok 2]
  * - block_2_button_2_bg:color-selector(button-backgrounds)!default(nok-bg-white nok-text-darkblue)!descr[Knop 2 achtergrondkleur blok 2]
  * - block_2_button_2_icon:icon-selector!default(ui_arrow-right-long)!descr[Knop 2 icoon blok 2]
@@ -163,7 +163,7 @@ function render_content_block(array $block, string $shadow): string {
 			<div class="nok-layout-grid fill-fill nok-column-gap-0_5">
 				<?php if ($block['button_url']->raw()) : ?>
 					<a role="button"
-					   href="<?= $block['button_url']->url() ?>"
+					   href="<?= $block['button_url']->link() ?>"
 						<?php if ($block['button_target'] === '_blank') : ?>target="_blank" rel="noopener"<?php endif; ?>
 					   class="nok-button <?= esc_attr($block['button_bg']) ?>">
 						<span><?= $block['button_text'] ?></span><?= Assets::getIcon($block['button_icon'], $block['button_icon_color']) ?>
@@ -171,7 +171,7 @@ function render_content_block(array $block, string $shadow): string {
 				<?php endif; ?>
 				<?php if ($block['button_2_url']->raw()) : ?>
 					<a role="button"
-					   href="<?= $block['button_2_url']->url() ?>"
+					   href="<?= $block['button_2_url']->link() ?>"
 						<?php if ($block['button_2_target'] === '_blank') : ?>target="_blank" rel="noopener"<?php endif; ?>
 					   class="nok-button <?= esc_attr($block['button_2_bg']) ?>">
 						<span><?= $block['button_2_text'] ?></span><?= Assets::getIcon($block['button_2_icon'], $block['button_2_icon_color']) ?>
@@ -304,7 +304,7 @@ function render_media_element(array $block): string {
 								<div class="nok-layout-grid fill-fill nok-column-gap-0_5">
 									<?php if ($block['button_url']->raw()) : ?>
 										<a role="button"
-										   href="<?= $block['button_url']->url() ?>"
+										   href="<?= $block['button_url']->link() ?>"
 											<?php if ($block['button_target'] === '_blank') : ?>target="_blank" rel="noopener"<?php endif; ?>
 										   class="nok-button <?= $block['button_bg'] ?>">
 											<span><?= $block['button_text'] ?></span><?= Assets::getIcon($block['button_icon'], $block['button_icon_color']) ?>
@@ -312,7 +312,7 @@ function render_media_element(array $block): string {
 									<?php endif; ?>
 									<?php if ($block['button_2_url']->raw()) : ?>
 										<a role="button"
-										   href="<?= $block['button_2_url']->url() ?>"
+										   href="<?= $block['button_2_url']->link() ?>"
 											<?php if ($block['button_2_target'] === '_blank') : ?>target="_blank" rel="noopener"<?php endif; ?>
 										   class="nok-button <?= $block['button_2_bg'] ?>">
 											<span><?= $block['button_2_text'] ?></span><?= Assets::getIcon($block['button_2_icon'], $block['button_2_icon_color']) ?>

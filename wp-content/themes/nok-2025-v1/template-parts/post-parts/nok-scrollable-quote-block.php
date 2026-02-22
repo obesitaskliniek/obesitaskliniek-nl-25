@@ -2,6 +2,7 @@
 
 use NOK2025\V1\Assets;
 use NOK2025\V1\Helpers;
+use NOK2025\V1\PageParts\FieldValue;
 
 $scroller_id              = $args['scroller_id'] ?? 'scroller-' . time() . rand( 0, 1000 );
 $quote_data               = $args['quotes'] ?? [];
@@ -30,10 +31,11 @@ $quote_block_button_style = $args['block_button_color'] ?? 'nok-bg-darkestblue n
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>
-                <?php if ( ! empty( $quote['link_url'] ) ) : ?>
+                <?php $quote_link_href = FieldValue::resolve_link( $quote['link_url'] ?? null ); ?>
+                <?php if ( $quote_link_href ) : ?>
                     <div class="nok-layout-flex-row space-between">
                         <div class="nok-layout-flex-column quart-flex-gap">
-                            <a role="button" href="<?= esc_url( $quote['link_url'] ) ?>"
+                            <a role="button" href="<?= $quote_link_href ?>"
                                class="nok-button nok-justify-self-start <?= $quote_block_button_style ?> fill-mobile"
                                title="Lees het hele verhaal van <?= esc_attr( $quote['name'] ?? 'deze patiënt' ) ?>"
                                tabindex="0">

@@ -6,8 +6,8 @@
  * Featured Image Overridable: true
  * Custom Fields:
  * - tagline:text
- * - button_text:text!default(Lees meer)
- * - button_url:url
+ * - button_text:text!default(Lees meer)!page-editable
+ * - button_url:link!page-editable
  * - layout:select(left|right)!page-editable
  * - achtergrondkleur:color-selector(backgrounds-simple)!page-editable
  * - tekstkleur:color-selector(text-extended)!page-editable!default(nok-text-contrast)
@@ -48,7 +48,7 @@ $featured_image = Helpers::get_featured_image($border_class);
                         nok-align-items-start">
             <div class="nok-align-self-to-lg-stretch nok-column-first-5 nok-mb-section-padding">
 				<?php if ($c->has('tagline')) : ?>
-                    <h2 class="nok-fs-6 nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-mb-0_5">
+                    <h2 class="nok-fs-4 nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-mb-0_5">
 						<?= $c->tagline ?>
                     </h2>
 				<?php endif; ?>
@@ -69,7 +69,7 @@ $featured_image = Helpers::get_featured_image($border_class);
 					<?= $c->content(); ?>
                     <div>
 						<?php if ($c->has('button_url')) : ?>
-                            <a role="button" href="<?= $c->button_url->url() ?>"
+                            <a role="button" href="<?= $c->button_url->link() ?>"
                                class="nok-button nok-align-self-to-sm-stretch nok-bg-darkblue nok-text-contrast fill-mobile">
                                 <span><?= $c->button_text ?></span><?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
                             </a>
@@ -84,7 +84,7 @@ $featured_image = Helpers::get_featured_image($border_class);
 					<?= $c->content(); ?>
                     <div>
 						<?php if ($c->has('button_url')) : ?>
-                            <a role="button" href="<?= $c->button_url->url() ?>"
+                            <a role="button" href="<?= $c->button_url->link() ?>"
                                class="nok-button nok-align-self-to-sm-stretch nok-bg-darkblue nok-text-contrast fill-mobile">
                                 <span><?= $c->button_text ?></span><?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
                             </a>

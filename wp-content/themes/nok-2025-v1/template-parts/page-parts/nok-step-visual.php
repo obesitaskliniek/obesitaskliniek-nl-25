@@ -7,7 +7,7 @@
  * Custom Fields:
  * - tagline:text
  * - button_blauw_text:text!default(Lees meer)
- * - button_blauw_url:url
+ * - button_blauw_url:link
  * - layout:select(left|right)!page-editable!default(left)
  * - colors:color-selector(step-visual-colors)!page-editable
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
@@ -81,7 +81,7 @@ ob_start();
         </button>
     <?php endif; ?>
     <?php if ($c->has('button_blauw_url')) : ?>
-        <a role="button" href="<?= $c->button_blauw_url->url() ?>" class="nok-button nok-justify-self-start
+        <a role="button" href="<?= $c->button_blauw_url->link() ?>" class="nok-button nok-justify-self-start
             nok-bg-darkblue nok-text-contrast fill-mobile" tabindex="0">
             <span><?= $c->button_blauw_text ?></span><?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
         </a>

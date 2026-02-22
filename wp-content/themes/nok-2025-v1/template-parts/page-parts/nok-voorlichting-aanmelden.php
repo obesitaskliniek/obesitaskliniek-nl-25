@@ -7,6 +7,7 @@
  * - colors:select(Wit op lichtgrijs|Wit op donkerblauw)!page-editable!default(Wit op lichtgrijs)
  * - show_intro:checkbox!default(true)!descr[Toon introductietekst boven het formulier]
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
+ * - center_text:checkbox!default(false)!descr[Midden uitlijnen]!page-editable
  * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
@@ -51,7 +52,7 @@ $voorlichting_id_field = 'input_' . $form_id . '_' . VoorlichtingForm::FIELD_VOO
 	<div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>" id="nok-voorlichting-form">
 
 		<?php if ($c->show_intro->isTrue()): ?>
-			<div class="nok-layout-grid nok-mb-2">
+			<div class="nok-layout-grid nok-mb-2 <?= $c->center_text->isTrue('text-center'); ?>">
 				<?php if (!$c->hide_title->isTrue()) : ?>
 				<h2 class="nok-fs-6"><?= $c->title() ?></h2>
 				<?php endif; ?>

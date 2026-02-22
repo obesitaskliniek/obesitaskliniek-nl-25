@@ -7,6 +7,7 @@
  * - colors:select(Wit op lichtgrijs|Wit op donkerblauw)!page-editable!default(Wit op lichtgrijs)
  * - show_intro:checkbox!default(true)!descr[Toon introductietekst boven het formulier]
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
+ * - center_text:checkbox!default(false)!descr[Midden uitlijnen]!page-editable
  * - preselect_vestiging:checkbox!page-editable!default(false)!descr[Selecteer automatisch de vestiging van deze pagina (verbergt dropdown)]
  * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
@@ -55,7 +56,7 @@ $field_values = $vestiging_value ? 'contactform_vestiging=' . $vestiging_value :
 <?php endif; ?>
 
 <nok-section class="<?= $section_colors ?>">
-	<div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?>" id="nok-contactformulier">
+	<div class="nok-section__inner <?= $c->narrow_section->isTrue('nok-section-narrow'); ?> <?= $c->center_text->isTrue('text-center'); ?>" id="nok-contactformulier">
 
 		<?php if ($c->show_intro->isTrue()): ?>
 			<div class="nok-layout-grid nok-mb-2">

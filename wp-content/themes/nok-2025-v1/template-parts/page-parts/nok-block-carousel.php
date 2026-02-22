@@ -11,13 +11,14 @@
  * - aantal_blocks:select(2|3|4)!default(3)!descr[Aantal blokken dat in beeld is]
  * - shuffle_blocks:checkbox!default(false)!descr[Willekeurige volgorde?]
  * - read_more:text!default(Lees verder)
- * - blocks:repeater(icon:icon-selector,title:text,content:textarea,link_url:url)
+ * - blocks:repeater(icon:icon-selector,title:text,content:textarea,link_url:link)
  * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
 
 use NOK2025\V1\Assets;
+use NOK2025\V1\PageParts\FieldValue;
 
 $c = $context;
 
@@ -61,8 +62,9 @@ $blocks = $c->blocks->json(array_fill(0, 6, [
 										<?= esc_html($block['content']); ?>
                                     </p>
 								<?php endif; ?>
-								<?php if (!empty($block['link_url'])) : ?>
-                                    <a class="nok-square-block__link" href="<?= esc_url($block['link_url']); ?>">
+								<?php $block_link_href = FieldValue::resolve_link( $block['link_url'] ); ?>
+							<?php if ( $block_link_href ) : ?>
+                                    <a class="nok-square-block__link" href="<?= $block_link_href; ?>">
 										<?= $c->read_more ?> <?= Assets::getIcon('ui_arrow-right-longer'); ?>
                                     </a>
 								<?php endif; ?>

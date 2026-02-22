@@ -10,13 +10,14 @@
  *  - block_item_colors:color-selector(block-colors)!page-editable!default(nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue)
  *  - circle_color:select(Blauw::var(--nok-darkerblue)|Wit::var(--nok-darkerblue)|Geel::var(--nok-yellow--darker)|Automatisch-lichter::oklch(from var(--bg-color) calc(l * 1.1) c h / 1)|Automatisch-donkerder::oklch(from var(--bg-color) calc(l * .9) c h / 1)|Uit::transparent)!page-editable!default(Uit)
  *  - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
- * - items:repeater(tab_title:text,panel_title:text,panel_content:textarea,button_text:text,button_url:url)!descr[Voeg proces stappen toe]
+ * - items:repeater(tab_title:text,panel_title:text,panel_content:textarea,button_text:text,button_url:link)!descr[Voeg proces stappen toe]
  * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
 
 use NOK2025\V1\Assets;
+use NOK2025\V1\PageParts\FieldValue;
 
 $c = $context;
 
@@ -96,9 +97,10 @@ $arrow_inactive_class = 'nok-text-darkblue';
                                 <?= wp_kses_post( wpautop( $item['panel_content'] ?? '' ) ) ?>
                             </div>
 
-                            <?php if ( ! empty( $item['button_url'] ) ) : ?>
+                            <?php $button_href = FieldValue::resolve_link( $item['button_url'] ?? null ); ?>
+                            <?php if ( $button_href ) : ?>
                                 <a role="button"
-                                   href="<?= esc_url( $item['button_url'] ) ?>"
+                                   href="<?= $button_href ?>"
                                    class="nok-button nok-bg-darkerblue nok-text-white nok-align-self-start">
                                     <span><?= esc_html( $item['button_text'] ?? 'Lees meer' ) ?></span>
                                     <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ) ?>

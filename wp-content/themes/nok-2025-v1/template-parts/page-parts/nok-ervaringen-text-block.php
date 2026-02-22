@@ -7,7 +7,7 @@
  * - layout:select(left|right)!page-editable!default(left)
  * - achtergrond:color-selector(backgrounds-simple)!page-editable!default(nok-bg-darkerblue)
  * - shuffle_quotes:checkbox!default(false)!descr[Willekeurige volgorde?]
- * - quote_items:repeater(quote:text,name:text,subname:text,excerpt:text,link_url:url,image_url:url)!descr[Voeg handmatige quotes toe om te tonen]
+ * - quote_items:repeater(quote:text,name:text,subname:text,excerpt:text,link_url:link,image_url:url)!descr[Voeg handmatige quotes toe om te tonen]
  * - quote_posts:post_repeater(post:ervaringen)!descr[Kies specifieke ervaringsverhalen om te tonen]
  * - random_quotes:checkbox!default(true)!descr[Vul aan met willekeurige ervaringen indien minder dan 5 quotes aanwezig zijn]
  * - carousel_buttons:checkbox!default(false)!descr[Toon navigatieknoppen voor de carousel]

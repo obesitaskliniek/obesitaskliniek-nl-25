@@ -7,12 +7,13 @@
  *
  * @param array $attributes Block attributes from block.json
  * @param string $content Inner blocks content
+ *
  * @return string Rendered HTML output
  */
 
 use NOK2025\V1\PageParts\TemplateRenderer;
 
-return function( array $attributes, string $content ): string {
+return function ( array $attributes, string $content ): string {
 	// Return empty if no content
 	if ( empty( trim( strip_tags( $content ) ) ) ) {
 		return '';
@@ -24,6 +25,7 @@ return function( array $attributes, string $content ): string {
 		'text_color'       => $attributes['textColor'] ?? 'nok-text-darkerblue',
 		'layout_width'     => $attributes['layoutWidth'] ?? '1-column',
 		'narrow_section'   => ( $attributes['narrowSection'] ?? false ) ? '1' : '0',
+		'text_center'      => ( $attributes['textCenter'] ?? false ) ? '1' : '0',
 		'enable_pull_up'   => ( $attributes['enablePullUp'] ?? false ) ? '1' : '0',
 		'enable_no_aos'    => ( $attributes['enableNoAos'] ?? false ) ? '1' : '0',
 	];

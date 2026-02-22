@@ -12,7 +12,7 @@
  * - accordion_checkmarks:select(Vraagtekens met vinkjes::question-marks|Vinkjes::checkmarks)!descr[Vinkjes of vraagtekens voor de titels plaatsen?]
  * - accordion_checkmarks_colors:select(Blauw::var(--nok-lightblue)|Groen::var(--nok-green)|Geel::var(--nok-yellow)|Lightgroen::var(--nok-greenblue--lighter))!default(Blauw)!descr[Kleur van de vinkjes]
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
- * - accordion_items:repeater(title:text,content:textarea,button_url:url,button_text:text)!descr[Voeg accordion items toe]
+ * - accordion_items:repeater(title:text,content:textarea,button_url:link,button_text:text)!descr[Voeg accordion items toe]
  * - accordion_posts:post_repeater(kennisbank)!descr[Kies specifieke kennisbank items om te tonen in de accordion]
  * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
@@ -21,6 +21,7 @@
 
 use NOK2025\V1\Assets;
 use NOK2025\V1\Helpers;
+use NOK2025\V1\PageParts\FieldValue;
 
 $c = $context;
 
@@ -68,12 +69,13 @@ $c = $context;
                                     </summary>
                                     <?php if ( ! empty( $item['content'] ) ) : ?>
                                     <div class="accordion-content nok-p-2 nok-pt-0">
-                                        <div class="<?= ! empty( $item['button_url'] ) ? 'nok-mb-1' : '' ?>">
+                                        <?php $button_href = FieldValue::resolve_link( $item['button_url'] ?? null ); ?>
+                                        <div class="<?= $button_href ? 'nok-mb-1' : '' ?>">
                                             <?= wp_kses_post( $item['content'] ) ?>
                                         </div>
-                                        <?php if ( ! empty( $item['button_url'] ) ) : ?>
-                                            <a href="<?= esc_url( $item['button_url'] ) ?>" role="button"
-                                               class="nok-button nok-text-contrast nok-bg-darkblue--darker nok-dark-bg-darkestblue nok-visible-xs nok-align-self-stretch fill-mobile"
+                                        <?php if ( $button_href ) : ?>
+                                            <a href="<?= $button_href ?>" role="button"
+                                               class="nok-button nok-text-contrast nok-bg-darkblue--darker nok-dark-bg-darkestblue nok-align-self-stretch fill-mobile"
                                                tabindex="0"><span>
                                                 <?= ! empty( trim( $item['button_text'] ) ) ? esc_html( $item['button_text'] ) : $c->accordion_button_text ?></span>
                                                 <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ) ?>

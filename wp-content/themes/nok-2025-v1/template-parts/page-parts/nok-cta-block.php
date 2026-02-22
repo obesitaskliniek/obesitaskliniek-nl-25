@@ -7,8 +7,8 @@
  * - layout_offset:select(left|balanced)!default(left)
  * - colors:select(Blauw op transparant|Blauw op donkerblauw)!page-editable!default(Blauw op transparant)
  * - icon:icon-selector!page-editable!default(ui_arrow-right-long)
- * - button_text:text!default(Lees meer)
- * - button_url:url
+ * - button_text:text!default(Lees meer)!page-editable
+ * - button_url:link!page-editable
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
@@ -38,7 +38,7 @@ $block_colors = $c->colors->is('Blauw op donkerblauw',
             <div class="nok-square-block__text nok-layout-grid nok-layout-grid__1-column"><?= $c->content(); ?></div>
 
 			<?php if ($c->has('button_url')): ?>
-                <a role="button" href="<?= $c->button_url->url() ?>" class="nok-button nok-align-self-end nok-bg-white nok-text-darkblue fill-mobile">
+                <a role="button" href="<?= $c->button_url->link() ?>" class="nok-button nok-align-self-end nok-bg-white nok-text-darkblue fill-mobile">
                     <span><?= $c->button_text ?></span><?= Assets::getIcon('ui_arrow-right-long', 'nok-text-lightblue') ?>
                 </a>
 			<?php endif; ?>
