@@ -1,0 +1,204 @@
+@use "sass:map";
+@use "shared" as components-base;
+
+// =============================================================================
+// Full-screen hero — viewport-spanning background photo with text overlay
+// Used on campaign/landing pages (e.g. "meld-je-aan")
+//
+// Navigation context: the hero sits below the sticky nok-top-navigation whose
+// flow height ≈ top-row padding-top (~1.5rem) + content (~1.5rem) +
+// padding-bottom (--nok-top-navigation-height, 4rem) = ~7rem on desktop.
+// The menu bar (6rem, absolutely positioned at --nok-top-navigation-height)
+// overhangs ~2rem into the hero area. We account for both.
+// =============================================================================
+
+nok-hero.nok-hero--fullscreen {
+
+  // Container: flex column so content fills available space via flex:1.
+  // Height = viewport minus the nav flow height (approx 2× --nok-top-navigation-height).
+  .nok-hero-fullscreen__container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100svh - var(--nok-top-navigation-height, 4rem) * 2);
+    overflow: hidden;
+    width: 100%;
+    align-self: stretch; // Break out of nok-section centering
+  }
+
+  // --- Figure layer (background image) — absolutely positioned ---
+  .nok-hero-fullscreen__figure {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    margin: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: var(--hero-image-focus, center center);
+    }
+
+    // Dark mode: slight image darkening
+    @media (prefers-color-scheme: dark) {
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.2);
+        pointer-events: none;
+      }
+    }
+  }
+
+  // --- Overlay layer — absolutely positioned ---
+  .nok-hero-fullscreen__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+
+    &--gradient-bottom {
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(0, 0, 0, 0.4) 35%,
+        rgba(0, 0, 0, 0.05) 65%,
+        transparent 100%
+      );
+    }
+
+    &--gradient-left {
+      background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(0, 0, 0, 0.3) 50%,
+        transparent 100%
+      );
+    }
+  }
+
+  // --- Content layer — centered, fills available space ---
+  .nok-hero-fullscreen__content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    // Top padding clears the overhanging menu bar (~2rem below nav flow)
+    padding: var(--nok-top-navigation-height, 4rem) var(--nok-nok-spacing-section-sides, 3rem) var(--nok-space-fluid-xl);
+
+    &--text-shadow {
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6), 0 1px 4px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .nok-hero-fullscreen__text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--nok-space-fluid-sm);
+    max-width: 42rem;
+  }
+
+  // --- Typography ---
+  .nok-hero-fullscreen__breadcrumbs {
+    font-size: 0.9rem;
+    opacity: 0.85;
+  }
+
+  .nok-hero-fullscreen__tagline {
+    @include components-base.rfs((components-base.$h2-font-size), font-size);
+    @include components-base.nok-heading-font;
+    text-shadow: 1px 2px 5px #0007;
+    margin: 0;
+    opacity: 0.9;
+  }
+
+  .nok-hero-fullscreen__title {
+    @include components-base.rfs((components-base.$h1-font-size * 2.25), font-size);
+    font-weight: bold;
+    text-shadow: 1px 2px 5px #0007;
+    line-height: 1.05;
+    margin: 0;
+  }
+
+  .nok-hero-fullscreen__body {
+    @include components-base.rfs(1.15rem, font-size);
+    max-width: 36rem;
+  }
+
+  .nok-button-group {
+    margin-top: var(--nok-space-fluid-xs);
+    justify-items: center;
+  }
+
+  // --- Text theme: light (for dark photos) ---
+  &.nok-hero-fullscreen--light {
+    color: var(--nok-white, #f3f4f9);
+    .nok-hero-fullscreen__title {
+      color: var(--nok-white, #f3f4f9);
+    }
+
+    .nok-hero-fullscreen__breadcrumbs {
+      color: rgba(243, 244, 249, 0.8);
+
+      a { color: rgba(243, 244, 249, 0.8); }
+      a:hover { color: var(--nok-white); }
+    }
+
+    .nok-hero-fullscreen__tagline {
+      color: var(--nok-yellow, #ffd41f);
+    }
+
+    .nok-hyperlink {
+      color: var(--nok-white, #f3f4f9);
+    }
+  }
+
+  // --- Text theme: dark (for light photos) ---
+  &.nok-hero-fullscreen--dark {
+    color: var(--nok-darkerblue, #0b2355);
+
+    .nok-hero-fullscreen__tagline {
+      color: var(--nok-lightblue, #00b0e4);
+    }
+
+    .nok-hyperlink {
+      color: var(--nok-darkerblue, #0b2355);
+    }
+  }
+
+  // --- Mobile ---
+  // On mobile (<xl), nav is position:fixed (out of flow), so the hero starts
+  // at the top of <body>. Use full viewport height; pad top to clear the nav overlay.
+  @include components-base.media-breakpoint-down(components-base.$mobile-breakpoint) {
+    .nok-hero-fullscreen__container {
+      min-height: 100svh;
+    }
+
+    .nok-hero-fullscreen__content {
+      // Bottom-align on mobile — centered wastes space on narrow screens
+      align-items: flex-end;
+      // Top padding clears the fixed nav overlay; bottom padding for breathing room
+      padding-top: calc(var(--nok-top-navigation-height, 6rem) + var(--nok-space-fluid-md));
+      padding-bottom: var(--nok-space-fluid-xl);
+    }
+
+    .nok-hero-fullscreen__text {
+      text-align: left;
+      align-items: flex-start;
+    }
+
+    .nok-hero-fullscreen__title {
+      @include components-base.rfs((components-base.$h1-font-size * 2.2), font-size);
+    }
+
+    .nok-button-group {
+      grid-template-columns: 1fr;
+    }
+  }
+}
