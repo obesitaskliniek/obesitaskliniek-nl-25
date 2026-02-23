@@ -27,34 +27,28 @@
   // Desktop: two columns with buttons in col 1, panels in col 2
   @include nok-mixins.media-breakpoint-up(nok-variables.$mobile-breakpoint) {
     grid-template-columns: 1fr 1fr;
-    grid-auto-flow: dense; // Allow items to fill gaps
+    grid-auto-flow: dense;
     align-items: start;
+    // row-gap: 0 prevents empty spanned rows from adding gap space.
+    // Buttons use margin-bottom instead for visual spacing.
+    column-gap: var(--grid-gap, var(--nok-padding-base, 1rem));
+    row-gap: 0;
 
     // All buttons go in column 1, auto-placed in sequential rows
     > [role="tab"] {
       grid-column: 1;
+      margin-bottom: var(--grid-gap, var(--nok-padding-base, 1rem));
     }
 
-    // All panels stack in column 2, spanning all rows
-    // They overlap visually - only the active one is visible
+    // All panels stack in column 2, spanning all button rows.
+    // Uses span 20 because grid-row: 1 / -1 only works with explicit rows
+    // (grid-template-rows), not implicit ones. Extra rows collapse to 0.
     > [role="tabpanel"] {
       grid-column: 2;
-      grid-row: 1 / -1; // Span many rows to cover all buttons
+      grid-row: 1 / span 20;
 
-      // Hidden panels stay in layout but are invisible
-      // This prevents grid reflow when switching tabs
       &[hidden] {
-        visibility: hidden;
-        height: 0;
-        overflow: hidden;
-        padding: 0;
-        margin: 0;
-      }
-
-      // Active panel is visible
-      &:not([hidden]) {
-        visibility: visible;
-        height: auto;
+        display: none;
       }
     }
   }
