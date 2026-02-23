@@ -347,6 +347,11 @@ class Colors {
 				'color' => self::COLOR_DEFINITIONS['nok-bg-darkblue'],
 			],
 			[
+				'label' => 'Donkerderblauw',
+				'value' => 'nok-bg-darkerblue nok-text-contrast',
+				'color' => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
+			],
+			[
 				'label' => 'Blauw',
 				'value' => 'nok-bg-lightblue nok-text-darkblue',
 				'color' => self::COLOR_DEFINITIONS['nok-bg-lightblue'],

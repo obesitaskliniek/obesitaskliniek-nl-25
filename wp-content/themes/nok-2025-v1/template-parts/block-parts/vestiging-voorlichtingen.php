@@ -95,7 +95,7 @@ $colors   = esc_attr( trim( "$bg_color $tx_color" ) );
 
 					</div>
                     <?php if ( $show_all_link ) : ?>
-                        <a href="<?= esc_url( $all_url ); ?>" class="nok-button nok-bg-darkerblue nok-text-inherit nok-mt-2">
+                        <a href="<?= esc_url( $all_url ); ?>" class="nok-button nok-bg-darkerblue nok-text-contrast nok-mt-2">
                             <?php esc_html_e( 'Bekijk alle voorlichtingen', THEME_TEXT_DOMAIN ); ?>
                             <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ); ?>
                         </a>

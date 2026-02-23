@@ -39,7 +39,11 @@ if (empty($parents_with_children)) {
 		</h3>
 		<a href="/contact/" role="button" class="nok-button nok-bg-darkblue nok-text-contrast" tabindex="0">
 			Neem contact op
-			<?= Assets::getIcon('ui_arrow-right', 'nok-text-yellow'); ?>
+			<?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow'); ?>
 		</a>
+        <a href="https://nokclinics.nl" target="_blank" class="nok-button nok-bg-clinics-oranje nok-text-white">
+            Behandeling zonder operatie
+            <?= Assets::getIcon('ui_arrow-up-right' ); ?>
+        </a>
 	</nok-square-block>
 </div>

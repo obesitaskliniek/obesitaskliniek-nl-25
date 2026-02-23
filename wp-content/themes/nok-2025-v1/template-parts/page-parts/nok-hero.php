@@ -10,12 +10,12 @@
  * - button_blauw_url:link!page-editable
  * - button_transparant_text:text!page-editable
  * - button_transparant_url:link!page-editable
- * - usp_1_icon:icon-selector!page-editable!default(nok_kosten)
- * - usp_1_text:text!page-editable!default(Vergoed door je zorgverzekering)
- * - usp_2_icon:icon-selector!page-editable!default(nok_30_jaar_ervaring)
- * - usp_2_text:text!page-editable!default(Meer dan 30 jaar ervaring)
- * - usp_3_icon:icon-selector!page-editable!default(nok_hospital)
- * - usp_3_text:text!page-editable!default(Samenwerking met de beste ziekenhuizen))
+ * - usp_1_icon:icon-selector!page-editable!
+ * - usp_1_text:text!page-editable!
+ * - usp_2_icon:icon-selector!page-editable!
+ * - usp_2_text:text!page-editable!
+ * - usp_3_icon:icon-selector!page-editable!
+ * - usp_3_text:text!page-editable!
  * - button_vestiging_text:text!page-editable!default(Onze vestigingen)
  * - button_vestiging_url:link!page-editable!default(/vestigingen)
  *

@@ -123,11 +123,11 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
         <nok-navigation-top-row class="nok-section__inner--stretched  nok-bg-body nok-dark-bg-darkestblue nok-dark-text-white nok-z-2">
             <div class="nok-navigation-top-row__inner
             nok-section__inner nok-my-0">
-                <div>
+                <div><!--
                     <small class="valign-center">
                         <span class="nok-text-lightblue nok-star-ratings"><?= $star; ?><?= $star; ?><?= $star; ?><?= $star; ?><?= $star; ?></span>5/5
                         op basis van 12.030 beoordelingen
-                    </small>
+                    </small>-->
                 </div>
                 <?php $menu_manager->render_top_row('top_row'); ?>
                 <a href="#"
