@@ -9,7 +9,7 @@ use NOK2025\V1\Assets;
  * MenuManager - WordPress menu registration and hierarchical rendering
  *
  * Handles navigation menu management:
- * - Registers menu locations (primary, mobile, footer)
+ * - Registers menu locations (primary, mobile, mobile drawer footer, footer)
  * - Builds hierarchical menu tree from flat WordPress menu items
  * - Provides separate rendering for desktop bar, dropdown, and mobile carousel
  * - Template-based rendering with context variables
@@ -51,10 +51,11 @@ class MenuManager {
 	 */
 	public function register_menus(): void {
 		register_nav_menus( [
-			'primary'        => __( 'Primary Navigation', THEME_TEXT_DOMAIN ),
-			'mobile_primary' => __( 'Mobile Primary Navigation', THEME_TEXT_DOMAIN ),
-			'top_row'        => __( 'Desktop Top Row', THEME_TEXT_DOMAIN ),
-			'footer'         => __( 'Footer Navigation', THEME_TEXT_DOMAIN ),
+			'primary'               => __( 'Primary Navigation', THEME_TEXT_DOMAIN ),
+			'mobile_primary'        => __( 'Mobile Primary Navigation', THEME_TEXT_DOMAIN ),
+			'mobile_drawer_footer'  => __( 'Mobile Drawer Footer', THEME_TEXT_DOMAIN ),
+			'top_row'               => __( 'Desktop Top Row', THEME_TEXT_DOMAIN ),
+			'footer'                => __( 'Footer Navigation', THEME_TEXT_DOMAIN ),
 		] );
 	}
 
@@ -256,6 +257,30 @@ class MenuManager {
 	}
 
 	/**
+	 * Render mobile drawer footer (utility links at bottom of mobile sidebar)
+	 *
+	 * Flat menu for links like "Werken bij", "BMI berekenen", etc.
+	 * Popup triggers close the sidebar before opening the popup.
+	 * No fallback to another menu location — if unassigned, admins see a setup link.
+	 *
+	 * @param string $location Menu location
+	 * @param array<string, mixed> $context Additional variables to pass to template
+	 * @return void
+	 */
+	public function render_mobile_drawer_footer( string $location = 'mobile_drawer_footer', array $context = [] ): void {
+		$menu_items = $this->get_menu_tree( $location );
+
+		if ( empty( $menu_items ) && ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$this->load_template( 'mobile-drawer-footer', [
+			'menu_items' => $menu_items,
+			'location'   => $location,
+		] + $context );
+	}
+
+	/**
 	 * Render mobile carousel (full structure)
 	 *
 	 * @param string $location Menu location (falls back to primary if not set)
@@ -367,6 +392,10 @@ class MenuManager {
 
 		if ( $item['is_current'] || $item['is_current_ancestor'] ) {
 			$classes[] = 'nok-nav-menu-item--active';
+		}
+
+		if ( ! empty( $item['has_children'] ) ) {
+			$classes[] = 'nok-nav-menu-item--has-children';
 		}
 
 		if ( ! empty( $options['extra_classes'] ) ) {

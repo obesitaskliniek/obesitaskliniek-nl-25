@@ -114,15 +114,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg'
 				<?php $menu_manager->render_mobile_carousel('mobile_primary'); ?>
             </div>
             <div class="nok-section__inner--stretched nok-nav-footer nok-text-contrast nok-bg-darkerblue nok-dark-bg-darkestblue nok-z-1">
-                <div class="nok-nav-menu-items nok-nav-menu-items--compact">
-                    <a href="https://werkenbijdenok.nl" target="_blank" class="nok-nav-menu-item">Werken bij</a>
-                    <a href="#" class="nok-nav-menu-item nok-popup-trigger" data-toggles-class="popup-open" data-class-target="nok-top-navigation" data-toggle-event="click"
-                       data-toggles-attribute="data-state" data-toggles-attribute-value="open" data-attribute-target="#popup-bmi-calculator">BMI berekenen</a>
-                    <a href="#" class="nok-nav-menu-item">Voor patiënten</a>
-                    <a href="/aanmelden-gratis-voorlichting#nok-voorlichting-form" role="button" class="nok-button nok-button--small nok-bg-yellow nok-text-contrast nok-invisible-sm"
-                            tabindex="0">Gratis voorlichting
-                    </a>
-                </div>
+				<?php $menu_manager->render_mobile_drawer_footer('mobile_drawer_footer'); ?>
             </div>
         </nok-navigation-drawer>
     </nok-navigation-mobile>

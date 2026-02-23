@@ -30,4 +30,8 @@ if (empty($menu_items)) {
 	<?php foreach ($menu_items as $item):
 		echo MenuManager::render_menu_link($item, ['popup_unsets_sidebar' => true]);
 	endforeach; ?>
+    <a href="/aanmelden-gratis-voorlichting#nok-voorlichting-form" role="button"
+       class="nok-button nok-button--small nok-bg-yellow nok-text-contrast nok-invisible-sm"
+       tabindex="0">Gratis voorlichting
+    </a>
 </div>
