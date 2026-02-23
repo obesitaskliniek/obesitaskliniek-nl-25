@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Contactformulier
- * Description: Contact form with vestiging selector - routes to selected vestiging's email
+ * Description: Contact form section
  * Slug: nok-contactformulier
  * Custom Fields:
  * - colors:select(Wit op lichtgrijs|Wit op donkerblauw)!page-editable!default(Wit op lichtgrijs)
@@ -13,8 +13,6 @@
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
-
-use NOK2025\V1\ContactForm;
 
 $c = $context;
 
@@ -28,7 +26,7 @@ $block_colors = $c->colors->is('Wit op donkerblauw',
 	'nok-bg-body nok-text-contrast'
 );
 
-$form_id = ContactForm::FORM_ID;
+$form_id = 4;
 
 // Check for automatic vestiging preselection
 $vestiging_value = '';
