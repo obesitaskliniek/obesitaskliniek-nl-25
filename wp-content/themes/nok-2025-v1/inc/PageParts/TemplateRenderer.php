@@ -450,11 +450,27 @@ class TemplateRenderer {
 	}
 
 	/**
+	 * Tracks designs that already have a style_loader_tag filter registered,
+	 * preventing double-replacement when the same template renders multiple times.
+	 *
+	 * @var array<string, true>
+	 */
+	private array $deferred_css_handles = [];
+
+	/**
 	 * Handle CSS for frontend rendering
 	 * Standard WordPress enqueue system
 	 */
 	private function handle_frontend_css(string $design, string $css_uri, int $version): void {
 		wp_enqueue_style($design, $css_uri, [], $version);
+
+		// Only register the defer filter once per handle — multiple instances of
+		// the same template on one page would otherwise stack closures, causing
+		// the media attribute to be double-replaced (breaking the onload swap).
+		if ( isset( $this->deferred_css_handles[ $design ] ) ) {
+			return;
+		}
+		$this->deferred_css_handles[ $design ] = true;
 
 		// Page/post-part CSS is supplementary — defer to avoid render-blocking
 		add_filter('style_loader_tag', function ($tag, $handle) use ($design) {
