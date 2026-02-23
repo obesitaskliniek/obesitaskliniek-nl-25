@@ -49,6 +49,8 @@ class Colors {
 		'nok-bg-white'               => '#ffffff',
 		'nok-bg-lightgrey'           => '#cccccc',
 		'nok-bg-transparent'         => 'transparent',
+		'nok-bg-clinics-blauw'       => '#B6BBD6',
+		'nok-bg-clinics-oranje'      => '#C27655',
 
 		'nok-text-lightblue'         => '#00b0e4',
 		'nok-text-darkblue'          => '#14477c',
@@ -363,6 +365,16 @@ class Colors {
 				'label' => 'Wit',
 				'value' => 'nok-bg-white nok-text-darkblue',
 				'color' => self::COLOR_DEFINITIONS['nok-bg-white'],
+			],
+			[
+				'label' => 'Clinics blauw',
+				'value' => 'nok-bg-clinics-blauw nok-text-darkerblue',
+				'color' => self::COLOR_DEFINITIONS['nok-bg-clinics-blauw'],
+			],
+			[
+				'label' => 'Clinics oranje',
+				'value' => 'nok-bg-clinics-oranje nok-text-contrast',
+				'color' => self::COLOR_DEFINITIONS['nok-bg-clinics-oranje'],
 			],
 			[
 				'label' => 'Transparant',
