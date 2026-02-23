@@ -7,6 +7,13 @@
  */
 
 return function(): string {
+	// Handle 404 pages — no post context, render 404 content template
+	if (is_404()) {
+		ob_start();
+		get_template_part('template-parts/404', 'content');
+		return ob_get_clean();
+	}
+
 	$post = get_queried_object();
 
 	if (!$post || !($post instanceof WP_Post)) {
