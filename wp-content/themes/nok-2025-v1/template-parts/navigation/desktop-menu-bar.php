@@ -8,6 +8,8 @@
  * @var string $location Menu location identifier
  */
 
+use NOK2025\V1\Navigation\MenuManager;
+
 // Fallback if no menu assigned
 if ( empty( $menu_items ) ) {
 	if ( current_user_can( 'manage_options' ) ) {
@@ -33,55 +35,25 @@ if ( empty( $menu_items ) ) {
     <?php endforeach; ?>
 </style>
 
-<?php foreach ( $menu_items as $item ): ?>
-    <div <?php if ($item['has_children']): ?>data-sets-class="sidebar-open" data-toggle-event="hover" data-class-target="nok-top-navigation" data-toggle-outside="unset"
-         data-sets-attribute="data-active-menu" data-sets-attribute-value="submenu-<?= esc_attr( $item['id'] ); ?>" data-attribute-target="nok-top-navigation"<?php else: ?>data-unsets-class="sidebar-open" data-toggle-event="hover" data-class-target="nok-top-navigation"<?php endif; ?>>
-		<?php
-		$classes = [ 'nok-nav-menu-item' ];
+<?php foreach ( $menu_items as $item ):
+	// Build extra classes for current-page tracking
+	$extra_classes = [];
+	if ( $item['is_current'] ) {
+		$extra_classes[] = 'is-current-page';
+	} elseif ( $item['is_current_ancestor'] ) {
+		$extra_classes[] = 'is-current-ancestor';
+	}
 
-		// Add active/current classes
-		if ( $item['is_current'] ) {
-			$classes[] = 'nok-nav-menu-item--active';
-			$classes[] = 'is-current-page';
-		} elseif ( $item['is_current_ancestor'] ) {
-			$classes[] = 'nok-nav-menu-item--active';
-			$classes[] = 'is-current-ancestor';
-		}
-
-		// Add custom classes from admin
-		if ( ! empty( $item['classes'] ) ) {
-			$classes = array_merge( $classes, $item['classes'] );
-		}
-
-		$class_string = implode( ' ', array_map( 'esc_attr', $classes ) );
-
-		// Popup triggers use # instead of their URL
-		$url = ! empty( $item['is_popup_trigger'] ) ? '#' : ( $item['url'] ?: '#' );
-
-		// Build attributes
-		$attrs = [];
-		if ( ! empty( $item['target'] ) ) {
-			$attrs[] = 'target="' . esc_attr( $item['target'] ) . '"';
-		}
-		if ( ! empty( $item['attr_title'] ) ) {
-			$attrs[] = 'title="' . esc_attr( $item['attr_title'] ) . '"';
-		}
-
-		$attr_string = ! empty( $attrs ) ? ' ' . implode( ' ', $attrs ) : '';
-
-		// Popup trigger data-attributes
-		$popup_attrs = '';
-		if ( ! empty( $item['is_popup_trigger'] ) && ! empty( $item['popup_id'] ) ) {
-			$popup_attrs = sprintf(
-				' data-toggles-class="popup-open" data-class-target="nok-top-navigation"'
-				. ' data-toggle-event="click" data-toggles-attribute="data-state"'
-				. ' data-toggles-attribute-value="open" data-attribute-target="#%s"',
-				esc_attr( $item['popup_id'] )
-			);
-		}
+	// Toggler wrapper attributes for dropdown behavior
+	if ( $item['has_children'] ):
 		?>
-        <a href="<?= esc_url( $url ); ?>" class="<?= $class_string; ?>"<?= $attr_string; ?><?= $popup_attrs; ?>>
-			<?= esc_html( $item['title'] ); ?>
-        </a>
-    </div>
+        <div data-sets-class="sidebar-open" data-toggle-event="hover" data-class-target="nok-top-navigation" data-toggle-outside="unset"
+             data-sets-attribute="data-active-menu" data-sets-attribute-value="submenu-<?= esc_attr( $item['id'] ); ?>" data-attribute-target="nok-top-navigation">
+	<?php else: ?>
+        <div data-unsets-class="sidebar-open" data-toggle-event="hover" data-class-target="nok-top-navigation">
+	<?php endif; ?>
+
+	<?= MenuManager::render_menu_link( $item, [ 'extra_classes' => $extra_classes ] ); ?>
+
+        </div>
 <?php endforeach; ?>

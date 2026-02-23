@@ -283,6 +283,27 @@
   }
 }
 
+/* Screen reader text - visually hidden but accessible to assistive technology */
+.screen-reader-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Menu item icons */
+.nok-nav-menu-icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  fill: currentColor;
+}
+
 @media (prefers-contrast: more) {
   body > .#{nok-variables.$prefix}-accessibility-helper {
     display: block;

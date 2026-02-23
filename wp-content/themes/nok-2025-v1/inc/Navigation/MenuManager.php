@@ -3,6 +3,8 @@
 
 namespace NOK2025\V1\Navigation;
 
+use NOK2025\V1\Assets;
+
 /**
  * MenuManager - WordPress menu registration and hierarchical rendering
  *
@@ -11,6 +13,7 @@ namespace NOK2025\V1\Navigation;
  * - Builds hierarchical menu tree from flat WordPress menu items
  * - Provides separate rendering for desktop bar, dropdown, and mobile carousel
  * - Template-based rendering with context variables
+ * - Shared link rendering with icon support
  *
  * @example Basic usage in theme setup
  * $menu_manager = new MenuManager();
@@ -130,6 +133,8 @@ class MenuManager {
 					'has_children'        => ! empty( $children ),
 					'is_popup_trigger'    => $is_popup_trigger,
 					'popup_id'            => $popup_id,
+					'icon'                => $item->_nok_menu_icon ?? '',
+					'icon_display'        => $item->_nok_menu_icon_display ?? '',
 					'children'            => $children,
 				];
 			}
@@ -321,6 +326,132 @@ class MenuManager {
 		extract( $context, EXTR_SKIP );
 
 		include $template_path;
+	}
+
+	/**
+	 * Render a single menu item <a> tag with all standard attributes
+	 *
+	 * Centralizes the repeated link-building logic across navigation templates:
+	 * class merging, HTML attributes, popup triggers, icon rendering, and escaping.
+	 *
+	 * @param array{
+	 *     id: int,
+	 *     title: string,
+	 *     url: string,
+	 *     classes: string[],
+	 *     target: string,
+	 *     attr_title: string,
+	 *     is_current: bool,
+	 *     is_current_ancestor: bool,
+	 *     is_popup_trigger: bool,
+	 *     popup_id: string|null,
+	 *     has_children: bool,
+	 *     icon: string,
+	 *     icon_display: string
+	 * } $item Menu item from build_menu_tree()
+	 * @param array{
+	 *     extra_classes?: string[],
+	 *     url_override?: string,
+	 *     popup_unsets_sidebar?: bool,
+	 *     extra_attrs?: string
+	 * } $options Rendering options:
+	 *     - extra_classes:         Additional CSS classes (e.g., 'is-current-page')
+	 *     - url_override:          Override the item URL (e.g., for mobile submenu anchors)
+	 *     - popup_unsets_sidebar:  If true, popup triggers also unset sidebar-open (mobile)
+	 *     - extra_attrs:           Raw HTML attribute string to append
+	 *
+	 * @return string Complete <a> tag HTML
+	 */
+	public static function render_menu_link( array $item, array $options = [] ): string {
+		$classes = [ 'nok-nav-menu-item' ];
+
+		if ( $item['is_current'] || $item['is_current_ancestor'] ) {
+			$classes[] = 'nok-nav-menu-item--active';
+		}
+
+		if ( ! empty( $options['extra_classes'] ) ) {
+			$classes = array_merge( $classes, $options['extra_classes'] );
+		}
+
+		if ( ! empty( $item['classes'] ) ) {
+			$classes = array_merge( $classes, array_filter( $item['classes'] ) );
+		}
+
+		// Determine URL
+		if ( isset( $options['url_override'] ) ) {
+			$url = $options['url_override'];
+		} elseif ( ! empty( $item['is_popup_trigger'] ) ) {
+			$url = '#';
+		} else {
+			$url = $item['url'] ?: '#';
+		}
+
+		// Build HTML attributes
+		$attrs = [];
+		if ( ! empty( $item['target'] ) && empty( $item['is_popup_trigger'] ) && ! isset( $options['url_override'] ) ) {
+			$attrs[] = 'target="' . esc_attr( $item['target'] ) . '"';
+		}
+		if ( ! empty( $item['attr_title'] ) ) {
+			$attrs[] = 'title="' . esc_attr( $item['attr_title'] ) . '"';
+		}
+
+		// Popup trigger data-attributes
+		if ( ! empty( $item['is_popup_trigger'] ) && ! empty( $item['popup_id'] ) ) {
+			$popup_class_action = ! empty( $options['popup_unsets_sidebar'] )
+				? 'data-unsets-class="sidebar-open"'
+				: 'data-toggles-class="popup-open"';
+
+			$attrs[] = $popup_class_action . ' data-class-target="nok-top-navigation"'
+			           . ' data-toggle-event="click"'
+			           . ( ! empty( $options['popup_unsets_sidebar'] ) ? ' data-toggles-class="popup-open"' : '' )
+			           . ' data-toggles-attribute="data-state" data-toggles-attribute-value="open"'
+			           . ' data-attribute-target="#' . esc_attr( $item['popup_id'] ) . '"';
+		}
+
+		if ( ! empty( $options['extra_attrs'] ) ) {
+			$attrs[] = $options['extra_attrs'];
+		}
+
+		$class_string = implode( ' ', array_map( 'esc_attr', $classes ) );
+		$attr_string  = ! empty( $attrs ) ? ' ' . implode( ' ', $attrs ) : '';
+
+		// Build link content: icon + title
+		$content = self::render_menu_link_content( $item );
+
+		return '<a href="' . esc_url( $url ) . '" class="' . $class_string . '"' . $attr_string . '>'
+		       . $content
+		       . '</a>';
+	}
+
+	/**
+	 * Render the inner content of a menu link (icon + title text)
+	 *
+	 * @param array $item Menu item from build_menu_tree()
+	 *
+	 * @return string Escaped title with optional icon SVG
+	 */
+	private static function render_menu_link_content( array $item ): string {
+		$icon_html = '';
+		$icon_name = $item['icon'] ?? '';
+
+		if ( $icon_name ) {
+			$icon_html = Assets::getIcon( $icon_name, 'nok-nav-menu-icon' );
+		}
+
+		$display = $item['icon_display'] ?? '';
+		$title   = esc_html( $item['title'] );
+
+		if ( $icon_html && $display === 'replace' ) {
+			// Icon replaces visible text; keep text for screen readers
+			return $icon_html . '<span class="screen-reader-text">' . $title . '</span>';
+		}
+
+		if ( $icon_html ) {
+			// Icon alongside text (default)
+			return $icon_html . ' ' . $title;
+		}
+
+		return $title;
 	}
 
 	/**

@@ -9,6 +9,7 @@
  */
 
 use NOK2025\V1\Assets;
+use NOK2025\V1\Navigation\MenuManager;
 
 // Filter to only parents with children
 $parents_with_children = array_filter($menu_items, function($item) {
@@ -24,64 +25,21 @@ if (empty($parents_with_children)) {
 	<?php foreach ($parents_with_children as $parent): ?>
 		<div class="dropdown-contents-menu nok-ul-list nok-mt-0"
 			 data-submenu-id="submenu-<?= esc_attr($parent['id']); ?>">
-			<!--<div>
-				<a href="<?= esc_url($parent['url']); ?>" class="nok-nav-menu-item nok-nav-menu-item--parent<?= $parent['is_current'] ? ' nok-nav-menu-item--active' : ''; ?>">
-					<?= esc_html($parent['title']); ?>
-				</a>
-			</div>-->
-			<?php foreach ($parent['children'] as $child):
-				$classes = ['nok-nav-menu-item'];
-
-				if ($child['is_current']) {
-					$classes[] = 'nok-nav-menu-item--active';
-				}
-
-				if (!empty($child['classes'])) {
-					$classes = array_merge($classes, $child['classes']);
-				}
-
-				$class_string = implode(' ', array_map('esc_attr', $classes));
-
-				$attrs = [];
-				if (!empty($child['target'])) {
-					$attrs[] = 'target="' . esc_attr($child['target']) . '"';
-				}
-				if (!empty($child['attr_title'])) {
-					$attrs[] = 'title="' . esc_attr($child['attr_title']) . '"';
-				}
-				$attr_string = !empty($attrs) ? ' ' . implode(' ', $attrs) : '';
-
-				// Popup triggers use # instead of their URL
-				$url = !empty($child['is_popup_trigger']) ? '#' : $child['url'];
-
-				// Popup trigger data-attributes
-				$popup_attrs = '';
-				if (!empty($child['is_popup_trigger']) && !empty($child['popup_id'])) {
-					$popup_attrs = sprintf(
-						' data-toggles-class="popup-open" data-class-target="nok-top-navigation"'
-						. ' data-toggle-event="click" data-toggles-attribute="data-state"'
-						. ' data-toggles-attribute-value="open" data-attribute-target="#%s"',
-						esc_attr($child['popup_id'])
-					);
-				}
-				?>
+			<?php foreach ($parent['children'] as $child): ?>
 				<div>
-					<a href="<?= esc_url($url); ?>" class="<?= $class_string; ?>"<?= $attr_string; ?><?= $popup_attrs; ?>>
-						<?= esc_html($child['title']); ?>
-					</a>
+					<?= MenuManager::render_menu_link($child); ?>
 				</div>
 			<?php endforeach; ?>
 		</div>
 	<?php endforeach; ?>
 
-	<!-- todo: make dynamic -->
-	<nok-square-block class="nok-bg-darkerblue">
+	<nok-square-block class="nok-bg-darkerblue nok-text-contrast nok-align-self-start">
 		<h3 class="nok-square-block__heading">
 			Vragen, of behoefte aan persoonlijk advies?
 		</h3>
-		<button class="nok-button nok-bg-darkblue nok-text-contrast" tabindex="0">
+		<a href="/contact/" role="button" class="nok-button nok-bg-darkblue nok-text-contrast" tabindex="0">
 			Neem contact op
 			<?= Assets::getIcon('ui_arrow-right', 'nok-text-yellow'); ?>
-		</button>
+		</a>
 	</nok-square-block>
 </div>

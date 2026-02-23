@@ -14,6 +14,8 @@
  * @var string $location Menu location identifier
  */
 
+use NOK2025\V1\Navigation\MenuManager;
+
 // Fallback if no menu assigned
 if ( empty( $menu_items ) ) {
 	if ( current_user_can( 'manage_options' ) ) {
@@ -41,9 +43,7 @@ if ( empty( $columns ) ) {
 		<ul class="nok-ul-list">
 			<?php foreach ( $menu_items as $item ): ?>
 				<li>
-					<a href="<?= esc_url( $item['url'] ?: '#' ); ?>" class="nok-nav-menu-item">
-						<?= esc_html( $item['title'] ); ?>
-					</a>
+					<?= MenuManager::render_menu_link( $item ); ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>
@@ -61,32 +61,9 @@ foreach ( $columns as $column ): ?>
 			</summary>
 			<div class="accordion-content">
 				<ul class="nok-ul-list">
-					<?php foreach ( $column['children'] as $child ):
-						$classes = [ 'nok-nav-menu-item' ];
-
-						if ( $child['is_current'] ) {
-							$classes[] = 'nok-nav-menu-item--active';
-						}
-
-						if ( ! empty( $child['classes'] ) ) {
-							$classes = array_merge( $classes, array_filter( $child['classes'] ) );
-						}
-
-						$class_string = implode( ' ', array_map( 'esc_attr', $classes ) );
-
-						$attrs = [];
-						if ( ! empty( $child['target'] ) ) {
-							$attrs[] = 'target="' . esc_attr( $child['target'] ) . '"';
-						}
-						if ( ! empty( $child['attr_title'] ) ) {
-							$attrs[] = 'title="' . esc_attr( $child['attr_title'] ) . '"';
-						}
-						$attr_string = ! empty( $attrs ) ? ' ' . implode( ' ', $attrs ) : '';
-						?>
+					<?php foreach ( $column['children'] as $child ): ?>
 						<li>
-							<a href="<?= esc_url( $child['url'] ); ?>" class="<?= $class_string; ?>"<?= $attr_string; ?>>
-								<?= esc_html( $child['title'] ); ?>
-							</a>
+							<?= MenuManager::render_menu_link( $child ); ?>
 						</li>
 					<?php endforeach; ?>
 				</ul>
