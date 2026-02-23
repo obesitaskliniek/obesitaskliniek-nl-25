@@ -6,6 +6,7 @@ namespace NOK2025\V1;
 use NOK2025\V1\PostTypes;
 use NOK2025\V1\Core\AssetManager;
 use NOK2025\V1\Navigation\MenuManager;
+use NOK2025\V1\Navigation\MenuIconFields;
 use NOK2025\V1\PageParts\Registry;
 use NOK2025\V1\PageParts\MetaManager;
 use NOK2025\V1\PageParts\PreviewSystem;
@@ -81,6 +82,7 @@ final class Theme {
     // Components
     private AssetManager $asset_manager;
     private MenuManager $menu_manager;
+    private MenuIconFields $menu_icon_fields;
     private Registry $registry;
     private MetaManager $meta_manager;
     private PreviewSystem $preview_system;
@@ -104,6 +106,7 @@ final class Theme {
         // Initialize components with proper dependencies
         $this->asset_manager       = new AssetManager();
         $this->menu_manager        = new MenuManager();
+        $this->menu_icon_fields    = new MenuIconFields();
         $this->registry            = new Registry();
         $this->meta_manager        = new MetaManager( $this->registry );
         $this->preview_system      = new PreviewSystem( $this->meta_manager );
@@ -150,6 +153,7 @@ final class Theme {
         // Let components register their hooks
         $this->asset_manager->register_hooks();
         $this->menu_manager->register_hooks();
+        $this->menu_icon_fields->register_hooks();
         $this->meta_manager->register_hooks();
         $this->preview_system->register_hooks();
         $this->template_renderer->register_hooks();
@@ -160,6 +164,9 @@ final class Theme {
         $this->voorlichting_form->register_hooks();
         PageParts\Registry::register_invalidation_hooks();
 
+
+        // Preload LCP hero image (early in <head> before other tags)
+        add_action( 'wp_head', [ Helpers::class, 'maybe_preload_hero_image' ], 2 );
 
         // Register archive settings AFTER init (priority 20)
         add_action( 'init', [ $this, 'register_archive_settings' ], 20 );
@@ -597,7 +604,7 @@ final class Theme {
      *
      * @return string|null Setting key (e.g. 'template_layout_vestiging') or null if no layout applies
      */
-    private function get_active_template_layout_setting(): ?string {
+    public function get_active_template_layout_setting(): ?string {
         if ( ! is_singular() ) {
             return null;
         }

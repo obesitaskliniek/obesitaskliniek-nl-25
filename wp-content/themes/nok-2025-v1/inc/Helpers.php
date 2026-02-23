@@ -41,6 +41,23 @@ use WP_Query;
  * @package NOK2025\V1
  */
 class Helpers {
+
+	/**
+	 * Fallback hero image when no featured image is set
+	 *
+	 * CDN-hosted stock photo used by both get_featured_image() and
+	 * maybe_preload_hero_image() to ensure the preload tag matches
+	 * the rendered <img> exactly (preventing double downloads).
+	 */
+	/** sizes attribute for WordPress attachment hero images (must match preload and <img>) */
+	private const HERO_IMAGE_SIZES = '(max-width: 1200px) 100vw, 1200px';
+
+	private const FALLBACK_HERO_IMAGE = [
+		'src'    => 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:100x0-25-0-0-center-0.jpg',
+		'srcset' => 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:1920x0-65-0-0-center-0.jpg 1920w, https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:768x0-65-0-0-center-0.jpg 768w, https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:320x0-65-0-0-center-0.jpg 320w, https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:150x0-65-0-0-center-0.jpg 150w',
+		'sizes'  => '(max-width: 575px) 100vw, (min-width: 575px) 75vw, (min-width: 768px) 84vw, (min-width: 996px) 84vw, (min-width: 1200px) 84vw',
+	];
+
 	/**
 	 * Generate cryptographically secure random string
 	 *
@@ -188,19 +205,16 @@ class Helpers {
 					'loading'  => 'eager',
 					'decoding' => 'async',
 					'class'    => trim( ( $class ?? '' ) . " featured-image" ),
-					'sizes'    => '(max-width: 1200px) 100vw, 1200px',
+					'sizes'    => self::HERO_IMAGE_SIZES,
 				]
 			);
 		} else {
-			$featuredImage = '<img ' . ( $class ? "class='" . esc_attr( $class ) . "'" : '' ) . ' src="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:100x0-25-0-0-center-0.jpg"
-					srcset="https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:1920x0-65-0-0-center-0.jpg 1920w,
-                     https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:768x0-65-0-0-center-0.jpg 768w,
-                     https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:320x0-65-0-0-center-0.jpg 320w,
-                     https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:150x0-65-0-0-center-0.jpg 150w" sizes="(max-width: 575px) 100vw,
-                         (min-width: 575px) 75vw,
-                         (min-width: 768px) 84vw,
-                         (min-width: 996px) 84vw,
-                         (min-width: 1200px) 84vw" loading="eager" decoding="async">';
+			$class_attr    = $class ? 'class="' . esc_attr( $class ) . '" ' : '';
+			$featuredImage = '<img ' . $class_attr
+				. 'src="' . self::FALLBACK_HERO_IMAGE['src'] . '" '
+				. 'srcset="' . self::FALLBACK_HERO_IMAGE['srcset'] . '" '
+				. 'sizes="' . self::FALLBACK_HERO_IMAGE['sizes'] . '" '
+				. 'loading="eager" decoding="async">';
 		}
 
 		return $featuredImage;
@@ -2004,6 +2018,147 @@ class Helpers {
 			. '</span>'
 			. '<span class="nok-download-item__action">' . $icon_arrow . '</span>'
 			. '</a>';
+	}
+
+	/**
+	 * Output a <link rel="preload"> for the hero image if the current page has one
+	 *
+	 * The nok-hero template renders its featured image inside an SVG <foreignObject>,
+	 * which is invisible to the browser's preload scanner. This hook runs early in
+	 * wp_head (priority 2) to let the browser discover the LCP image during HTML parsing.
+	 *
+	 * Resolves the image through the same chain as the embed block render:
+	 * 1. _override_thumbnail_id from block attributes (per-page override)
+	 * 2. Page part's own featured image
+	 * 3. FALLBACK_HERO_IMAGE constant (CDN stock photo)
+	 *
+	 * The imagesrcset/imagesizes values MUST match the rendered <img> exactly,
+	 * otherwise the browser downloads the image twice. For WordPress attachments,
+	 * both use wp_get_attachment_image* with size 'large'. For the fallback CDN
+	 * image, both reference FALLBACK_HERO_IMAGE.
+	 *
+	 * Assumes no plugin filters modify the hero image's srcset/sizes after
+	 * wp_get_attachment_image(). If they do, the preload would cause a double download.
+	 *
+	 * Intentionally skips non-singular pages (archives, 404, search) — not LCP-critical.
+	 *
+	 * @hooked wp_head (priority 2)
+	 */
+	public static function maybe_preload_hero_image(): void {
+		if ( is_admin() || ! is_singular() ) {
+			return;
+		}
+
+		global $post;
+		if ( ! $post ) {
+			return;
+		}
+
+		// Determine content source: template layout content or current post content
+		$content = $post->post_content;
+		$layout_setting = Theme::get_instance()->get_active_template_layout_setting();
+		if ( $layout_setting ) {
+			$layout_id = get_theme_mod( $layout_setting, 0 );
+			if ( $layout_id ) {
+				$layout_post = get_post( $layout_id );
+				if ( $layout_post ) {
+					$content = $layout_post->post_content;
+				}
+			}
+		}
+
+		$hero = self::find_first_hero_block( $content );
+		if ( ! $hero ) {
+			return;
+		}
+
+		$image_size = 'large';
+
+		// Resolve image: override → page part thumbnail → fallback
+		$attachment_id = 0;
+		if ( ! empty( $hero['overrides']['_override_thumbnail_id'] ) ) {
+			$attachment_id = (int) $hero['overrides']['_override_thumbnail_id'];
+		} else {
+			$attachment_id = (int) get_post_thumbnail_id( $hero['post_id'] );
+		}
+
+		if ( $attachment_id ) {
+			$href   = wp_get_attachment_image_url( $attachment_id, $image_size );
+			$srcset = wp_get_attachment_image_srcset( $attachment_id, $image_size );
+			$sizes = self::HERO_IMAGE_SIZES;
+
+			if ( ! $href ) {
+				return;
+			}
+
+			echo '<link rel="preload" as="image" href="' . esc_url( $href ) . '"'
+				. ( $srcset ? ' imagesrcset="' . esc_attr( $srcset ) . '"' : '' )
+				. ' imagesizes="' . esc_attr( $sizes ) . '"'
+				. ' fetchpriority="high">' . "\n";
+		} else {
+			// No attachment — use CDN fallback (must match FALLBACK_HERO_IMAGE constant)
+			echo '<link rel="preload" as="image" href="' . esc_url( self::FALLBACK_HERO_IMAGE['src'] ) . '"'
+				. ' imagesrcset="' . esc_attr( self::FALLBACK_HERO_IMAGE['srcset'] ) . '"'
+				. ' imagesizes="' . esc_attr( self::FALLBACK_HERO_IMAGE['sizes'] ) . '"'
+				. ' fetchpriority="high">' . "\n";
+		}
+	}
+
+	/**
+	 * Find the first nok-hero embed block in post content
+	 *
+	 * Parses Gutenberg block content and recursively searches for an
+	 * embed-nok-page-part block whose page part has design_slug 'nok-hero'.
+	 *
+	 * @param string $content Raw post_content with block comments
+	 *
+	 * @return array{post_id: int, overrides: array}|null Block data or null if no hero found
+	 */
+	private static function find_first_hero_block( string $content ): ?array {
+		if ( empty( $content ) ) {
+			return null;
+		}
+
+		$blocks = parse_blocks( $content );
+
+		return self::find_hero_in_blocks( $blocks );
+	}
+
+	/**
+	 * Recursively search block tree for the first nok-hero page part
+	 *
+	 * Walks the parsed block structure depth-first, matching
+	 * nok2025/embed-nok-page-part blocks whose page part has
+	 * design_slug === 'nok-hero'. Returns on first match.
+	 *
+	 * @see \NOK2025\V1\SEO\YoastIntegration::find_page_part_ids_recursive() Similar recursive block walker for Yoast indexing
+	 *
+	 * @param array $blocks Parsed block arrays from parse_blocks()
+	 *
+	 * @return array{post_id: int, overrides: array}|null First hero block data or null
+	 */
+	private static function find_hero_in_blocks( array $blocks ): ?array {
+		foreach ( $blocks as $block ) {
+			if ( $block['blockName'] === 'nok2025/embed-nok-page-part' ) {
+				$post_id = (int) ( $block['attrs']['postId'] ?? 0 );
+				if ( $post_id && get_post_meta( $post_id, 'design_slug', true ) === 'nok-hero' ) {
+					return [
+						'post_id'   => $post_id,
+						'overrides' => $block['attrs']['overrides'] ?? [],
+					];
+				}
+			}
+
+			// Check inner blocks recursively (hero inside group/columns/etc.)
+			if ( ! empty( $block['innerBlocks'] ) ) {
+				$found = self::find_hero_in_blocks( $block['innerBlocks'] );
+				if ( $found ) {
+					return $found;
+				}
+			}
+		}
+
+		return null;
 	}
 }
 
