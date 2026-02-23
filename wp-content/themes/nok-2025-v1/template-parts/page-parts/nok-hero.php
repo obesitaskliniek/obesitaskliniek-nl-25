@@ -122,24 +122,25 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
             </figure>
 
             <footer class="nok-px-section-padding nok-bg-body--lighter nok-dark-bg-darkerblue nok-bg-blur--large nok-bg-alpha-6">
-                <div class="nok-fs-buttons nok-usp nok-invisible-to-lg">
+                <div class="nok-fs-buttons nok-usp ">
                     <?= Assets::getIcon($c->usp_1_icon->raw(), 'nok-text-lightblue') ?>
                     <?= $c->usp_1_text ?>
                 </div>
-                <div class="nok-fs-buttons nok-usp nok-invisible-to-xl">
+                <div class="nok-fs-buttons nok-usp nok-invisible-to-lg">
                     <?= Assets::getIcon($c->usp_2_icon->raw(), 'nok-text-lightblue') ?>
                     <?= $c->usp_2_text ?>
                 </div>
-                <div class="nok-fs-buttons nok-usp nok-invisible-to-xxxl">
+                <div class="nok-fs-buttons nok-usp nok-invisible-to-xl">
                     <?= Assets::getIcon($c->usp_3_icon->raw(), 'nok-text-lightblue') ?>
                     <?= $c->usp_3_text ?>
                 </div>
+                <!--
                 <?php if ( $c->has( 'button_vestiging_url' ) ): ?>
                 <a role="button" href="<?= $c->button_vestiging_url->link() ?>"
-                   class="nok-button nok-bg-white nok-text-darkerblue nok-visible-xs nok-align-self-stretch"
+                   class="nok-button nok-bg-white nok-text-darkerblue nok-align-self-stretch"
                    tabindex="0"><span><?= $c->button_vestiging_text ?></span>
                 </a>
-                <?php endif; ?>
+                <?php endif; ?>-->
             </footer>
         </div>
     </nok-hero>

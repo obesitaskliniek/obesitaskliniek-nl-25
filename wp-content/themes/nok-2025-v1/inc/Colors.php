@@ -373,7 +373,7 @@ class Colors {
 			],
 			[
 				'label' => 'Clinics oranje',
-				'value' => 'nok-bg-clinics-oranje nok-text-contrast',
+				'value' => 'nok-bg-clinics-oranje nok-text-white',
 				'color' => self::COLOR_DEFINITIONS['nok-bg-clinics-oranje'],
 			],
 			[

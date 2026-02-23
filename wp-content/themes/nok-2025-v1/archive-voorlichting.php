@@ -165,7 +165,7 @@ $base_week_url = add_query_arg( 'week', $week_start->format( 'Y-m-d' ), get_post
             nok-mb-3 nok-row-gap-1 nok-column-gap-2">
                 <div class="nok-agenda-week-selector">
                     <h2 class="nok-fs-6 nok-mb-0">
-                        <?php esc_html_e( 'Evenementen tussen', THEME_TEXT_DOMAIN ); ?><br>
+                        <?php esc_html_e( 'Voorlichtingen tussen', THEME_TEXT_DOMAIN ); ?><br>
                         <span class="fw-bold"><?= esc_html( $date_range ); ?></span>
                     </h2>
                 </div>

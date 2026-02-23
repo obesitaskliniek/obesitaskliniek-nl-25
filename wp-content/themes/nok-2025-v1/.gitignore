@@ -49,3 +49,6 @@ token-debug.log
 *.min.*
 *.css
 *.css.map
+
+*.csv
+*.xls*

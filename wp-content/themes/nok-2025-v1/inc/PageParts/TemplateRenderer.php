@@ -421,8 +421,7 @@ class TemplateRenderer {
 	 * Handle CSS loading based on context and template type
 	 */
 	private function handle_template_css(string $template_type, string $design): void {
-		$theme = \NOK2025\V1\Theme::get_instance();
-		$dev_mode = $theme->is_development_mode();
+		$dev_mode = is_user_logged_in();
 
 		// Try minified version first in production
 		$css_info = $this->resolve_css_file($template_type, $design, $dev_mode);
@@ -456,6 +455,19 @@ class TemplateRenderer {
 	 */
 	private function handle_frontend_css(string $design, string $css_uri, int $version): void {
 		wp_enqueue_style($design, $css_uri, [], $version);
+
+		// Page/post-part CSS is supplementary — defer to avoid render-blocking
+		add_filter('style_loader_tag', function ($tag, $handle) use ($design) {
+			if ($handle !== $design) {
+				return $tag;
+			}
+			$deferred = preg_replace(
+				'/media=[\'"]all[\'"]/',
+				'media="print" onload="this.media=\'all\'"',
+				$tag
+			);
+			return ($deferred !== $tag) ? $deferred . '<noscript>' . $tag . '</noscript>' : $tag;
+		}, 10, 2);
 	}
 
 	/**

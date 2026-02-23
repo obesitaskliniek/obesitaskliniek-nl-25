@@ -61,8 +61,8 @@ define( 'USER_LOGGED_IN', function_exists( 'is_user_logged_in' ) && is_user_logg
 
 define( 'WP_ROOT', function_exists('get_home_path') ? get_home_path() : dirname(dirname(dirname(dirname(dirname(__FILE__))))));
 
-define( 'SITE_BASE_URI', 'https://dev.obesitaskliniek.nl');
-define( 'SITE_LIVE', false);
+define( 'SITE_BASE_URI', home_url());
+define( 'SITE_LIVE', wp_get_environment_type() === 'production');
 
 // 2) PSR‑4 autoloader
 spl_autoload_register( function( $class ) {

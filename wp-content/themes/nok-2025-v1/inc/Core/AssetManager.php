@@ -16,11 +16,11 @@ namespace NOK2025\V1\Core;
  * - File-based cache busting via timestamps
  * - Custom editor inline styles
  *
- * Development mode (Theme::is_development_mode() = true):
- * - Loads unminified assets (.css)
+ * Logged-in users:
+ * - Loads unminified assets (.css) for easier debugging
  * - Uses source file timestamps for versioning
  *
- * Production mode (Theme::is_development_mode() = false):
+ * Visitors (not logged in):
  * - Attempts to load minified assets (.min.css)
  * - Falls back to unminified if minified not found
  * - Uses minified file timestamps for versioning
@@ -69,11 +69,10 @@ class AssetManager {
 	 * @return void
 	 */
 	public function frontend_assets(): void {
-		$theme    = \NOK2025\V1\Theme::get_instance();
-		$dev_mode = $theme->is_development_mode();
+		$dev_mode = is_user_logged_in();
 
 		// Debug mode: ?critical-css-only strips all deferred stylesheets
-		// so only the inlined critical CSS renders. Dev mode only.
+		// so only the inlined critical CSS renders. Logged-in users only.
 		if ( $dev_mode && isset( $_GET['critical-css-only'] ) ) {
 			return;
 		}
@@ -131,8 +130,7 @@ class AssetManager {
 	 * // - PagePartDesignSettings localization
 	 */
 	public function admin_assets( $hook ): void {
-		$theme    = \NOK2025\V1\Theme::get_instance();
-		$dev_mode = $theme->is_development_mode();
+		$dev_mode = is_user_logged_in();
 
 		// Import admin-specific CSS
 		wp_register_style(

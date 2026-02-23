@@ -12,7 +12,6 @@
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable
  * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
  *
- * todo: work out the repeater
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
 
