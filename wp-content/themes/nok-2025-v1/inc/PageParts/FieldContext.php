@@ -209,10 +209,15 @@ class FieldContext implements \ArrayAccess {
 
 	public function content(): string {
 		if (!empty($this->generic_overrides['_override_content'])) {
-			return self::kses_post_with_svg(wpautop(do_blocks($this->generic_overrides['_override_content'])));
+			$html = wpautop(do_blocks($this->generic_overrides['_override_content']));
+			return self::kses_post_with_svg(\NOK2025\V1\BlockRenderers::clean_buttons_wpautop($html));
 		}
 		global $post;
-		return $post ? self::kses_post_with_svg(wpautop(wptexturize(do_blocks($post->post_content)))) : '';
+		if (!$post) {
+			return '';
+		}
+		$html = wpautop(wptexturize(do_blocks($post->post_content)));
+		return self::kses_post_with_svg(\NOK2025\V1\BlockRenderers::clean_buttons_wpautop($html));
 	}
 
 	/**

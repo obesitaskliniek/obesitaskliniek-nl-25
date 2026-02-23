@@ -309,3 +309,102 @@ addFilter(
     withButtonIconPreview,
     20
 );
+
+// ============================================================
+// core/buttons (wrapper block) extensions
+// ============================================================
+
+/**
+ * Add custom attributes to core/buttons block
+ */
+function addButtonsAttributes(settings, name) {
+    if (name !== 'core/buttons') {
+        return settings;
+    }
+
+    return {
+        ...settings,
+        attributes: {
+            ...settings.attributes,
+            nokEqualWidth: {
+                type: 'boolean',
+                default: false,
+            },
+        },
+    };
+}
+
+addFilter(
+    'blocks.registerBlockType',
+    'nok2025/buttons-attributes',
+    addButtonsAttributes
+);
+
+/**
+ * Add equal-width toggle to buttons block inspector
+ */
+const withButtonsControls = createHigherOrderComponent((BlockEdit) => {
+    return (props) => {
+        const { name, attributes, setAttributes } = props;
+
+        if (name !== 'core/buttons') {
+            return <BlockEdit {...props} />;
+        }
+
+        const { nokEqualWidth = false } = attributes;
+
+        return (
+            <Fragment>
+                <BlockEdit {...props} />
+                <InspectorControls>
+                    <PanelBody title={__('NOK Knoppen Instellingen', 'nok2025')} initialOpen={true}>
+                        <ToggleControl
+                            label={__('Gelijke breedte', 'nok2025')}
+                            checked={nokEqualWidth}
+                            onChange={(value) => setAttributes({ nokEqualWidth: value })}
+                            help={__('Knoppen delen de beschikbare ruimte gelijk', 'nok2025')}
+                        />
+                    </PanelBody>
+                </InspectorControls>
+            </Fragment>
+        );
+    };
+}, 'withButtonsControls');
+
+addFilter(
+    'editor.BlockEdit',
+    'nok2025/buttons-controls',
+    withButtonsControls
+);
+
+/**
+ * Apply equal-width class to buttons wrapper in editor
+ */
+const applyButtonsClassesEditor = createHigherOrderComponent((BlockListBlock) => {
+    return (props) => {
+        const { name, attributes } = props;
+
+        if (name !== 'core/buttons') {
+            return <BlockListBlock {...props} />;
+        }
+
+        const { nokEqualWidth = false } = attributes;
+
+        if (!nokEqualWidth) {
+            return <BlockListBlock {...props} />;
+        }
+
+        return (
+            <BlockListBlock
+                {...props}
+                className={`${props.className || ''} nok-equal-width`.trim()}
+            />
+        );
+    };
+}, 'applyButtonsClassesEditor');
+
+addFilter(
+    'editor.BlockListBlock',
+    'nok2025/buttons-classes-editor',
+    applyButtonsClassesEditor
+);

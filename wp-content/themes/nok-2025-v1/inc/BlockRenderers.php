@@ -28,6 +28,12 @@ class BlockRenderers {
 		add_filter( 'render_block_core/heading', [ $this, 'render_heading_block' ], 10, 2 );
 		add_filter( 'render_block_core/image', [ $this, 'handle_ghost_image' ], 10, 2 );
 		add_filter( 'render_block_core/button', [ $this, 'render_button_block' ], 10, 2 );
+		add_filter( 'render_block_core/buttons', [ $this, 'render_buttons_block' ], 10, 2 );
+
+		// Priority 11: run AFTER wpautop (priority 10) to clean up <p> tags
+		// it injects inside .wp-block-buttons (caused by bare <a> tags after
+		// render_button_block strips the .wp-block-button wrapper divs)
+		add_filter( 'the_content', [ $this, 'clean_buttons_wpautop' ], 11 );
 	}
 
 	public function handle_ghost_image( string $block_content, array $block ): string {
@@ -304,6 +310,51 @@ class BlockRenderers {
 
 		// Extract just the anchor tag (remove wrapper div)
 		return $dom->saveHTML( $button );
+	}
+
+	/**
+	 * Apply equal-width class to buttons wrapper when enabled
+	 *
+	 * @param string $block_content Original block HTML
+	 * @param array  $block         Block data including attributes
+	 *
+	 * @return string Modified HTML with nok-equal-width class if enabled
+	 */
+	public function render_buttons_block( string $block_content, array $block ): string {
+		$equal_width = $block['attrs']['nokEqualWidth'] ?? false;
+
+		if ( ! $equal_width ) {
+			return $block_content;
+		}
+
+		// Add nok-equal-width class to the wrapper div (first occurrence only)
+		return preg_replace(
+			'/class="([^"]*\bwp-block-buttons\b[^"]*)"/',
+			'class="$1 nok-equal-width"',
+			$block_content,
+			1
+		);
+	}
+
+	/**
+	 * Strip wpautop <p> tags from inside .wp-block-buttons containers
+	 *
+	 * Because render_button_block() strips .wp-block-button wrapper divs,
+	 * wpautop sees bare <a> tags and injects orphaned <p>/<\/p> around them.
+	 * Called from the_content (priority 11) and FieldContext::content().
+	 *
+	 * @param string $content Post content HTML
+	 *
+	 * @return string Content with <p> tags removed from buttons containers
+	 */
+	public static function clean_buttons_wpautop( string $content ): string {
+		return preg_replace_callback(
+			'/(<div\b[^>]*\bwp-block-buttons\b[^>]*>)(.*?)(<\/div>)/s',
+			function ( $matches ) {
+				return $matches[1] . preg_replace( '/<\/?p(?:\s[^>]*)?>/', '', $matches[2] ) . $matches[3];
+			},
+			$content
+		);
 	}
 
 }

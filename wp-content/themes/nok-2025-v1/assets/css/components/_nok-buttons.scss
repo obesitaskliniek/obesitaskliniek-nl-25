@@ -169,3 +169,11 @@ button.nok-button,
     @include components-base.nok-heading-font;
   }
 }
+
+// Equal-width buttons — all buttons share space equally
+.wp-block-buttons.nok-equal-width {
+  > .nok-button,
+  > .wp-block-button {
+    flex: 1 1 0%;
+  }
+}
