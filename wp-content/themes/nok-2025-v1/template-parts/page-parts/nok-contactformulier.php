@@ -27,6 +27,7 @@ $block_colors = $c->colors->is('Wit op donkerblauw',
 );
 
 $form_id = 4;
+$vestiging_field_id = 20; // GF form 4: "Vestiging" dropdown (dynamic population param: contactform_vestiging)
 
 // Check for automatic vestiging preselection
 $vestiging_value = '';
@@ -44,13 +45,10 @@ if ($c->preselect_vestiging->isTrue()) {
 	// If not on a vestiging page, checkbox has no effect - show dropdown as normal
 }
 
-// Form field values for dynamic population
-// Note: Parameter name prefixed to avoid conflict with 'vestiging' CPT slug
-$field_values = $vestiging_value ? 'contactform_vestiging=' . $vestiging_value : '';
 ?>
 
 <?php if ($hide_vestiging_dropdown): ?>
-<style>.populate-vestigingen { display: none !important; }</style>
+<style>#field_<?= $form_id ?>_<?= $vestiging_field_id ?> { display: none !important; }</style>
 <?php endif; ?>
 
 <nok-section class="<?= $section_colors ?>">
@@ -75,7 +73,10 @@ $field_values = $vestiging_value ? 'contactform_vestiging=' . $vestiging_value :
 
 		<nok-square-block class="<?= $block_colors ?>" data-shadow="true">
 			<?php if (function_exists('gravity_form')): ?>
-				<?php gravity_form($form_id, false, false, false, $field_values ?: null, true); ?>
+				<?php gravity_form($form_id, false, false, false,
+				$hide_vestiging_dropdown ? ['contactform_vestiging' => $vestiging_value] : null,
+				true
+			); ?>
 			<?php else: ?>
 				<p class="nok-text-muted">
 					<?php esc_html_e('Gravity Forms is niet actief. Neem contact op met de beheerder.', THEME_TEXT_DOMAIN); ?>
