@@ -209,9 +209,9 @@ class FieldContext implements \ArrayAccess {
 
 	public function content(): string {
 		if (!empty($this->generic_overrides['_override_content'])) {
-			return wp_kses_post(wpautop($this->generic_overrides['_override_content']));
+			return wp_kses_post(wpautop(do_blocks($this->generic_overrides['_override_content'])));
 		}
 		global $post;
-		return $post ? wp_kses_post(wpautop(wptexturize($post->post_content))) : '';
+		return $post ? wp_kses_post(wpautop(wptexturize(do_blocks($post->post_content)))) : '';
 	}
 }
