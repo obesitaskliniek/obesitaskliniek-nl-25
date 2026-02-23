@@ -209,9 +209,42 @@ class FieldContext implements \ArrayAccess {
 
 	public function content(): string {
 		if (!empty($this->generic_overrides['_override_content'])) {
-			return wp_kses_post(wpautop(do_blocks($this->generic_overrides['_override_content'])));
+			return self::kses_post_with_svg(wpautop(do_blocks($this->generic_overrides['_override_content'])));
 		}
 		global $post;
-		return $post ? wp_kses_post(wpautop(wptexturize(do_blocks($post->post_content)))) : '';
+		return $post ? self::kses_post_with_svg(wpautop(wptexturize(do_blocks($post->post_content)))) : '';
+	}
+
+	/**
+	 * Sanitize content like wp_kses_post() but allow inline SVG icons
+	 *
+	 * Block renderers (e.g. BlockRenderers::render_button_block) inject SVG icons
+	 * during do_blocks(). Standard wp_kses_post() strips all SVG elements,
+	 * removing those icons from the rendered output.
+	 *
+	 * @param string $content Content to sanitize
+	 * @return string Sanitized content with SVG elements preserved
+	 */
+	private static function kses_post_with_svg(string $content): string {
+		$allowed = wp_kses_allowed_html('post');
+
+		$allowed['svg'] = [
+			'xmlns'       => true,
+			'class'       => true,
+			'height'      => true,
+			'width'       => true,
+			'fill'        => true,
+			'viewbox'     => true,
+			'aria-hidden' => true,
+			'role'        => true,
+		];
+		$allowed['path'] = [
+			'fill-rule' => true,
+			'clip-rule' => true,
+			'd'         => true,
+			'fill'      => true,
+		];
+
+		return wp_kses($content, $allowed);
 	}
 }
