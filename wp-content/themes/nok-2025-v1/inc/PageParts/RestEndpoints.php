@@ -159,6 +159,7 @@ class RestEndpoints {
 		add_action('rest_api_init', [$this, 'register_post_query_endpoint']);
 		add_action('rest_api_init', [$this, 'register_orphaned_fields_endpoint']);
 		add_action('rest_api_init', [$this, 'register_search_endpoint']);
+		add_action('rest_api_init', [$this, 'register_link_search_endpoint']);
 	}
 
 	/**
@@ -381,10 +382,11 @@ class RestEndpoints {
 	 * @var array<string, string>
 	 */
 	private const POST_TYPE_LABELS = [
-		'page'       => 'Pagina',
-		'post'       => 'Artikel',
-		'vestiging'  => 'Vestiging',
-		'kennisbank' => 'Kennisbank',
+		'page'          => 'Pagina',
+		'post'          => 'Artikel',
+		'vestiging'     => 'Vestiging',
+		'kennisbank'    => 'Kennisbank',
+		'voorlichting'  => 'Voorlichting',
 	];
 
 	/**
@@ -392,7 +394,17 @@ class RestEndpoints {
 	 *
 	 * @var array<string>
 	 */
-	private const SEARCH_POST_TYPES = ['page', 'post', 'vestiging', 'kennisbank'];
+	private const SEARCH_POST_TYPES = ['page', 'post', 'vestiging', 'kennisbank', 'voorlichting'];
+
+	/**
+	 * Taxonomies to include in link search results
+	 *
+	 * @var array<string, string> Taxonomy slug => Dutch label
+	 */
+	private const LINK_SEARCH_TAXONOMIES = [
+		'category'              => 'Categorie',
+		'kennisbank_categories' => 'Kennisbank categorie',
+	];
 
 	/**
 	 * Meta fields to include in search for specific post types
@@ -542,6 +554,157 @@ class RestEndpoints {
 		}
 
 		return $meta_posts;
+	}
+
+	/**
+	 * Register endpoint for link field search (editor-only)
+	 *
+	 * Provides title-priority ranked search across post types and taxonomies
+	 * for the LinkField component. Replaces 6 parallel WP REST calls with
+	 * a single query using direct SQL for relevance ranking.
+	 *
+	 * @return void
+	 */
+	public function register_link_search_endpoint(): void {
+		register_rest_route('nok-2025-v1/v1', '/link-search', [
+			'methods'             => 'GET',
+			'callback'            => [$this, 'link_search_callback'],
+			'permission_callback' => function () {
+				return current_user_can('edit_posts');
+			},
+			'args'                => [
+				'q' => [
+					'required'          => true,
+					'type'              => 'string',
+					'sanitize_callback' => 'sanitize_text_field',
+					'validate_callback' => fn($param) => is_string($param) && strlen(trim($param)) >= 2,
+				],
+			],
+		]);
+	}
+
+	/**
+	 * REST callback: Link field search with title-priority ranking
+	 *
+	 * Searches published posts by title only (no content search) with 3-tier relevance:
+	 *   1. Exact title match
+	 *   2. Title starts with search term
+	 *   3. Title contains search term
+	 *
+	 * Within each tier, results are ordered by post type priority (pages first).
+	 * Also searches taxonomy terms by name and vestiging meta fields.
+	 *
+	 * @param \WP_REST_Request $request Request with q parameter
+	 * @return \WP_REST_Response Response with results array
+	 */
+	public function link_search_callback(\WP_REST_Request $request): \WP_REST_Response {
+		global $wpdb;
+
+		$search_term   = trim($request->get_param('q'));
+		$like_starts   = $wpdb->esc_like($search_term) . '%';
+		$like_contains = '%' . $wpdb->esc_like($search_term) . '%';
+
+		// Post type priority (hardcoded constants, no user input — safe to inline)
+		$type_priority_map = [
+			'page'          => 1,
+			'vestiging'     => 2,
+			'kennisbank'    => 3,
+			'post'          => 4,
+			'voorlichting'  => 5,
+		];
+
+		$type_case_parts = [];
+		foreach ($type_priority_map as $type => $priority) {
+			$type_case_parts[] = "WHEN '{$type}' THEN {$priority}";
+		}
+		$type_case_sql = 'CASE post_type ' . implode(' ', $type_case_parts) . ' ELSE 99 END';
+
+		// IN clause from hardcoded constant
+		$type_in_sql = "'" . implode("','", self::SEARCH_POST_TYPES) . "'";
+
+		// Title-priority search query
+		// Relevance: 1=exact, 2=starts with, 3=contains
+		// Secondary sort: post type priority
+		// Only 3 user-supplied placeholders — CASE and IN use hardcoded values
+		$query = $wpdb->prepare(
+			"SELECT ID, post_title, post_type,
+				CASE
+					WHEN LOWER(post_title) = LOWER(%s) THEN 1
+					WHEN LOWER(post_title) LIKE LOWER(%s) THEN 2
+					ELSE 3
+				END AS relevance,
+				{$type_case_sql} AS type_priority
+			FROM {$wpdb->posts}
+			WHERE post_status = 'publish'
+				AND post_type IN ({$type_in_sql})
+				AND LOWER(post_title) LIKE LOWER(%s)
+			ORDER BY relevance ASC, type_priority ASC, post_title ASC
+			LIMIT 20",
+			$search_term,
+			$like_starts,
+			$like_contains
+		);
+
+		$posts = $wpdb->get_results($query);
+
+		$results   = [];
+		$found_ids = [];
+
+		foreach ($posts as $post) {
+			$post_type   = $post->post_type;
+			$found_ids[] = (int) $post->ID;
+			$results[]   = [
+				'id'      => (int) $post->ID,
+				'title'   => html_entity_decode($post->post_title, ENT_QUOTES, 'UTF-8'),
+				'type'    => $post_type,
+				'label'   => self::POST_TYPE_LABELS[$post_type] ?? ucfirst($post_type),
+				'storeAs' => 'post',
+				'url'     => get_permalink($post->ID),
+			];
+		}
+
+		// Search vestiging meta fields (city, street)
+		$meta_posts = $this->search_meta_fields($search_term, 5, $found_ids);
+		foreach ($meta_posts as $meta_post) {
+			$post_type   = get_post_type($meta_post);
+			$post_id     = is_object($meta_post) ? $meta_post->ID : (int) $meta_post;
+			$found_ids[] = $post_id;
+			$results[]   = [
+				'id'      => $post_id,
+				'title'   => html_entity_decode(get_the_title($post_id), ENT_QUOTES, 'UTF-8'),
+				'type'    => $post_type,
+				'label'   => self::POST_TYPE_LABELS[$post_type] ?? ucfirst($post_type),
+				'storeAs' => 'post',
+				'url'     => get_permalink($post_id),
+			];
+		}
+
+		// Search taxonomy terms
+		foreach (self::LINK_SEARCH_TAXONOMIES as $taxonomy => $label) {
+			$terms = get_terms([
+				'taxonomy'   => $taxonomy,
+				'name__like' => $search_term,
+				'hide_empty' => false,
+				'number'     => 5,
+			]);
+
+			if (is_wp_error($terms)) {
+				continue;
+			}
+
+			foreach ($terms as $term) {
+				$results[] = [
+					'id'      => (int) $term->term_id,
+					'title'   => html_entity_decode($term->name, ENT_QUOTES, 'UTF-8'),
+					'type'    => $taxonomy,
+					'label'   => $label,
+					'storeAs' => 'term',
+					'url'     => get_term_link($term),
+				];
+			}
+		}
+
+		return new \WP_REST_Response(['results' => $results], 200);
 	}
 
 	/**

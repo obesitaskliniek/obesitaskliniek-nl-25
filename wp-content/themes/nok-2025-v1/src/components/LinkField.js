@@ -120,7 +120,7 @@ const LinkField = ({value, onChange, placeholder = 'Search or enter URL...'}) =>
         }
     }, [value]);
 
-    // Search for posts/pages/CPTs/categories/archives
+    // Search for posts/pages/CPTs/categories/archives via single custom endpoint
     const searchContent = debounce(async (search) => {
         if (!search || search.length < 2) {
             setSuggestions([]);
@@ -130,34 +130,18 @@ const LinkField = ({value, onChange, placeholder = 'Search or enter URL...'}) =>
         setLoading(true);
 
         try {
-            // Search all content types in parallel
-            const [posts, pages, kennisbank, voorlichting, vestigingen, categories] = await Promise.all([
-                apiFetch({path: `/wp/v2/posts?search=${encodeURIComponent(search)}&per_page=5`}),
-                apiFetch({path: `/wp/v2/pages?search=${encodeURIComponent(search)}&per_page=5`}),
-                apiFetch({path: `/wp/v2/kennisbank?search=${encodeURIComponent(search)}&per_page=5`}).catch(() => []),
-                apiFetch({path: `/wp/v2/voorlichting?search=${encodeURIComponent(search)}&per_page=5`}).catch(() => []),
-                apiFetch({path: `/wp/v2/vestigingen?search=${encodeURIComponent(search)}&per_page=5`}).catch(() => []),
-                apiFetch({path: `/wp/v2/categories?search=${encodeURIComponent(search)}&per_page=5`})
-            ]);
+            const response = await apiFetch({
+                path: `/nok-2025-v1/v1/link-search?q=${encodeURIComponent(search)}`,
+            });
 
-            // Filter archive pages by search term
+            // Filter archive pages client-side (static list)
             const searchLower = search.toLowerCase();
             const matchingArchives = ARCHIVE_PAGES.filter(a =>
                 a.title.toLowerCase().includes(searchLower) ||
                 a.slug.toLowerCase().includes(searchLower)
-            );
+            ).map(a => ({id: a.slug, title: a.title, type: 'archive', label: 'Archief', url: null, storeAs: 'archive'}));
 
-            const results = [
-                ...posts.map(p => ({id: p.id, title: p.title.rendered, type: 'post', url: p.link, storeAs: 'post'})),
-                ...pages.map(p => ({id: p.id, title: p.title.rendered, type: 'page', url: p.link, storeAs: 'post'})),
-                ...kennisbank.map(p => ({id: p.id, title: p.title.rendered, type: 'kennisbank', url: p.link, storeAs: 'post'})),
-                ...voorlichting.map(p => ({id: p.id, title: p.title.rendered, type: 'voorlichting', url: p.link, storeAs: 'post'})),
-                ...vestigingen.map(p => ({id: p.id, title: p.title.rendered, type: 'vestiging', url: p.link, storeAs: 'post'})),
-                ...categories.map(c => ({id: c.id, title: c.name, type: 'category', url: c.link, storeAs: 'term'})),
-                ...matchingArchives.map(a => ({id: a.slug, title: a.title, type: 'archive', url: null, storeAs: 'archive'}))
-            ];
-
-            setSuggestions(results);
+            setSuggestions([...response.results, ...matchingArchives]);
         } catch (error) {
             console.error('Link search failed:', error);
             setSuggestions([]);
@@ -244,7 +228,7 @@ const LinkField = ({value, onChange, placeholder = 'Search or enter URL...'}) =>
                 border: `1px solid ${linkedPost.itemType === 'archive' ? '#a3d9a3' : '#ddd'}`
             }}>
                 <span style={{flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
-                    <strong dangerouslySetInnerHTML={{__html: linkedPost.title}} />
+                    <strong>{linkedPost.title}</strong>
                     {pathDisplay && (
                         <span style={{color: '#666', marginLeft: '8px', fontSize: '11px'}}>
                             {pathDisplay}
@@ -331,7 +315,7 @@ const LinkField = ({value, onChange, placeholder = 'Search or enter URL...'}) =>
                             onMouseEnter={(e) => e.currentTarget.style.background = '#f5f5f5'}
                             onMouseLeave={(e) => e.currentTarget.style.background = '#fff'}
                         >
-                            <span dangerouslySetInnerHTML={{__html: item.title}} />
+                            <span>{item.title}</span>
                             <span style={{
                                 fontSize: '10px',
                                 color: '#666',
@@ -340,7 +324,7 @@ const LinkField = ({value, onChange, placeholder = 'Search or enter URL...'}) =>
                                 borderRadius: '3px',
                                 textTransform: 'uppercase'
                             }}>
-                                {item.type}
+                                {item.label || item.type}
                             </span>
                         </div>
                     ))}
