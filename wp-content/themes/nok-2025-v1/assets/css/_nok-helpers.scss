@@ -812,16 +812,14 @@ $utilities: (
     flex-wrap: nowrap;
 
     &[data-scroll-snapping="true"] {
-      scroll-snap-type: both mandatory;
-      scroll-snap-stop: normal;
-      scroll-snap-align: center;
+      scroll-snap-type: x mandatory;
     }
 
     > * {
       flex: 0 0 calc(
         (100% - (var(--flex-gap, 0rem) * (var(--slides-in-view, 1) - 1))) / var(--slides-in-view, 1)
       );
-      //scroll-snap-align: start;
+      scroll-snap-align: start;
     }
 
     nok-square-block {

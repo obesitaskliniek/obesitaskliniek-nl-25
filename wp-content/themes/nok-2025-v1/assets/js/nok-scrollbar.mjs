@@ -477,7 +477,9 @@ export function setupFakeScrollbar(scrollElement) {
         isVisible(scrollElement, function(visible) {
           if (visible && scrollElement.dataset.autoscroll === 'true') {
             const reachedEnd = Math.abs(scrollElement.scrollLeft + scrollElement.offsetWidth - scrollElement.scrollWidth) < 10;
+            if (SNAPPING) { disableSnapping(scrollElement); }
             scrollElement.scrollLeft = reachedEnd ? 0 : children[getNextChildIndex()].offsetLeft;
+            if (SNAPPING) { restoreSnapping(scrollElement); }
           }
         })
       }, interval);
