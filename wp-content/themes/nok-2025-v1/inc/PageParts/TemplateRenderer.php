@@ -394,7 +394,19 @@ class TemplateRenderer {
 			include $template_path;
 			$html = ob_get_clean();
 
-			echo $section_id !== '' ? $this->inject_section_id( $html, $section_id ) : $html;
+			if ( $section_id !== '' ) {
+				$html = $this->inject_section_id( $html, $section_id );
+			}
+
+			// Inject frontend edit button for logged-in editors (frontend only)
+			global $post;
+			if ( $this->context->is_frontend()
+			     && $post instanceof \WP_Post
+			     && current_user_can( 'edit_post', $post->ID ) ) {
+				$html = $this->inject_edit_button( $html, $post->ID );
+			}
+
+			echo $html;
 		} else {
 			include $template_path;
 		}
@@ -591,6 +603,38 @@ class TemplateRenderer {
 			'$1 id="' . esc_attr( $unique_id ) . '"',
 			$html,
 			1 // Replace only the first match
+		);
+	}
+
+	/**
+	 * Inject a frontend edit button as the first child of the template's root element
+	 *
+	 * Matches the first HTML opening tag via regex and inserts a pencil-icon link
+	 * immediately after it. The button is hidden by default and revealed on
+	 * .nok-section hover via CSS (.nok-pp-edit).
+	 *
+	 * Only called on frontend context when the user can edit the specific post.
+	 *
+	 * @param string $html Rendered template HTML
+	 * @param int    $post_id Page part post ID
+	 *
+	 * @return string HTML with edit button injected (or unchanged if no opening tag found)
+	 */
+	private function inject_edit_button( string $html, int $post_id ): string {
+		$edit_url = esc_url( admin_url( "post.php?post={$post_id}&action=edit" ) );
+		$title    = esc_attr( get_the_title( $post_id ) );
+
+		$button = '<a class="nok-pp-edit" href="' . $edit_url . '" target="_blank" rel="noopener" title="' . $title . '">'
+		        . '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+		        . '<path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>'
+		        . '</svg></a>';
+
+		// Match the first HTML opening tag ([^>]* already spans newlines)
+		return preg_replace(
+			'/(<[a-z][a-z0-9-]*\b[^>]*>)/i',
+			'$1' . $button,
+			$html,
+			1
 		);
 	}
 

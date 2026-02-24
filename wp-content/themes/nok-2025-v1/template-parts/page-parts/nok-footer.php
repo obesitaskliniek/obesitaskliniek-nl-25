@@ -35,8 +35,8 @@ $block_colors = $c->colors->contains('nok-bg-darkestblue',
                         <a href="/contact/" role="button" class="nok-button nok-justify-self-start fill-mobile nok-bg-darkblue nok-text-contrast" tabindex="0">
                             Neem contact op <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
                         </a>
-                        <a href="/kennisbank/veelgestelde-vragen" role="button" class="nok-button nok-justify-self-start fill-mobile nok-bg-body--darker nok-text-contrast" tabindex="0">
-                            Bekijk veelgestelde vragen <?= Assets::getIcon('ui_question', 'nok-text-darkblue') ?>
+                        <a href="/kennisbank/veelgestelde-vragen" role="button" class="nok-button nok-justify-self-start fill-mobile nok-bg-body--darker nok-dark-bg-darkerblue nok-text-contrast" tabindex="0">
+                            Bekijk veelgestelde vragen <?= Assets::getIcon('ui_question', 'nok-text-darkblue nok-dark-text-yellow') ?>
                         </a>
                     </div>
                 </nok-square-block>

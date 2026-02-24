@@ -51,7 +51,7 @@ $visual_z = $left ? 'nok-z-1' : '';
 // Capture content block
 ob_start();
 ?>
-<nok-square-block class="nok-bg-white nok-alpha-10 nok-my-2 nok-my-to-lg-0 <?= $content_z ?>" data-shadow="true">
+<nok-square-block class="nok-bg-white nok-dark-bg-darkerblue nok-alpha-10 nok-my-2 nok-my-to-lg-0 <?= $content_z ?>" data-shadow="true">
     <div class="nok-square-block__heading">
         <h2 class="nok-text-lightblue nok-dark-text-yellow nok-hero__pre-heading nok-fs-3 nok-fs-to-md-2">
             <?= $c->tagline ?>

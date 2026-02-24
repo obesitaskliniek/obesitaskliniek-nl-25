@@ -100,7 +100,7 @@ final class Theme {
     private bool $development_mode = true;
 
     // Maintenance mode - serves wp-content/maintenance.php to non-logged-in visitors
-    private bool $maintenance_mode = true;
+    private bool $maintenance_mode = false;
 
     public function __construct() {
         // Ensure CPTs are registered

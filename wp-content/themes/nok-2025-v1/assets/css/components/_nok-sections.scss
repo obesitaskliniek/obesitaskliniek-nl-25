@@ -206,3 +206,32 @@ nok-section {
 @include nok-section;
 }
 
+// Frontend edit button for logged-in admins (admin-only, not in critical CSS)
+.nok-pp-edit {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+  text-decoration: none;
+
+  svg { width: 1rem; height: 1rem; }
+
+  // Matches both class (.nok-section) and bare custom element (nok-section)
+  nok-section:hover > &,
+  .nok-section:hover > & {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
