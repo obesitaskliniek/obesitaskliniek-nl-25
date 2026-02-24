@@ -15,7 +15,7 @@ use NOK2025\V1\Theme;
 $theme = Theme::get_instance();
 $menu_manager = $theme->get_menu_manager();
 $star = Assets::getIcon('ui_star');
-$logo = '<nok-logo>' . file_get_contents(THEME_ROOT . '/assets/img/nok-logo.svg') .'</nok-logo>';
+$logo = '<nok-logo>' . file_get_contents(THEME_ROOT_ABS . '/assets/img/nok-logo.svg') .'</nok-logo>';
 ?>
 
 <nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs">

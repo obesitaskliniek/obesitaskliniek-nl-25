@@ -99,6 +99,9 @@ final class Theme {
     // Development mode - set to false for production
     private bool $development_mode = true;
 
+    // Maintenance mode - serves wp-content/maintenance.php to non-logged-in visitors
+    private bool $maintenance_mode = true;
+
     public function __construct() {
         // Ensure CPTs are registered
         new PostTypes();
@@ -149,6 +152,11 @@ final class Theme {
     private function setup_hooks(): void {
         // Core theme setup
         add_action( 'init', [ $this, 'theme_supports' ] );
+
+        // Maintenance mode — serve branded page to non-logged-in visitors
+        if ( $this->maintenance_mode ) {
+            add_action( 'template_redirect', [ $this, 'maybe_serve_maintenance_page' ] );
+        }
 
         // Let components register their hooks
         $this->asset_manager->register_hooks();
@@ -311,6 +319,28 @@ final class Theme {
      */
     public function is_development_mode(): bool {
         return $this->development_mode;
+    }
+
+    /**
+     * Serve branded maintenance page to non-logged-in visitors
+     *
+     * Loads wp-content/maintenance.php (standalone, zero WP dependency) and exits.
+     * Logged-in users bypass this entirely so admins can preview the site during launch.
+     *
+     * Hooked on `template_redirect` — only registered when $maintenance_mode is true.
+     *
+     * @return void
+     */
+    public function maybe_serve_maintenance_page(): void {
+        if ( is_user_logged_in() ) {
+            return;
+        }
+
+        $maintenance_file = WP_CONTENT_DIR . '/maintenance.php';
+        if ( file_exists( $maintenance_file ) ) {
+            require $maintenance_file;
+            exit;
+        }
     }
 
     // =============================================================================

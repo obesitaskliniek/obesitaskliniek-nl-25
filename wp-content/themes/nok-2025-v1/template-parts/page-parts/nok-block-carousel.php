@@ -62,7 +62,7 @@ $blocks = $c->blocks->json(array_fill(0, 6, [
 										<?= esc_html($block['content']); ?>
                                     </p>
 								<?php endif; ?>
-								<?php $block_link_href = FieldValue::resolve_link( $block['link_url'] ); ?>
+								<?php $block_link_href = !empty($block['link_url']) ? FieldValue::resolve_link( $block['link_url'] ) : ''; ?>
 							<?php if ( $block_link_href ) : ?>
                                     <a class="nok-square-block__link" href="<?= $block_link_href; ?>">
 										<?= $c->read_more ?> <?= Assets::getIcon('ui_arrow-right-longer'); ?>

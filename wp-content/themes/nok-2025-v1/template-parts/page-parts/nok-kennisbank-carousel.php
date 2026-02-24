@@ -46,13 +46,26 @@ if (!empty($category_filter)) {
 	}
 }
 
-// Query kennisbank posts
+// Exclude current kennisbank post to avoid self-reference in carousel
+// TemplateRenderer replaces $wp_query, so use $wp_the_query (the untouched original main query)
+$exclude = [];
+$main_query = $GLOBALS['wp_the_query'] ?? null;
+if ($main_query && $main_query->is_singular('kennisbank')) {
+	$exclude = [$main_query->get_queried_object_id()];
+}
 $query = Helpers::get_latest_custom_posts(
 	'kennisbank',
 	intval($c->max_items->raw()),
 	[],
 	$tax_query
 );
+
+// Exclude current kennisbank post from results
+if (!empty($exclude) && $query) {
+	$filtered = array_filter($query->posts, fn($p) => !in_array($p->ID, $exclude));
+	$query->posts = array_values($filtered);
+	$query->post_count = count($query->posts);
+}
 
 // Exit early if no posts
 if (!$query || !$query->have_posts()) {
@@ -89,15 +102,15 @@ $scroller_id = 'kennisbank-carousel-' . wp_unique_id();
 
 					<?php if ($c->show_nav_buttons->isTrue()) : ?>
 						<div class="nok-button-group nok-mt-2">
-							<button class="nok-button nok-bg-lightgrey nok-dark-bg-darkblue nok-text-contrast fill-group-column"
+							<button class="nok-button nok-bg-darkblue nok-dark-bg-darkblue nok-text-contrast fill-group-column"
 							        data-scroll-target="<?= $scroller_id; ?>" data-scroll-action="backward"
 							        aria-label="Vorige artikelen">
-								<?= Assets::getIcon('ui_arrow-left-longer') ?>
+								<?= Assets::getIcon('ui_arrow-left-long', 'nok-text-yellow') ?>
 							</button>
-							<button class="nok-button nok-bg-lightgrey nok-dark-bg-darkblue nok-text-contrast fill-group-column"
+							<button class="nok-button nok-bg-darkblue nok-dark-bg-darkblue nok-text-contrast fill-group-column"
 							        data-scroll-target="<?= $scroller_id; ?>" data-scroll-action="forward"
 							        aria-label="Volgende artikelen">
-								<?= Assets::getIcon('ui_arrow-right-longer') ?>
+								<?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
 							</button>
 						</div>
 					<?php endif; ?>

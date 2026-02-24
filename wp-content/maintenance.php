@@ -22,26 +22,26 @@ header('Content-Type: text/html; charset=utf-8');
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
     <title>Onderhoud — Nederlandse Obesitas Kliniek</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="themes/nok-2025-v1/assets/img/icon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="themes/nok-2025-v1/assets/img/icon/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/wp-content/themes/nok-2025-v1/assets/img/icon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/wp-content/themes/nok-2025-v1/assets/img/icon/favicon-16x16.png">
     <style>
         @font-face {
             font-family: 'Realist';
-            src: url('themes/nok-2025-v1/assets/fonts/realist-new/Realist-Medium.woff2') format('woff2');
+            src: url('/wp-content/themes/nok-2025-v1/assets/fonts/realist-new/Realist-Medium.woff2') format('woff2');
             font-weight: 500;
             font-style: normal;
             font-display: swap;
         }
         @font-face {
             font-family: 'Realist';
-            src: url('themes/nok-2025-v1/assets/fonts/realist-new/Realist-Bold.woff2') format('woff2');
+            src: url('/wp-content/themes/nok-2025-v1/assets/fonts/realist-new/Realist-Bold.woff2') format('woff2');
             font-weight: 700;
             font-style: normal;
             font-display: swap;
         }
         @font-face {
             font-family: 'Inter';
-            src: url('themes/nok-2025-v1/assets/fonts/inter/InterVariable.woff2') format('woff2');
+            src: url('/wp-content/themes/nok-2025-v1/assets/fonts/inter/InterVariable.woff2') format('woff2');
             font-weight: 100 900;
             font-style: normal;
             font-display: swap;

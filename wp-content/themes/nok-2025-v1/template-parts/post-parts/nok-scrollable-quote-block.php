@@ -41,7 +41,7 @@ $quote_block_button_style = $args['block_button_color'] ?? 'nok-bg-darkestblue n
                                tabindex="0">
                                 Lees het verhaal <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ); ?>
                             </a>
-                            <a role="button" href="#" class="nok-hyperlink nok-justify-self-center">
+                            <a role="button" href="/ervaringen/" class="nok-hyperlink nok-justify-self-center">
                                 <span>Bekijk alle ervaringen</span>
                             </a>
                         </div>
