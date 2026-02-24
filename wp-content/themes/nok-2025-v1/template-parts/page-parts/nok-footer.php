@@ -47,6 +47,7 @@ $block_colors = $c->colors->contains('nok-bg-darkestblue',
             <div class="nok-layout-grid__span-all nok-layout-flex-row">
                 <a href="/klachten-privacy/" class="nok-hyperlink">Klachten & Privacy</a>
                 <a href="/zorgmail/" class="nok-hyperlink">ZorgMail</a>
+                <a href="/cookie-verklaring/" class="nok-hyperlink">Cookie Verklaring</a>
                 <!--
                 <a href="mailto:info@obesitaskliniek.nl" class="nok-hyperlink">info@obesitaskliniek.nl</a>
                 <a href="tel:+31888832444" class="nok-hyperlink">088 - 88 32 444</a>-->
