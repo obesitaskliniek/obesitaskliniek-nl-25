@@ -182,7 +182,7 @@ class Helpers {
               data-toggles-attribute="data-state"
               data-toggles-attribute-value="open"
               data-attribute-target="#popup-video">
-            <img class="nok-video-thumbnail__poster" src="%s" alt="" loading="lazy">
+            <img class="nok-video-thumbnail__poster" src="%s" alt="%s" loading="lazy">
             <div class="nok-video-thumbnail__play" aria-hidden="true">
                 <span class="nok-video-background__play-icon">%s</span>
             </div>
@@ -191,6 +191,7 @@ class Helpers {
 			implode( "\n              ", $data_attrs ),
 			esc_attr( $title ),
 			esc_url( $poster_url ),
+			esc_attr( $title ),
 			$icon
 		);
 	}

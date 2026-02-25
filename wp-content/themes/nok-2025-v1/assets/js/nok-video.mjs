@@ -257,7 +257,16 @@ async function enterFullscreen(video) {
     if (state.hqSrc !== state.lqSrc) {
         video.src = state.hqSrc;
         video.load();
-        await new Promise(r => video.addEventListener('loadeddata', r, { once: true }));
+        const loaded = await new Promise(r => {
+            video.addEventListener('loadeddata', () => r(true), { once: true });
+            video.addEventListener('error', () => r(false), { once: true });
+        });
+        if (!loaded) {
+            console.warn(`[nok-video] HQ source failed to load: ${state.hqSrc} — falling back to LQ`);
+            video.src = state.lqSrc;
+            video.load();
+            await new Promise(r => video.addEventListener('loadeddata', r, { once: true }));
+        }
         video.currentTime = state.currentTime;
     }
 
