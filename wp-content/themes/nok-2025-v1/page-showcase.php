@@ -4,6 +4,11 @@
 use NOK2025\V1\Helpers;
 use NOK2025\V1\Theme;
 
+add_filter('body_class', function($classes) {
+    $classes[] = 'no-aos';
+    return $classes;
+});
+
 get_header();
 
 $theme = Theme::get_instance();
@@ -43,6 +48,12 @@ uksort($groups, function ($a, $b) use ($registry) {
 });
 ?>
 
+<style>
+    .nok-section {
+        overflow: hidden;
+    }
+</style>
+
 <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 
 	<nok-section class="nok-bg-body nok-text-contrast">
@@ -60,7 +71,7 @@ uksort($groups, function ($a, $b) use ($registry) {
 
 				<?php if (!empty($groups)) : ?>
 					<nav aria-label="Inhoudsopgave">
-						<h2 class="nok-fs-4">Inhoudsopgave</h2>
+						<h2 class="nok-fs-4 nok-mb-1">Inhoudsopgave</h2>
 						<ul style="columns: 2; column-gap: 2rem; list-style: none; padding: 0;">
 							<?php foreach ($groups as $slug => $posts) :
 								$template_name = $registry[$slug]['name'] ?? $slug;
@@ -89,6 +100,8 @@ uksort($groups, function ($a, $b) use ($registry) {
 	?>
 		<nok-section class="nok-bg-white" id="<?= esc_attr($design_slug) ?>" style="
         position: sticky;
+        height: 8rem;
+        max-height: 8rem;
         top: 0;
         z-index: 98;">
 			<div class="nok-section__inner condensed">
@@ -104,7 +117,9 @@ uksort($groups, function ($a, $b) use ($registry) {
 			$edit_url = admin_url("post.php?post={$part_id}&action=edit");
 		?>
 			<div style="background: #f0f0f1;
-			padding: 4rem 3vw;
+			padding: .5rem 3vw;
+			position: sticky;
+			top: 8rem;
             font-size: 0.85rem;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             display: flex;
@@ -112,7 +127,6 @@ uksort($groups, function ($a, $b) use ($registry) {
             gap: 1rem;
             z-index: 97;
             border-top: 1px solid #000000;
-            position: relative;
             border-bottom: 1px solid #000000;">
 				<strong><?= esc_html($part_post->post_title) ?></strong>
 				<span style="opacity: 0.6;">ID <?= $part_id ?></span>

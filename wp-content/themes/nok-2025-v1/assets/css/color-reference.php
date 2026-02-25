@@ -10,12 +10,16 @@
 require_once dirname(__DIR__, 5) . '/wp-load.php';
 
 use NOK2025\V1\Assets;
+
+// Block all robots — this page should never be indexed
+header('X-Robots-Tag: noindex, nofollow, noarchive, nosnippet', true);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
     <title>NOK Color Reference</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
