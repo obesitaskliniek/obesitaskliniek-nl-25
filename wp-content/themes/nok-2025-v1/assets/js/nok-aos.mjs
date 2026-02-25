@@ -1,14 +1,20 @@
 /**
  * @fileoverview Lightweight Scroll Animation Observer - IntersectionObserver-based visibility tracking
  * @module nok-aos
- * @version 2.0.0
+ * @version 3.0.0
  * @author Nederlandse Obesitas Kliniek B.V. / Klaas Leussink / hnldesign
  * @since 2025
  *
  * @description
  * Tracks element visibility via IntersectionObserver and updates data attributes.
- * Supports per-element thresholds, dynamic element detection, and tall-element handling.
- * Integrates with DOMule module system while maintaining standalone API.
+ * Supports per-element thresholds, dynamic element detection, and viewport-relative
+ * threshold calculation. Integrates with DOMule module system while maintaining standalone API.
+ *
+ * Threshold semantics (v3): the threshold represents the fraction of the **viewport**
+ * that the element's visible area must cover before triggering. A threshold of 0.35 means
+ * "trigger when 35% of the viewport height is covered by this element" — consistent
+ * regardless of element height. Elements fully visible in the viewport always trigger,
+ * even if they're too small to meet the viewport-coverage threshold.
  *
  * @example
  * // DOMule usage
@@ -42,9 +48,6 @@ const DEFAULTS = {
 
 /** @private */
 const THRESHOLD_STEPS = 101;
-
-/** @private */
-const MAX_THRESHOLD_RATIO = 0.99;
 
 /** @private */
 const ELEMENT_NODE = 1;
@@ -105,17 +108,31 @@ function initElement(el, options) {
 }
 
 /**
- * Calculates effective threshold for tall elements.
- * Prevents unreachable thresholds when element exceeds viewport height.
+ * Tests whether an element meets visibility criteria using viewport-relative ratio.
+ *
+ * The threshold represents the fraction of the viewport height that the element's
+ * visible area must cover. This makes thresholds behave consistently regardless of
+ * element height — a 0.35 threshold always means "35% of the viewport is covered."
+ *
+ * Small elements that can never fill the threshold fraction of the viewport are
+ * handled by a fully-visible fallback: if intersectionRatio ≈ 1.0, always trigger.
+ *
  * @private
- * @param {number} requestedThreshold - User-requested threshold
- * @param {number} viewportHeight - Viewport height in pixels
- * @param {number} elementHeight - Element height in pixels
- * @returns {number} Capped threshold value
+ * @param {IntersectionObserverEntry} entry - Observer entry with intersection data
+ * @param {number} threshold - Viewport-coverage fraction required (0–1)
+ * @returns {boolean} Whether the element meets visibility criteria
  */
-function calculateEffectiveThreshold(requestedThreshold, viewportHeight, elementHeight) {
-  const maxRatio = Math.min(1, viewportHeight / elementHeight);
-  return Math.min(requestedThreshold, maxRatio * MAX_THRESHOLD_RATIO);
+function meetsViewportThreshold(entry, threshold) {
+  // rootBounds includes rootMargin inflation, so the effective "viewport"
+  // is larger than the physical screen by the configured offset amount.
+  const viewportHeight = entry.rootBounds?.height ?? window.innerHeight;
+  const viewportRatio = entry.intersectionRect.height / viewportHeight;
+
+  // Small elements fully in view always qualify, even if they can't fill
+  // the threshold fraction of the viewport
+  if (entry.intersectionRatio >= 0.99) return true;
+
+  return viewportRatio >= threshold;
 }
 
 // ============================================================================
@@ -138,7 +155,7 @@ class AOS {
    * @param {boolean} [options.mirror] - Reverse on scroll up
    * @param {string} [options.anchorPlacement] - Trigger point
    * @param {boolean} [options.disableMutationObserver] - Disable dynamic detection
-   * @param {number|string} [options.threshold] - Visibility threshold
+   * @param {number|string} [options.threshold] - Viewport-coverage fraction (0–1) required to trigger
    */
   constructor(options = {}) {
     this.options = { ...DEFAULTS, ...options };
@@ -177,7 +194,7 @@ class AOS {
   }
 
   /**
-   * Creates IntersectionObserver with dynamic threshold handling.
+   * Creates IntersectionObserver with viewport-relative threshold handling.
    * @private
    */
   _setupIntersectionObserver() {
@@ -185,15 +202,9 @@ class AOS {
         entries => {
           entries.forEach(entry => {
             const el = entry.target;
-            const requestedThreshold = getElementThreshold(el, this.options.threshold);
+            const threshold = getElementThreshold(el, this.options.threshold);
 
-            const effectiveThreshold = calculateEffectiveThreshold(
-                requestedThreshold,
-                entry.rootBounds?.height ?? window.innerHeight,
-                entry.boundingClientRect.height
-            );
-
-            if (entry.intersectionRatio >= effectiveThreshold) {
+            if (meetsViewportThreshold(entry, threshold)) {
               el.dataset[this.options.dataName] = 'true';
             } else if (this.options.mirror && el.dataset.aosOnce !== 'true') {
               el.dataset[this.options.dataName] = 'false';

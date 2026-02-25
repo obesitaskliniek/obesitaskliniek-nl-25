@@ -137,7 +137,7 @@ events.docReady(function () {
     });
 
     const aos = AOS.init({
-        selector: 'body:not(.no-aos) nok-section:not(.no-aos),body:not(.no-aos) .nok-aos', duration: 600, threshold: 0.35, once: true
+        selector: 'body:not(.no-aos) nok-section:not(.no-aos),body:not(.no-aos) .nok-aos', duration: 600, threshold: 0.2, once: true
     });
 
 });
