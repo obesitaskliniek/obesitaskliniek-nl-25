@@ -388,9 +388,9 @@ caption {
 // 3. Fix alignment for Safari
 
 th {
-  font-weight: 1; // 1
-  text-align: inherit; // 2
-  text-align: -webkit-match-parent; // 3
+  font-weight: 400;
+  text-align: inherit;
+  text-align: -webkit-match-parent;
 }
 
 thead,

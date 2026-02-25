@@ -1982,7 +1982,7 @@ class Helpers {
 	 * @return string HTML for one download item row.
 	 */
 	public static function render_download_item( array $file, bool $with_source = false ): string {
-		$icon_file  = Assets::getIcon( 'ui_file', 'nok-text-yellow' );
+		$icon_file  = Assets::getIcon( 'ui_file', 'nok-text-contrast' );
 		$icon_arrow = Assets::getIcon( 'ui_arrow-down' );
 		$title_attr = esc_attr( sprintf( '%s downloaden', $file['title'] ) );
 		$url        = esc_url( $file['url'] );
@@ -2000,18 +2000,18 @@ class Helpers {
 					. '</span>';
 			}
 
-			return '<div class="nok-download-item">'
+			return '<div class="nok-download-item nok-bg-darkestblue nok-hover-to-darkblue nok-text-contrast">'
 				. '<span class="nok-download-item__icon">' . $icon_file . '</span>'
 				. '<span class="nok-download-item__info">'
-					. '<a href="' . $url . '" class="nok-download-item__title" download>' . esc_html( $file['title'] ) . '</a>'
+					. '<a href="' . $url . '" class="nok-download-item__title nok-fs-2" download>' . esc_html( $file['title'] ) . '</a>'
 					. '<span class="nok-download-item__meta">' . $meta . '</span>'
 				. '</span>'
-				. '<a href="' . $url . '" class="nok-download-item__action nok-stretched-link" download aria-label="' . $title_attr . '">' . $icon_arrow . '</a>'
+				. '<a href="' . $url . '" class="nok-download-item__action" download aria-label="' . $title_attr . '">' . $icon_arrow . '</a>'
 				. $source
 				. '</div>';
 		}
 
-		return '<a href="' . $url . '" class="nok-download-item nok-stretched-link" download title="' . $title_attr . '">'
+		return '<a href="' . $url . '" class="nok-download-item" download title="' . $title_attr . '">'
 			. '<span class="nok-download-item__icon">' . $icon_file . '</span>'
 			. '<span class="nok-download-item__info">'
 				. '<span class="nok-download-item__title">' . esc_html( $file['title'] ) . '</span>'

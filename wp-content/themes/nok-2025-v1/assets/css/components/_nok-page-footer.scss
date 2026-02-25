@@ -4,7 +4,7 @@
 
 nok-page-footer {
   .nok-section__inner--stretched {
-    background-image: url(#{components-base.$theme_root}/assets/img/nok-beeldmerk.php?width=500&height=100&opacity=0.5&x=35%&rotation=15&rotationOffsetX=0%&rotationOffsetY=100%&x=20%);
+    background-image: url(#{components-base.$theme_root}/assets/img/nok-beeldmerk.php?width=600&height=150&opacity=0.5&rotation=15&rotationOffsetX=0%&rotationOffsetY=100%);
     background-position: right bottom;
     background-repeat: no-repeat;
     background-size: map-get(components-base.$grid-breakpoints, 'xl');
