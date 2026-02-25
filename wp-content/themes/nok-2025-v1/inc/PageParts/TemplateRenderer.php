@@ -398,9 +398,10 @@ class TemplateRenderer {
 				$html = $this->inject_section_id( $html, $section_id );
 			}
 
-			// Inject frontend edit button for logged-in editors (frontend only)
+			// Inject frontend edit button for logged-in editors (frontend only, not preview iframe)
 			global $post;
 			if ( $this->context->is_frontend()
+			     && ! is_preview()
 			     && $post instanceof \WP_Post
 			     && current_user_can( 'edit_post', $post->ID ) ) {
 				$html = $this->inject_edit_button( $html, $post->ID );

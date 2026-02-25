@@ -4,7 +4,7 @@
 nok-hero {
   --z-base: 0;
   --grid-gap: var(--#{components-base.$prefix}-padding-base, var(--#{components-base.$prefix}-global-grid-gap, 1.5rem));
-  --footer-height: 0;
+  --footer-height: 3rem;
 
   &:has(footer) {
     --footer-height: 6rem;

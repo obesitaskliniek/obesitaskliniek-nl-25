@@ -148,13 +148,22 @@ svg.nok-icon { vertical-align: middle; width: 1em; height: 1em; }
 nok-top-navigation {
   font-size: 1.2rem;
 }
+
 @include nok-mixins.media-breakpoint-up(xl) {
-  nok-top-navigation { position: sticky !important; top: 0; z-index: nok-variables.$z-stack-top; }
+  @at-root body:not(.page-template-page-showcase) nok-top-navigation {
+    position: sticky !important;
+    top: 0;
+    z-index: nok-variables.$z-stack-top;
+  }
   nok-top-navigation nok-navigation-mobile { display: none !important; }
 }
 @include nok-mixins.media-breakpoint-down(xl) {
+  @at-root body:not(.page-template-page-showcase) nok-top-navigation {
+    position: fixed !important;
+    top: 0;
+    bottom: 0;
+  }
   nok-top-navigation {
-    position: fixed !important; top: 0; bottom: 0;
     justify-content: flex-start;
     z-index: nok-variables.$z-stack-top !important;
     pointer-events: none;

@@ -53,6 +53,7 @@
  * - block_2_video_poster:url!page-editable!descr[Video poster URL blok 2]
  * - block_2_media_position:select(Boven::top|Onder::bottom)!default(top)!descr[Media positie blok 2]!page-editable
  * - hide_title:checkbox!page-editable!descr[Verberg de sectietitel]
+ * - hide_descr:checkbox!page-editable!descr[Verberg de beschrijving]
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
  */
@@ -241,7 +242,7 @@ function render_media_element(array $block): string {
 				<h2 class="nok-fs-6 nok-mb-1"><?= $c->title() ?></h2>
 			<?php endif; ?>
 
-			<?php if ($c->content()) : ?>
+            <?php if ($c->title() && !$c->hide_descr->isTrue() && $c->content()) : ?>
 				<div class="nok-layout-grid nok-layout-grid__1-column nok-text-content">
 					<?= $c->content(); ?>
 				</div>

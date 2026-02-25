@@ -178,3 +178,6 @@ button.nok-button,
     min-width: fit-content;
   }
 }
+.wp-block-buttons {
+  @extend .nok-button-group;
+}

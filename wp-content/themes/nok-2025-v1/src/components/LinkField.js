@@ -177,7 +177,8 @@ const LinkField = ({value, onChange, placeholder = 'Search or enter URL...'}) =>
             // If input looks like a URL and nothing is selected, save as URL
             if (inputValue && !linkedPost) {
                 const trimmed = inputValue.trim();
-                if (trimmed.startsWith('/') || trimmed.startsWith('http') || trimmed.startsWith('#')) {
+                if (trimmed.startsWith('/') || trimmed.startsWith('http') || trimmed.startsWith('#')
+                    || trimmed.startsWith('tel:') || trimmed.startsWith('mailto:')) {
                     onChange(trimmed);
                 }
             }

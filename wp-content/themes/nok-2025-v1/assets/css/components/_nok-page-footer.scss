@@ -20,4 +20,53 @@ nok-page-footer {
       color: var(--nok-lightblue);
     }
   }
+
+  .#{&}__bottom-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--nok-space-fluid-sm);
+  }
+
+  .#{&}__legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--nok-space-fluid-sm);
+  }
+
+  .#{&}__social-links {
+    display: flex;
+    align-items: center;
+    gap: var(--nok-space-fluid-sm);
+  }
+
+  @include components-base.media-breakpoint-down(components-base.$mobile-breakpoint) {
+    .#{&}__bottom-bar {
+      gap: var(--nok-space-fluid-md);
+      margin-top: var(--nok-space-fluid-md);
+    }
+    .#{&}__social-links, .#{&}__legal-links {
+      flex-basis: 100%;
+      justify-content: space-evenly;
+    }
+  }
+
+  .#{&}__social-link {
+    display: inline-flex;
+    align-items: center;
+    color: currentColor;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+      opacity: 1;
+    }
+
+    .nok-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
 }

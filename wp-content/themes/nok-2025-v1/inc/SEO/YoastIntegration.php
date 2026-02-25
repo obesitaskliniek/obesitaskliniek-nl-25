@@ -37,6 +37,13 @@ class YoastIntegration {
 		add_filter('wpseo_breadcrumb_links', [$this, 'fix_breadcrumb_archive_urls']);
 		// Enhance Yoast schema graph with MedicalOrganization data
 		add_filter('wpseo_schema_graph', [$this, 'enhance_schema_graph'], 10, 2);
+		// Fall back to post excerpt when no explicit meta description is set
+		add_filter('wpseo_metadesc', [$this, 'fallback_to_excerpt']);
+		// Noindex showcase page (works with or without Yoast)
+		add_filter('wp_robots', [$this, 'noindex_showcase_page']);
+		// Exclude showcase page from Yoast sitemap and WordPress internal search
+		add_filter('wpseo_sitemap_entry', [$this, 'exclude_showcase_from_sitemap'], 10, 3);
+		add_action('pre_get_posts', [$this, 'exclude_showcase_from_search']);
 	}
 
 	public function exclude_page_parts_from_indexables(array $excluded): array {
@@ -46,6 +53,153 @@ class YoastIntegration {
 
 	public function exclude_page_parts_from_sitemap(bool $excluded, string $post_type): bool {
 		return $post_type === 'page_part' ? true : $excluded;
+	}
+
+	/**
+	 * Add noindex and nofollow to the showcase page template
+	 *
+	 * Uses the WordPress core `wp_robots` filter, which works regardless of
+	 * whether Yoast SEO is active.
+	 *
+	 * @param array $robots Robot directives
+	 * @return array Modified directives with noindex/nofollow when on showcase page
+	 */
+	public function noindex_showcase_page(array $robots): array {
+		if (is_page_template('page-showcase.php')) {
+			$robots['noindex']  = true;
+			$robots['nofollow'] = true;
+		}
+		return $robots;
+	}
+
+	/**
+	 * Exclude showcase page from Yoast XML sitemap
+	 *
+	 * Filters individual sitemap entries. Returns false to omit the entry
+	 * when the post uses the page-showcase.php template.
+	 *
+	 * @param array  $url       Sitemap entry array with 'loc', 'mod', etc.
+	 * @param string $url_type  URL type (e.g., 'post')
+	 * @param object $post      Post object
+	 * @return array|false Entry array or false to exclude
+	 */
+	public function exclude_showcase_from_sitemap($url, $url_type, $post) {
+		if (!is_object($post) || empty($post->ID)) {
+			return $url;
+		}
+
+		$template = get_page_template_slug($post->ID);
+		if ($template === 'page-showcase.php') {
+			return false;
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Exclude showcase pages from WordPress search results
+	 *
+	 * Catches all search contexts: main query, REST API, and AJAX autocomplete.
+	 * Skips admin screens so editors can still find the page in wp-admin.
+	 *
+	 * @param \WP_Query $query The query object
+	 */
+	public function exclude_showcase_from_search($query): void {
+		if (is_admin() || empty($query->get('s'))) {
+			return;
+		}
+
+		$showcase_ids = get_posts([
+			'post_type'  => 'page',
+			'meta_key'   => '_wp_page_template',
+			'meta_value' => 'page-showcase.php',
+			'fields'     => 'ids',
+			'numberposts' => -1,
+		]);
+
+		if (!empty($showcase_ids)) {
+			$existing = $query->get('post__not_in') ?: [];
+			$query->set('post__not_in', array_merge($existing, $showcase_ids));
+		}
+	}
+
+	/**
+	 * Fall back to post excerpt when no explicit Yoast meta description is set
+	 *
+	 * Fallback chain:
+	 * 1. Manual excerpt on the post itself
+	 * 2. Auto-generated excerpt from post_content (first 55 words)
+	 * 3. Voorlichting: intro_lang from HubSpot metadata
+	 * 4. Content from the first embedded page part that has text
+	 *
+	 * @param string $metadesc The meta description from Yoast (empty if not set)
+	 * @return string The meta description, or auto-generated excerpt as fallback
+	 */
+	public function fallback_to_excerpt(string $metadesc): string {
+		if ($metadesc !== '') {
+			return $metadesc;
+		}
+
+		if (!is_singular()) {
+			return $metadesc;
+		}
+
+		$post = get_post();
+		if (!$post) {
+			return $metadesc;
+		}
+
+		// Try the post's own excerpt (manual or auto-generated from content)
+		$excerpt = get_the_excerpt($post);
+		if ($excerpt) {
+			return $excerpt;
+		}
+
+		// Voorlichting: use HubSpot intro text (these posts have no post_content)
+		if ($post->post_type === 'voorlichting') {
+			$hubspot = \NOK2025\V1\Helpers::setup_hubspot_metadata($post->ID);
+			$intro = $hubspot['intro_lang'] ?? $hubspot['intro'] ?? '';
+			if ($intro) {
+				return wp_trim_words(wp_strip_all_tags($intro), 55);
+			}
+		}
+
+		// Fall back to first page part with content
+		return $this->get_first_page_part_excerpt($post) ?: $metadesc;
+	}
+
+	/**
+	 * Get an excerpt from the first embedded page part that has text content
+	 *
+	 * Parses the post's block content for page part embeds, then checks each
+	 * page part's content in order until one produces a usable excerpt.
+	 *
+	 * @param \WP_Post $post The parent post containing page part embeds
+	 * @return string Excerpt text, or empty string if none found
+	 */
+	private function get_first_page_part_excerpt(\WP_Post $post): string {
+		if (empty($post->post_content)) {
+			return '';
+		}
+
+		$part_ids = $this->extract_page_part_ids($post->post_content);
+		if (empty($part_ids)) {
+			return '';
+		}
+
+		foreach ($part_ids as $part_id) {
+			$part = get_post($part_id);
+			if (!$part || $part->post_status !== 'publish') {
+				continue;
+			}
+
+			$excerpt = get_the_excerpt($part);
+			if ($excerpt) {
+				return $excerpt;
+			}
+		}
+
+		return '';
 	}
 
 	/**
@@ -417,6 +571,98 @@ class YoastIntegration {
 		}
 
 		return $specs;
+	}
+
+	/**
+	 * Get social media profiles configured in Yoast SEO
+	 *
+	 * Reads the `wpseo_social` option and maps configured URLs to platform
+	 * metadata (icon name, label). Only platforms with a non-empty URL and
+	 * a known icon are returned. TikTok and other extras live in Yoast's
+	 * `other_social_urls` array field.
+	 *
+	 * @example Render social links in a template
+	 * $profiles = YoastIntegration::get_social_profiles();
+	 * foreach ($profiles as $p) {
+	 *     echo '<a href="' . esc_url($p['url']) . '">' . Assets::getIcon($p['icon']) . '</a>';
+	 * }
+	 *
+	 * @return array<int, array{platform: string, url: string, icon: string, label: string}>
+	 */
+	public static function get_social_profiles(): array {
+		if (!defined('WPSEO_VERSION')) {
+			return [];
+		}
+
+		$social = get_option('wpseo_social', []);
+		if (!is_array($social)) {
+			return [];
+		}
+
+		// Collect URLs from Yoast's known fields
+		$urls = [];
+
+		if (!empty($social['facebook_site'])) {
+			$urls[] = $social['facebook_site'];
+		}
+		if (!empty($social['twitter_site'])) {
+			$urls[] = 'https://x.com/' . ltrim($social['twitter_site'], '@');
+		}
+		if (!empty($social['instagram_url'])) {
+			$urls[] = $social['instagram_url'];
+		}
+		if (!empty($social['linkedin_url'])) {
+			$urls[] = $social['linkedin_url'];
+		}
+		if (!empty($social['youtube_url'])) {
+			$urls[] = $social['youtube_url'];
+		}
+		if (!empty($social['pinterest_url'])) {
+			$urls[] = $social['pinterest_url'];
+		}
+
+		// Merge "other" URLs (TikTok etc.)
+		if (!empty($social['other_social_urls']) && is_array($social['other_social_urls'])) {
+			foreach ($social['other_social_urls'] as $url) {
+				if (!empty($url)) {
+					$urls[] = $url;
+				}
+			}
+		}
+
+		// Map each URL to a platform via domain detection
+		$platform_map = [
+			'facebook.com'  => ['icon' => 'social_facebook',  'label' => 'Facebook'],
+			'instagram.com' => ['icon' => 'social_instagram', 'label' => 'Instagram'],
+			'linkedin.com'  => ['icon' => 'social_linkedin',  'label' => 'LinkedIn'],
+			'youtube.com'   => ['icon' => 'social_youtube',   'label' => 'YouTube'],
+			'tiktok.com'    => ['icon' => 'social_tiktok',    'label' => 'TikTok'],
+			'x.com'         => ['icon' => 'social_twitter-x', 'label' => 'X'],
+			'twitter.com'   => ['icon' => 'social_twitter-x', 'label' => 'X'],
+			'pinterest.com' => ['icon' => 'social_pinterest', 'label' => 'Pinterest'],
+		];
+
+		$profiles = [];
+		foreach ($urls as $url) {
+			$host = wp_parse_url($url, PHP_URL_HOST);
+			if (!$host) {
+				continue;
+			}
+
+			foreach ($platform_map as $domain => $meta) {
+				if (str_contains($host, $domain)) {
+					$profiles[] = [
+						'platform' => $meta['label'],
+						'url'      => $url,
+						'icon'     => $meta['icon'],
+						'label'    => $meta['label'],
+					];
+					break;
+				}
+			}
+		}
+
+		return $profiles;
 	}
 
 	/**

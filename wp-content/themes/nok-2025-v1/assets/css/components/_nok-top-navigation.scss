@@ -31,7 +31,8 @@ nok-top-navigation {
     nok-navigation-mobile {
       display: none !important;
     }
-    & {
+
+    @at-root body:not(.page-template-page-showcase) nok-top-navigation {
       position: sticky !important;
       top: 0;
       z-index: components-base.$z-stack-top;
@@ -39,17 +40,21 @@ nok-top-navigation {
   }
 
   @include components-base.media-breakpoint-down($switch_point) {
-    nok-navigation-desktop {
-      display: none !important;
-    }
-    & {
-      position: fixed !important;
-      top: 0;
-      bottom: 0;
-      justify-content: flex-start;
-      z-index: components-base.$z-stack-top !important;
-      pointer-events: none;
-    }
+      nok-navigation-desktop {
+        display: none !important;
+      }
+      & {
+        @at-root body:not(.page-template-page-showcase) nok-navigation-desktop {
+          & {
+            position: fixed !important;
+            top: 0;
+            bottom: 0;
+          }
+        }
+        justify-content: flex-start;
+        z-index: components-base.$z-stack-top !important;
+        pointer-events: none;
+      }
   }
 
   .nok-star-ratings {

@@ -548,6 +548,10 @@ class Registry {
 				$definition = trim( $definition );
 			}
 
+			// Strip any stray flag delimiters left after flag removal
+			// e.g. "name:icon-selector!page-editable!" → after !page-editable removal → "name:icon-selector!"
+			$definition = rtrim( $definition, '!' );
+
 			// Field Type 1: Select field
 			// Pattern: "name:select(option1|option2|option3)"
 			// With labels: "name:select(Label 1::value1|Label 2::value2)"

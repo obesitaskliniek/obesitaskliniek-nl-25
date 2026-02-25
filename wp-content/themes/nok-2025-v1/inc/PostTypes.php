@@ -620,10 +620,12 @@ class PostTypes {
 	}
 
 	/**
-	 * Protect page_part posts from being accessed by non-logged-in users
+	 * Protect page_part and template_layout posts from direct public access
 	 *
-	 * Page parts are designed to be embedded components, not standalone pages.
-	 * This prevents them from being indexed by search engines or accessed directly.
+	 * Page parts are embedded components, not standalone pages. For page_part
+	 * URLs, attempts a 301 redirect to the first published page that uses the
+	 * page part (with #section-id fragment for deep linking). Falls back to 404
+	 * for orphaned page parts and template_layout posts.
 	 */
 	public function protect_post_types(): void {
 		global $pagenow, $wp_query;
@@ -652,6 +654,19 @@ class PostTypes {
 
 		// Protect single views
 		if ( is_singular( $protected_post_types ) ) {
+
+			// For page_part: redirect to first published page that uses it.
+			// Uses 301 (permanent) because page part → page relationships are stable.
+			// Browsers and CDNs cache 301s aggressively — this is intentional.
+			if ( is_singular( 'page_part' ) ) {
+				$redirect_url = $this->get_page_part_redirect_url( get_the_ID() );
+				if ( $redirect_url ) {
+					wp_safe_redirect( $redirect_url, 301 );
+					exit;
+				}
+			}
+
+			// Fallback: 404 for orphaned page parts and template_layout
 			$wp_query->set_404();
 			status_header( 404 );
 			nocache_headers();
@@ -663,6 +678,64 @@ class PostTypes {
 			wp_safe_redirect( home_url( '/' ) );
 			exit;
 		}
+	}
+
+	/**
+	 * Find the redirect URL for a page part based on its first published usage
+	 *
+	 * Searches post_content for the Gutenberg embed block pattern to find pages
+	 * that use this page part. Returns the permalink of the first published page,
+	 * with the page part's section ID as a URL fragment for deep linking.
+	 *
+	 * Uses RLIKE with a boundary pattern (`[,}\s]` after the ID) to prevent
+	 * false positives (e.g., ID 12 matching "postId":123).
+	 *
+	 * @param int $post_id Page part post ID
+	 *
+	 * @return string|null Redirect URL with #fragment, or null if orphaned
+	 */
+	private function get_page_part_redirect_url( int $post_id ): ?string {
+		global $wpdb;
+
+		// Find first published page/post that embeds this page part.
+		// RLIKE boundary ensures "postId":12 doesn't match "postId":123.
+		// ORDER prefers pages over posts, then alphabetical for determinism.
+		$target_id = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT ID
+				 FROM {$wpdb->posts}
+				 WHERE post_content RLIKE %s
+				 AND post_type IN ('page', 'post')
+				 AND post_status = 'publish'
+				 ORDER BY post_type ASC, post_title ASC
+				 LIMIT 1",
+				'"postId":' . $post_id . '[,}[:space:]]'
+			)
+		);
+
+		if ( ! $target_id ) {
+			return null;
+		}
+
+		$permalink = get_permalink( (int) $target_id );
+		if ( ! $permalink ) {
+			return null;
+		}
+
+		// Resolve section ID for #fragment: _section_id meta → post slug fallback
+		// Mirrors TemplateRenderer::resolve_section_id() (minus per-embed override,
+		// which is unavailable from the page part side)
+		$section_id = get_post_meta( $post_id, '_section_id', true );
+		if ( $section_id === '' || $section_id === false ) {
+			$page_part = get_post( $post_id );
+			$section_id = $page_part ? $page_part->post_name : '';
+		}
+
+		if ( $section_id !== '' ) {
+			$permalink .= '#' . sanitize_title( $section_id );
+		}
+
+		return $permalink;
 	}
 
 	/**

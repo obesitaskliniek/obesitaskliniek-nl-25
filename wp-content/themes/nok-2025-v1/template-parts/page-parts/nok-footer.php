@@ -10,6 +10,7 @@
  */
 
 use NOK2025\V1\Assets;
+use NOK2025\V1\SEO\YoastIntegration;
 use NOK2025\V1\Theme;
 
 $c = $context;
@@ -44,13 +45,26 @@ $block_colors = $c->colors->contains('nok-bg-darkestblue',
 					<?php $menu_manager->render_footer_columns( 'footer' ); ?>
                 </div>
             </div>
-            <div class="nok-layout-grid__span-all nok-layout-flex-row">
-                <a href="/klachten-privacy/" class="nok-hyperlink">Klachten & Privacy</a>
-                <a href="/zorgmail/" class="nok-hyperlink">ZorgMail</a>
-                <a href="/cookie-verklaring/" class="nok-hyperlink">Cookie Verklaring</a>
-                <!--
-                <a href="mailto:info@obesitaskliniek.nl" class="nok-hyperlink">info@obesitaskliniek.nl</a>
-                <a href="tel:+31888832444" class="nok-hyperlink">088 - 88 32 444</a>-->
+            <div class="nok-layout-grid__span-all nok-page-footer__bottom-bar">
+                <div class="nok-page-footer__legal-links">
+                    <a href="/klachten-privacy/" class="nok-hyperlink">Klachten & Privacy</a>
+                    <a href="/zorgmail/" class="nok-hyperlink">ZorgMail</a>
+                    <a href="/cookie-verklaring/" class="nok-hyperlink">Cookie Verklaring</a>
+                </div>
+                <?php $social_profiles = YoastIntegration::get_social_profiles(); ?>
+                <?php if ($social_profiles): ?>
+                    <nav class="nok-page-footer__social-links" aria-label="Social media">
+                        <?php foreach ($social_profiles as $profile): ?>
+                            <a href="<?= esc_url($profile['url']) ?>"
+                               class="nok-page-footer__social-link"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               aria-label="<?= esc_attr($profile['label']) ?>">
+                                <?= Assets::getIcon($profile['icon']) ?>
+                            </a>
+                        <?php endforeach; ?>
+                    </nav>
+                <?php endif; ?>
             </div>
         </div>
     </div>

@@ -44,6 +44,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                 <div class="nok-layout-grid">
 					<?= $c->content(); ?>
                 </div>
+                <?php if ($c->has('button_blauw_url') || $c->has('button_transparant_url')) : ?>
                 <div class="nok-button-group nok-justify-items-start">
 					<?php if ( $c->has( 'button_blauw_url' ) ): ?>
                         <a role="button" href="<?= $c->button_blauw_url->link() ?>"
@@ -59,6 +60,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                         </a>
 					<?php endif; ?>
                 </div>
+                <?php endif; ?>
             </article>
 
             <figure>
@@ -121,27 +123,34 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 
             </figure>
 
+            <?php if ($c->has('usp_1_text') || $c->has('usp_2_text') || $c->has('usp_3_text') || $c->has('button_vestiging_text')) : ?>
             <footer class="nok-px-section-padding nok-bg-body--lighter nok-dark-bg-darkerblue nok-bg-blur--large nok-bg-alpha-6">
+                <?php if ($c->has('usp_1_text')) : ?>
                 <div class="nok-fs-buttons nok-usp ">
                     <?= Assets::getIcon($c->usp_1_icon->raw(), 'nok-text-lightblue') ?>
                     <?= $c->usp_1_text ?>
                 </div>
+                <?php endif; ?>
+                <?php if ($c->has('usp_2_text')) : ?>
                 <div class="nok-fs-buttons nok-usp nok-invisible-to-lg">
                     <?= Assets::getIcon($c->usp_2_icon->raw(), 'nok-text-lightblue') ?>
                     <?= $c->usp_2_text ?>
                 </div>
+                <?php endif; ?>
+                <?php if ($c->has('usp_3_text')) : ?>
                 <div class="nok-fs-buttons nok-usp nok-invisible-to-xl">
                     <?= Assets::getIcon($c->usp_3_icon->raw(), 'nok-text-lightblue') ?>
                     <?= $c->usp_3_text ?>
                 </div>
-                <!--
-                <?php if ( $c->has( 'button_vestiging_url' ) ): ?>
+                <?php endif; ?>
+                <?php if ($c->has('button_vestiging_url')) : ?>
                 <a role="button" href="<?= $c->button_vestiging_url->link() ?>"
                    class="nok-button nok-bg-white nok-text-darkerblue nok-align-self-stretch"
                    tabindex="0"><span><?= $c->button_vestiging_text ?></span>
                 </a>
-                <?php endif; ?>-->
+                <?php endif; ?>
             </footer>
+            <?php endif; ?>
         </div>
     </nok-hero>
 
