@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: BMI Calculator
- * Description: Page wrapper for BMI calculator post part - displays calculator with title
+ * Description: Wrapper voor de BMI-calculator met titel
  * Slug: nok-bmi-calculator
  * Custom Fields:
  * - show_title:checkbox!default(true)!descr[Toon/verberg titel]!page-editable

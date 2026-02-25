@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Contactformulier
- * Description: Contact form section
+ * Description: Contactformulier met vestigingkeuze via Gravity Forms
  * Slug: nok-contactformulier
  * Custom Fields:
  * - colors:select(Wit op lichtgrijs|Wit op donkerblauw)!page-editable!default(Wit op lichtgrijs)

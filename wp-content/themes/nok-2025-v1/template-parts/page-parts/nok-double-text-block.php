@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Double text block
- * Description: Two side-by-side square blocks with customizable content, colors, and buttons. Optionally includes media (image/video) glued to each card.
+ * Description: Twee naast elkaar geplaatste blokken met instelbare content, kleuren en knoppen. Optioneel met media (afbeelding/video) aan elke kaart gekoppeld.
  * Slug: nok-double-text-block
  * Custom Fields:
  * - colors:color-selector(backgrounds)!page-editable!default(nok-bg-body)

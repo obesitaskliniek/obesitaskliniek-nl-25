@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Hero
- * Description: Full-width hero section with SVG-masked image, title, content, CTAs and USP footer
+ * Description: Fullwidth hero met SVG-masked afbeelding, titel, content, CTA-knoppen en USP-balk
  * Slug: nok-hero
  * Featured Image Overridable: true
  * Custom Fields:

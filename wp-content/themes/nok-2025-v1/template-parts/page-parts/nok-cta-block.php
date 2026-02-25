@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: CTA block
- * Description: Call-to-action block with icon, title, content and optional button in horizontal layout
+ * Description: Call-to-action-blok met icoon, titel, content en optionele knop in horizontale layout
  * Slug: nok-cta-block
  * Custom Fields:
  * - layout_offset:select(left|balanced)!default(left)

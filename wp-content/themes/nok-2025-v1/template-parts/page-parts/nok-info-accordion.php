@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Info Accordion
- * Description: Single column layout with accordion
+ * Description: Eenkoloms layout met accordion
  * Slug: nok-info-accordion
  * Custom Fields:
  * - colors:color-selector(section-colors)!page-editable!default(nok-bg-darkerblue nok-text-contrast)

@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Kennisbank Carousel
- * Description: Displays title, intro, and scrollable carousel of kennisbank articles with featured images
+ * Description: Titel, intro en scrollbare carrousel van kennisbankartikelen met uitgelichte afbeeldingen
  * Slug: nok-kennisbank-carousel
  * Custom Fields:
  * - colors:color-selector(section-colors)!page-editable!default(nok-bg-body)

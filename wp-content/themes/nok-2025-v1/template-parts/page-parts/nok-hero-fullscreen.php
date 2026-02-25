@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Hero (fullscreen)
- * Description: Full-viewport background photo hero with text overlay — for campaign/landing pages
+ * Description: Fullscreen hero met achtergrondafbeelding en tekst-overlay — voor campagne- en landingspagina's
  * Slug: nok-hero-fullscreen
  * Featured Image Overridable: true
  * Custom Fields:

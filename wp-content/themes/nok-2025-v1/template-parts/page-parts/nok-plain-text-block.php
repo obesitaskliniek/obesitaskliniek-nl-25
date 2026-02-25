@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Plain text block
- * Description: A very basic text block with title and content.
+ * Description: Eenvoudig tekstblok met titel en content.
  * Slug: nok-plain-text-block
  * Custom Fields:
  * - layout:select(left|center|right)!page-editable!default(center)

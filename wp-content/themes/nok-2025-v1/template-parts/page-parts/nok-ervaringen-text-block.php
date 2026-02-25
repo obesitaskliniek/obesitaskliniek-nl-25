@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Ervaringen text block
- * Description: Text block with decorative circle background and testimonial carousel
+ * Description: Tekstblok met decoratieve cirkelachtergrond en ervaringen-carrousel
  * Slug: nok-ervaringen-text-block
  * Custom Fields:
  * - layout:select(left|right)!page-editable!default(left)

@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Footer
- * Description: Site footer with contact CTA, navigation accordions, and legal links
+ * Description: Sitefooter met contact-CTA, navigatie-accordions en juridische links
  * Slug: nok-footer
  * Custom Fields:
  * - colors:color-selector(footer-colors)!default(nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue nok-dark-text-white)

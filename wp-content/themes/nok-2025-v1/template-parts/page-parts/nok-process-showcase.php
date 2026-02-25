@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Process Showcase
- * Description: Tab-based showcase with vertical navigation and content panel with autoplay
+ * Description: Tab-gebaseerde showcase met verticale navigatie en contentpaneel met autoplay
  * Slug: nok-process-showcase
  * Custom Fields:
  *  - autoplay:checkbox!default(true)!descr[Automatisch wisselen tussen items]

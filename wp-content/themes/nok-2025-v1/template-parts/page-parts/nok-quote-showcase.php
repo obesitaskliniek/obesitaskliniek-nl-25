@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Quote Showcase
- * Description: Two-column layout with quote carousel and accordion items
+ * Description: Tweekoloms layout met quote-carrousel en accordion-items
  * Slug: nok-quote-showcase
  * Custom Fields:
  * - shuffle_quotes:checkbox!default(false)!descr[Willekeurige volgorde?]

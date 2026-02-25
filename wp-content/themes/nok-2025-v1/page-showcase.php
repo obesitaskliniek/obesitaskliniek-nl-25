@@ -54,6 +54,29 @@ uksort($groups, function ($a, $b) use ($registry) {
     }
 </style>
 
+<script>
+    function showcaseScrollTo(slug) {
+        const anchor = document.getElementById(slug);
+        if (!anchor) return;
+        const top = anchor.getBoundingClientRect().top + window.scrollY;
+        requestAnimationFrame(function () {
+            window.scrollTo({top: top, behavior: 'auto'});
+        });
+    }
+
+    // Handle initial hash after full page load (images, etc.)
+    window.addEventListener('load', function () {
+        const hash = location.hash.slice(1);
+        if (hash) {
+            // Delay to let sticky layout settle after all content is loaded
+            requestAnimationFrame(function () {
+                showcaseScrollTo(hash);
+
+            });
+        }
+    });
+</script>
+
 <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 
 	<nok-section class="nok-bg-body nok-text-contrast">
@@ -78,7 +101,7 @@ uksort($groups, function ($a, $b) use ($registry) {
 								$count = count($posts);
 							?>
 								<li style="break-inside: avoid; margin-bottom: 0.5em;">
-									<a href="#<?= esc_attr($slug) ?>" style="color: inherit; text-decoration: underline;">
+									<a href="#<?= esc_attr($slug) ?>" onclick="event.preventDefault(); history.pushState(null, '', this.href); showcaseScrollTo('<?= esc_attr($slug) ?>');" style="color: inherit; text-decoration: underline;">
 										<?= esc_html($template_name) ?>
 									</a>
 									<small>(<?= $count ?>)</small>
@@ -98,7 +121,8 @@ uksort($groups, function ($a, $b) use ($registry) {
 		$template_name = $registry[$design_slug]['name'] ?? $design_slug;
 		$count = count($posts);
 	?>
-		<nok-section class="nok-bg-white" id="<?= esc_attr($design_slug) ?>" style="
+		<div id="<?= esc_attr($design_slug) ?>" style="scroll-margin-top:0;position: relative;"></div>
+		<nok-section class="nok-bg-white" style="
         position: sticky;
         height: 8rem;
         max-height: 8rem;
@@ -111,6 +135,131 @@ uksort($groups, function ($a, $b) use ($registry) {
                 </h2>
 			</div>
 		</nok-section>
+
+		<?php
+		$template_fields = $registry[$design_slug]['custom_fields'] ?? [];
+		$template_desc   = $registry[$design_slug]['description'] ?? '';
+		$has_featured    = !empty($registry[$design_slug]['featured_image_overridable']);
+		?>
+
+		<?php if (!empty($template_fields) || $template_desc || $has_featured) : ?>
+            <div style="background: #f0f0f1;
+                        padding: .5rem 3vw;
+                        position: sticky;
+                        top: 8rem;
+                        font-size: 0.85rem;
+                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                        display: flex;
+                        align-items: center;
+                        gap: 1rem;
+                        z-index: 97;
+                        border-top: 1px solid #000000;
+                        border-bottom: 1px solid #000000;">Eigenschappen</div>
+			<nok-section class="nok-bg-body--darker" style="border-bottom: 1px solid #c3c4c7;">
+				<div class="nok-section__inner condensed nok-bg-body nok-rounded-border-large small nok-p-3" style="padding-top: 1rem; padding-bottom: 1rem;">
+
+					<?php if ($template_desc) : ?>
+						<p style="margin: 0 0 0.75rem; opacity: 0.7; font-style: italic;">
+							<?= esc_html($template_desc) ?>
+						</p>
+					<?php endif; ?>
+
+					<?php if ($has_featured) : ?>
+						<p style="margin: 0 0 0.75rem;">
+							<span style="display: inline-block; background: #dba617; color: #fff; font-size: 0.75rem; padding: 0.15em 0.5em; border-radius: 3px; font-weight: 600;">Featured Image Overridable</span>
+						</p>
+					<?php endif; ?>
+
+					<?php if (!empty($template_fields)) : ?>
+						<table style="width: 100%; border-collapse: collapse;">
+							<thead>
+								<tr style="text-align: left; border-bottom: 2px solid #c3c4c7;">
+									<th style="padding: 0.35em 0.75em 0.35em 0;">Veld</th>
+									<th style="padding: 0.35em 0.75em;">Type</th>
+									<th style="padding: 0.35em 0.75em;">Standaardwaarde</th>
+									<th style="padding: 0.35em 0.75em;">Beschrijving/opties</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach ($template_fields as $field) :
+									// Build details column
+									$details = [];
+									if (!empty($field['description'])) {
+										$details[] = esc_html($field['description']);
+									}
+									if (!empty($field['options'])) {
+										$labels = $field['option_labels'] ?? $field['options'];
+										$option_parts = [];
+										foreach ($field['options'] as $i => $opt) {
+											$label = $labels[$i] ?? $opt;
+											if ($label !== $opt) {
+												$option_parts[] = esc_html($label) . '::' . esc_html($opt);
+											} else {
+												$option_parts[] = esc_html($opt);
+											}
+										}
+										$details[] = implode(' | ', $option_parts);
+									}
+									if (!empty($field['schema'])) {
+										$sub_fields = array_map(function($s) {
+											return esc_html($s['name']) . ':' . esc_html($s['type']);
+										}, $field['schema']);
+										$details[] = '(' . implode(', ', $sub_fields) . ')';
+									}
+									if (!empty($field['post_types'])) {
+										$details[] = 'posts: ' . esc_html(implode('|', $field['post_types']));
+										if (!empty($field['categories'])) {
+											$details[count($details) - 1] .= ':' . esc_html(implode(',', $field['categories']));
+										}
+									}
+									if (!empty($field['taxonomy'])) {
+										$tax_detail = esc_html($field['taxonomy']);
+										if (!empty($field['multiple'])) {
+											$tax_detail .= ' (multi)';
+										} else {
+											$tax_detail .= ' (single)';
+										}
+										$details[] = $tax_detail;
+									}
+									if (!empty($field['palette'])) {
+										$details[] = 'palette: ' . esc_html($field['palette']);
+									}
+								?>
+									<tr style="border-bottom: 1px solid #dcdcde;">
+										<td style="padding: 0.35em 0.75em 0.35em 0; font-weight: 600; white-space: nowrap;">
+											<?= esc_html($field['name']) ?><?php if (!empty($field['page_editable'])) : ?><span style="color: #b32d2e;" title="page-editable">*</span><?php endif; ?>
+										</td>
+										<td style="padding: 0.35em 0.75em;">
+											<code style="background: #f0f0f1; padding: 0.1em 0.4em; border-radius: 3px; font-size: 0.9em;">
+												<?= esc_html($field['type']) ?>
+											</code>
+										</td>
+										<td style="padding: 0.35em 0.75em; white-space: nowrap;">
+											<?php if ($field['default'] !== null && $field['default'] !== '') : ?>
+												<code style="background: #f0f0f1; padding: 0.1em 0.4em; border-radius: 3px; font-size: 0.9em;">
+													<?= esc_html($field['default']) ?>
+												</code>
+											<?php endif; ?>
+										</td>
+										<td style="padding: 0.35em 0.75em; color: #50575e; word-break: break-word;">
+											<?= implode('<br>', $details) ?>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+
+						<?php
+						$has_page_editable = array_filter($template_fields, fn($f) => !empty($f['page_editable']));
+						if (!empty($has_page_editable)) : ?>
+							<p style="margin: 0.5rem 0 0; opacity: 0.6; font-size: 0.8em;">
+								<span style="color: #b32d2e;">*</span> page-editable — overschrijfbaar per pagina
+							</p>
+						<?php endif; ?>
+					<?php endif; ?>
+				</div>
+			</nok-section>
+		<?php endif; ?>
 
 		<?php foreach ($posts as $part_post) :
 			$part_id = $part_post->ID;

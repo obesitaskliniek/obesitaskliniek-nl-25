@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Video Section
- * Description: Video embed with play button overlay, title and description
+ * Description: Video-embed met afspeelknop-overlay, titel en beschrijving
  * Slug: nok-video-section
  * Featured Image Overridable: false
  * Custom Fields:

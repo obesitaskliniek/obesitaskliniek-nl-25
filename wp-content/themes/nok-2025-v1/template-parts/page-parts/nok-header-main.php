@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Header (Main)
- * Description: A header unit for the top of all pages.
+ * Description: Hoofdnavigatie bovenaan elke pagina.
  * Slug: nok-header-main
  * Custom Fields:
  *

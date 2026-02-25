@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Portrait Carousel
- * Description: Scrollable carousel displaying team member portraits from filesystem
+ * Description: Scrollbare carrousel met teamportretten uit het bestandssysteem
  * Slug: nok-portrait-carousel
  * Custom Fields:
  * - button_text:text!default(Bekijk alle specialisten)

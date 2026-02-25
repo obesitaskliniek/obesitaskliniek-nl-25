@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Simple picture text block (not narrow)
- * Description: A basic block with a title, image and content. Image 'sticks' to the left or right side of the viewport.
+ * Description: Blok met titel, afbeelding en content. De afbeelding loopt door tot de linker- of rechterrand van het scherm.
  * Slug: nok-picture-text-block
  * Featured Image Overridable: true
  * Custom Fields:

@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Small simple picture text block
- * Description: A basic block with a title, image and content.
+ * Description: Compact blok met titel, afbeelding en content.
  * Slug: nok-small-picture-text-block
  * Featured Image Overridable: true
  * Custom Fields:

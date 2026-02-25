@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Step Visual
- * Description: A split-content page part for representing a step with a visual
+ * Description: Gesplitst blok voor het weergeven van een stap met bijbehorend beeld
  * Slug: nok-step-visual
  * Featured Image Overridable: true
  * Custom Fields:

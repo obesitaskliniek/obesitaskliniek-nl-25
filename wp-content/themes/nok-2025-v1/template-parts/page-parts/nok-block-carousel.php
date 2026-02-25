@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Block Carousel
- * Description: Displays title, content, and a horizontally scrollable carousel of blocks
+ * Description: Titel, content en een horizontaal scrollbare carrousel van blokken
  * Slug: nok-block-carousel
  * Custom Fields:
  * - colors:color-selector(section-colors)!page-editable!default(nok-bg-darkerblue nok-text-contrast)

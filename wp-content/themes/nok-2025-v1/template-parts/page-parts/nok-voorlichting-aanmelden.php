@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Voorlichting Aanmelden
- * Description: General voorlichting registration form with AJAX-populated dropdowns for location and date/time selection
+ * Description: Aanmeldformulier voor voorlichtingen met AJAX-gevulde dropdowns voor locatie- en datum/tijdkeuze
  * Slug: nok-voorlichting-aanmelden
  * Custom Fields:
  * - colors:select(Wit op lichtgrijs|Wit op donkerblauw)!page-editable!default(Wit op lichtgrijs)

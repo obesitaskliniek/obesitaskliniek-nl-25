@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Gravity Form
- * Description: Embed any Gravity Form with color and layout options
+ * Description: Willekeurig Gravity Form insluiten met kleur- en layoutopties
  * Slug: nok-gravity-form
  * Custom Fields:
  * - form_id:select(Inschrijfformulier WOD::5|Contactformulier::4|Inschrijving voorlichting::1)!page-editable!descr[Kies een Gravity Forms formulier]
