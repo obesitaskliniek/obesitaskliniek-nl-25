@@ -26,15 +26,13 @@ $has_featured_image = has_post_thumbnail( get_the_ID() ) && $featured_image !== 
         nok-hero__inner nok-mt-0 nok-px-0 nok-border-radius-to-sm-0
     nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10 nok-faded-background" style="--bg-image:url('<?= esc_url( $featured_image ); ?>');">
 
-            <header class="nok-section__inner nok-section-narrow nok-mt-0">
+            <header class="nok-section__inner nok-section-narrow nok-my-0">
 
                 <?php Helpers::render_breadcrumbs(); ?>
 
                 <?php the_title( '<h1 class="nok-fs-giant">', '</h1>' ); ?>
 
-                <div>
-                    <?php Helpers::the_content_first_paragraph(); ?>
-                </div>
+                <?php Helpers::the_content_first_paragraph(); ?>
             </header>
         </div>
     </nok-hero>
