@@ -263,6 +263,35 @@ final class Theme {
         add_theme_support( 'title-tag' );
         add_theme_support( 'post-thumbnails' );
         add_theme_support( 'html5', [ 'search-form', 'comment-form' ] );
+
+        $palette = [
+            [ 'name' => 'Donkerst blauw',  'slug' => 'darkerblue',      'color' => '#0b2355' ],
+            [ 'name' => 'Donkerblauw',      'slug' => 'darkblue',        'color' => '#14477c' ],
+            [ 'name' => 'Lichtblauw',       'slug' => 'lightblue',       'color' => '#00b0e4' ],
+            [ 'name' => 'Groenblauw',       'slug' => 'greenblue',       'color' => '#35aba5' ],
+            [ 'name' => 'Groen',            'slug' => 'green',           'color' => '#54b085' ],
+            [ 'name' => 'Geel',             'slug' => 'yellow',          'color' => '#ffd41f' ],
+            [ 'name' => 'Wit',              'slug' => 'white',           'color' => '#ffffff' ],
+            [ 'name' => 'Zwart',            'slug' => 'black',           'color' => '#222222' ],
+            [ 'name' => 'Body',             'slug' => 'body',            'color' => '#f3f4f9' ],
+            [ 'name' => 'Clinics blauw',    'slug' => 'clinics-blauw',   'color' => '#B6BBD6' ],
+            [ 'name' => 'Clinics oranje',   'slug' => 'clinics-oranje',  'color' => '#C27655' ],
+        ];
+
+        add_theme_support( 'editor-color-palette', $palette );
+
+        // Classic themes (no theme.json) don't generate has-*-color utility classes.
+        // Generate them so Gutenberg color selections work on the frontend.
+        add_action( 'wp_enqueue_scripts', function () use ( $palette ) {
+            $css = '';
+            foreach ( $palette as $entry ) {
+                $slug  = $entry['slug'];
+                $color = $entry['color'];
+                $css  .= ".has-{$slug}-color{color:{$color}!important}";
+                $css  .= ".has-{$slug}-background-color{background-color:{$color}}";
+            }
+            wp_add_inline_style( 'nok-components-css', $css );
+        } );
     }
 
     /**

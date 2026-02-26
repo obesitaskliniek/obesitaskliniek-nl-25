@@ -181,6 +181,20 @@ class AssetManager {
 			}
 		}
 
+		// Enqueue block style toggles for block editor
+		if ( in_array( $hook, [ 'post.php', 'post-new.php' ] ) ) {
+			$screen = get_current_screen();
+			if ( $screen && $screen->is_block_editor() ) {
+				$toggles_asset = require get_theme_file_path( '/assets/js/nok-block-style-toggles.asset.php' );
+				wp_enqueue_script(
+					'nok-block-style-toggles',
+					get_stylesheet_directory_uri() . '/assets/js/nok-block-style-toggles.js',
+					$toggles_asset['dependencies'],
+					$toggles_asset['version']
+				);
+			}
+		}
+
 		// Enqueue button extension for block editor
 		if ( in_array( $hook, [ 'post.php', 'post-new.php' ] ) ) {
 			$screen = get_current_screen();

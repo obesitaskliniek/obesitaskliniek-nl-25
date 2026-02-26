@@ -51,7 +51,7 @@ $colors   = esc_attr( trim( "$bg_color $tx_color" ) );
 							$is_online   = strtolower( $hubspotData['type'] ) === 'online';
 							?>
 
-							<nok-square-block class="nok-bg-white nok-dark-bg-darkestblue nok-grid-gap-0_5" data-shadow="true">
+							<nok-square-block class="nok-bg-white nok-dark-bg-darkerblue nok-grid-gap-0_5" data-shadow="true">
 
 								<span class="nok-square-block__banner nok-badge <?= $is_online ? 'nok-bg-lightblue--lighter' : 'nok-bg-green--lighter'; ?> nok-text-darkerblue">
 									<?= $is_online ? esc_html__( 'Online', THEME_TEXT_DOMAIN ) : esc_html__( 'Op locatie', THEME_TEXT_DOMAIN ); ?>
@@ -84,7 +84,7 @@ $colors   = esc_attr( trim( "$bg_color $tx_color" ) );
 										<?php esc_html_e( 'Aanmelden', THEME_TEXT_DOMAIN ); ?>
 									</a>
 									<a href="<?= esc_url( get_permalink( $post->ID ) ); ?>"
-									   class="nok-button nok-bg-lightgrey--lighter nok-text-darkerblue w-100 nok-dark-text-white">
+									   class="nok-button nok-bg-lightgrey--lighter nok-text-darkerblue w-100 nok-text-contrast">
 										<?php esc_html_e( 'Informatie', THEME_TEXT_DOMAIN ); ?>
 									</a>
 								</div>
