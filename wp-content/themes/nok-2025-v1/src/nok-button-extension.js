@@ -2,7 +2,7 @@
  * Button Block Extension
  *
  * Extends core/button block with NOK-specific features:
- * - Icon selector (ui_ icons only)
+ * - Icon selector (ui_ and nok_ icons)
  * - Background color via ColorSelector (button-backgrounds palette)
  * - Optional text color override via ColorSelector (text palette)
  * - Icon color via ColorSelector (icon-colors palette)
@@ -96,8 +96,8 @@ const withButtonControls = createHigherOrderComponent((BlockEdit) => {
             fillMobile = false
         } = attributes;
 
-        // Get icons from localized data
-        const availableIcons = (window.nokButtonIcons && window.nokButtonIcons.ui) || {};
+        // Get icons from localized data (ui + nok categories, keys include prefix)
+        const availableIcons = window.nokButtonIcons || {};
 
         return (
             <Fragment>
@@ -107,7 +107,7 @@ const withButtonControls = createHigherOrderComponent((BlockEdit) => {
                         <IconSelector
                             value={nokIcon}
                             onChange={(value) => setAttributes({ nokIcon: value })}
-                            icons={{ ui: availableIcons }}
+                            icons={availableIcons}
                         />
 
                         {nokIcon && (

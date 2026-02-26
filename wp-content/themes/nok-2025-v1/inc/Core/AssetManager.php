@@ -193,13 +193,13 @@ class AssetManager {
 					$button_asset['version']
 				);
 
-				// Localize with ui_ icons only
+				// Localize with ui and nok icons (exclude logos — not useful for buttons)
+				$button_icons = \NOK2025\V1\Assets::getIconsForAdmin();
+				unset( $button_icons['logo'] );
 				wp_localize_script(
 					'nok-button-extension',
 					'nokButtonIcons',
-					[
-						'ui' => \NOK2025\V1\Assets::getIconsByCategory( 'ui' )
-					]
+					$button_icons
 				);
 			}
 		}

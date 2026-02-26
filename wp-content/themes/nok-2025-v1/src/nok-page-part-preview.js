@@ -230,12 +230,16 @@ domReady(() => {
             iframe.removeAttribute('srcdoc');
             iframe.src = `${previewLink}&hide_adminbar=1`;
 
+        // Debounced preview update — batches rapid edits (typing, toggling)
+        // into a single preview refresh to avoid Cloudflare rate limits
+        const debouncedUpdateFrame = debounceThis(enhancedUpdateFrame, {threshold: 2000});
+
         // Subscribe to changes (only starts listening after editor is ready)
         subscribe(() => {
             const meta = select("core/editor").getEditedPostAttribute("meta") || {};
             const currentSlug = meta.design_slug;
 
-            // Check if design_slug changed
+            // Check if design_slug changed — immediate, discrete user action
             if (currentSlug !== lastSlug) {
                 lastSlug = currentSlug;
                 logger.info(NAME, `Design slug changed to: ${currentSlug}`);
@@ -248,7 +252,7 @@ domReady(() => {
             if (hasMetaChanged) {
                 lastMeta = {...meta};
                 logger.info(NAME, `Custom fields changed, updating preview`);
-                enhancedUpdateFrame();
+                debouncedUpdateFrame();
             }
         });
 

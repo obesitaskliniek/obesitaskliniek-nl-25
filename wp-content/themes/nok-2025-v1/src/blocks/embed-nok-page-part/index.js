@@ -358,11 +358,26 @@ registerBlockType(blockName, {
             })
         ];
 
-        const src = postId
+        const nextSrc = postId
             ? `/wp-json/nok-2025-v1/v1/embed-page-part/${postId}?${new URLSearchParams(
                 Object.entries(overrides).map(([key, value]) => [key, value])
             ).toString()}`
             : '';
+
+        // Debounce iframe src to avoid Cloudflare rate limits during rapid edits
+        const [src, setSrc] = useState(nextSrc);
+        const prevPostId = useRef(postId);
+        useEffect(() => {
+            // postId change (page part selection) — apply immediately
+            if (postId !== prevPostId.current) {
+                prevPostId.current = postId;
+                setSrc(nextSrc);
+                return;
+            }
+            // Override edits — debounce
+            const timer = setTimeout(() => setSrc(nextSrc), 2000);
+            return () => clearTimeout(timer);
+        }, [nextSrc]);
 
         // Refs & state for dynamic height
         const iframeRef = useRef(null);
@@ -715,6 +730,7 @@ registerBlockType(blockName, {
 
                                         case 'text':
                                         case 'url':
+                                        case 'link':
                                             return (
                                                 <TextControl
                                                     key={field.meta_key}

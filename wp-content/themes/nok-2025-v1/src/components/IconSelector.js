@@ -1,6 +1,12 @@
 import { useState, useRef } from '@wordpress/element';
 import { Popover } from '@wordpress/components';
 
+const CATEGORY_LABELS = {
+    ui: 'UI',
+    nok: 'NOK',
+    logo: 'Logo',
+};
+
 const IconSelector = ({ value, onChange, icons }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [search, setSearch] = useState('');
@@ -23,9 +29,24 @@ const IconSelector = ({ value, onChange, icons }) => {
         }))
     );
 
+    // Strip category prefix for display (e.g. "ui_arrow-right" → "arrow-right")
+    const displayName = (icon) => icon.name.slice(icon.category.length + 1);
+
     const filteredIcons = allIcons.filter(icon =>
         icon.name.toLowerCase().includes(search.toLowerCase())
     );
+
+    // Group filtered icons by category
+    const categories = Object.keys(icons);
+    const groupedIcons = categories
+        .map(cat => ({
+            category: cat,
+            label: CATEGORY_LABELS[cat] || cat,
+            icons: filteredIcons.filter(icon => icon.category === cat)
+        }))
+        .filter(group => group.icons.length > 0);
+
+    const hasMultipleCategories = categories.length > 1;
 
     const selectedIcon = allIcons.find(icon => icon.name === value);
 
@@ -65,7 +86,7 @@ const IconSelector = ({ value, onChange, icons }) => {
                                 style={{ width: '24px', height: '24px', flexShrink: 0 }}
                                 dangerouslySetInnerHTML={{ __html: selectedIcon.svg }}
                             />
-                            <span style={{ fontSize: '13px' }}>{selectedIcon.name}</span>
+                            <span style={{ fontSize: '13px' }}>{displayName(selectedIcon)}</span>
                         </>
                     ) : (
                         <span style={{ fontSize: '13px', color: '#757575' }}>Select an icon...</span>
@@ -146,50 +167,69 @@ const IconSelector = ({ value, onChange, icons }) => {
                                     No icons found
                                 </div>
                             ) : (
-                                <div style={{
-                                    display: 'grid',
-                                    gridTemplateColumns: 'repeat(4, 1fr)',
-                                    gap: '8px'
-                                }}>
-                                    {filteredIcons.map(icon => (
-                                        <div
-                                            key={icon.name}
-                                            onClick={() => {
-                                                onChange(icon.name);
-                                                setIsOpen(false);
-                                                setSearch('');
-                                            }}
-                                            title={icon.name}
-                                            style={{
-                                                padding: '2px',
-                                                border: '1px solid #ddd',
-                                                borderRadius: '4px',
-                                                cursor: 'pointer',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                background: value === icon.name ? '#e0f0ff' : '#fff',
-                                                transition: 'all 0.15s',
-                                                aspectRatio: '1'
-                                            }}
-                                            onMouseEnter={(e) => {
-                                                if (value !== icon.name) {
-                                                    e.currentTarget.style.background = '#f5f5f5';
-                                                }
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                if (value !== icon.name) {
-                                                    e.currentTarget.style.background = '#fff';
-                                                }
-                                            }}
-                                        >
-                                            <div
-                                                style={{ width: '3em', height: '3em' }}
-                                                dangerouslySetInnerHTML={{ __html: icon.svg }}
-                                            />
+                                groupedIcons.map(group => (
+                                    <div key={group.category}>
+                                        {hasMultipleCategories && (
+                                            <div style={{
+                                                fontSize: '11px',
+                                                fontWeight: '600',
+                                                color: '#757575',
+                                                textTransform: 'uppercase',
+                                                letterSpacing: '0.5px',
+                                                padding: '8px 0 4px',
+                                                borderBottom: '1px solid #eee',
+                                                marginBottom: '8px'
+                                            }}>
+                                                {group.label}
+                                            </div>
+                                        )}
+                                        <div style={{
+                                            display: 'grid',
+                                            gridTemplateColumns: 'repeat(4, 1fr)',
+                                            gap: '8px',
+                                            marginBottom: '8px'
+                                        }}>
+                                            {group.icons.map(icon => (
+                                                <div
+                                                    key={icon.name}
+                                                    onClick={() => {
+                                                        onChange(icon.name);
+                                                        setIsOpen(false);
+                                                        setSearch('');
+                                                    }}
+                                                    title={displayName(icon)}
+                                                    style={{
+                                                        padding: '2px',
+                                                        border: '1px solid #ddd',
+                                                        borderRadius: '4px',
+                                                        cursor: 'pointer',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        background: value === icon.name ? '#e0f0ff' : '#fff',
+                                                        transition: 'all 0.15s',
+                                                        aspectRatio: '1'
+                                                    }}
+                                                    onMouseEnter={(e) => {
+                                                        if (value !== icon.name) {
+                                                            e.currentTarget.style.background = '#f5f5f5';
+                                                        }
+                                                    }}
+                                                    onMouseLeave={(e) => {
+                                                        if (value !== icon.name) {
+                                                            e.currentTarget.style.background = '#fff';
+                                                        }
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{ width: '3em', height: '3em' }}
+                                                        dangerouslySetInnerHTML={{ __html: icon.svg }}
+                                                    />
+                                                </div>
+                                            ))}
                                         </div>
-                                    ))}
-                                </div>
+                                    </div>
+                                ))
                             )}
                         </div>
                     </div>

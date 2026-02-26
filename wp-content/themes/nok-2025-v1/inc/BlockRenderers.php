@@ -271,7 +271,9 @@ class BlockRenderers {
 
 			if ( ! $has_icon ) {
 				// Get icon SVG from Assets
-				$icon_name = 'ui_' . $nok_icon;
+				// New format stores prefixed name (e.g. "ui_arrow-right", "nok_hart");
+				// legacy stores unprefixed name (e.g. "arrow-right") — assume ui_ category
+				$icon_name = preg_match( '/^(ui|nok|logo)_/', $nok_icon ) ? $nok_icon : 'ui_' . $nok_icon;
 
 				// Resolve icon color class: new format stores full class (e.g., "nok-text-yellow"),
 				// legacy stores simple name (e.g., "yellow")
