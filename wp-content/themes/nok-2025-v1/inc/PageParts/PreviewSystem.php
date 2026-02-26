@@ -157,8 +157,13 @@ class PreviewSystem {
 	public function render_preview_meta_box(\WP_Post $post): void {
 		wp_nonce_field('nok_preview_nonce', 'nok_preview_nonce');
 
+		echo '<div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">';
 		echo '<button id="nok-page-part-preview-button" type="button" class="button button-primary">'
 		     . esc_html__('Refresh Preview', THEME_TEXT_DOMAIN) . '</button>';
+		echo '<button id="nok-page-part-preview-darkmode" type="button" class="button" title="'
+		     . esc_attr__('Simuleer donkere modus in preview', THEME_TEXT_DOMAIN) . '">'
+		     . '&#9789; Dark mode</button>';
+		echo '</div>';
 		echo '<div><p>' . esc_html__('Let op: Page Parts zijn niet afzonderlijk publiek benaderbaar (of indexeerbaar) en zijn ontworpen om onderdeel van een pagina te zijn.', THEME_TEXT_DOMAIN) . '</p></div>';
 		echo '<div id="nok-page-part-preview-root" style="border:1px solid #ddd; min-height:300px"></div>';
 	}

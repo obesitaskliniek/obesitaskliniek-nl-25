@@ -4,7 +4,9 @@ use NOK2025\V1\Assets;
 use NOK2025\V1\Theme;
 
 $theme = Theme::get_instance();
-$theme->embed_page_part_template('nok-footer', []); ?>
+// Skip footer content for page part previews — they only need wp_footer() for scripts
+if ( ! is_singular( 'page_part' ) ) {
+	$theme->embed_page_part_template('nok-footer', []); ?>
 
 <button class="nok-scroll-progress scroll-to-top"
         aria-label="<?php esc_attr_e('Klik om terug naar de bovenkant van de pagina te gaan', 'nok'); ?>"
@@ -20,6 +22,7 @@ $theme->embed_page_part_template('nok-footer', []); ?>
     <!-- Arrow up icon -->
     <?= Assets::getIcon('ui_arrow-up-long', 'nok-scroll-progress__icon') ?>
 </button>
+<?php } ?>
 
 <?php wp_footer(); ?>
 

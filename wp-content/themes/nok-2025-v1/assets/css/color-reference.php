@@ -460,6 +460,7 @@ header('X-Robots-Tag: noindex, nofollow, noarchive, nosnippet', true);
     <button class="tab" data-tab="fill">Fill Colors</button>
     <button class="tab" data-tab="utilities">Utilities</button>
     <button class="tab" data-tab="variables">CSS Variables</button>
+    <button class="tab" data-tab="darkmode">Dark Mode</button>
 </div>
 
 <!-- BACKGROUNDS TAB -->
@@ -1178,6 +1179,150 @@ header('X-Robots-Tag: noindex, nofollow, noarchive, nosnippet', true);
                     <span class="desc">#CCC</span>
                 </span>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- DARK MODE TAB -->
+<div id="darkmode" class="tab-content">
+    <div class="section">
+        <div class="section-title">Dark Mode System <span class="badge">@media (prefers-color-scheme: dark)</span></div>
+        <div class="intro">
+            <strong>How it works:</strong> Dark mode uses two complementary mechanisms:<br><br>
+            <strong>1. Auto-adjusted colors</strong> — Colors listed in <code>$nok-base-colors-adjust-for-dark</code>
+            get their CSS custom properties automatically overridden in dark mode. This affects
+            <code>body</code>, <code>yellow</code>, <code>green</code>, <code>greenyellow</code>,
+            <code>greenblue</code>, <code>lightgreenblue</code>, and <code>error</code>.<br><br>
+            <strong>2. Explicit dark classes</strong> — <code>.nok-dark-bg-*</code> and <code>.nok-dark-text-*</code>
+            classes override specific properties only in dark mode. These are opt-in per element.<br><br>
+            <strong>Class pattern:</strong> <code>.nok-dark-{type}-{color}</code> — mirrors the light class naming but only
+            applies inside <code>@media (prefers-color-scheme: dark)</code>.
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Auto-Adjusted Colors</div>
+        <p>These colors have their CSS variables redefined in dark mode. No extra classes needed.</p>
+        <div class="color-grid color-grid--wide">
+            <?php
+            $auto_dark_colors = ['body', 'yellow', 'green', 'greenyellow', 'greenblue', 'lightgreenblue', 'error'];
+            foreach ($auto_dark_colors as $color_name):
+            ?>
+            <div class="utility-card" style="padding: 0; overflow: hidden; border: none;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; min-height: 5em;">
+                    <div class="nok-bg-<?= $color_name ?>" style="display: flex; flex-direction: column; justify-content: flex-end; padding: 0.5em;">
+                        <span style="font-size: 0.75em; font-weight: 600;">Light</span>
+                        <span style="font-size: 0.7em; opacity: 0.8;">.nok-bg-<?= $color_name ?></span>
+                    </div>
+                    <div style="background: var(--nok-<?= $color_name ?>); color: var(--nok-<?= $color_name ?>-contrast); display: flex; flex-direction: column; justify-content: flex-end; padding: 0.5em; border-left: 2px solid rgba(128,128,128,0.2);">
+                        <span style="font-size: 0.75em; font-weight: 600;">Dark (auto)</span>
+                        <span style="font-size: 0.7em; opacity: 0.8;">var(--nok-<?= $color_name ?>)</span>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Explicit Dark Override Classes <span class="badge">nok-dark-*</span></div>
+        <p>Use these to explicitly set background or text color in dark mode only.</p>
+        <div class="color-grid color-grid--wide">
+            <?php
+            $dark_bg_classes = [
+                'darkestblue' => '#00132f',
+                'darkerblue'  => '#0b2355',
+                'darkblue'    => '#14477c',
+            ];
+            foreach ($dark_bg_classes as $name => $hex):
+            ?>
+            <div class="color-card" style="background: <?= $hex ?>; color: #fff;" data-class="nok-dark-bg-<?= $name ?>">
+                <span class="color-card__name">.nok-dark-bg-<?= $name ?></span>
+                <span class="color-card__class"><?= $hex ?></span>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <div class="color-grid color-grid--wide" style="margin-top: 0.5em;">
+            <?php
+            $dark_text_classes = [
+                'white'    => '#ffffff',
+                'contrast' => 'inherit',
+            ];
+            foreach ($dark_text_classes as $name => $hex):
+            ?>
+            <div class="color-card color-card--text" data-class="nok-dark-text-<?= $name ?>">
+                <span class="color-card__name" style="color: <?= $hex ?>;">.nok-dark-text-<?= $name ?></span>
+                <span class="color-card__class">Only in dark mode</span>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Composed Examples <span class="badge">Light + Dark</span></div>
+        <p>Common combinations: light classes always apply, dark classes activate in dark mode only.</p>
+        <div class="color-grid color-grid--wide">
+            <?php
+            $composed_examples = [
+                [
+                    'label'   => 'White section',
+                    'classes' => 'nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue',
+                    'light'   => 'nok-bg-white nok-text-darkblue',
+                    'dark'    => 'nok-dark-bg-darkestblue',
+                ],
+                [
+                    'label'   => 'Footer (white)',
+                    'classes' => 'nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue nok-dark-text-white',
+                    'light'   => 'nok-bg-white nok-text-darkblue',
+                    'dark'    => 'nok-dark-bg-darkestblue nok-dark-text-white',
+                ],
+                [
+                    'label'   => 'Grey section',
+                    'classes' => 'nok-bg-body--darker gradient-background nok-text-darkerblue nok-dark-text-contrast',
+                    'light'   => 'nok-bg-body--darker nok-text-darkerblue',
+                    'dark'    => 'nok-dark-text-contrast',
+                ],
+                [
+                    'label'   => 'Accordion button',
+                    'classes' => 'nok-bg-white nok-text-contrast nok-dark-bg-darkestblue',
+                    'light'   => 'nok-bg-white nok-text-contrast',
+                    'dark'    => 'nok-dark-bg-darkestblue',
+                ],
+            ];
+            foreach ($composed_examples as $example):
+            ?>
+            <div class="utility-card" style="padding: 0; overflow: hidden; border-radius: 0.364em;">
+                <div style="padding: 0.6em 0.75em; border-bottom: 1px solid rgba(128,128,128,0.15);">
+                    <strong style="font-size: 0.85em;"><?= $example['label'] ?></strong>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr;">
+                    <div class="<?= $example['classes'] ?>" style="padding: 0.75em; min-height: 4em; display: flex; flex-direction: column; justify-content: center;">
+                        <span style="font-size: 0.75em; font-weight: 500;">Preview area</span>
+                        <span style="font-size: 0.65em; opacity: 0.7; margin-top: 0.25em;">Toggle OS dark mode to compare</span>
+                    </div>
+                    <div style="padding: 0.5em 0.75em; background: rgba(128,128,128,0.05); font-size: 0.7em; display: flex; flex-direction: column; justify-content: center; gap: 0.25em;">
+                        <div><strong>Light:</strong> <code style="font-size: 0.9em;"><?= htmlspecialchars($example['light']) ?></code></div>
+                        <div><strong>Dark:</strong> <code style="font-size: 0.9em;"><?= htmlspecialchars($example['dark']) ?></code></div>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Usage Guidelines</div>
+        <div class="intro">
+            <strong>When to use explicit dark classes:</strong><br>
+            • Light backgrounds (white, body, lightgrey) that need a dark alternative<br>
+            • Text colors that should change independently of background<br><br>
+            <strong>When NOT needed:</strong><br>
+            • Already-dark colors (darkerblue, darkblue, darkestblue) — fine as-is in dark mode<br>
+            • Accent colors (yellow, greenblue) — auto-adjusted by SCSS, stay vibrant<br>
+            • <code>nok-text-contrast</code> — already auto-adapts to background<br><br>
+            <strong>In the editor:</strong> Color pickers with dark mode support show a secondary "Dark"
+            row below the main swatch. Picking a light color auto-fills the curated dark default.
+            Editors can override or clear the dark selection per field.
         </div>
     </div>
 </div>

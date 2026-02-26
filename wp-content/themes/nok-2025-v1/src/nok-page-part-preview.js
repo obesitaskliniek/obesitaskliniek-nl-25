@@ -83,12 +83,78 @@ domReady(() => {
     const button = document.getElementById(`${prefix}-button`);
     const iframe = document.getElementById(`${prefix}-iframe`);
 
+    const darkModeBtn = document.getElementById(`${prefix}-darkmode`);
+
     if (!iframe) {
         logger.error(NAME, 'Failed to load iframe');
         return;
     }
     if (!button) {
         logger.warn(NAME, 'Update button not found, continuing with frame only');
+    }
+
+    // Dark mode simulation toggle
+    let darkModeActive = false;
+
+    /**
+     * Force dark mode by manipulating CSSMediaRule.media on @media (prefers-color-scheme: dark)
+     * blocks inside the iframe's stylesheets.
+     *
+     * Appends (prefers-color-scheme: light) to each dark-mode media rule. Since comma-separated
+     * media queries are OR'd, one always matches — making the block unconditional. Removing the
+     * appended condition restores original OS-preference behavior.
+     *
+     * Uses iframe.contentWindow.CSSMediaRule for instanceof checks — cross-frame instanceof
+     * fails because the parent window's CSSMediaRule !== iframe's CSSMediaRule.
+     */
+    const applyDarkMode = () => {
+        try {
+            const doc = iframe.contentDocument || iframe.contentWindow?.document;
+            if (!doc) return;
+
+            const IframeCSSMediaRule = iframe.contentWindow.CSSMediaRule;
+
+            for (const sheet of doc.styleSheets) {
+                try {
+                    for (const rule of sheet.cssRules) {
+                        if (!(rule instanceof IframeCSSMediaRule)) continue;
+                        if (!rule.conditionText?.includes('prefers-color-scheme: dark')) continue;
+
+                        if (darkModeActive) {
+                            rule.media.appendMedium('(prefers-color-scheme: light)');
+                        } else {
+                            try { rule.media.deleteMedium('(prefers-color-scheme: light)'); } catch (_) {}
+                        }
+                    }
+                } catch (_) {
+                    // Cross-origin stylesheet, skip
+                }
+            }
+        } catch (e) {
+            // iframe not ready
+        }
+    };
+
+    // Re-apply dark mode after each iframe load (preview refresh)
+    iframe.addEventListener('load', () => applyDarkMode());
+
+    if (darkModeBtn) {
+        // Show notice when browser is already in dark mode
+        const osDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+        const notice = document.createElement('span');
+        notice.style.cssText = 'color:#FF8575; font-size:12px; font-style:italic;';
+        notice.textContent = 'Je browser staat al op dark mode — toggle heeft geen zichtbaar effect.';
+        notice.hidden = !osDarkMode.matches;
+        darkModeBtn.parentNode.appendChild(notice);
+        osDarkMode.addEventListener('change', (e) => notice.hidden = !e.matches);
+
+        darkModeBtn.addEventListener('click', () => {
+            darkModeActive = !darkModeActive;
+            darkModeBtn.classList.toggle('button-primary', darkModeActive);
+            darkModeBtn.style.opacity = darkModeActive ? '1' : '';
+            applyDarkMode();
+            logger.info(NAME, `Dark mode simulation: ${darkModeActive ? 'ON' : 'OFF'}`);
+        });
     }
 
     // Wait for editor to be ready before initializing

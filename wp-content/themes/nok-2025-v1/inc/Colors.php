@@ -12,6 +12,11 @@ namespace NOK2025\V1;
  * This replaces manually duplicated select() options across templates,
  * allowing centralized management of available color combinations.
  *
+ * Palette entries may include optional dark mode fields:
+ * - `darkValue`: CSS classes for dark mode (e.g., 'nok-dark-bg-darkestblue nok-dark-text-white')
+ * - `darkLabel`: Human-readable label for the dark option in the editor (e.g., 'Donkerstblauw')
+ * - `darkColor`: Hex color for the dark mode swatch (auto-derived from darkValue if omitted)
+ *
  * @example Using a color palette in a page part template
  * // In PHPDoc Custom Fields header:
  * // * - bg_color:color-selector(backgrounds)!default(nok-bg-darkblue)
@@ -102,6 +107,9 @@ class Colors {
 	/**
 	 * Get palettes formatted for JavaScript/admin consumption
 	 *
+	 * Passes darkValue and darkColor to JS alongside existing fields.
+	 * Computes darkColor from darkValue when not explicitly set.
+	 *
 	 * @return array Palettes with structure suitable for React components
 	 */
 	public static function getColorsForAdmin(): array {
@@ -110,11 +118,20 @@ class Colors {
 
 		foreach ( $palettes as $name => $options ) {
 			$result[ $name ] = array_map( function ( $option ) {
-				return [
+				$entry = [
 					'label' => $option['label'],
 					'value' => $option['value'],
 					'color' => $option['color'],
 				];
+
+				if ( isset( $option['darkValue'] ) ) {
+					$entry['darkValue'] = $option['darkValue'];
+					$entry['darkLabel'] = $option['darkLabel'] ?? $option['label'];
+					$entry['darkColor'] = $option['darkColor']
+						?? self::resolveDarkColor( $option['darkValue'] );
+				}
+
+				return $entry;
 			}, $options );
 		}
 
@@ -122,85 +139,124 @@ class Colors {
 	}
 
 	/**
+	 * Resolve a dark mode swatch color from dark CSS classes
+	 *
+	 * Strips the `nok-dark-` prefix and looks up the corresponding light color
+	 * in COLOR_DEFINITIONS. This avoids duplicating color hex values.
+	 *
+	 * @param string $classes Dark mode CSS class string (e.g., 'nok-dark-bg-darkestblue nok-dark-text-white')
+	 * @return string Hex color code or 'transparent'
+	 */
+	public static function resolveDarkColor( string $classes ): string {
+		if ( empty( $classes ) ) {
+			return 'transparent';
+		}
+
+		// Prioritize background classes for swatch color
+		$bg_fallback = null;
+		foreach ( explode( ' ', $classes ) as $class ) {
+			$class = trim( $class );
+			if ( empty( $class ) ) {
+				continue;
+			}
+
+			$light_equivalent = str_replace( 'nok-dark-', 'nok-', $class );
+			if ( isset( self::COLOR_DEFINITIONS[ $light_equivalent ] ) ) {
+				// Prefer bg classes for the swatch
+				if ( str_contains( $class, '-bg-' ) ) {
+					return self::COLOR_DEFINITIONS[ $light_equivalent ];
+				}
+				$bg_fallback ??= self::COLOR_DEFINITIONS[ $light_equivalent ];
+			}
+		}
+
+		return $bg_fallback ?? 'transparent';
+	}
+
+	/**
 	 * Common backgrounds palette
 	 *
 	 * Used for section and block background colors.
 	 *
-	 * @return array<int, array{label: string, value: string, color: string}>
+	 * @return array<int, array{label: string, value: string, color: string, darkValue?: string, darkColor?: string}>
 	 */
 	private static function getBackgroundsPalette(): array {
 		return [
 			[
-				'label' => 'Donkerst blauw',
-				'value' => 'nok-bg-darkerblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
+				'label'     => 'Donkerst blauw',
+				'value'     => 'nok-bg-darkerblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
 			],
 			[
-				'label' => 'Donkerblauw',
-				'value' => 'nok-bg-darkblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkblue'],
+				'label'     => 'Donkerblauw',
+				'value'     => 'nok-bg-darkblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkblue'],
 			],
 			[
-				'label' => 'Blauw',
-				'value' => 'nok-bg-lightblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-lightblue'],
+				'label'     => 'Blauw',
+				'value'     => 'nok-bg-lightblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-lightblue'],
 			],
 			[
-				'label' => 'Wit',
-				'value' => 'nok-bg-white nok-dark-bg-darkestblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'label'     => 'Wit',
+				'value'     => 'nok-bg-white',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'darkValue' => 'nok-dark-bg-darkestblue',
+				'darkLabel' => 'Donkerstblauw',
 			],
 			[
-				'label' => 'Body',
-				'value' => 'nok-bg-body',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-body'],
+				'label'     => 'Body',
+				'value'     => 'nok-bg-body',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-body'],
 			],
 			[
-				'label' => 'Body (donkerder)',
-				'value' => 'nok-bg-body--darker',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-body--darker'],
+				'label'     => 'Body (donkerder)',
+				'value'     => 'nok-bg-body--darker',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-body--darker'],
 			],
 			[
-				'label' => 'Transparant',
-				'value' => '',
-				'color' => 'transparent',
+				'label'     => 'Transparant',
+				'value'     => '',
+				'color'     => 'transparent',
 			],
 		];
 	}
 
 	/**
-	 * Simple backgrounds palette (bg only, no dark mode)
+	 * Simple backgrounds palette (bg only)
 	 *
 	 * Used for achtergrondkleur fields in picture-text blocks.
 	 *
-	 * @return array<int, array{label: string, value: string, color: string}>
+	 * @return array<int, array{label: string, value: string, color: string, darkValue?: string, darkColor?: string}>
 	 */
 	private static function getBackgroundsSimplePalette(): array {
 		return [
 			[
-				'label' => 'Blauw',
-				'value' => 'nok-bg-darkerblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
+				'label'     => 'Blauw',
+				'value'     => 'nok-bg-darkerblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
 			],
 			[
-				'label' => 'Wit',
-				'value' => 'nok-bg-white nok-dark-bg-darkestblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'label'     => 'Wit',
+				'value'     => 'nok-bg-white',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'darkValue' => 'nok-dark-bg-darkestblue',
+				'darkLabel' => 'Donkerstblauw',
 			],
 			[
-				'label' => 'Body',
-				'value' => 'nok-bg-body',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-body'],
+				'label'     => 'Body',
+				'value'     => 'nok-bg-body',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-body'],
 			],
 			[
-				'label' => 'Body (donkerder)',
-				'value' => 'nok-bg-body--darker',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-body--darker'],
+				'label'     => 'Body (donkerder)',
+				'value'     => 'nok-bg-body--darker',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-body--darker'],
 			],
 			[
-				'label' => 'Transparant',
-				'value' => '',
-				'color' => 'transparent',
+				'label'     => 'Transparant',
+				'value'     => '',
+				'color'     => 'transparent',
 			],
 		];
 	}
@@ -210,54 +266,56 @@ class Colors {
 	 *
 	 * Used for block backgrounds within sections where more variety is needed.
 	 *
-	 * @return array<int, array{label: string, value: string, color: string}>
+	 * @return array<int, array{label: string, value: string, color: string, darkValue?: string, darkColor?: string}>
 	 */
 	private static function getBackgroundsFullPalette(): array {
 		return [
 			[
-				'label' => 'Donkerst blauw',
-				'value' => 'nok-bg-darkerblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
+				'label'     => 'Donkerst blauw',
+				'value'     => 'nok-bg-darkerblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
 			],
 			[
-				'label' => 'Donkerblauw',
-				'value' => 'nok-bg-darkblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkblue'],
+				'label'     => 'Donkerblauw',
+				'value'     => 'nok-bg-darkblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkblue'],
 			],
 			[
-				'label' => 'Lichter donkerblauw',
-				'value' => 'nok-bg-darkblue--lighter',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkblue--lighter'],
+				'label'     => 'Lichter donkerblauw',
+				'value'     => 'nok-bg-darkblue--lighter',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkblue--lighter'],
 			],
 			[
-				'label' => 'Blauw',
-				'value' => 'nok-bg-lightblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-lightblue'],
+				'label'     => 'Blauw',
+				'value'     => 'nok-bg-lightblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-lightblue'],
 			],
 			[
-				'label' => 'Groenblauw',
-				'value' => 'nok-bg-greenblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-greenblue'],
+				'label'     => 'Groenblauw',
+				'value'     => 'nok-bg-greenblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-greenblue'],
 			],
 			[
-				'label' => 'Geel',
-				'value' => 'nok-bg-yellow',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-yellow'],
+				'label'     => 'Geel',
+				'value'     => 'nok-bg-yellow',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-yellow'],
 			],
 			[
-				'label' => 'Body',
-				'value' => 'nok-bg-body',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-body'],
+				'label'     => 'Body',
+				'value'     => 'nok-bg-body',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-body'],
 			],
 			[
-				'label' => 'Wit',
-				'value' => 'nok-bg-white',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'label'     => 'Wit',
+				'value'     => 'nok-bg-white',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'darkValue' => 'nok-dark-bg-darkestblue',
+				'darkLabel' => 'Donkerstblauw',
 			],
 			[
-				'label' => 'Transparant',
-				'value' => '',
-				'color' => 'transparent',
+				'label'     => 'Transparant',
+				'value'     => '',
+				'color'     => 'transparent',
 			],
 		];
 	}
@@ -267,29 +325,33 @@ class Colors {
 	 *
 	 * Used for text color selections.
 	 *
-	 * @return array<int, array{label: string, value: string, color: string}>
+	 * @return array<int, array{label: string, value: string, color: string, darkValue?: string, darkColor?: string}>
 	 */
 	private static function getTextPalette(): array {
 		return [
 			[
-				'label' => 'Donkerblauw',
-				'value' => 'nok-text-darkerblue',
-				'color' => self::COLOR_DEFINITIONS['nok-text-darkerblue'],
+				'label'     => 'Donkerblauw',
+				'value'     => 'nok-text-darkerblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-text-darkerblue'],
+				'darkValue' => 'nok-dark-text-white',
+				'darkLabel' => 'Witte tekst',
 			],
 			[
-				'label' => 'Wit',
-				'value' => 'nok-text-white',
-				'color' => self::COLOR_DEFINITIONS['nok-text-white'],
+				'label'     => 'Wit',
+				'value'     => 'nok-text-white',
+				'color'     => self::COLOR_DEFINITIONS['nok-text-white'],
 			],
 			[
-				'label' => 'Zwart',
-				'value' => 'nok-text-black',
-				'color' => self::COLOR_DEFINITIONS['nok-text-black'],
+				'label'     => 'Zwart',
+				'value'     => 'nok-text-black',
+				'color'     => self::COLOR_DEFINITIONS['nok-text-black'],
+				'darkValue' => 'nok-dark-text-white',
+				'darkLabel' => 'Witte tekst',
 			],
 			[
-				'label' => 'Contrast',
-				'value' => 'nok-text-contrast',
-				'color' => 'inherit',
+				'label'     => 'Contrast',
+				'value'     => 'nok-text-contrast',
+				'color'     => 'inherit',
 			],
 		];
 	}
@@ -299,34 +361,40 @@ class Colors {
 	 *
 	 * Includes standard text option for picture-text blocks.
 	 *
-	 * @return array<int, array{label: string, value: string, color: string}>
+	 * @return array<int, array{label: string, value: string, color: string, darkValue?: string, darkColor?: string}>
 	 */
 	private static function getTextExtendedPalette(): array {
 		return [
 			[
-				'label' => 'Standaard',
-				'value' => 'nok-text-darkerblue',
-				'color' => self::COLOR_DEFINITIONS['nok-text-darkerblue'],
+				'label'     => 'Standaard',
+				'value'     => 'nok-text-darkerblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-text-darkerblue'],
+				'darkValue' => 'nok-dark-text-white',
+				'darkLabel' => 'Witte tekst',
 			],
 			[
-				'label' => 'Contrast',
-				'value' => 'nok-text-contrast',
-				'color' => 'inherit',
+				'label'     => 'Contrast',
+				'value'     => 'nok-text-contrast',
+				'color'     => 'inherit',
 			],
 			[
-				'label' => 'Wit',
-				'value' => 'nok-text-white',
-				'color' => self::COLOR_DEFINITIONS['nok-text-white'],
+				'label'     => 'Wit',
+				'value'     => 'nok-text-white',
+				'color'     => self::COLOR_DEFINITIONS['nok-text-white'],
 			],
 			[
-				'label' => 'Zwart',
-				'value' => 'nok-text-black',
-				'color' => self::COLOR_DEFINITIONS['nok-text-black'],
+				'label'     => 'Zwart',
+				'value'     => 'nok-text-black',
+				'color'     => self::COLOR_DEFINITIONS['nok-text-black'],
+				'darkValue' => 'nok-dark-text-white',
+				'darkLabel' => 'Witte tekst',
 			],
 			[
-				'label' => 'Blauw',
-				'value' => 'nok-text-darkerblue',
-				'color' => self::COLOR_DEFINITIONS['nok-text-darkerblue'],
+				'label'     => 'Blauw',
+				'value'     => 'nok-text-darkerblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-text-darkerblue'],
+				'darkValue' => 'nok-dark-text-white',
+				'darkLabel' => 'Witte tekst',
 			],
 		];
 	}
@@ -337,54 +405,56 @@ class Colors {
 	 * Combined background + text color classes for buttons.
 	 * Color shown in swatch is the background color.
 	 *
-	 * @return array<int, array{label: string, value: string, color: string}>
+	 * @return array<int, array{label: string, value: string, color: string, darkValue?: string, darkColor?: string}>
 	 */
 	private static function getButtonBackgroundsPalette(): array {
 		return [
 			[
-				'label' => 'Donkerblauw',
-				'value' => 'nok-bg-darkblue nok-text-contrast',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkblue'],
+				'label'     => 'Donkerblauw',
+				'value'     => 'nok-bg-darkblue nok-text-contrast',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkblue'],
 			],
 			[
-				'label' => 'Donkerderblauw',
-				'value' => 'nok-bg-darkerblue nok-text-contrast',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
+				'label'     => 'Donkerderblauw',
+				'value'     => 'nok-bg-darkerblue nok-text-contrast',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
 			],
 			[
-				'label' => 'Blauw',
-				'value' => 'nok-bg-lightblue nok-text-darkblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-lightblue'],
+				'label'     => 'Blauw',
+				'value'     => 'nok-bg-lightblue nok-text-darkblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-lightblue'],
 			],
 			[
-				'label' => 'Groenblauw',
-				'value' => 'nok-bg-greenblue nok-text-darkblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-greenblue'],
+				'label'     => 'Groenblauw',
+				'value'     => 'nok-bg-greenblue nok-text-darkblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-greenblue'],
 			],
 			[
-				'label' => 'Geel',
-				'value' => 'nok-bg-yellow nok-text-darkblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-yellow'],
+				'label'     => 'Geel',
+				'value'     => 'nok-bg-yellow nok-text-darkblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-yellow'],
 			],
 			[
-				'label' => 'Wit',
-				'value' => 'nok-bg-white nok-text-darkblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'label'     => 'Wit',
+				'value'     => 'nok-bg-white nok-text-darkblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'darkValue' => 'nok-dark-bg-darkestblue nok-dark-text-white',
+				'darkLabel' => 'Donkerstblauw + wit',
 			],
 			[
-				'label' => 'Clinics blauw',
-				'value' => 'nok-bg-clinics-blauw nok-text-darkerblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-clinics-blauw'],
+				'label'     => 'Clinics blauw',
+				'value'     => 'nok-bg-clinics-blauw nok-text-darkerblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-clinics-blauw'],
 			],
 			[
-				'label' => 'Clinics oranje',
-				'value' => 'nok-bg-clinics-oranje nok-text-white',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-clinics-oranje'],
+				'label'     => 'Clinics oranje',
+				'value'     => 'nok-bg-clinics-oranje nok-text-white',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-clinics-oranje'],
 			],
 			[
-				'label' => 'Transparant',
-				'value' => 'nok-bg-transparent nok-text-contrast',
-				'color' => 'transparent',
+				'label'     => 'Transparant',
+				'value'     => 'nok-bg-transparent nok-text-contrast',
+				'color'     => 'transparent',
 			],
 		];
 	}
@@ -392,7 +462,8 @@ class Colors {
 	/**
 	 * Icon colors palette
 	 *
-	 * Used for icon fill/text colors.
+	 * Used for icon fill/text colors. No dark mode overrides needed —
+	 * icons inherit context from their parent section's dark mode.
 	 *
 	 * @return array<int, array{label: string, value: string, color: string}>
 	 */
@@ -437,44 +508,50 @@ class Colors {
 	 * Pre-composed section schemes with background + text combinations.
 	 * Used for main section-level colors.
 	 *
-	 * @return array<int, array{label: string, value: string, color: string}>
+	 * @return array<int, array{label: string, value: string, color: string, darkValue?: string, darkColor?: string}>
 	 */
 	private static function getSectionColorsPalette(): array {
 		return [
 			[
-				'label' => 'Transparant',
-				'value' => 'nok-bg-body nok-text-darkerblue nok-dark-text-contrast',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-body'],
+				'label'     => 'Transparant',
+				'value'     => 'nok-bg-body nok-text-darkerblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-body'],
+				'darkValue' => 'nok-dark-text-contrast',
+				'darkLabel' => 'Contrasttekst',
 			],
 			[
-				'label' => 'Body',
-				'value' => 'nok-bg-body',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-body'],
+				'label'     => 'Body',
+				'value'     => 'nok-bg-body',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-body'],
 			],
 			[
-				'label' => 'Grijs',
-				'value' => 'nok-bg-body--darker gradient-background nok-text-darkerblue nok-dark-text-contrast',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-body--darker'],
+				'label'     => 'Grijs',
+				'value'     => 'nok-bg-body--darker gradient-background nok-text-darkerblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-body--darker'],
+				'darkValue' => 'nok-dark-text-contrast',
+				'darkLabel' => 'Contrasttekst',
 			],
 			[
-				'label' => 'Wit',
-				'value' => 'nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'label'     => 'Wit',
+				'value'     => 'nok-bg-white nok-text-darkblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'darkValue' => 'nok-dark-bg-darkestblue',
+				'darkLabel' => 'Donkerstblauw',
 			],
 			[
-				'label' => 'Blauw',
-				'value' => 'nok-bg-darkerblue nok-text-contrast',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
+				'label'     => 'Blauw',
+				'value'     => 'nok-bg-darkerblue nok-text-contrast',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
 			],
 			[
-				'label' => 'Donkerblauw',
-				'value' => 'nok-bg-darkblue nok-text-contrast',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkblue'],
+				'label'     => 'Donkerblauw',
+				'value'     => 'nok-bg-darkblue nok-text-contrast',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkblue'],
 			],
 			[
-				'label' => 'Geel',
-				'value' => 'nok-bg-yellow nok-text-darkerblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-yellow'],
+				'label'     => 'Geel',
+				'value'     => 'nok-bg-yellow nok-text-darkerblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-yellow'],
 			],
 		];
 	}
@@ -484,54 +561,60 @@ class Colors {
 	 *
 	 * Combined bg + text for content blocks within sections (accordions, cards, etc.)
 	 *
-	 * @return array<int, array{label: string, value: string, color: string}>
+	 * @return array<int, array{label: string, value: string, color: string, darkValue?: string, darkColor?: string}>
 	 */
 	private static function getBlockColorsPalette(): array {
 		return [
 			[
-				'label' => 'Transparant',
-				'value' => 'nok-bg-transparent',
-				'color' => 'transparent',
+				'label'     => 'Transparant',
+				'value'     => 'nok-bg-transparent',
+				'color'     => 'transparent',
 			],
 			[
-				'label' => 'Blauw',
-				'value' => 'nok-bg-darkerblue nok-text-white',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
+				'label'     => 'Blauw',
+				'value'     => 'nok-bg-darkerblue nok-text-white',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
 			],
 			[
-				'label' => 'Lichter blauw',
-				'value' => 'nok-bg-darkblue--darker nok-text-white',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkblue--darker'],
+				'label'     => 'Lichter blauw',
+				'value'     => 'nok-bg-darkblue--darker nok-text-white',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkblue--darker'],
 			],
 			[
-				'label' => 'Donkerblauw',
-				'value' => 'nok-bg-darkerblue--darker nok-text-white',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkerblue--darker'],
+				'label'     => 'Donkerblauw',
+				'value'     => 'nok-bg-darkerblue--darker nok-text-white',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkerblue--darker'],
 			],
 			[
-				'label' => 'Wit',
-				'value' => 'nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'label'     => 'Wit',
+				'value'     => 'nok-bg-white nok-text-darkblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'darkValue' => 'nok-dark-bg-darkestblue',
+				'darkLabel' => 'Donkerstblauw',
 			],
 			[
-				'label' => 'Grijs',
-				'value' => 'nok-bg-body--darker gradient-background nok-text-darkerblue nok-dark-text-contrast',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-body--darker'],
+				'label'     => 'Grijs',
+				'value'     => 'nok-bg-body--darker gradient-background nok-text-darkerblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-body--darker'],
+				'darkValue' => 'nok-dark-text-contrast',
+				'darkLabel' => 'Contrasttekst',
 			],
 			[
-				'label' => 'Geel',
-				'value' => 'nok-bg-yellow nok-text-darkerblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-yellow'],
+				'label'     => 'Geel',
+				'value'     => 'nok-bg-yellow nok-text-darkerblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-yellow'],
 			],
 			[
-				'label' => 'Lichtgrijs',
-				'value' => 'nok-bg-lightgrey nok-text-darkblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-lightgrey'],
+				'label'     => 'Lichtgrijs',
+				'value'     => 'nok-bg-lightgrey nok-text-darkblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-lightgrey'],
+				'darkValue' => 'nok-dark-bg-darkestblue nok-dark-text-white',
+				'darkLabel' => 'Donkerstblauw + wit',
 			],
 			[
-				'label' => 'Body',
-				'value' => 'nok-bg-body nok-text-contrast',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-body'],
+				'label'     => 'Body',
+				'value'     => 'nok-bg-body nok-text-contrast',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-body'],
 			],
 		];
 	}
@@ -541,34 +624,38 @@ class Colors {
 	 *
 	 * Simple bg + text combinations for cards and smaller blocks.
 	 *
-	 * @return array<int, array{label: string, value: string, color: string}>
+	 * @return array<int, array{label: string, value: string, color: string, darkValue?: string, darkColor?: string}>
 	 */
 	private static function getCardColorsPalette(): array {
 		return [
 			[
-				'label' => 'Wit',
-				'value' => 'nok-bg-white nok-text-darkblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'label'     => 'Wit',
+				'value'     => 'nok-bg-white nok-text-darkblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'darkValue' => 'nok-dark-bg-darkestblue nok-dark-text-white',
+				'darkLabel' => 'Donkerstblauw + wit',
 			],
 			[
-				'label' => 'Blauw',
-				'value' => 'nok-bg-darkerblue nok-text-white',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
+				'label'     => 'Blauw',
+				'value'     => 'nok-bg-darkerblue nok-text-white',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
 			],
 			[
-				'label' => 'Donkerblauw',
-				'value' => 'nok-bg-darkblue nok-text-contrast',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkblue'],
+				'label'     => 'Donkerblauw',
+				'value'     => 'nok-bg-darkblue nok-text-contrast',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkblue'],
 			],
 			[
-				'label' => 'Body',
-				'value' => 'nok-bg-body nok-text-contrast',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-body'],
+				'label'     => 'Body',
+				'value'     => 'nok-bg-body nok-text-contrast',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-body'],
 			],
 			[
-				'label' => 'Wit (donker)',
-				'value' => 'nok-bg-white nok-text-darkestblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'label'     => 'Wit (donker)',
+				'value'     => 'nok-bg-white nok-text-darkestblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'darkValue' => 'nok-dark-bg-darkestblue nok-dark-text-white',
+				'darkLabel' => 'Donkerstblauw + wit',
 			],
 		];
 	}
@@ -578,19 +665,21 @@ class Colors {
 	 *
 	 * For badges and labels on cards.
 	 *
-	 * @return array<int, array{label: string, value: string, color: string}>
+	 * @return array<int, array{label: string, value: string, color: string, darkValue?: string, darkColor?: string}>
 	 */
 	private static function getBadgeColorsPalette(): array {
 		return [
 			[
-				'label' => 'Blauw',
-				'value' => 'nok-bg-darkerblue nok-text-white',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
+				'label'     => 'Blauw',
+				'value'     => 'nok-bg-darkerblue nok-text-white',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
 			],
 			[
-				'label' => 'Wit',
-				'value' => 'nok-bg-white nok-text-darkerblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'label'     => 'Wit',
+				'value'     => 'nok-bg-white nok-text-darkerblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'darkValue' => 'nok-dark-bg-darkestblue nok-dark-text-white',
+				'darkLabel' => 'Donkerstblauw + wit',
 			],
 		];
 	}
@@ -600,24 +689,26 @@ class Colors {
 	 *
 	 * For quote blocks in carousels and showcases.
 	 *
-	 * @return array<int, array{label: string, value: string, color: string}>
+	 * @return array<int, array{label: string, value: string, color: string, darkValue?: string, darkColor?: string}>
 	 */
 	private static function getQuoteBlockColorsPalette(): array {
 		return [
 			[
-				'label' => 'Body',
-				'value' => 'nok-bg-body nok-text-contrast',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-body'],
+				'label'     => 'Body',
+				'value'     => 'nok-bg-body nok-text-contrast',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-body'],
 			],
 			[
-				'label' => 'Wit',
-				'value' => 'nok-bg-white nok-text-darkestblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'label'     => 'Wit',
+				'value'     => 'nok-bg-white nok-text-darkestblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'darkValue' => 'nok-dark-bg-darkestblue nok-dark-text-white',
+				'darkLabel' => 'Donkerstblauw + wit',
 			],
 			[
-				'label' => 'Blauw',
-				'value' => 'nok-bg-darkblue nok-text-contrast',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkblue'],
+				'label'     => 'Blauw',
+				'value'     => 'nok-bg-darkblue nok-text-contrast',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkblue'],
 			],
 		];
 	}
@@ -627,24 +718,28 @@ class Colors {
 	 *
 	 * For buttons inside accordion items.
 	 *
-	 * @return array<int, array{label: string, value: string, color: string}>
+	 * @return array<int, array{label: string, value: string, color: string, darkValue?: string, darkColor?: string}>
 	 */
 	private static function getAccordionButtonColorsPalette(): array {
 		return [
 			[
-				'label' => 'Wit',
-				'value' => 'nok-bg-white nok-text-contrast nok-dark-bg-darkestblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'label'     => 'Wit',
+				'value'     => 'nok-bg-white nok-text-contrast',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'darkValue' => 'nok-dark-bg-darkestblue',
+				'darkLabel' => 'Donkerstblauw',
 			],
 			[
-				'label' => 'Blauw',
-				'value' => 'nok-bg-darkblue--darker nok-text-contrast nok-dark-bg-darkestblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkblue--darker'],
+				'label'     => 'Blauw',
+				'value'     => 'nok-bg-darkblue--darker nok-text-contrast',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkblue--darker'],
+				'darkValue' => 'nok-dark-bg-darkestblue',
+				'darkLabel' => 'Donkerstblauw',
 			],
 			[
-				'label' => 'Donkerblauw',
-				'value' => 'nok-bg-darkerblue--darker nok-text-contrast',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkerblue--darker'],
+				'label'     => 'Donkerblauw',
+				'value'     => 'nok-bg-darkerblue--darker nok-text-contrast',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkerblue--darker'],
 			],
 		];
 	}
@@ -654,19 +749,21 @@ class Colors {
 	 *
 	 * Specific colors for the footer component.
 	 *
-	 * @return array<int, array{label: string, value: string, color: string}>
+	 * @return array<int, array{label: string, value: string, color: string, darkValue?: string, darkColor?: string}>
 	 */
 	private static function getFooterColorsPalette(): array {
 		return [
 			[
-				'label' => 'Wit',
-				'value' => 'nok-bg-white nok-dark-bg-darkestblue nok-text-darkblue nok-dark-text-white',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'label'     => 'Wit',
+				'value'     => 'nok-bg-white nok-text-darkblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'darkValue' => 'nok-dark-bg-darkestblue nok-dark-text-white',
+				'darkLabel' => 'Donkerstblauw + wit',
 			],
 			[
-				'label' => 'Donkerblauw',
-				'value' => 'nok-bg-darkestblue nok-text-white--darker',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkestblue'],
+				'label'     => 'Donkerblauw',
+				'value'     => 'nok-bg-darkestblue nok-text-white--darker',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkestblue'],
 			],
 		];
 	}
@@ -676,19 +773,21 @@ class Colors {
 	 *
 	 * Simple bg-only colors for step visual sections.
 	 *
-	 * @return array<int, array{label: string, value: string, color: string}>
+	 * @return array<int, array{label: string, value: string, color: string, darkValue?: string, darkColor?: string}>
 	 */
 	private static function getStepVisualColorsPalette(): array {
 		return [
 			[
-				'label' => 'Blauw',
-				'value' => 'nok-bg-darkerblue',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
+				'label'     => 'Blauw',
+				'value'     => 'nok-bg-darkerblue',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-darkerblue'],
 			],
 			[
-				'label' => 'Wit',
-				'value' => 'nok-bg-white',
-				'color' => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'label'     => 'Wit',
+				'value'     => 'nok-bg-white',
+				'color'     => self::COLOR_DEFINITIONS['nok-bg-white'],
+				'darkValue' => 'nok-dark-bg-darkestblue',
+				'darkLabel' => 'Donkerstblauw',
 			],
 		];
 	}
