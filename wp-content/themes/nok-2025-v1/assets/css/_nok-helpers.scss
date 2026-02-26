@@ -871,9 +871,9 @@ $utilities: (
 .nok-aos {
   opacity: 0;
   @include nok-mixins.no-transitions {
-    @at-root body.domready & {
-      opacity: 1;
-    }
+    // Before __enable-transitions is added (docLoaded), show elements at full
+    // opacity so content isn't invisible during the gap between docReady and docLoaded.
+    opacity: 1;
   }
   @include nok-mixins.transition-properties {
     opacity: 0;

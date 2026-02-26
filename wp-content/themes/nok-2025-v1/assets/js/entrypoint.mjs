@@ -7,15 +7,15 @@
  */
 
 
-import events from './domule/core.events.mjs';
-import {loadModules} from './domule/core.loader.mjs';
-import {logger, DEBUG} from './domule/core.log.mjs';
-import {classToggler} from './domule/modules/hnl.classtoggler.mjs';
-import {pageScrollPercentage} from "./domule/util.perf.mjs";
-import {setupScrollbarControl, setupFakeScrollbar, shuffleChildren} from "./nok-scrollbar.mjs";
-import {ViewportScroller} from './domule/util.ensure-visibility.mjs';
-import AOS from './nok-aos.mjs';
-import {singleClick} from "./domule/modules/hnl.clickhandlers.mjs";
+import events from './domule/core.events.min.mjs';
+import {loadModules} from './domule/core.loader.min.mjs';
+import {logger, DEBUG} from './domule/core.log.min.mjs';
+import {classToggler} from './domule/modules/hnl.classtoggler.min.mjs';
+import {pageScrollPercentage} from "./domule/util.perf.min.mjs";
+import {setupScrollbarControl, setupFakeScrollbar, shuffleChildren} from "./nok-scrollbar.min.mjs";
+import {ViewportScroller} from './domule/util.ensure-visibility.min.mjs';
+import AOS from './nok-aos.min.mjs';
+import {singleClick} from "./domule/modules/hnl.clickhandlers.min.mjs";
 
 const NAME = 'entryPoint';
 const BODY = document.body;
@@ -137,7 +137,9 @@ events.docReady(function () {
     });
 
     const aos = AOS.init({
-        selector: 'body:not(.no-aos) nok-section:not(.no-aos),body:not(.no-aos) .nok-aos', duration: 600, threshold: 0.2, once: true
+        selector: 'body:not(.no-aos) nok-section:not(.no-aos),body:not(.no-aos) .nok-aos',
+        threshold: 0.2,
+        once: true
     });
 
 });

@@ -1,32 +1,27 @@
 /**
  * @fileoverview Lightweight Scroll Animation Observer - IntersectionObserver-based visibility tracking
  * @module nok-aos
- * @version 3.0.0
+ * @version 4.0.0
  * @author Nederlandse Obesitas Kliniek B.V. / Klaas Leussink / hnldesign
  * @since 2025
  *
  * @description
  * Tracks element visibility via IntersectionObserver and updates data attributes.
  * Supports per-element thresholds, dynamic element detection, and viewport-relative
- * threshold calculation. Integrates with DOMule module system while maintaining standalone API.
+ * threshold calculation.
  *
- * Threshold semantics (v3): the threshold represents the fraction of the **viewport**
+ * Threshold semantics: the threshold represents the fraction of the **viewport**
  * that the element's visible area must cover before triggering. A threshold of 0.35 means
  * "trigger when 35% of the viewport height is covered by this element" — consistent
  * regardless of element height. Elements fully visible in the viewport always trigger,
  * even if they're too small to meet the viewport-coverage threshold.
  *
  * @example
- * // DOMule usage
- * <div data-requires="nok-aos.mjs" data-aos data-aos-threshold="75%">
- *
- * @example
- * // Standalone usage
  * import AOS from './nok-aos.mjs';
  * const aos = AOS.init({ threshold: 0.5, once: true });
  */
 
-import {logger} from './domule/core.log.mjs';
+import {logger} from "./domule/core.log.min.mjs";
 
 export const NAME = 'aos';
 
@@ -40,17 +35,18 @@ const DEFAULTS = {
   dataName: 'visible',
   offset: 120,
   once: false,
-  mirror: false,
-  anchorPlacement: 'top-bottom',
   disableMutationObserver: false,
   threshold: 0.1,
 };
 
-/** @private */
+/** @private Number of discrete threshold steps for IntersectionObserver */
 const THRESHOLD_STEPS = 101;
 
 /** @private */
 const ELEMENT_NODE = 1;
+
+/** @private Resize debounce delay in ms */
+const RESIZE_DEBOUNCE_MS = 200;
 
 // ============================================================================
 // STATE MANAGEMENT
@@ -58,9 +54,6 @@ const ELEMENT_NODE = 1;
 
 /** @type {WeakMap<HTMLElement, number>} Cached parsed thresholds per element */
 const thresholdCache = new WeakMap();
-
-/** @type {AOS|null} Global instance for DOMule integration */
-let globalInstance = null;
 
 // ============================================================================
 // PRIVATE UTILITIES
@@ -101,7 +94,9 @@ function getElementThreshold(el, defaultThreshold) {
  */
 function initElement(el, options) {
   el.classList.add('nok-aos');
-  el.dataset[options.dataName] = 'false';
+  if (el.dataset[options.dataName] !== 'true') {
+    el.dataset[options.dataName] = 'false';
+  }
   if (!el.dataset.aosOnce) {
     el.dataset.aosOnce = String(options.once);
   }
@@ -109,30 +104,23 @@ function initElement(el, options) {
 
 /**
  * Tests whether an element meets visibility criteria using viewport-relative ratio.
- *
- * The threshold represents the fraction of the viewport height that the element's
- * visible area must cover. This makes thresholds behave consistently regardless of
- * element height — a 0.35 threshold always means "35% of the viewport is covered."
- *
- * Small elements that can never fill the threshold fraction of the viewport are
- * handled by a fully-visible fallback: if intersectionRatio ≈ 1.0, always trigger.
+ * Pure function — used by both IntersectionObserver callback and synchronous initial check.
  *
  * @private
- * @param {IntersectionObserverEntry} entry - Observer entry with intersection data
- * @param {number} threshold - Viewport-coverage fraction required (0–1)
+ * @param {number} visibleHeight - Height of the element's visible portion in px
+ * @param {number} elementHeight - Total element height in px
+ * @param {number} viewportHeight - Effective viewport height in px (includes rootMargin)
+ * @param {number} threshold - Viewport-coverage fraction required (0-1)
  * @returns {boolean} Whether the element meets visibility criteria
  */
-function meetsViewportThreshold(entry, threshold) {
-  // rootBounds includes rootMargin inflation, so the effective "viewport"
-  // is larger than the physical screen by the configured offset amount.
-  const viewportHeight = entry.rootBounds?.height ?? window.innerHeight;
-  const viewportRatio = entry.intersectionRect.height / viewportHeight;
+function isVisible(visibleHeight, elementHeight, viewportHeight, threshold) {
+  if (viewportHeight <= 0) return false;
 
   // Small elements fully in view always qualify, even if they can't fill
   // the threshold fraction of the viewport
-  if (entry.intersectionRatio >= 0.99) return true;
+  if (elementHeight > 0 && visibleHeight >= elementHeight * 0.99) return true;
 
-  return viewportRatio >= threshold;
+  return (visibleHeight / viewportHeight) >= threshold;
 }
 
 // ============================================================================
@@ -148,25 +136,35 @@ class AOS {
   /**
    * Creates AOS instance.
    * @param {Object} options - Configuration options
-   * @param {string} [options.selector] - Element selector
-   * @param {string} [options.dataName] - Data attribute for visibility state
-   * @param {number} [options.offset] - Trigger offset in pixels
-   * @param {boolean} [options.once] - Animate only once
-   * @param {boolean} [options.mirror] - Reverse on scroll up
-   * @param {string} [options.anchorPlacement] - Trigger point
-   * @param {boolean} [options.disableMutationObserver] - Disable dynamic detection
-   * @param {number|string} [options.threshold] - Viewport-coverage fraction (0–1) required to trigger
+   * @param {string} [options.selector='[data-aos]'] - Element selector
+   * @param {string} [options.dataName='visible'] - Data attribute name for visibility state
+   * @param {number} [options.offset=120] - Trigger offset in pixels (expands viewport bounds)
+   * @param {boolean} [options.once=false] - Animate only once, then unobserve
+   * @param {boolean} [options.disableMutationObserver=false] - Disable dynamic element detection
+   * @param {number|string} [options.threshold=0.1] - Viewport-coverage fraction (0-1) required to trigger
    */
   constructor(options = {}) {
-    this.options = { ...DEFAULTS, ...options };
-    this.elements = [];
+    this.options = {...DEFAULTS, ...options};
+
+    /** @type {Set<HTMLElement>} Tracked elements */
+    this.elements = new Set();
+
+    /** @type {IntersectionObserver|null} */
     this.observer = null;
+
+    /** @type {MutationObserver|null} */
     this.mutationObserver = null;
+
+    /** @type {boolean} */
     this.initialized = false;
+
+    // Bound handlers for cleanup
+    this._onResize = null;
+    this._onPageShow = null;
   }
 
   /**
-   * Initializes observer and tracks elements.
+   * Initializes observer, tracks elements, and binds window event listeners.
    * @public
    */
   init() {
@@ -175,22 +173,29 @@ class AOS {
       return;
     }
 
-    this.elements = Array.from(document.querySelectorAll(this.options.selector));
+    const els = document.querySelectorAll(this.options.selector);
 
-    if (!this.elements.length) {
+    if (!els.length) {
       logger.info(NAME, 'No elements found');
       return;
     }
 
-    this.elements.forEach(el => initElement(el, this.options));
+    els.forEach(el => {
+      initElement(el, this.options);
+      this.elements.add(el);
+    });
+
     this._setupIntersectionObserver();
+    this._checkInitialVisibility();
 
     if (!this.options.disableMutationObserver) {
       this._setupMutationObserver();
     }
 
+    this._bindWindowEvents();
+
     this.initialized = true;
-    logger.info(NAME, `Tracking ${this.elements.length} element(s)`);
+    logger.info(NAME, `Tracking ${this.elements.size} element(s)`);
   }
 
   /**
@@ -198,26 +203,75 @@ class AOS {
    * @private
    */
   _setupIntersectionObserver() {
+    const rootMargin = `${this.options.offset}px 0px ${this.options.offset}px 0px`;
+
     this.observer = new IntersectionObserver(
         entries => {
           entries.forEach(entry => {
             const el = entry.target;
             const threshold = getElementThreshold(el, this.options.threshold);
 
-            if (meetsViewportThreshold(entry, threshold)) {
+            // rootBounds includes rootMargin inflation, so the effective "viewport"
+            // is larger than the physical screen by the configured offset amount.
+            const viewportHeight = entry.rootBounds?.height ?? window.innerHeight;
+            const visibleHeight = entry.intersectionRect.height;
+            const elementHeight = entry.boundingClientRect.height;
+
+            if (isVisible(visibleHeight, elementHeight, viewportHeight, threshold)) {
               el.dataset[this.options.dataName] = 'true';
-            } else if (this.options.mirror && el.dataset.aosOnce !== 'true') {
+              if (el.dataset.aosOnce === 'true') {
+                this.observer.unobserve(el);
+              }
+            } else if (el.dataset.aosOnce !== 'true') {
               el.dataset[this.options.dataName] = 'false';
             }
           });
         },
         {
-          rootMargin: this._calculateRootMargin(),
-          threshold: Array.from({ length: THRESHOLD_STEPS }, (_, i) => i / (THRESHOLD_STEPS - 1))
+          rootMargin,
+          threshold: Array.from({length: THRESHOLD_STEPS}, (_, i) => i / (THRESHOLD_STEPS - 1))
         }
     );
 
-    this.elements.forEach(el => this.observer.observe(el));
+    this.elements.forEach(el => {
+      // Don't re-observe elements that already triggered with once mode
+      if (el.dataset.aosOnce === 'true' && el.dataset[this.options.dataName] === 'true') return;
+      this.observer.observe(el);
+    });
+  }
+
+  /**
+   * Synchronous visibility check for elements already in viewport at init time.
+   * Prevents the flash-of-invisible-content that occurs when IO callback delivery
+   * is deferred (initial load, bfcache restore).
+   *
+   * Uses the same `isVisible()` function as the IO callback, with rootMargin
+   * accounted for by expanding the effective viewport height.
+   * @private
+   */
+  _checkInitialVisibility() {
+    const viewportHeight = window.innerHeight + (this.options.offset * 2);
+
+    this.elements.forEach(el => {
+      // Already visible (e.g. from a previous observation) — skip
+      if (el.dataset[this.options.dataName] === 'true') return;
+
+      const rect = el.getBoundingClientRect();
+      // Element is outside expanded viewport — skip
+      if (rect.bottom < -this.options.offset || rect.top > window.innerHeight + this.options.offset) return;
+
+      const visibleTop = Math.max(rect.top, -this.options.offset);
+      const visibleBottom = Math.min(rect.bottom, window.innerHeight + this.options.offset);
+      const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+      const threshold = getElementThreshold(el, this.options.threshold);
+
+      if (isVisible(visibleHeight, rect.height, viewportHeight, threshold)) {
+        el.dataset[this.options.dataName] = 'true';
+        if (el.dataset.aosOnce === 'true') {
+          this.observer?.unobserve(el);
+        }
+      }
+    });
   }
 
   /**
@@ -233,7 +287,7 @@ class AOS {
           if (node.matches(this.options.selector)) {
             this._addElement(node);
           }
-          node.querySelectorAll(this.options.selector)
+          node.querySelectorAll?.(this.options.selector)
               .forEach(el => this._addElement(el));
         });
       });
@@ -246,40 +300,76 @@ class AOS {
   }
 
   /**
+   * Binds resize and pageshow (bfcache) handlers.
+   * @private
+   */
+  _bindWindowEvents() {
+    // Debounced resize — re-observe with current viewport dimensions
+    let resizeTimer;
+    this._onResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => this.refresh(), RESIZE_DEBOUNCE_MS);
+    };
+    window.addEventListener('resize', this._onResize);
+
+    // bfcache restore — IO state is lost, do a synchronous visibility pass
+    this._onPageShow = (e) => {
+      if (e.persisted) {
+        logger.info(NAME, 'bfcache restore — re-checking visibility');
+        this._checkInitialVisibility();
+      }
+    };
+    window.addEventListener('pageshow', this._onPageShow);
+  }
+
+  /**
+   * Removes window event listeners.
+   * @private
+   */
+  _unbindWindowEvents() {
+    if (this._onResize) {
+      window.removeEventListener('resize', this._onResize);
+      this._onResize = null;
+    }
+    if (this._onPageShow) {
+      window.removeEventListener('pageshow', this._onPageShow);
+      this._onPageShow = null;
+    }
+  }
+
+  /**
    * Adds element to tracking.
    * @private
    * @param {HTMLElement} el - Element to track
    */
   _addElement(el) {
-    if (this.elements.includes(el)) return;
+    if (this.elements.has(el)) return;
 
     initElement(el, this.options);
-    this.elements.push(el);
+    this.elements.add(el);
     this.observer?.observe(el);
 
     logger.info(NAME, 'Added dynamic element');
   }
 
   /**
-   * Calculates rootMargin based on anchor placement.
-   * @private
-   * @returns {string} CSS rootMargin value
-   */
-  _calculateRootMargin() {
-    const [anchor, placement] = this.options.anchorPlacement.split('-');
-    const offset = this.options.offset;
-
-    return `${anchor === 'top' ? offset : 0}px 0px ${placement === 'bottom' ? offset : 0}px 0px`;
-  }
-
-  /**
-   * Refreshes observer (lightweight).
+   * Refreshes observer (lightweight). Re-queries DOM for elements matching
+   * the selector and re-creates the IntersectionObserver.
    * @public
    */
   refresh() {
     this.observer?.disconnect();
-    this.elements = Array.from(document.querySelectorAll(this.options.selector));
+
+    // Re-query DOM — may include new elements
+    document.querySelectorAll(this.options.selector).forEach(el => {
+      if (!this.elements.has(el)) {
+        initElement(el, this.options);
+        this.elements.add(el);
+      }
+    });
+
     this._setupIntersectionObserver();
+    this._checkInitialVisibility();
     logger.info(NAME, 'Refreshed');
   }
 
@@ -293,19 +383,22 @@ class AOS {
   }
 
   /**
-   * Cleans up observers and resets state.
+   * Cleans up observers, window listeners, and resets state.
    * @public
    */
   destroy() {
     this.observer?.disconnect();
     this.mutationObserver?.disconnect();
+    this._unbindWindowEvents();
 
     this.elements.forEach(el => {
       delete el.dataset[this.options.dataName];
       thresholdCache.delete(el);
     });
 
-    this.elements = [];
+    this.elements = new Set();
+    this.observer = null;
+    this.mutationObserver = null;
     this.initialized = false;
 
     logger.info(NAME, 'Destroyed');
@@ -313,102 +406,11 @@ class AOS {
 }
 
 // ============================================================================
-// DOMULE API EXPORTS
+// PUBLIC API
 // ============================================================================
 
 /**
- * DOMule standard init function.
- * Elements can pass options via data attributes.
- * @param {NodeList|HTMLElement[]} elements - Elements with data-requires
- * @returns {string} Status message
- *
- * @example
- * <div data-requires="nok-aos.mjs"
- *      data-aos
- *      data-aos-threshold="75%"
- *      data-aos-once="true">
- */
-export function init(elements) {
-  if (globalInstance) {
-    logger.warn(NAME, 'Global instance exists, use api("refresh")');
-    return 'Already initialized';
-  }
-
-  // Extract options from first element or use defaults
-  const firstEl = elements[0];
-  const options = firstEl ? {
-    selector: firstEl.dataset.aosSelector || DEFAULTS.selector,
-    once: firstEl.dataset.aosOnce === 'true',
-    mirror: firstEl.dataset.aosMirror === 'true',
-    offset: parseInt(firstEl.dataset.aosOffset) || DEFAULTS.offset,
-    threshold: firstEl.dataset.aosThreshold || DEFAULTS.threshold,
-  } : {};
-
-  globalInstance = new AOS(options);
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => globalInstance.init());
-  } else {
-    globalInstance.init();
-  }
-
-  return `Initialized with ${elements.length} container(s)`;
-}
-
-/**
- * Module API for inter-module coordination.
- * @param {string} action - Action name
- * @param {...*} args - Action arguments
- * @returns {*} Action-specific return value
- *
- * @example
- * ModuleRegistry.waitFor('aos')
- *   .then(aos => aos.api('refresh'));
- */
-export function api(action, ...args) {
-  if (!globalInstance) {
-    logger.warn(NAME, 'Not initialized');
-    return null;
-  }
-
-  switch (action) {
-    case 'refresh':
-      globalInstance.refresh();
-      break;
-
-    case 'refreshHard':
-      globalInstance.refreshHard();
-      break;
-
-    case 'getElements':
-      return globalInstance.elements;
-
-    case 'isTracking':
-      return args[0] ? globalInstance.elements.includes(args[0]) : false;
-
-    default:
-      logger.warn(NAME, `Unknown action: ${action}`);
-      return null;
-  }
-}
-
-/**
- * DOMule cleanup for SPA unmounting.
- * @public
- */
-export function destroy() {
-  if (globalInstance) {
-    globalInstance.destroy();
-    globalInstance = null;
-  }
-}
-
-// ============================================================================
-// STANDALONE API
-// ============================================================================
-
-/**
- * Standalone init for non-DOMule usage.
+ * Creates and initializes an AOS instance.
  * @param {Object} options - Configuration options
  * @returns {AOS} AOS instance
  *
@@ -419,8 +421,6 @@ export function destroy() {
 export default {
   init(options = {}) {
     const aos = new AOS(options);
-
-    logger.info(NAME, 'Standalone instance initialized.');
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => aos.init());
