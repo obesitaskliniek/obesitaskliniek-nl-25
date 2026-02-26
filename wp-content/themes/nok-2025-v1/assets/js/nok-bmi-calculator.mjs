@@ -26,7 +26,7 @@
 export const NAME = "NOK-BMI-Calculator";
 
 import {debouncedEvent} from "./domule/util.debounce.mjs";
-import {logger} from "./domule/core.log.mjs";
+import {logger} from "./domule/core.log.min.mjs";
 
 // ============================================================================
 // CONSTANTS

@@ -28,8 +28,8 @@
  * </div>
  */
 
-import { logger } from './domule/core.log.mjs';
-import { ViewportScroller } from './domule/util.ensure-visibility.mjs';
+import { logger } from './domule/core.log.min.mjs';
+import { ViewportScroller } from './domule/util.ensure-visibility.min.mjs';
 
 export const NAME = 'process-showcase';
 

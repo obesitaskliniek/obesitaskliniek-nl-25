@@ -22,7 +22,7 @@ if ( ! empty( $args ) ) {
                 <!-- Component: drag-scrollable blokkengroep -->
                 <div class="nok-mt-2 nok-align-self-stretch">
                     <div class="nok-layout-grid nok-layout-grid__3-column
-            nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="true">
+            nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="true" data-autoscroll-interval="10000">
 
                         <!-- alle komende voorlichtingen, niet specifiek die van de huidige vestiging -->
                         <?php

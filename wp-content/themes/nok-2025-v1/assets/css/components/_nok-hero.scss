@@ -129,7 +129,7 @@ nok-hero {
       .#{components-base.$prefix}-usp {
         display: flex;
         flex-direction: row;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: flex-start;
 
@@ -196,6 +196,30 @@ nok-hero {
         .#{components-base.$prefix}-button-group {
           grid-template-columns: 1fr;
           grid-template-rows: 1fr 1fr;
+        }
+      }
+    }
+    footer > div {
+      flex-wrap: nowrap;
+      flex-direction: row;
+      display: flex;
+      flex-basis: 100%;
+      width: stretch;
+      overflow: auto hidden;
+      scroll-snap-type: x mandatory;
+      justify-content: space-between;
+      overflow-wrap: anywhere;
+      > * {
+        scroll-snap-align: center;
+        flex-shrink: 0;
+        width: stretch;
+        justify-content: center !important;
+        flex-basis: max-content;
+        @include components-base.media-breakpoint-down(xl) {
+          flex-basis: 50%;
+        }
+        @include components-base.media-breakpoint-down(lg) {
+          flex-basis: 100%;
         }
       }
     }

@@ -15,7 +15,7 @@
  */
 
 import {debouncedEvent} from "./domule/modules/hnl.debounce.mjs";
-import {logger} from "./domule/core.log.mjs";
+import {logger} from "./domule/core.log.min.mjs";
 
 export const NAME = 'nok-search';
 

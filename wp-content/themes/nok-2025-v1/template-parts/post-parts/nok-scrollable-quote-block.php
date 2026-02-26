@@ -14,7 +14,7 @@ $quote_block_button_style = $args['block_button_color'] ?? 'nok-bg-darkestblue n
 <div class="<?= $class ?> nok-align-self-to-lg-stretch nok-column-last-3">
     <div class="nok-scrollable__horizontal nok-subtle-shadow-compensation"
          data-scroll-snapping="true" data-draggable="true" <?= $shuffle ? 'data-nok-shuffle' : '' ?>
-         id="<?= $scroller_id; ?>" data-autoscroll="<?= $autoscroll; ?>">
+         id="<?= $scroller_id; ?>" data-autoscroll="<?= $autoscroll; ?>" data-autoscroll-interval="10000">
         <?php foreach ( $quote_data as $quote ): ?>
             <nok-square-block class="<?= $quote_block_style ?> nok-alpha-10 nok-p-3" data-shadow="true">
                 <div class="nok-square-block__heading">

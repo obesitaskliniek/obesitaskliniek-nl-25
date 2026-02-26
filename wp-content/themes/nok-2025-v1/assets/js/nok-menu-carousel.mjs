@@ -19,7 +19,7 @@
  */
 
 import {singleClick} from "./domule/modules/hnl.clickhandlers.mjs";
-import {logger} from "./domule/core.log.mjs";
+import {logger} from "./domule/core.log.min.mjs";
 import {debounceThis} from "./domule/util.debounce.mjs";
 
 export const NAME = 'menuCarousel';

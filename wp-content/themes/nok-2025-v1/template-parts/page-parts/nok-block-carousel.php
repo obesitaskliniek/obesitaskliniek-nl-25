@@ -44,7 +44,7 @@ $blocks = $c->blocks->json(array_fill(0, 6, [
                 <!-- Component: drag-scrollable block carousel -->
                 <div class="<?= $c->alternatieve_layout->is(true,'nok-align-self-stretch nok-column-last-xl-6', 'nok-mt-2 nok-align-self-stretch'); ?>">
                     <div class="nok-layout-grid nok-layout-grid__<?= $c->alternatieve_layout->is(true, '2', $c->aantal_blocks->raw()); ?>-column
-            nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="true" <?= $c->shuffle_blocks->isTrue() ? 'data-nok-shuffle' : '' ?>>
+            nok-scrollable__horizontal columns-to-slides" data-scroll-snapping="true" data-draggable="true" data-autoscroll="true" data-autoscroll-interval="10000" <?= $c->shuffle_blocks->isTrue() ? 'data-nok-shuffle' : '' ?>>
 						<?php foreach ($blocks as $block) : ?>
                             <nok-square-block class="<?= $c->block_colors ?>">
 								<?php if (!empty($block['icon'])) : ?>

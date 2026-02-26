@@ -1,5 +1,5 @@
 import {singleClick} from "./domule/modules/hnl.clickhandlers.mjs";
-import {logger} from "./domule/core.log.mjs";
+import {logger} from "./domule/core.log.min.mjs";
 import {debounceThis, debouncedEvent} from "./domule/modules/hnl.debounce.mjs";
 
 export const NAME = 'simpleToggler';
