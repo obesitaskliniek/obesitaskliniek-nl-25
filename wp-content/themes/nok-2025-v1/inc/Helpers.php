@@ -1566,7 +1566,8 @@ class Helpers {
 	 * Priority logic:
 	 * 1. If highlighted_excerpt custom field is set, use it as 'first'
 	 *    and full content as 'rest'
-	 * 2. Otherwise, split at first paragraph boundary in raw content
+	 * 2. If <!--more--> tag is present, split content there
+	 * 3. Otherwise, split at first paragraph boundary in raw content
 	 *
 	 * Applies WordPress filters to each section independently to keep
 	 * shortcodes/blocks intact and respect semantic structure.
@@ -1596,6 +1597,16 @@ class Helpers {
 
 		// Get raw content before filters
 		$raw = get_post_field('post_content', $post_id);
+
+		// Split at <!--more--> tag if present
+		if (str_contains($raw, '<!--more-->')) {
+			$parts = explode('<!--more-->', $raw, 2);
+			$cache[$post_id] = [
+				'first' => apply_filters('the_content', trim($parts[0])),
+				'rest'  => apply_filters('the_content', trim($parts[1]))
+			];
+			return $cache[$post_id];
+		}
 
 		// Find first paragraph break (double newline)
 		$pattern = '/\n\s*\n/';
