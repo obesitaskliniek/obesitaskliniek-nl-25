@@ -79,7 +79,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT_ABS . '/assets/img/nok-logo.
 
     <nok-navigation-mobile>
         <nok-navigation-top-row class="nok-section__inner--stretched  nok-bg-white nok-dark-bg-darkestblue nok-text-contrast nok-fill-contrast  nok-z-3">
-            <a href="<?= esc_url(home_url('/')) ?>" aria-label="Nederlandse Obesitas Kliniek - Home"><?= $logo; ?></a>
+            <a href="<?= esc_url(home_url('/')) ?>" aria-label="Nederlandse Obesitas Kliniek - Home" title="Nederlandse Obesitas Kliniek - Home"><?= $logo; ?></a>
             <a href="/aanmelden-gratis-voorlichting#nok-voorlichting-form" role="button" class="nok-button nok-button--small nok-bg-yellow nok-text-contrast nok-invisible-to-sm"
                     tabindex="0">Gratis voorlichting
             </a>
@@ -136,7 +136,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT_ABS . '/assets/img/nok-logo.
                     </small>-->
                 </div>
                 <?php $menu_manager->render_top_row('top_row'); ?>
-                <button type="button" aria-label="Tekstgrootte aanpassen"
+                <button type="button" aria-label="Tekstgrootte aanpassen" title="Tekstgrootte aanpassen"
                    data-toggles-class="open" data-class-target=".nok-nav-control-dropdown" data-toggle-event="click" data-toggle-outside="unset"
                    data-swipe="unset" data-auto-restore="10">
                     <?= Assets::getIcon('ui_font_size') ?>

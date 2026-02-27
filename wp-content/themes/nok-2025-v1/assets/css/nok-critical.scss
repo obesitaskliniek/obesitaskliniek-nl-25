@@ -16,6 +16,59 @@
 @use "./tools/nok-rfs";
 
 // =============================================================================
+// 0. CRITICAL @FONT-FACE (eliminates render-blocking font CSS chain)
+// =============================================================================
+// Only the font weights used above the fold. Full set loads deferred via
+// inter.css / realist.css. These declarations MUST use absolute URLs because
+// critical CSS is inlined in <head> (no base URL for relative paths).
+// The THEME_ROOT placeholder is replaced by PHP before inlining.
+//
+// Matching preload hints in header.php ensure these fonts start downloading
+// at the earliest opportunity (before CSS parsing).
+// =============================================================================
+
+// Inter — body text (variable font, normal only — italic not above fold)
+// __THEME_FONTS__ is replaced by PHP with the actual theme font URL at output time
+// (critical CSS is inlined in <head>, so relative paths don't work).
+@font-face {
+  font-family: 'Inter';
+  src: url('__THEME_FONTS__/inter/InterVariable.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Realist — headings: weight 500 (default heading weight via nok-heading-font mixin)
+@font-face {
+  font-family: 'Realist';
+  src: url('__THEME_FONTS__/realist-new/Realist-Medium.woff2') format('woff2'),
+       url('__THEME_FONTS__/realist-new/Realist-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Realist — bold headings + buttons: weight 700
+@font-face {
+  font-family: 'Realist';
+  src: url('__THEME_FONTS__/realist-new/Realist-Bold.woff2') format('woff2'),
+       url('__THEME_FONTS__/realist-new/Realist-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+// Realist — regular weight: 400 (navigation text, buttons)
+@font-face {
+  font-family: 'Realist';
+  src: url('__THEME_FONTS__/realist-new/Realist-Regular.woff2') format('woff2'),
+       url('__THEME_FONTS__/realist-new/Realist-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+// =============================================================================
 // 1. MINIMAL REBOOT (box-sizing + body reset)
 // =============================================================================
 *, *::before, *::after { box-sizing: border-box; }

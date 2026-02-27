@@ -1146,9 +1146,9 @@ class RestEndpoints {
 			}
 		}
 
-		$html      .= '<link href="<?= THEME_ROOT ;?>/assets/fonts/inter.css" rel="stylesheet" crossorigin="anonymous">
-        <link href="' . THEME_ROOT . '/assets/fonts/realist.css" rel="stylesheet" crossorigin="anonymous">
-        </head><body>';
+		$html .= '<link href="' . esc_url( THEME_ROOT . '/assets/fonts/inter.css' ) . '" rel="stylesheet" crossorigin="anonymous">';
+		$html .= '<link href="' . esc_url( THEME_ROOT . '/assets/fonts/realist.css' ) . '" rel="stylesheet" crossorigin="anonymous">';
+		$html .= '</head><body>';
 		$html .= $rendered_html;
 		//$html .= '</div>';
 		$html .= '</body></html>';
