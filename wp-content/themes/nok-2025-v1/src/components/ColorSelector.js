@@ -340,6 +340,13 @@ const ColorSelector = ({ value, onChange, palette }) => {
                 paletteColors, false, null
             )}
 
+            {/* Dark mode helper — explain when DARK row appears */}
+            {hasDarkOptions && !showDarkRow && selectedLight && (
+                <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#757575', fontStyle: 'italic' }}>
+                    Deze kleur heeft geen dark-mode variant.
+                </p>
+            )}
+
             {/* Dark mode picker row — same palette, picks dark-prefixed classes */}
             {showDarkRow && (
                 <div style={{ position: 'relative' }}>
