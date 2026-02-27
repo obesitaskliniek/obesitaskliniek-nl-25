@@ -26,7 +26,7 @@ use NOK2025\V1\Assets;
 use NOK2025\V1\Helpers;
 
 $c             = $context;
-$featuredImage = Helpers::get_featured_image();
+$featuredImage = Helpers::get_featured_image( null, Helpers::HERO_IMAGE_SIZES );
 ?>
 
     <nok-hero class="nok-section">

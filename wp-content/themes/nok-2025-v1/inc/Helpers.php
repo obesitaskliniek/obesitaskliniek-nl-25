@@ -49,13 +49,21 @@ class Helpers {
 	 * maybe_preload_hero_image() to ensure the preload tag matches
 	 * the rendered <img> exactly (preventing double downloads).
 	 */
-	/** sizes attribute for WordPress attachment hero images (must match preload and <img>) */
-	private const HERO_IMAGE_SIZES = '(max-width: 1200px) 100vw, 1200px';
+	/** Default sizes for featured images used across templates (full-width on mobile, ~50% on desktop) */
+	private const DEFAULT_IMAGE_SIZES = '(max-width: 992px) 100vw, 50vw';
+
+	/**
+	 * sizes attribute for hero images (must match preload and <img>)
+	 *
+	 * The hero image sits inside an SVG foreignObject (700 of 900 SVG units = 78%).
+	 * - Mobile (<lg):  figure spans full width → image ≈ 100vw
+	 * - Desktop (≥lg): figure is ~50% of section → image ≈ 39vw, max ~620px
+	 */
+	public const HERO_IMAGE_SIZES = '(max-width: 992px) 100vw, 40vw';
 
 	private const FALLBACK_HERO_IMAGE = [
 		'src'    => 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:100x0-25-0-0-center-0.jpg',
 		'srcset' => 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:1920x0-65-0-0-center-0.jpg 1920w, https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:768x0-65-0-0-center-0.jpg 768w, https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:320x0-65-0-0-center-0.jpg 320w, https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:150x0-65-0-0-center-0.jpg 150w',
-		'sizes'  => '(max-width: 575px) 100vw, (min-width: 575px) 75vw, (min-width: 768px) 84vw, (min-width: 996px) 84vw, (min-width: 1200px) 84vw',
 	];
 
 	/**
@@ -196,7 +204,9 @@ class Helpers {
 		);
 	}
 
-	public static function get_featured_image( $class = null ): string {
+	public static function get_featured_image( $class = null, ?string $sizes = null ): string {
+		$sizes_attr = $sizes ?? self::DEFAULT_IMAGE_SIZES;
+
 		if ( has_post_thumbnail() ) {
 			$featuredImage = wp_get_attachment_image(
 				get_post_thumbnail_id(),
@@ -206,7 +216,7 @@ class Helpers {
 					'loading'  => 'eager',
 					'decoding' => 'async',
 					'class'    => trim( ( $class ?? '' ) . " featured-image" ),
-					'sizes'    => self::HERO_IMAGE_SIZES,
+					'sizes'    => $sizes_attr,
 				]
 			);
 		} else {
@@ -214,7 +224,7 @@ class Helpers {
 			$featuredImage = '<img ' . $class_attr
 				. 'src="' . self::FALLBACK_HERO_IMAGE['src'] . '" '
 				. 'srcset="' . self::FALLBACK_HERO_IMAGE['srcset'] . '" '
-				. 'sizes="' . self::FALLBACK_HERO_IMAGE['sizes'] . '" '
+				. 'sizes="' . esc_attr( $sizes_attr ) . '" '
 				. 'alt="" '
 				. 'loading="eager" decoding="async">';
 		}
@@ -2112,7 +2122,7 @@ class Helpers {
 			// No attachment — use CDN fallback (must match FALLBACK_HERO_IMAGE constant)
 			echo '<link rel="preload" as="image" href="' . esc_url( self::FALLBACK_HERO_IMAGE['src'] ) . '"'
 				. ' imagesrcset="' . esc_attr( self::FALLBACK_HERO_IMAGE['srcset'] ) . '"'
-				. ' imagesizes="' . esc_attr( self::FALLBACK_HERO_IMAGE['sizes'] ) . '"'
+				. ' imagesizes="' . esc_attr( self::HERO_IMAGE_SIZES ) . '"'
 				. ' fetchpriority="high">' . "\n";
 		}
 	}
