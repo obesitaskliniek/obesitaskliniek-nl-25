@@ -69,7 +69,6 @@ ob_start();
                 aria-label="Bekijk de video"
                 data-requires="./nok-video.min.mjs"
                 data-require-lazy="true"
-                data-require-lazy="true"
                 data-video-hq="<?= esc_url($video_hq) ?>">
             <?php if ($video_poster_url) : ?>
                 <img src="<?= esc_url($video_poster_url) ?>"
