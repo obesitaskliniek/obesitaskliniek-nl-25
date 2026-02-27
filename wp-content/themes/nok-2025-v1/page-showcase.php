@@ -1,6 +1,7 @@
 <?php
 /* Template Name: Page Parts Showcase */
 
+use NOK2025\V1\Colors;
 use NOK2025\V1\Helpers;
 use NOK2025\V1\Theme;
 
@@ -188,17 +189,50 @@ uksort($groups, function ($a, $b) use ($registry) {
 										$details[] = esc_html($field['description']);
 									}
 									if (!empty($field['options'])) {
-										$labels = $field['option_labels'] ?? $field['options'];
-										$option_parts = [];
-										foreach ($field['options'] as $i => $opt) {
-											$label = $labels[$i] ?? $opt;
-											if ($label !== $opt) {
-												$option_parts[] = esc_html($label) . '::' . esc_html($opt);
-											} else {
-												$option_parts[] = esc_html($opt);
+										if ($field['type'] === 'color-selector' && !empty($field['palette'])) {
+											// Render color swatches instead of text
+											$palette = Colors::getPalette($field['palette']);
+											$palette_by_value = [];
+											foreach ($palette as $entry) {
+												$palette_by_value[$entry['value']] = $entry['color'];
 											}
+											$swatch_html = '<span style="display: inline-flex; flex-wrap: wrap; gap: 4px; align-items: center;">';
+											$labels = $field['option_labels'] ?? $field['options'];
+											foreach ($field['options'] as $i => $opt) {
+												$hex = $palette_by_value[$opt] ?? Colors::resolveColor($opt);
+												$label = $labels[$i] ?? $opt;
+												$is_transparent = ($hex === 'transparent' || $hex === 'inherit' || $opt === '');
+												$is_light = in_array($hex, ['#ffffff', '#f3f4f9', '#e5e7ef', '#cccccc', 'transparent', 'inherit'], true);
+												$border = ($is_light || $is_transparent)
+													? '1px solid #c3c4c7'
+													: '1px solid transparent';
+												if ($is_transparent) {
+													$bg_style = 'background: linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%), linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%); background-size: 6px 6px; background-position: 0 0, 3px 3px';
+												} else {
+													$bg_style = 'background: ' . esc_attr($hex);
+												}
+												$swatch_html .= sprintf(
+													'<span title="%s" style="display: inline-block; width: 18px; height: 18px; border-radius: 50%%; border: %s; %s; flex-shrink: 0;"></span>',
+													esc_attr($label . ' (' . $opt . ')'),
+													$border,
+													$bg_style
+												);
+											}
+											$swatch_html .= '</span>';
+											$details[] = $swatch_html;
+										} else {
+											$labels = $field['option_labels'] ?? $field['options'];
+											$option_parts = [];
+											foreach ($field['options'] as $i => $opt) {
+												$label = $labels[$i] ?? $opt;
+												if ($label !== $opt) {
+													$option_parts[] = esc_html($label) . '::' . esc_html($opt);
+												} else {
+													$option_parts[] = esc_html($opt);
+												}
+											}
+											$details[] = implode(' | ', $option_parts);
 										}
-										$details[] = implode(' | ', $option_parts);
 									}
 									if (!empty($field['schema'])) {
 										$sub_fields = array_map(function($s) {
