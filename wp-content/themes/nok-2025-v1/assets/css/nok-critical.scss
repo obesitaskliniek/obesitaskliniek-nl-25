@@ -470,3 +470,7 @@ nok-hero.nok-hero--fullscreen {
 // Misc
 .nok-bg-blur { backdrop-filter: blur(5px); &--large { backdrop-filter: blur(10px); } }
 .nok-sticky  { position: sticky; top: 0; z-index: nok-variables.$z-stack-top; }
+
+// Blur ghost: prevent FOUC before deferred CSS loads (ghost image renders full-size in flow)
+.nok-image-cover-blur { position: relative; overflow: hidden; }
+.nok-image-cover-blur-ghost { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
