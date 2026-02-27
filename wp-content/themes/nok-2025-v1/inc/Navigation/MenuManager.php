@@ -420,9 +420,8 @@ class MenuManager {
 		if ( ! empty( $item['target'] ) && empty( $item['is_popup_trigger'] ) && ! isset( $options['url_override'] ) ) {
 			$attrs[] = 'target="' . esc_attr( $item['target'] ) . '"';
 		}
-		if ( ! empty( $item['attr_title'] ) ) {
-			$attrs[] = 'title="' . esc_attr( $item['attr_title'] ) . '"';
-		}
+		$title_attr = ! empty( $item['attr_title'] ) ? $item['attr_title'] : $item['title'];
+		$attrs[]    = 'title="' . esc_attr( $title_attr ) . '"';
 
 		// Popup trigger data-attributes
 		if ( ! empty( $item['is_popup_trigger'] ) && ! empty( $item['popup_id'] ) ) {
