@@ -124,7 +124,7 @@ nok-hero {
       z-index: calc(var(--z-base, 1) + 3);
       align-self: stretch;
 
-      @include components-base.inline-flex-menu(var(--#{components-base.$prefix}-padding-base), auto);
+      @include components-base.inline-flex-menu(var(--#{components-base.$prefix}-padding-base), 100%);
 
       .#{components-base.$prefix}-usp {
         display: flex;
@@ -204,21 +204,24 @@ nok-hero {
       flex-direction: row;
       display: flex;
       flex-basis: 100%;
-      width: stretch;
+      width: -webkit-fill-available;
       overflow: auto hidden;
       scroll-snap-type: x mandatory;
       justify-content: space-between;
       overflow-wrap: anywhere;
       > * {
-        scroll-snap-align: center;
+        scroll-snap-align: start;
         flex-shrink: 0;
-        width: stretch;
+        width: -webkit-fill-available;
         justify-content: center !important;
         flex-basis: max-content;
         @include components-base.media-breakpoint-down(xl) {
           flex-basis: 50%;
         }
         @include components-base.media-breakpoint-down(lg) {
+          flex-basis: max-content;
+        }
+        @include components-base.media-breakpoint-down(components-base.$mobile-breakpoint) {
           flex-basis: 100%;
         }
       }

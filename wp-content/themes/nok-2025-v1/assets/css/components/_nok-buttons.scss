@@ -171,11 +171,12 @@ button.nok-button,
 }
 
 // Equal-width buttons — all buttons share space equally
-.wp-block-buttons.nok-equal-width {
+.nok-equal-button-width,
+.nok-equal-width {
   > .nok-button,
   > .wp-block-button {
     flex: 1 1 0%;
-    min-width: fit-content;
+    min-width: min-content;
   }
 }
 .wp-block-buttons {

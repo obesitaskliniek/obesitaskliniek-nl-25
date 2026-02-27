@@ -139,8 +139,7 @@ function render_content_block(array $block, string $shadow): string {
 	ob_start();
 	?>
 	<nok-square-block
-		class="link-bottom <?= esc_attr($block['bg']) ?> <?= esc_attr($block['text']) ?> <?= $no_padding ? 'nok-p-0' : '' ?>"
-		data-shadow="<?= esc_attr($shadow) ?>">
+		class="link-bottom <?= esc_attr($block['bg']) ?> <?= esc_attr($block['text']) ?> <?= $no_padding ? 'nok-p-0' : '' ?>">
 
 		<?php if ($block['title']->raw()) : ?>
 			<h3 class="nok-square-block__heading nok-fs-5">
@@ -267,7 +266,7 @@ function render_media_element(array $block): string {
 					$delay_style = $block['delay'] > 0 ? 'animation-fill-mode: both; animation-delay: ' . $block['delay'] . 'ms' : '';
 				?>
 					<?php if ($has_media) : ?>
-						<div class="<?= esc_attr($wrapper_classes) ?>"
+						<div class="<?= esc_attr($wrapper_classes) ?> <?=$c->shadow->isTrue('nok-subtle-shadow');?>"
 						     <?php if ($delay_style) : ?>style="<?= esc_attr($delay_style) ?>"<?php endif; ?>>
 							<?php
 							// DOM order: content first, media second
