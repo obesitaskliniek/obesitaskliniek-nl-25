@@ -816,12 +816,12 @@ $utilities: (
 
     /* Enable draggable cursor for non-touch devices */
     @media (pointer: fine) {
-      & {
+      &:not([data-no-scrollbar="true"]) {
         cursor: grab;
-      }
-      &:active, &.being-scrolled {
-        cursor: grabbing;
-        user-select: none;
+        &:active, &.being-scrolled {
+          cursor: grabbing;
+          user-select: none;
+        }
       }
     }
 
