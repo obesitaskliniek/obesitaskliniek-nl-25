@@ -59,10 +59,12 @@ $scroller_id = 'ervaringen-scroller';
                 <?php if ($c->carousel_buttons->isTrue()) : ?>
                 <div class="nok-button-group">
                     <button class="nok-button nok-bg-lightgrey nok-dark-bg-darkblue nok-text-contrast fill-group-column"
+                            aria-label="Vorige ervaring"
                             data-scroll-target="<?= $scroller_id; ?>" data-scroll-action="backward">
 						<?= Assets::getIcon('ui_arrow-left-longer') ?>
                     </button>
                     <button class="nok-button nok-bg-lightgrey nok-dark-bg-darkblue nok-text-contrast fill-group-column"
+                            aria-label="Volgende ervaring"
                             data-scroll-target="<?= $scroller_id; ?>" data-scroll-action="forward">
 						<?= Assets::getIcon('ui_arrow-right-longer') ?>
                     </button>

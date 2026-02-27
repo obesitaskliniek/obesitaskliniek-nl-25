@@ -47,7 +47,7 @@ $quote_block_button_style = $args['block_button_color'] ?? 'nok-bg-darkestblue n
                         </div>
                         <?php if ( ! empty( $quote['image_url'] ) ): ?>
                         <div class="nok-square-block__thumbnail">
-                            <img src="<?= esc_url( $quote['image_url'] ) ?>" loading="lazy">
+                            <img src="<?= esc_url( $quote['image_url'] ) ?>" alt="<?= esc_attr( $quote['name'] ?? '' ) ?>" loading="lazy">
                         </div>
                         <?php endif; ?>
                     </div>

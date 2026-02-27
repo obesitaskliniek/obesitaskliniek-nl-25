@@ -215,6 +215,7 @@ class Helpers {
 				. 'src="' . self::FALLBACK_HERO_IMAGE['src'] . '" '
 				. 'srcset="' . self::FALLBACK_HERO_IMAGE['srcset'] . '" '
 				. 'sizes="' . self::FALLBACK_HERO_IMAGE['sizes'] . '" '
+				. 'alt="" '
 				. 'loading="eager" decoding="async">';
 		}
 
