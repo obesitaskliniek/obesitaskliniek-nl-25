@@ -73,7 +73,8 @@ $autoplay = $c->has('autoplay') ? $c->autoplay->raw() : 'visibility';
             </div>
             <?php if ($has_video) : ?>
                 <div class="nok-video-background nok-rounded-border-large nok-order-<?= ($order % 2) + 1 ?>"
-                     data-requires="./nok-video.mjs"
+                     data-requires="./nok-video.min.mjs"
+                     data-require-lazy="true"
                      data-video-autoplay="<?= esc_attr($autoplay) ?>"
                      <?php if ($video_start > 0) : ?>data-video-start="<?= esc_attr($video_start) ?>"<?php endif; ?>>
                     <video muted loop playsinline preload="none"

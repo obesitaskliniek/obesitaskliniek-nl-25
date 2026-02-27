@@ -53,7 +53,8 @@ if ( $video_url && ! $is_self_hosted ) {
 
         <?php if ( $video_url && $is_self_hosted ) : ?>
             <div class="nok-video-background w-100"
-                 data-requires="./nok-video.mjs"
+                 data-requires="./nok-video.min.mjs"
+                 data-require-lazy="true"
                  data-video-lq="<?= esc_url( $video_url ) ?>"
                  data-video-hq="<?= esc_url( $video_hq ) ?>"
                  data-video-autoplay="<?= esc_attr( $autoplay ) ?>"
@@ -94,7 +95,8 @@ if ( $video_url && ! $is_self_hosted ) {
 
             <?php if ( $video_url && $is_self_hosted ) : ?>
                 <div class="nok-video-background nok-rounded-border-large"
-                     data-requires="./nok-video.mjs"
+                     data-requires="./nok-video.min.mjs"
+                     data-require-lazy="true"
                      data-video-lq="<?= esc_url( $video_url ) ?>"
                      data-video-hq="<?= esc_url( $video_hq ) ?>"
                      data-video-autoplay="<?= esc_attr( $autoplay ) ?>"

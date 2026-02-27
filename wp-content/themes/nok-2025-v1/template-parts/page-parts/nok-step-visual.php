@@ -67,7 +67,9 @@ ob_start();
         <button type="button"
                 class="nok-video-inline-trigger nok-invisible-lg"
                 aria-label="Bekijk de video"
-                data-requires="./nok-video.mjs"
+                data-requires="./nok-video.min.mjs"
+                data-require-lazy="true"
+                data-require-lazy="true"
                 data-video-hq="<?= esc_url($video_hq) ?>">
             <?php if ($video_poster_url) : ?>
                 <img src="<?= esc_url($video_poster_url) ?>"
@@ -99,7 +101,8 @@ $visual_order_mobile = ($mobile_stack && !$left) ? 'nok-order-to-lg-last' : '';
 ob_start();
 if ($has_video) : ?>
     <div class="nok-video-background nok-rounded-border-large <?= $visual_mobile_hide ?> <?= $visual_order_mobile ?> nok-h-100 <?= $visual_z ?>"
-         data-requires="./nok-video.mjs"
+         data-requires="./nok-video.min.mjs"
+         data-require-lazy="true"
          data-video-lq="<?= esc_url($video_lq) ?>"
          data-video-hq="<?= esc_url($video_hq) ?>"
          data-video-autoplay="<?= esc_attr($autoplay) ?>"

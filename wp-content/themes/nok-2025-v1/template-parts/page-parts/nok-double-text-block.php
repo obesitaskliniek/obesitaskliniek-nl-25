@@ -205,7 +205,8 @@ function render_media_element(array $block): string {
 		// Video background with nok-video.mjs
 		?>
 		<div class="nok-video-background"
-		     data-requires="./nok-video.mjs"
+		     data-requires="./nok-video.min.mjs"
+             data-require-lazy="true"
 		     data-video-lq="<?= $block['video_lq']->url() ?>"
 		     <?php if ($block['video_hq']->raw()) : ?>data-video-hq="<?= $block['video_hq']->url() ?>"<?php endif; ?>
 		     <?php if ($block['video_poster']->raw()) : ?>data-video-poster="<?= $block['video_poster']->url() ?>"<?php endif; ?>
