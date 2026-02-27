@@ -29,14 +29,20 @@
         endif; ?>
 
         <?php // Defer non-critical font weights (italic, thin, light, etc.).
-        // Critical weights (Inter normal, Realist 400/500/700) are already in critical CSS above. ?>
-        <link href="<?= THEME_ROOT ;?>/assets/fonts/inter.css" rel="stylesheet" media="print" onload="this.media='all'" crossorigin="anonymous">
-        <noscript><link href="<?= THEME_ROOT ;?>/assets/fonts/inter.css" rel="stylesheet" crossorigin="anonymous"></noscript>
-        <link href="<?= THEME_ROOT ;?>/assets/fonts/realist.css" rel="stylesheet" media="print" onload="this.media='all'" crossorigin="anonymous">
-        <noscript><link href="<?= THEME_ROOT ;?>/assets/fonts/realist.css" rel="stylesheet" crossorigin="anonymous"></noscript>
+        // Critical weights (Inter normal, Realist 400/500/700) are already in critical CSS above.
+        $inter_ver   = @filemtime( THEME_ROOT_ABS . '/assets/fonts/inter.css' ) ?: time();
+        $realist_ver = @filemtime( THEME_ROOT_ABS . '/assets/fonts/realist.css' ) ?: time(); ?>
+        <link href="<?= THEME_ROOT ;?>/assets/fonts/inter.css?ver=<?= $inter_ver; ?>" rel="stylesheet" media="print" onload="this.media='all'" crossorigin="anonymous">
+        <noscript><link href="<?= THEME_ROOT ;?>/assets/fonts/inter.css?ver=<?= $inter_ver; ?>" rel="stylesheet" crossorigin="anonymous"></noscript>
+        <link href="<?= THEME_ROOT ;?>/assets/fonts/realist.css?ver=<?= $realist_ver; ?>" rel="stylesheet" media="print" onload="this.media='all'" crossorigin="anonymous">
+        <noscript><link href="<?= THEME_ROOT ;?>/assets/fonts/realist.css?ver=<?= $realist_ver; ?>" rel="stylesheet" crossorigin="anonymous"></noscript>
 
-        <link rel="modulepreload" href="<?= THEME_ROOT ;?>/assets/js/entrypoint.min.mjs">
-        <script type="module" src="<?= THEME_ROOT ;?>/assets/js/entrypoint.min.mjs" defer></script>
+        <?php // Cache-busting version for JS entrypoint and all dynamically imported modules.
+        // SITE_NONCE is read by DOMule's core.loader to append ?nonce= to dynamic import() URLs.
+        $js_cache_ver = @filemtime( THEME_ROOT_ABS . '/assets/js/entrypoint.min.mjs' ) ?: time(); ?>
+        <script>const SITE_NONCE = '<?= $js_cache_ver; ?>';</script>
+        <link rel="modulepreload" href="<?= THEME_ROOT ;?>/assets/js/entrypoint.min.mjs?ver=<?= $js_cache_ver; ?>">
+        <script type="module" src="<?= THEME_ROOT ;?>/assets/js/entrypoint.min.mjs?ver=<?= $js_cache_ver; ?>" defer></script>
 
         <!-- head data -->
         <?php wp_head(); ?>
