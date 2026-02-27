@@ -92,6 +92,7 @@ final class Theme {
     private PagePartSchema $page_part_schema;
     private BlockRenderers $block_renderers;
     private VoorlichtingForm $voorlichting_form;
+    private AllowedEditorBlocks $allowed_editor_blocks;
 
     // Settings store (can hold customizer values)
     private array $settings = [];
@@ -117,8 +118,9 @@ final class Theme {
         $this->yoast_integration   = new YoastIntegration();
         $this->page_part_schema    = new PagePartSchema( $this->registry );
         $this->block_renderers     = new BlockRenderers();
-        $this->voorlichting_form   = new VoorlichtingForm();
-        $this->rest_endpoints      = new RestEndpoints(
+        $this->voorlichting_form       = new VoorlichtingForm();
+        $this->allowed_editor_blocks   = new AllowedEditorBlocks();
+        $this->rest_endpoints        = new RestEndpoints(
                 $this->template_renderer,
                 $this->meta_manager
         );
@@ -170,6 +172,7 @@ final class Theme {
         $this->page_part_schema->register_hooks();
         $this->block_renderers->register_hooks();
         $this->voorlichting_form->register_hooks();
+        $this->allowed_editor_blocks->register_hooks();
         PageParts\Registry::register_invalidation_hooks();
 
 
