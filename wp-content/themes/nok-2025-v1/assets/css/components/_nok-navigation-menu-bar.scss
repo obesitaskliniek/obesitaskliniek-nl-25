@@ -29,6 +29,19 @@ nok-navigation-menu-bar {
 
     pointer-events: all;
 
+
+
+    [aria-expanded="false"] .nok-icon {
+      transform: translateY(-2px);
+    }
+    [aria-expanded="true"] .nok-icon {
+      color: inherit;
+      transform: translateY(0);
+      @include components-base.transition-properties {
+        transition: transform components-base.$animation-duration ease, transform components-base.$animation-duration ease;
+      }
+    }
+
     .nok-nav-menu-item {
       &:hover,
       &:focus-visible {

@@ -8,6 +8,7 @@
  * @var string $location Menu location identifier
  */
 
+use NOK2025\V1\Assets;
 use NOK2025\V1\Navigation\MenuManager;
 
 // Fallback if no menu assigned
@@ -43,9 +44,11 @@ if ( empty( $menu_items ) ) {
 	} elseif ( $item['is_current_ancestor'] ) {
 		$extra_classes[] = 'is-current-ancestor';
 	}
+    $icon = '';
 
-	// Toggler wrapper attributes for dropdown behavior
+// Toggler wrapper attributes for dropdown behavior
 	if ( $item['has_children'] ):
+        $icon = Assets::getIcon( 'ui_caret_down', 'small nok-text-lightgrey' );
 		?>
         <div role="button" data-sets-class="sidebar-open" data-toggle-event="hover" data-class-target="nok-top-navigation" data-toggle-outside="unset"
              data-sets-attribute="data-active-menu" data-sets-attribute-value="submenu-<?= esc_attr( $item['id'] ); ?>" data-attribute-target="nok-top-navigation"
@@ -54,7 +57,7 @@ if ( empty( $menu_items ) ) {
         <div data-unsets-class="sidebar-open" data-toggle-event="hover" data-class-target="nok-top-navigation">
 	<?php endif; ?>
 
-	<?= MenuManager::render_menu_link( $item, [ 'extra_classes' => $extra_classes ] ); ?>
+	<?= MenuManager::render_menu_link( $item, [ 'extra_classes' => $extra_classes ] ); ?> <?= $icon; ?>
 
         </div>
 <?php endforeach; ?>
