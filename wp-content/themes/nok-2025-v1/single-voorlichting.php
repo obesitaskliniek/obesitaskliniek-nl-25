@@ -57,7 +57,7 @@ $badge_text  = $is_online ? __( 'Online', THEME_TEXT_DOMAIN ) : __( 'Op locatie'
 			<div>
 				<?= ucfirst( $hubspotData['intro'] ); ?>
 				<?php if ( ! $is_open ) : ?>
-					<div class="nok-alert nok-bg-greenyellow--lighter nok-p-1 nok-mt-1 nok-rounded-border nok-bg-alpha-10" role="alert">
+					<div class="nok-alert nok-bg-yellow nok-p-1 nok-mt-1 nok-rounded-border nok-bg-alpha-10" role="alert">
 						<p>
 							Helaas, deze voorlichting is <?= esc_html( $hubspotData['status'] ); ?>! Aanmelden is daarom niet (meer) mogelijk.
 							<?php if ( $has_alternatives ) : ?>
@@ -149,10 +149,10 @@ $badge_text  = $is_online ? __( 'Online', THEME_TEXT_DOMAIN ) : __( 'Op locatie'
 						   class="nok-button nok-bg-yellow nok-text-darkerblue w-100 <?= $is_open ? '' : 'disabled'; ?>">
 							<?php esc_html_e( 'Aanmelden', THEME_TEXT_DOMAIN ); ?>
 						</a>
-						<a role="button" href=""
+						<!--<a role="button" href=""
 						   class="nok-button nok-bg-lightgrey--lighter nok-text-darkerblue w-100 <?= $is_open ? '' : 'disabled'; ?>">
 							<?= Assets::getIcon( 'ui_plus' ); ?> <?php esc_html_e( 'Agenda', THEME_TEXT_DOMAIN ); ?>
-						</a>
+						</a>-->
 					</div>
 				</nok-square-block>
 

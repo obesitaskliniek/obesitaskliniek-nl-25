@@ -70,7 +70,7 @@ $voorlichting_id_field = 'input_' . $form_id . '_' . VoorlichtingForm::FIELD_VOO
 					     data-target-form="#gform_<?= $form_id ?>"
 					     data-voorlichting-id-field="<?= esc_attr($voorlichting_id_field) ?>">
 
-						<div class="nok-form-row nok-layout-grid" style="--cols: 2; --gap: var(--spacing-1);">
+						<div class="nok-form-row nok-layout-grid">
 							<div class="nok-form-field">
 								<label for="voorlichting-location" class="gfield_label gform-field-label">
 									<?php esc_html_e('Vestiging', THEME_TEXT_DOMAIN); ?>
@@ -107,7 +107,7 @@ $voorlichting_id_field = 'input_' . $form_id . '_' . VoorlichtingForm::FIELD_VOO
 					</p>
 				<?php endif; ?>
 			<?php else: ?>
-				<div class="nok-alert nok-bg-greenyellow--lighter nok-p-1 nok-rounded-border nok-bg-alpha-10">
+				<div class="nok-alert nok-bg-yellow nok-p-1 nok-rounded-border nok-bg-alpha-10">
 					<p>
 						<?= Assets::getIcon('ui_calendar', 'nok-mr-0_5') ?>
 						<?php esc_html_e('Er zijn momenteel geen voorlichtingen beschikbaar voor aanmelding.', THEME_TEXT_DOMAIN); ?>

@@ -390,9 +390,13 @@ class Helpers {
 
 	public static function setup_hubspot_metadata( $postID ) {
 
-		$hubspotData = get_post_meta( $postID );
-		$eventDate   = Helpers::getDateParts( new DateTime( $hubspotData['aanvangsdatum_en_tijd'][0], new DateTimeZone( 'Europe/Amsterdam' ) ), intval( $hubspotData['duur'][0] ) );
-		$eventData   = array(
+		$hubspotData    = get_post_meta( $postID );
+		$eventDateTime  = new DateTime( $hubspotData['aanvangsdatum_en_tijd'][0], new DateTimeZone( 'Europe/Amsterdam' ) );
+		$eventDate      = Helpers::getDateParts( $eventDateTime, intval( $hubspotData['duur'][0] ) );
+		$is_past        = $eventDateTime < new DateTime( 'now', new DateTimeZone( 'Europe/Amsterdam' ) );
+		$hubspot_status = strtolower( $hubspotData['inschrijvingsstatus'][0] );
+
+		$eventData = array(
 			'data_raw'      => $hubspotData,
 			'timestamp'     => $eventDate,
 			'timestamp_raw' => $hubspotData['aanvangsdatum_en_tijd'][0],
@@ -403,8 +407,9 @@ class Helpers {
 			'intro'         => $hubspotData['intro_kort'][0] ?? '',
 			'intro_lang'    => $hubspotData['intro_lang'][0] ?? '',
 			'onderwerpen'   => $hubspotData['onderwerpen'][0] ?? '',
-			'open'          => strtolower( $hubspotData['inschrijvingsstatus'][0] ) === 'open',
-			'status'        => strtolower( $hubspotData['inschrijvingsstatus'][0] )
+			'past'          => $is_past,
+			'open'          => $hubspot_status === 'open' && ! $is_past,
+			'status'        => $is_past ? 'geweest' : $hubspot_status,
 		);
 
 		//inschrijvingsstatus = open, gesloten, vol en geannuleerd
@@ -1768,8 +1773,8 @@ class Helpers {
 		$root_count = 0;
 
 		foreach ($matches as $match_data) {
-			$full_match = $match_data[0][0]; // Full matched string
-			$position = $match_data[0][1];   // Position in content
+			$full_match = $match_data[0][0];       // Full matched string
+			$position   = (int) $match_data[0][1]; // Position in content
 			$is_closing = !empty($match_data[1][0]); // Check for closing slash
 
 			if ($is_closing) {
@@ -1779,7 +1784,7 @@ class Helpers {
 
 					if ($root_count === $after_position) {
 						// Insert after this root closing tag
-						$insert_pos = (int)($position + strlen($full_match));
+						$insert_pos = $position + strlen($full_match);
 						$before = substr($content, 0, $insert_pos);
 						$after = substr($content, $insert_pos);
 						return $before . $injection . $after;
