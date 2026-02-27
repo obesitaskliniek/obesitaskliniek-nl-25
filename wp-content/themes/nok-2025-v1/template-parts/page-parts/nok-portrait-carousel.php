@@ -57,7 +57,7 @@ $c = $context;
 									unset($images[$random_key]); ?>
                                     <nok-square-block class="nok-p-0 nok-border-radius-0">
                                         <div class="nok-image-square-portrait nok-rounded-border-large nok-portrait-gradient-1">
-                                            <img src="<?= esc_url($afbeelding) ?>" loading="lazy" style="filter:drop-shadow(30px 20px 30px rgba(var(--nok-darkerblue-rgb), 0.15))">
+                                            <img src="<?= esc_url($afbeelding) ?>" alt="<?= esc_attr($persoon . ', ' . $specialist) ?>" loading="lazy" style="filter:drop-shadow(30px 20px 30px rgba(var(--nok-darkerblue-rgb), 0.15))">
                                         </div>
                                         <div>
                                             <h3><?= esc_html($persoon) ?></h3>

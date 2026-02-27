@@ -40,8 +40,9 @@ if ( $video_url && ! $is_self_hosted ) {
 	// Fallback if oEmbed fails
 	if ( ! $video_embed_html ) {
 		$video_embed_html = sprintf(
-			'<iframe src="%s" frameborder="0" allowfullscreen></iframe>',
-			esc_url( $video_url )
+			'<iframe src="%s" frameborder="0" allowfullscreen title="Video: %s"></iframe>',
+			esc_url( $video_url ),
+			esc_attr( get_the_title() )
 		);
 	}
 }

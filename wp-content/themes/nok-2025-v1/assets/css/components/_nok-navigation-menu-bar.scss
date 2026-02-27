@@ -30,8 +30,14 @@ nok-navigation-menu-bar {
     pointer-events: all;
 
     .nok-nav-menu-item {
-      &:hover {
+      &:hover,
+      &:focus-visible {
         color: var(--nok-lightblue);
+      }
+      &:focus-visible {
+        outline: 2px solid var(--nok-lightblue);
+        outline-offset: 2px;
+        border-radius: 4px;
       }
     }
   }
@@ -92,8 +98,14 @@ nok-navigation-menu-bar {
         align-self: flex-start;
 
         .nok-nav-menu-item {
-          &:hover {
+          &:hover,
+          &:focus-visible {
             color: var(--nok-lightblue);
+          }
+          &:focus-visible {
+            outline: 2px solid var(--nok-lightblue);
+            outline-offset: 2px;
+            border-radius: 4px;
           }
         }
 

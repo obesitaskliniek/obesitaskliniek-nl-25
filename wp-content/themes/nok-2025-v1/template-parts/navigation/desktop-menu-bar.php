@@ -48,7 +48,8 @@ if ( empty( $menu_items ) ) {
 	if ( $item['has_children'] ):
 		?>
         <div data-sets-class="sidebar-open" data-toggle-event="hover" data-class-target="nok-top-navigation" data-toggle-outside="unset"
-             data-sets-attribute="data-active-menu" data-sets-attribute-value="submenu-<?= esc_attr( $item['id'] ); ?>" data-attribute-target="nok-top-navigation">
+             data-sets-attribute="data-active-menu" data-sets-attribute-value="submenu-<?= esc_attr( $item['id'] ); ?>" data-attribute-target="nok-top-navigation"
+             aria-expanded="false" aria-haspopup="true">
 	<?php else: ?>
         <div data-unsets-class="sidebar-open" data-toggle-event="hover" data-class-target="nok-top-navigation">
 	<?php endif; ?>

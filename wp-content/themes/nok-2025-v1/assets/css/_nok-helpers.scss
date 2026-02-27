@@ -294,6 +294,25 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+
+  &:focus {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: nok-variables.$z-stack-top + 2;
+    width: auto;
+    height: auto;
+    padding: 0.75rem 1.5rem;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    background: var(--nok-darkestblue, #0a1628);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    @include nok-mixins.nok-border-radius;
+  }
 }
 
 /* Menu item icons */
@@ -771,12 +790,20 @@ $utilities: (
     --flex-direction: row;
     --overflow: auto hidden;
     @include nok-mixins.nok-scrollbar-thin($scrollbar_thickness, false);
+    &[data-no-scrollbar="true"] {
+      padding-bottom: 0;
+      scrollbar-width: none;
+    }
   }
   &__vertical {
     --flex-gap: var(--row-gap, var(--grid-gap, var(--#{nok-variables.$prefix}-global-grid-gap)));
     --flex-direction: column;
     --overflow: hidden auto;
     @include nok-mixins.nok-scrollbar-thin($scrollbar_thickness, true);
+    &[data-no-scrollbar="true"] {
+      padding-right: 0;
+      scrollbar-width: none;
+    }
   }
   &__horizontal,&__vertical {
 

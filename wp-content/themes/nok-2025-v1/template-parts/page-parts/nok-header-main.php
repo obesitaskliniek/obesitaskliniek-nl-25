@@ -18,14 +18,14 @@ $star = Assets::getIcon('ui_star');
 $logo = '<nok-logo>' . file_get_contents(THEME_ROOT_ABS . '/assets/img/nok-logo.svg') .'</nok-logo>';
 ?>
 
-<nok-top-navigation class="nok-section" data-requires="./nok-toggler.mjs">
+<nok-top-navigation class="nok-section" role="navigation" aria-label="<?php esc_attr_e( 'Hoofdnavigatie', 'nok' ); ?>" data-requires="./nok-toggler.mjs">
     <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkestblue--darker nok-z-1">
 
         <!-- POPUP: BMI CALCULATOR -->
         <nok-popup class="nok-bg-body nok-dark-bg-darkerblue nok-align-items-stretch" id="popup-bmi-calculator">
             <nok-popup-header>
                 <nok-popup-title>BMI Calculator</nok-popup-title>
-                <button title="Klik om te sluiten" class="nok-button nok-button--small" data-unsets-class="popup-open" data-class-target="nok-top-navigation" data-toggle-event="click"
+                <button title="Klik om te sluiten" aria-label="Sluiten" class="nok-button nok-button--small" data-unsets-class="popup-open" data-class-target="nok-top-navigation" data-toggle-event="click"
                         data-unsets-attribute="data-state" data-unsets-attribute-value="open" data-attribute-target="#popup-bmi-calculator">
                     <?= Assets::getIcon('ui_close') ?>
                 </button>
@@ -39,7 +39,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT_ABS . '/assets/img/nok-logo.
         <nok-popup class="nok-bg-body nok-dark-bg-darkerblue" id="popup-search">
             <nok-popup-header>
                 <nok-popup-title>Zoeken</nok-popup-title>
-                <button title="Sluiten" class="nok-button nok-button--small"
+                <button title="Sluiten" aria-label="Sluiten" class="nok-button nok-button--small"
                         data-unsets-class="popup-open" data-class-target="nok-top-navigation"
                         data-toggle-event="click"
                         data-unsets-attribute="data-state" data-unsets-attribute-value="open"
@@ -62,12 +62,15 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT_ABS . '/assets/img/nok-logo.
         <div class="nok-layout-flex-row half-flex-gap">
             Tekstgrootte:
             <button class="nok-button nok-button--small nok-bg-darkerblue nok-text-contrast font-decrease"
+                    aria-label="Tekstgrootte verkleinen"
                     style="font-variant: all-small-caps;" tabindex="0" data-set-font-size="-0.1">A
             </button>
             <button class="nok-button nok-button--small nok-bg-darkerblue nok-text-contrast font-increase"
+                    aria-label="Tekstgrootte vergroten"
                     tabindex="0" data-set-font-size="+0.1">A
             </button>
             <button class="nok-button nok-button--small nok-bg-darkblue nok-dark-bg-lightblue--darker nok-text-contrast"
+                    aria-label="Tekstgrootte herstellen"
                     tabindex="0" data-reset-font-size="true">
                 <?= Assets::getIcon('ui_reload') ?>
             </button>
@@ -80,11 +83,12 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT_ABS . '/assets/img/nok-logo.
             <a href="/aanmelden-gratis-voorlichting#nok-voorlichting-form" role="button" class="nok-button nok-button--small nok-bg-yellow nok-text-contrast nok-invisible-to-sm"
                     tabindex="0">Gratis voorlichting
             </a>
-            <a href="tel:+31888832444" role="button" class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
+            <a href="tel:+31888832444" role="button" aria-label="Bel ons: 088 883 2444" class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
                     tabindex="0">
                 <?= Assets::getIcon('ui_telefoon') ?>
             </a>
             <button class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow nok-popup-trigger"
+                    aria-label="Zoeken"
                     tabindex="0"
                     data-toggles-class="popup-open" data-class-target="nok-top-navigation"
                     data-toggle-event="click"
@@ -93,12 +97,14 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT_ABS . '/assets/img/nok-logo.
                 <?= Assets::getIcon('ui_search') ?>
             </button>
             <button class="nok-button nok-button-menu nok-dark-bg-darkerblue nok-text-contrast no-shadow"
+                    aria-label="Tekstgrootte aanpassen"
                     tabindex="0"
                     data-toggles-class="open" data-class-target=".nok-nav-control-dropdown" data-toggle-event="click"  data-toggle-outside="unset"
                     data-swipe="unset" data-auto-restore="10">
                 <?= Assets::getIcon('ui_font_size') ?>
             </button>
             <button class="nok-button nok-button-menu nok-nav-menu-toggler nok-dark-bg-darkerblue nok-text-contrast no-shadow"
+                    aria-label="Menu openen"
                     tabindex="0"
                     data-toggles-class="sidebar-open" data-class-target="nok-top-navigation" data-toggle-event="click" data-toggle-outside="unset">
                 <?= Assets::getIcon('ui_hamburger') ?>
@@ -130,11 +136,11 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT_ABS . '/assets/img/nok-logo.
                     </small>-->
                 </div>
                 <?php $menu_manager->render_top_row('top_row'); ?>
-                <a href="#"
+                <button type="button" aria-label="Tekstgrootte aanpassen"
                    data-toggles-class="open" data-class-target=".nok-nav-control-dropdown" data-toggle-event="click" data-toggle-outside="unset"
                    data-swipe="unset" data-auto-restore="10">
                     <?= Assets::getIcon('ui_font_size') ?>
-                </a>
+                </button>
             </div>
         </nok-navigation-top-row>
         <nok-navigation-menu-bar class="nok-section__inner nok-my-0 nok-z-3">

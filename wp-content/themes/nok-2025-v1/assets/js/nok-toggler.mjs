@@ -383,6 +383,21 @@ function handleTriggerEvent(e, trigger, dataset, actions, targets, restoreState,
         }
     }
 
+    // Sync aria-expanded on the trigger element when it has the attribute
+    if (trigger.hasAttribute('aria-expanded')) {
+        const isExpanded = undoStack.some(op =>
+            op.method === 'remove' && Array.isArray(op.value)
+        );
+        trigger.setAttribute('aria-expanded', String(isExpanded));
+
+        // Add undo operation to restore aria-expanded when state is undone
+        undoStack.push({
+            target: trigger,
+            method: 'setAttribute',
+            value: ['aria-expanded', String(!isExpanded)]
+        });
+    }
+
     // Set up swipe-to-restore behavior if enabled
     if (swipeRestore && tgtElementsArray.length > 0) {
         setupSwipeRestore(tgtElementsArray, undoStack, controller);
@@ -396,16 +411,6 @@ function handleTriggerEvent(e, trigger, dataset, actions, targets, restoreState,
     // Set up auto-restore behavior if configured
     if (autoRestore) {
         setupAutoRestore(undoStack, controller, autoRestore);
-    }
-
-    // Set up swipe-to-restore behavior if enabled
-    if (swipeRestore && tgtElementsArray.length > 0) {
-        setupSwipeRestore(tgtElementsArray, undoStack, controller);
-    }
-
-    // Set up outside interaction restore behavior if configured
-    if (restoreState) {
-        setupRestoreBehavior(trigger, tgtElementsArray, undoStack, controller, triggerEvent);
     }
 }
 

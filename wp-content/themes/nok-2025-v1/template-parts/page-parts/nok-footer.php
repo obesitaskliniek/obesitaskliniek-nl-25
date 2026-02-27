@@ -23,7 +23,7 @@ $block_colors = $c->colors->contains('nok-bg-darkestblue',
 );
 ?>
 
-<nok-page-footer class="nok-section">
+<nok-page-footer class="nok-section" role="contentinfo">
     <div class="nok-section__inner--stretched nok-my-0 nok-px-0 nok-border-radius-0 <?= $c->colors ?>">
         <div class="nok-section__inner nok-page-footer__inner">
             <div class="nok-layout-grid nok-layout-grid__2-column fill-fill nok-align-items-start nok-column-gap-3">
@@ -32,7 +32,7 @@ $block_colors = $c->colors->contains('nok-bg-darkestblue',
                         <h3 class="fw-bold">Vragen?</h3>
                         <h3 class="fw-400">We helpen je graag</h3>
                     </div>
-                    <div class="nok-layout-flex nok-column-gap-0_5 flex-wrap">
+                    <div class="nok-layout-flex nok-column-gap-0_5 flex-wrap nok-equal-button-width">
                         <a href="/contact/" role="button" class="nok-button nok-justify-self-start fill-mobile nok-bg-darkblue nok-text-contrast" tabindex="0">
                             Neem contact op <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
                         </a>

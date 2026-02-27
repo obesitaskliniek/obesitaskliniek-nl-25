@@ -212,6 +212,12 @@ class Assets {
 			$svgElement->setAttribute('class', 'nok-icon');
 		}
 
+		// Icons are decorative by default — mark as hidden from assistive technology.
+		// Callers can override by passing ['aria-hidden' => 'false'] in $attrs.
+		if ( ! array_key_exists( 'aria-hidden', $attrs ) ) {
+			$svgElement->setAttribute( 'aria-hidden', 'true' );
+		}
+
 		// Inject additional attributes
 		foreach ($attrs as $key => $value) {
 			$svgElement->setAttribute($key, $value);

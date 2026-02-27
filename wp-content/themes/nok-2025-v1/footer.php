@@ -4,6 +4,8 @@ use NOK2025\V1\Assets;
 use NOK2025\V1\Theme;
 
 $theme = Theme::get_instance();
+// Close <main> opened in header.php
+echo '</main>';
 // Skip footer content for page part previews — they only need wp_footer() for scripts
 if ( ! is_singular( 'page_part' ) ) {
 	$theme->embed_page_part_template('nok-footer', []); ?>
