@@ -1,0 +1,47 @@
+@use "nok-variables";
+@use "tools/nok-mixins";
+
+/* Local stacks are not taken into account. They work with the --z-base variable methodology, as used in _nok-hero.scss */
+
+@for $i from 1 through 9 {
+  .#{nok-variables.$prefix}-z-#{$i} {
+    --z-base: #{$i};
+    z-index: var(--z-base, $i);
+  }
+}
+
+.#{nok-variables.$prefix}-accessibility-helper {
+  z-index: nok-variables.$z-stack-top + 1;
+}
+
+.screen-reader-text :focus {
+  z-index: nok-variables.$z-stack-top + 2;
+}
+
+.nok-scroll-progress {
+  z-index: nok-variables.$z-stack-top - 1;
+}
+
+//descending z-index cascade for sections
+.nok-section, nok-section {
+  @for $i from 1 through 20 {
+    &:nth-child(#{$i}) {
+      --section-index: #{$i * 2 - 1};
+      &.z-ascend {
+        --section-index: #{$i * 2 - 4};
+      }
+    }
+  }
+  z-index: calc(#{nok-variables.$z-stack-top} - var(--section-index));
+}
+
+.#{nok-variables.$prefix}-sticky,
+nok-accessibility-helper,
+.nok-datepicker__popup,
+.nok-lightbox,
+nok-top-navigation,
+.nok-pp-edit,
+.#{nok-variables.$prefix}-z-top {
+  --z-base: #{nok-variables.$z-stack-top};
+  z-index: nok-variables.$z-stack-top;
+}

@@ -17,17 +17,6 @@
   overflow-x: clip;
   font-size: 1.1rem;
 
-  //descending z-index cascade
-  @for $i from 1 through 20 {
-    &:nth-child(#{$i}) {
-      --section-index: #{$i * 2 - 1};
-      &.z-ascend {
-        --section-index: #{$i * 2 - 4};
-      }
-    }
-  }
-  z-index: calc(#{components-base.$z-stack-top} - var(--section-index));
-
   &__inner {
     width: 100%;
     padding-right: var(--#{components-base.$prefix}-nok-spacing-section-sides, (components-base.$padding-base * 2));
@@ -211,7 +200,6 @@ nok-section {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;

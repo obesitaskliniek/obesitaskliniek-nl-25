@@ -79,23 +79,9 @@
 .#{nok-variables.$prefix}-sticky {
   position: sticky;
   top: 0;
-  z-index: nok-variables.$z-stack-top;
-
   &--fixed {
     position: fixed;
   }
-}
-
-@for $i from 1 through 9 {
-  .#{nok-variables.$prefix}-z-#{$i} {
-    --z-base: #{$i};
-    z-index: var(--z-base, $i);
-  }
-}
-
-.#{nok-variables.$prefix}-z-top {
-  --z-base: #{nok-variables.$z-stack-top};
-  z-index: nok-variables.$z-stack-top;
 }
 
 /* Aligners */
@@ -271,7 +257,6 @@
   visibility: hidden;
   inset: 0;
   position: fixed;
-  z-index: nok-variables.$z-stack-top + 1;
   pointer-events: none;
 }
 
@@ -299,7 +284,6 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: nok-variables.$z-stack-top + 2;
     width: auto;
     height: auto;
     padding: 0.75rem 1.5rem;

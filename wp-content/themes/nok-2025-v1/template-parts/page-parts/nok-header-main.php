@@ -19,7 +19,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT_ABS . '/assets/img/nok-logo.
 ?>
 
 <nok-top-navigation class="nok-section" role="navigation" aria-label="<?php esc_attr_e( 'Hoofdnavigatie', 'nok' ); ?>" data-requires="./nok-toggler.mjs">
-    <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkestblue--darker nok-z-1">
+    <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkestblue--darker">
 
         <!-- POPUP: BMI CALCULATOR -->
         <nok-popup class="nok-bg-body nok-dark-bg-darkerblue nok-align-items-stretch" id="popup-bmi-calculator">

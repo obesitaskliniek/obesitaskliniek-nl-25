@@ -16,7 +16,11 @@
         <?php // Inline critical CSS for instant above-the-fold rendering.
         // Contains @font-face for the 3 preloaded fonts — __THEME_FONTS__ placeholder
         // is replaced with the actual theme font URL at output time.
-        $critical_css_path = THEME_ROOT_ABS . '/assets/css/nok-critical.min.css';
+        if (isset( $_GET['dev-css'] )) {
+            $critical_css_path = THEME_ROOT_ABS . '/assets/css/nok-critical-new.css';
+        } else {
+            $critical_css_path = THEME_ROOT_ABS . '/assets/css/nok-critical.min.css';
+        }
         if ( ! file_exists( $critical_css_path ) ) {
 	        $critical_css_path = THEME_ROOT_ABS . '/assets/css/nok-critical.css';
         }

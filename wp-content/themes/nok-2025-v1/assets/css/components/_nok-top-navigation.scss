@@ -35,7 +35,6 @@ nok-top-navigation {
     @at-root body:not(.page-template-page-showcase) nok-top-navigation {
       position: sticky !important;
       top: 0;
-      z-index: components-base.$z-stack-top;
     }
   }
 
@@ -51,7 +50,6 @@ nok-top-navigation {
       }
 
       justify-content: flex-start;
-      z-index: components-base.$z-stack-top !important;
       pointer-events: none;
   }
 
