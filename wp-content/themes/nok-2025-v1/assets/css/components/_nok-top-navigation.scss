@@ -43,18 +43,16 @@ nok-top-navigation {
       nok-navigation-desktop {
         display: none !important;
       }
-      & {
-        @at-root body:not(.page-template-page-showcase) nok-navigation-desktop {
-          & {
-            position: fixed !important;
-            top: 0;
-            bottom: 0;
-          }
-        }
-        justify-content: flex-start;
-        z-index: components-base.$z-stack-top !important;
-        pointer-events: none;
+
+      @at-root body:not(.page-template-page-showcase) nok-top-navigation {
+        position: fixed !important;
+        top: 0;
+        bottom: 0;
       }
+
+      justify-content: flex-start;
+      z-index: components-base.$z-stack-top !important;
+      pointer-events: none;
   }
 
   .nok-star-ratings {

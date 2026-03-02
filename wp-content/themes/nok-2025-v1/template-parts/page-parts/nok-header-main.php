@@ -136,11 +136,11 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT_ABS . '/assets/img/nok-logo.
                     </small>-->
                 </div>
                 <?php $menu_manager->render_top_row('top_row'); ?>
-                <button type="button" aria-label="Tekstgrootte aanpassen" title="Tekstgrootte aanpassen"
+                <a href="#" class="nok-nav-menu-item" role="button" aria-label="Tekstgrootte aanpassen" title="Tekstgrootte aanpassen"
                    data-toggles-class="open" data-class-target=".nok-nav-control-dropdown" data-toggle-event="click" data-toggle-outside="unset"
                    data-swipe="unset" data-auto-restore="10">
                     <?= Assets::getIcon('ui_font_size') ?>
-                </button>
+                </a>
             </div>
         </nok-navigation-top-row>
         <nok-navigation-menu-bar class="nok-section__inner nok-my-0 nok-z-3">

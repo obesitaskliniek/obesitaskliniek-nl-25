@@ -55,11 +55,12 @@ class Helpers {
 	/**
 	 * sizes attribute for hero images (must match preload and <img>)
 	 *
-	 * The hero image sits inside an SVG foreignObject (700 of 900 SVG units = 78%).
-	 * - Mobile (<lg):  figure spans full width → image ≈ 100vw
-	 * - Desktop (≥lg): figure is ~50% of section → image ≈ 39vw, max ~620px
+	 * The hero image sits inside an SVG foreignObject (700×1060 portrait) with object-fit:cover.
+	 * Source images are landscape (16:9), so cover-fit upscales by height:
+	 * effective width needed ≈ container_height × source_aspect_ratio ≈ 1060 × 1.78 ≈ 1884px.
+	 * Using 100vw ensures the browser picks a large enough source image.
 	 */
-	public const HERO_IMAGE_SIZES = '(max-width: 992px) 100vw, 40vw';
+	public const HERO_IMAGE_SIZES = '100vw';
 
 	private const FALLBACK_HERO_IMAGE = [
 		'src'    => 'https://assets.obesitaskliniek.nl/files/2025_fotos/NOK%20Stockfotos%202025%20-%2005-12-2024%20-%2045:100x0-25-0-0-center-0.jpg',

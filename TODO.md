@@ -49,6 +49,29 @@ If user content is ever needed, implement DOMPurify sanitization first.
 
 ---
 
+### HIGH-003: Critical CSS System — Full Revision
+**Priority:** High
+**Status:** Open
+**Related Files:** `assets/css/nok-critical.scss`, `header.php`, `inc/Core/AssetManager.php`
+
+The critical CSS system is a hand-maintained copy of component SCSS rules that drifts out of sync,
+causing silent regressions:
+
+- A `preg_replace` stripping `sourceMappingURL` silently returned `null` on the 18KB single-line
+  minified CSS (PCRE backtrack limit), killing **all** critical CSS output on production. Fixed by
+  switching to `str_replace` with absolute path rewrite.
+- FOUC regressions when critical CSS closed-state rules don't match component CSS (e.g. `display:none`
+  vs `display:flex` + transform, causing slide animations via `body.no-js` transition gate).
+- Mobile `position: fixed` was on the wrong element in component SCSS (`nok-navigation-desktop`
+  instead of `nok-top-navigation`) — only the critical CSS had the correct rule.
+
+**Desired outcome:**
+- Automated critical CSS extraction or a build step that generates from component SCSS source of truth
+- Eliminate manual duplication between `nok-critical.scss` and component SCSS
+- Build-time validation that above-the-fold elements have matching rules in both files
+
+---
+
 ## Medium Priority
 
 ### MED-006: Archive Page Hero Alignment

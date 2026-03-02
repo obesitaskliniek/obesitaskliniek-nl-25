@@ -24,8 +24,9 @@
 	        $critical_css = @file_get_contents( $critical_css_path );
 	        if ( $critical_css ) :
 		        $critical_css = str_replace( '__THEME_FONTS__', THEME_ROOT . '/assets/fonts', $critical_css );
-		        // Strip sourceMappingURL — relative paths break when CSS is inlined into HTML.
-		        $critical_css = preg_replace( '#/\*[#@]\s*sourceMappingURL=\S+\s*\*/\s*#', '', $critical_css ); ?>
+		        // Rewrite sourceMappingURL from relative to absolute — relative paths resolve
+		        // against the page URL when CSS is inlined, causing 404s.
+		        $critical_css = str_replace( 'sourceMappingURL=nok-critical.css.map', 'sourceMappingURL=' . THEME_ROOT . '/assets/css/nok-critical.css.map', $critical_css ); ?>
         <style id="nok-critical-css"><?php echo $critical_css; ?></style>
 	        <?php endif;
         endif; ?>
