@@ -23,7 +23,9 @@
         if ( file_exists( $critical_css_path ) ) :
 	        $critical_css = @file_get_contents( $critical_css_path );
 	        if ( $critical_css ) :
-		        $critical_css = str_replace( '__THEME_FONTS__', THEME_ROOT . '/assets/fonts', $critical_css ); ?>
+		        $critical_css = str_replace( '__THEME_FONTS__', THEME_ROOT . '/assets/fonts', $critical_css );
+		        // Strip sourceMappingURL — relative paths break when CSS is inlined into HTML.
+		        $critical_css = preg_replace( '#/\*[#@]\s*sourceMappingURL=\S+\s*\*/\s*#', '', $critical_css ); ?>
         <style id="nok-critical-css"><?php echo $critical_css; ?></style>
 	        <?php endif;
         endif; ?>

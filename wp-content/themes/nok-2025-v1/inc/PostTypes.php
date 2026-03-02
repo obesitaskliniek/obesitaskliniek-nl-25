@@ -481,9 +481,20 @@ class PostTypes {
 	 *
 	 * Generates nested URLs under vestigingen:
 	 * - /vestigingen/{vestiging-slug}/{regio-slug}/
+	 *
+	 * Pagination rule must come BEFORE the post rule because
+	 * /vestigingen/page/2/ has 2 segments and would otherwise
+	 * match the regio post rule, setting regio=2 → 404.
 	 */
 	public function register_regio_permalink_filter(): void {
 		add_filter( 'post_type_link', [ $this, 'regio_permalink' ], 10, 2 );
+
+		// Vestigingen archive pagination: /vestigingen/page/{n}/
+		add_rewrite_rule(
+			'^vestigingen/page/?([0-9]{1,})/?$',
+			'index.php?post_type=vestiging&paged=$matches[1]',
+			'top'
+		);
 
 		// Rewrite rule: /vestigingen/{vestiging-slug}/{regio-slug}/
 		add_rewrite_rule(
