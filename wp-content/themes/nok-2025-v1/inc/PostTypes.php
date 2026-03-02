@@ -420,12 +420,47 @@ class PostTypes {
 	 * - /kennisbank/{parent}/{child}/{post}/ (3 segments)
 	 * - /kennisbank/{category}/{post}/ (2 segments, for top-level categories)
 	 *
-	 * Note: 3-segment rule must come first to match before 2-segment rule.
+	 * Pagination rules must come BEFORE post rules because the generic
+	 * post rules would otherwise match pagination URLs. For example,
+	 * /kennisbank/veelgestelde-vragen/page/2/ has 3 segments and would
+	 * match the 3-segment post rule, setting kennisbank=2 → 404.
+	 *
+	 * Rule order (most specific first):
+	 * 1. Child category pagination: /kennisbank/{parent}/{child}/page/{n}/
+	 * 2. Top-level category pagination: /kennisbank/{category}/page/{n}/
+	 * 3. Main archive pagination: /kennisbank/page/{n}/
+	 * 4. Post in child category: /kennisbank/{parent}/{child}/{post}/
+	 * 5. Post in top-level category: /kennisbank/{category}/{post}/
 	 */
 	public function register_kennisbank_permalink_filter(): void {
 		add_filter( 'post_type_link', [ $this, 'kennisbank_permalink' ], 10, 2 );
 
-		// Add rewrite rule for hierarchical categories: /kennisbank/{parent}/{child}/{post-slug}/
+		// --- Pagination rules (must come BEFORE generic post rules) ---
+
+		// Child category archive pagination: /kennisbank/{parent}/{child}/page/{n}/
+		add_rewrite_rule(
+			'^kennisbank/([^/]+)/([^/]+)/page/?([0-9]{1,})/?$',
+			'index.php?kennisbank_categories=$matches[1]/$matches[2]&paged=$matches[3]',
+			'top'
+		);
+
+		// Top-level category archive pagination: /kennisbank/{category}/page/{n}/
+		add_rewrite_rule(
+			'^kennisbank/([^/]+)/page/?([0-9]{1,})/?$',
+			'index.php?kennisbank_categories=$matches[1]&paged=$matches[2]',
+			'top'
+		);
+
+		// Main archive pagination: /kennisbank/page/{n}/
+		add_rewrite_rule(
+			'^kennisbank/page/?([0-9]{1,})/?$',
+			'index.php?post_type=kennisbank&paged=$matches[1]',
+			'top'
+		);
+
+		// --- Post rules ---
+
+		// Hierarchical categories: /kennisbank/{parent}/{child}/{post-slug}/
 		// Must come BEFORE the 2-segment rule
 		add_rewrite_rule(
 			'^kennisbank/([^/]+)/([^/]+)/([^/]+)/?$',
@@ -433,7 +468,7 @@ class PostTypes {
 			'top'
 		);
 
-		// Add rewrite rule for top-level categories: /kennisbank/{category}/{post-slug}/
+		// Top-level categories: /kennisbank/{category}/{post-slug}/
 		add_rewrite_rule(
 			'^kennisbank/([^/]+)/([^/]+)/?$',
 			'index.php?kennisbank=$matches[2]',

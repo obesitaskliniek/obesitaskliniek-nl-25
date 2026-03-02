@@ -428,11 +428,11 @@ class AssetManager {
 	 * $min = $this->get_minified_path('/assets/css/app.css');
 	 * // Returns: '/assets/css/app.min.css'
 	 *
-	 * @example Already minified (no change)
+	 * @example Already minified (idempotent)
 	 * $min = $this->get_minified_path('/assets/css/app.min.css');
-	 * // Returns: '/assets/css/app.min.min.css' (edge case)
+	 * // Returns: '/assets/css/app.min.css'
 	 */
 	private function get_minified_path( string $asset_path ): string {
-		return preg_replace( '/\.css$/', '.min.css', $asset_path );
+		return preg_replace( '/(?:\.min)*\.css$/', '.min.css', $asset_path );
 	}
 }
