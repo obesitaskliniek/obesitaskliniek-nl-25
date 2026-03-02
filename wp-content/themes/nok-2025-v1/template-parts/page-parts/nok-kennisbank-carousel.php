@@ -7,7 +7,7 @@
  * - colors:color-selector(section-colors)!page-editable!default(nok-bg-body)
  * - card_colors:color-selector(card-colors)!page-editable!default(nok-bg-white nok-text-darkblue)
  * - badge_colors:color-selector(badge-colors)!page-editable!default(nok-bg-darkerblue nok-text-white)
- * - shuffle:checkbox!default(false)!descr[Willekeurige volgorde?]
+ * - shuffle:checkbox!default(false)!descr[Willekeurige volgorde?]!page-editable
  * - show_all_link:checkbox!default(true)!descr[Toon "Alle items" link]
  * - all_link_url:link!default(/kennisbank)!descr[URL voor "Alle items" link]
  * - all_link_text:text!default(Alle items)
@@ -53,12 +53,18 @@ $main_query = $GLOBALS['wp_the_query'] ?? null;
 if ($main_query && $main_query->is_singular('kennisbank')) {
 	$exclude = [$main_query->get_queried_object_id()];
 }
-$query = Helpers::get_latest_custom_posts(
-	'kennisbank',
-	intval($c->max_items->raw()),
-	[],
-	$tax_query
-);
+$query_args = [
+	'post_type'      => 'kennisbank',
+	'posts_per_page' => intval($c->max_items->raw()),
+	'post_status'    => 'publish',
+	'no_found_rows'  => true,
+	'orderby'        => $c->shuffle->isTrue() ? 'rand' : 'date',
+	'order'          => 'DESC',
+];
+if (!empty($tax_query)) {
+	$query_args['tax_query'] = $tax_query;
+}
+$query = new \WP_Query($query_args);
 
 // Exclude current kennisbank post from results
 if (!empty($exclude) && $query) {
@@ -114,6 +120,9 @@ $scroller_id = 'kennisbank-carousel-' . wp_unique_id();
 							</button>
 						</div>
 					<?php endif; ?>
+                    <a href="<?= get_post_type_archive_link('kennisbank'); ?>" role="button" class="nok-button nok-bg-darkblue nok-text-contrast">
+                        Bezoek onze kennisbank <?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow') ?>
+                    </a>
 				</div>
 
 				<!-- Right column: article carousel (spans 3 columns) -->
@@ -123,8 +132,7 @@ $scroller_id = 'kennisbank-carousel-' . wp_unique_id();
 					     data-scroll-snapping="true"
 					     data-draggable="true"
 					     data-autoscroll="false"
-					     id="<?= $scroller_id; ?>"
-						<?= $c->shuffle->isTrue() ? 'data-nok-shuffle' : '' ?>>
+					     id="<?= $scroller_id; ?>">
 
 						<?php while ($query->have_posts()) : $query->the_post();
 							$post_id = get_the_ID();
