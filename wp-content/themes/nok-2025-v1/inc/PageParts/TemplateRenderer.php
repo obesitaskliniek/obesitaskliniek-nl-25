@@ -390,6 +390,11 @@ class TemplateRenderer {
 		if ( $template_type === 'page-parts' ) {
 			$section_id = $this->resolve_section_id();
 
+			// Capture page part post ID before template include, which may run
+			// internal WP_Query loops that corrupt the global $post
+			global $post;
+			$page_part_id = ( $post instanceof \WP_Post ) ? $post->ID : 0;
+
 			ob_start();
 			include $template_path;
 			$html = ob_get_clean();
@@ -399,12 +404,11 @@ class TemplateRenderer {
 			}
 
 			// Inject frontend edit button for logged-in editors (frontend only, not preview iframe)
-			global $post;
-			if ( $this->context->is_frontend()
+			if ( $page_part_id
+			     && $this->context->is_frontend()
 			     && ! is_preview()
-			     && $post instanceof \WP_Post
-			     && current_user_can( 'edit_post', $post->ID ) ) {
-				$html = $this->inject_edit_button( $html, $post->ID );
+			     && current_user_can( 'edit_post', $page_part_id ) ) {
+				$html = $this->inject_edit_button( $html, $page_part_id );
 			}
 
 			echo $html;
