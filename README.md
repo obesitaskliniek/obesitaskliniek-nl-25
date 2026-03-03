@@ -1,23 +1,39 @@
 # NOK 2025 Theme
-© 2025 Klaas Leussink - Nederlandse Obesitas Kliniek B.V.
 
-WordPress theme with component-based page building using "page parts" - reusable sections composed into flexible layouts.
+WordPress theme for Nederlandse Obesitas Kliniek. Component-based architecture using a "page parts" system — reusable sections assembled via Gutenberg block editor.
+
+**Stack:** PHP 8+, React/Gutenberg, SCSS (OKLCH color system), @wordpress/scripts
+
+## Build Commands
+
+```bash
+npm install          # Install dependencies
+npm run build        # Production build
+npm run start        # Development watch mode
+```
+
+**ATF/BTF pipeline:** After modifying component SCSS, run `node tools/split-atf-btf.mjs` to regenerate the ATF/BTF CSS split (see [CSS Architecture](#css-architecture)).
 
 ## Architecture
 
 ```
 inc/
-├── Theme.php                    # Main orchestrator
-├── Assets.php                   # Static asset helpers (icons, images)
+├── Theme.php                    # Main orchestrator (singleton)
+├── Assets.php                   # Icon management with caching
+├── AllowedEditorBlocks.php      # Editor block filtering
 ├── BlockRenderers.php           # Custom block render callbacks
-├── Customizer.php               # Theme customization
-├── Helpers.php                  # Utility functions (phone, hours formatting)
-├── PostTypes.php                # CPT registration & protection
+├── Colors.php                   # Color palette management
+├── Customizer.php               # Theme customization settings
+├── Helpers.php                  # Utility functions (phone, hours, dates)
+├── PostTypes.php                # CPT/taxonomy registration
+├── VoorlichtingForm.php         # Event form handling
 ├── Core/
-│   └── AssetManager.php         # CSS/JS with dev/prod modes
+│   └── AssetManager.php         # CSS/JS with dev/prod modes, ATF/BTF loading
+├── libs/
+│   └── hnl.cspGenerator.php     # CSP header generation
 ├── Navigation/
 │   ├── MenuManager.php          # Menu registration & rendering
-│   └── MenuWalker.php           # Custom menu walker
+│   └── MenuIconFields.php       # Menu icon field handling
 ├── PageParts/
 │   ├── Registry.php             # Template scanning & metadata
 │   ├── MetaManager.php          # Meta operations & validation
@@ -31,13 +47,75 @@ inc/
 │   ├── MetaRegistry.php         # Field registration & types
 │   └── MetaRegistrar.php        # WordPress/REST integration
 └── SEO/
-    └── YoastIntegration.php     # Yoast SEO customizations
-
-src/blocks/
-└── embed-nok-page-part/         # Gutenberg integration
+    ├── YoastIntegration.php     # Breadcrumbs, sitemaps, indexables
+    └── PagePartSchema.php       # Schema.org structured data
 ```
 
-## Template Creation
+```
+template-parts/
+├── page-parts/           # Page part CPT templates (kebab-case filenames)
+├── post-parts/           # Post type-specific widgets (BMI calculator, etc.)
+├── block-parts/          # Gutenberg block render templates
+└── navigation/           # Desktop, mobile, footer navigation templates
+```
+
+```
+src/
+├── blocks/               # Gutenberg blocks (see below)
+└── components/           # Shared React components
+    ├── ColorSelector.js
+    ├── FieldImportWizard.js
+    ├── IconSelector.js
+    ├── ImageSelector.js
+    ├── LinkField.js
+    └── TaxonomySelector.js
+```
+
+## Gutenberg Blocks
+
+| Block | Description |
+|-------|-------------|
+| `embed-nok-page-part` | Embed a reusable page part with per-page field overrides |
+| `embed-nok-post-part` | Embed a post-part widget (e.g. BMI calculator) |
+| `embed-nok-video` | Video with play button overlay |
+| `nok-video-section` | Video section (YouTube, Vimeo, self-hosted) |
+| `general-nok-section` | Section wrapper with `nok-section` styling for regular content |
+| `nok-attachment-downloads` | Downloadable attachments list (PDF, documents) |
+| `nok-vestiging-voorlichtingen` | Upcoming events carousel (auto-detects vestiging) |
+| `content-placeholder-nok-template` | Content placeholder within template layouts |
+
+### Block Structure
+
+```
+src/blocks/{block-name}/
+├── index.js          # Block registration and editor UI
+├── render.php        # Server-side rendering (optional)
+└── block.json        # Block metadata and attributes
+```
+
+### Embed Block Preview
+
+The `embed-nok-page-part` block renders an iframe preview in the editor:
+- iframe `src` is a REST endpoint: `/nok-2025-v1/v1/embed-page-part/{id}?overrides...`
+- Page-part selection changes apply immediately
+- Override field edits are debounced at **2 seconds** to avoid Cloudflare rate limits
+
+## Custom Post Types
+
+| Post Type | Slug | Archive | REST Base | Description |
+|-----------|------|---------|-----------|-------------|
+| Page Part | `page_part` | — | `page-parts` | Reusable page sections |
+| Template Layout | `template_layout` | — | `template-layouts` | Single post template configs |
+| Vestiging | `vestiging` | `/vestigingen/` | `vestigingen` | Clinic locations |
+| Regio | `regio` | — | `regios` | SEO landing pages per region |
+| Kennisbank | `kennisbank` | `/kennisbank/` | `kennisbank` | Knowledge base articles |
+
+**Taxonomies:**
+- `kennisbank_categories` — Hierarchical categories for kennisbank articles (enables `/kennisbank/{parent}/{child}/{post}/` URL structure)
+
+**Protection:** `page_part` CPT is protected from public access — non-logged users get 404 while REST/admin access is preserved.
+
+## Template Creation (Page Parts)
 
 Place in `template-parts/page-parts/`:
 
@@ -71,7 +149,7 @@ $c = $context;  // Standard shorthand
 </section>
 ```
 
-## Field Types
+### Field Types
 
 | Type | Syntax | Storage | Notes |
 |------|--------|---------|-------|
@@ -85,55 +163,81 @@ $c = $context;  // Standard shorthand
 | `post_repeater` | `posts:post_repeater(post:category)` | JSON array | Post selector |
 | `icon-selector` | `icon:icon-selector` | String | Icon picker |
 
-### Field Flags
+**Flags:** `!page-editable` (overridable per-page), `!default(value)`, `!descr[help text]`
 
-- `!page-editable` — Field can be overridden per-page when embedded
-- `!default(value)` — Default value if not set
-- `!descr[text]` — Help text shown below field in editor
-
-## FieldContext Usage
+### FieldContext API
 
 ```php
-$c = $context;  // Standard shorthand
+$c = $context;
 
-// Output methods (auto-escaped)
+// Output (auto-escaped)
 <?= $c->field ?>                  // HTML-escaped (default)
 <?= $c->field->url() ?>           // URL-escaped
-<?= $c->field->url('/fallback') ?>// With fallback
 <?= $c->field->attr() ?>          // Attribute-escaped
 $c->field->raw()                  // Unescaped (logic only)
 
-// Conditional methods (return bool, or $ifTrue/$ifFalse when provided)
+// Conditionals
 $c->has('field')                              // Existence check
 $c->has('field', 'yes', 'no')                 // Inline conditional
 $c->field->is('value', 'match', 'no-match')   // Equality check
 $c->field->isTrue('active', '')               // Checkbox check
-$c->field->in(['a', 'b'], 'found', '')        // Array membership
-$c->field->contains('sub', 'has-it', '')      // Substring check
 
-// Utility methods
+// Utilities
 $c->field->otherwise('fallback')              // Default if empty
 $c->field->json([])                           // Parse JSON to array
 $c->field->css_var('bg-color')                // Returns "--bg-color:value"
-
-// Title & content (with per-page override support)
-<?= $c->title() ?>
-<?= $c->content() ?>
+<?= $c->title() ?>                            // Title (with override support)
+<?= $c->content() ?>                          // Content (with override support)
 ```
 
 **Full documentation:** See `template-parts/page-parts/readme.md`
 
-## Custom Post Types & Meta Fields
+## CSS Architecture
 
-### Available Post Types
+### ATF/BTF Pipeline
 
-| Post Type | Slug | Description |
-|-----------|------|-------------|
-| Page Part | `page_part` | Reusable page sections |
-| Template Layout | `template_layout` | Single post template configs |
-| Vestiging | `vestiging` | Clinic locations (`/vestigingen/`) |
+Production CSS uses automated Above The Fold / Below The Fold splitting:
 
-### Registering Meta Fields
+1. `nok-components.scss` compiles to the full CSS bundle via webpack
+2. `tools/split-atf-btf.mjs` (PostCSS) splits it into `nok-atf.css` + `nok-btf.css` based on `tools/atf-btf-config.mjs`
+3. CSSO minifies both to `.min.css` variants
+4. `nok-atf.min.css` is inlined in `<head>` by `header.php`
+5. `nok-btf.min.css` is enqueued deferred (`media="print" onload`) by `AssetManager.php`
+
+**Diagnostic URLs** (logged-in only):
+- `?critical-css-only` — renders only inlined ATF CSS
+- `?legacy-css` — falls back to old hand-curated critical CSS
+- `?debug` — loads ATF audit overlay
+
+### Entry Points
+
+| File | Purpose |
+|------|---------|
+| `assets/css/nok-components.scss` | Frontend styles (webpack) |
+| `assets/css/nok-backend-css.scss` | Admin/editor styles (webpack) |
+| `assets/css/color_tests-v2.scss` | Color system (`nok-colors-css`) |
+
+### Dev/Prod Modes
+
+| Mode | Behavior |
+|------|----------|
+| `development_mode = true` | Uses unminified `.css` files |
+| `development_mode = false` | Prefers `.min.css`, falls back to `.css` |
+
+Set in `inc/Theme.php` constructor.
+
+### Context-Aware Loading
+
+| Context | CSS Method |
+|---------|-----------|
+| Frontend | `wp_enqueue_style()` (ATF inline + BTF deferred) |
+| Page Editor | Block preview, standard enqueue |
+| Post Editor | Page part preview, enqueue + inline |
+| REST API | Inline only |
+
+## Post Meta Fields
+
+### Registering Fields
 
 ```php
 // In inc/Theme.php register_post_custom_fields()
@@ -141,221 +245,73 @@ PostMeta\MetaRegistry::register_field('vestiging', 'street', [
     'type' => 'text',
     'label' => 'Straat',
     'placeholder' => 'Voer straatnaam in...',
-    'description' => 'De straatnaam van deze vestiging',
 ]);
 ```
 
-### Supported Meta Field Types
+### Supported Types
 
-| Type | Description | UI Component |
-|------|-------------|--------------|
-| `text` | Single line text | TextControl |
-| `textarea` | Multi-line text | TextareaControl |
-| `email` | Email address | TextControl (email) |
-| `url` | URL | TextControl (url) |
-| `number` | Integer | TextControl (number) |
-| `checkbox` | True/false | CheckboxControl |
-| `post_select` | Select from posts | SelectControl |
-| `opening_hours` | Opening hours editor | Custom component |
+| Type | UI Component |
+|------|-------------|
+| `text` | TextControl |
+| `textarea` | TextareaControl |
+| `email` | TextControl (email) |
+| `url` | TextControl (url) |
+| `number` | TextControl (number) |
+| `checkbox` | CheckboxControl |
+| `post_select` | SelectControl |
+| `opening_hours` | Custom component |
 
-### Opening Hours Field
+### Opening Hours
 
-Special field type for managing business hours:
+Special field type for business hours with werkdagen templates, individual day overrides, and explicit closed marking:
 
 ```php
 PostMeta\MetaRegistry::register_field('vestiging', 'opening_hours', [
     'type' => 'opening_hours',
     'label' => 'Openingstijden',
 ]);
+
+// Display
+echo Helpers::format_opening_hours(get_post_meta($post_id, '_opening_hours', true));
 ```
 
-Features:
-- **Werkdagen template** - Set default hours for Monday-Friday
-- **Individual overrides** - Override specific days with custom hours
-- **Explicit closed** - Mark days as closed even when weekdays are set
+## Navigation
 
-Data structure:
-```json
-{
-  "weekdays": [{"opens": "09:00", "closes": "17:00"}],
-  "monday": [],
-  "wednesday": [{"closed": true}],
-  "friday": [{"opens": "09:00", "closes": "16:00"}]
-}
-```
+**Registered locations:**
 
-Display hours:
+| Location | Description |
+|----------|-------------|
+| `primary` | Desktop main navigation |
+| `mobile_primary` | Mobile main navigation |
+| `mobile_drawer_footer` | Mobile drawer footer |
+| `top_row` | Desktop top row |
+| `footer` | Footer navigation |
+
+**Rendering:**
 ```php
-use NOK2025\V1\Helpers;
-$opening_hours = get_post_meta($post_id, '_opening_hours', true);
-echo Helpers::format_opening_hours($opening_hours);
+$menu_manager = Theme::get_instance()->get_menu_manager();
+$menu_manager->render_desktop_menu_bar('primary');
+$menu_manager->render_desktop_dropdown('primary');
+$menu_manager->render_mobile_carousel('mobile_primary');
 ```
 
-### Category-Specific Fields
+## REST Endpoints
 
-Restrict fields to specific post categories:
+**Base:** `/wp-json/nok-2025-v1/v1/`
 
-```php
-$experience_cat = get_category_by_slug('ervaringen');
+| Route | Method | Permission | Description |
+|-------|--------|------------|-------------|
+| `/embed-page-part/{id}` | GET | Public | Rendered page part HTML with inline CSS |
+| `/search/autocomplete` | GET | Public | Search autocomplete |
+| `/posts/query` | GET | Public | Query posts with filters |
+| `/link-search` | GET | `edit_posts` | Link field search (editor) |
 
-PostMeta\MetaRegistry::register_field('post', 'naam_patient', [
-    'type' => 'text',
-    'label' => 'Naam patiënt',
-    'categories' => [$experience_cat->term_id],
-]);
-```
+**Base:** `/wp-json/nok/v1/`
 
-### Post Select Fields
-
-Link to other post types:
-
-```php
-PostMeta\MetaRegistry::register_field('post', 'behandeld_door', [
-    'type' => 'post_select',
-    'post_type' => 'vestiging',
-    'label' => 'Vestiging',
-    'placeholder' => 'Onbekend / Niet van toepassing',
-]);
-```
-
-### Accessing Meta Values
-
-```php
-// Get single field (note underscore prefix)
-$street = get_post_meta($post_id, '_street', true);
-
-// Format phone number (Dutch formatting)
-use NOK2025\V1\Helpers;
-$formatted = Helpers::format_phone($phone);
-```
-
-### Custom Post Type Templates
-
-Archive template: `archive-{post-type}.php`
-```php
-// archive-vestiging.php
-get_header('generic');
-if (have_posts()) {
-    while (have_posts()) {
-        the_post();
-        $city = get_post_meta(get_the_ID(), '_city', true);
-    }
-}
-get_footer();
-```
-
-Single template: `single-{post-type}.php` or `template-parts/single-{post-type}-content.php`
-
-### REST API Schema
-
-For complex types like `opening_hours`, the schema is defined in `MetaRegistrar.php`:
-- Validates data structure
-- Converts between JSON (database) and objects (REST API)
-- Uses `sanitize_callback` for saving
-- Uses `prepare_callback` for loading
-
-## Post Type Protection
-
-`page_part` CPT is protected from public access:
-- Non-logged users get 404
-- Prevents search indexing
-- REST/admin access preserved
-- Logged users can preview
-
-## CSS Handling
-
-**Development mode** (`development_mode = true`):
-- Uses `.css` files
-
-**Production mode** (`development_mode = false`):
-- Prefers `.min.css` when available
-- Falls back to `.css`
-
-**Color Reference Chart:**
-Interactive reference for all color utility classes available at:
-```
-/wp-content/themes/nok-2025-v1/assets/css/color-reference.php
-```
-Shows backgrounds, text colors, fill colors (SVG), utilities, and CSS variables with click-to-copy functionality.
-
-**Context-aware loading:**
-
-| Context | CSS Method |
-|---------|-----------|
-| Frontend | `wp_enqueue_style()` |
-| Page Editor | Block preview, standard enqueue |
-| Post Editor | Page part preview, enqueue + inline |
-| REST API | Inline only |
-
-## Gutenberg Block Integration
-
-**Block:** `embed-nok-page-part`
-
-Features:
-- Dropdown page part selector
-- Live iframe preview
-- Per-page field overrides
-- Featured image override (when template allows)
-- 500ms debounced updates
-
-Usage in page editor:
-1. Insert block
-2. Select page part
-3. Override fields as needed
-4. Preview updates in real-time
-
-## Yoast SEO Integration
-
-Page parts are automatically included in Yoast SEO content analysis when editing pages.
-
-### How It Works
-
-The integration piggybacks the existing iframe preview system:
-
-1. Each page part renders in an iframe (already happens for preview)
-2. Server extracts semantic content (headings, paragraphs, lists, image alt text)
-3. Content embedded in iframe as `<meta name="yoast-content">` tag
-4. Block component reads meta tag and stores in global data store
-5. Yoast SEO reads aggregated content during analysis
-
-**Zero additional network overhead** - uses preview requests that already happen.
-
-### Features
-
-**Visual Editor Only**
-- SEO analysis works in visual mode
-- Code editor shows notice: "Page Part SEO analysis is disabled in code editor mode"
-- Automatically re-enables when switching back to visual mode
-
-**Per-Block Exclusion**
-- Each page part block has "SEO Instellingen" panel
-- Toggle "Meenemen in SEO analyse" checkbox to exclude specific parts
-- Visual badge shows on excluded blocks
-- Analysis updates in real-time when toggled
-
-**Content Analysis**
-- Extracts: h1-h6 headings, paragraphs, list items, image alt text
-- Skips: raw Gutenberg blocks, non-semantic markup
-- Updates automatically when page parts change
-
-### Technical Details
-
-**Architecture:**
-- Synchronous content delivery (no async race conditions)
-- Conforms to [Yoast Developer Integration Guide](https://developer.yoast.com/blog/yoast-seo-developer-integration/)
-- Follows ACF/Elementor integration patterns
-- Content always matches rendered output (WYSIWYG for SEO)
-
-**Debug Mode:**
-Enable debug logging in browser console:
-```javascript
-window.nokYoastIntegration.debug = true;
-```
-
-**Limitations:**
-- Only analyzes published page part content (not drafts)
-- Requires visual editor mode
-- Page parts must render successfully in iframes
+| Route | Method | Permission | Description |
+|-------|--------|------------|-------------|
+| `/page-part/{id}/prune-fields` | POST | `edit_posts` | Prune orphaned template fields |
+| `/page-part/{id}/orphaned-fields` | GET | `edit_posts` | Get orphaned fields from previous templates |
 
 ## Preview System
 
@@ -368,119 +324,31 @@ Uses WordPress transients for live previews without saving:
 
 **Transient key:** `preview_editor_state_{$post_id}`
 
-## REST Endpoints
+## Yoast SEO Integration
 
-**Base:** `/wp-json/nok-2025-v1/v1/`
+Page parts are automatically included in Yoast SEO content analysis when editing pages.
 
-**Endpoints:**
-- `GET /embed-page-part/{id}` - Page part HTML with inline CSS
-- Response includes rendered template with context-appropriate styles
+**How it works:**
+1. Each page part renders in an iframe (reuses preview system)
+2. Server extracts semantic content (headings, paragraphs, lists, image alt text)
+3. Content embedded in iframe as `<meta name="yoast-content">` tag
+4. Yoast reads aggregated content during analysis
 
-## Navigation System
+**Zero additional network overhead** — uses preview requests that already happen.
 
-**Registered locations:**
-- `primary` - Main navigation
-- `mobile_primary` - Mobile navigation
-- `footer` - Footer navigation
+**Per-block exclusion:** Each page part block has an "SEO Instellingen" panel with a toggle to exclude from analysis.
 
-**Rendering methods:**
-```php
-$menu_manager = Theme::get_instance()->get_menu_manager();
-$menu_manager->render_desktop_menu_bar('primary');
-$menu_manager->render_desktop_dropdown('primary');
-$menu_manager->render_mobile_carousel('mobile_primary');
-```
+**Schema.org:** `PagePartSchema.php` collects structured data from rendered page parts via `nok_page_part_rendered` hook.
 
-Returns hierarchical menu arrays with `is_current`, `is_current_ancestor`, and `has_children` flags.
+## Icon System
 
-## Theme Configuration
+SVG icons in `assets/icons/`, categorized by filename prefix:
 
-**Set production mode:**
-```php
-// inc/Theme.php constructor
-private bool $development_mode = false; // Production: use .min.css
-```
-
-**Theme supports:**
-- `title-tag`
-- `post-thumbnails`
-- `html5` (search-form, comment-form)
-
-## Usage Examples
-
-```php
-// Get theme instance
-$theme = Theme::get_instance();
-
-// Render page part (frontend)
-$theme->include_page_part_template($design, [
-    'post' => $post,
-    'context' => $context  // FieldContext instance
-]);
-
-// Direct rendering
-$renderer = new TemplateRenderer();
-$renderer->render_page_part($design, $fields);
-$renderer->render_post_part($design, $fields);
-
-// Access registry
-$registry = $theme->get_page_part_registry();
-$template_data = $registry[$design];
-```
-
-## File Structure
-
-```
-template-parts/
-├── page-parts/
-│   ├── nok-hero.php
-│   ├── nok-hero.css
-│   ├── nok-hero.min.css          # Auto-selected in production
-│   └── nok-hero.preview.css      # Page part editor only
-├── post-parts/
-│   ├── nok-bmi-calculator.php
-│   └── nok-bmi-calculator.css
-└── navigation/
-    ├── desktop-menu-bar.php
-    ├── desktop-dropdown.php
-    └── mobile-menu.php
-```
-
-## Customizer Integration
-
-Access theme settings:
-```php
-$accent = Theme::get_instance()->get_setting('accent_color', '#FF0000');
-```
-
-Register settings in `inc/Customizer.php`.
-
-## Build Commands
-
-```bash
-npm install          # Install dependencies
-npm run build        # Production build
-npm run start        # Development watch mode
-```
-
-## Current Status
-
-**Completed:**
-- Modular component architecture
-- Context-aware CSS loading
-- Live preview system with transients (5min TTL)
-- Dynamic field generation
-- Development/production asset modes
-- Repeater field UI
-- Parameter overriding in page editor
-- Featured image override support
-- Gutenberg block integration
-- Post type protection
-- Navigation system
-- REST API endpoints
-- Yoast page part logic integration
-
-**Roadmap & Technical Debt:** See [TODO.md](TODO.md) for tracked items.
+| Prefix | Category | Used for |
+|--------|----------|----------|
+| `ui_`  | UI       | Buttons, navigation, interface elements |
+| `nok_` | NOK      | Medical/content illustrations |
+| `logo_`| Logo     | Brand/partner logos |
 
 ## External Dependencies
 
@@ -488,4 +356,22 @@ npm run start        # Development watch mode
 - Location: `assets/js/domule/`
 - Source: https://github.com/c-kick/DOMule
 - Not managed via npm
-- Required for frontend functionality
+- Provides event system, module loading, viewport scrolling
+
+## Production Checklist
+
+| Setting | File | Dev | Prod |
+|---------|------|-----|------|
+| `$development_mode` | `inc/Theme.php` | `true` | `false` |
+| `$maintenance_mode` | `inc/Theme.php` | `false` | `false` |
+
+## Further Documentation
+
+Detailed development instructions, coding standards, and architecture decisions are documented in `CLAUDE.md` and the theme's `wp-content/themes/nok-2025-v1/CLAUDE.md`.
+
+**Roadmap & Technical Debt:** See [TODO.md](TODO.md) for tracked items.
+
+---
+
+**License:** Proprietary
+2025 Klaas Leussink - Nederlandse Obesitas Kliniek B.V.
