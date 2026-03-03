@@ -1,7 +1,6 @@
 @use "nok-variables";
 @use "tools/nok-rfs";
 @use "tools/nok-mixins";
-@use "nok-reboot-body";
 @use "nok-wordpress-quirks";
 //@use "nok-colors";
 
@@ -14,41 +13,6 @@
 // styles targeting irrelevant browsers while applying new styles.
 //
 // Normalize is licensed MIT. https://github.com/necolas/normalize.css
-
-
-// Document
-//
-// Change from `box-sizing: content-box` so that `width` is not affected by `padding` or `border`.
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-/* Remove default margin */
-* {
-  margin: 0;
-}
-
-/* Enable keyword animations */
-html {
-  interpolate-size: allow-keywords;
-}
-
-
-// Body
-//
-// 1. Remove the margin in all browsers.
-// 2. As a best practice, apply a default `background-color`.
-// 3. Prevent adjustments of font size after orientation changes in iOS.
-// 4. Change the default tap highlight to be completely transparent in iOS.
-
-// scss-docs-start reboot-body-rules
-body {
-  @include nok-reboot-body.nok-body-properties;
-}
-// scss-docs-end reboot-body-rules
 
 
 // Content grouping
@@ -79,14 +43,6 @@ hr {
   /* Avoid text overflows */
   overflow-wrap: break-word;
   text-wrap: balance;
-  //+ p {
-  //  margin-top: 1em;
-  //}
-}
-
-h1 {
-  @extend %heading;
-  @include nok-rfs.font-size(nok-variables.$h1-font-size);
 }
 
 h2 {
@@ -95,11 +51,6 @@ h2 {
 }
 .nok-general-content h2 {
   font-size: nok-rfs.rfs-fluid-value(nok-variables.$h1-font-size);
-}
-
-h3 {
-  @extend %heading;
-  @include nok-rfs.font-size(nok-variables.$h3-font-size);
 }
 
 h4 {
@@ -117,27 +68,6 @@ h6 {
   @include nok-rfs.font-size(nok-variables.$h6-font-size);
 }
 
-
-// Reset margins on paragraphs
-//
-
-p {
-  /* Avoid text overflows */
-  overflow-wrap: break-word;
-  /* Improve line wrapping */
-  //text-wrap: pretty;
-  margin-top: 0;
-  margin-bottom: 0;
-  //& + p {
-  //  margin-top: 1em;
-  //}
-
- // @for $i from 1 through 6 {
-  //  & + h#{$i} {
-  //    margin-top: 1em;
-  //  }
-  //}
-}
 
 // Abbreviations
 //
@@ -251,32 +181,6 @@ sub { bottom: -.25em; }
 sup { top: -.5em; }
 
 
-// Links
-
-a {
-  color: var(--text-color), var(--text-color--contrast, 1);
-  text-decoration: none;
-
-  &:hover {
-    color: var(--text-color--hover);
-    text-decoration: none;
-  }
-}
-
-// And undo these styles for placeholder links/named anchors (without href).
-// It would be more straightforward to just use a[href] in previous block, but that
-// causes specificity issues in many other styles that are too complex to fix.
-// See https://github.com/twbs/bootstrap/issues/19402
-
-a:not([href]):not([class]) {
-  &,
-  &:hover {
-    color: inherit;
-    text-decoration: none;
-  }
-}
-
-
 // Code
 
 pre,
@@ -333,35 +237,8 @@ kbd {
 }
 
 
-// Figures
-//
-// Apply a consistent margin strategy (matches our type styles).
-
-figure {
-  margin: 0;
-  figcaption {
-    opacity: 0.8;
-    font-weight: 300;
-    font-size: 0.8em;
-  }
-}
-
-// Images and content
-
-img,
-svg {
-  vertical-align: middle;
-}
-//h1,h2,h3,h4,h5,h6,p,span {
-//  > svg {
-//    width: 1rem;
-//    height: 1rem;
-//    vertical-align: middle;
-//  }
-//}
-
 /* Improve media defaults */
-img, picture, video, canvas {
+picture, video, canvas {
   display: block;
   max-width: 100%;
 }
@@ -413,27 +290,9 @@ label {
   display: inline-block; // 1
 }
 
-// Remove the default `border-radius` that macOS Chrome adds.
-// See https://github.com/twbs/bootstrap/issues/24093
-
-button {
-  // stylelint-disable-next-line property-disallowed-list
-  border-radius: 0;
-}
-
-// Explicitly remove focus outline in Chromium when it shouldn't be
-// visible (e.g. as result of mouse click or touch tap). It already
-// should be doing this automatically, but seems to currently be
-// confused and applies its very visible two-tone outline anyway.
-
-button:focus:not(:focus-visible) {
-  outline: 0;
-}
-
 // 1. Remove the margin in Firefox and Safari
 
 input,
-button,
 select,
 optgroup,
 textarea {
@@ -444,7 +303,6 @@ textarea {
 }
 
 // Remove the inheritance of text transform in Firefox
-button,
 select {
   text-transform: none;
 }
@@ -478,7 +336,6 @@ select {
 // 2. Correct the inability to style clickable types in iOS and Safari.
 // 3. Opinionated: add "hand" cursor to non-disabled button elements.
 
-button,
 [type="button"], // 1
 [type="reset"],
 [type="submit"] {

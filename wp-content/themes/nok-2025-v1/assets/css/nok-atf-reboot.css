@@ -1,0 +1,57 @@
+/* Critical @font-face declarations for above-the-fold rendering.
+ * Only the font weights used above the fold. Full set loads deferred.
+ * __THEME_FONTS__ is replaced by PHP with the actual theme font URL. */
+
+/* Inter — body text (variable font, normal only) */
+@font-face {
+  font-family: "Inter";
+  src: url("__THEME_FONTS__/inter/InterVariable.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Realist — headings weight 500 */
+@font-face {
+  font-family: "Realist";
+  src: url("__THEME_FONTS__/realist-new/Realist-Medium.woff2") format("woff2"),
+       url("__THEME_FONTS__/realist-new/Realist-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Realist — bold headings + buttons weight 700 */
+@font-face {
+  font-family: "Realist";
+  src: url("__THEME_FONTS__/realist-new/Realist-Bold.woff2") format("woff2"),
+       url("__THEME_FONTS__/realist-new/Realist-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Realist — regular weight 400 (navigation, buttons) */
+@font-face {
+  font-family: "Realist";
+  src: url("__THEME_FONTS__/realist-new/Realist-Regular.woff2") format("woff2"),
+       url("__THEME_FONTS__/realist-new/Realist-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* FOUC prevention — hidden-at-load custom elements.
+ * Custom elements default to display:inline and render visibly.
+ * BTF CSS overrides these with the proper closed-state (display + transform). */
+nok-accessibility-helper,
+nok-nav-menu-bar-dropdown,
+nok-navigation-drawer,
+.nok-pp-edit,
+nok-popup {
+  display: none;
+}
+nok-screen-mask {
+  display: none;
+}
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm5vay1hdGYtcmVib290LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTs7dUVBRXVFOztBQUV2RSxtREFBbUQ7QUFDbkQ7RUFDRSxvQkFBb0I7RUFDcEIsZ0ZBQWdGO0VBQ2hGLG9CQUFvQjtFQUNwQixrQkFBa0I7RUFDbEIsa0JBQWtCO0FBQ3BCOztBQUVBLGtDQUFrQztBQUNsQztFQUNFLHNCQUFzQjtFQUN0Qjs0RUFDMEU7RUFDMUUsZ0JBQWdCO0VBQ2hCLGtCQUFrQjtFQUNsQixrQkFBa0I7QUFDcEI7O0FBRUEsaURBQWlEO0FBQ2pEO0VBQ0Usc0JBQXNCO0VBQ3RCOzBFQUN3RTtFQUN4RSxnQkFBZ0I7RUFDaEIsa0JBQWtCO0VBQ2xCLGtCQUFrQjtBQUNwQjs7QUFFQSx1REFBdUQ7QUFDdkQ7RUFDRSxzQkFBc0I7RUFDdEI7NkVBQzJFO0VBQzNFLGdCQUFnQjtFQUNoQixrQkFBa0I7RUFDbEIsa0JBQWtCO0FBQ3BCOztBQUVBOztnRkFFZ0Y7QUFDaEY7Ozs7O0VBS0UsYUFBYTtBQUNmO0FBQ0E7RUFDQSxhQUFBO0FBQ0EiLCJmaWxlIjoibm9rLWF0Zi1yZWJvb3QuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLyogQ3JpdGljYWwgQGZvbnQtZmFjZSBkZWNsYXJhdGlvbnMgZm9yIGFib3ZlLXRoZS1mb2xkIHJlbmRlcmluZy5cbiAqIE9ubHkgdGhlIGZvbnQgd2VpZ2h0cyB1c2VkIGFib3ZlIHRoZSBmb2xkLiBGdWxsIHNldCBsb2FkcyBkZWZlcnJlZC5cbiAqIF9fVEhFTUVfRk9OVFNfXyBpcyByZXBsYWNlZCBieSBQSFAgd2l0aCB0aGUgYWN0dWFsIHRoZW1lIGZvbnQgVVJMLiAqL1xuXG4vKiBJbnRlciDigJQgYm9keSB0ZXh0ICh2YXJpYWJsZSBmb250LCBub3JtYWwgb25seSkgKi9cbkBmb250LWZhY2Uge1xuICBmb250LWZhbWlseTogXCJJbnRlclwiO1xuICBzcmM6IHVybChcIl9fVEhFTUVfRk9OVFNfXy9pbnRlci9JbnRlclZhcmlhYmxlLndvZmYyXCIpIGZvcm1hdChcIndvZmYyLXZhcmlhdGlvbnNcIik7XG4gIGZvbnQtd2VpZ2h0OiAxMDAgOTAwO1xuICBmb250LXN0eWxlOiBub3JtYWw7XG4gIGZvbnQtZGlzcGxheTogc3dhcDtcbn1cblxuLyogUmVhbGlzdCDigJQgaGVhZGluZ3Mgd2VpZ2h0IDUwMCAqL1xuQGZvbnQtZmFjZSB7XG4gIGZvbnQtZmFtaWx5OiBcIlJlYWxpc3RcIjtcbiAgc3JjOiB1cmwoXCJfX1RIRU1FX0ZPTlRTX18vcmVhbGlzdC1uZXcvUmVhbGlzdC1NZWRpdW0ud29mZjJcIikgZm9ybWF0KFwid29mZjJcIiksXG4gICAgICAgdXJsKFwiX19USEVNRV9GT05UU19fL3JlYWxpc3QtbmV3L1JlYWxpc3QtTWVkaXVtLndvZmZcIikgZm9ybWF0KFwid29mZlwiKTtcbiAgZm9udC13ZWlnaHQ6IDUwMDtcbiAgZm9udC1zdHlsZTogbm9ybWFsO1xuICBmb250LWRpc3BsYXk6IHN3YXA7XG59XG5cbi8qIFJlYWxpc3Qg4oCUIGJvbGQgaGVhZGluZ3MgKyBidXR0b25zIHdlaWdodCA3MDAgKi9cbkBmb250LWZhY2Uge1xuICBmb250LWZhbWlseTogXCJSZWFsaXN0XCI7XG4gIHNyYzogdXJsKFwiX19USEVNRV9GT05UU19fL3JlYWxpc3QtbmV3L1JlYWxpc3QtQm9sZC53b2ZmMlwiKSBmb3JtYXQoXCJ3b2ZmMlwiKSxcbiAgICAgICB1cmwoXCJfX1RIRU1FX0ZPTlRTX18vcmVhbGlzdC1uZXcvUmVhbGlzdC1Cb2xkLndvZmZcIikgZm9ybWF0KFwid29mZlwiKTtcbiAgZm9udC13ZWlnaHQ6IDcwMDtcbiAgZm9udC1zdHlsZTogbm9ybWFsO1xuICBmb250LWRpc3BsYXk6IHN3YXA7XG59XG5cbi8qIFJlYWxpc3Qg4oCUIHJlZ3VsYXIgd2VpZ2h0IDQwMCAobmF2aWdhdGlvbiwgYnV0dG9ucykgKi9cbkBmb250LWZhY2Uge1xuICBmb250LWZhbWlseTogXCJSZWFsaXN0XCI7XG4gIHNyYzogdXJsKFwiX19USEVNRV9GT05UU19fL3JlYWxpc3QtbmV3L1JlYWxpc3QtUmVndWxhci53b2ZmMlwiKSBmb3JtYXQoXCJ3b2ZmMlwiKSxcbiAgICAgICB1cmwoXCJfX1RIRU1FX0ZPTlRTX18vcmVhbGlzdC1uZXcvUmVhbGlzdC1SZWd1bGFyLndvZmZcIikgZm9ybWF0KFwid29mZlwiKTtcbiAgZm9udC13ZWlnaHQ6IDQwMDtcbiAgZm9udC1zdHlsZTogbm9ybWFsO1xuICBmb250LWRpc3BsYXk6IHN3YXA7XG59XG4iXX0= */

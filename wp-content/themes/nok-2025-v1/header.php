@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="nl" class="no-js <?= (is_user_logged_in() ? 'logged-in' : ''); ?>">
+<html lang="nl" class="<?= (is_user_logged_in() ? 'logged-in' : ''); ?>">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=overlays-content">
@@ -17,7 +17,8 @@
         // Contains @font-face for the 3 preloaded fonts — __THEME_FONTS__ placeholder
         // is replaced with the actual theme font URL at output time.
         if (isset( $_GET['dev-css'] )) {
-            $critical_css_path = THEME_ROOT_ABS . '/assets/css/nok-critical-new.css';
+            // Test extracted ATF CSS (unminified, includes font-face + component ATF split)
+            $critical_css_path = THEME_ROOT_ABS . '/assets/css/nok-atf.css';
         } else {
             $critical_css_path = THEME_ROOT_ABS . '/assets/css/nok-critical.min.css';
         }
@@ -50,6 +51,11 @@
         <script>const SITE_NONCE = '<?= $js_cache_ver; ?>';</script>
         <link rel="modulepreload" href="<?= THEME_ROOT ;?>/assets/js/entrypoint.min.mjs?ver=<?= $js_cache_ver; ?>">
         <script type="module" src="<?= THEME_ROOT ;?>/assets/js/entrypoint.min.mjs?ver=<?= $js_cache_ver; ?>" defer></script>
+
+        <?php // ATF CSS audit tool — loads when ?dev-css&debug is present
+        if ( isset( $_GET['dev-css'] ) && isset( $_GET['debug'] ) ) : ?>
+        <script type="module" src="<?= THEME_ROOT ;?>/assets/js/atf-audit.mjs" defer></script>
+        <?php endif; ?>
 
         <!-- head data -->
         <?php wp_head(); ?>

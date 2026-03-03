@@ -77,8 +77,12 @@ class AssetManager {
 			return;
 		}
 
-		$css_url     = $this->resolve_asset_url( '/assets/css/nok-components.css', $dev_mode );
-		$css_version = $this->get_asset_version( '/assets/css/nok-components.css', $dev_mode );
+		// When ?dev-css is set, load BTF split instead of full bundle (ATF is inlined in <head>)
+		$css_file    = ( $dev_mode && isset( $_GET['dev-css'] ) )
+			? '/assets/css/nok-btf.css'
+			: '/assets/css/nok-components.css';
+		$css_url     = $this->resolve_asset_url( $css_file, $dev_mode );
+		$css_version = $this->get_asset_version( $css_file, $dev_mode );
 
 		// Register the full stylesheet — loaded deferred (media="print", swapped on load)
 		// Critical CSS is inlined in header.php for instant first paint

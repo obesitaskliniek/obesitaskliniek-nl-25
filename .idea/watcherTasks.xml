@@ -101,5 +101,25 @@
       <option name="workingDir" value="$FileDir$" />
       <envs />
     </TaskOptions>
+    <TaskOptions isEnabled="true">
+      <option name="arguments" value="scripts/extract-atf-css.mjs" />
+      <option name="checkSyntaxErrors" value="true" />
+      <option name="description" />
+      <option name="exitCodeBehavior" value="ERROR" />
+      <option name="fileExtension" value="*" />
+      <option name="immediateSync" value="true" />
+      <option name="name" value="CSS - ATF/BTF Extract" />
+      <option name="output" value="nok-atf.css:nok-atf.min.css:nok-btf.css:nok-btf.min.css" />
+      <option name="outputFilters">
+        <array />
+      </option>
+      <option name="outputFromStdout" value="false" />
+      <option name="program" value="node" />
+      <option name="runOnExternalChanges" value="true" />
+      <option name="scopeName" value="nok-components.css" />
+      <option name="trackOnlyRoot" value="false" />
+      <option name="workingDir" value="$ProjectFileDir$/wp-content/themes/nok-2025-v1" />
+      <envs />
+    </TaskOptions>
   </component>
 </project>

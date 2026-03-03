@@ -1,0 +1,147 @@
+@use "nok-variables";
+@use "tools/nok-rfs";
+@use "nok-reboot-body";
+
+// ATF Reboot
+//
+// Above-the-fold subset of _nok-reboot.scss.
+// Only contains selectors matching elements present in the initial page render.
+// Full reboot remains in _nok-reboot.scss for deferred loading.
+
+
+// Document
+//
+// Change from `box-sizing: content-box` so that `width` is not affected by `padding` or `border`.
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+* {
+  margin: 0;
+}
+
+/* Enable keyword animations */
+html {
+  interpolate-size: allow-keywords;
+}
+
+
+// Body
+//
+// 1. Remove the margin in all browsers.
+// 2. As a best practice, apply a default `background-color`.
+// 3. Prevent adjustments of font size after orientation changes in iOS.
+// 4. Change the default tap highlight to be completely transparent in iOS.
+
+body {
+  @include nok-reboot-body.nok-body-properties;
+}
+
+
+// Typography
+//
+// 1. Remove top margins from headings
+
+%heading {
+  margin-top: 0; // 1
+  margin-bottom: 0;
+  line-height: 1.2;
+  line-height: var(--#{nok-variables.$prefix}-default-heading-line-height, 1.1);
+  color: var(--text-color, var(--bg-color--contrast));
+  /* Avoid text overflows */
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+h1 {
+  @extend %heading;
+  @include nok-rfs.font-size(nok-variables.$h1-font-size);
+}
+
+h3 {
+  @extend %heading;
+  @include nok-rfs.font-size(nok-variables.$h3-font-size);
+}
+
+
+// Reset margins on paragraphs
+
+p {
+  /* Avoid text overflows */
+  overflow-wrap: break-word;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+
+// Links
+
+a {
+  color: var(--text-color), var(--text-color--contrast, 1);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--text-color--hover);
+    text-decoration: none;
+  }
+}
+
+// And undo these styles for placeholder links/named anchors (without href).
+
+a:not([href]):not([class]) {
+  &,
+  &:hover {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+
+// Figures
+
+figure {
+  margin: 0;
+  figcaption {
+    opacity: 0.8;
+    font-weight: 300;
+    font-size: 0.8em;
+  }
+}
+
+// Images and content
+
+img,
+svg {
+  vertical-align: middle;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+
+// Forms
+
+button {
+  // stylelint-disable-next-line property-disallowed-list
+  border-radius: 0;
+  margin: 0;
+  font: inherit;
+  @include nok-rfs.font-size(inherit);
+  line-height: inherit;
+  text-transform: none;
+  -webkit-appearance: button;
+
+  &:focus:not(:focus-visible) {
+    outline: 0;
+  }
+
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+}

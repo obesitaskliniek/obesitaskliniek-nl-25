@@ -3,6 +3,7 @@
 @use "./tools/nok-mixins";
 @use "./tools/nok-rfs";
 @use "nok-colors-v2";
+@use "nok-atf-reboot";
 @use "nok-reboot";
 @use "nok-layout";
 @use "nok-z-stack";
@@ -40,14 +41,16 @@
 
 //Todo: move everything below to something that makes more sense - something like layout, or text-layout
 
+
 :root {
   @include nok-variables.parsed-variables;
+  //@include nok-variables.parsed-variables($not-these: nok-variables.$atf-variables);
 }
 
 /* custom elements */
 //article,aside,
 section,
-nok-logo, nok-mobile-nav, nok-desktop-nav {
+nok-logo {
   display: contents;
 }
 
