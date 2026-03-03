@@ -16,14 +16,15 @@
         <?php // Inline critical CSS for instant above-the-fold rendering.
         // Contains @font-face for the 3 preloaded fonts — __THEME_FONTS__ placeholder
         // is replaced with the actual theme font URL at output time.
-        if (isset( $_GET['dev-css'] )) {
-            // Test extracted ATF CSS (unminified, includes font-face + component ATF split)
-            $critical_css_path = THEME_ROOT_ABS . '/assets/css/nok-atf.css';
-        } else {
+        if ( is_user_logged_in() && isset( $_GET['legacy-css'] ) ) {
+            // Fallback to old hand-curated critical CSS for comparison
             $critical_css_path = THEME_ROOT_ABS . '/assets/css/nok-critical.min.css';
+        } else {
+            // Production default: automated ATF extraction from nok-components.css
+            $critical_css_path = THEME_ROOT_ABS . '/assets/css/nok-atf.min.css';
         }
         if ( ! file_exists( $critical_css_path ) ) {
-	        $critical_css_path = THEME_ROOT_ABS . '/assets/css/nok-critical.css';
+	        $critical_css_path = THEME_ROOT_ABS . '/assets/css/nok-atf.css';
         }
         if ( file_exists( $critical_css_path ) ) :
 	        $critical_css = @file_get_contents( $critical_css_path );
@@ -32,6 +33,9 @@
 		        // Rewrite sourceMappingURL from relative to absolute — relative paths resolve
 		        // against the page URL when CSS is inlined, causing 404s.
 		        $critical_css = str_replace( 'sourceMappingURL=nok-critical.css.map', 'sourceMappingURL=' . THEME_ROOT . '/assets/css/nok-critical.css.map', $critical_css ); ?>
+        <?php if ( is_user_logged_in() ) : ?>
+        <!-- css taken from : <?= $critical_css_path; ?> -->
+        <?php endif; ?>
         <style id="nok-critical-css"><?php echo $critical_css; ?></style>
 	        <?php endif;
         endif; ?>
@@ -52,8 +56,8 @@
         <link rel="modulepreload" href="<?= THEME_ROOT ;?>/assets/js/entrypoint.min.mjs?ver=<?= $js_cache_ver; ?>">
         <script type="module" src="<?= THEME_ROOT ;?>/assets/js/entrypoint.min.mjs?ver=<?= $js_cache_ver; ?>" defer></script>
 
-        <?php // ATF CSS audit tool — loads when ?dev-css&debug is present
-        if ( isset( $_GET['dev-css'] ) && isset( $_GET['debug'] ) ) : ?>
+        <?php // ATF CSS audit tool — loads when ?debug is present (logged-in only)
+        if ( is_user_logged_in() && isset( $_GET['debug'] ) ) : ?>
         <script type="module" src="<?= THEME_ROOT ;?>/assets/js/atf-audit.mjs" defer></script>
         <?php endif; ?>
 

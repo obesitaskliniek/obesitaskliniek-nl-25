@@ -77,10 +77,11 @@ class AssetManager {
 			return;
 		}
 
-		// When ?dev-css is set, load BTF split instead of full bundle (ATF is inlined in <head>)
-		$css_file    = ( $dev_mode && isset( $_GET['dev-css'] ) )
-			? '/assets/css/nok-btf.css'
-			: '/assets/css/nok-components.css';
+		// Default: ATF is inlined in <head>, BTF companion loads deferred
+		// ?legacy-css: Fall back to old full bundle (paired with old critical CSS in header.php)
+		$css_file    = ( $dev_mode && isset( $_GET['legacy-css'] ) )
+			? '/assets/css/nok-components.css'
+			: '/assets/css/nok-btf.css';
 		$css_url     = $this->resolve_asset_url( $css_file, $dev_mode );
 		$css_version = $this->get_asset_version( $css_file, $dev_mode );
 
