@@ -3,7 +3,7 @@
 This file centralizes all technical debt, feature requests, and implementation tasks.
 Inline TODO comments have been removed from the codebase in favor of this central tracking.
 
-**Last Updated:** 2026-02-23
+**Last Updated:** 2026-03-03
 
 ---
 
@@ -49,26 +49,19 @@ If user content is ever needed, implement DOMPurify sanitization first.
 
 ---
 
-### HIGH-003: Critical CSS System — Full Revision
-**Priority:** High
-**Status:** Open
-**Related Files:** `assets/css/nok-critical.scss`, `header.php`, `inc/Core/AssetManager.php`
+### ~~RESOLVED: HIGH-003: Critical CSS System — Full Revision~~
+**Resolved:** 2026-02-23
+**Implementation:** `scripts/extract-atf-css.mjs`, `scripts/atf-selectors.config.mjs`, `header.php`, `inc/Core/AssetManager.php`
 
-The critical CSS system is a hand-maintained copy of component SCSS rules that drifts out of sync,
-causing silent regressions:
+Automated ATF/BTF extraction pipeline fully implemented and deployed to production:
+- PostCSS-based splitting of `nok-components.css` into ATF (inlined) + BTF (deferred) bundles
+- Config-driven selector classification (includes/excludes/boundary patterns)
+- Intelligent CSS variable pruning (only referenced `:root` vars in ATF)
+- Validation checks (declaration count integrity, critical token coverage, ~65KB size budget)
+- Legacy `nok-critical.scss` retained for rollback via `?legacy-css` query param
+- Verification URLs: `?critical-css-only`, `?legacy-css`, `?debug`
 
-- A `preg_replace` stripping `sourceMappingURL` silently returned `null` on the 18KB single-line
-  minified CSS (PCRE backtrack limit), killing **all** critical CSS output on production. Fixed by
-  switching to `str_replace` with absolute path rewrite.
-- FOUC regressions when critical CSS closed-state rules don't match component CSS (e.g. `display:none`
-  vs `display:flex` + transform, causing slide animations via `body.no-js` transition gate).
-- Mobile `position: fixed` was on the wrong element in component SCSS (`nok-navigation-desktop`
-  instead of `nok-top-navigation`) — only the critical CSS had the correct rule.
-
-**Desired outcome:**
-- Automated critical CSS extraction or a build step that generates from component SCSS source of truth
-- Eliminate manual duplication between `nok-critical.scss` and component SCSS
-- Build-time validation that above-the-fold elements have matching rules in both files
+Replaces manual `nok-critical.scss` duplication with deterministic extraction from component SCSS source of truth.
 
 ---
 
@@ -156,13 +149,13 @@ Add support for mutually exclusive field options.
 
 ---
 
-### LOW-004: Additional Field Types
+### LOW-004: Image Gallery Field Type
 **Priority:** Low
 **Related File:** `inc/PostMeta/MetaRegistry.php`
 
 **Requested Types:**
-- Image gallery field
-- Color picker field
+- Image gallery field (multi-select from WordPress media library)
+- ~~Color picker field~~ — Implemented as `color-selector(palette)` in `Registry.php`
 
 ---
 
