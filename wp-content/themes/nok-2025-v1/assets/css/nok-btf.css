@@ -5303,19 +5303,43 @@ body.scrolled-100 .nok-scroll-progress__progress {
   display: flex;
   flex-direction: column;
   gap: var(--nok-space-fluid-md);
+  text-align: center;
 }
 .nok-vragenlijst__progress {
-  height: 4px;
+  position: relative;
+  height: 3px;
   background: var(--nok-body--darker);
-  overflow: hidden;
-  border-radius: calc(var(--nok-default-border-radius, 0.4rem) * 0.75);
-  overflow: hidden;
+  border-radius: 999px;
+  overflow: visible;
+  margin: 12px 14px;
+}
+.nok-vragenlijst__progress::before, .nok-vragenlijst__progress::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+.nok-vragenlijst__progress::before {
+  left: 0;
+  width: 10px;
+  height: 10px;
+  background: var(--nok-darkerblue);
+  box-shadow: 0 0 0 3px var(--nok-body--bg, #fff), 0 0 0 5px var(--nok-darkerblue);
+  transform: translate(-50%, -50%);
+}
+.nok-vragenlijst__progress::after {
+  right: 0;
+  width: 16px;
+  height: 16px;
+  background: var(--nok-body--bg, #fff);
+  border: 2px solid var(--nok-body--darker);
+  transform: translate(50%, -50%);
 }
 .nok-vragenlijst__progress-fill {
   height: 100%;
   background: var(--nok-lightblue);
-  overflow: hidden;
-  border-radius: calc(var(--nok-default-border-radius, 0.4rem) * 0.75);
+  border-radius: 999px;
 }
 @media (prefers-reduced-motion: no-preference) {
   body.__enable-transitions .nok-vragenlijst__progress-fill, body.no-js .nok-vragenlijst__progress-fill {
@@ -5336,7 +5360,14 @@ body.scrolled-100 .nok-scroll-progress__progress {
   font-optical-sizing: auto;
   font-style: normal;
   font-weight: 500;
-  font-size: 1.25rem;
+  font-size: calc(1.3rem + 0.6vw);
+}
+@media (min-width: 1200px) {
+  .nok-vragenlijst__label {
+    font-size: 1.75rem;
+  }
+}
+.nok-vragenlijst__label {
   display: block;
 }
 .nok-vragenlijst__help {
@@ -5347,6 +5378,12 @@ body.scrolled-100 .nok-scroll-progress__progress {
   display: flex;
   flex-direction: column;
   gap: var(--nok-space-fluid-xs);
+}
+.nok-vragenlijst__field:has(.nok-vragenlijst__radio-option) {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--nok-space-fluid-sm);
 }
 .nok-vragenlijst__input {
   padding: var(--nok-space-sm) var(--nok-space-md);
@@ -5359,6 +5396,7 @@ body.scrolled-100 .nok-scroll-progress__progress {
   background: transparent;
   width: 100%;
   box-sizing: border-box;
+  text-align: left;
 }
 .nok-vragenlijst__input:focus {
   outline: 2px solid var(--nok-lightblue);
@@ -5373,7 +5411,7 @@ body.scrolled-100 .nok-scroll-progress__progress {
 .nok-vragenlijst__radio-option {
   display: flex;
   align-items: center;
-  gap: var(--nok-space-fluid-sm);
+  justify-content: center;
   padding: var(--nok-space-sm) var(--nok-space-md);
   border: 2px solid var(--nok-body--darker);
   overflow: hidden;
@@ -5395,14 +5433,17 @@ body.scrolled-100 .nok-scroll-progress__progress {
   border-color: var(--nok-lightblue);
   background: oklch(from var(--nok-lightblue) l c h/0.08);
 }
-.nok-vragenlijst__radio-option input[type=radio] {
-  accent-color: var(--nok-lightblue);
-  width: 1.2em;
-  height: 1.2em;
-  flex-shrink: 0;
+.nok-vragenlijst__radio-option:focus-within {
+  outline: 2px solid var(--nok-lightblue);
+  outline-offset: 2px;
 }
-.nok-vragenlijst__radio-option span {
-  flex: 1;
+.nok-vragenlijst__radio-option input[type=radio] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
 }
 .nok-vragenlijst__checkbox-option {
   display: flex;
@@ -5410,6 +5451,7 @@ body.scrolled-100 .nok-scroll-progress__progress {
   gap: var(--nok-space-fluid-sm);
   padding: var(--nok-space-sm) var(--nok-space-md);
   cursor: pointer;
+  text-align: left;
 }
 .nok-vragenlijst__checkbox-option input[type=checkbox] {
   accent-color: var(--nok-lightblue);
@@ -5421,6 +5463,7 @@ body.scrolled-100 .nok-scroll-progress__progress {
   display: flex;
   flex-direction: column;
   gap: var(--nok-space-fluid-sm);
+  text-align: left;
 }
 .nok-vragenlijst__bmi-hw, .nok-vragenlijst__bmi-direct {
   display: flex;
@@ -5471,13 +5514,13 @@ body.scrolled-100 .nok-scroll-progress__progress {
 }
 .nok-vragenlijst__nav {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   gap: var(--nok-space-fluid-sm);
   padding-top: var(--nok-space-fluid-sm);
 }
-.nok-vragenlijst__next {
-  margin-left: auto;
+.nok-vragenlijst__prev:disabled {
+  display: none;
 }
 .nok-vragenlijst__result {
   display: flex;

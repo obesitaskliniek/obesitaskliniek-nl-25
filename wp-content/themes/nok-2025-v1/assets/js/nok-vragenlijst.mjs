@@ -329,7 +329,7 @@ class VragenlijstRenderer {
         this.nextButton = document.createElement('button');
         this.nextButton.type = 'button';
         this.nextButton.className = 'nok-button nok-bg-darkerblue nok-text-contrast nok-vragenlijst__next';
-        this.nextButton.innerHTML = '<span>Volgende</span>';
+        this.nextButton.innerHTML = '<span>Doorgaan</span>';
         this.nextButton.disabled = true;
 
         this.nav.appendChild(this.prevButton);
@@ -635,7 +635,7 @@ class VragenlijstRenderer {
 
         const submitText = engine.settings.submit_button_text || 'Bekijk resultaat';
         this.nextButton.querySelector('span').textContent =
-            (isLast || branchToResult) ? submitText : 'Volgende';
+            (isLast || branchToResult) ? submitText : 'Doorgaan';
     }
 
     /**
