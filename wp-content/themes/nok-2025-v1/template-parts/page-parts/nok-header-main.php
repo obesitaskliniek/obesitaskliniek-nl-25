@@ -18,7 +18,7 @@ $star = Assets::getIcon('ui_star');
 $logo = '<nok-logo>' . file_get_contents(THEME_ROOT_ABS . '/assets/img/nok-logo.svg') .'</nok-logo>';
 ?>
 
-<nok-top-navigation class="nok-section" role="navigation" aria-label="<?php esc_attr_e( 'Hoofdnavigatie', 'nok' ); ?>" data-requires="./nok-toggler.mjs">
+<nok-top-navigation class="nok-section" role="navigation" aria-label="<?php esc_attr_e( 'Hoofdnavigatie', 'nok' ); ?>">
     <nok-screen-mask class="nok-bg-darkerblue nok-dark-bg-darkestblue--darker">
 
         <!-- POPUP: BMI CALCULATOR -->
@@ -52,6 +52,26 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT_ABS . '/assets/img/nok-logo.
                     <input type="search" placeholder="Zoek op trefwoord..." class="nok-search-input" autocomplete="off" aria-label="Zoeken" />
                     <nok-search-results></nok-search-results>
                 </nok-search>
+            </nok-popup-body>
+        </nok-popup>
+
+        <!-- POPUP: VRAGENLIJST -->
+        <nok-popup class="nok-bg-body nok-dark-bg-darkerblue" id="popup-vragenlijst"
+                   data-on-close="reset">
+            <nok-popup-header>
+                <nok-popup-title>Kom ik in aanmerking?</nok-popup-title>
+                <button title="Sluiten" aria-label="Sluiten" class="nok-button nok-button--small"
+                        data-unsets-class="popup-open" data-class-target="nok-top-navigation"
+                        data-toggle-event="click"
+                        data-unsets-attribute="data-state" data-unsets-attribute-value="open"
+                        data-attribute-target="#popup-vragenlijst">
+                    <?= Assets::getIcon('ui_close') ?>
+                </button>
+            </nok-popup-header>
+            <nok-popup-body>
+                <?php $theme->embed_post_part_template('nok-vragenlijst', [
+                    'vragenlijst_slug' => 'inclusie-check'
+                ], true); ?>
             </nok-popup-body>
         </nok-popup>
 

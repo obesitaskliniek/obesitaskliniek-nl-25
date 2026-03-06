@@ -30,6 +30,8 @@ class BlockRenderers {
 		add_filter( 'render_block_core/button', [ $this, 'render_button_block' ], 10, 2 );
 		add_filter( 'render_block_core/buttons', [ $this, 'render_buttons_block' ], 10, 2 );
 
+		add_filter( 'render_block', [ $this, 'expand_popup_links' ], 10, 2 );
+
 		// Priority 11: run AFTER wpautop (priority 10) to clean up <p> tags
 		// it injects inside .wp-block-buttons (caused by bare <a> tags after
 		// render_button_block strips the .wp-block-button wrapper divs)
@@ -125,20 +127,24 @@ class BlockRenderers {
 			return $block_content;
 		}
 
-		// Extract all inner content, stripping paragraph wrappers
-		$text = '';
+		// Extract quote text and citation separately
+		$text     = '';
+		$citation = '';
 		foreach ( $blockquote->childNodes as $node ) {
 			if ( $node->nodeName === 'p' ) {
-				// Get innerHTML only (content without the <p> tags)
 				foreach ( $node->childNodes as $child ) {
 					$text .= $dom->saveHTML( $child );
 				}
-				// Add space between paragraphs if multiple exist
 				$text .= ' ';
+			} elseif ( $node->nodeName === 'cite' ) {
+				foreach ( $node->childNodes as $child ) {
+					$citation .= $dom->saveHTML( $child );
+				}
 			}
 		}
 
-		$text = trim( $text );
+		$text     = trim( $text );
+		$citation = trim( $citation );
 
 		// Bail if no content extracted
 		if ( empty( $text ) ) {
@@ -149,10 +155,15 @@ class BlockRenderers {
 		$icon = Assets::getIcon( 'ui_quote' );
 
 		// Rebuild with theme structure
+		$citation_html = $citation !== ''
+			? sprintf( '<cite class="nok-quote__citation">%s</cite>', $citation )
+			: '';
+
 		return sprintf(
-			'<blockquote class="wp-block-quote nok-quote nok-fs-5 nok-my-2"><div class="nok-quote__icon">%s</div><p class="nok-quote__text">%s</p></blockquote>',
+			'<blockquote class="wp-block-quote nok-quote nok-fs-5 nok-my-2"><div class="nok-quote__icon">%s</div><p class="nok-quote__text">%s</p>%s</blockquote>',
 			$icon,
-			$text
+			$text,
+			$citation_html
 		);
 	}
 
@@ -342,6 +353,63 @@ class BlockRenderers {
 			'class="$1 nok-equal-width"',
 			$block_content,
 			1
+		);
+	}
+
+	/**
+	 * Build toggler data-attribute string for a popup trigger
+	 *
+	 * Single source of truth for the toggler attributes that open a popup.
+	 * Used by expand_popup_links() and available for close-button templates.
+	 *
+	 * @param string $popup_id HTML id of the popup element (e.g. 'popup-bmi-calculator')
+	 *
+	 * @return string HTML attribute string
+	 */
+	public static function get_popup_toggler_attrs( string $popup_id ): string {
+		return 'data-toggles-class="popup-open" data-class-target="nok-top-navigation"'
+		       . ' data-toggle-event="click"'
+		       . ' data-toggles-attribute="data-state" data-toggles-attribute-value="open"'
+		       . ' data-attribute-target="#' . esc_attr( $popup_id ) . '"';
+	}
+
+	/**
+	 * Convert editor popup link spans to frontend anchor tags with toggler attributes
+	 *
+	 * The editor stores popup links as:
+	 *   <span class="nok-popup-link" data-popup="popup-id">text</span>
+	 *
+	 * This filter converts them to functional anchor tags:
+	 *   <a href="#" class="nok-popup-link" data-toggles-class="..." ...>text</a>
+	 *
+	 * Uses <span> in the editor to avoid collision with core's link format (which owns <a>).
+	 *
+	 * @param string $block_content Rendered block HTML
+	 * @param array  $block         Block data
+	 *
+	 * @return string Modified HTML with popup links expanded
+	 */
+	public function expand_popup_links( string $block_content, array $block ): string {
+		if ( strpos( $block_content, 'nok-popup-link' ) === false ) {
+			return $block_content;
+		}
+
+		return preg_replace_callback(
+			'/<span\s([^>]*\bnok-popup-link\b[^>]*)>(.*?)<\/span>/is',
+			function ( $matches ) {
+				$attrs_str = $matches[1];
+				$text      = $matches[2];
+
+				if ( ! preg_match( '/data-popup="([^"]+)"/', $attrs_str, $popup_match ) ) {
+					return $matches[0];
+				}
+
+				$popup_id = $popup_match[1];
+				$attrs    = self::get_popup_toggler_attrs( $popup_id );
+
+				return '<a href="#" class="nok-popup-link" ' . $attrs . '>' . $text . '</a>';
+			},
+			$block_content
 		);
 	}
 

@@ -44,6 +44,11 @@ module.exports = {
             'src/nok-block-style-toggles.js'
         ),
 
+        'assets/js/nok-popup-link-format': path.resolve(
+            __dirname,
+            'src/nok-popup-link-format.js'
+        ),
+
         'blocks/embed-nok-page-part/index': path.resolve(
             __dirname,
             'src/blocks/embed-nok-page-part/index.js'

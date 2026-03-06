@@ -68,4 +68,4 @@
 
     <body <?php body_class( 'no-js no-debug nok-bg-body nok-text-contrast' ); ?>>
     <a class="screen-reader-text" href="#main-content"><?php esc_html_e( 'Ga naar inhoud', 'nok' ); ?></a>
-    <main id="main-content">
+    <main id="main-content" data-requires="./nok-toggler.mjs">

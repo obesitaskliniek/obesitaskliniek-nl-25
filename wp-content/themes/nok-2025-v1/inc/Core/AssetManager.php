@@ -222,6 +222,30 @@ class AssetManager {
 				);
 			}
 		}
+
+		// Enqueue popup link format for block editor
+		if ( in_array( $hook, [ 'post.php', 'post-new.php' ] ) ) {
+			$screen = get_current_screen();
+			if ( $screen && $screen->is_block_editor() ) {
+				$popup_asset = require get_theme_file_path( '/assets/js/nok-popup-link-format.asset.php' );
+				wp_enqueue_script(
+					'nok-popup-link-format',
+					get_stylesheet_directory_uri() . '/assets/js/nok-popup-link-format.js',
+					$popup_asset['dependencies'],
+					$popup_asset['version']
+				);
+
+				wp_localize_script(
+					'nok-popup-link-format',
+					'nokPopupTargets',
+					[
+						[ 'id' => 'popup-bmi-calculator', 'label' => 'BMI Calculator' ],
+						[ 'id' => 'popup-search', 'label' => 'Zoeken' ],
+						[ 'id' => 'popup-vragenlijst', 'label' => 'Vragenlijst' ],
+					]
+				);
+			}
+		}
 	}
 
 	/**
@@ -325,6 +349,43 @@ class AssetManager {
                 }
                 .editor-styles-wrapper::after {
                     height: 60px !important;
+                }
+                .editor-styles-wrapper .nok-popup-link {
+                    color: var(--wp-admin-theme-color, #007cba);
+                    text-decoration: underline;
+                    cursor: pointer;
+                    position: relative;
+                }
+                .editor-styles-wrapper .nok-popup-link::after {
+                    content: "";
+                    display: inline-block;
+                    width: 0.75em;
+                    height: 0.75em;
+                    margin-left: 0.15em;
+                    vertical-align: baseline;
+                    background: currentColor;
+                    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm0 16H5V5h14v14zM7 7h4v2H7zm0 4h10v2H7zm0 4h10v2H7z%27/%3E%3C/svg%3E") no-repeat center / contain;
+                    mask: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm0 16H5V5h14v14zM7 7h4v2H7zm0 4h10v2H7zm0 4h10v2H7z%27/%3E%3C/svg%3E") no-repeat center / contain;
+                }
+                .editor-styles-wrapper .nok-popup-link::before {
+                    content: "Popup-link";
+                    position: absolute;
+                    bottom: 100%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    padding: 2px 8px;
+                    border-radius: 3px;
+                    background: #1e1e1e;
+                    color: #fff;
+                    font-size: 11px;
+                    line-height: 1.6;
+                    white-space: nowrap;
+                    pointer-events: none;
+                    opacity: 0;
+                    transition: opacity 0.15s;
+                }
+                .editor-styles-wrapper .nok-popup-link:hover::before {
+                    opacity: 1;
                 }
             </style>';
 		}

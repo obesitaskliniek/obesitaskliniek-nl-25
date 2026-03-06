@@ -82,6 +82,26 @@ const SWIPE_THRESHOLD = 50;
 const SWIPE_VELOCITY = 0.3;
 
 // ============================================================================
+// CLOSE EVENT DISPATCH
+// ============================================================================
+
+/**
+ * Dispatches a 'nok-popup:close' CustomEvent on elements that have
+ * a data-on-close attribute when any attribute is removed from them.
+ *
+ * @private
+ * @param {HTMLElement} target - Element that had an attribute removed
+ */
+function dispatchCloseEventIfNeeded(target) {
+    if (target.dataset?.onClose) {
+        target.dispatchEvent(new CustomEvent('nok-popup:close', {
+            bubbles: true,
+            detail: { action: target.dataset.onClose }
+        }));
+    }
+}
+
+// ============================================================================
 // SWIPE GESTURE HANDLER
 // ============================================================================
 /**
@@ -463,6 +483,7 @@ function executeAction(targetElements, actionType, method, value, restoreState) 
             if (shouldRemove) {
                 const oldValue = target.getAttribute(attrName);
                 target.removeAttribute(attrName);
+                dispatchCloseEventIfNeeded(target);
 
                 if (restoreState !== RESTORE_SET) {
                     undoOps.push({
@@ -593,6 +614,7 @@ function executeUndoStack(undoStack) {
             target.setAttribute(...value);
         } else if (method === 'removeAttribute') {
             target.removeAttribute(...value);
+            dispatchCloseEventIfNeeded(target);
         } else {
             // classList methods
             target[method](...value);
