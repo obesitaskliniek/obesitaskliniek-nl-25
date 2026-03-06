@@ -13,6 +13,8 @@ namespace NOK2025\V1;
  *   URL structure: /vestigingen/{vestiging-slug}/{regio-slug}/
  * - kennisbank: Knowledge base with FAQ and informational articles
  *   URL structure: /kennisbank/{category}/{post-slug}/
+ * - vragenlijst: Interactive questionnaires (e.g. inclusie-check)
+ *   Not public — rendered via post-part templates in popups/pages
  *
  * Protects internal post types from public access:
  * - Returns 404 for page_part and template_layout single views
@@ -39,6 +41,7 @@ class PostTypes {
 		add_filter( 'request', [ $this, 'disambiguate_kennisbank_urls' ] );
 		add_filter( 'rest_post_search_query', [ $this, 'exclude_internal_types_from_rest_search' ], 10, 2 );
 		add_filter( 'rest_page_part_collection_params', [ $this, 'raise_page_part_per_page_limit' ] );
+		add_action( 'admin_notices', [ $this, 'display_vragenlijst_config_notices' ] );
 	}
 
 	/**
@@ -51,6 +54,7 @@ class PostTypes {
 		$this->register_regio_post_type();
 		$this->register_kennisbank_taxonomy();
 		$this->register_kennisbank_post_type();
+		$this->register_vragenlijst_post_type();
 		$this->track_archive_post_types();
 	}
 
@@ -411,6 +415,247 @@ class PostTypes {
 			'slug'  => 'kennisbank',
 			'label' => $labels['name'],
 		];
+	}
+
+	/**
+	 * Register the vragenlijst custom post type
+	 *
+	 * Vragenlijsten are interactive questionnaires (e.g., the inclusie-check).
+	 * Not public — rendered via post-part templates embedded in popups or pages.
+	 * Config stored as JSON in _vl_config meta field.
+	 */
+	private function register_vragenlijst_post_type(): void {
+		$labels = [
+			'name'               => __( 'Vragenlijsten', THEME_TEXT_DOMAIN ),
+			'singular_name'      => __( 'Vragenlijst', THEME_TEXT_DOMAIN ),
+			'add_new_item'       => __( 'Nieuwe vragenlijst toevoegen', THEME_TEXT_DOMAIN ),
+			'edit_item'          => __( 'Vragenlijst bewerken', THEME_TEXT_DOMAIN ),
+			'new_item'           => __( 'Nieuwe vragenlijst', THEME_TEXT_DOMAIN ),
+			'view_item'          => __( 'Vragenlijst bekijken', THEME_TEXT_DOMAIN ),
+			'search_items'       => __( 'Vragenlijsten zoeken', THEME_TEXT_DOMAIN ),
+			'not_found'          => __( 'Geen vragenlijsten gevonden.', THEME_TEXT_DOMAIN ),
+			'not_found_in_trash' => __( 'Geen vragenlijsten gevonden in prullenbak.', THEME_TEXT_DOMAIN ),
+			'all_items'          => __( 'Alle vragenlijsten', THEME_TEXT_DOMAIN ),
+		];
+
+		$args = [
+			'labels'              => $labels,
+			'description'         => __( 'Interactieve vragenlijsten voor zelfbeoordeling.', THEME_TEXT_DOMAIN ),
+			'public'              => false,
+			'publicly_queryable'  => false,
+			'show_ui'             => true,
+			'show_in_menu'        => true,
+			'show_in_nav_menus'   => false,
+			'show_in_admin_bar'   => true,
+			'show_in_rest'        => true,
+			'rest_base'           => 'vragenlijsten',
+			'menu_position'       => 25,
+			'menu_icon'           => 'dashicons-forms',
+			'capability_type'     => 'post',
+			'hierarchical'        => false,
+			'supports'            => [
+				'title',
+				'editor',
+				'revisions',
+				'custom-fields',
+			],
+			'has_archive'         => false,
+			'rewrite'             => false,
+			'query_var'           => false,
+			'can_export'          => true,
+			'delete_with_user'    => false,
+		];
+
+		register_post_type( 'vragenlijst', $args );
+
+		register_post_meta( 'vragenlijst', '_vl_config', [
+			'type'              => 'string',
+			'single'            => true,
+			'show_in_rest'      => true,
+			'sanitize_callback' => [ $this, 'sanitize_vragenlijst_config' ],
+			'auth_callback'     => function () {
+				return current_user_can( 'edit_posts' );
+			},
+		] );
+	}
+
+	/**
+	 * Sanitize and validate the _vl_config JSON meta field
+	 *
+	 * Validates structure on every save. On failure, stores a transient
+	 * admin notice but does NOT prevent the save — editors can fix errors
+	 * iteratively.
+	 *
+	 * @param mixed $value Raw meta value (JSON string)
+	 *
+	 * @return string Sanitized JSON string
+	 */
+	public function sanitize_vragenlijst_config( $value ): string {
+		if ( empty( $value ) ) {
+			return '';
+		}
+
+		$config = json_decode( $value, true );
+		if ( json_last_error() !== JSON_ERROR_NONE ) {
+			$this->store_vragenlijst_notice( 'Ongeldige JSON: ' . json_last_error_msg() );
+
+			return is_string( $value ) ? $value : '';
+		}
+
+		$errors         = [];
+		$valid_types    = [ 'text', 'number', 'radio', 'select', 'checkbox', 'info' ];
+		$valid_styles   = [ 'positive', 'neutral', 'negative' ];
+		$valid_ops      = [ '==', '!=', '>', '>=', '<', '<=' ];
+		$valid_actions  = [ 'skip_to' ];
+
+		// --- Validate questions ---
+		if ( empty( $config['questions'] ) || ! is_array( $config['questions'] ) ) {
+			$errors[] = 'Minstens één vraag is vereist (questions array)';
+		} else {
+			$question_ids = [];
+			foreach ( $config['questions'] as $i => $q ) {
+				$pos = 'Vraag ' . ( $i + 1 );
+
+				if ( empty( $q['id'] ) || ! is_string( $q['id'] ) ) {
+					$errors[] = "{$pos}: 'id' is verplicht (string)";
+				} elseif ( in_array( $q['id'], $question_ids, true ) ) {
+					$errors[] = "{$pos}: duplicaat id '{$q['id']}'";
+				} else {
+					$question_ids[] = $q['id'];
+				}
+
+				if ( empty( $q['type'] ) || ! in_array( $q['type'], $valid_types, true ) ) {
+					$errors[] = "{$pos}: ongeldig of ontbrekend type";
+				}
+
+				if ( empty( $q['label'] ) && ( $q['type'] ?? '' ) !== 'info' ) {
+					$errors[] = "{$pos}: 'label' is verplicht";
+				}
+
+				if ( in_array( $q['type'] ?? '', [ 'radio', 'select' ], true ) ) {
+					if ( empty( $q['options'] ) ) {
+						$errors[] = "{$pos}: 'options' is verplicht voor type '{$q['type']}'";
+					} else {
+						foreach ( $q['options'] as $opt_i => $opt ) {
+							if ( ! isset( $opt['value'] ) || $opt['value'] === '' ) {
+								$errors[] = "{$pos}: optie " . ( $opt_i + 1 ) . " heeft een lege waarde";
+							}
+						}
+					}
+				}
+
+				// Validate branch target references
+				if ( ! empty( $q['branch'] ) ) {
+					$branch = $q['branch'];
+					if ( ! empty( $branch['op'] ) && ! in_array( $branch['op'], $valid_ops, true ) ) {
+						$errors[] = "{$pos}: branch operator '{$branch['op']}' is ongeldig";
+					}
+					if ( ! empty( $branch['action'] ) && ! in_array( $branch['action'], $valid_actions, true ) ) {
+						$errors[] = "{$pos}: branch action '{$branch['action']}' is ongeldig";
+					}
+				}
+			}
+		}
+
+		// --- Validate results ---
+		$result_ids  = [];
+		$has_default = false;
+
+		if ( empty( $config['results'] ) || ! is_array( $config['results'] ) ) {
+			$errors[] = 'Minstens één resultaat is vereist (results array)';
+		} else {
+			foreach ( $config['results'] as $i => $r ) {
+				$pos = 'Resultaat ' . ( $i + 1 );
+
+				if ( empty( $r['id'] ) || ! is_string( $r['id'] ) ) {
+					$errors[] = "{$pos}: 'id' is verplicht (string)";
+				} elseif ( in_array( $r['id'], $result_ids, true ) ) {
+					$errors[] = "{$pos}: duplicaat id '{$r['id']}'";
+				} else {
+					$result_ids[] = $r['id'];
+				}
+
+				if ( empty( $r['title'] ) ) {
+					$errors[] = "{$pos}: 'title' is verplicht";
+				}
+
+				if ( ! isset( $r['condition'] ) ) {
+					$errors[] = "{$pos}: 'condition' is verplicht";
+				} elseif ( $r['condition'] === 'default' ) {
+					$has_default = true;
+				}
+
+				if ( ! empty( $r['style'] ) && ! in_array( $r['style'], $valid_styles, true ) ) {
+					$errors[] = "{$pos}: ongeldige style '{$r['style']}'";
+				}
+
+				// Sanitize body HTML
+				if ( ! empty( $r['body'] ) ) {
+					$config['results'][ $i ]['body'] = wp_kses_post( $r['body'] );
+				}
+
+				// Validate CTA URL — only relative paths or same-domain URLs allowed
+				if ( ! empty( $r['cta_url'] ) ) {
+					$url = $r['cta_url'];
+					if ( ! str_starts_with( $url, '/' ) ) {
+						$host = wp_parse_url( $url, PHP_URL_HOST );
+						if ( $host && ! str_ends_with( $host, 'obesitaskliniek.nl' ) ) {
+							$config['results'][ $i ]['cta_url'] = '';
+							$errors[]                           = "{$pos}: externe URL's zijn niet toegestaan in CTA";
+						}
+					}
+				}
+			}
+
+			if ( ! $has_default ) {
+				$errors[] = "Precies één resultaat moet condition: \"default\" hebben";
+			}
+		}
+
+		// Validate branch targets reference existing question/result IDs
+		$all_ids = array_merge( $question_ids ?? [], $result_ids );
+		foreach ( ( $config['questions'] ?? [] ) as $i => $q ) {
+			if ( ! empty( $q['branch']['target'] ) ) {
+				$target = $q['branch']['target'];
+				if ( is_string( $target ) && ! in_array( $target, $all_ids, true ) ) {
+					$errors[] = 'Vraag ' . ( $i + 1 ) . ": branch target '{$target}' verwijst naar onbekend ID";
+				}
+			}
+		}
+
+		if ( ! empty( $errors ) ) {
+			$this->store_vragenlijst_notice( implode( '; ', $errors ) );
+		}
+
+		// Re-encode to persist sanitized body HTML
+		return wp_json_encode( $config );
+	}
+
+	/**
+	 * Store a vragenlijst config validation notice as a user transient
+	 *
+	 * @param string $message Error description
+	 */
+	private function store_vragenlijst_notice( string $message ): void {
+		set_transient(
+			'vragenlijst_config_errors_' . get_current_user_id(),
+			$message,
+			60
+		);
+	}
+
+	/**
+	 * Display vragenlijst config validation notices in wp-admin
+	 */
+	public function display_vragenlijst_config_notices(): void {
+		$transient_key = 'vragenlijst_config_errors_' . get_current_user_id();
+		$message       = get_transient( $transient_key );
+
+		if ( $message ) {
+			delete_transient( $transient_key );
+			echo '<div class="notice notice-warning is-dismissible"><p><strong>Vragenlijst configuratie:</strong> '
+			     . esc_html( $message ) . '</p></div>';
+		}
 	}
 
 	/**
@@ -816,7 +1061,7 @@ class PostTypes {
 	 * @return array<string, mixed> Modified query arguments
 	 */
 	public function exclude_internal_types_from_rest_search( array $query_args, \WP_REST_Request $request ): array {
-		$excluded = [ 'page_part', 'template_layout' ];
+		$excluded = [ 'page_part', 'template_layout', 'vragenlijst' ];
 
 		if ( ! empty( $query_args['post_type'] ) && is_array( $query_args['post_type'] ) ) {
 			$query_args['post_type'] = array_values( array_diff( $query_args['post_type'], $excluded ) );

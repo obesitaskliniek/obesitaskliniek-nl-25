@@ -82,8 +82,10 @@ class AllowedEditorBlocks {
 	 */
 	private function get_post_type_config( string $post_type ): ?array {
 		$configs = [
-			// Pages: only page-part embeds (content is built from page parts)
-			'page'            => [ 'core' => false, 'nok' => [ 'embed-nok-page-part' ] ],
+			// Pages: admins get full access; editors only get page-part embeds
+			'page'            => current_user_can( 'manage_options' )
+				? [ 'core' => true, 'nok' => 'all' ]
+				: [ 'core' => false, 'nok' => [ 'embed-nok-page-part' ] ],
 
 			// Page parts: core content blocks + all NOK blocks
 			'page_part'       => [ 'core' => true, 'nok' => 'all' ],

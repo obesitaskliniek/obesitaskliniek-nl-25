@@ -5291,6 +5291,250 @@ body.scrolled-100 .nok-scroll-progress__progress {
 .nok-scroll-progress:active {
   transform: scale(0.95);
 }
+.nok-vragenlijst {
+  display: block;
+}
+.nok-vragenlijst__intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nok-space-fluid-md);
+}
+.nok-vragenlijst__wizard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nok-space-fluid-md);
+}
+.nok-vragenlijst__progress {
+  height: 4px;
+  background: var(--nok-body--darker);
+  overflow: hidden;
+  border-radius: calc(var(--nok-default-border-radius, 0.4rem) * 0.75);
+  overflow: hidden;
+}
+.nok-vragenlijst__progress-fill {
+  height: 100%;
+  background: var(--nok-lightblue);
+  overflow: hidden;
+  border-radius: calc(var(--nok-default-border-radius, 0.4rem) * 0.75);
+}
+@media (prefers-reduced-motion: no-preference) {
+  body.__enable-transitions .nok-vragenlijst__progress-fill, body.no-js .nok-vragenlijst__progress-fill {
+    transition: width 300ms ease;
+  }
+}
+.nok-vragenlijst__question {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nok-space-fluid-sm);
+}
+.nok-vragenlijst__label {
+  font-family: var(--nok-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
+  font-size-adjust: var(--nok-heading-font-size-adjust, 0.444);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  text-rendering: optimizelegibility;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.25rem;
+  display: block;
+}
+.nok-vragenlijst__help {
+  opacity: 0.7;
+  font-size: 0.9em;
+}
+.nok-vragenlijst__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nok-space-fluid-xs);
+}
+.nok-vragenlijst__input {
+  padding: var(--nok-space-sm) var(--nok-space-md);
+  border: 2px solid var(--nok-body--darker);
+  overflow: hidden;
+  border-radius: var(--nok-default-border-radius, 0.4rem);
+  font-size: 1rem;
+  font-family: inherit;
+  color: inherit;
+  background: transparent;
+  width: 100%;
+  box-sizing: border-box;
+}
+.nok-vragenlijst__input:focus {
+  outline: 2px solid var(--nok-lightblue);
+  outline-offset: 2px;
+  border-color: var(--nok-lightblue);
+}
+.nok-vragenlijst select.nok-vragenlijst__input {
+  -webkit-appearance: auto;
+     -moz-appearance: auto;
+          appearance: auto;
+}
+.nok-vragenlijst__radio-option {
+  display: flex;
+  align-items: center;
+  gap: var(--nok-space-fluid-sm);
+  padding: var(--nok-space-sm) var(--nok-space-md);
+  border: 2px solid var(--nok-body--darker);
+  overflow: hidden;
+  border-radius: var(--nok-default-border-radius, 0.4rem);
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  body.__enable-transitions .nok-vragenlijst__radio-option, body.no-js .nok-vragenlijst__radio-option {
+    transition: border-color 150ms ease, background-color 150ms ease;
+  }
+}
+.nok-vragenlijst__radio-option:hover {
+  border-color: var(--nok-lightblue);
+}
+.nok-vragenlijst__radio-option.is-selected {
+  border-color: var(--nok-lightblue);
+  background: oklch(from var(--nok-lightblue) l c h/0.08);
+}
+.nok-vragenlijst__radio-option input[type=radio] {
+  accent-color: var(--nok-lightblue);
+  width: 1.2em;
+  height: 1.2em;
+  flex-shrink: 0;
+}
+.nok-vragenlijst__radio-option span {
+  flex: 1;
+}
+.nok-vragenlijst__checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: var(--nok-space-fluid-sm);
+  padding: var(--nok-space-sm) var(--nok-space-md);
+  cursor: pointer;
+}
+.nok-vragenlijst__checkbox-option input[type=checkbox] {
+  accent-color: var(--nok-lightblue);
+  width: 1.2em;
+  height: 1.2em;
+  flex-shrink: 0;
+}
+.nok-vragenlijst__bmi-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nok-space-fluid-sm);
+}
+.nok-vragenlijst__bmi-hw, .nok-vragenlijst__bmi-direct {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nok-space-fluid-xs);
+}
+.nok-vragenlijst__bmi-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.nok-vragenlijst__bmi-field span {
+  font-size: 0.85em;
+  opacity: 0.7;
+}
+.nok-vragenlijst__bmi-result {
+  font-size: 1.1em;
+  padding: var(--nok-space-xs) 0;
+}
+.nok-vragenlijst__bmi-result strong {
+  font-family: var(--nok-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
+  font-size-adjust: var(--nok-heading-font-size-adjust, 0.444);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  text-rendering: optimizelegibility;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 500;
+}
+.nok-vragenlijst__bmi-toggle {
+  all: unset;
+  cursor: pointer;
+  font-size: 0.85em;
+  opacity: 0.6;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.nok-vragenlijst__bmi-toggle:hover {
+  opacity: 1;
+}
+.nok-vragenlijst__info-text {
+  padding: var(--nok-space-sm) 0;
+  line-height: 1.6;
+}
+.nok-vragenlijst__error {
+  color: var(--nok-error);
+  font-size: 0.85em;
+}
+.nok-vragenlijst__nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--nok-space-fluid-sm);
+  padding-top: var(--nok-space-fluid-sm);
+}
+.nok-vragenlijst__next {
+  margin-left: auto;
+}
+.nok-vragenlijst__result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nok-space-fluid-md);
+  padding: var(--nok-space-fluid-lg);
+  overflow: hidden;
+  border-radius: var(--nok-default-border-radius--large, 1rem);
+}
+.nok-vragenlijst__result--positive {
+  background: oklch(from var(--nok-green) l c h/0.08);
+  border-left: 4px solid var(--nok-green);
+}
+.nok-vragenlijst__result--neutral {
+  background: var(--nok-body--darker);
+}
+.nok-vragenlijst__result--negative {
+  background: oklch(from var(--nok-error) l c h/0.08);
+  border-left: 4px solid var(--nok-error);
+}
+.nok-vragenlijst__result-title {
+  font-family: var(--nok-heading-font-family, "Realist", Arial, Helvetica, sans-serif);
+  font-size-adjust: var(--nok-heading-font-size-adjust, 0.444);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  text-rendering: optimizelegibility;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: calc(1.275rem + 0.3vw);
+}
+@media (min-width: 1200px) {
+  .nok-vragenlijst__result-title {
+    font-size: 1.5rem;
+  }
+}
+.nok-vragenlijst__result-title {
+  margin: 0;
+}
+.nok-vragenlijst__result-body {
+  line-height: 1.6;
+}
+.nok-vragenlijst__result-body p:last-child {
+  margin-bottom: 0;
+}
+.nok-vragenlijst__result-cta {
+  align-self: flex-start;
+}
+.nok-vragenlijst__restart {
+  align-self: flex-start;
+}
+.nok-vragenlijst__noscript {
+  padding: var(--nok-space-fluid-md);
+  background: var(--nok-body--darker);
+  overflow: hidden;
+  border-radius: var(--nok-default-border-radius, 0.4rem);
+}
 nok-section__inner {
   width: 100%;
   padding-right: var(--nok-nok-spacing-section-sides, 3rem);

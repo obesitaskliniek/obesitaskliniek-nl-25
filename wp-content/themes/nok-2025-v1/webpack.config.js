@@ -49,6 +49,11 @@ module.exports = {
             'src/nok-popup-link-format.js'
         ),
 
+        'assets/js/nok-vragenlijst-editor': path.resolve(
+            __dirname,
+            'src/nok-vragenlijst-editor.js'
+        ),
+
         'blocks/embed-nok-page-part/index': path.resolve(
             __dirname,
             'src/blocks/embed-nok-page-part/index.js'

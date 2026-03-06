@@ -246,6 +246,20 @@ class AssetManager {
 				);
 			}
 		}
+
+		// Enqueue vragenlijst editor for vragenlijst CPT
+		if ( in_array( $hook, [ 'post.php', 'post-new.php' ] ) ) {
+			$screen = get_current_screen();
+			if ( $screen && $screen->post_type === 'vragenlijst' && $screen->is_block_editor() ) {
+				$vl_asset = require get_theme_file_path( '/assets/js/nok-vragenlijst-editor.asset.php' );
+				wp_enqueue_script(
+					'nok-vragenlijst-editor',
+					get_stylesheet_directory_uri() . '/assets/js/nok-vragenlijst-editor.js',
+					$vl_asset['dependencies'],
+					$vl_asset['version']
+				);
+			}
+		}
 	}
 
 	/**

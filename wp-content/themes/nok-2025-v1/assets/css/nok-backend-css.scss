@@ -57,6 +57,14 @@
   }
 }
 
+// Vragenlijst editor modal — wider than WP default
+.nok-vragenlijst-modal {
+  .components-modal__content {
+    width: 960px;
+    max-width: 90vw;
+  }
+}
+
 blockquote.wp-block-quote {
   font-size: 2em;
 

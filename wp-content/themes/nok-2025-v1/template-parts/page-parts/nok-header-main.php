@@ -56,10 +56,14 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT_ABS . '/assets/img/nok-logo.
         </nok-popup>
 
         <!-- POPUP: VRAGENLIJST -->
+        <?php
+        $vl_post = get_posts(['post_type' => 'vragenlijst', 'name' => 'inclusie-check', 'posts_per_page' => 1, 'post_status' => 'publish']);
+        $vl_title = !empty($vl_post) ? get_the_title($vl_post[0]) : 'Vragenlijst';
+        ?>
         <nok-popup class="nok-bg-body nok-dark-bg-darkerblue" id="popup-vragenlijst"
                    data-on-close="reset">
             <nok-popup-header>
-                <nok-popup-title>Kom ik in aanmerking?</nok-popup-title>
+                <nok-popup-title><?= esc_html($vl_title) ?></nok-popup-title>
                 <button title="Sluiten" aria-label="Sluiten" class="nok-button nok-button--small"
                         data-unsets-class="popup-open" data-class-target="nok-top-navigation"
                         data-toggle-event="click"
