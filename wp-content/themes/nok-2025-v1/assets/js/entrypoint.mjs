@@ -24,8 +24,9 @@ logger.info(NAME, 'Starting up...');
 
 window.exports = "object" == typeof window.exports ? window.exports : {}; //hack for scripts loaded as modules (e.g. AOS)
 
-events.docLoaded(function () {
-    //enable transitions once everything's done, to prevent weird animation FOUCs
+events.imgsLoaded(function () {
+    //enable transitions once visible content has rendered (non-lazy images loaded),
+    //without waiting for third-party scripts (GTM, Facebook, CookieScript)
     document.body.classList.add('__enable-transitions');
 
     events.addListener('scroll', (e) => {
