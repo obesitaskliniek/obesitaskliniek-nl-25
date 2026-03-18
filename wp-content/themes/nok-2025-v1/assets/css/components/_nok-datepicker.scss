@@ -271,3 +271,15 @@ $prefix: 'nok-datepicker';
     }
   }
 }
+
+// Month selection mode - highlight current month days
+.#{$prefix}__popup--month-mode {
+  .#{$prefix}__day--in-selected-month {
+    background: color-mix(in oklch, var(--#{components-base.$prefix}-lightblue) 25%, transparent);
+
+    &:hover {
+      background: var(--#{components-base.$prefix}-lightblue);
+      color: var(--#{components-base.$prefix}-white);
+    }
+  }
+}

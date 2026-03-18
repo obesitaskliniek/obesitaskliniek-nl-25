@@ -2,9 +2,9 @@
 /**
  * Archive Template: Voorlichtingen (Agenda)
  *
- * Displays upcoming voorlichting (information session) posts in a week-based view.
+ * Displays upcoming voorlichting (information session) posts in a month-based view.
  * Supports filtering by vestiging via ?locatie= query parameter.
- * Supports week navigation via ?week= parameter (ISO week start date).
+ * Supports month navigation via ?maand= and ?jaar= parameters.
  *
  * @package NOK2025_V1
  * @since   1.0.0
@@ -14,65 +14,68 @@ use NOK2025\V1\Assets;
 use NOK2025\V1\Helpers;
 use NOK2025\V1\Theme;
 
+// Backward compat: ?week= redirects to ?maand=&jaar= (must happen before get_header sends output)
+$timezone = new DateTimeZone( 'Europe/Amsterdam' );
+$today    = new DateTime( 'now', $timezone );
+
+if ( isset( $_GET['week'] ) && ! isset( $_GET['maand'] ) ) {
+    $redirect_date = null;
+    if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $_GET['week'] ) ) {
+        $redirect_date = new DateTime( $_GET['week'], $timezone );
+    } elseif ( preg_match( '/^\d{1,2}$/', $_GET['week'] ) ) {
+        $week_year = isset( $_GET['jaar'] ) && preg_match( '/^\d{4}$/', $_GET['jaar'] )
+                ? (int) $_GET['jaar']
+                : (int) $today->format( 'Y' );
+        $redirect_date = new DateTime( 'now', $timezone );
+        $redirect_date->setISODate( $week_year, (int) $_GET['week'], 1 );
+    }
+    if ( $redirect_date ) {
+        $filter_loc   = isset( $_GET['locatie'] ) ? sanitize_text_field( $_GET['locatie'] ) : '';
+        $redirect_url = get_post_type_archive_link( 'voorlichting' );
+        $redirect_url = add_query_arg( [
+            'maand' => (int) $redirect_date->format( 'n' ),
+            'jaar'  => $redirect_date->format( 'Y' ),
+        ], $redirect_url );
+        if ( $filter_loc ) {
+            $redirect_url = add_query_arg( 'locatie', rawurlencode( $filter_loc ), $redirect_url );
+        }
+        wp_safe_redirect( $redirect_url, 301 );
+        exit;
+    }
+}
+
 get_header( 'generic' );
 
 // Get vestiging filter from query string (use 'locatie' to avoid conflict with 'vestiging' post type)
 $filter_vestiging = isset( $_GET['locatie'] ) ? sanitize_text_field( $_GET['locatie'] ) : '';
 
-// Week-based navigation
-$timezone = new DateTimeZone( 'Europe/Amsterdam' );
-$today    = new DateTime( 'now', $timezone );
-
-// Get week start from query param or default to current week's Monday
-// Supports: ?week=2025-12-15 (date) or ?week=51&year=2025 (ISO week number)
-if ( isset( $_GET['week'] ) && preg_match( '/^\d{4}-\d{2}-\d{2}$/', $_GET['week'] ) ) {
-    // Date format: YYYY-MM-DD
-    $week_start = new DateTime( $_GET['week'], $timezone );
-} elseif ( isset( $_GET['week'] ) && preg_match( '/^\d{1,2}$/', $_GET['week'] ) ) {
-    // ISO week number format: ?week=51&jaar=2025
-    $week_num  = (int) $_GET['week'];
-    $week_year = isset( $_GET['jaar'] ) && preg_match( '/^\d{4}$/', $_GET['jaar'] )
-            ? (int) $_GET['jaar']
-            : (int) $today->format( 'Y' );
-    // Create date from ISO week (returns Monday of that week)
-    $week_start = new DateTime( 'now', $timezone );
-    $week_start->setISODate( $week_year, $week_num, 1 ); // 1 = Monday
+// Parse month/year from query params or default to current month
+if ( isset( $_GET['maand'] ) && preg_match( '/^(?:1[0-2]|[1-9])$/', $_GET['maand'] )
+     && isset( $_GET['jaar'] ) && preg_match( '/^\d{4}$/', $_GET['jaar'] ) ) {
+    $month_start = new DateTime( 'now', $timezone );
+    $month_start->setDate( (int) $_GET['jaar'], (int) $_GET['maand'], 1 );
 } else {
-    // Default: find Monday of current week
-    $week_start  = clone $today;
-    $day_of_week = (int) $week_start->format( 'N' ); // 1 = Monday, 7 = Sunday
-    if ( $day_of_week > 1 ) {
-        $week_start->modify( '-' . ( $day_of_week - 1 ) . ' days' );
-    }
+    // Default: 1st of current month
+    $month_start = clone $today;
+    $month_start->setDate( (int) $today->format( 'Y' ), (int) $today->format( 'n' ), 1 );
 }
-$week_start->setTime( 0, 0, 0 );
+$month_start->setTime( 0, 0, 0 );
 
-// Calculate week end (Sunday)
-$week_end = clone $week_start;
-$week_end->modify( '+6 days' );
-$week_end->setTime( 23, 59, 59 );
+// Calculate month end
+$month_end = clone $month_start;
+$month_end->modify( 'last day of this month' );
+$month_end->setTime( 23, 59, 59 );
 
-// Previous and next week dates
-$prev_week = clone $week_start;
-$prev_week->modify( '-7 days' );
-$next_week = clone $week_start;
-$next_week->modify( '+7 days' );
+// Previous and next month
+$prev_month = clone $month_start;
+$prev_month->modify( '-1 month' );
+$next_month = clone $month_start;
+$next_month->modify( '+1 month' );
 
-// Format week range for display
-$week_start_day = $week_start->format( 'j' );
-$week_end_day   = $week_end->format( 'j' );
-$month_start    = Helpers::dutchMonth( (int) $week_start->format( 'n' ) );
-$month_end      = Helpers::dutchMonth( (int) $week_end->format( 'n' ) );
-$year           = $week_start->format( 'Y' );
+// Format month for display: "maart 2026"
+$date_range = sprintf( '%s %s', Helpers::dutchMonth( (int) $month_start->format( 'n' ) ), $month_start->format( 'Y' ) );
 
-// Build display string
-if ( $week_start->format( 'n' ) === $week_end->format( 'n' ) ) {
-    $date_range = sprintf( '%s en %s %s %s', $week_start_day, $week_end_day, $month_start, $year );
-} else {
-    $date_range = sprintf( '%s %s en %s %s %s', $week_start_day, $month_start, $week_end_day, $month_end, $year );
-}
-
-// Build query args for the week
+// Build query args for the month
 $query_args = [
         'post_type'      => 'voorlichting',
         'posts_per_page' => - 1,
@@ -84,13 +87,13 @@ $query_args = [
                 'relation' => 'AND',
                 [
                         'key'     => 'aanvangsdatum_en_tijd',
-                        'value'   => $week_start->format( 'Y-m-d H:i:s' ),
+                        'value'   => $month_start->format( 'Y-m-d H:i:s' ),
                         'compare' => '>=',
                         'type'    => 'DATETIME',
                 ],
                 [
                         'key'     => 'aanvangsdatum_en_tijd',
-                        'value'   => $week_end->format( 'Y-m-d H:i:s' ),
+                        'value'   => $month_end->format( 'Y-m-d H:i:s' ),
                         'compare' => '<=',
                         'type'    => 'DATETIME',
                 ],
@@ -119,10 +122,14 @@ $vestigingen = get_posts( [
         'order'          => 'ASC',
 ] );
 
-// Build navigation URLs
-$build_url = function ( $week_date, $locatie = null ) use ( $filter_vestiging ) {
-    $url = get_post_type_archive_link( 'voorlichting' );
-    $url = add_query_arg( 'week', $week_date->format( 'Y-m-d' ), $url );
+// Build navigation URLs (cache archive link — called in closure and datepicker)
+$archive_link = get_post_type_archive_link( 'voorlichting' );
+
+$build_url = function ( $month_date, $locatie = null ) use ( $archive_link, $filter_vestiging ) {
+    $url = add_query_arg( [
+        'maand' => (int) $month_date->format( 'n' ),
+        'jaar'  => $month_date->format( 'Y' ),
+    ], $archive_link );
     $loc = $locatie ?? $filter_vestiging;
     if ( $loc ) {
         $url = add_query_arg( 'locatie', rawurlencode( $loc ), $url );
@@ -131,7 +138,11 @@ $build_url = function ( $week_date, $locatie = null ) use ( $filter_vestiging ) 
     return $url;
 };
 
-$base_week_url = add_query_arg( 'week', $week_start->format( 'Y-m-d' ), get_post_type_archive_link( 'voorlichting' ) );
+// Base URL without locatie filter (used by "clear filter" dropdown option)
+$base_month_url = add_query_arg( [
+    'maand' => (int) $month_start->format( 'n' ),
+    'jaar'  => $month_start->format( 'Y' ),
+], $archive_link );
 ?>
 
     <nok-hero class="nok-section">
@@ -165,7 +176,7 @@ $base_week_url = add_query_arg( 'week', $week_start->format( 'Y-m-d' ), get_post
             nok-mb-3 nok-row-gap-1 nok-column-gap-2">
                 <div class="nok-agenda-week-selector">
                     <h2 class="nok-fs-6 nok-mb-0">
-                        <?php esc_html_e( 'Voorlichtingen tussen', THEME_TEXT_DOMAIN ); ?><br>
+                        <?php esc_html_e( 'Voorlichtingen in', THEME_TEXT_DOMAIN ); ?>
                         <span class="fw-bold"><?= esc_html( $date_range ); ?></span>
                     </h2>
                 </div>
@@ -174,25 +185,24 @@ $base_week_url = add_query_arg( 'week', $week_start->format( 'Y-m-d' ), get_post
                 nok-align-items-center
                  nok-justify-content-to-lg-space-between nok-justify-content-end
                  nok-column-gap-1">
-                    <!-- Week picker -->
+                    <!-- Month picker -->
                     <?php
-                    // Build URL pattern for datepicker navigation (uses ISO week format)
-                    $datepicker_url_base    = get_post_type_archive_link( 'voorlichting' );
+                    // Build URL pattern for datepicker navigation (uses month/year format)
                     $datepicker_url_pattern = add_query_arg( [
-                            'week' => '{week}',
-                            'jaar' => '{jaar}',
-                    ], $datepicker_url_base );
+                            'maand' => '{maand}',
+                            'jaar'  => '{jaar}',
+                    ], $archive_link );
                     if ( $filter_vestiging ) {
                         $datepicker_url_pattern = add_query_arg( 'locatie', rawurlencode( $filter_vestiging ), $datepicker_url_pattern );
                     }
                     ?>
                     <div class="nok-datepicker"
                          data-requires="./nok-datepicker.mjs">
-                        <button type="button" title="Klik om een andere week te selecteren"
+                        <button type="button" title="Klik om een andere maand te selecteren"
                                 class="nok-datepicker__trigger nok-bg-white nok-text-darkerblue"
                                 data-datepicker
-                                data-mode="week"
-                                data-value="<?= esc_attr( $week_start->format( 'Y-m-d' ) ); ?>"
+                                data-mode="month"
+                                data-value="<?= esc_attr( $month_start->format( 'Y-m-d' ) ); ?>"
                                 data-url-pattern="<?= esc_attr( $datepicker_url_pattern ); ?>"
                                 aria-expanded="false"
                                 aria-haspopup="dialog">
@@ -206,7 +216,7 @@ $base_week_url = add_query_arg( 'week', $week_start->format( 'Y-m-d' ), get_post
                         <div class="nok-select-wrapper nok-form-element nok-mb-0">
                             <select class="nok-select nok-bg-white nok-text-darkerblue"
                                     onchange="if(this.value) window.location.href=this.value">
-                                <option value="<?= esc_url( $base_week_url ); ?>" <?= empty( $filter_vestiging ) ? 'selected' : ''; ?>>
+                                <option value="<?= esc_url( $base_month_url ); ?>" <?= empty( $filter_vestiging ) ? 'selected' : ''; ?>>
                                     <?php esc_html_e( 'Filter evenementen', THEME_TEXT_DOMAIN ); ?>
                                 </option>
                                 <?php foreach ( $vestigingen as $vestiging ):
@@ -217,7 +227,7 @@ $base_week_url = add_query_arg( 'week', $week_start->format( 'Y-m-d' ), get_post
                                     }
                                     $filter_normalized = Helpers::normalize_vestiging_name( $filter_vestiging );
                                     $is_selected       = ! empty( $filter_vestiging ) && strtolower( $filter_normalized ) === strtolower( $vestiging_city );
-                                    $option_url        = $build_url( $week_start, $vestiging_city );
+                                    $option_url        = $build_url( $month_start, $vestiging_city );
                                     ?>
                                     <option value="<?= esc_url( $option_url ); ?>" <?= $is_selected ? 'selected' : ''; ?>>
                                         <?= esc_html( $vestiging_city ); ?>
@@ -296,22 +306,22 @@ $base_week_url = add_query_arg( 'week', $week_start->format( 'Y-m-d' ), get_post
                 </div>
 
             <?php else: ?>
-                <p class="nok-text-center nok-p-2"><?php esc_html_e( 'Geen voorlichtingen gevonden in deze week.', THEME_TEXT_DOMAIN ); ?></p>
+                <p class="nok-text-center nok-p-2"><?php esc_html_e( 'Geen voorlichtingen gevonden in deze maand.', THEME_TEXT_DOMAIN ); ?></p>
             <?php endif; ?>
 
             <?php wp_reset_postdata(); ?>
 
-            <!-- Week navigation bottom -->
+            <!-- Month navigation bottom -->
             <nav class="nok-week-navigation nok-layout-flex nok-layout-flex-row nok-justify-content-space-between nok-mt-3 nok-pt-2 nok-border-top"
-                 aria-label="<?php esc_attr_e( 'Week navigatie', THEME_TEXT_DOMAIN ); ?>">
-                <a href="<?= esc_url( $build_url( $prev_week ) ); ?>"
+                 aria-label="<?php esc_attr_e( 'Maand navigatie', THEME_TEXT_DOMAIN ); ?>">
+                <a href="<?= esc_url( $build_url( $prev_month ) ); ?>"
                    class="nok-button nok-bg-transparent nok-text-darkerblue">
                     <?= Assets::getIcon( 'ui_arrow-left' ); ?>
-                    <?php esc_html_e( 'Vorige week', THEME_TEXT_DOMAIN ); ?>
+                    <?php esc_html_e( 'Vorige maand', THEME_TEXT_DOMAIN ); ?>
                 </a>
-                <a href="<?= esc_url( $build_url( $next_week ) ); ?>"
+                <a href="<?= esc_url( $build_url( $next_month ) ); ?>"
                    class="nok-button nok-bg-transparent nok-text-darkerblue">
-                    <?php esc_html_e( 'Volgende week', THEME_TEXT_DOMAIN ); ?>
+                    <?php esc_html_e( 'Volgende maand', THEME_TEXT_DOMAIN ); ?>
                     <?= Assets::getIcon( 'ui_arrow-right' ); ?>
                 </a>
             </nav>

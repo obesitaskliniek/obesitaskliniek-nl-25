@@ -4227,6 +4227,13 @@ nok-square-block .nok-square-block__footer svg, .nok-square-block .nok-square-bl
 .nok-datepicker__popup--week-mode .nok-datepicker__week:not(.nok-datepicker__week--header):hover .nok-datepicker__day:not(:hover) {
   background: color-mix(in oklch, var(--nok-lightblue) 25%, transparent);
 }
+.nok-datepicker__popup--month-mode .nok-datepicker__day--in-selected-month {
+  background: color-mix(in oklch, var(--nok-lightblue) 25%, transparent);
+}
+.nok-datepicker__popup--month-mode .nok-datepicker__day--in-selected-month:hover {
+  background: var(--nok-lightblue);
+  color: var(--nok-white);
+}
 .nok-quote {
   display: flex;
   flex-direction: column;

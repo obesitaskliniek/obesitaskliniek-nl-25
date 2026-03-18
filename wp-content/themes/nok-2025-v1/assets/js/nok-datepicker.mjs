@@ -22,6 +22,7 @@ const MONTHS = [
 
 const CSS_PREFIX = 'nok-datepicker';
 const WEEK_MODE = 'week';
+const MONTH_MODE = 'month';
 const DATE_MODE = 'date';
 
 // ============================================================================
@@ -169,6 +170,9 @@ class DatepickerInstance {
         if (this.mode === WEEK_MODE) {
             // Snap to Monday of that week
             this.selectedDate = this._getWeekStart(date);
+        } else if (this.mode === MONTH_MODE) {
+            // Snap to 1st of that month
+            this.selectedDate = this._getMonthStart(date);
         } else {
             this.selectedDate = new Date(date);
         }
@@ -188,15 +192,26 @@ class DatepickerInstance {
         this.trigger.dispatchEvent(event);
 
         // Navigate if URL pattern provided
-        // Supports placeholders: {date}, {week}, {jaar}
+        // Supports placeholders: {date}, {week}, {jaar}, {maand}
         if (this.urlPattern) {
-            const isoWeek = this._getISOWeek(this.selectedDate);
-            const [year, week] = isoWeek.split('-');
             // Decode URL first (WordPress add_query_arg encodes curly braces)
-            const url = decodeURIComponent(this.urlPattern)
-                .replace('{date}', this._formatDateISO(this.selectedDate))
-                .replace('{week}', parseInt(week, 10).toString()) // Remove leading zero
-                .replace('{jaar}', year);
+            let url = decodeURIComponent(this.urlPattern)
+                .replace('{date}', this._formatDateISO(this.selectedDate));
+
+            if (this.mode === WEEK_MODE) {
+                // Week mode: use ISO week year (may differ from calendar year at boundaries)
+                const isoWeek = this._getISOWeek(this.selectedDate);
+                const [year, week] = isoWeek.split('-');
+                url = url
+                    .replace('{week}', parseInt(week, 10).toString())
+                    .replace('{jaar}', year);
+            } else {
+                // Month/date mode: use calendar year
+                url = url
+                    .replace('{maand}', (this.selectedDate.getMonth() + 1).toString())
+                    .replace('{jaar}', this.selectedDate.getFullYear().toString());
+            }
+
             window.location.href = url;
         }
     }
@@ -223,6 +238,8 @@ class DatepickerInstance {
         popup.className = `${CSS_PREFIX}__popup`;
         if (this.mode === WEEK_MODE) {
             popup.classList.add(`${CSS_PREFIX}__popup--week-mode`);
+        } else if (this.mode === MONTH_MODE) {
+            popup.classList.add(`${CSS_PREFIX}__popup--month-mode`);
         }
         popup.setAttribute('role', 'dialog');
         popup.setAttribute('aria-modal', 'true');
@@ -408,6 +425,8 @@ class DatepickerInstance {
         today.setHours(0, 0, 0, 0);
 
         const selectedWeekStart = this.mode === WEEK_MODE ? this._getWeekStart(this.selectedDate) : null;
+        const selectedMonth = this.mode === MONTH_MODE ? this.selectedDate.getMonth() : null;
+        const selectedYear = this.mode === MONTH_MODE ? this.selectedDate.getFullYear() : null;
 
         // Add weekday header row
         const headerRow = document.createElement('div');
@@ -435,7 +454,7 @@ class DatepickerInstance {
 
             for (let i = startDay - 1; i >= 0; i--) {
                 const prevDate = new Date(year, month - 1, prevMonthLastDay - i);
-                const btn = this._createDayButton(prevDate, today, selectedWeekStart, true);
+                const btn = this._createDayButton(prevDate, today, selectedWeekStart, true, selectedMonth, selectedYear);
                 currentWeekRow.appendChild(btn);
             }
         }
@@ -452,7 +471,7 @@ class DatepickerInstance {
                 currentWeekId = weekId;
             }
 
-            const btn = this._createDayButton(date, today, selectedWeekStart, false);
+            const btn = this._createDayButton(date, today, selectedWeekStart, false, selectedMonth, selectedYear);
             currentWeekRow.appendChild(btn);
         }
 
@@ -462,7 +481,7 @@ class DatepickerInstance {
             if (daysInLastRow < 7) {
                 for (let i = 1; i <= 7 - daysInLastRow; i++) {
                     const nextDate = new Date(year, month + 1, i);
-                    const btn = this._createDayButton(nextDate, today, selectedWeekStart, true);
+                    const btn = this._createDayButton(nextDate, today, selectedWeekStart, true, selectedMonth, selectedYear);
                     currentWeekRow.appendChild(btn);
                 }
             }
@@ -475,10 +494,12 @@ class DatepickerInstance {
      * @param {Date} today - Today's date (for comparison)
      * @param {Date|null} selectedWeekStart - Start of selected week (for week mode)
      * @param {boolean} isOtherMonth - Whether this day is from adjacent month
+     * @param {number|null} selectedMonth - Selected month index (for month mode)
+     * @param {number|null} selectedYear - Selected year (for month mode)
      * @returns {HTMLButtonElement}
      * @private
      */
-    _createDayButton(date, today, selectedWeekStart, isOtherMonth) {
+    _createDayButton(date, today, selectedWeekStart, isOtherMonth, selectedMonth = null, selectedYear = null) {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = `${CSS_PREFIX}__day`;
@@ -507,6 +528,12 @@ class DatepickerInstance {
             const weekStart = this._getWeekStart(date);
             if (selectedWeekStart && weekStart.getTime() === selectedWeekStart.getTime()) {
                 btn.classList.add(`${CSS_PREFIX}__day--selected`);
+            }
+        } else if (this.mode === MONTH_MODE) {
+            // Highlight days in the selected month (subtle, not !important dark blue)
+            if (selectedMonth !== null && !isOtherMonth
+                && date.getMonth() === selectedMonth && date.getFullYear() === selectedYear) {
+                btn.classList.add(`${CSS_PREFIX}__day--in-selected-month`);
             }
         } else {
             if (this._formatDateISO(date) === this._formatDateISO(this.selectedDate)) {
@@ -552,6 +579,8 @@ class DatepickerInstance {
                 const weekEnd = new Date(weekStart);
                 weekEnd.setDate(weekEnd.getDate() + 6);
                 displayEl.textContent = this._formatWeekRange(weekStart, weekEnd);
+            } else if (this.mode === MONTH_MODE) {
+                displayEl.textContent = this._formatMonth(this.selectedDate);
             } else {
                 displayEl.textContent = this._formatDate(this.selectedDate);
             }
@@ -571,6 +600,28 @@ class DatepickerInstance {
         d.setDate(diff);
         d.setHours(0, 0, 0, 0);
         return d;
+    }
+
+    /**
+     * Get 1st of the month containing date.
+     * @param {Date} date
+     * @returns {Date}
+     * @private
+     */
+    _getMonthStart(date) {
+        const d = new Date(date.getFullYear(), date.getMonth(), 1);
+        d.setHours(0, 0, 0, 0);
+        return d;
+    }
+
+    /**
+     * Format month for display (e.g., "maart 2026").
+     * @param {Date} date
+     * @returns {string}
+     * @private
+     */
+    _formatMonth(date) {
+        return `${MONTHS[date.getMonth()]} ${date.getFullYear()}`;
     }
 
     /**

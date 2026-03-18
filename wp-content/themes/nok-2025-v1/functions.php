@@ -120,8 +120,10 @@ add_action( 'init', function() {
 add_filter( 'query_vars', function( $vars ) {
     $vars[] = 'week';
     $vars[] = 'jaar';
+    $vars[] = 'maand';
     $vars[] = 'locatie';
     $vars[] = 'exclude';         // Kennisbank category exclusion
+    $vars[] = 'flat';            // Kennisbank flat view for Word export
     return $vars;
 } );
 

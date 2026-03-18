@@ -15,6 +15,12 @@ use NOK2025\V1\Assets;
 use NOK2025\V1\Helpers;
 use NOK2025\V1\Theme;
 
+// Flat view: standalone HTML for Word export (?flat=true)
+if ( isset( $_GET['flat'] ) && $_GET['flat'] === 'true' && is_user_logged_in() ) {
+    nok_render_kennisbank_flat_view();
+    exit;
+}
+
 get_header('generic');
 
 // Determine archive type
@@ -222,3 +228,95 @@ query_posts($query_args);
 <?php
 wp_reset_query();
 get_footer();
+
+/**
+ * Render kennisbank posts as standalone HTML for Word export.
+ *
+ * Outputs a minimal HTML page (no theme chrome) with all posts in the current
+ * category context, sorted alphabetically. Designed for copy-pasting to Word.
+ *
+ * Triggered by ?flat=true query parameter.
+ *
+ * @since 1.0.0
+ */
+function nok_render_kennisbank_flat_view(): void {
+    $is_taxonomy_archive = is_tax( 'kennisbank_categories' );
+    $current_term        = $is_taxonomy_archive ? get_queried_object() : null;
+
+    // Build query
+    $query_args = [
+        'post_type'      => 'kennisbank',
+        'posts_per_page' => - 1,
+        'post_status'    => 'publish',
+        'orderby'        => 'title',
+        'order'          => 'ASC',
+    ];
+
+    // Filter by category if viewing a taxonomy archive
+    if ( $current_term && ! is_wp_error( $current_term ) ) {
+        $query_args['tax_query'] = [
+            [
+                'taxonomy'         => 'kennisbank_categories',
+                'field'            => 'term_id',
+                'terms'            => $current_term->term_id,
+                'include_children' => true,
+            ],
+        ];
+    }
+
+    // Handle ?exclude= parameter (comma-separated category slugs)
+    $exclude_param = isset( $_GET['exclude'] ) ? sanitize_text_field( $_GET['exclude'] ) : '';
+    $exclude_slugs = array_filter( array_map( 'trim', explode( ',', $exclude_param ) ) );
+    if ( ! empty( $exclude_slugs ) ) {
+        $query_args['tax_query']             = $query_args['tax_query'] ?? [];
+        $query_args['tax_query']['relation'] = 'AND';
+        $query_args['tax_query'][]           = [
+            'taxonomy' => 'kennisbank_categories',
+            'field'    => 'slug',
+            'terms'    => $exclude_slugs,
+            'operator' => 'NOT IN',
+        ];
+    }
+
+    $posts = new WP_Query( $query_args );
+
+    $title = $current_term ? esc_html( $current_term->name ) : 'Kennisbank';
+    $count = $posts->found_posts;
+    $date  = wp_date( 'j F Y, H:i' );
+    ?>
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <title><?= $title; ?> — NOK Kennisbank (platte weergave)</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, 'Segoe UI', sans-serif; max-width: 960px; margin: 0 auto; padding: 2rem 1rem; line-height: 1.6; color: #1a1a2e; }
+        h1 { text-align: center; margin-bottom: 0.25rem; font-size: 1.75rem; }
+        .meta { text-align: center; color: #666; margin-bottom: 2rem; font-size: 0.875rem; }
+        article { margin-bottom: 3rem; }
+        article h2 { font-size: 1.25rem; padding-bottom: 0.5rem; margin-bottom: 1rem; border-bottom: 2px solid #e0e0e0; position: sticky; top: 0; background: white; z-index: 1; }
+        article .content { font-size: 0.9375rem; }
+        article .content p { margin-bottom: 0.75rem; }
+        article .content ul, article .content ol { margin: 0.75rem 0; padding-left: 1.5rem; }
+        article .content li { margin-bottom: 0.25rem; }
+        article .content img { max-width: 100%; height: auto; }
+        article .content h3, article .content h4 { margin: 1rem 0 0.5rem; }
+        @media print { article h2 { position: static; } }
+    </style>
+</head>
+<body>
+    <h1><?= $title; ?></h1>
+    <p class="meta"><?= esc_html( $count ); ?> artikelen — gegenereerd op <?= esc_html( $date ); ?></p>
+    <?php if ( $posts->have_posts() ): while ( $posts->have_posts() ): $posts->the_post(); ?>
+        <article>
+            <h2><?= esc_html( get_the_title() ); ?></h2>
+            <div class="content"><?= apply_filters( 'the_content', get_the_content() ); ?></div>
+        </article>
+    <?php endwhile; endif; ?>
+    <?php wp_reset_postdata(); ?>
+</body>
+</html>
+    <?php
+}
