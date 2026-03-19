@@ -6834,6 +6834,9 @@ svg.nok-icon.larger {
   -o-object-position: center center;
      object-position: center center;
 }
+.nok-image-cover-blur {
+  position: relative;
+}
 .nok-image-cover-blur-container {
   overflow: hidden;
   border-radius: var(--nok-default-border-radius--large, 1rem);

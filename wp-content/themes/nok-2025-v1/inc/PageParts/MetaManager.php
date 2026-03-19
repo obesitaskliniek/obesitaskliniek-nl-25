@@ -543,7 +543,7 @@ class MetaManager {
 		$registry         = $this->registry->get_registry();
 		$current_template = $_GET['design_template'] ?? '';
 
-		echo '<select name="design_template">';
+		echo '<select name="design_template" aria-label="' . esc_attr__( 'Filter by template', THEME_TEXT_DOMAIN ) . '">';
 		echo '<option value="">' . esc_html__( 'All Templates', THEME_TEXT_DOMAIN ) . '</option>';
 
 		foreach ( $registry as $slug => $data ) {

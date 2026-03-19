@@ -1,0 +1,323 @@
+@use "shared" as components-base;
+
+// Vragenlijst (Questionnaire) — multi-step wizard component
+// BEM block: .nok-vragenlijst
+
+.nok-vragenlijst {
+  display: block;
+
+  // --- Intro screen ---
+  &__intro {
+    display: flex;
+    flex-direction: column;
+    gap: var(--nok-space-fluid-md);
+  }
+
+  &__intro-content {
+    // WordPress content — inherits theme typography
+  }
+
+  // --- Wizard ---
+  &__wizard {
+    display: flex;
+    flex-direction: column;
+    gap: var(--nok-space-fluid-md);
+    text-align: center;
+  }
+
+  // --- Progress stepper (dots + line) ---
+  &__progress {
+    position: relative;
+    height: 3px;
+    background: var(--nok-body--darker);
+    border-radius: 999px;
+    overflow: visible;
+    margin: 12px 14px;
+
+    &::before, &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      border-radius: 50%;
+      box-sizing: border-box;
+    }
+
+    // Active dot (start)
+    &::before {
+      left: 0;
+      width: 10px;
+      height: 10px;
+      background: var(--nok-darkerblue);
+      box-shadow: 0 0 0 3px var(--nok-body--bg, #fff), 0 0 0 5px var(--nok-darkerblue);
+      transform: translate(-50%, -50%);
+    }
+
+    // End dot
+    &::after {
+      right: 0;
+      width: 16px;
+      height: 16px;
+      background: var(--nok-body--bg, #fff);
+      border: 2px solid var(--nok-body--darker);
+      transform: translate(50%, -50%);
+    }
+  }
+
+  &__progress-fill {
+    height: 100%;
+    background: var(--nok-lightblue);
+    border-radius: 999px;
+
+    @include components-base.transition-properties {
+      transition: width 300ms ease;
+    }
+  }
+
+  // --- Question ---
+  &__question {
+    display: flex;
+    flex-direction: column;
+    gap: var(--nok-space-fluid-sm);
+  }
+
+  &__label {
+    @include components-base.nok-heading-font;
+    @include components-base.rfs(1.75rem, font-size);
+    display: block;
+  }
+
+  &__help {
+    opacity: 0.7;
+    font-size: 0.9em;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--nok-space-fluid-xs);
+
+    // Side-by-side layout for radio options
+    &:has(.nok-vragenlijst__radio-option) {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--nok-space-fluid-sm);
+    }
+  }
+
+  // --- Input elements ---
+  &__input {
+    padding: var(--nok-space-sm) var(--nok-space-md);
+    border: 2px solid var(--nok-body--darker);
+    @include components-base.nok-border-radius;
+    font-size: 1rem;
+    font-family: inherit;
+    color: inherit;
+    background: transparent;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+
+    &:focus {
+      outline: 2px solid var(--nok-lightblue);
+      outline-offset: 2px;
+      border-color: var(--nok-lightblue);
+    }
+  }
+
+  select#{&}__input {
+    appearance: auto;
+  }
+
+  // --- Radio options (button-style selection) ---
+  &__radio-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--nok-space-sm) var(--nok-space-md);
+    border: 2px solid var(--nok-body--darker);
+    @include components-base.nok-border-radius;
+    cursor: pointer;
+    user-select: none;
+
+    @include components-base.transition-properties {
+      transition: border-color 150ms ease, background-color 150ms ease;
+    }
+
+    &:hover {
+      border-color: var(--nok-lightblue);
+    }
+
+    &.is-selected {
+      border-color: var(--nok-lightblue);
+      background: oklch(from var(--nok-lightblue) l c h / 0.08);
+    }
+
+    // Focus ring for keyboard navigation
+    &:focus-within {
+      outline: 2px solid var(--nok-lightblue);
+      outline-offset: 2px;
+    }
+
+    input[type="radio"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      clip-path: inset(50%);
+    }
+  }
+
+  // --- Checkbox option ---
+  &__checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: var(--nok-space-fluid-sm);
+    padding: var(--nok-space-sm) var(--nok-space-md);
+    cursor: pointer;
+    text-align: left;
+
+    input[type="checkbox"] {
+      accent-color: var(--nok-lightblue);
+      width: 1.2em;
+      height: 1.2em;
+      flex-shrink: 0;
+    }
+  }
+
+  // --- BMI compound input ---
+  &__bmi-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--nok-space-fluid-sm);
+    text-align: left;
+  }
+
+  &__bmi-hw,
+  &__bmi-direct {
+    display: flex;
+    flex-direction: column;
+    gap: var(--nok-space-fluid-xs);
+  }
+
+  &__bmi-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    span {
+      font-size: 0.85em;
+      opacity: 0.7;
+    }
+  }
+
+  &__bmi-result {
+    font-size: 1.1em;
+    padding: var(--nok-space-xs) 0;
+
+    strong {
+      @include components-base.nok-heading-font;
+    }
+  }
+
+  &__bmi-toggle {
+    all: unset;
+    cursor: pointer;
+    font-size: 0.85em;
+    opacity: 0.6;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  // --- Info text (read-only question type) ---
+  &__info-text {
+    padding: var(--nok-space-sm) 0;
+    line-height: 1.6;
+  }
+
+  // --- Validation error ---
+  &__error {
+    color: var(--nok-error);
+    font-size: 0.85em;
+  }
+
+  // --- Navigation ---
+  &__nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--nok-space-fluid-sm);
+    padding-top: var(--nok-space-fluid-sm);
+  }
+
+  &__prev {
+    &:disabled {
+      display: none;
+    }
+  }
+
+  &__next {
+    // Primary button — uses .nok-bg-darkerblue .nok-text-contrast
+  }
+
+  // --- Result card ---
+  &__result-container {
+    // Wrapper for the result
+  }
+
+  &__result {
+    display: flex;
+    flex-direction: column;
+    gap: var(--nok-space-fluid-md);
+    padding: var(--nok-space-fluid-lg);
+    @include components-base.nok-border-radius('large');
+
+    &--positive {
+      background: oklch(from var(--nok-green) l c h / 0.08);
+      border-left: 4px solid var(--nok-green);
+    }
+
+    &--neutral {
+      background: var(--nok-body--darker);
+    }
+
+    &--negative {
+      background: oklch(from var(--nok-error) l c h / 0.08);
+      border-left: 4px solid var(--nok-error);
+    }
+  }
+
+  &__result-title {
+    @include components-base.nok-heading-font;
+    @include components-base.rfs(1.5rem, font-size);
+    margin: 0;
+  }
+
+  &__result-body {
+    line-height: 1.6;
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__result-cta {
+    align-self: flex-start;
+  }
+
+  &__restart {
+    align-self: flex-start;
+  }
+
+  // --- Noscript fallback ---
+  &__noscript {
+    padding: var(--nok-space-fluid-md);
+    background: var(--nok-body--darker);
+    @include components-base.nok-border-radius;
+  }
+}

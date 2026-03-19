@@ -119,6 +119,7 @@
   }
 
   &-cover-blur {
+    position: relative;
     &-container {
       @include components-base.nok-border-radius('large');
       @include components-base.nok-subtle-shadow;

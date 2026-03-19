@@ -472,7 +472,9 @@ class VragenlijstRenderer {
         let html = '<div class="nok-vragenlijst__question">';
 
         if (question.type !== 'info') {
-            html += `<label class="nok-vragenlijst__label">${escapeHtml(question.label)}</label>`;
+            const needsFor = ['text', 'number', 'select'].includes(question.type);
+            const forAttr = needsFor ? ` for="${escapeAttr(question.id)}"` : '';
+            html += `<label class="nok-vragenlijst__label"${forAttr}>${escapeHtml(question.label)}</label>`;
         }
 
         if (question.help) {
@@ -494,7 +496,7 @@ class VragenlijstRenderer {
         switch (question.type) {
             case 'text':
                 return `<input type="text" class="nok-vragenlijst__input"
-                    data-qid="${qid}"
+                    id="${qid}" data-qid="${qid}"
                     value="${escapeAttr(existingAnswer || '')}"
                     ${question.required !== false ? 'required' : ''}>`;
 
@@ -502,7 +504,7 @@ class VragenlijstRenderer {
                 const min = question.validation?.min ?? '';
                 const max = question.validation?.max ?? '';
                 return `<input type="number" inputmode="decimal" class="nok-vragenlijst__input"
-                    data-qid="${qid}"
+                    id="${qid}" data-qid="${qid}"
                     value="${escapeAttr(existingAnswer ?? '')}"
                     ${min !== '' ? `min="${min}"` : ''}
                     ${max !== '' ? `max="${max}"` : ''}
@@ -531,6 +533,7 @@ class VragenlijstRenderer {
                     </div>
                     <div class="nok-vragenlijst__bmi-direct" hidden>
                         <input type="number" inputmode="decimal" class="nok-vragenlijst__input nok-vragenlijst__bmi-direct-input"
+                            aria-label="BMI waarde"
                             min="${question.validation?.min ?? 10}" max="${question.validation?.max ?? 80}"
                             step="any" value="${escapeAttr(bmiVal)}"
                             placeholder="bijv. 30.0" ${question.required !== false ? 'required' : ''}>
@@ -559,7 +562,7 @@ class VragenlijstRenderer {
                     const selected = existingAnswer === opt.value ? ' selected' : '';
                     return `<option value="${escapeAttr(opt.value)}"${selected}>${escapeHtml(opt.label)}</option>`;
                 }).join('');
-                return `<select class="nok-vragenlijst__input" data-qid="${qid}"
+                return `<select class="nok-vragenlijst__input" id="${qid}" data-qid="${qid}"
                     ${question.required !== false ? 'required' : ''}>
                     <option value="">Maak een keuze...</option>
                     ${options}
