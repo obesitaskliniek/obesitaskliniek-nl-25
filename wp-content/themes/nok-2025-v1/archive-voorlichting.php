@@ -75,6 +75,13 @@ $next_month->modify( '+1 month' );
 // Format month for display: "maart 2026"
 $date_range = sprintf( '%s %s', Helpers::dutchMonth( (int) $month_start->format( 'n' ) ), $month_start->format( 'Y' ) );
 
+// Hide past events: when viewing current month, start from today
+$query_start = clone $month_start;
+if ( $month_start->format( 'Y-m' ) === $today->format( 'Y-m' ) ) {
+    $query_start = clone $today;
+    $query_start->setTime( 0, 0, 0 );
+}
+
 // Build query args for the month
 $query_args = [
         'post_type'      => 'voorlichting',
@@ -87,7 +94,7 @@ $query_args = [
                 'relation' => 'AND',
                 [
                         'key'     => 'aanvangsdatum_en_tijd',
-                        'value'   => $month_start->format( 'Y-m-d H:i:s' ),
+                        'value'   => $query_start->format( 'Y-m-d H:i:s' ),
                         'compare' => '>=',
                         'type'    => 'DATETIME',
                 ],
