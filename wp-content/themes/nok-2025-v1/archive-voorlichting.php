@@ -222,6 +222,7 @@ $base_month_url = add_query_arg( [
                     <?php if ( $vestigingen ): ?>
                         <div class="nok-select-wrapper nok-form-element nok-mb-0">
                             <select class="nok-select nok-bg-white nok-text-darkerblue"
+                                    aria-label="<?php esc_attr_e( 'Filter evenementen op locatie', THEME_TEXT_DOMAIN ); ?>"
                                     onchange="if(this.value) window.location.href=this.value">
                                 <option value="<?= esc_url( $base_month_url ); ?>" <?= empty( $filter_vestiging ) ? 'selected' : ''; ?>>
                                     <?php esc_html_e( 'Filter evenementen', THEME_TEXT_DOMAIN ); ?>
