@@ -28,5 +28,8 @@
     "@wordpress/data": "^10.32.0",
     "@wordpress/dom-ready": "^4.32.0",
     "@wordpress/icons": "^11.0.0"
+  },
+  "overrides": {
+    "serialize-javascript": "^7.0.3"
   }
 }
