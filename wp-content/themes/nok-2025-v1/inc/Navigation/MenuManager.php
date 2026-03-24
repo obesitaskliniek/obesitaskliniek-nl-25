@@ -385,25 +385,37 @@ class MenuManager {
 	 *     - popup_unsets_sidebar:  If true, popup triggers also unset sidebar-open (mobile)
 	 *     - extra_attrs:           Raw HTML attribute string to append
 	 *
+	 * Button mode: When 'nok-button' is among the item's CSS classes (set in WP menu admin),
+	 * the item renders as a button — the nok-nav-menu-item base class is skipped, and
+	 * role="button" + tabindex="0" are added. All other functionality (icons, popups) still works.
+	 *
 	 * @return string Complete <a> tag HTML
 	 */
 	public static function render_menu_link( array $item, array $options = [] ): string {
-		$classes = [ 'nok-nav-menu-item' ];
+		$item_classes = ! empty( $item['classes'] ) ? array_filter( $item['classes'] ) : [];
+		$is_button    = in_array( 'nok-button', $item_classes, true );
 
-		if ( $item['is_current'] || $item['is_current_ancestor'] ) {
-			$classes[] = 'nok-nav-menu-item--active';
-		}
+		if ( $is_button ) {
+			// Button items use their menu-admin CSS classes directly (no nav-menu-item base)
+			$classes = $item_classes;
+		} else {
+			$classes = [ 'nok-nav-menu-item' ];
 
-		if ( ! empty( $item['has_children'] ) ) {
-			$classes[] = 'nok-nav-menu-item--has-children';
+			if ( $item['is_current'] || $item['is_current_ancestor'] ) {
+				$classes[] = 'nok-nav-menu-item--active';
+			}
+
+			if ( ! empty( $item['has_children'] ) ) {
+				$classes[] = 'nok-nav-menu-item--has-children';
+			}
+
+			if ( ! empty( $item_classes ) ) {
+				$classes = array_merge( $classes, $item_classes );
+			}
 		}
 
 		if ( ! empty( $options['extra_classes'] ) ) {
 			$classes = array_merge( $classes, $options['extra_classes'] );
-		}
-
-		if ( ! empty( $item['classes'] ) ) {
-			$classes = array_merge( $classes, array_filter( $item['classes'] ) );
 		}
 
 		// Determine URL
@@ -422,6 +434,11 @@ class MenuManager {
 		}
 		$title_attr = ! empty( $item['attr_title'] ) ? $item['attr_title'] : $item['title'];
 		$attrs[]    = 'title="' . esc_attr( $title_attr ) . '"';
+
+		if ( $is_button ) {
+			$attrs[] = 'role="button"';
+			$attrs[] = 'tabindex="0"';
+		}
 
 		// Popup trigger data-attributes
 		if ( ! empty( $item['is_popup_trigger'] ) && ! empty( $item['popup_id'] ) ) {
