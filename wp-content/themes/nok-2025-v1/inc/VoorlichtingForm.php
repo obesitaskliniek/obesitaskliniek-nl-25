@@ -36,6 +36,7 @@ class VoorlichtingForm {
 	 */
 	public const FORM_ID = 1;
 	public const FIELD_VOORLICHTING_ID = 18;
+	public const FIELD_SUBMISSION_ID = 21;
 
 	/**
 	 * Register WordPress hooks

@@ -185,6 +185,7 @@ add_filter( 'gform_validation_' . VoorlichtingForm::FORM_ID, function( $validati
 	$form = $validation_result['form'];
 
 	// Get the voorlichting ID from hidden field (POST uses "input_{field_id}", not "input_{form_id}_{field_id}")
+	/** @noinspection PhpUndefinedFunctionInspection — Gravity Forms helper */
 	$voorlichting_id = rgpost( 'input_' . VoorlichtingForm::FIELD_VOORLICHTING_ID );
 
 	if ( empty( $voorlichting_id ) ) {
@@ -235,3 +236,15 @@ add_filter( 'gform_validation_' . VoorlichtingForm::FORM_ID, function( $validati
 
 	return $validation_result;
 } );
+
+/**
+ * Gravity Forms: Populate Submission ID field with entry ID
+ *
+ * Writes the entry ID into the hidden Submission ID field (field 21) after
+ * the entry is saved. Uses priority 9 to run before add-on feed processing
+ * (typically priority 10), ensuring the value is available for HubSpot sync.
+ */
+add_action( 'gform_after_submission_' . VoorlichtingForm::FORM_ID, function( $entry, $form ) {
+	/** @noinspection PhpUndefinedClassInspection — Gravity Forms API */
+	GFAPI::update_entry_field( $entry['id'], VoorlichtingForm::FIELD_SUBMISSION_ID, $entry['id'] );
+}, 9, 2 );

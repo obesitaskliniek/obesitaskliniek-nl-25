@@ -42,8 +42,8 @@ if (empty($parents_with_children)) {
 			<?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow'); ?>
 		</a>
         <a href="https://nokclinics.nl" target="_blank" class="nok-button nok-bg-clinics-oranje nok-text-white">
-            Behandeling zonder operatie
-            <?= Assets::getIcon('ui_arrow-up-right' ); ?>
+            Behandeling met medicatie
+            <?= Assets::getIcon('ui_arrow-right-long' ); ?>
         </a>
 	</nok-square-block>
 </div>
