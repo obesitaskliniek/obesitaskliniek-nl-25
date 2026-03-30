@@ -12,9 +12,9 @@ nok-search {
 }
 
 .nok-search-input {
-  --bg-base: var(--nok-body--lighter);
-  --bg-base-contrast: var(--nok-body--lighter-contrast);
-  --bg-color: oklch(from var(--bg-base) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1)));
+  //--bg-base: var(--nok-body--lighter);
+  //--bg-base-contrast: var(--nok-body--lighter-contrast);
+  //--bg-color: oklch(from var(--bg-base) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1)));
   --form-element-padding: 1.25ex;
 
   display: block;
@@ -23,8 +23,8 @@ nok-search {
   font-size: 1.1rem;
   line-height: 1.5;
 
-  background-color: var(--bg-color);
-  color: var(--nok-darkerblue);
+  //background-color: var(--bg-color);
+  //color: var(--nok-darkerblue);
   border: 1px solid transparent;
   outline: none;
 

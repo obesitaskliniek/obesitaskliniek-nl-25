@@ -21,6 +21,18 @@ if ( isset( $_GET['flat'] ) && $_GET['flat'] === 'true' && is_user_logged_in() )
     exit;
 }
 
+// Accordion view: search-first FAQ layout (?view=accordion)
+// Scoped to specific FAQ categories only — other kennisbank archives are unaffected.
+// When making this permanent, remove the $_GET check and keep only the slug check.
+$accordion_category_slugs = [ 'veelgestelde-vragen', 'veelgestelde-vragen-voor-verwijzers' ];
+$_current_term            = is_tax( 'kennisbank_categories' ) ? get_queried_object() : null;
+$is_faq_category          = $_current_term && in_array( $_current_term->slug, $accordion_category_slugs, true );
+
+if ( $is_faq_category && isset( $_GET['view'] ) && $_GET['view'] === 'accordion' ) {
+    require get_template_directory() . '/template-parts/archive-kennisbank-accordion.php';
+    return;
+}
+
 get_header('generic');
 
 // Determine archive type

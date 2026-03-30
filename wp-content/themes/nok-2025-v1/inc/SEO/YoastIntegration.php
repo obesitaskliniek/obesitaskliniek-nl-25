@@ -748,7 +748,7 @@ class YoastIntegration {
 			[
 				'expectedParts' => $expected_parts,
 				'postId' => $post_id,
-				'debug' => defined('WP_DEBUG') && WP_DEBUG
+				'debug' => false
 			]
 		);
 	}

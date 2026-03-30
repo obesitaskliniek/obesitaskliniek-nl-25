@@ -92,6 +92,7 @@ nok-screen-mask {
 :root {
   --nok-lightblue: rgb(var(--nok-lightblue-rgb));
   --nok-lightblue--darker: rgb(var(--nok-lightblue--darker-rgb));
+  --nok-darkblue: rgb(var(--nok-darkblue-rgb));
   --nok-darkerblue: rgb(var(--nok-darkerblue-rgb));
   --nok-darkerblue-contrast: rgba(243, 244, 249, var(--alpha, 1));
   --nok-darkestblue: rgb(var(--nok-darkestblue-rgb));
@@ -111,6 +112,7 @@ nok-screen-mask {
   :root {
     --nok-lightblue: oklch(70.7278920617% 0.1382167991 228.1947684763deg);
     --nok-lightblue--darker: oklch(63.7278920617% 0.1462167991 228.1947684763deg);
+    --nok-darkblue: oklch(39.4585756791% 0.1040551055 252.9122685779deg);
     --nok-darkerblue: oklch(27.2423866383% 0.0958936548 262.5713856846deg);
     --nok-darkerblue-contrast: oklch(96.7812353453% 0.0067408217 277.1634226961deg);
     --nok-darkestblue: oklch(19.0024725735% 0.063103724 255.2385823087deg);
@@ -736,6 +738,10 @@ nok-hero:has(figure) {
   --figure-row-mobile: var(--section-max-width, 50vw);
 }
 
+nok-hero .nok-hero__inner:not(:has(figure)):not(.nok-bg-white) {
+  background: linear-gradient(135deg, var(--nok-darkblue) 0%, var(--nok-darkerblue) 100%);
+}
+
 nok-hero .nok-hero__inner {
   display: grid;
   row-gap: var(--nok-spacing-section-ends, 1.5rem);
@@ -967,6 +973,10 @@ nok-hero .nok-hero__inner footer > div > * {
   nok-hero .nok-hero__inner footer > div > * {
     flex-basis: 100%;
   }
+}
+
+nok-hero .nok-hero__inner {
+  /* Modifiers */
 }
 
 nok-hero.nok-hero--fullscreen .nok-hero-fullscreen__container {

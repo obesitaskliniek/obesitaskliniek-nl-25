@@ -2692,7 +2692,7 @@ button.nok-button-badge,
   border-radius: 2em;
   transition: background-color 0.15s ease, border-color 0.15s ease;
 }
-.nok-pill:hover {
+.nok-pill:not([class*=nok-hover-to-]):hover {
   background-color: var(--nok-lightblue--lighter);
   border-color: oklch(from var(--nok-darkerblue) l c h/0.3);
   text-decoration: none;
@@ -4923,17 +4923,12 @@ nok-search {
   margin: 0 auto;
 }
 .nok-search-input {
-  --bg-base: var(--nok-body--lighter);
-  --bg-base-contrast: var(--nok-body--lighter-contrast);
-  --bg-color: oklch(from var(--bg-base) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1)));
   --form-element-padding: 1.25ex;
   display: block;
   width: 100%;
   padding: var(--form-element-padding) calc(var(--form-element-padding) * 1.5);
   font-size: 1.1rem;
   line-height: 1.5;
-  background-color: var(--bg-color);
-  color: var(--nok-darkerblue);
   border: 1px solid transparent;
   outline: none;
   overflow: hidden;
@@ -6266,6 +6261,10 @@ nok-hero .nok-hero__inner .article h2 {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;
   }
+}
+nok-hero .nok-hero__inner.collapse-bottom {
+  row-gap: 0;
+  padding-top: var(--nok-spacing-section-ends, 1.5rem);
 }
 @media (prefers-color-scheme: dark) {
   nok-hero.nok-hero--fullscreen .nok-hero-fullscreen__figure::after {

@@ -12,6 +12,9 @@ nok-hero {
   &:has(figure) {
     --figure-row-mobile: var(--section-max-width, 50vw);
   }
+  & .#{&}__inner:not(:has(figure)):not(.nok-bg-white) {
+    background: linear-gradient(135deg, var(--nok-darkblue) 0%, var(--nok-darkerblue) 100%);
+  }
 
   .#{&}__inner {
     display: grid;
@@ -225,6 +228,12 @@ nok-hero {
           flex-basis: 100%;
         }
       }
+    }
+
+    /* Modifiers */
+    &.collapse-bottom {
+      row-gap: 0;
+      padding-top: var(--nok-spacing-section-ends, 1.5rem);
     }
   }
 }
