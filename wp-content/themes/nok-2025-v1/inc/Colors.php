@@ -793,6 +793,28 @@ class Colors {
 	}
 
 	/**
+	 * Get chart-suitable colors as hex values
+	 *
+	 * Returns a curated set of visually distinct brand colors for use in
+	 * Chart.js datasets. Unlike CSS-class-based palettes, these return raw
+	 * hex values for programmatic use.
+	 *
+	 * @return array<int, array{label: string, hex: string}> Color entries
+	 */
+	public static function getChartColors(): array {
+		return [
+			[ 'label' => 'Donkerblauw',    'hex' => self::COLOR_DEFINITIONS['nok-bg-darkblue'] ],
+			[ 'label' => 'Lichtblauw',     'hex' => self::COLOR_DEFINITIONS['nok-bg-lightblue'] ],
+			[ 'label' => 'Groenblauw',     'hex' => self::COLOR_DEFINITIONS['nok-bg-greenblue'] ],
+			[ 'label' => 'Geel',           'hex' => self::COLOR_DEFINITIONS['nok-bg-yellow'] ],
+			[ 'label' => 'Groen',          'hex' => self::COLOR_DEFINITIONS['nok-bg-green'] ],
+			[ 'label' => 'Donkerst blauw', 'hex' => self::COLOR_DEFINITIONS['nok-bg-darkerblue'] ],
+			[ 'label' => 'Clinics blauw',  'hex' => self::COLOR_DEFINITIONS['nok-bg-clinics-blauw'] ],
+			[ 'label' => 'Clinics oranje', 'hex' => self::COLOR_DEFINITIONS['nok-bg-clinics-oranje'] ],
+		];
+	}
+
+	/**
 	 * Resolve a color class to its display color
 	 *
 	 * Extracts the primary background color from a class string that may contain

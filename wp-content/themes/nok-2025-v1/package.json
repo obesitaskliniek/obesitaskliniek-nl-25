@@ -11,7 +11,10 @@
     "css:critical:legacy": "sass assets/css/nok-critical.scss assets/css/nok-critical.css --style=compressed --no-source-map",
     "css:all": "npm run css:build && npm run css:extract-atf",
     "icons:normalize": "node normalize-icons.js",
-    "icons:watch": "nodemon --watch assets/icons-source --ext svg --exec npm run icons:normalize"
+    "icons:watch": "nodemon --watch assets/icons-source --ext svg --exec npm run icons:normalize",
+    "vendor:chartjs": "node -e \"const fs=require('fs');fs.mkdirSync('assets/js/lib',{recursive:true});fs.copyFileSync('node_modules/chart.js/dist/chart.umd.js','assets/js/lib/chart.umd.js');\"",
+    "postinstall": "npm run vendor:chartjs",
+    "css:chart": "sass assets/css/components/nok-chart.scss assets/css/components/nok-chart.css --style=expanded --no-source-map && sass assets/css/components/nok-chart.scss assets/css/components/nok-chart.min.css --style=compressed --no-source-map"
   },
   "devDependencies": {
     "@wordpress/scripts": "^30.25.0",
@@ -27,7 +30,8 @@
   "dependencies": {
     "@wordpress/data": "^10.32.0",
     "@wordpress/dom-ready": "^4.32.0",
-    "@wordpress/icons": "^11.0.0"
+    "@wordpress/icons": "^11.0.0",
+    "chart.js": "^4.4.0"
   },
   "overrides": {
     "serialize-javascript": "^7.0.3"

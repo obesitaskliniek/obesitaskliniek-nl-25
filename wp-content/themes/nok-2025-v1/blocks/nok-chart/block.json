@@ -1,0 +1,98 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "nok2025/nok-chart",
+  "title": "NOK Grafiek",
+  "description": "Tabeldata weergeven als een grafiek (staaf, lijn) met een toegankelijke datatable.",
+  "category": "nok-blocks",
+  "icon": "chart-bar",
+  "keywords": [
+    "grafiek",
+    "chart",
+    "tabel",
+    "data",
+    "staaf",
+    "lijn"
+  ],
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
+  "attributes": {
+    "chartType": {
+      "type": "string",
+      "default": "bar"
+    },
+    "labels": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "string"
+      }
+    },
+    "datasets": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "object"
+      }
+    },
+    "chartTitle": {
+      "type": "string",
+      "default": ""
+    },
+    "showLegend": {
+      "type": "boolean",
+      "default": true
+    },
+    "showTooltips": {
+      "type": "boolean",
+      "default": true
+    },
+    "xAxisLabel": {
+      "type": "string",
+      "default": ""
+    },
+    "yAxisLabel": {
+      "type": "string",
+      "default": ""
+    },
+    "tension": {
+      "type": "number",
+      "default": 0
+    },
+    "showPoints": {
+      "type": "boolean",
+      "default": true
+    },
+    "xAxisDivisor": {
+      "type": "number",
+      "default": 1
+    },
+    "yAxisPadding": {
+      "type": "number",
+      "default": 0
+    },
+    "yAxisMin": {
+      "type": "string",
+      "default": ""
+    },
+    "showDataTable": {
+      "type": "boolean",
+      "default": false
+    },
+    "valueSuffix": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "textdomain": "nok-2025-v1",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php",
+  "style": [
+    "nok-chart-css"
+  ]
+}

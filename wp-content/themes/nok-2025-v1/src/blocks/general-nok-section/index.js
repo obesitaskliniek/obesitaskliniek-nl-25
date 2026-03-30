@@ -23,6 +23,7 @@ const ALLOWED_BLOCKS = [
     'core/button',
     'core/html',
     'core/shortcode',
+    'nok2025/nok-chart',
 ];
 
 // Layout width options

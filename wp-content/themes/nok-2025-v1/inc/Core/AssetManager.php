@@ -94,6 +94,14 @@ class AssetManager {
 			$css_version
 		);
 
+		// Register block-specific stylesheets (only enqueued by WP when block is on page)
+		wp_register_style(
+			'nok-chart-css',
+			$this->resolve_asset_url( '/assets/css/components/nok-chart.css', $dev_mode ),
+			[],
+			$this->get_asset_version( '/assets/css/components/nok-chart.css', $dev_mode )
+		);
+
 		// Make it non-render-blocking: media="print" swapped to "all" on load
 		add_filter( 'style_loader_tag', function ( $tag, $handle ) {
 			if ( $handle !== 'nok-components-css' ) {
@@ -321,6 +329,7 @@ class AssetManager {
 			'postParts'          => $this->get_available_post_parts(),
 			'icons'              => \NOK2025\V1\Assets::getIconsForAdmin(),
 			'colorPalettes'      => \NOK2025\V1\Colors::getColorsForAdmin(),
+			'chartColors'        => \NOK2025\V1\Colors::getChartColors(),
 			'ajaxurl'            => admin_url( 'admin-ajax.php' ),
 			'nonce'              => wp_create_nonce( 'nok_preview_state_nonce' )
 		];
