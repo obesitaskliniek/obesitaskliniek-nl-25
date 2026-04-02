@@ -837,6 +837,13 @@ final class Theme {
                 'placeholder' => 'Selecteer een vestiging...',
                 'description' => 'De dichtstbijzijnde vestiging voor deze regio. Bepaalt de URL-structuur (/vestigingen/{vestiging}/{regio}/) en welke adresgegevens en voorlichtingen worden getoond.',
         ] );
+
+        // Kennisbank meta fields
+        PostMeta\MetaRegistry::register_field( 'kennisbank', 'faq_pinned', [
+                'type'        => 'checkbox',
+                'label'       => 'Uitgelichte vraag',
+                'description' => 'Toon deze vraag bovenaan de FAQ-pagina, boven de categoriegroepen.',
+        ] );
     }
 
     /**

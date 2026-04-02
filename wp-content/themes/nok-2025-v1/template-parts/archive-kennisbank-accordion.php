@@ -49,13 +49,22 @@ $child_categories = get_terms( [
 ] );
 
 // Build grouped array: child_term_id => [ posts ]
+// Pinned posts (meta _faq_pinned = "1") are partitioned out for display above groups.
 $grouped_posts   = [];
 $ungrouped_posts = [];
+$pinned_posts    = [];
 
 if ( $posts->have_posts() ) {
 	while ( $posts->have_posts() ) {
 		$posts->the_post();
 		$post_id    = get_the_ID();
+
+		// Check pinned status before grouping
+		if ( get_post_meta( $post_id, '_faq_pinned', true ) === '1' ) {
+			$pinned_posts[] = $post_id;
+			continue;
+		}
+
 		$post_terms = get_the_terms( $post_id, 'kennisbank_categories' );
 
 		if ( ! $post_terms || is_wp_error( $post_terms ) ) {
@@ -155,6 +164,53 @@ if ( $current_term_has_children ) {
 
 <nok-section class="no-aos">
     <div class="nok-section__inner" data-requires="./nok-faq-search.mjs" id="faq-accordion-content">
+
+		<?php // Render pinned posts above all category groups
+		if ( ! empty( $pinned_posts ) ) : ?>
+			<div class="faq-group nok-mb-2" data-category="pinned">
+				<div class="nok-mb-0_5" style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 0.6rem; border-bottom: 2px solid var(--nok-darkblue);">
+					<h2 class="nok-fs-3 fw-bold" style="margin: 0;">Uitgelicht</h2>
+					<span class="nok-text-muted nok-fs-1" style="background: var(--nok-body--darker); padding: 0.2rem 0.65rem; border-radius: 100px; white-space: nowrap;">
+						<?= sprintf( '%d vragen', count( $pinned_posts ) ) ?>
+					</span>
+				</div>
+
+				<div data-requires="./nok-accordion.mjs"
+				     data-require-lazy="true">
+
+					<?php foreach ( $pinned_posts as $post_id ) :
+						$title   = get_the_title( $post_id );
+						$excerpt = get_the_excerpt( $post_id );
+						?>
+                        <nok-accordion class="nok-border-bottom-1">
+							<details class="nok-bg-transparent nok-rounded-border"
+							         name="faq-pinned"
+							         data-search-title="<?= esc_attr( strtolower( $title ) ) ?>"
+							         data-search-excerpt="<?= esc_attr( strtolower( wp_strip_all_tags( $excerpt ) ) ) ?>">
+								<summary class="nok-py-1 nok-px-2 nok-fs-2 nok-fs-to-sm-2 fw-bold">
+									<?= esc_html( $title ) ?>
+								</summary>
+								<div class="accordion-content nok-p-2 nok-pt-0">
+									<article>
+										<?= wp_kses_post( $excerpt ) ?>
+									</article>
+									<footer class="nok-mt-1">
+										<a role="button"
+										   href="<?= esc_url( get_the_permalink( $post_id ) ) ?>"
+										   class="nok-button nok-button--small nok-justify-self-start nok-bg-darkblue nok-text-contrast"
+										   tabindex="0">
+											Lees meer <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ) ?>
+										</a>
+									</footer>
+								</div>
+							</details>
+						</nok-accordion>
+					<?php endforeach; ?>
+
+				</div>
+			</div>
+		<?php endif; ?>
+
 		<?php
 		// Render each child category group
 		foreach ( $child_cat_map as $term_id => $child_cat ) :
@@ -216,7 +272,7 @@ if ( $current_term_has_children ) {
 			$ungrouped_count = count( $ungrouped_posts );
 			$accordion_name  = 'faq-overig';
 			?>
-			<div class="faq-group nok-mt-2" data-category="overig">
+			<div class="faq-group nok-mb-2" data-category="overig">
 				<div class="nok-mb-0_5" style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 0.6rem; border-bottom: 2px solid var(--nok-darkblue);">
 					<h2 class="nok-fs-3 fw-bold" style="margin: 0;">Overig</h2>
 					<span class="nok-text-muted nok-fs-1" style="background: var(--nok-body--darker); padding: 0.2rem 0.65rem; border-radius: 100px; white-space: nowrap;">
@@ -231,16 +287,15 @@ if ( $current_term_has_children ) {
 						$title   = get_the_title( $post_id );
 						$excerpt = get_the_excerpt( $post_id );
 						?>
-						<nok-accordion>
-							<details class="nok-dark-bg-darkblue nok-dark-text-contrast"
-							         style="border-bottom: 1px solid var(--nok-lightgrey--lighter);"
+                        <nok-accordion class="nok-border-bottom-1">
+							<details class="nok-bg-transparent nok-rounded-border"
 							         name="<?= esc_attr( $accordion_name ) ?>"
 							         data-search-title="<?= esc_attr( strtolower( $title ) ) ?>"
 							         data-search-excerpt="<?= esc_attr( strtolower( wp_strip_all_tags( $excerpt ) ) ) ?>">
-								<summary class="nok-py-1 nok-fs-2 fw-bold" style="list-style: none; cursor: pointer;">
+								<summary class="nok-py-1 nok-px-2 nok-fs-2 nok-fs-to-sm-2 fw-bold">
 									<?= esc_html( $title ) ?>
 								</summary>
-								<div class="accordion-content nok-pb-1">
+								<div class="accordion-content nok-p-2 nok-pt-0">
 									<article>
 										<?= wp_kses_post( $excerpt ) ?>
 									</article>
