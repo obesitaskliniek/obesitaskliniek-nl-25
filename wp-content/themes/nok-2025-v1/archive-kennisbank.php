@@ -15,8 +15,9 @@ use NOK2025\V1\Assets;
 use NOK2025\V1\Helpers;
 use NOK2025\V1\Theme;
 
-// Flat view: standalone HTML for Word export (?flat=true)
-if ( isset( $_GET['flat'] ) && $_GET['flat'] === 'true' && is_user_logged_in() ) {
+// Flat view: standalone HTML for export (?flat=true)
+// Access: logged-in users OR valid token via ?token= (define NOK_FLAT_VIEW_TOKEN in wp-config.php)
+if ( isset( $_GET['flat'] ) && $_GET['flat'] === 'true' && nok_flat_view_authorized() ) {
     nok_render_kennisbank_flat_view();
     exit;
 }
@@ -242,10 +243,39 @@ wp_reset_query();
 get_footer();
 
 /**
- * Render kennisbank posts as standalone HTML for Word export.
+ * Check if the current request is authorized for flat view access.
+ *
+ * Allows access if the user is logged in OR provides a valid token
+ * via ?token= query parameter. Token must match NOK_FLAT_VIEW_TOKEN
+ * constant (define in wp-config.php).
+ *
+ * @since 1.0.0
+ *
+ * @return bool True if authorized.
+ */
+function nok_flat_view_authorized(): bool {
+	if ( is_user_logged_in() ) {
+		return true;
+	}
+
+	if ( ! defined( 'NOK_FLAT_VIEW_TOKEN' ) || NOK_FLAT_VIEW_TOKEN === '' ) {
+		return false;
+	}
+
+	$token = isset( $_GET['token'] ) ? $_GET['token'] : '';
+	if ( $token === '' ) {
+		return false;
+	}
+
+	return hash_equals( NOK_FLAT_VIEW_TOKEN, $token );
+}
+
+/**
+ * Render kennisbank posts as standalone HTML for export.
  *
  * Outputs a minimal HTML page (no theme chrome) with all posts in the current
- * category context, sorted alphabetically. Designed for copy-pasting to Word.
+ * category context, sorted alphabetically. Designed for copy-pasting to Word
+ * or LLM ingestion.
  *
  * Triggered by ?flat=true query parameter.
  *

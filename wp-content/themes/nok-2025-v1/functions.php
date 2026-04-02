@@ -124,6 +124,7 @@ add_filter( 'query_vars', function( $vars ) {
     $vars[] = 'locatie';
     $vars[] = 'exclude';         // Kennisbank category exclusion
     $vars[] = 'flat';            // Kennisbank flat view for Word export
+    $vars[] = 'token';           // Shared secret for flat view access
     return $vars;
 } );
 
