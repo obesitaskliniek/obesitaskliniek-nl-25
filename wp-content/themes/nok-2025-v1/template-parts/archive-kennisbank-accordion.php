@@ -180,7 +180,8 @@ if ( $current_term_has_children ) {
 
 					<?php foreach ( $pinned_posts as $post_id ) :
 						$title   = get_the_title( $post_id );
-						$excerpt = get_the_excerpt( $post_id );
+						$permalink = get_the_permalink( $post_id );
+					$excerpt   = str_replace( '[&hellip;]', '<a href="' . esc_url( $permalink ) . '">[&hellip;]</a>', get_the_excerpt( $post_id ) );
 						?>
                         <nok-accordion class="nok-border-bottom-1">
 							<details class="nok-bg-transparent nok-rounded-border"
@@ -196,7 +197,7 @@ if ( $current_term_has_children ) {
 									</article>
 									<footer class="nok-mt-1">
 										<a role="button"
-										   href="<?= esc_url( get_the_permalink( $post_id ) ) ?>"
+										   href="<?= esc_url( $permalink ) ?>"
 										   class="nok-button nok-button--small nok-justify-self-start nok-bg-darkblue nok-text-contrast"
 										   tabindex="0">
 											Lees meer <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ) ?>
@@ -235,7 +236,8 @@ if ( $current_term_has_children ) {
 
 					<?php foreach ( $grouped_posts[ $term_id ] as $post_id ) :
 						$title   = get_the_title( $post_id );
-						$excerpt = get_the_excerpt( $post_id );
+						$permalink = get_the_permalink( $post_id );
+					$excerpt   = str_replace( '[&hellip;]', '<a href="' . esc_url( $permalink ) . '">[&hellip;]</a>', get_the_excerpt( $post_id ) );
 						?>
                         <nok-accordion class="nok-border-bottom-1">
 							<details class="nok-bg-transparent nok-rounded-border"
@@ -251,7 +253,7 @@ if ( $current_term_has_children ) {
 									</article>
 									<footer class="nok-mt-1">
 										<a role="button"
-										   href="<?= esc_url( get_the_permalink( $post_id ) ) ?>"
+										   href="<?= esc_url( $permalink ) ?>"
 										   class="nok-button nok-button--small nok-justify-self-start nok-bg-darkblue nok-text-contrast"
 										   tabindex="0">
 											Lees meer <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ) ?>
@@ -285,7 +287,8 @@ if ( $current_term_has_children ) {
 
 					<?php foreach ( $ungrouped_posts as $post_id ) :
 						$title   = get_the_title( $post_id );
-						$excerpt = get_the_excerpt( $post_id );
+						$permalink = get_the_permalink( $post_id );
+					$excerpt   = str_replace( '[&hellip;]', '<a href="' . esc_url( $permalink ) . '">[&hellip;]</a>', get_the_excerpt( $post_id ) );
 						?>
                         <nok-accordion class="nok-border-bottom-1">
 							<details class="nok-bg-transparent nok-rounded-border"
@@ -301,7 +304,7 @@ if ( $current_term_has_children ) {
 									</article>
 									<footer class="nok-mt-1">
 										<a role="button"
-										   href="<?= esc_url( get_the_permalink( $post_id ) ) ?>"
+										   href="<?= esc_url( $permalink ) ?>"
 										   class="nok-button nok-button--small nok-justify-self-start nok-bg-darkblue nok-text-contrast"
 										   tabindex="0">
 											Lees meer <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ) ?>
@@ -319,20 +322,5 @@ if ( $current_term_has_children ) {
 	</div>
 </nok-section>
 
-<!-- "Niet gevonden" CTA -->
-<nok-section class="no-aos">
-	<div class="nok-section__inner">
-		<nok-square-block class="nok-bg-darkerblue nok-bg-alpha-6 nok-text-contrast nok-mt-2">
-			<div class="nok-square-block__heading">
-				<h3 class="fw-bold">Niet gevonden wat u zocht?</h3>
-			</div>
-			<a role="button" href="/contact/"
-			   class="nok-button nok-justify-self-start nok-bg-darkblue nok-text-contrast" tabindex="0">
-				Neem contact op <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ) ?>
-			</a>
-		</nok-square-block>
-	</div>
-</nok-section>
-
-<?php
+<?php1
 get_footer();

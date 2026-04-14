@@ -22,14 +22,22 @@ if ( isset( $_GET['flat'] ) && $_GET['flat'] === 'true' && nok_flat_view_authori
     exit;
 }
 
-// Accordion view: search-first FAQ layout (?view=accordion)
-// Scoped to specific FAQ categories only — other kennisbank archives are unaffected.
-// When making this permanent, remove the $_GET check and keep only the slug check.
+// Accordion view: default layout for FAQ category archives.
+// Applies to the FAQ parent categories and their direct children.
 $accordion_category_slugs = [ 'veelgestelde-vragen', 'veelgestelde-vragen-voor-verwijzers' ];
 $_current_term            = is_tax( 'kennisbank_categories' ) ? get_queried_object() : null;
-$is_faq_category          = $_current_term && in_array( $_current_term->slug, $accordion_category_slugs, true );
+$is_faq_category          = false;
+if ( $_current_term ) {
+    if ( in_array( $_current_term->slug, $accordion_category_slugs, true ) ) {
+        $is_faq_category = true;
+    } elseif ( $_current_term->parent ) {
+        $_parent_term    = get_term( $_current_term->parent, 'kennisbank_categories' );
+        $is_faq_category = $_parent_term && ! is_wp_error( $_parent_term )
+                           && in_array( $_parent_term->slug, $accordion_category_slugs, true );
+    }
+}
 
-if ( $is_faq_category && isset( $_GET['view'] ) && $_GET['view'] === 'accordion' ) {
+if ( $is_faq_category ) {
     require get_template_directory() . '/template-parts/archive-kennisbank-accordion.php';
     return;
 }
