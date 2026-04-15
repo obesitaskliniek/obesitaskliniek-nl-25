@@ -243,14 +243,30 @@ class AssetManager {
 					$popup_asset['version']
 				);
 
+				$vragenlijst_targets = array_map(
+					fn( $p ) => [
+						'id'    => 'popup-vragenlijst-' . $p->post_name,
+						'label' => 'Vragenlijst: ' . get_the_title( $p ),
+					],
+					get_posts( [
+						'post_type'      => 'vragenlijst',
+						'post_status'    => 'publish',
+						'posts_per_page' => -1,
+						'orderby'        => 'title',
+						'order'          => 'ASC',
+					] )
+				);
+
 				wp_localize_script(
 					'nok-popup-link-format',
 					'nokPopupTargets',
-					[
-						[ 'id' => 'popup-bmi-calculator', 'label' => 'BMI Calculator' ],
-						[ 'id' => 'popup-search', 'label' => 'Zoeken' ],
-						[ 'id' => 'popup-vragenlijst', 'label' => 'Vragenlijst' ],
-					]
+					array_merge(
+						[
+							[ 'id' => 'popup-bmi-calculator', 'label' => 'BMI Calculator' ],
+							[ 'id' => 'popup-search',         'label' => 'Zoeken' ],
+						],
+						$vragenlijst_targets
+					)
 				);
 			}
 		}

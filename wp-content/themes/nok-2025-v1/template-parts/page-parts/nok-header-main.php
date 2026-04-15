@@ -55,29 +55,37 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT_ABS . '/assets/img/nok-logo.
             </nok-popup-body>
         </nok-popup>
 
-        <!-- POPUP: VRAGENLIJST -->
+        <!-- POPUPS: VRAGENLIJSTEN (one per published vragenlijst CPT post) -->
         <?php
-        $vl_post = get_posts(['post_type' => 'vragenlijst', 'name' => 'inclusie-check', 'posts_per_page' => 1, 'post_status' => 'publish']);
-        $vl_title = !empty($vl_post) ? get_the_title($vl_post[0]) : 'Vragenlijst';
+        $vl_posts = get_posts([
+            'post_type'      => 'vragenlijst',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'orderby'        => 'title',
+            'order'          => 'ASC',
+        ]);
+        foreach ($vl_posts as $vl_post) :
+            $vl_popup_id = 'popup-vragenlijst-' . $vl_post->post_name;
         ?>
-        <nok-popup class="nok-bg-body nok-dark-bg-darkerblue" id="popup-vragenlijst"
+        <nok-popup class="nok-bg-body nok-dark-bg-darkerblue" id="<?= esc_attr($vl_popup_id) ?>"
                    data-on-close="reset">
             <nok-popup-header>
-                <nok-popup-title><?= esc_html($vl_title) ?></nok-popup-title>
+                <nok-popup-title><?= esc_html(get_the_title($vl_post)) ?></nok-popup-title>
                 <button title="Sluiten" aria-label="Sluiten" class="nok-button nok-button--small"
                         data-unsets-class="popup-open" data-class-target="nok-top-navigation"
                         data-toggle-event="click"
                         data-unsets-attribute="data-state" data-unsets-attribute-value="open"
-                        data-attribute-target="#popup-vragenlijst">
+                        data-attribute-target="#<?= esc_attr($vl_popup_id) ?>">
                     <?= Assets::getIcon('ui_close') ?>
                 </button>
             </nok-popup-header>
             <nok-popup-body>
                 <?php $theme->embed_post_part_template('nok-vragenlijst', [
-                    'vragenlijst_slug' => 'inclusie-check'
+                    'vragenlijst_slug' => $vl_post->post_name
                 ], true); ?>
             </nok-popup-body>
         </nok-popup>
+        <?php endforeach; ?>
 
     </nok-screen-mask>
 
