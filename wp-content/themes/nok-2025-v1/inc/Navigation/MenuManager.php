@@ -399,15 +399,15 @@ class MenuManager {
 			// Button items use their menu-admin CSS classes directly (no nav-menu-item base)
 			$classes = $item_classes;
 		} else {
-			$classes = [ 'nok-nav-menu-item' ];
+		$classes = [ 'nok-nav-menu-item' ];
 
-			if ( $item['is_current'] || $item['is_current_ancestor'] ) {
-				$classes[] = 'nok-nav-menu-item--active';
-			}
+		if ( $item['is_current'] || $item['is_current_ancestor'] ) {
+			$classes[] = 'nok-nav-menu-item--active';
+		}
 
-			if ( ! empty( $item['has_children'] ) ) {
-				$classes[] = 'nok-nav-menu-item--has-children';
-			}
+		if ( ! empty( $item['has_children'] ) ) {
+			$classes[] = 'nok-nav-menu-item--has-children';
+		}
 
 			if ( ! empty( $item_classes ) ) {
 				$classes = array_merge( $classes, $item_classes );

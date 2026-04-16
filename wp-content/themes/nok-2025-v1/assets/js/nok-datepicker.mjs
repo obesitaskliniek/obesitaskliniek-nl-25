@@ -200,11 +200,11 @@ class DatepickerInstance {
 
             if (this.mode === WEEK_MODE) {
                 // Week mode: use ISO week year (may differ from calendar year at boundaries)
-                const isoWeek = this._getISOWeek(this.selectedDate);
-                const [year, week] = isoWeek.split('-');
+            const isoWeek = this._getISOWeek(this.selectedDate);
+            const [year, week] = isoWeek.split('-');
                 url = url
                     .replace('{week}', parseInt(week, 10).toString())
-                    .replace('{jaar}', year);
+                .replace('{jaar}', year);
             } else {
                 // Month/date mode: use calendar year
                 url = url

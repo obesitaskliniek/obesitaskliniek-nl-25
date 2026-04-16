@@ -33,8 +33,8 @@ if ( isset( $_GET['week'] ) && ! isset( $_GET['maand'] ) ) {
         $filter_loc   = isset( $_GET['locatie'] ) ? sanitize_text_field( $_GET['locatie'] ) : '';
         $redirect_url = get_post_type_archive_link( 'voorlichting' );
         $redirect_url = add_query_arg( [
-            'maand' => (int) $redirect_date->format( 'n' ),
-            'jaar'  => $redirect_date->format( 'Y' ),
+                'maand' => (int) $redirect_date->format( 'n' ),
+                'jaar'  => $redirect_date->format( 'Y' ),
         ], $redirect_url );
         if ( $filter_loc ) {
             $redirect_url = add_query_arg( 'locatie', rawurlencode( $filter_loc ), $redirect_url );
@@ -134,8 +134,8 @@ $archive_link = get_post_type_archive_link( 'voorlichting' );
 
 $build_url = function ( $month_date, $locatie = null ) use ( $archive_link, $filter_vestiging ) {
     $url = add_query_arg( [
-        'maand' => (int) $month_date->format( 'n' ),
-        'jaar'  => $month_date->format( 'Y' ),
+            'maand' => (int) $month_date->format( 'n' ),
+            'jaar'  => $month_date->format( 'Y' ),
     ], $archive_link );
     $loc = $locatie ?? $filter_vestiging;
     if ( $loc ) {
@@ -147,8 +147,8 @@ $build_url = function ( $month_date, $locatie = null ) use ( $archive_link, $fil
 
 // Base URL without locatie filter (used by "clear filter" dropdown option)
 $base_month_url = add_query_arg( [
-    'maand' => (int) $month_start->format( 'n' ),
-    'jaar'  => $month_start->format( 'Y' ),
+        'maand' => (int) $month_start->format( 'n' ),
+        'jaar'  => $month_start->format( 'Y' ),
 ], $archive_link );
 ?>
 
