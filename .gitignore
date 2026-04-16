@@ -21,3 +21,4 @@ wp-config.php
 *.css
 *.css.map
 .idea/laravel-idea.xml
+wp-content/themes/nok-2025-v1/plan-seo-technical.md
