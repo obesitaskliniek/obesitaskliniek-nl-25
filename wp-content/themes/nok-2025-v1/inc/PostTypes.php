@@ -37,6 +37,7 @@ class PostTypes {
 		add_action( 'init', [ $this, 'register_kennisbank_permalink_filter' ] );
 		add_action( 'init', [ $this, 'register_regio_permalink_filter' ] );
 		add_action( 'template_redirect', [ $this, 'protect_post_types' ] );
+		add_filter( 'redirect_canonical', [ $this, 'block_page_part_canonical_guess' ], 10, 2 );
 		add_filter( 'single_template', [ $this, 'kennisbank_category_template' ] );
 		add_filter( 'request', [ $this, 'disambiguate_kennisbank_urls' ] );
 		add_filter( 'rest_post_search_query', [ $this, 'exclude_internal_types_from_rest_search' ], 10, 2 );
@@ -78,12 +79,23 @@ class PostTypes {
 			'attributes'         => __( 'Page Part Attributes', THEME_TEXT_DOMAIN ),
 		];
 
+		// Page parts are only publicly queryable for logged-in users — the
+		// iframe preview in the page-part post editor needs the canonical URL
+		// to be resolvable. Anonymous visits should 404 rather than 301 through
+		// the CPT, which previously masked broken content links (see 1.6 in
+		// plan-seo-technical.md).
+		//
+		// exclude_from_search is also true so that WordPress's
+		// redirect_guess_404_permalink() (the "did you mean?" rescue) does not
+		// consider page_part slugs when trying to rescue a would-be 404. This
+		// is reinforced by a redirect_canonical filter below that defensively
+		// blocks any guessed URL targeting /page-part/*.
 		$args = [
 			'labels'              => $labels,
 			'description'         => __( 'Reusable page components that can be embedded into pages.', THEME_TEXT_DOMAIN ),
 			'public'              => true,
-			'publicly_queryable'  => true,
-			'exclude_from_search' => false,
+			'publicly_queryable'  => is_user_logged_in(),
+			'exclude_from_search' => true,
 			'show_ui'             => true,
 			'show_in_menu'        => true,
 			'show_in_nav_menus'   => false,
@@ -918,6 +930,31 @@ class PostTypes {
 	 * page part (with #section-id fragment for deep linking). Falls back to 404
 	 * for orphaned page parts and template_layout posts.
 	 */
+	/**
+	 * Block WordPress's 404 permalink guess from rescuing requests via page_part slugs
+	 *
+	 * WordPress's redirect_guess_404_permalink() (called from redirect_canonical)
+	 * attempts to rescue would-be 404s by matching the last URL segment against
+	 * any publicly-viewable post's slug. Before this filter, broken content links
+	 * like /behandeling/behandelprogramma/behandelteam/psycholoog/ were silently
+	 * redirected to /page-part/psycholoog/ (and then on to the final page),
+	 * creating 2-hop redirect chains and hiding the broken links from auditors.
+	 *
+	 * Setting exclude_from_search on page_part should already prevent this, but
+	 * we also filter redirect_canonical as a defensive second layer in case
+	 * another code path reintroduces a /page-part/* guess.
+	 *
+	 * @param string|false $redirect_url  URL redirect_canonical wants to send us to.
+	 * @param string       $requested_url The URL that was originally requested.
+	 * @return string|false Original URL, or false to suppress the redirect.
+	 */
+	public function block_page_part_canonical_guess( $redirect_url, $requested_url ) {
+		if ( is_string( $redirect_url ) && str_contains( $redirect_url, '/page-part/' ) ) {
+			return false;
+		}
+		return $redirect_url;
+	}
+
 	public function protect_post_types(): void {
 		global $pagenow, $wp_query;
 

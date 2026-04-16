@@ -128,6 +128,17 @@ add_filter( 'query_vars', function( $vars ) {
     return $vars;
 } );
 
+// Nieuws category: set posts_per_page on the main query so WP's canonical
+// routing (max_num_pages) matches what the template renders. Previously
+// archive.php called query_posts(['posts_per_page' => 9]) which diverged
+// from the main query's page count, causing pagination to link to
+// /nieuws/page/15/ (which then 404'd). See plan-seo-technical.md §1.4.
+add_action( 'pre_get_posts', function( $query ) {
+    if ( ! is_admin() && $query->is_main_query() && $query->is_category( 'nieuws' ) ) {
+        $query->set( 'posts_per_page', 9 );
+    }
+} );
+
 // Restrict search results to the same post types as autocomplete
 add_action( 'pre_get_posts', function( $query ) {
     if ( ! is_admin() && $query->is_search() && $query->is_main_query() ) {

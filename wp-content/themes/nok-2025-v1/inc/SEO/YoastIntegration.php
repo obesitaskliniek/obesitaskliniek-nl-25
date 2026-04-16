@@ -11,6 +11,15 @@
  * - JavaScript waits for all iframes to load before registering with Yoast
  * - Visual editor mode only (code editor cannot access iframe content)
  *
+ * Yoast title/meta templates (configured in Yoast admin, documented here for traceability):
+ * - Sitename (%%sitename%%) set to "NOK" across all content types (2026-04-15),
+ *   replacing the previous "Nederlandse Obesitas Kliniek" suffix to keep
+ *   <title> under 60 chars / 580px. See plan-seo-technical.md §1.1.
+ * - Same %%sitename%% -> "NOK" change applied in meta description templates
+ *   across all content types (2026-04-15). See plan-seo-technical.md §1.2.
+ *   Note: vestiging meta descriptions may still exceed 155 chars due to
+ *   boilerplate length — verify via re-crawl.
+ *
  * @example Basic initialization in Theme class
  * $yoast = new YoastIntegration();
  * $yoast->register_hooks();
@@ -126,11 +135,19 @@ class YoastIntegration {
 	/**
 	 * Fall back to post excerpt when no explicit Yoast meta description is set
 	 *
-	 * Fallback chain:
+	 * Fallback chain (singulars):
 	 * 1. Manual excerpt on the post itself
 	 * 2. Auto-generated excerpt from post_content (first 55 words)
 	 * 3. Voorlichting: intro_lang from HubSpot metadata
 	 * 4. Content from the first embedded page part that has text
+	 * 5. Direct extraction from post_content (bypasses get_the_excerpt() filter
+	 *    chain, which can return empty when global $post isn't set — this
+	 *    fixed FAQ singles under /kennisbank/veelgestelde-vragen/*)
+	 *
+	 * Archive coverage (kennisbank):
+	 * - Post type archive (and paged variants): templated description
+	 * - Taxonomy archive kennisbank_categories (and paged variants): templated
+	 *   description including the term name
 	 *
 	 * @param string $metadesc The meta description from Yoast (empty if not set)
 	 * @return string The meta description, or auto-generated excerpt as fallback
@@ -138,6 +155,25 @@ class YoastIntegration {
 	public function fallback_to_excerpt(string $metadesc): string {
 		if ($metadesc !== '') {
 			return $metadesc;
+		}
+
+		// Kennisbank archive pages (post type archive + paged variants)
+		if (is_post_type_archive('kennisbank')) {
+			$page = max(1, (int) get_query_var('paged'));
+			return $page > 1
+				? sprintf('NOK Kennisbank — pagina %d. Antwoorden over obesitas, behandeling en leefstijl.', $page)
+				: 'NOK Kennisbank: antwoorden op veelgestelde vragen over obesitas, behandeling, operaties en leefstijl.';
+		}
+
+		// Kennisbank taxonomy archives (category + paged variants)
+		if (is_tax('kennisbank_categories')) {
+			$term = get_queried_object();
+			$term_name = ($term && isset($term->name)) ? $term->name : '';
+			$page = max(1, (int) get_query_var('paged'));
+			if ($page > 1) {
+				return sprintf('NOK Kennisbank — %s, pagina %d. Antwoorden over obesitas en behandeling.', $term_name, $page);
+			}
+			return sprintf('NOK Kennisbank categorie %s. Antwoorden op veelgestelde vragen over obesitas en behandeling.', $term_name);
 		}
 
 		if (!is_singular()) {
@@ -164,8 +200,43 @@ class YoastIntegration {
 			}
 		}
 
-		// Fall back to first page part with content
-		return $this->get_first_page_part_excerpt($post) ?: $metadesc;
+		// Try first embedded page part with content
+		$page_part_excerpt = $this->get_first_page_part_excerpt($post);
+		if ($page_part_excerpt) {
+			return $page_part_excerpt;
+		}
+
+		// Final fallback: extract text directly from post_content
+		return $this->generate_excerpt_from_content($post) ?: $metadesc;
+	}
+
+	/**
+	 * Generate an excerpt directly from a post's raw post_content
+	 *
+	 * Bypasses get_the_excerpt() / wp_trim_excerpt() which can return empty
+	 * on some posts (observed on kennisbank FAQ singles where the global
+	 * $post isn't set at filter time). Applies the same block-stripping,
+	 * shortcode-stripping, and word-trimming logic as core.
+	 *
+	 * @param \WP_Post $post The post to extract text from
+	 * @return string Trimmed excerpt text, or empty string if content yields nothing
+	 */
+	private function generate_excerpt_from_content(\WP_Post $post): string {
+		if (empty($post->post_content)) {
+			return '';
+		}
+
+		$text = $post->post_content;
+		$text = excerpt_remove_blocks($text);
+		$text = strip_shortcodes($text);
+		$text = wp_strip_all_tags($text);
+		$text = trim(preg_replace('/\s+/u', ' ', $text));
+
+		if ($text === '') {
+			return '';
+		}
+
+		return wp_trim_words($text, 55, '…');
 	}
 
 	/**

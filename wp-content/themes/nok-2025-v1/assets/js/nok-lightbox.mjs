@@ -7,6 +7,13 @@
  * Creates the overlay element on first use and reuses it for subsequent opens.
  * Closes on backdrop click, close button, or Escape key.
  *
+ * TODO: Extend to regular Gutenberg image blocks in post_content (news posts,
+ * ervaringen, kennisbank). Currently only wired up for the
+ * nok-small-picture-text-block page part via its `lightbox` checkbox field.
+ * Editors authoring /nieuws/* posts expect to click-to-enlarge images but
+ * there's no in-editor affordance. Consider: auto-attach to <figure class="wp-block-image">
+ * elements, or add a per-image class toggle that bootstraps the lightbox.
+ *
  * @module nok-lightbox
  */
 

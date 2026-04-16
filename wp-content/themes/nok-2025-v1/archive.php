@@ -10,8 +10,9 @@ use NOK2025\V1\Assets;
 use NOK2025\V1\Helpers;
 
 get_header('generic');
-
-query_posts(array_merge($wp_query->query, ['posts_per_page' => 9]));
+// posts_per_page is set on the main query via pre_get_posts in functions.php
+// for the nieuws category — previously this file used query_posts() which
+// caused pagination to generate URLs beyond WP's canonical max_num_pages.
 ?>
 
 	<nok-hero class="nok-section">
