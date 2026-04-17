@@ -157,24 +157,21 @@
 
 .nok-faded-background {
   position: relative;
-  --mask-position: 80%;
-  &::before {
-    content: "";
-    background: var(--bg-image);
-    mask-image: linear-gradient(to right, transparent, #000 var(--mask-position, 100%));
-    background-size: cover;
-    background-position: center;
+
+  &__image {
+    object-fit: cover;
+    object-position: center;
     display: block;
     position: absolute;
     width: 50%;
     height: 100%;
     right: 0;
     top: 0;
-    bottom: 0;
-    opacity: 1;
+    mask-image: linear-gradient(to right, transparent, #000 80%);
+
     @include components-base.media-breakpoint-down(components-base.$mobile-breakpoint) {
       opacity: 0.3;
-      --mask-position: 100%;
+      mask-image: linear-gradient(to right, transparent, #000);
     }
   }
 }

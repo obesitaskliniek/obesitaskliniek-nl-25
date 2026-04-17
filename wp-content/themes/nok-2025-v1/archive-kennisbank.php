@@ -169,8 +169,6 @@ query_posts($query_args);
 					$excerpt = get_the_excerpt();
 					$date = get_the_date('d-m-y');
 
-					// Get featured image
-					$image_url = Helpers::get_featured_image_uri($post_id, 'medium_large');
 					$has_image = has_post_thumbnail($post_id);
 
 					// Get primary category
@@ -182,10 +180,16 @@ query_posts($query_args);
 						<!-- Featured image with badge overlays -->
 						<figure class="nok-square-block__image">
 							<?php if ($has_image): ?>
-								<img src="<?= esc_url($image_url); ?>"
-								     alt="<?= esc_attr($title); ?>"
-								     loading="lazy"
-								     decoding="async">
+								<?= wp_get_attachment_image(
+									get_post_thumbnail_id($post_id),
+									'medium_large',
+									false,
+									[
+										'loading'  => 'lazy',
+										'decoding' => 'async',
+										'sizes'    => '(max-width: 992px) 100vw, (max-width: 1200px) 50vw, 33vw',
+									]
+								); ?>
 							<?php elseif ($primary_category->name == 'Artikelen') : ?>
 								<div class="nok-square-block__image--placeholder">
 									<div style="transform: translateY(1em) rotateZ(45deg) scale(10);">

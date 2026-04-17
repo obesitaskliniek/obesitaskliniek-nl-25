@@ -141,8 +141,6 @@ $scroller_id = 'kennisbank-carousel-' . wp_unique_id();
 							$excerpt = get_the_excerpt();
 							$date = get_the_date('d-m-y');
 
-							// Get featured image URL (uses fallback if none)
-							$image_url = Helpers::get_featured_image_uri($post_id, 'medium_large');
 							$has_image = has_post_thumbnail($post_id);
 
 							// Get primary category
@@ -154,10 +152,16 @@ $scroller_id = 'kennisbank-carousel-' . wp_unique_id();
 								<!-- Featured image with badge overlays -->
 								<figure class="nok-square-block__image">
 									<?php if ($has_image) : ?>
-										<img src="<?= esc_url($image_url) ?>"
-										     alt="<?= esc_attr($title) ?>"
-										     loading="lazy"
-										     decoding="async">
+										<?= wp_get_attachment_image(
+											get_post_thumbnail_id($post_id),
+											'medium_large',
+											false,
+											[
+												'loading'  => 'lazy',
+												'decoding' => 'async',
+												'sizes'    => '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
+											]
+										); ?>
 									<?php else : ?>
 										<div class="nok-square-block__image--placeholder">
                                             <div style="transform: translateY(1em) rotateZ(45deg) scale(10);">

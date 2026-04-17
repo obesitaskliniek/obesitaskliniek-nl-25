@@ -163,9 +163,7 @@ $placeholder_icons = [
 					$badge_label = $type_config[$post_type][0] ?? ucfirst($post_type);
 					$badge_color = $type_config[$post_type][1] ?? 'nok-bg-lightblue';
 
-					// Featured image
 					$has_image = has_post_thumbnail($post_id);
-					$image_url = $has_image ? Helpers::get_featured_image_uri($post_id, 'medium_large') : '';
 
 					// Placeholder icon
 					$placeholder_icon = $placeholder_icons[$post_type] ?? 'ui_search';
@@ -189,10 +187,16 @@ $placeholder_icons = [
 					<article class="nok-square-block link-bottom nok-bg-white nok-text-darkblue" data-shadow="true">
 						<figure class="nok-square-block__image">
 							<?php if ($has_image): ?>
-								<img src="<?= esc_url($image_url); ?>"
-								     alt="<?= esc_attr($title); ?>"
-								     loading="lazy"
-								     decoding="async">
+								<?= wp_get_attachment_image(
+									get_post_thumbnail_id($post_id),
+									'medium_large',
+									false,
+									[
+										'loading'  => 'lazy',
+										'decoding' => 'async',
+										'sizes'    => '(max-width: 992px) 100vw, (max-width: 1200px) 50vw, 33vw',
+									]
+								); ?>
 							<?php else: ?>
 								<div class="nok-square-block__image--placeholder">
 									<div style="transform: translateY(1em) rotateZ(45deg) scale(10);">

@@ -3550,6 +3550,7 @@ nok-square-block .nok-square-block__image, .nok-square-block .nok-square-block__
 nok-square-block .nok-square-block__image img, .nok-square-block .nok-square-block__image img {
   display: block;
   width: 100%;
+  height: auto;
   aspect-ratio: 16/9;
   -o-object-fit: cover;
      object-fit: cover;
@@ -6863,28 +6864,26 @@ svg.nok-icon.larger {
 }
 .nok-faded-background {
   position: relative;
-  --mask-position: 80%;
 }
-.nok-faded-background::before {
-  content: "";
-  background: var(--bg-image);
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--mask-position, 100%));
-          mask-image: linear-gradient(to right, transparent, #000 var(--mask-position, 100%));
-  background-size: cover;
-  background-position: center;
+.nok-faded-background__image {
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
   display: block;
   position: absolute;
   width: 50%;
   height: 100%;
   right: 0;
   top: 0;
-  bottom: 0;
-  opacity: 1;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 80%);
+          mask-image: linear-gradient(to right, transparent, #000 80%);
 }
 @media (max-width: 991.98px) {
-  .nok-faded-background::before {
+  .nok-faded-background__image {
     opacity: 0.3;
-    --mask-position: 100%;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000);
+            mask-image: linear-gradient(to right, transparent, #000);
   }
 }
 .nok-pos-rel {

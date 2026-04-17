@@ -58,9 +58,7 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
 						// Count upcoming voorlichtingen for this vestiging
 						$voorlichting_count = $vestiging_city_for_match ? Helpers::count_upcoming_voorlichtingen($vestiging_city_for_match) : 0;
 
-						// Get featured image
-						$featured_image     = Helpers::get_featured_image();
-						$has_featured_image = has_post_thumbnail(get_the_ID()) && $featured_image !== '';
+						$has_featured_image = has_post_thumbnail(get_the_ID());
 						?>
 
                         <nok-square-block class="nok-bg-white nok-dark-bg-darkestblue" data-shadow="true">
@@ -68,7 +66,16 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                             <div class="nok-square-block__heading_image">
                                 <figure class="nok-vestiging-card__image nok-aspect-16x9 nok-image-cover">
                                     <a href="<?php the_permalink(); ?>">
-                                        <?= $featured_image; ?>
+                                        <?= wp_get_attachment_image(
+                                            get_post_thumbnail_id(),
+                                            'large',
+                                            false,
+                                            [
+                                                'loading'  => 'lazy',
+                                                'decoding' => 'async',
+                                                'sizes'    => '(max-width: 992px) 100vw, (max-width: 1200px) 50vw, 33vw',
+                                            ]
+                                        ); ?>
                                     </a>
                                 </figure>
                             </div>

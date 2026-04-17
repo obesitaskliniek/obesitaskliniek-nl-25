@@ -16,15 +16,14 @@ $phone          = $post_meta['_phone'][0] ?? '';
 $email          = $post_meta['_email'][0] ?? '';
 $opening_hours  = $post_meta['_opening_hours'][0] ?? '';
 
-$featured_image     = Helpers::get_featured_image_uri( $post );
-$has_featured_image = has_post_thumbnail( get_the_ID() ) && $featured_image !== '';
-
 ?>
     <nok-hero class="nok-section">
         <div class="nok-section__inner
         nok-layout-grid nok-layout-grid__4-column fill-fill
         nok-hero__inner nok-mt-0 nok-px-0 nok-border-radius-to-sm-0
-    nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10 nok-faded-background" style="--bg-image:url('<?= esc_url( $featured_image ); ?>');">
+    nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok-bg-alpha-6 nok-dark-bg-alpha-10 nok-faded-background">
+
+            <?= Helpers::get_featured_image( 'nok-faded-background__image', '(max-width: 992px) 100vw, 50vw' ) ?>
 
             <header class="nok-section__inner nok-section-narrow nok-my-0">
 
