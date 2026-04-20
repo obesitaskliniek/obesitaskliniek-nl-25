@@ -1327,7 +1327,8 @@ class Helpers {
 	 * - name: Patient name or 'Anonieme patiënt'
 	 * - subnaam: Optional subtitle (location, date, etc.)
 	 * - link_url: Permalink to full post
-	 * - image_url: Featured image URL or fallback
+	 * - image_id: Featured image attachment ID (0 if none)
+	 * - image_url: Featured image URL or fallback (for legacy/custom-quote callers)
 	 *
 	 * @example Single post
 	 * $quotes = Helpers::get_quotes_from_experience_posts([123, 456]);
@@ -1369,6 +1370,7 @@ class Helpers {
 				'name'      => $post_meta['_naam_patient'][0] ?? 'Anonieme patiënt',
 				'subnaam'   => $post_meta['_subnaam_patient'][0] ?? '',
 				'link_url'  => get_permalink( $post_id ),
+				'image_id'  => has_post_thumbnail( $post_id ) ? (int) get_post_thumbnail_id( $post_id ) : 0,
 				'image_url' => self::get_featured_image_uri( $post, 'thumbnail' ),
 			];
 

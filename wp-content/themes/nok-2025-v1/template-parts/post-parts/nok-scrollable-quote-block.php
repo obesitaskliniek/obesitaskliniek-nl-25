@@ -45,9 +45,16 @@ $quote_block_button_style = $args['block_button_color'] ?? 'nok-bg-darkestblue n
                                 <span>Bekijk alle ervaringen</span>
                             </a>
                         </div>
-                        <?php if ( ! empty( $quote['image_url'] ) ): ?>
+                        <?php if ( ! empty( $quote['image_id'] ) || ! empty( $quote['image_url'] ) ): ?>
                         <div class="nok-square-block__thumbnail">
-                            <img src="<?= esc_url( $quote['image_url'] ) ?>" alt="<?= esc_attr( $quote['name'] ?? '' ) ?>" loading="lazy">
+                            <?php if ( ! empty( $quote['image_id'] ) ): ?>
+                                <?= wp_get_attachment_image( $quote['image_id'], 'thumbnail', false, [
+                                    'alt'     => $quote['name'] ?? '',
+                                    'loading' => 'lazy',
+                                ] ) ?>
+                            <?php else: ?>
+                                <img src="<?= esc_url( $quote['image_url'] ) ?>" alt="<?= esc_attr( $quote['name'] ?? '' ) ?>" loading="lazy">
+                            <?php endif; ?>
                         </div>
                         <?php endif; ?>
                     </div>
