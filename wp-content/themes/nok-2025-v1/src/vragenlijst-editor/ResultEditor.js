@@ -26,6 +26,19 @@ const labelStyle = {
     color: '#1e1e1e',
 };
 
+const resolveEndAction = (result) => {
+    if (result.end_action === 'button' || result.end_action === 'form' || result.end_action === 'none') {
+        return result.end_action;
+    }
+    return (result.cta_url && result.cta_text) ? 'button' : 'none';
+};
+
+const END_ACTION_OPTIONS = [
+    {value: 'button', label: 'Knop (CTA)'},
+    {value: 'form',   label: 'Formulier (Gravity Form)'},
+    {value: 'none',   label: 'Niets'},
+];
+
 const ResultEditor = ({result, questions, allResults, onChange}) => {
     const update = useCallback((partial) => {
         onChange({...result, ...partial});
@@ -33,6 +46,14 @@ const ResultEditor = ({result, questions, allResults, onChange}) => {
 
     const isDefault = result.condition === 'default';
     const otherHasDefault = allResults.some(r => r.id !== result.id && r.condition === 'default');
+
+    const editorData = window.nokVragenlijstEditor || {};
+    const gravityForms = Array.isArray(editorData.gravityForms) ? editorData.gravityForms : [];
+    // If we received any forms, the plugin is obviously loaded — ignore the
+    // detection flag, which is only meaningful when the list is empty.
+    const gfReady = gravityForms.length > 0 || editorData.gravityFormsReady === true;
+
+    const endAction = resolveEndAction(result);
 
     return (
         <div style={{paddingTop: '8px'}}>
@@ -110,23 +131,71 @@ const ResultEditor = ({result, questions, allResults, onChange}) => {
                 __next40pxDefaultSize
             />
 
-            {/* CTA */}
-            <div style={labelStyle}>CTA knop (optioneel)</div>
-            <TextControl
-                value={result.cta_text || ''}
-                onChange={(cta_text) => update({cta_text: cta_text || undefined})}
-                placeholder="Knoptekst, bijv. 'Maak een afspraak'"
+            {/* End action — what to show after the result body */}
+            <div style={labelStyle}>Actie onderaan</div>
+            <SelectControl
+                value={endAction}
+                options={END_ACTION_OPTIONS}
+                onChange={(val) => {
+                    const patch = {end_action: val};
+                    // Clear unrelated fields when switching away from their action
+                    if (val !== 'button') {
+                        patch.cta_text = undefined;
+                        patch.cta_url = undefined;
+                    }
+                    if (val !== 'form') {
+                        patch.gravity_form_id = undefined;
+                    }
+                    update(patch);
+                }}
                 __nextHasNoMarginBottom
                 __next40pxDefaultSize
             />
-            <TextControl
-                value={result.cta_url || ''}
-                onChange={(cta_url) => update({cta_url: cta_url || undefined})}
-                placeholder="/pad-op-de-site/"
-                help="Relatief pad of URL op obesitaskliniek.nl"
-                __nextHasNoMarginBottom
-                __next40pxDefaultSize
-            />
+
+            {endAction === 'button' && (
+                <>
+                    <TextControl
+                        value={result.cta_text || ''}
+                        onChange={(cta_text) => update({cta_text: cta_text || undefined})}
+                        placeholder="Knoptekst, bijv. 'Maak een afspraak'"
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
+                    />
+                    <TextControl
+                        value={result.cta_url || ''}
+                        onChange={(cta_url) => update({cta_url: cta_url || undefined})}
+                        placeholder="/pad-op-de-site/"
+                        help="Relatief pad of URL op obesitaskliniek.nl"
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
+                    />
+                </>
+            )}
+
+            {endAction === 'form' && (
+                gfReady ? (
+                    <SelectControl
+                        value={result.gravity_form_id ? String(result.gravity_form_id) : ''}
+                        options={[
+                            {value: '', label: gravityForms.length ? '— Kies een formulier —' : 'Geen formulieren gevonden'},
+                            ...gravityForms.map(f => ({
+                                value: String(f.id),
+                                label: `${f.title} (#${f.id})`,
+                            })),
+                        ]}
+                        onChange={(val) => update({
+                            gravity_form_id: val ? Number(val) : undefined,
+                        })}
+                        help="Het formulier verschijnt in plaats van een CTA-knop onder het resultaat."
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
+                    />
+                ) : (
+                    <p style={{fontSize: '12px', color: '#721c24'}}>
+                        Gravity Forms is niet actief — activeer de plugin om een formulier te kiezen.
+                    </p>
+                )
+            )}
         </div>
     );
 };

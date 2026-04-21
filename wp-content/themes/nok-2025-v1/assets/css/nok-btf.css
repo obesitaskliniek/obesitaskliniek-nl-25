@@ -5403,8 +5403,7 @@ body.scrolled-100 .nok-scroll-progress__progress {
 }
 .nok-vragenlijst__input:focus {
   outline: 2px solid var(--nok-lightblue);
-  outline-offset: 2px;
-  border-color: var(--nok-lightblue);
+  outline-offset: -2px;
 }
 .nok-vragenlijst select.nok-vragenlijst__input {
   -webkit-appearance: auto;
@@ -5436,9 +5435,9 @@ body.scrolled-100 .nok-scroll-progress__progress {
   border-color: var(--nok-lightblue);
   background: oklch(from var(--nok-lightblue) l c h/0.08);
 }
-.nok-vragenlijst__radio-option:focus-within {
+.nok-vragenlijst__radio-option:has(input:focus-visible) {
   outline: 2px solid var(--nok-lightblue);
-  outline-offset: 2px;
+  outline-offset: -2px;
 }
 .nok-vragenlijst__radio-option input[type=radio] {
   position: absolute;
@@ -5535,14 +5534,14 @@ body.scrolled-100 .nok-scroll-progress__progress {
 }
 .nok-vragenlijst__result--positive {
   background: oklch(from var(--nok-green) l c h/0.08);
-  border-left: 4px solid var(--nok-green);
+  border: 2px solid var(--nok-green);
 }
 .nok-vragenlijst__result--neutral {
   background: var(--nok-body--darker);
 }
 .nok-vragenlijst__result--negative {
   background: oklch(from var(--nok-error) l c h/0.08);
-  border-left: 4px solid var(--nok-error);
+  border: 2px solid var(--nok-error);
 }
 .nok-vragenlijst__result-title {
   font-family: var(--nok-heading-font-family, "Realist", Arial, Helvetica, sans-serif);

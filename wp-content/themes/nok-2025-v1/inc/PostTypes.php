@@ -514,11 +514,12 @@ class PostTypes {
 			return is_string( $value ) ? $value : '';
 		}
 
-		$errors         = [];
-		$valid_types    = [ 'text', 'number', 'radio', 'select', 'checkbox', 'info' ];
-		$valid_styles   = [ 'positive', 'neutral', 'negative' ];
-		$valid_ops      = [ '==', '!=', '>', '>=', '<', '<=' ];
-		$valid_actions  = [ 'skip_to' ];
+		$errors             = [];
+		$valid_types        = [ 'text', 'number', 'radio', 'select', 'checkbox', 'info' ];
+		$valid_styles       = [ 'positive', 'neutral', 'negative' ];
+		$valid_ops          = [ '==', '!=', '>', '>=', '<', '<=' ];
+		$valid_actions      = [ 'skip_to' ];
+		$valid_end_actions  = [ 'button', 'form', 'none' ];
 
 		// --- Validate questions ---
 		if ( empty( $config['questions'] ) || ! is_array( $config['questions'] ) ) {
@@ -615,6 +616,19 @@ class PostTypes {
 							$config['results'][ $i ]['cta_url'] = '';
 							$errors[]                           = "{$pos}: externe URL's zijn niet toegestaan in CTA";
 						}
+					}
+				}
+
+				// Validate end action and form reference
+				if ( isset( $r['end_action'] ) && ! in_array( $r['end_action'], $valid_end_actions, true ) ) {
+					$errors[] = "{$pos}: ongeldige end_action '{$r['end_action']}'";
+				}
+				if ( ( $r['end_action'] ?? '' ) === 'form' ) {
+					$form_id = isset( $r['gravity_form_id'] ) ? (int) $r['gravity_form_id'] : 0;
+					if ( $form_id <= 0 ) {
+						$errors[] = "{$pos}: end_action 'form' vereist een geldig Gravity Form ID";
+					} else {
+						$config['results'][ $i ]['gravity_form_id'] = $form_id;
 					}
 				}
 			}

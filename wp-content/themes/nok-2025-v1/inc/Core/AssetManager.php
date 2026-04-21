@@ -282,6 +282,44 @@ class AssetManager {
 					$vl_asset['dependencies'],
 					$vl_asset['version']
 				);
+
+				// Expose available Gravity Forms so the result editor can offer
+				// a dropdown instead of requiring editors to memorize form IDs.
+				// Detection is permissive — GF's class/function availability
+				// varies by version and install type, so we accept any signal
+				// that indicates the plugin is loaded.
+				$gf_ready = class_exists( 'GFForms' )
+					|| class_exists( 'GFAPI' )
+					|| class_exists( 'RGForms' )
+					|| function_exists( 'gravity_form' )
+					|| defined( 'GF_MIN_WP_VERSION' );
+
+				$gravity_forms = [];
+				if ( class_exists( 'GFAPI' ) && method_exists( 'GFAPI', 'get_forms' ) ) {
+					foreach ( \GFAPI::get_forms() as $gf ) {
+						if ( empty( $gf['id'] ) || empty( $gf['title'] ) ) {
+							continue;
+						}
+						$gravity_forms[] = [
+							'id'    => (int) $gf['id'],
+							'title' => (string) $gf['title'],
+						];
+					}
+				}
+
+				// If we found forms, the plugin is unambiguously working.
+				if ( ! empty( $gravity_forms ) ) {
+					$gf_ready = true;
+				}
+
+				wp_localize_script(
+					'nok-vragenlijst-editor',
+					'nokVragenlijstEditor',
+					[
+						'gravityForms'      => $gravity_forms,
+						'gravityFormsReady' => $gf_ready,
+					]
+				);
 			}
 		}
 	}

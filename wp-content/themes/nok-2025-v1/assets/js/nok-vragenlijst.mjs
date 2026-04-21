@@ -329,7 +329,7 @@ class VragenlijstRenderer {
         this.nextButton = document.createElement('button');
         this.nextButton.type = 'button';
         this.nextButton.className = 'nok-button nok-bg-darkerblue nok-text-contrast nok-vragenlijst__next';
-        this.nextButton.innerHTML = '<span>Doorgaan</span>';
+        this.nextButton.innerHTML = '<span>Volgende</span>';
         this.nextButton.disabled = true;
 
         this.nav.appendChild(this.prevButton);
@@ -351,27 +351,80 @@ class VragenlijstRenderer {
     }
 
     showIntro() {
+        this.returnFormToPool();
         if (this.intro) this.intro.hidden = false;
         this.wizard.hidden = true;
         this.resultContainer.hidden = true;
     }
 
     showWizard() {
+        this.returnFormToPool();
         if (this.intro) this.intro.hidden = true;
         this.wizard.hidden = false;
         this.resultContainer.hidden = true;
     }
 
     showResult(result) {
+        // Before replacing innerHTML, return any previously-rendered form to
+        // its pool so we don't destroy Gravity Forms DOM (which holds event
+        // listeners bound by its own scripts).
+        this.returnFormToPool();
+
         if (this.intro) this.intro.hidden = true;
         this.wizard.hidden = true;
         this.resultContainer.hidden = false;
         this.resultContainer.innerHTML = this.buildResultHTML(result);
 
+        // If the result embeds a Gravity Form, move its pre-rendered nodes from
+        // the off-screen pool into the placeholder. Moving preserves event
+        // listeners and any scripts GF enqueued globally.
+        const endAction = this.resolveEndAction(result);
+        if (endAction === 'form') {
+            const placeholder = this.resultContainer.querySelector('.nok-vragenlijst__form-slot');
+            const pool = this.container.querySelector(
+                `.nok-vragenlijst__form-pool[data-result-id="${CSS.escape(result.id)}"]`
+            );
+            if (placeholder && pool) {
+                while (pool.firstChild) placeholder.appendChild(pool.firstChild);
+                placeholder.dataset.resultId = result.id;
+                placeholder.hidden = false;
+
+                // Nudge any size-dependent GF logic (conditional layouts, chosen
+                // dropdowns, etc.) to recompute against the new parent width.
+                requestAnimationFrame(() => {
+                    window.dispatchEvent(new Event('resize'));
+                });
+            }
+        }
+
         const restartBtn = this.resultContainer.querySelector('.nok-vragenlijst__restart');
         if (restartBtn) {
             restartBtn.addEventListener('click', () => this.onRestart?.());
         }
+    }
+
+    /** Move any form currently in a result slot back to its pool wrapper. */
+    returnFormToPool() {
+        const slot = this.resultContainer.querySelector('.nok-vragenlijst__form-slot');
+        if (!slot || !slot.dataset.resultId) return;
+        const pool = this.container.querySelector(
+            `.nok-vragenlijst__form-pool[data-result-id="${CSS.escape(slot.dataset.resultId)}"]`
+        );
+        if (!pool) return;
+        while (slot.firstChild) pool.appendChild(slot.firstChild);
+    }
+
+    /**
+     * Resolve a result's end action with backwards-compat fallback.
+     * If explicit end_action is missing, infer 'button' when a CTA is defined,
+     * otherwise 'none'.
+     */
+    resolveEndAction(result) {
+        if (!result) return 'none';
+        if (result.end_action === 'button' || result.end_action === 'form' || result.end_action === 'none') {
+            return result.end_action;
+        }
+        return (result.cta_url && result.cta_text) ? 'button' : 'none';
     }
 
     /**
@@ -447,7 +500,7 @@ class VragenlijstRenderer {
             directSection.hidden = !isDirect;
             toggleBtn.textContent = isDirect
                 ? 'Liever lengte & gewicht invoeren?'
-                : 'BMI al bekend? Direct invoeren';
+                : 'Liever direct BMI invoeren?';
 
             // Clear answer when switching modes
             hiddenInput.value = '';
@@ -539,7 +592,7 @@ class VragenlijstRenderer {
                             placeholder="bijv. 30.0" ${question.required !== false ? 'required' : ''}>
                     </div>
                     <button type="button" class="nok-vragenlijst__bmi-toggle">
-                        BMI al bekend? Direct invoeren
+                        Liever direct BMI invoeren?
                     </button>
                     <input type="hidden" class="nok-vragenlijst__bmi-answer" data-qid="${qid}" value="${escapeAttr(bmiVal)}">
                 </div>`;
@@ -597,11 +650,16 @@ class VragenlijstRenderer {
             html += `<div class="nok-vragenlijst__result-body">${result.body}</div>`;
         }
 
-        if (result.cta_url && result.cta_text) {
+        const endAction = this.resolveEndAction(result);
+
+        if (endAction === 'button' && result.cta_url && result.cta_text) {
             html += `<a href="${escapeAttr(result.cta_url)}"
                 class="nok-button nok-bg-darkerblue nok-text-contrast nok-vragenlijst__result-cta">
                 <span>${escapeHtml(result.cta_text)}</span>
             </a>`;
+        } else if (endAction === 'form') {
+            // Placeholder filled in by showResult() from the hidden form pool
+            html += '<div class="nok-vragenlijst__form-slot" hidden></div>';
         }
 
         html += `<button type="button" class="nok-button nok-vragenlijst__restart">
@@ -623,6 +681,13 @@ class VragenlijstRenderer {
         const engine = this.engine;
         this.prevButton.disabled = !engine.canGoBack();
         this.nextButton.disabled = !engine.canAdvance();
+        // Visibility is managed by the controller — updateNav never forces the
+        // button back on (otherwise it'd "un-hide" during an auto-advance window).
+        // visibility (not `hidden`) keeps the button's flex slot so the Prev
+        // button doesn't jump into the centered gap left behind.
+        if (!this._nextHiddenByAutoAdvance) {
+            this.nextButton.style.visibility = '';
+        }
 
         // "Bekijk resultaat" on last question, "Volgende" otherwise
         const current = engine.getCurrentQuestion();
@@ -726,19 +791,36 @@ function initQuestionnaire(container) {
     const engine = new VragenlijstEngine(config);
     const renderer = new VragenlijstRenderer(container, engine);
 
+    const skipIntro = engine.settings.skip_intro === true;
+
+    const startWizard = () => {
+        const first = engine.start();
+        if (!first) return;
+        renderer.showWizard();
+        renderer.renderQuestion(first);
+    };
+
     // --- Start button ---
     const startBtn = container.querySelector('.nok-vragenlijst__start');
     if (startBtn) {
-        startBtn.addEventListener('click', () => {
-            const first = engine.start();
-            if (!first) return;
-            renderer.showWizard();
-            renderer.renderQuestion(first);
-        });
+        startBtn.addEventListener('click', startWizard);
     }
+
+    // --- Auto-advance timer (radio/select with auto_advance enabled) ---
+    let autoAdvanceTimer = null;
+    const cancelAutoAdvance = () => {
+        if (autoAdvanceTimer) {
+            clearTimeout(autoAdvanceTimer);
+            autoAdvanceTimer = null;
+        }
+        renderer._nextHiddenByAutoAdvance = false;
+        renderer.nextButton.style.visibility = '';
+    };
 
     // --- Answer input handling ---
     function onAnswerChange() {
+        cancelAutoAdvance();
+
         const answer = renderer.getCurrentAnswer();
         const q = engine.getCurrentQuestion();
         if (q && answer !== undefined) {
@@ -752,6 +834,23 @@ function initQuestionnaire(container) {
             renderer.questionArea.querySelectorAll('.nok-vragenlijst__radio-option').forEach(opt => {
                 opt.classList.toggle('is-selected', !!opt.querySelector('input')?.checked);
             });
+        }
+
+        // Auto-advance on radio/select when enabled (default on) and we have a valid answer.
+        // Short delay lets the user see their selection register before the screen changes.
+        if (q && (q.type === 'radio' || q.type === 'select')
+            && q.auto_advance !== false
+            && answer !== undefined && engine.canAdvance()) {
+            // Hide the Next button synchronously — paint hasn't happened yet, so
+            // the user never sees the "Doorgaan" flash between selection and advance.
+            // visibility:hidden reserves layout space (Prev stays put).
+            renderer._nextHiddenByAutoAdvance = true;
+            renderer.nextButton.style.visibility = 'hidden';
+            autoAdvanceTimer = setTimeout(() => {
+                autoAdvanceTimer = null;
+                renderer._nextHiddenByAutoAdvance = false;
+                advance();
+            }, 250);
         }
     }
 
@@ -781,17 +880,26 @@ function initQuestionnaire(container) {
         }
     }
 
-    renderer.nextButton.addEventListener('click', advance);
+    renderer.nextButton.addEventListener('click', () => {
+        cancelAutoAdvance();
+        advance();
+    });
 
     renderer.prevButton.addEventListener('click', () => {
+        cancelAutoAdvance();
         const prev = engine.prev();
         if (prev) renderer.renderQuestion(prev);
     });
 
     // --- Restart ---
     renderer.onRestart = () => {
-        engine.reset();
-        renderer.showIntro();
+        cancelAutoAdvance();
+        if (skipIntro) {
+            startWizard();
+        } else {
+            engine.reset();
+            renderer.showIntro();
+        }
     };
 
     // --- Keyboard: Enter advances ---
@@ -802,6 +910,7 @@ function initQuestionnaire(container) {
 
         if (engine.canAdvance()) {
             e.preventDefault();
+            cancelAutoAdvance();
             advance();
         }
     });
@@ -810,9 +919,19 @@ function initQuestionnaire(container) {
     const popup = container.closest('nok-popup');
     if (popup) {
         popup.addEventListener('nok-popup:close', () => {
-            engine.reset();
-            renderer.showIntro();
+            cancelAutoAdvance();
+            if (skipIntro) {
+                startWizard();
+            } else {
+                engine.reset();
+                renderer.showIntro();
+            }
         });
+    }
+
+    // --- Auto-start when skip_intro is enabled ---
+    if (skipIntro) {
+        startWizard();
     }
 
     logger.info(NAME, `Loaded: ${config.questions.length} questions, ${config.results.length} results`);

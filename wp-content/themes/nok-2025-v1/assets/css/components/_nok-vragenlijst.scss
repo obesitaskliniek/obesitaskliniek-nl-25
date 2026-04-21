@@ -119,9 +119,10 @@
     text-align: left;
 
     &:focus {
+      // Inset offset draws the ring over the existing border so it can't be
+      // clipped by an ancestor overflow:hidden (e.g. nok-popup-body).
       outline: 2px solid var(--nok-lightblue);
-      outline-offset: 2px;
-      border-color: var(--nok-lightblue);
+      outline-offset: -2px;
     }
   }
 
@@ -153,10 +154,13 @@
       background: oklch(from var(--nok-lightblue) l c h / 0.08);
     }
 
-    // Focus ring for keyboard navigation
-    &:focus-within {
+    // Focus ring for keyboard navigation only — avoids a double ring after
+    // a mouse click when is-selected already colours the border. Inset
+    // offset keeps the ring inside the element so ancestor overflow:hidden
+    // (e.g. nok-popup-body) can't clip it.
+    &:has(input:focus-visible) {
       outline: 2px solid var(--nok-lightblue);
-      outline-offset: 2px;
+      outline-offset: -2px;
     }
 
     input[type="radio"] {
@@ -279,7 +283,7 @@
 
     &--positive {
       background: oklch(from var(--nok-green) l c h / 0.08);
-      border-left: 4px solid var(--nok-green);
+      border: 2px solid var(--nok-green);
     }
 
     &--neutral {
@@ -288,7 +292,7 @@
 
     &--negative {
       background: oklch(from var(--nok-error) l c h / 0.08);
-      border-left: 4px solid var(--nok-error);
+      border: 2px solid var(--nok-error);
     }
   }
 

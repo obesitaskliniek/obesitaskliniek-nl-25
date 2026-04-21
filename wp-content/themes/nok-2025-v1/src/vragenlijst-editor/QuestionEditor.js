@@ -120,6 +120,21 @@ const QuestionEditor = ({question, index, questions, results, onChange}) => {
                 </div>
             )}
 
+            {/* Auto-advance (radio/select only) */}
+            {needsOptions && (
+                <div style={{marginTop: '10px'}}>
+                    <ToggleControl
+                        label="Automatisch doorgaan"
+                        help="Ga direct naar de volgende vraag zodra een antwoord is gekozen."
+                        checked={question.auto_advance !== false}
+                        onChange={(auto_advance) => update({
+                            auto_advance: auto_advance ? undefined : false,
+                        })}
+                        __nextHasNoMarginBottom
+                    />
+                </div>
+            )}
+
             {/* Options (radio/select) */}
             {needsOptions && (
                 <>
