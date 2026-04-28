@@ -44,7 +44,7 @@ const instances = new WeakMap();
  * <div data-voorlichting-selector
  *      data-api-url="/wp-json/nok-2025-v1/v1/voorlichtingen/options"
  *      data-target-form="#gform_1"
- *      data-voorlichting-id-field="input_1_18">
+ *      data-voorlichting-id-field="input_1_22">
  *   <select id="voorlichting-location">...</select>
  *   <select id="voorlichting-datetime">...</select>
  * </div>
@@ -94,10 +94,14 @@ class SelectorInstance {
         this.container = container;
         this.controller = new AbortController();
 
-        // Configuration from data attributes
+        // Configuration from data attributes. The hidden voorlichting-id
+        // field id is resolved server-side from the GF form's adminLabel
+        // (see VoorlichtingForm::field_id) — no fallback here, because a
+        // missing data attribute means the form is misconfigured and we
+        // shouldn't silently bind to a stale id.
         this.apiUrl = container.dataset.apiUrl;
         this.targetFormSelector = container.dataset.targetForm || '#gform_1';
-        this.voorlichtingIdFieldId = container.dataset.voorlichtingIdField || 'input_1_18';
+        this.voorlichtingIdFieldId = container.dataset.voorlichtingIdField || '';
 
         // Find dropdown elements (by fixed IDs from template)
         this.locationSelect = container.querySelector('#voorlichting-location');
@@ -105,7 +109,9 @@ class SelectorInstance {
 
         // Find target form and its elements
         this.form = document.querySelector(this.targetFormSelector);
-        this.voorlichtingIdInput = this.form?.querySelector(`#${this.voorlichtingIdFieldId}`);
+        this.voorlichtingIdInput = this.voorlichtingIdFieldId
+            ? this.form?.querySelector(`#${this.voorlichtingIdFieldId}`)
+            : null;
         this.formFieldset = document.querySelector('[data-voorlichting-form-fieldset]');
 
         // Data storage
@@ -120,6 +126,15 @@ class SelectorInstance {
      * @private
      */
     async _init() {
+        if (!this.voorlichtingIdFieldId) {
+            console.error(
+                'NOK Voorlichting Selector: missing data-voorlichting-id-field on container — ' +
+                'GF form 1 is likely misconfigured (no field with adminLabel "voorlichting_id"). ' +
+                'Aborting init; admin_notices will surface this in wp-admin.'
+            );
+            return;
+        }
+
         if (!this.locationSelect || !this.datetimeSelect) {
             console.warn('NOK Voorlichting Selector: Required dropdowns not found', {
                 locationSelect: this.locationSelect,
@@ -132,6 +147,14 @@ class SelectorInstance {
             console.warn('NOK Voorlichting Selector: Target form not found', {
                 selector: this.targetFormSelector
             });
+            return;
+        }
+
+        if (!this.voorlichtingIdInput) {
+            console.error(
+                'NOK Voorlichting Selector: hidden field #' + this.voorlichtingIdFieldId +
+                ' not present in target form. Aborting init.'
+            );
             return;
         }
 

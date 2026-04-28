@@ -25,18 +25,36 @@ use WP_REST_Response;
  */
 class VoorlichtingForm {
 	/**
-	 * Form configuration - single source of truth for Gravity Forms field IDs
+	 * Form configuration - single source of truth for Gravity Forms references.
 	 *
 	 * Uses Form 1 (same as single-voorlichting page). Location/datetime
 	 * selection is handled by external dropdowns, not form fields.
 	 *
+	 * Fields are addressed by their adminLabel (set in GF admin → Field →
+	 * Advanced → Admin Field Label) rather than numeric ID. GF renumbers IDs
+	 * when fields are deleted/recreated, so storing IDs in code creates a
+	 * fragile coupling. adminLabel is admin-only, never shown on the
+	 * frontend, and survives field renumbering.
+	 *
 	 * Referenced by:
+	 * - functions.php (gform_validation_1 / gform_after_submission_1 hooks)
 	 * - Template data attributes (nok-voorlichting-aanmelden.php)
 	 * - JavaScript form handler (nok-voorlichting-form.mjs)
 	 */
 	public const FORM_ID = 1;
-	public const FIELD_VOORLICHTING_ID = 18;
-	public const FIELD_SUBMISSION_ID = 21;
+	public const ADMIN_LABEL_VOORLICHTING_ID = 'voorlichting_id';
+	public const ADMIN_LABEL_SUBMISSION_ID   = 'submission_id';
+
+	/**
+	 * Cache of field IDs resolved by adminLabel during the current request.
+	 *
+	 * Populated by the gform_pre_render filter — the canonical render-time
+	 * hook where GF is guaranteed to be fully bootstrapped and $form is
+	 * fully resolved. Keyed by adminLabel.
+	 *
+	 * @var array<string,int>
+	 */
+	private static array $resolved_field_ids = [];
 
 	/**
 	 * Register WordPress hooks
@@ -45,6 +63,166 @@ class VoorlichtingForm {
 	 */
 	public function register_hooks(): void {
 		add_action( 'rest_api_init', [ $this, 'register_endpoints' ] );
+		add_action( 'admin_notices', [ $this, 'maybe_render_misconfiguration_notice' ] );
+
+		// Capture resolved field IDs every time form 1 is rendered. Cheap
+		// (one foreach over the fields array) and guaranteed to fire when
+		// the template calls gravity_form( FORM_ID, ... ).
+		add_filter( 'gform_pre_render_' . self::FORM_ID, [ self::class, 'capture_field_ids' ] );
+	}
+
+	/**
+	 * Cache field IDs resolved from adminLabels during form pre-render.
+	 *
+	 * Hooked on gform_pre_render_<FORM_ID>. Populates self::$resolved_field_ids
+	 * keyed by adminLabel; returns $form unchanged. Filter, not action — must
+	 * return the form.
+	 *
+	 * @param array $form
+	 * @return array
+	 */
+	public static function capture_field_ids( $form ): array {
+		if ( is_array( $form ) ) {
+			foreach ( [
+				self::ADMIN_LABEL_VOORLICHTING_ID,
+				self::ADMIN_LABEL_SUBMISSION_ID,
+			] as $label ) {
+				$id = self::field_id( $form, $label );
+				if ( $id !== null ) {
+					self::$resolved_field_ids[ $label ] = $id;
+				}
+			}
+		}
+		return $form;
+	}
+
+	/**
+	 * Look up a previously-captured field ID.
+	 *
+	 * Returns null if gform_pre_render_<FORM_ID> hasn't fired yet for this
+	 * request — i.e. before gravity_form() has been called. Callers that
+	 * need the ID before render must either render the form first (output
+	 * buffer) or fall back to {@see self::load_form()} + field_id().
+	 *
+	 * @param string $admin_label
+	 * @return int|null
+	 */
+	public static function get_resolved_field_id( string $admin_label ): ?int {
+		return self::$resolved_field_ids[ $admin_label ] ?? null;
+	}
+
+	/**
+	 * Resolve a Gravity Forms field ID by its adminLabel.
+	 *
+	 * Pure function over a form array — no I/O, trivially testable. Callers
+	 * in hook context already receive $form; callers outside hook context
+	 * should fetch it via {@see self::load_form()}.
+	 *
+	 * @param array  $form        GF form array (as returned by GFAPI::get_form_meta).
+	 * @param string $admin_label The adminLabel set on the field in GF admin.
+	 * @return int|null Field ID, or null if no field matches.
+	 */
+	public static function field_id( array $form, string $admin_label ): ?int {
+		foreach ( $form['fields'] ?? [] as $field ) {
+			if ( ( $field->adminLabel ?? null ) === $admin_label ) {
+				return (int) $field->id;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Resolve a field ID and log if missing.
+	 *
+	 * Wraps {@see self::field_id()} with a single error_log call so callsites
+	 * stay one line. Returns null on miss; callers decide the user-facing
+	 * fallback.
+	 *
+	 * @param array  $form
+	 * @param string $admin_label
+	 * @return int|null
+	 */
+	public static function require_field_id( array $form, string $admin_label ): ?int {
+		$id = self::field_id( $form, $admin_label );
+		if ( $id === null ) {
+			error_log( sprintf(
+				'NOK voorlichting form (%d): missing adminLabel "%s"',
+				self::FORM_ID,
+				$admin_label
+			) );
+		}
+		return $id;
+	}
+
+	/**
+	 * Load the configured form's metadata.
+	 *
+	 * Thin wrapper around GFAPI::get_form_meta() that no-ops gracefully if
+	 * Gravity Forms is deactivated. GFAPI caches per-request internally
+	 * (see GFFormsModel::$_current_forms), so repeated calls are free.
+	 *
+	 * @return array|null
+	 */
+	public static function load_form(): ?array {
+		if ( ! class_exists( '\GFAPI' ) ) {
+			return null;
+		}
+		try {
+			$form = \GFAPI::get_form_meta( self::FORM_ID );
+		} catch ( \Throwable $e ) {
+			error_log( 'NOK VoorlichtingForm::load_form: ' . $e->getMessage() );
+			return null;
+		}
+		return is_array( $form ) ? $form : null;
+	}
+
+	/**
+	 * Render an admin notice when form 1 is missing required adminLabels.
+	 *
+	 * The whole point of resolving fields by adminLabel is to surface
+	 * misconfiguration earlier than "submit-time silent failure." Wrapped in
+	 * try/catch so a fatal here can never bring down wp-admin — diagnostic
+	 * fallback to the PHP error log.
+	 *
+	 * Skipped on AJAX/cron/REST contexts (not admin page renders) and for
+	 * users without manage_options to limit blast radius.
+	 *
+	 * @return void
+	 */
+	public function maybe_render_misconfiguration_notice(): void {
+		if ( wp_doing_ajax() || wp_doing_cron() ) {
+			return;
+		}
+		if ( ! function_exists( 'current_user_can' ) || ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		try {
+			$form = self::load_form();
+			if ( $form === null ) {
+				return; // GF inactive or form missing — separate problem.
+			}
+			$missing = [];
+			foreach ( [
+				self::ADMIN_LABEL_VOORLICHTING_ID,
+				self::ADMIN_LABEL_SUBMISSION_ID,
+			] as $label ) {
+				if ( self::field_id( $form, $label ) === null ) {
+					$missing[] = $label;
+				}
+			}
+			if ( empty( $missing ) ) {
+				return;
+			}
+			printf(
+				'<div class="notice notice-error"><p><strong>Voorlichting-aanmelding is broken:</strong> Gravity Form %d is missing %s with adminLabel %s. Set the Admin Field Label under Field → Advanced.</p></div>',
+				(int) self::FORM_ID,
+				count( $missing ) === 1 ? 'a field' : 'fields',
+				'<code>' . implode( '</code>, <code>', array_map( 'esc_html', $missing ) ) . '</code>'
+			);
+		} catch ( \Throwable $e ) {
+			error_log( 'NOK VoorlichtingForm::maybe_render_misconfiguration_notice: ' . $e->getMessage() );
+		}
 	}
 
 	/**

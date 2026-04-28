@@ -196,14 +196,25 @@ add_filter( 'gform_required_legend', function( $legend, $form ) {
 add_filter( 'gform_validation_' . VoorlichtingForm::FORM_ID, function( $validation_result ) {
 	$form = $validation_result['form'];
 
+	$voorlichting_field_id = VoorlichtingForm::require_field_id(
+		$form,
+		VoorlichtingForm::ADMIN_LABEL_VOORLICHTING_ID
+	);
+	if ( $voorlichting_field_id === null ) {
+		// Misconfigured form — admin_notices warns admins. Don't pretend to
+		// validate against a field that doesn't exist; let GF's own
+		// validation handle whatever fields are present.
+		return $validation_result;
+	}
+
 	// Get the voorlichting ID from hidden field (POST uses "input_{field_id}", not "input_{form_id}_{field_id}")
 	/** @noinspection PhpUndefinedFunctionInspection — Gravity Forms helper */
-	$voorlichting_id = rgpost( 'input_' . VoorlichtingForm::FIELD_VOORLICHTING_ID );
+	$voorlichting_id = rgpost( 'input_' . $voorlichting_field_id );
 
 	if ( empty( $voorlichting_id ) ) {
 		// Mark hidden field as invalid
 		foreach ( $form['fields'] as &$field ) {
-			if ( $field->id == VoorlichtingForm::FIELD_VOORLICHTING_ID ) {
+			if ( $field->id == $voorlichting_field_id ) {
 				$field->failed_validation  = true;
 				$field->validation_message = __( 'Selecteer een voorlichting.', THEME_TEXT_DOMAIN );
 				break;
@@ -218,7 +229,7 @@ add_filter( 'gform_validation_' . VoorlichtingForm::FORM_ID, function( $validati
 	$post = get_post( (int) $voorlichting_id );
 	if ( ! $post || $post->post_type !== 'voorlichting' ) {
 		foreach ( $form['fields'] as &$field ) {
-			if ( $field->id == VoorlichtingForm::FIELD_VOORLICHTING_ID ) {
+			if ( $field->id == $voorlichting_field_id ) {
 				$field->failed_validation  = true;
 				$field->validation_message = __( 'De geselecteerde voorlichting is niet meer beschikbaar.', THEME_TEXT_DOMAIN );
 				break;
@@ -233,7 +244,7 @@ add_filter( 'gform_validation_' . VoorlichtingForm::FORM_ID, function( $validati
 	$status = strtolower( get_post_meta( $voorlichting_id, 'inschrijvingsstatus', true ) );
 	if ( $status !== 'open' ) {
 		foreach ( $form['fields'] as &$field ) {
-			if ( $field->id == VoorlichtingForm::FIELD_VOORLICHTING_ID ) {
+			if ( $field->id == $voorlichting_field_id ) {
 				$field->failed_validation  = true;
 				$field->validation_message = sprintf(
 					__( 'Deze voorlichting is helaas %s. Kies een andere datum.', THEME_TEXT_DOMAIN ),
@@ -252,11 +263,18 @@ add_filter( 'gform_validation_' . VoorlichtingForm::FORM_ID, function( $validati
 /**
  * Gravity Forms: Populate Submission ID field with entry ID
  *
- * Writes the entry ID into the hidden Submission ID field (field 21) after
- * the entry is saved. Uses priority 9 to run before add-on feed processing
- * (typically priority 10), ensuring the value is available for HubSpot sync.
+ * Writes the entry ID into the hidden Submission ID field after the entry
+ * is saved. Uses priority 9 to run before add-on feed processing (typically
+ * priority 10), ensuring the value is available for HubSpot sync.
  */
 add_action( 'gform_after_submission_' . VoorlichtingForm::FORM_ID, function( $entry, $form ) {
+	$submission_field_id = VoorlichtingForm::require_field_id(
+		$form,
+		VoorlichtingForm::ADMIN_LABEL_SUBMISSION_ID
+	);
+	if ( $submission_field_id === null ) {
+		return;
+	}
 	/** @noinspection PhpUndefinedClassInspection — Gravity Forms API */
-	GFAPI::update_entry_field( $entry['id'], VoorlichtingForm::FIELD_SUBMISSION_ID, $entry['id'] );
+	GFAPI::update_entry_field( $entry['id'], $submission_field_id, $entry['id'] );
 }, 9, 2 );
