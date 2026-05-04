@@ -294,7 +294,7 @@ $base_month_url = add_query_arg( [
                                 </tr>
                                 <tr>
                                     <td><?= Assets::getIcon( 'ui_location' ); ?></td>
-                                    <td><?= $is_online ? esc_html__( 'Online', THEME_TEXT_DOMAIN ) : esc_html( ucfirst( $hubspotData['locatie'] ) ); ?></td>
+                                    <td><?= $is_online ? esc_html__( 'Online', THEME_TEXT_DOMAIN ) : esc_html( 'Locatie '. ucfirst( $hubspotData['locatie'] ) ); ?></td>
                                 </tr>
                             </table>
 
