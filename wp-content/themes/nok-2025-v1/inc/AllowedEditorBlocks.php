@@ -85,7 +85,15 @@ class AllowedEditorBlocks {
 			// Pages: admins get full access; editors only get page-part embeds
 			'page'            => current_user_can( 'manage_options' )
 				? [ 'core' => true, 'nok' => 'all' ]
-				: [ 'core' => false, 'nok' => [ 'embed-nok-page-part' ] ],
+				: [
+					'core'  => false,
+					'nok'   => [ 'embed-nok-page-part', 'general-nok-section' ],
+					'extra' => [
+						'core/paragraph',
+						'core/heading',
+						'core/image',
+					],
+				],
 
 			// Page parts: core content blocks + all NOK blocks
 			'page_part'       => [ 'core' => true, 'nok' => 'all' ],

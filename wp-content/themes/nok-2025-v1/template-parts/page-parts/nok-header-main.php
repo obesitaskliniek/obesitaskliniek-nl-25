@@ -67,7 +67,7 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT_ABS . '/assets/img/nok-logo.
         foreach ($vl_posts as $vl_post) :
             $vl_popup_id = 'popup-vragenlijst-' . $vl_post->post_name;
         ?>
-        <nok-popup class="nok-bg-body nok-dark-bg-darkerblue" id="<?= esc_attr($vl_popup_id) ?>"
+        <nok-popup class="nok-bg-body nok-dark-bg-darkerblue nok-vragenlijst-popup nok-vragenlijst-popup--<?= esc_attr( sanitize_html_class( $vl_post->post_name ) ) ?>" id="<?= esc_attr($vl_popup_id) ?>"
                    data-on-close="reset">
             <nok-popup-header>
                 <nok-popup-title><?= esc_html(get_the_title($vl_post)) ?></nok-popup-title>

@@ -253,7 +253,7 @@
   // --- Navigation ---
   &__nav {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: var(--nok-space-fluid-sm);
     padding-top: var(--nok-space-fluid-sm);
@@ -261,7 +261,7 @@
 
   &__prev {
     &:disabled {
-      display: none;
+      //display: none;
     }
   }
 

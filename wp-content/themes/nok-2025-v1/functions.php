@@ -261,20 +261,46 @@ add_filter( 'gform_validation_' . VoorlichtingForm::FORM_ID, function( $validati
 } );
 
 /**
- * Gravity Forms: Populate Submission ID field with entry ID
+ * Gravity Forms: Populate derived hidden fields
  *
- * Writes the entry ID into the hidden Submission ID field after the entry
- * is saved. Uses priority 9 to run before add-on feed processing (typically
- * priority 10), ensuring the value is available for HubSpot sync.
+ * Writes values after the entry is saved. Uses priority 9 to run before add-on
+ * feed processing (typically priority 10), ensuring the values are available
+ * for HubSpot sync.
  */
 add_action( 'gform_after_submission_' . VoorlichtingForm::FORM_ID, function( $entry, $form ) {
 	$submission_field_id = VoorlichtingForm::require_field_id(
 		$form,
 		VoorlichtingForm::ADMIN_LABEL_SUBMISSION_ID
 	);
-	if ( $submission_field_id === null ) {
+	$voorlichting_field_id = VoorlichtingForm::require_field_id(
+		$form,
+		VoorlichtingForm::ADMIN_LABEL_VOORLICHTING_ID
+	);
+	$event_type_field_id = VoorlichtingForm::require_field_id(
+		$form,
+		VoorlichtingForm::ADMIN_LABEL_EVENT_TYPE
+	);
+
+	if ( $submission_field_id === null && ( $voorlichting_field_id === null || $event_type_field_id === null ) ) {
 		return;
 	}
+
 	/** @noinspection PhpUndefinedClassInspection — Gravity Forms API */
-	GFAPI::update_entry_field( $entry['id'], $submission_field_id, $entry['id'] );
+	if ( $submission_field_id !== null ) {
+		GFAPI::update_entry_field( $entry['id'], $submission_field_id, $entry['id'] );
+	}
+
+	if ( $voorlichting_field_id === null || $event_type_field_id === null ) {
+		return;
+	}
+
+	$voorlichting_id = $entry[ (string) $voorlichting_field_id ] ?? '';
+	if ( empty( $voorlichting_id ) ) {
+		return;
+	}
+
+	$hubspot_data = Helpers::setup_hubspot_metadata( (int) $voorlichting_id );
+	$event_type   = strtolower( $hubspot_data['type'] ?? '' ) === 'online' ? 'online' : 'offline';
+
+	GFAPI::update_entry_field( $entry['id'], $event_type_field_id, $event_type );
 }, 9, 2 );

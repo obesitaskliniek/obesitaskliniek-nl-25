@@ -222,6 +222,7 @@ class BlockRenderers {
 		$nok_icon_color    = $block['attrs']['nokIconColor'] ?? '';
 		$nok_icon_position = $block['attrs']['nokIconPosition'] ?? 'after';
 		$fill_mobile       = $block['attrs']['fillMobile'] ?? false;
+		$nok_popup_id      = $block['attrs']['nokPopupId'] ?? '';
 
 		// Load HTML into DOMDocument
 		$dom = new \DOMDocument();
@@ -328,6 +329,14 @@ class BlockRenderers {
 			}
 		}
 
+		// Apply popup toggler attributes when a popup is configured
+		if ( ! empty( $nok_popup_id ) ) {
+			$button->setAttribute( 'href', '#' );
+			foreach ( self::get_popup_toggler_attr_map( $nok_popup_id ) as $name => $value ) {
+				$button->setAttribute( $name, $value );
+			}
+		}
+
 		// Extract just the anchor tag (remove wrapper div)
 		return $dom->saveHTML( $button );
 	}
@@ -367,10 +376,31 @@ class BlockRenderers {
 	 * @return string HTML attribute string
 	 */
 	public static function get_popup_toggler_attrs( string $popup_id ): string {
-		return 'data-toggles-class="popup-open" data-class-target="nok-top-navigation"'
-		       . ' data-toggle-event="click"'
-		       . ' data-toggles-attribute="data-state" data-toggles-attribute-value="open"'
-		       . ' data-attribute-target="#' . esc_attr( $popup_id ) . '"';
+		$attrs = [];
+
+		foreach ( self::get_popup_toggler_attr_map( $popup_id ) as $name => $value ) {
+			$attrs[] = $name . '="' . esc_attr( $value ) . '"';
+		}
+
+		return implode( ' ', $attrs );
+	}
+
+	/**
+	 * Build popup toggler attributes as a DOM-friendly map.
+	 *
+	 * @param string $popup_id HTML id of the popup element (e.g. 'popup-bmi-calculator')
+	 *
+	 * @return array<string, string> Attribute name/value pairs
+	 */
+	private static function get_popup_toggler_attr_map( string $popup_id ): array {
+		return [
+			'data-toggles-class'           => 'popup-open',
+			'data-class-target'            => 'nok-top-navigation',
+			'data-toggle-event'            => 'click',
+			'data-toggles-attribute'       => 'data-state',
+			'data-toggles-attribute-value' => 'open',
+			'data-attribute-target'        => '#' . $popup_id,
+		];
 	}
 
 	/**

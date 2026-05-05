@@ -44,6 +44,7 @@ class VoorlichtingForm {
 	public const FORM_ID = 1;
 	public const ADMIN_LABEL_VOORLICHTING_ID = 'voorlichting_id';
 	public const ADMIN_LABEL_SUBMISSION_ID   = 'submission_id';
+	public const ADMIN_LABEL_EVENT_TYPE      = 'event_type';
 
 	/**
 	 * Cache of field IDs resolved by adminLabel during the current request.
@@ -86,6 +87,7 @@ class VoorlichtingForm {
 			foreach ( [
 				self::ADMIN_LABEL_VOORLICHTING_ID,
 				self::ADMIN_LABEL_SUBMISSION_ID,
+				self::ADMIN_LABEL_EVENT_TYPE,
 			] as $label ) {
 				$id = self::field_id( $form, $label );
 				if ( $id !== null ) {
@@ -206,6 +208,7 @@ class VoorlichtingForm {
 			foreach ( [
 				self::ADMIN_LABEL_VOORLICHTING_ID,
 				self::ADMIN_LABEL_SUBMISSION_ID,
+				self::ADMIN_LABEL_EVENT_TYPE,
 			] as $label ) {
 				if ( self::field_id( $form, $label ) === null ) {
 					$missing[] = $label;

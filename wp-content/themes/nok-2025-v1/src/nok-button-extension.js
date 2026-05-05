@@ -16,8 +16,8 @@
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { Fragment } from '@wordpress/element';
-import { InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
+import { BlockControls, InspectorControls } from '@wordpress/block-editor';
+import { PanelBody, SelectControl, ToggleControl, ToolbarDropdownMenu } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import IconSelector from './components/IconSelector';
 import ColorSelector from './components/ColorSelector';
@@ -66,6 +66,10 @@ function addButtonAttributes(settings, name) {
                 type: 'boolean',
                 default: false,
             },
+            nokPopupId: {
+                type: 'string',
+                default: '',
+            },
         },
     };
 }
@@ -93,16 +97,38 @@ const withButtonControls = createHigherOrderComponent((BlockEdit) => {
             nokTextColor = '',
             nokIconColor = '',
             nokIconPosition = 'after',
-            fillMobile = false
+            fillMobile = false,
+            nokPopupId = '',
         } = attributes;
 
         // Get icons from localized data (ui + nok categories, keys include prefix)
         const availableIcons = window.nokButtonIcons || {};
+        const popupTargets = window.nokPopupTargets || [];
 
         return (
             <Fragment>
                 <BlockEdit {...props} />
-                <InspectorControls>
+                {popupTargets.length > 0 && (
+                    <BlockControls group="block">
+                        <ToolbarDropdownMenu
+                            icon="external"
+                            label={__('Popup link', 'nok2025')}
+                            controls={[
+                                {
+                                    title: __('Geen popup', 'nok2025'),
+                                    isActive: !nokPopupId,
+                                    onClick: () => setAttributes({ nokPopupId: '' }),
+                                },
+                                ...popupTargets.map((target) => ({
+                                    title: target.label,
+                                    isActive: nokPopupId === target.id,
+                                    onClick: () => setAttributes({ nokPopupId: target.id }),
+                                })),
+                            ]}
+                        />
+                    </BlockControls>
+                )}
+                <InspectorControls group="settings">
                     <PanelBody title={__('NOK Button Instellingen', 'nok2025')} initialOpen={true}>
                         <IconSelector
                             value={nokIcon}
@@ -151,6 +177,19 @@ const withButtonControls = createHigherOrderComponent((BlockEdit) => {
                                     palette="icon-colors"
                                 />
                             </>
+                        )}
+
+                        {popupTargets.length > 0 && (
+                            <SelectControl
+                                label={__('Popup link', 'nok2025')}
+                                value={nokPopupId}
+                                options={[
+                                    { value: '', label: __('Geen popup', 'nok2025') },
+                                    ...popupTargets.map(t => ({ value: t.id, label: t.label })),
+                                ]}
+                                onChange={(value) => setAttributes({ nokPopupId: value })}
+                                help={nokPopupId ? __('Knop opent de geselecteerde popup', 'nok2025') : ''}
+                            />
                         )}
 
                         <ToggleControl

@@ -4780,6 +4780,7 @@ nok-popup {
        column-gap: 0;
   grid-template-columns: var(--row-gap) 1fr var(--row-gap);
   grid-template-rows: auto 1fr var(--row-gap);
+  min-width: min(80vw, 500px);
   max-width: var(--section-max-width);
   max-height: 90vh;
   z-index: calc(var(--z-base, 2) + 1);
@@ -4812,6 +4813,9 @@ nok-popup-body {
 nok-popup .hidden-in-popup {
   display: none;
   visibility: collapse;
+}
+nok-popup.nok-vragenlijst-popup {
+  max-width: min(80vw, 500px);
 }
 .popup-open nok-popup[data-state=open] {
   opacity: 1;
@@ -5516,13 +5520,10 @@ body.scrolled-100 .nok-scroll-progress__progress {
 }
 .nok-vragenlijst__nav {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: var(--nok-space-fluid-sm);
   padding-top: var(--nok-space-fluid-sm);
-}
-.nok-vragenlijst__prev:disabled {
-  display: none;
 }
 .nok-vragenlijst__result {
   display: flex;

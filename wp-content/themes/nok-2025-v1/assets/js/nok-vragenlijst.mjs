@@ -322,13 +322,13 @@ class VragenlijstRenderer {
 
         this.prevButton = document.createElement('button');
         this.prevButton.type = 'button';
-        this.prevButton.className = 'nok-button nok-vragenlijst__prev';
+        this.prevButton.className = 'nok-button nok-bg-white nok-text-contrast nok-vragenlijst__prev';
         this.prevButton.innerHTML = '<span>Vorige</span>';
         this.prevButton.disabled = true;
 
         this.nextButton = document.createElement('button');
         this.nextButton.type = 'button';
-        this.nextButton.className = 'nok-button nok-bg-darkerblue nok-text-contrast nok-vragenlijst__next';
+        this.nextButton.className = 'nok-button nok-bg-white nok-text-contrast nok-vragenlijst__next';
         this.nextButton.innerHTML = '<span>Volgende</span>';
         this.nextButton.disabled = true;
 

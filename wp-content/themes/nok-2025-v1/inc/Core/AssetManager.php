@@ -257,17 +257,16 @@ class AssetManager {
 					] )
 				);
 
-				wp_localize_script(
-					'nok-popup-link-format',
-					'nokPopupTargets',
-					array_merge(
-						[
-							[ 'id' => 'popup-bmi-calculator', 'label' => 'BMI Calculator' ],
-							[ 'id' => 'popup-search',         'label' => 'Zoeken' ],
-						],
-						$vragenlijst_targets
-					)
+				$popup_targets = array_merge(
+					[
+						[ 'id' => 'popup-bmi-calculator', 'label' => 'BMI Calculator' ],
+						[ 'id' => 'popup-search',         'label' => 'Zoeken' ],
+					],
+					$vragenlijst_targets
 				);
+
+				wp_localize_script( 'nok-popup-link-format', 'nokPopupTargets', $popup_targets );
+				wp_localize_script( 'nok-button-extension', 'nokPopupTargets', $popup_targets );
 			}
 		}
 

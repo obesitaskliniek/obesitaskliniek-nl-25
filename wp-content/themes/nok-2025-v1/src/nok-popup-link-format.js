@@ -14,6 +14,7 @@
 import { registerFormatType, toggleFormat, applyFormat, removeFormat, getActiveFormat } from '@wordpress/rich-text';
 import { RichTextToolbarButton } from '@wordpress/block-editor';
 import { Popover, SelectControl } from '@wordpress/components';
+import { useSelect } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
@@ -33,10 +34,18 @@ function getPopupTargets() {
  */
 function PopupLinkButton({ isActive, value, onChange, contentRef }) {
     const [showPopover, setShowPopover] = useState(false);
+    const selectedBlockName = useSelect(
+        (select) => select('core/block-editor').getSelectedBlock()?.name,
+        []
+    );
 
     const targets = getPopupTargets();
     const activeFormat = getActiveFormat(value, FORMAT_NAME);
     const currentTarget = activeFormat?.attributes?.popupTarget || '';
+
+    if (selectedBlockName === 'core/button') {
+        return null;
+    }
 
     function onToggle() {
         if (isActive) {
