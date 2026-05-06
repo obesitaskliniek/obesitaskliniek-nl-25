@@ -299,8 +299,10 @@ add_action( 'gform_after_submission_' . VoorlichtingForm::FORM_ID, function( $en
 		return;
 	}
 
-	$hubspot_data = Helpers::setup_hubspot_metadata( (int) $voorlichting_id );
-	$event_type   = strtolower( $hubspot_data['type'] ?? '' ) === 'online' ? 'online' : 'offline';
+	$event_type = VoorlichtingForm::event_type_for_voorlichting( (int) $voorlichting_id );
+	if ( $event_type === null ) {
+		return;
+	}
 
 	GFAPI::update_entry_field( $entry['id'], $event_type_field_id, $event_type );
 }, 9, 2 );

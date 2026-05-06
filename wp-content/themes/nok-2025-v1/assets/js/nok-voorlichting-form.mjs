@@ -7,7 +7,7 @@
  * Architecture:
  * - Dropdowns are OUTSIDE the Gravity Form (not submitted to HubSpot)
  * - They serve as UI for selecting a voorlichting post ID
- * - Selected ID is set in a hidden field inside Form 1
+ * - Selected ID and derived event_type are set in hidden fields inside Form 1
  * - Form is disabled until a voorlichting is selected
  *
  * Features:
@@ -44,7 +44,8 @@ const instances = new WeakMap();
  * <div data-voorlichting-selector
  *      data-api-url="/wp-json/nok-2025-v1/v1/voorlichtingen/options"
  *      data-target-form="#gform_1"
- *      data-voorlichting-id-field="input_1_22">
+ *      data-voorlichting-id-field="input_1_22"
+ *      data-event-type-field="input_1_23">
  *   <select id="voorlichting-location">...</select>
  *   <select id="voorlichting-datetime">...</select>
  * </div>
@@ -102,6 +103,7 @@ class SelectorInstance {
         this.apiUrl = container.dataset.apiUrl;
         this.targetFormSelector = container.dataset.targetForm || '#gform_1';
         this.voorlichtingIdFieldId = container.dataset.voorlichtingIdField || '';
+        this.eventTypeFieldId = container.dataset.eventTypeField || '';
 
         // Find dropdown elements (by fixed IDs from template)
         this.locationSelect = container.querySelector('#voorlichting-location');
@@ -112,6 +114,10 @@ class SelectorInstance {
         this.voorlichtingIdInput = this.voorlichtingIdFieldId
             ? this.form?.querySelector(`#${this.voorlichtingIdFieldId}`)
             : null;
+        this.eventTypeInput = this.eventTypeFieldId
+            ? this.form?.querySelector(`#${this.eventTypeFieldId}`)
+            : null;
+        this.eventTypeChoiceInputs = this._findGravityChoiceInputs(this.eventTypeFieldId);
         this.formFieldset = document.querySelector('[data-voorlichting-form-fieldset]');
 
         // Data storage
@@ -135,6 +141,15 @@ class SelectorInstance {
             return;
         }
 
+        if (!this.eventTypeFieldId) {
+            console.error(
+                'NOK Voorlichting Selector: missing data-event-type-field on container — ' +
+                'GF form 1 is likely misconfigured (no field with adminLabel "event_type"). ' +
+                'Aborting init; admin_notices will surface this in wp-admin.'
+            );
+            return;
+        }
+
         if (!this.locationSelect || !this.datetimeSelect) {
             console.warn('NOK Voorlichting Selector: Required dropdowns not found', {
                 locationSelect: this.locationSelect,
@@ -153,6 +168,14 @@ class SelectorInstance {
         if (!this.voorlichtingIdInput) {
             console.error(
                 'NOK Voorlichting Selector: hidden field #' + this.voorlichtingIdFieldId +
+                ' not present in target form. Aborting init.'
+            );
+            return;
+        }
+
+        if (!this.eventTypeInput && !this.eventTypeChoiceInputs.length) {
+            console.error(
+                'NOK Voorlichting Selector: field #' + this.eventTypeFieldId +
                 ' not present in target form. Aborting init.'
             );
             return;
@@ -198,7 +221,7 @@ class SelectorInstance {
 
                 // Select the datetime and restore hidden field value
                 this.datetimeSelect.value = savedId;
-                this._updateVoorlichtingId(savedId);
+                this._updateVoorlichtingSelection(savedId, matchingEvent.type);
 
                 // Update placeholder text
                 const placeholderOption = this.datetimeSelect.querySelector('option[value=""]');
@@ -284,6 +307,7 @@ class SelectorInstance {
             option.value = event.id;
             option.textContent = event.label;
             option.disabled = event.disabled;
+            option.dataset.eventType = this._normalizeEventType(event.type);
 
             if (event.disabled) {
                 option.classList.add('nok-text-muted');
@@ -296,7 +320,7 @@ class SelectorInstance {
         const availableOptions = events.filter(e => !e.disabled);
         if (availableOptions.length === 1) {
             this.datetimeSelect.value = availableOptions[0].id;
-            this._updateVoorlichtingId(availableOptions[0].id);
+            this._updateVoorlichtingSelection(availableOptions[0].id, availableOptions[0].type);
             this._setFormDisabled(false);
         }
     }
@@ -314,20 +338,120 @@ class SelectorInstance {
         placeholder.textContent = 'Selecteer eerst een vestiging';
         this.datetimeSelect.appendChild(placeholder);
 
-        // Clear hidden field and disable form
-        this._updateVoorlichtingId('');
+        // Clear hidden fields and disable form
+        this._updateVoorlichtingSelection('', '');
         this._setFormDisabled(true);
     }
 
     /**
-     * Update the hidden voorlichting ID field in the target form.
+     * Update the hidden voorlichting ID and event type fields in the target form.
      * @param {string|number} id - The voorlichting post ID
+     * @param {string} eventType - The event type from the selected REST option
      * @private
      */
-    _updateVoorlichtingId(id) {
+    _updateVoorlichtingSelection(id, eventType) {
         if (this.voorlichtingIdInput) {
             this.voorlichtingIdInput.value = id;
         }
+        if (this.eventTypeInput) {
+            this.eventTypeInput.value = id ? this._normalizeEventType(eventType) : '';
+            this._dispatchFieldEvents(this.eventTypeInput);
+        }
+
+        if (this.eventTypeChoiceInputs.length) {
+            const normalizedType = id ? this._normalizeEventType(eventType) : '';
+
+            this.eventTypeChoiceInputs.forEach(input => {
+                const shouldCheck = normalizedType
+                    ? this._isEventTypeChoiceMatch(input, normalizedType)
+                    : false;
+
+                if (input.checked !== shouldCheck) {
+                    input.checked = shouldCheck;
+                    this._dispatchFieldEvents(input);
+                }
+            });
+        }
+    }
+
+    /**
+     * Find Gravity Forms choice inputs for a field id such as input_1_23.
+     * Radio/checkbox fields use individual inputs named input_23 rather than
+     * a single element with id input_1_23.
+     * @param {string} fieldDomId
+     * @returns {HTMLInputElement[]}
+     * @private
+     */
+    _findGravityChoiceInputs(fieldDomId) {
+        if (!this.form || !fieldDomId) return [];
+
+        const match = fieldDomId.match(/^input_(\d+)_(\d+)$/);
+        if (!match) return [];
+
+        const [, formId, fieldId] = match;
+        const selector = [
+            `input[type="radio"][name="input_${fieldId}"]`,
+            `input[type="checkbox"][name="input_${fieldId}"]`,
+            `input[type="radio"][id^="choice_${formId}_${fieldId}_"]`,
+            `input[type="checkbox"][id^="choice_${formId}_${fieldId}_"]`,
+        ].join(',');
+
+        return Array.from(this.form.querySelectorAll(selector));
+    }
+
+    /**
+     * Check whether a GF choice input represents online/offline.
+     * @param {HTMLInputElement} input
+     * @param {'online'|'offline'} normalizedType
+     * @returns {boolean}
+     * @private
+     */
+    _isEventTypeChoiceMatch(input, normalizedType) {
+        const value = String(input.value || '').trim().toLowerCase();
+        const label = this._getInputLabel(input).toLowerCase();
+
+        if (value === normalizedType) return true;
+        if (normalizedType === 'online') {
+            return label.includes('online');
+        }
+
+        return ['offline', 'op locatie', 'op-locatie', 'locatie', 'fysiek'].includes(value)
+            || label.includes('offline')
+            || label.includes('op locatie')
+            || label.includes('locatie');
+    }
+
+    /**
+     * Get label text for a radio/checkbox input.
+     * @param {HTMLInputElement} input
+     * @returns {string}
+     * @private
+     */
+    _getInputLabel(input) {
+        const explicitLabel = input.id
+            ? this.form?.querySelector(`label[for="${input.id}"]`)
+            : null;
+        return explicitLabel?.textContent || input.closest('label')?.textContent || '';
+    }
+
+    /**
+     * Notify Gravity Forms and browser listeners that a field changed.
+     * @param {HTMLElement} field
+     * @private
+     */
+    _dispatchFieldEvents(field) {
+        field.dispatchEvent(new Event('input', { bubbles: true }));
+        field.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    /**
+     * Normalize HubSpot event type into the Gravity Forms/HubSpot field value.
+     * @param {string} type
+     * @returns {'online'|'offline'}
+     * @private
+     */
+    _normalizeEventType(type) {
+        return String(type || '').toLowerCase() === 'online' ? 'online' : 'offline';
     }
 
     /**
@@ -365,7 +489,11 @@ class SelectorInstance {
         // Datetime change handler
         this.datetimeSelect.addEventListener('change', (e) => {
             const selectedId = e.target.value;
-            this._updateVoorlichtingId(selectedId);
+            const selectedOption = e.target.selectedOptions?.[0];
+            this._updateVoorlichtingSelection(
+                selectedId,
+                selectedOption?.dataset.eventType || ''
+            );
 
             // Enable form when a valid selection is made
             this._setFormDisabled(!selectedId);

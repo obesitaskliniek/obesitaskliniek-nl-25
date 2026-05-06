@@ -69,20 +69,34 @@ class VoorlichtingForm {
 		// Capture resolved field IDs every time form 1 is rendered. Cheap
 		// (one foreach over the fields array) and guaranteed to fire when
 		// the template calls gravity_form( FORM_ID, ... ).
-		add_filter( 'gform_pre_render_' . self::FORM_ID, [ self::class, 'capture_field_ids' ] );
+		add_filter( 'gform_pre_render_' . self::FORM_ID, [ self::class, 'prepare_rendered_form' ] );
+		add_filter( 'gform_pre_validation_' . self::FORM_ID, [ self::class, 'prepare_submitted_form' ] );
+		add_filter( 'gform_pre_submission_filter_' . self::FORM_ID, [ self::class, 'prepare_submitted_form' ] );
 	}
 
 	/**
-	 * Cache field IDs resolved from adminLabels during form pre-render.
+	 * Cache field IDs and populate defaults while Form 1 is being rendered.
 	 *
-	 * Hooked on gform_pre_render_<FORM_ID>. Populates self::$resolved_field_ids
-	 * keyed by adminLabel; returns $form unchanged. Filter, not action — must
-	 * return the form.
+	 * Single voorlichting pages know their event at render time, so the hidden
+	 * voorlichting_id and event_type fields can be filled immediately. The
+	 * general aanmelden page renders the same form before a visitor has chosen
+	 * an event; there the JS module updates both hidden fields after selection.
 	 *
 	 * @param array $form
 	 * @return array
 	 */
-	public static function capture_field_ids( $form ): array {
+	public static function prepare_rendered_form( $form ): array {
+		self::capture_field_ids( $form );
+		return self::populate_current_event_defaults( $form );
+	}
+
+	/**
+	 * Cache field IDs resolved from adminLabels.
+	 *
+	 * @param array $form
+	 * @return void
+	 */
+	public static function capture_field_ids( $form ): void {
 		if ( is_array( $form ) ) {
 			foreach ( [
 				self::ADMIN_LABEL_VOORLICHTING_ID,
@@ -95,7 +109,110 @@ class VoorlichtingForm {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Populate hidden defaults for single voorlichting form renders.
+	 *
+	 * @param array $form
+	 * @return array
+	 */
+	public static function populate_current_event_defaults( array $form ): array {
+		$voorlichting_id = self::current_rendered_voorlichting_id();
+		if ( $voorlichting_id === null ) {
+			return $form;
+		}
+
+		$event_type = self::event_type_for_voorlichting( $voorlichting_id );
+		if ( $event_type === null ) {
+			return $form;
+		}
+
+		$voorlichting_field_id = self::field_id( $form, self::ADMIN_LABEL_VOORLICHTING_ID );
+		$event_type_field_id   = self::field_id( $form, self::ADMIN_LABEL_EVENT_TYPE );
+
+		foreach ( $form['fields'] ?? [] as &$field ) {
+			if ( $voorlichting_field_id !== null && (int) $field->id === $voorlichting_field_id ) {
+				$field->defaultValue = (string) $voorlichting_id;
+			}
+			if ( $event_type_field_id !== null && (int) $field->id === $event_type_field_id ) {
+				$field->defaultValue = $event_type;
+			}
+		}
+
 		return $form;
+	}
+
+	/**
+	 * Derive event_type before validation and entry creation.
+	 *
+	 * This keeps server-side submissions authoritative even if JS did not fill
+	 * the field, and makes event_type available before add-on feed processing.
+	 *
+	 * @param array $form
+	 * @return array
+	 */
+	public static function prepare_submitted_form( $form ): array {
+		if ( ! is_array( $form ) ) {
+			return $form;
+		}
+
+		self::capture_field_ids( $form );
+
+		$voorlichting_field_id = self::field_id( $form, self::ADMIN_LABEL_VOORLICHTING_ID );
+		$event_type_field_id   = self::field_id( $form, self::ADMIN_LABEL_EVENT_TYPE );
+		if ( $voorlichting_field_id === null || $event_type_field_id === null ) {
+			return $form;
+		}
+
+		$voorlichting_input_name = 'input_' . $voorlichting_field_id;
+		$event_type_input_name   = 'input_' . $event_type_field_id;
+		$voorlichting_id         = function_exists( 'rgpost' )
+			? rgpost( $voorlichting_input_name )
+			: ( $_POST[ $voorlichting_input_name ] ?? '' );
+
+		if ( empty( $voorlichting_id ) || ! is_scalar( $voorlichting_id ) ) {
+			return $form;
+		}
+
+		$event_type = self::event_type_for_voorlichting( (int) $voorlichting_id );
+		if ( $event_type === null ) {
+			return $form;
+		}
+
+		$_POST[ $event_type_input_name ] = $event_type;
+
+		return $form;
+	}
+
+	/**
+	 * Resolve the event type value expected by the hidden GF field.
+	 *
+	 * @param int $voorlichting_id
+	 * @return string|null
+	 */
+	public static function event_type_for_voorlichting( int $voorlichting_id ): ?string {
+		$post = get_post( $voorlichting_id );
+		if ( ! $post || $post->post_type !== 'voorlichting' ) {
+			return null;
+		}
+
+		$hubspot_data = Helpers::setup_hubspot_metadata( $voorlichting_id );
+		return strtolower( $hubspot_data['type'] ?? '' ) === 'online' ? 'online' : 'offline';
+	}
+
+	/**
+	 * Return the current voorlichting id when Form 1 is rendered on a single event.
+	 *
+	 * @return int|null
+	 */
+	private static function current_rendered_voorlichting_id(): ?int {
+		if ( ! function_exists( 'is_singular' ) || ! is_singular( 'voorlichting' ) ) {
+			return null;
+		}
+
+		$post_id = get_queried_object_id();
+		return $post_id > 0 ? (int) $post_id : null;
 	}
 
 	/**

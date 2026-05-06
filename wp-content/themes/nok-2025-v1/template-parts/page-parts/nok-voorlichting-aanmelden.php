@@ -58,13 +58,19 @@ if ($has_voorlichtingen && function_exists('gravity_form')) {
 $voorlichting_field_id = VoorlichtingForm::get_resolved_field_id(
 	VoorlichtingForm::ADMIN_LABEL_VOORLICHTING_ID
 );
+$event_type_field_id = VoorlichtingForm::get_resolved_field_id(
+	VoorlichtingForm::ADMIN_LABEL_EVENT_TYPE
+);
 $voorlichting_id_field = $voorlichting_field_id !== null
 	? 'input_' . $form_id . '_' . $voorlichting_field_id
 	: '';
+$event_type_field = $event_type_field_id !== null
+	? 'input_' . $form_id . '_' . $event_type_field_id
+	: '';
 // Render the form when there are voorlichtingen AND we successfully captured
-// the hidden field's id. Misconfigured forms fall through to the yellow
+// the hidden fields' ids. Misconfigured forms fall through to the yellow
 // alert (Option A) — admins see the misconfiguration via admin_notices.
-$can_render_form = $has_voorlichtingen && $voorlichting_field_id !== null && $form_html !== '';
+$can_render_form = $has_voorlichtingen && $voorlichting_field_id !== null && $event_type_field_id !== null && $form_html !== '';
 ?>
 
 <nok-section class="<?= $section_colors ?>" data-requires="./nok-voorlichting-form.mjs">
@@ -86,7 +92,8 @@ $can_render_form = $has_voorlichtingen && $voorlichting_field_id !== null && $fo
 				     data-voorlichting-selector
 				     data-api-url="<?= esc_url(rest_url('nok-2025-v1/v1/voorlichtingen/options')) ?>"
 				     data-target-form="#gform_<?= $form_id ?>"
-				     data-voorlichting-id-field="<?= esc_attr($voorlichting_id_field) ?>">
+				     data-voorlichting-id-field="<?= esc_attr($voorlichting_id_field) ?>"
+				     data-event-type-field="<?= esc_attr($event_type_field) ?>">
 
 					<div class="nok-form-row nok-layout-grid">
 						<div class="nok-form-field">
