@@ -50,6 +50,29 @@ import ColorTool from "../../../assets/js/domule/util.color.mjs";
 const textDomain = 'nok-2025-v1';
 const blockName = 'nok2025/embed-nok-page-part';
 
+const buildSelectOptions = (field, currentValue, placeholder = null) => {
+    const selectOptions = field.options || [];
+    const selectLabels = field.option_labels || selectOptions;
+    const normalizedCurrentValue = currentValue === undefined || currentValue === null
+        ? ''
+        : String(currentValue);
+    const mappedOptions = selectOptions.map((option, index) => ({
+        label: selectLabels[index] || option,
+        value: option
+    }));
+    const hasCurrentOption = normalizedCurrentValue === ''
+        || mappedOptions.some(option => String(option.value) === normalizedCurrentValue);
+
+    if (!hasCurrentOption) {
+        mappedOptions.push({
+            label: `Huidige waarde (#${normalizedCurrentValue})`,
+            value: normalizedCurrentValue
+        });
+    }
+
+    return placeholder ? [placeholder, ...mappedOptions] : mappedOptions;
+};
+
 const CustomPagePartSelector = ({value, options, onChange, onOpen}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [hoveredOption, setHoveredOption] = useState(null);
@@ -683,20 +706,16 @@ registerBlockType(blockName, {
                                             );
 
                                         case 'select':
-                                            const selectOptions = field.options || [];
-                                            const selectLabels = field.option_labels || selectOptions;
                                             return (
                                                 <SelectControl
                                                     key={field.meta_key}
                                                     label={`Override ${field.label}`}
                                                     value={currentValue}
-                                                    options={[
-                                                        {label: '— Gebruik de ingestelde waarde —', value: ''},
-                                                        ...selectOptions.map((opt, idx) => ({
-                                                            label: selectLabels[idx] || opt,
-                                                            value: opt
-                                                        }))
-                                                    ]}
+                                                    options={buildSelectOptions(
+                                                        field,
+                                                        currentValue,
+                                                        {label: '— Gebruik de ingestelde waarde —', value: ''}
+                                                    )}
                                                     onChange={updateOverride}
                                                 />
                                             );

@@ -4,7 +4,7 @@
  * Description: Willekeurig Gravity Form insluiten met kleur- en layoutopties
  * Slug: nok-gravity-form
  * Custom Fields:
- * - form_id:select(Inschrijfformulier WOD::5|Contactformulier::4|Inschrijving voorlichting::1)!page-editable!descr[Kies een Gravity Forms formulier]
+ * - form_id:gravity-form-select!page-editable!descr[Kies een Gravity Forms formulier]
  * - colors:select(Wit op lichtgrijs|Wit op donkerblauw)!page-editable!default(Wit op lichtgrijs)
  * - show_intro:checkbox!default(true)!descr[Toon introductietekst boven het formulier]
  * - narrow_section:checkbox!default(false)!descr[Smalle sectie?]!page-editable

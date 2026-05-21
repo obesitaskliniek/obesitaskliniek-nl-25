@@ -14,6 +14,29 @@ import LinkField from './components/LinkField';
 
 const NAME = 'nok-page-part-design-selector';
 
+const buildSelectOptions = (field, currentValue, placeholder = null) => {
+    const selectOptions = field.options || [];
+    const selectLabels = field.option_labels || selectOptions;
+    const normalizedCurrentValue = currentValue === undefined || currentValue === null
+        ? ''
+        : String(currentValue);
+    const mappedOptions = selectOptions.map((option, index) => ({
+        label: selectLabels[index] || option,
+        value: option
+    }));
+    const hasCurrentOption = normalizedCurrentValue === ''
+        || mappedOptions.some(option => String(option.value) === normalizedCurrentValue);
+
+    if (!hasCurrentOption) {
+        mappedOptions.push({
+            label: `Huidige waarde (#${normalizedCurrentValue})`,
+            value: normalizedCurrentValue
+        });
+    }
+
+    return placeholder ? [placeholder, ...mappedOptions] : mappedOptions;
+};
+
 const fieldStyle = {
     width: '100%',
     borderBottom: '1px solid #ddd',
@@ -764,23 +787,12 @@ function DesignSlugPanel() {
                     </FieldGroup>
                 );
             case 'select':
-                const selectOptions = field.options || [];
-                const selectLabels = field.option_labels || selectOptions; // Fallback to options if no labels
                 const hasDefault = field.default && field.default !== '';
 
                 // Only show "— Select —" if no default is defined
                 const options = hasDefault
-                    ? selectOptions.map((option, index) => ({
-                        label: selectLabels[index] || option,
-                        value: option
-                    }))
-                    : [
-                        {label: '— Select —', value: ''},
-                        ...selectOptions.map((option, index) => ({
-                            label: selectLabels[index] || option,
-                            value: option
-                        }))
-                    ];
+                    ? buildSelectOptions(field, fieldValue)
+                    : buildSelectOptions(field, fieldValue, {label: '— Select —', value: ''});
 
                 return (
                     <FieldGroup key={field.meta_key} label={field.label}>

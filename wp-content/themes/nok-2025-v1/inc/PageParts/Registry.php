@@ -111,7 +111,7 @@ class Registry {
 		if ( $use_transient_cache ) {
 			$cached = get_transient( $cache_key );
 			if ( $cached !== false && is_array( $cached ) ) {
-				$this->part_registry = $cached;
+				$this->part_registry = $this->hydrate_dynamic_field_options( $cached );
 				return $this->part_registry;
 			}
 		}
@@ -153,6 +153,8 @@ class Registry {
 			// Clean up old cache keys (different mtime)
 			$this->cleanup_old_cache_keys( $cache_key );
 		}
+
+		$this->part_registry = $this->hydrate_dynamic_field_options( $this->part_registry );
 
 		return $this->part_registry;
 	}
@@ -599,6 +601,26 @@ class Registry {
 					'description'   => $description
 				];
 			}
+			// Field Type 1b: Gravity Forms select field
+			// Pattern: "name:gravity-form-select"
+			// Provides a normal select UI with options hydrated from active Gravity Forms.
+			elseif ( preg_match( '/^([^:]+):gravity-form-select$/', $definition, $matches ) ) {
+				$field_name = trim( $matches[1] );
+				$meta_key   = $template_slug . '_' . $field_name;
+
+				$fields[] = [
+					'name'          => $field_name,
+					'type'          => 'select',
+					'meta_key'      => $meta_key,
+					'label'         => $this->generate_field_label( $field_name ),
+					'options'       => [],
+					'option_labels' => [],
+					'option_source' => 'gravity_forms',
+					'page_editable' => $is_page_editable,
+					'default'       => $default_value,
+					'description'   => $description
+				];
+			}
 			// Field Type 2: Checkbox field
 			// Pattern: "name:checkbox" or "name:checkbox(true)" or "name:checkbox(false)"
 			// Example: "show_overlay:checkbox(true)"
@@ -855,6 +877,100 @@ class Registry {
 
 		// Fallback to literal value (backward compat)
 		return $default_value;
+	}
+
+	/**
+	 * Hydrate fields with live options that should not be persisted in registry transients.
+	 *
+	 * @param array $registry Parsed page-parts registry
+	 * @return array Registry with dynamic field options populated for this request
+	 */
+	private function hydrate_dynamic_field_options( array $registry ): array {
+		$gravity_form_options = null;
+
+		foreach ( $registry as &$template_data ) {
+			if ( empty( $template_data['custom_fields'] ) || ! is_array( $template_data['custom_fields'] ) ) {
+				continue;
+			}
+
+			foreach ( $template_data['custom_fields'] as &$field ) {
+				if ( ( $field['option_source'] ?? '' ) !== 'gravity_forms' ) {
+					continue;
+				}
+
+				if ( $gravity_form_options === null ) {
+					$gravity_form_options = $this->get_gravity_form_options();
+				}
+
+				$field['options']       = $gravity_form_options['options'];
+				$field['option_labels'] = $gravity_form_options['option_labels'];
+			}
+			unset( $field );
+		}
+		unset( $template_data );
+
+		return $registry;
+	}
+
+	/**
+	 * Fetch active, non-trashed Gravity Forms as select options.
+	 *
+	 * @return array{options: string[], option_labels: string[]}
+	 */
+	private function get_gravity_form_options(): array {
+		if ( ! class_exists( 'GFAPI' ) ) {
+			return [
+				'options'       => [],
+				'option_labels' => [],
+			];
+		}
+
+		try {
+			$forms = \GFAPI::get_forms( true, false, 'title' );
+		} catch ( \Throwable $e ) {
+			try {
+				$forms = \GFAPI::get_forms( true, false );
+			} catch ( \Throwable $e ) {
+				return [
+					'options'       => [],
+					'option_labels' => [],
+				];
+			}
+		}
+
+		if ( ! is_array( $forms ) ) {
+			return [
+				'options'       => [],
+				'option_labels' => [],
+			];
+		}
+
+		usort( $forms, static function ( $a, $b ) {
+			return strcasecmp( (string) ( $a['title'] ?? '' ), (string) ( $b['title'] ?? '' ) );
+		} );
+
+		$options       = [];
+		$option_labels = [];
+
+		foreach ( $forms as $form ) {
+			$id = absint( $form['id'] ?? 0 );
+			if ( $id <= 0 ) {
+				continue;
+			}
+
+			$title = trim( (string) ( $form['title'] ?? '' ) );
+			if ( $title === '' ) {
+				$title = sprintf( __( 'Formulier %d', THEME_TEXT_DOMAIN ), $id );
+			}
+
+			$options[]       = (string) $id;
+			$option_labels[] = sprintf( '%s (#%d)', $title, $id );
+		}
+
+		return [
+			'options'       => $options,
+			'option_labels' => $option_labels,
+		];
 	}
 
 	/**

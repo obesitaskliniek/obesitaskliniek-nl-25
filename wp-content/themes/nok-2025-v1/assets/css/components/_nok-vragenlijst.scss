@@ -318,6 +318,39 @@
     align-self: flex-start;
   }
 
+  // --- Logged-in debug shortcuts ---
+  &__debug {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: var(--nok-space-fluid-md);
+    padding-top: var(--nok-space-fluid-sm);
+    border-top: 1px dashed var(--nok-body--darker);
+    font-size: 0.8rem;
+  }
+
+  &__debug-label {
+    font-weight: 700;
+    opacity: 0.7;
+  }
+
+  &__debug-button {
+    padding: 4px 10px;
+    border: 1px solid var(--nok-body--darker);
+    border-radius: 4px;
+    background: var(--nok-body--bg, #fff);
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      border-color: var(--nok-lightblue);
+      outline: none;
+    }
+  }
+
   // --- Noscript fallback ---
   &__noscript {
     padding: var(--nok-space-fluid-md);

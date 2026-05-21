@@ -94,9 +94,10 @@ if ( function_exists( 'gravity_form' ) ) {
 // (DOMule's IntersectionObserver checks ratio > 0). With skip_intro on, the
 // container has no visible children server-side, so the lazy watcher would
 // never fire inside a closed popup. Load eagerly in that case.
-$lazy_attr = $skip_intro ? '' : ' data-require-lazy="true"';
+$lazy_attr  = $skip_intro ? '' : ' data-require-lazy="true"';
+$debug_attr = is_user_logged_in() ? ' data-debug-results="true"' : '';
 ?>
-<div class="nok-vragenlijst" data-requires="./nok-vragenlijst.mjs"<?= $lazy_attr ?>>
+<div class="nok-vragenlijst" data-requires="./nok-vragenlijst.mjs"<?= $lazy_attr ?><?= $debug_attr ?>>
 	<script type="application/json"><?= $config_json ?></script>
 
 	<?php if ( ! $skip_intro ) : ?>

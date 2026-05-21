@@ -285,7 +285,9 @@ class VragenlijstRenderer {
         this.container = container;
         this.engine = engine;
         this.intro = container.querySelector('.nok-vragenlijst__intro');
+        this.debugEnabled = container.dataset.debugResults === 'true';
         this.onRestart = null;
+        this.onDebugResult = null;
 
         this.createWizardDOM();
     }
@@ -348,6 +350,35 @@ class VragenlijstRenderer {
             this.container.appendChild(this.wizard);
             this.container.appendChild(this.resultContainer);
         }
+
+        if (this.debugEnabled) {
+            this.createDebugDOM();
+        }
+    }
+
+    /** Build logged-in-only debug controls for jumping directly to results. */
+    createDebugDOM() {
+        const results = this.engine.results.filter(result => result?.id);
+        if (!results.length) return;
+
+        this.debugControls = document.createElement('div');
+        this.debugControls.className = 'nok-vragenlijst__debug';
+
+        const label = document.createElement('span');
+        label.className = 'nok-vragenlijst__debug-label';
+        label.textContent = 'Debug resultaat';
+        this.debugControls.appendChild(label);
+
+        results.forEach((result, index) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'nok-vragenlijst__debug-button';
+            button.textContent = result.title || result.id || `Resultaat ${index + 1}`;
+            button.addEventListener('click', () => this.onDebugResult?.(result));
+            this.debugControls.appendChild(button);
+        });
+
+        this.container.appendChild(this.debugControls);
     }
 
     showIntro() {
@@ -900,6 +931,13 @@ function initQuestionnaire(container) {
             engine.reset();
             renderer.showIntro();
         }
+    };
+
+    // --- Logged-in debug shortcuts ---
+    renderer.onDebugResult = (result) => {
+        cancelAutoAdvance();
+        engine.reset();
+        renderer.showResult(result);
     };
 
     // --- Keyboard: Enter advances ---

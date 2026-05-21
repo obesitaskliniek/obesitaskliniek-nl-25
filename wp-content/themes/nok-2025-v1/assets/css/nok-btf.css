@@ -5575,6 +5575,33 @@ body.scrolled-100 .nok-scroll-progress__progress {
 .nok-vragenlijst__restart {
   align-self: flex-start;
 }
+.nok-vragenlijst__debug {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: var(--nok-space-fluid-md);
+  padding-top: var(--nok-space-fluid-sm);
+  border-top: 1px dashed var(--nok-body--darker);
+  font-size: 0.8rem;
+}
+.nok-vragenlijst__debug-label {
+  font-weight: 700;
+  opacity: 0.7;
+}
+.nok-vragenlijst__debug-button {
+  padding: 4px 10px;
+  border: 1px solid var(--nok-body--darker);
+  border-radius: 4px;
+  background: var(--nok-body--bg, #fff);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.nok-vragenlijst__debug-button:hover, .nok-vragenlijst__debug-button:focus-visible {
+  border-color: var(--nok-lightblue);
+  outline: none;
+}
 .nok-vragenlijst__noscript {
   padding: var(--nok-space-fluid-md);
   background: var(--nok-body--darker);
