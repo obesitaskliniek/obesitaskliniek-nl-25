@@ -302,11 +302,19 @@
     margin: 0;
   }
 
+  &__result.is-gform-submitted &__result-title,
+  &__result.is-gform-submitted &__result-body {
+    display: none;
+  }
+
   &__result-body {
     line-height: 1.6;
 
-    p:last-child {
-      margin-bottom: 0;
+    p {
+      margin-bottom: 1em;
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 
@@ -356,5 +364,9 @@
     padding: var(--nok-space-fluid-md);
     background: var(--nok-body--darker);
     @include components-base.nok-border-radius;
+  }
+
+  &__form-slot .gform_button {
+    width: 100%;
   }
 }

@@ -607,14 +607,14 @@ class PostTypes {
 					$config['results'][ $i ]['body'] = wp_kses_post( $r['body'] );
 				}
 
-				// Validate CTA URL — only relative paths or same-domain URLs allowed
+				// Validate CTA URL — relative paths or absolute http(s) URLs allowed
 				if ( ! empty( $r['cta_url'] ) ) {
 					$url = $r['cta_url'];
 					if ( ! str_starts_with( $url, '/' ) ) {
-						$host = wp_parse_url( $url, PHP_URL_HOST );
-						if ( $host && ! str_ends_with( $host, 'obesitaskliniek.nl' ) ) {
+						$scheme = wp_parse_url( $url, PHP_URL_SCHEME );
+						if ( ! in_array( $scheme, [ 'http', 'https' ], true ) ) {
 							$config['results'][ $i ]['cta_url'] = '';
-							$errors[]                           = "{$pos}: externe URL's zijn niet toegestaan in CTA";
+							$errors[]                           = "{$pos}: ongeldige CTA-URL (alleen relatieve paden of http(s) URL's toegestaan)";
 						}
 					}
 				}

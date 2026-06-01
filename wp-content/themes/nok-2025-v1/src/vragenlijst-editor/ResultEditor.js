@@ -164,8 +164,8 @@ const ResultEditor = ({result, questions, allResults, onChange}) => {
                     <TextControl
                         value={result.cta_url || ''}
                         onChange={(cta_url) => update({cta_url: cta_url || undefined})}
-                        placeholder="/pad-op-de-site/"
-                        help="Relatief pad of URL op obesitaskliniek.nl"
+                        placeholder="/pad-op-de-site/ of https://example.com/"
+                        help="Relatief pad (/...) of absolute http(s) URL."
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
                     />

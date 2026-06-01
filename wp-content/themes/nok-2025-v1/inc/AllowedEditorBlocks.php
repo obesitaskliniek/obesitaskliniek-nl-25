@@ -108,7 +108,17 @@ class AllowedEditorBlocks {
 			'post'            => [ 'core' => true, 'nok' => 'all' ],
 
 			// Vestiging / Regio: structural (template layout handles rendering)
-			'vestiging'       => [ 'core' => false, 'nok' => [ 'embed-nok-page-part' ] ],
+			'vestiging'       => current_user_can( 'manage_options' )
+				? [ 'core' => true, 'nok' => 'all' ]
+				: [
+					'core'  => false,
+					'nok'   => [ 'embed-nok-page-part', 'general-nok-section' ],
+					'extra' => [
+						'core/paragraph',
+						'core/heading',
+						'core/image',
+					],
+				],
 			'regio'           => [ 'core' => false, 'nok' => [ 'embed-nok-page-part' ] ],
 
 			// Voorlichting: synced from HubSpot, minimal editing

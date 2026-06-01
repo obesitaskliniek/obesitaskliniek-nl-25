@@ -5563,8 +5563,14 @@ body.scrolled-100 .nok-scroll-progress__progress {
 .nok-vragenlijst__result-title {
   margin: 0;
 }
+.nok-vragenlijst__result.is-gform-submitted .nok-vragenlijst__result-title, .nok-vragenlijst__result.is-gform-submitted .nok-vragenlijst__result-body {
+  display: none;
+}
 .nok-vragenlijst__result-body {
   line-height: 1.6;
+}
+.nok-vragenlijst__result-body p {
+  margin-bottom: 1em;
 }
 .nok-vragenlijst__result-body p:last-child {
   margin-bottom: 0;
@@ -5607,6 +5613,9 @@ body.scrolled-100 .nok-scroll-progress__progress {
   background: var(--nok-body--darker);
   overflow: hidden;
   border-radius: var(--nok-default-border-radius, 0.4rem);
+}
+.nok-vragenlijst__form-slot .gform_button {
+  width: 100%;
 }
 nok-section__inner {
   width: 100%;

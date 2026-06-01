@@ -288,8 +288,10 @@ class VragenlijstRenderer {
         this.debugEnabled = container.dataset.debugResults === 'true';
         this.onRestart = null;
         this.onDebugResult = null;
+        this.formConfirmationObserver = null;
 
         this.createWizardDOM();
+        this.bindGravityFormConfirmation();
     }
 
     /** Build the wizard and result container elements */
@@ -400,6 +402,7 @@ class VragenlijstRenderer {
         // its pool so we don't destroy Gravity Forms DOM (which holds event
         // listeners bound by its own scripts).
         this.returnFormToPool();
+        this.disconnectFormConfirmationObserver();
 
         if (this.intro) this.intro.hidden = true;
         this.wizard.hidden = true;
@@ -425,6 +428,8 @@ class VragenlijstRenderer {
                 requestAnimationFrame(() => {
                     window.dispatchEvent(new Event('resize'));
                 });
+
+                this.watchFormSlotForConfirmation(placeholder);
             }
         }
 
@@ -443,6 +448,59 @@ class VragenlijstRenderer {
         );
         if (!pool) return;
         while (slot.firstChild) pool.appendChild(slot.firstChild);
+    }
+
+    bindGravityFormConfirmation() {
+        if (!window.jQuery) return;
+
+        window.jQuery(document).on('gform_confirmation_loaded', (event, formId) => {
+            this.markSubmittedGravityForm(formId);
+        });
+    }
+
+    watchFormSlotForConfirmation(slot) {
+        this.disconnectFormConfirmationObserver();
+
+        this.markSubmittedGravityForm();
+
+        this.formConfirmationObserver = new MutationObserver(() => {
+            this.markSubmittedGravityForm();
+        });
+        this.formConfirmationObserver.observe(slot, {
+            childList: true,
+            subtree: true
+        });
+    }
+
+    disconnectFormConfirmationObserver() {
+        if (!this.formConfirmationObserver) return;
+        this.formConfirmationObserver.disconnect();
+        this.formConfirmationObserver = null;
+    }
+
+    markSubmittedGravityForm(formId = null) {
+        const slot = this.resultContainer.querySelector('.nok-vragenlijst__form-slot');
+        if (!slot) return;
+
+        const selectors = [
+            '.gform_confirmation_message',
+            '.gform_confirmation_wrapper'
+        ];
+
+        if (formId) {
+            selectors.unshift(
+                `#gform_confirmation_message_${CSS.escape(String(formId))}`,
+                `#gform_confirmation_wrapper_${CSS.escape(String(formId))}`
+            );
+        }
+
+        if (!slot.querySelector(selectors.join(','))) return;
+
+        const result = slot.closest('.nok-vragenlijst__result');
+        if (!result) return;
+
+        slot.classList.add('is-gform-submitted');
+        result.classList.add('is-gform-submitted');
     }
 
     /**
@@ -685,7 +743,7 @@ class VragenlijstRenderer {
 
         if (endAction === 'button' && result.cta_url && result.cta_text) {
             html += `<a href="${escapeAttr(result.cta_url)}"
-                class="nok-button nok-bg-darkerblue nok-text-contrast nok-vragenlijst__result-cta">
+                class="nok-button nok-bg-darkerblue nok-text-contrast nok-vragenlijst__result-cta w-100">
                 <span>${escapeHtml(result.cta_text)}</span>
             </a>`;
         } else if (endAction === 'form') {
@@ -693,7 +751,8 @@ class VragenlijstRenderer {
             html += '<div class="nok-vragenlijst__form-slot" hidden></div>';
         }
 
-        html += `<button type="button" class="nok-button nok-vragenlijst__restart">
+        html += `<button type="button" class="nok-button nok-vragenlijst__restart w-100">
+            <img src="/wp-content/themes/nok-2025-v1/assets/icons/ui_reload.svg" alt="" aria-hidden="true" class="nok-vragenlijst__restart-icon">
             <span>Opnieuw</span>
         </button>`;
         html += '</div>';
