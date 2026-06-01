@@ -289,9 +289,17 @@ class VragenlijstRenderer {
         this.onRestart = null;
         this.onDebugResult = null;
         this.formConfirmationObserver = null;
+        this.initialFormPoolHTML = new Map();
 
+        this.cacheInitialFormPools();
         this.createWizardDOM();
         this.bindGravityFormConfirmation();
+    }
+
+    cacheInitialFormPools() {
+        this.container.querySelectorAll('.nok-vragenlijst__form-pool[data-result-id]').forEach(pool => {
+            this.initialFormPoolHTML.set(pool.dataset.resultId, pool.innerHTML);
+        });
     }
 
     /** Build the wizard and result container elements */
@@ -419,14 +427,20 @@ class VragenlijstRenderer {
                 `.nok-vragenlijst__form-pool[data-result-id="${CSS.escape(result.id)}"]`
             );
             if (placeholder && pool) {
+                const needsReinit = pool.dataset.needsReinit === 'true';
                 while (pool.firstChild) placeholder.appendChild(pool.firstChild);
                 placeholder.dataset.resultId = result.id;
+                placeholder.dataset.formId = result.gravity_form_id ? String(result.gravity_form_id) : '';
                 placeholder.hidden = false;
+                delete pool.dataset.needsReinit;
 
                 // Nudge any size-dependent GF logic (conditional layouts, chosen
                 // dropdowns, etc.) to recompute against the new parent width.
                 requestAnimationFrame(() => {
                     window.dispatchEvent(new Event('resize'));
+                    if (needsReinit) {
+                        this.triggerGravityFormPostRender(placeholder, result.gravity_form_id);
+                    }
                 });
 
                 this.watchFormSlotForConfirmation(placeholder);
@@ -447,7 +461,24 @@ class VragenlijstRenderer {
             `.nok-vragenlijst__form-pool[data-result-id="${CSS.escape(slot.dataset.resultId)}"]`
         );
         if (!pool) return;
+
+        if (this.isSubmittedFormSlot(slot)) {
+            this.restoreInitialFormPool(pool, slot.dataset.resultId);
+            return;
+        }
+
         while (slot.firstChild) pool.appendChild(slot.firstChild);
+    }
+
+    isSubmittedFormSlot(slot) {
+        return slot.classList.contains('is-gform-submitted')
+            || !!slot.querySelector('.gform_confirmation_message, .gform_confirmation_wrapper');
+    }
+
+    restoreInitialFormPool(pool, resultId) {
+        if (!this.initialFormPoolHTML.has(resultId)) return;
+        pool.innerHTML = this.initialFormPoolHTML.get(resultId);
+        pool.dataset.needsReinit = 'true';
     }
 
     bindGravityFormConfirmation() {
@@ -501,6 +532,31 @@ class VragenlijstRenderer {
 
         slot.classList.add('is-gform-submitted');
         result.classList.add('is-gform-submitted');
+    }
+
+    triggerGravityFormPostRender(container, formId) {
+        const id = Number(formId);
+        if (!id) return;
+
+        const formElement = container.querySelector(`#gform_wrapper_${CSS.escape(String(id))}`)
+            || container.querySelector(`#gform_${CSS.escape(String(id))}`)
+            || container;
+
+        if (window.gform?.core?.triggerPostRenderEvents) {
+            window.gform.core.triggerPostRenderEvents(formElement, id);
+            return;
+        }
+
+        document.dispatchEvent(new CustomEvent('gform/post_render', {
+            detail: {
+                formId: id,
+                currentPage: 1
+            }
+        }));
+
+        if (window.jQuery) {
+            window.jQuery(document).trigger('gform_post_render', [id, 1]);
+        }
     }
 
     /**
