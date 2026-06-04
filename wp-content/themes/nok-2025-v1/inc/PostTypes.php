@@ -836,10 +836,14 @@ class PostTypes {
 			unset( $query_vars['post_type'] );
 			unset( $query_vars['name'] );
 
-			// For hierarchical taxonomies, extract full path from request URI
+			// For hierarchical taxonomies, extract full path from request URI.
 			// URL: /kennisbank/parent/child/ → taxonomy path: parent/child
-			$uri = $_SERVER['REQUEST_URI'] ?? '';
-			if ( preg_match( '#^/kennisbank/(.+?)/?$#', $uri, $matches ) ) {
+			// Strip the query string first: REQUEST_URI includes it (e.g. GA's
+			// ?_gl=...&gclid=...), and the greedy (.+?) would otherwise swallow it
+			// into the term path, producing a non-existent term and a 404.
+			$uri  = $_SERVER['REQUEST_URI'] ?? '';
+			$path = parse_url( $uri, PHP_URL_PATH ) ?? '';
+			if ( preg_match( '#^/kennisbank/(.+?)/?$#', $path, $matches ) ) {
 				$query_vars['kennisbank_categories'] = $matches[1];
 			} else {
 				$query_vars['kennisbank_categories'] = $slug;
