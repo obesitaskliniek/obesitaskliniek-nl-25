@@ -221,6 +221,29 @@ const PostMetaPanel = () => {
                     </FieldGroup>
                 );
 
+            case 'select':
+                const selectOptions = Object.entries(field.options || {}).map(([optionValue, label]) => ({
+                    label,
+                    value: optionValue
+                }));
+
+                return (
+                    <FieldGroup key={field.meta_key} label={field.label}>
+                        <SelectControl
+                            value={value || field.default || ''}
+                            options={selectOptions}
+                            onChange={(newValue) => updateMeta(metaKey, newValue)}
+                            __nextHasNoMarginBottom
+                            __next40pxDefaultSize
+                        />
+                        {field.description && (
+                            <p style={helpStyle}>
+                                {field.description}
+                            </p>
+                        )}
+                    </FieldGroup>
+                );
+
             case 'opening_hours':
                 const parseOpeningHours = (val) => {
                     if (!val) return {};

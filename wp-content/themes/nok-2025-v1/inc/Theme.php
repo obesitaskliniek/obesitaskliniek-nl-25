@@ -778,6 +778,26 @@ final class Theme {
                 'categories'  => [ $experience_cat->term_id ],
         ] );
 
+        PostMeta\MetaRegistry::register_field( 'post', 'operatiesoort', [
+                'type'              => 'select',
+                'label'             => 'Operatiesoort',
+                'default'           => 'onbekend',
+                'description'       => 'Selecteer het type operatie voor dit ervaringsverhaal.',
+                'sanitize_callback' => function( $value ): string {
+                        $value   = sanitize_text_field( $value );
+                        $allowed = [ 'gastric bypass', 'gastric sleeve', 'gastric band', 'onbekend' ];
+
+                        return in_array( $value, $allowed, true ) ? $value : 'onbekend';
+                },
+                'options'           => [
+                        'gastric bypass' => 'Gastric bypass',
+                        'gastric sleeve' => 'Gastric sleeve',
+                        'gastric band'   => 'Gastric band',
+                        'onbekend'       => 'Onbekend',
+                ],
+                'categories'        => [ $experience_cat->term_id ],
+        ] );
+
         // Vestiging meta fields
         PostMeta\MetaRegistry::register_field( 'vestiging', 'street', [
                 'type'        => 'text',

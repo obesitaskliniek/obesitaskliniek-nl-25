@@ -50,6 +50,7 @@ class MetaRegistry {
 			'placeholder'       => '',
 			'categories'        => [],
 			'taxonomies'        => [],
+			'options'           => [],
 		];
 
 		$field = array_merge( $defaults, $args );

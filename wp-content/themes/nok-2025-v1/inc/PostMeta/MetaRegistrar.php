@@ -46,6 +46,15 @@ class MetaRegistrar {
 					},
 				];
 
+				if ( $field['type'] === 'select' && ! empty( $field['options'] ) ) {
+					$args['show_in_rest'] = [
+						'schema' => [
+							'type' => 'string',
+							'enum' => array_keys( $field['options'] ),
+						],
+					];
+				}
+
 				// Add default value for simple types (not for complex REST schemas)
 				if ( $field['type'] !== 'opening_hours' ) {
 					$args['default'] = $field['default'];
