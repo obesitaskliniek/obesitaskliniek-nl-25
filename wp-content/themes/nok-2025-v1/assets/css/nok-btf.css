@@ -2682,6 +2682,12 @@ button.nok-button-outline:hover,
   min-width: -moz-min-content;
   min-width: min-content;
 }
+@media (min-width: 1200px) {
+  .nok-equal-button-width > .wp-block-button:only-child,
+  .nok-equal-width > .wp-block-button:only-child {
+    max-width: 50%;
+  }
+}
 .nok-category-pills {
   display: flex;
   flex-wrap: wrap;

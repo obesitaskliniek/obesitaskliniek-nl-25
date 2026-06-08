@@ -144,13 +144,13 @@ nok-bg-white nok-dark-bg-darkestblue nok-text-darkerblue nok-dark-text-white nok
                         <?= $c->usp_3_text ?>
                     </div>
                     <?php endif; ?>
-                    <?php if ($c->has('button_vestiging_url')) : ?>
-                        <a role="button" href="<?= $c->button_vestiging_url->link() ?>"
-                           class="nok-button nok-bg-white nok-text-darkerblue nok-align-self-stretch nok-invisible-to-xxl"
-                           tabindex="0"><span><?= $c->button_vestiging_text ?></span>
-                        </a>
-                    <?php endif; ?>
                 </div>
+                <?php if ($c->has('button_vestiging_url')) : ?>
+                    <a role="button" href="<?= $c->button_vestiging_url->link() ?>"
+                       class="nok-button nok-bg-white nok-text-darkerblue nok-align-self-stretch nok-invisible-to-xxl"
+                       tabindex="0"><span><?= $c->button_vestiging_text ?></span>
+                    </a>
+                <?php endif; ?>
             </footer>
             <?php endif; ?>
         </div>

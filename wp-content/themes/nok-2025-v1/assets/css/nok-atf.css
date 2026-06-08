@@ -398,6 +398,13 @@ button.nok-button svg,
   min-width: min-content;
 }
 
+@media (min-width: 1200px) {
+  .nok-equal-button-width > .nok-button:only-child,
+  .nok-equal-width > .nok-button:only-child {
+    max-width: 50%;
+  }
+}
+
 .nok-section,
 nok-section {
   position: relative;
