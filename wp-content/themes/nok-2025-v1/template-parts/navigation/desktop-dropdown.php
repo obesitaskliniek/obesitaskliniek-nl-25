@@ -37,13 +37,13 @@ if (empty($parents_with_children)) {
 		<h3 class="nok-square-block__heading">
 			Vragen, of behoefte aan persoonlijk advies?
 		</h3>
+        <a href="/aanmelden-gratis-voorlichting/" target="_blank" class="nok-button nok-bg-yellow nok-text-contrast" tabindex="0">
+            Gratis voorlichting
+            <?= Assets::getIcon('ui_arrow-right-long' ); ?>
+        </a>
 		<a href="/contact/" role="button" class="nok-button nok-bg-darkblue nok-text-contrast" tabindex="0">
 			Neem contact op
 			<?= Assets::getIcon('ui_arrow-right-long', 'nok-text-yellow'); ?>
 		</a>
-        <a href="https://nokclinics.nl" target="_blank" class="nok-button nok-bg-clinics-oranje nok-text-white">
-            Behandeling met medicatie
-            <?= Assets::getIcon('ui_arrow-right-long' ); ?>
-        </a>
 	</nok-square-block>
 </div>

@@ -2661,6 +2661,21 @@ button.nok-button-badge,
   font-style: normal;
   font-weight: 500;
 }
+button.nok-button-outline,
+.gform_button-outline,
+.nok-button-outline {
+  --border-width: 2px;
+  outline-offset: calc(-1 * var(--border-width));
+  background: transparent;
+  outline: var(--border-width) solid oklch(from var(--bg-color, inherit) l c h/var(--global-bg-alpha-value, var(--bg-alpha-value, 1)));
+  color: inherit;
+}
+button.nok-button-outline:hover,
+.gform_button-outline:hover,
+.nok-button-outline:hover {
+  background-color: var(--bg-color);
+  color: var(--text-color, var(--bg-color--contrast));
+}
 .nok-equal-button-width > .wp-block-button,
 .nok-equal-width > .wp-block-button {
   flex: 1 1 0%;

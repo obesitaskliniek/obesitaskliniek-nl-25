@@ -183,7 +183,9 @@ $logo = '<nok-logo>' . file_get_contents(THEME_ROOT_ABS . '/assets/img/nok-logo.
                 </div>
 				<?php $menu_manager->render_desktop_menu_bar('primary'); ?>
                 <div>
-                    <a href="/aanmelden-gratis-voorlichting#nok-voorlichting-form" role="button" class="nok-button nok-bg-yellow nok-text-contrast" tabindex="0">Gratis voorlichting</a>
+                    <a  href="#" data-toggles-class="popup-open" data-class-target="nok-top-navigation" data-toggle-event="click" data-toggles-attribute="data-state" data-toggles-attribute-value="open" data-attribute-target="#popup-vragenlijst-inclusie-check" role="button" class="nok-button nok-button-outline nok-bg-yellow nok-text-contrast" tabindex="0" title="<?php esc_attr_e('Wil je weten of je in aanmerking komt voor behandeling? Klik hier.', THEME_TEXT_DOMAIN); ?>">
+                        Doe de Quickscan
+                        <?= Assets::getIcon('ui_checkmark', 'nok-text-contrast'); ?></a>
                 </div>
             </div>
             <nok-nav-menu-bar-dropdown>

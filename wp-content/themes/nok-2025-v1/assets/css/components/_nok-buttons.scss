@@ -168,6 +168,18 @@ button.nok-button,
     pointer-events: none;
     @include components-base.nok-heading-font;
   }
+
+  &-outline {
+    --border-width: 2px;
+    outline-offset: calc(-1 * var(--border-width));
+    background: transparent;
+    outline: var(--border-width) solid oklch(from var(--bg-color, inherit) l c h / var(--global-bg-alpha-value, var(--bg-alpha-value, 1)));
+    color: inherit;
+    &:hover {
+      background-color: var(--bg-color);
+      color: var(--text-color, var(--bg-color--contrast));
+    }
+  }
 }
 
 // Equal-width buttons — all buttons share space equally
