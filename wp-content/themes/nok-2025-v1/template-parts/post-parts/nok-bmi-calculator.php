@@ -87,7 +87,7 @@ $rand_id = rand( 1000, 9999 );
                 <p class="show-behandeling-nok-clinics nok-mt-1">
                     U kunt voor behandeling <span class="show-behandeling-nok-regulier">óók</span> terecht bij NOK
                     Clinics; plan <a
-                            href="https://nokclinics.nl/intake-plannen?onderwerp_aanvraag=Ik+wil+graag+een+intake+plannen"
+                            href="https://nokclinics.nl/intake-plannen?onderwerp_aanvraag=Ik+wil+graag+een+intake+plannen/427439301-Referral%20NOK%20naar%20NOK%20Clinics%20BMI%20calculator%20intake"
                             target="_blank">hier</a> een intake op de website.
                 </p>
             </div>
