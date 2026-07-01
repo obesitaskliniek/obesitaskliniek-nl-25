@@ -44,6 +44,12 @@ CLAUDE.md
 token-debug.log
 .claude/
 
+# Codex
+AGENTS.md
+.codex/
+.codex*/
+codex*
+
 # ignore compiled css and minified (m)js, but keep WP required style.css
 !style.css
 *.min.*

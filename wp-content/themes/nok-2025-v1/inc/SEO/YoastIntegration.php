@@ -39,7 +39,7 @@ class YoastIntegration {
 	 */
 	public function register_hooks(): void {
 		add_action('admin_enqueue_scripts', [$this, 'enqueue_integration_script'], 20);
-		// Exclude page_part from Yoast indexables and sitemaps
+		// Exclude internal/pre-launch post types from Yoast indexables and sitemaps.
 		add_filter('wpseo_indexable_excluded_post_types', [$this, 'exclude_page_parts_from_indexables']);
 		add_filter('wpseo_sitemap_exclude_post_type', [$this, 'exclude_page_parts_from_sitemap'], 10, 2);
 		// Fix breadcrumb archive URLs for custom post types
@@ -56,12 +56,20 @@ class YoastIntegration {
 	}
 
 	public function exclude_page_parts_from_indexables(array $excluded): array {
-		$excluded[] = 'page_part';
-		return $excluded;
+		return array_values( array_unique( array_merge( $excluded, $this->get_prelaunch_excluded_post_types() ) ) );
 	}
 
 	public function exclude_page_parts_from_sitemap(bool $excluded, string $post_type): bool {
-		return $post_type === 'page_part' ? true : $excluded;
+		return in_array( $post_type, $this->get_prelaunch_excluded_post_types(), true ) ? true : $excluded;
+	}
+
+	/**
+	 * Get post types excluded from Yoast output until public launch.
+	 *
+	 * @return string[]
+	 */
+	private function get_prelaunch_excluded_post_types(): array {
+		return [ 'page_part', 'event' ];
 	}
 
 	/**
