@@ -934,7 +934,7 @@ final class Theme {
         ?>
         <div class="wrap">
             <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-            <form method="post" action="options.php">
+            <form method="post" action="<?php echo esc_url( admin_url( 'options.php' ) ); ?>">
                 <?php settings_fields( "{$post_type}_archive_settings" ); ?>
                 <table class="form-table">
                     <tr>
@@ -1000,7 +1000,7 @@ final class Theme {
         <div class="wrap">
             <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 
-            <form method="post" action="options.php">
+            <form method="post" action="<?php echo esc_url( admin_url( 'options.php' ) ); ?>">
                 <?php settings_fields( 'kennisbank_archive_settings' ); ?>
 
                 <h2><?php _e( 'Kennisbank Archief', THEME_TEXT_DOMAIN ); ?></h2>

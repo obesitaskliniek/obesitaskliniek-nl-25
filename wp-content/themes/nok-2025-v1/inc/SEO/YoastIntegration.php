@@ -46,7 +46,7 @@ class YoastIntegration {
 		// Fix breadcrumb archive URLs for custom post types
 		add_filter('wpseo_breadcrumb_links', [$this, 'fix_breadcrumb_archive_urls']);
 		// Enhance Yoast schema graph with MedicalOrganization data
-		add_filter('wpseo_schema_graph', [$this, 'enhance_schema_graph'], 10, 2);
+		add_filter('wpseo_schema_graph', [$this, 'enhance_schema_graph']);
 		// Fall back to post excerpt when no explicit meta description is set
 		add_filter('wpseo_metadesc', [$this, 'fallback_to_excerpt']);
 		// Noindex showcase page (works with or without Yoast)
@@ -462,11 +462,10 @@ class YoastIntegration {
 	 * pages, also adds a detailed MedicalClinic piece with address, phone, and
 	 * opening hours.
 	 *
-	 * @param array                              $graph   Schema graph pieces
-	 * @param \Yoast\WP\SEO\Context\Meta_Tags_Context $context Yoast meta tags context
+	 * @param array $graph Schema graph pieces
 	 * @return array Modified schema graph
 	 */
-	public function enhance_schema_graph(array $graph, $context): array {
+	public function enhance_schema_graph(array $graph): array {
 		foreach ($graph as &$piece) {
 			if (!isset($piece['@type'])) {
 				continue;
