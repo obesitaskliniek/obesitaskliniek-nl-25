@@ -190,8 +190,7 @@ final class Theme {
         add_filter( 'the_content', [ $this, 'enhance_paragraph_classes' ], 1 );
         add_filter( 'the_content', [ $this, 'process_page_part_tokens' ], 5 );
         add_filter( 'show_admin_bar', [ $this, 'maybe_hide_admin_bar' ] );
-        add_action( 'template_redirect', [ Agenda::class, 'protect_evenement_visibility' ], 7 );
-        add_action( 'template_redirect', [ Agenda::class, 'maybe_render_preview' ], 8 );
+        add_action( 'template_redirect', [ Agenda::class, 'maybe_render_agenda' ], 8 );
         add_filter( 'rest_pre_dispatch', [ Agenda::class, 'protect_evenement_rest' ], 10, 3 );
 
         // Template hierarchy

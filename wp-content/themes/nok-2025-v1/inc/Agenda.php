@@ -13,33 +13,8 @@ use WP_Query;
  * @package NOK2025\V1
  */
 class Agenda {
-	private const DATE_META_KEY      = 'aanvangsdatum_en_tijd';
-	private const PREVIEW_PATH       = 'agenda-preview';
-	private const EVENT_POST_TYPE    = 'evenement';
-	private const EVENT_ARCHIVE_PATH = 'evenementen';
-	private const EVENT_SINGLE_PATH  = 'evenement';
-
-	/**
-	 * Hide ACF-registered evenement content from anonymous visitors.
-	 */
-	public static function protect_evenement_visibility(): void {
-		if ( is_admin() || wp_doing_ajax() || wp_doing_cron() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || is_user_logged_in() ) {
-			return;
-		}
-
-		$path           = trim( (string) wp_parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ), '/' );
-		$is_event_path  = $path === self::EVENT_ARCHIVE_PATH
-			|| str_starts_with( $path, self::EVENT_ARCHIVE_PATH . '/' )
-			|| $path === self::EVENT_SINGLE_PATH
-			|| str_starts_with( $path, self::EVENT_SINGLE_PATH . '/' );
-		$is_event_query = is_post_type_archive( self::EVENT_POST_TYPE ) || is_singular( self::EVENT_POST_TYPE );
-
-		if ( ! $is_event_path && ! $is_event_query ) {
-			return;
-		}
-
-		self::render_not_found();
-	}
+	private const DATE_META_KEY = 'aanvangsdatum_en_tijd';
+	private const AGENDA_PATH   = 'agenda';
 
 	/**
 	 * Hide ACF-registered evenement REST endpoints from anonymous visitors.
@@ -84,37 +59,170 @@ class Agenda {
 	}
 
 	/**
-	 * Render temporary logged-in-only agenda routes before launch.
+	 * Render the public combined agenda route.
 	 */
-	public static function maybe_render_preview(): void {
+	public static function maybe_render_agenda(): void {
 		if ( is_admin() || wp_doing_ajax() || wp_doing_cron() || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) ) {
 			return;
 		}
 
 		$path = trim( (string) wp_parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ), '/' );
 
-		$is_preview_route = $path === self::PREVIEW_PATH || str_starts_with( $path, self::PREVIEW_PATH . '/' );
-		if ( ! $is_preview_route ) {
+		if ( $path !== self::AGENDA_PATH ) {
 			return;
 		}
 
-		if ( ! is_user_logged_in() ) {
-			self::render_not_found();
-		}
+		global $wp_query;
 
-		if ( $path === self::PREVIEW_PATH ) {
-			status_header( 200 );
-			self::render_archive( [
-				'post_types'        => [ 'voorlichting', 'evenement' ],
-				'archive_link'      => home_url( '/' . self::PREVIEW_PATH . '/' ),
-				'intro_post_type'   => 'voorlichting',
-				'heading'           => __( 'Agenda preview', THEME_TEXT_DOMAIN ),
-				'period_label'      => __( 'Agenda in', THEME_TEXT_DOMAIN ),
-				'empty_message'     => __( 'Geen agenda-items gevonden in deze maand.', THEME_TEXT_DOMAIN ),
-				'protect_logged_in' => true,
-			] );
-			exit;
-		}
+		$wp_query->is_404 = false;
+
+		self::register_agenda_seo_filters();
+
+		status_header( 200 );
+		self::render_archive( [
+			'post_types'        => [ 'voorlichting', 'evenement' ],
+			'archive_link'      => home_url( '/' . self::AGENDA_PATH . '/' ),
+			'intro_post_type'   => '',
+			'heading'           => __( 'Agenda', THEME_TEXT_DOMAIN ),
+			'period_label'      => __( 'Agenda in', THEME_TEXT_DOMAIN ),
+			'empty_message'     => __( 'Geen agenda-items gevonden in deze maand.', THEME_TEXT_DOMAIN ),
+			'protect_logged_in' => false,
+		] );
+		exit;
+	}
+
+	/**
+	 * Register Yoast metadata for the virtual combined agenda route.
+	 */
+	private static function register_agenda_seo_filters(): void {
+		$agenda_url      = home_url( '/' . self::AGENDA_PATH . '/' );
+		$seo_title       = __( 'Agenda - Nederlandse Obesitas Kliniek', THEME_TEXT_DOMAIN );
+		$seo_description = __( 'Bekijk de agenda van de Nederlandse Obesitas Kliniek met aankomende voorlichtingen en evenementen, online en op locatie.', THEME_TEXT_DOMAIN );
+
+		add_filter( 'wpseo_title', static fn( string $title ): string => $seo_title );
+		add_filter( 'wpseo_metadesc', static fn( string $description ): string => $seo_description );
+		add_filter( 'wpseo_canonical', static fn( string $canonical ): string => $agenda_url );
+		add_filter( 'wpseo_opengraph_title', static fn( string $title ): string => $seo_title );
+		add_filter( 'wpseo_opengraph_desc', static fn( string $description ): string => $seo_description );
+		add_filter( 'wpseo_opengraph_url', static fn( string $url ): string => $agenda_url );
+		add_filter( 'wpseo_twitter_title', static fn( string $title ): string => $seo_title );
+		add_filter( 'wpseo_twitter_description', static fn( string $description ): string => $seo_description );
+
+		add_action(
+			'wp_head',
+			static function () use ( $agenda_url, $seo_title, $seo_description ): void {
+				?>
+				<meta property="og:locale" content="nl_NL">
+				<meta property="og:type" content="website">
+				<meta property="og:title" content="<?php echo esc_attr( $seo_title ); ?>">
+				<meta property="og:description" content="<?php echo esc_attr( $seo_description ); ?>">
+				<meta property="og:url" content="<?php echo esc_url( $agenda_url ); ?>">
+				<meta property="og:site_name" content="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
+				<meta name="twitter:card" content="summary">
+				<meta name="twitter:title" content="<?php echo esc_attr( $seo_title ); ?>">
+				<meta name="twitter:description" content="<?php echo esc_attr( $seo_description ); ?>">
+				<?php
+			},
+			2
+		);
+
+		add_filter(
+			'wpseo_breadcrumb_links',
+			static function ( array $links ): array {
+				return [
+					[
+						'url'  => home_url( '/' ),
+						'text' => __( 'Home', THEME_TEXT_DOMAIN ),
+					],
+					[
+						'text' => __( 'Agenda', THEME_TEXT_DOMAIN ),
+					],
+				];
+			},
+			20
+		);
+
+		add_filter(
+			'wpseo_schema_graph',
+			static function ( array $graph ) use ( $agenda_url, $seo_title, $seo_description ): array {
+				$webpage_id     = $agenda_url . '#webpage';
+				$breadcrumb_id  = $agenda_url . '#breadcrumb';
+				$has_webpage    = false;
+				$has_breadcrumb = false;
+
+				foreach ( $graph as &$piece ) {
+					$types = (array) ( $piece['@type'] ?? [] );
+
+					if ( in_array( 'WebPage', $types, true ) || in_array( 'CollectionPage', $types, true ) ) {
+						$has_webpage         = true;
+						$piece['@type']       = 'CollectionPage';
+						$piece['@id']         = $webpage_id;
+						$piece['url']         = $agenda_url;
+						$piece['name']        = $seo_title;
+						$piece['description'] = $seo_description;
+						$piece['breadcrumb']  = [ '@id' => $breadcrumb_id ];
+					}
+
+					if ( in_array( 'BreadcrumbList', $types, true ) ) {
+						$has_breadcrumb           = true;
+						$piece['@id']             = $breadcrumb_id;
+						$piece['itemListElement'] = [
+							[
+								'@type'    => 'ListItem',
+								'position' => 1,
+								'name'     => __( 'Home', THEME_TEXT_DOMAIN ),
+								'item'     => home_url( '/' ),
+							],
+							[
+								'@type'    => 'ListItem',
+								'position' => 2,
+								'name'     => __( 'Agenda', THEME_TEXT_DOMAIN ),
+								'item'     => $agenda_url,
+							],
+						];
+					}
+				}
+
+				unset( $piece );
+
+				if ( ! $has_webpage ) {
+					$graph[] = [
+						'@type'       => 'CollectionPage',
+						'@id'         => $webpage_id,
+						'url'         => $agenda_url,
+						'name'        => $seo_title,
+						'description' => $seo_description,
+						'isPartOf'    => [ '@id' => home_url( '/#website' ) ],
+						'breadcrumb'  => [ '@id' => $breadcrumb_id ],
+						'inLanguage'  => get_bloginfo( 'language' ),
+					];
+				}
+
+				if ( ! $has_breadcrumb ) {
+					$graph[] = [
+						'@type'           => 'BreadcrumbList',
+						'@id'             => $breadcrumb_id,
+						'itemListElement' => [
+							[
+								'@type'    => 'ListItem',
+								'position' => 1,
+								'name'     => __( 'Home', THEME_TEXT_DOMAIN ),
+								'item'     => home_url( '/' ),
+							],
+							[
+								'@type'    => 'ListItem',
+								'position' => 2,
+								'name'     => __( 'Agenda', THEME_TEXT_DOMAIN ),
+								'item'     => $agenda_url,
+							],
+						],
+					];
+				}
+
+				return $graph;
+			},
+			99
+		);
 	}
 
 	/**
@@ -224,7 +332,7 @@ class Agenda {
 		}
 
 		$event_data   = self::event_data( $post );
-		$archive_url  = get_post_type_archive_link( 'evenement' ) ?: home_url( '/evenementen/' );
+		$archive_url  = home_url( '/agenda/' );
 		$form_id      = self::event_form_id( $post->ID );
         $is_open      = $event_data['open'];
 		$can_register = $form_id > 0 && $is_open;
@@ -317,7 +425,7 @@ class Agenda {
 			}
 		}
 
-		return home_url( '/' . self::PREVIEW_PATH . '/' );
+		return home_url( '/' . self::AGENDA_PATH . '/' );
 	}
 
 	private static function maybe_redirect_legacy_week_param( string $archive_link, DateTimeZone $timezone, DateTime $today ): void {
@@ -615,7 +723,7 @@ class Agenda {
 						if ( $intro ) {
 							echo wp_kses_post( $intro );
 						} else {
-							esc_html_e( 'Hier is plek voor een korte introductietekst over de agenda en evenementen van de Nederlandse Obesitas Kliniek.', THEME_TEXT_DOMAIN );
+							esc_html_e( 'Op deze pagina vind je alle geplande voorlichtingen en evenementen van de Nederlandse Obesitas Kliniek.', THEME_TEXT_DOMAIN );
 						}
 						?>
 					</p>

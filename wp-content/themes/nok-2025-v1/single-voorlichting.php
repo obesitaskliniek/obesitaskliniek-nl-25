@@ -16,7 +16,7 @@ get_header( 'voorlichting' );
 
 // Get event data
 $hubspotData  = Helpers::setup_hubspot_metadata( get_the_ID() );
-$archive_url  = get_post_type_archive_link( 'voorlichting' );
+$archive_url  = home_url( '/agenda/' );
 
 // Pre-compute commonly used values
 $is_online    = strtolower( $hubspotData['type'] ) === 'online';

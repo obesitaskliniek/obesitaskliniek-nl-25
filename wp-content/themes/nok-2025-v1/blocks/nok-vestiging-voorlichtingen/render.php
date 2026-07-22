@@ -39,7 +39,7 @@ return function( array $attributes ): string {
 	}
 
 	// Build "Bekijk alle" URL
-	$archive_url = get_post_type_archive_link( 'voorlichting' );
+	$archive_url = home_url( '/agenda/' );
 	$all_url     = $city
 		? add_query_arg( 'locatie', urlencode( $city ), $archive_url )
 		: $archive_url;

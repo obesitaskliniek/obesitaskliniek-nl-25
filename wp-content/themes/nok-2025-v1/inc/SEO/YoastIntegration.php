@@ -39,9 +39,10 @@ class YoastIntegration {
 	 */
 	public function register_hooks(): void {
 		add_action('admin_enqueue_scripts', [$this, 'enqueue_integration_script'], 20);
-		// Exclude internal/pre-launch post types from Yoast indexables and sitemaps.
+		// Exclude internal post types from Yoast indexables and sitemaps.
 		add_filter('wpseo_indexable_excluded_post_types', [$this, 'exclude_page_parts_from_indexables']);
 		add_filter('wpseo_sitemap_exclude_post_type', [$this, 'exclude_page_parts_from_sitemap'], 10, 2);
+		add_filter('wpseo_sitemap_post_type_first_links', [$this, 'add_agenda_to_sitemap'], 10, 2);
 		// Fix breadcrumb archive URLs for custom post types
 		add_filter('wpseo_breadcrumb_links', [$this, 'fix_breadcrumb_archive_urls']);
 		// Enhance Yoast schema graph with MedicalOrganization data
@@ -56,20 +57,39 @@ class YoastIntegration {
 	}
 
 	public function exclude_page_parts_from_indexables(array $excluded): array {
-		return array_values( array_unique( array_merge( $excluded, $this->get_prelaunch_excluded_post_types() ) ) );
+		return array_values( array_unique( array_merge( $excluded, $this->get_excluded_post_types() ) ) );
 	}
 
 	public function exclude_page_parts_from_sitemap(bool $excluded, string $post_type): bool {
-		return in_array( $post_type, $this->get_prelaunch_excluded_post_types(), true ) ? true : $excluded;
+		return in_array( $post_type, $this->get_excluded_post_types(), true ) ? true : $excluded;
 	}
 
 	/**
-	 * Get post types excluded from Yoast output until public launch.
+	 * Add the virtual combined agenda route to the voorlichting sitemap.
+	 *
+	 * @param array<int, array<string, mixed>> $links     Initial sitemap links.
+	 * @param string                           $post_type Sitemap post type.
+	 * @return array<int, array<string, mixed>>
+	 */
+	public function add_agenda_to_sitemap( array $links, string $post_type ): array {
+		if ( $post_type !== 'voorlichting' ) {
+			return $links;
+		}
+
+		$links[] = [
+			'loc' => home_url( '/agenda/' ),
+		];
+
+		return $links;
+	}
+
+	/**
+	 * Get internal post types excluded from Yoast output.
 	 *
 	 * @return string[]
 	 */
-	private function get_prelaunch_excluded_post_types(): array {
-		return [ 'page_part', 'event' ];
+	private function get_excluded_post_types(): array {
+		return [ 'page_part' ];
 	}
 
 	/**
