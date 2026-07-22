@@ -93,6 +93,7 @@ final class Theme {
     private BlockRenderers $block_renderers;
     private VoorlichtingForm $voorlichting_form;
     private AllowedEditorBlocks $allowed_editor_blocks;
+    private Comments $comments;
 
     // Settings store (can hold customizer values)
     private array $settings = [];
@@ -126,6 +127,7 @@ final class Theme {
         );
         $this->post_meta_registrar = new PostMeta\MetaRegistrar();
         $this->register_post_custom_fields();
+        $this->comments = new Comments();
     }
 
     /**
@@ -174,7 +176,7 @@ final class Theme {
         $this->voorlichting_form->register_hooks();
         $this->allowed_editor_blocks->register_hooks();
         PageParts\Registry::register_invalidation_hooks();
-
+        $this->comments->register_hooks();
 
         // Preload LCP hero image (early in <head> before other tags)
         add_action( 'wp_head', [ Helpers::class, 'maybe_preload_hero_image' ], 2 );
@@ -268,7 +270,7 @@ final class Theme {
     public function theme_supports(): void {
         add_theme_support( 'title-tag' );
         add_theme_support( 'post-thumbnails' );
-        add_theme_support( 'html5', [ 'search-form', 'comment-form' ] );
+        add_theme_support( 'html5', [ 'search-form' ] );
 
         $palette = [
             [ 'name' => 'Donkerst blauw',  'slug' => 'darkerblue',      'color' => '#0b2355' ],

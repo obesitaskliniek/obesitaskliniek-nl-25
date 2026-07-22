@@ -261,6 +261,7 @@ class Agenda {
                     <!-- Main content -->
                     <div class="baseline-grid nok-order-1 nok-order-lg-0" data-requires="./domule/modules/hnl.baseline-grid.mjs">
                         <?= wp_kses_post( $event_data['intro_lang'] ); ?>
+                        <?= wp_kses_post( $event_data['onderwerpen'] ); ?>
                     </div>
 
                     <!-- Sidebar -->
@@ -744,11 +745,17 @@ class Agenda {
 				<?php self::render_location_rows( $post, $event_data, $is_online, $compact ); ?>
 			</table>
 
+            <!-- <?= $event_data['inschrijving']; ?> -->
+
             <div class="nok-layout-flex nok-layout-flex-row nok-column-gap-0_5">
                  <?php if ( self::is_registrable( $post, $event_data ) ) : ?>
                 <a href="<?php the_permalink(); ?>#aanmelden"
                    class="nok-button nok-bg-yellow nok-text-darkerblue w-100 <?= ! $is_open ? 'disabled' : ''; ?>">
-                    <?php esc_html_e( 'Aanmelden', THEME_TEXT_DOMAIN ); ?>
+                    <?php if(!$is_open) {
+                        esc_html_e( $event_data['inschrijving'], THEME_TEXT_DOMAIN );
+                    } else {
+                        esc_html_e( 'Aanmelden', THEME_TEXT_DOMAIN );
+                    }?>
                 </a>
                 <?php endif; ?>
                 <?php if ( $show_info_link ) : ?>
@@ -794,6 +801,7 @@ class Agenda {
 			'onderwerpen'   => (string) ( $meta['onderwerpen'][0] ?? '' ),
 			'past'          => $is_past,
 			'open'          => $status === 'open' && ! $is_past,
+            'inschrijving'  => (string) ( $meta['inschrijvingsstatus'][0] ?? '' ),
 			'status'        => $is_past ? 'geweest' : $status,
 		];
 	}
