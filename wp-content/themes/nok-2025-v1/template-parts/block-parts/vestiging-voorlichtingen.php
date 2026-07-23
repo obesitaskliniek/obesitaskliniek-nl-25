@@ -1,24 +1,24 @@
 <?php
 /**
- * Block Part: Vestiging Voorlichtingen
- * Description: Carousel of upcoming voorlichtingen, optionally filtered by vestiging
+ * Block Part: Vestiging Agenda
+ * Description: Carousel of upcoming agenda items, optionally filtered by vestiging
  * Slug: vestiging-voorlichtingen
  * Icon: calendar-alt
  * Keywords: voorlichting, carousel, vestiging, agenda
  * Custom Fields:
- * - title:text!default(Voorlichtingen)
+ * - title:text!default(Agenda)
  * - background_color:text!default(nok-bg-darkerblue)
  * - text_color:text!default(nok-text-white)
  *
  * @var \NOK2025\V1\PageParts\FieldContext $context
- * @var \WP_Post[] $voorlichtingen Voorlichting posts from render.php
- * @var string     $all_url        URL to full voorlichtingen overview
+ * @var \WP_Post[] $agenda_items   Agenda posts from render.php
+ * @var string     $all_url        URL to the complete agenda
  * @var bool       $show_all_link  Whether to show the "Bekijk alle" link
  * @var string|null $city          City name or null for all locations
  */
 
+use NOK2025\V1\Agenda;
 use NOK2025\V1\Assets;
-use NOK2025\V1\Helpers;
 
 $c        = $context;
 $title    = $c->has( 'title' ) ? $c->title->raw() : '';
@@ -44,59 +44,24 @@ $colors   = esc_attr( trim( "$bg_color $tx_color" ) );
 
 						<?php
 						global $post;
-						foreach ( $voorlichtingen as $post ) :
+						$timezone = new DateTimeZone( 'Europe/Amsterdam' );
+						foreach ( $agenda_items as $post ) :
 							setup_postdata( $post );
-							$hubspotData = Helpers::setup_hubspot_metadata( $post->ID );
-							$is_open     = $hubspotData['open'];
-							$is_online   = strtolower( $hubspotData['type'] ) === 'online';
-							?>
-
-							<nok-square-block class="nok-bg-white nok-dark-bg-darkerblue nok-grid-gap-0_5" data-shadow="true">
-
-								<span class="nok-square-block__banner nok-badge <?= $is_online ? 'nok-bg-lightblue--lighter' : 'nok-bg-green--lighter'; ?> nok-text-darkerblue">
-									<?= $is_online ? esc_html__( 'Online', THEME_TEXT_DOMAIN ) : esc_html__( 'Op locatie', THEME_TEXT_DOMAIN ); ?>
-								</span>
-
-								<h3 class="nok-square-block__heading">
-									<a href="<?= esc_url( get_permalink( $post->ID ) ); ?>" class="nok-text-darkerblue nok-dark-text-white">
-										<?= esc_html( ucfirst( $hubspotData['soort'] ) ); ?> <?= esc_html( ucfirst( $hubspotData['locatie'] ) ); ?>
-									</a>
-								</h3>
-
-								<table class="nok-square-block__text nok-icon-table">
-									<tr>
-										<td><?= Assets::getIcon( 'ui_calendar' ); ?></td>
-										<td class="fw-bold"><?= esc_html( ucfirst( $hubspotData['timestamp']['niceDateFull'] ) ); ?></td>
-									</tr>
-									<tr>
-										<td><?= Assets::getIcon( 'ui_time' ); ?></td>
-										<td><?= esc_html( $hubspotData['timestamp']['start_time'] ); ?> - <?= esc_html( $hubspotData['timestamp']['end_time'] ); ?> uur</td>
-									</tr>
-									<tr>
-										<td><?= Assets::getIcon( 'ui_location' ); ?></td>
-										<td><?= $is_online ? esc_html__( 'Online', THEME_TEXT_DOMAIN ) : esc_html( ucfirst( $hubspotData['locatie'] ) ); ?></td>
-									</tr>
-								</table>
-
-								<div class="nok-layout-flex nok-layout-flex-row nok-column-gap-0_5">
-									<a href="<?= esc_url( get_permalink( $post->ID ) ); ?>#aanmelden"
-									   class="nok-button nok-bg-yellow nok-text-darkerblue w-100 <?= ! $is_open ? 'disabled' : ''; ?>">
-										<?php esc_html_e( 'Aanmelden', THEME_TEXT_DOMAIN ); ?>
-									</a>
-									<a href="<?= esc_url( get_permalink( $post->ID ) ); ?>"
-									   class="nok-button nok-bg-lightgrey--lighter nok-text-darkerblue w-100 nok-text-contrast">
-										<?php esc_html_e( 'Informatie', THEME_TEXT_DOMAIN ); ?>
-									</a>
-								</div>
-							</nok-square-block>
-
-						<?php endforeach; ?>
+							Agenda::render_card(
+								post: $post,
+								timezone: $timezone,
+								show_info_link: true,
+								show_title: true,
+								heading_level: 3,
+							);
+						endforeach;
+						?>
 						<?php wp_reset_postdata(); ?>
 
 					</div>
                     <?php if ( $show_all_link ) : ?>
                         <a href="<?= esc_url( $all_url ); ?>" class="nok-button nok-bg-darkerblue nok-text-contrast nok-mt-2">
-                            <?php esc_html_e( 'Bekijk alle voorlichtingen', THEME_TEXT_DOMAIN ); ?>
+                            <?php esc_html_e( 'Bekijk de volledige agenda', THEME_TEXT_DOMAIN ); ?>
                             <?= Assets::getIcon( 'ui_arrow-right-long', 'nok-text-yellow' ); ?>
                         </a>
                     <?php endif; ?>

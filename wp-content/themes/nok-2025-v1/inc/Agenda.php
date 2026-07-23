@@ -526,6 +526,41 @@ class Agenda {
 	}
 
 	/**
+	 * Get upcoming agenda items, optionally filtered by a vestiging city.
+	 *
+	 * @param int         $limit Maximum number of results, or -1 for all.
+	 * @param string|null $city  City name to filter by, or null for all locations.
+	 * @return WP_Post[] Upcoming voorlichtingen and evenementen ordered by start time.
+	 */
+	public static function get_upcoming_items( int $limit = 6, ?string $city = null ): array {
+		$post_types = [ 'voorlichting', 'evenement' ];
+		$meta_query = [
+			'relation' => 'AND',
+			[
+				'key'     => self::DATE_META_KEY,
+				'value'   => current_time( 'mysql' ),
+				'compare' => '>=',
+				'type'    => 'DATETIME',
+			],
+		];
+
+		if ( $city !== null && $city !== '' ) {
+			$meta_query[] = self::location_filter_meta_query( $post_types, $city );
+		}
+
+		return get_posts( [
+			'post_type'      => $post_types,
+			'posts_per_page' => $limit,
+			'post_status'    => 'publish',
+			'meta_key'       => self::DATE_META_KEY,
+			'meta_query'     => $meta_query,
+			'orderby'        => 'meta_value',
+			'order'          => 'ASC',
+			'no_found_rows'  => true,
+		] );
+	}
+
+	/**
 	 * Build the location meta query for the selected archive post types.
 	 *
 	 * Voorlichtingen store their city in `vestiging`; evenementen store their location
@@ -806,11 +841,23 @@ class Agenda {
 		<?php
 	}
 
-	private static function render_card( ?WP_Post $post, DateTimeZone $timezone, bool $show_info_link = true, bool $show_title = false, bool $pull_up = false, bool $compact = true ): void {
+	/**
+	 * Render a card for a voorlichting or evenement.
+	 *
+	 * @param WP_Post|null $post           Agenda item.
+	 * @param DateTimeZone $timezone       Display timezone.
+	 * @param bool         $show_info_link Whether to show the information link.
+	 * @param bool         $show_title     Whether to show the item title.
+	 * @param bool         $pull_up        Whether to apply the pull-up layout class.
+	 * @param bool         $compact        Whether to use compact location details.
+	 * @param int          $heading_level  Heading level for the item title.
+	 */
+	public static function render_card( ?WP_Post $post, DateTimeZone $timezone, bool $show_info_link = true, bool $show_title = false, bool $pull_up = false, bool $compact = true, int $heading_level = 2 ): void {
 		if ( ! $post ) {
 			return;
 		}
 
+		$heading_tag = in_array( $heading_level, [ 2, 3 ], true ) ? 'h' . $heading_level : 'h2';
 		$event_data = self::event_data( $post );
 		$event_date = new DateTime( $event_data['timestamp_raw'], $timezone );
 		$day_names  = [
@@ -834,11 +881,11 @@ class Agenda {
 			</span>
 
             <?php if ( $show_title ) : ?>
-			<h2 class="nok-square-block__heading">
+			<<?= esc_attr( $heading_tag ); ?> class="nok-square-block__heading">
 				<a href="<?= esc_url( get_permalink( $post ) ); ?>" class="nok-text-darkerblue nok-dark-text-white">
 					<?= esc_html( $title ); ?>
 				</a>
-			</h2>
+			</<?= esc_attr( $heading_tag ); ?>>
             <?php endif; ?>
 
 			<table class="nok-square-block__text nok-icon-table">

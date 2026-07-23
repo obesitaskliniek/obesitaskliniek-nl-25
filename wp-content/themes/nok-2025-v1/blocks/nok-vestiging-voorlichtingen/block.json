@@ -1,12 +1,13 @@
 {
   "apiVersion": 3,
   "name": "nok2025/nok-vestiging-voorlichtingen",
-  "title": "NOK Voorlichtingen Carousel",
-  "description": "Toont aankomende voorlichtingen in een carousel. Detecteert automatisch de vestiging op vestiging-pagina's.",
+  "title": "NOK Agenda Carousel",
+  "description": "Toont aankomende voorlichtingen en evenementen in een carousel. Detecteert automatisch de vestiging op vestiging-pagina's.",
   "category": "nok-blocks",
   "icon": "calendar-alt",
   "keywords": [
     "voorlichting",
+    "evenement",
     "carousel",
     "vestiging",
     "agenda"
@@ -25,7 +26,7 @@
     },
     "title": {
       "type": "string",
-      "default": "Voorlichtingen"
+      "default": "Agenda"
     },
     "showAllLink": {
       "type": "boolean",

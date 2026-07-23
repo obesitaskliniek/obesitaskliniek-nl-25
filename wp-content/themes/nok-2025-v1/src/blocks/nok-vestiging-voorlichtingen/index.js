@@ -1,7 +1,7 @@
 /**
- * NOK Vestiging Voorlichtingen Carousel Block
+ * NOK Vestiging Agenda Carousel Block
  *
- * Displays upcoming voorlichtingen in a scrollable carousel.
+ * Displays upcoming voorlichtingen and events in a scrollable carousel.
  * Auto-detects vestiging on vestiging pages, or shows all locations.
  */
 
@@ -86,7 +86,7 @@ registerBlockType(blockName, {
                             help={__('Kies een vestiging of laat automatisch detecteren.', textDomain)}
                         />
                         <RangeControl
-                            label={__('Aantal voorlichtingen', textDomain)}
+                            label={__('Aantal agenda-items', textDomain)}
                             value={limit}
                             onChange={(value) => setAttributes({ limit: value })}
                             min={1}
@@ -107,7 +107,7 @@ registerBlockType(blockName, {
 
                 {vestigingId === 0 && (
                     <Notice status="info" isDismissible={false} style={{ margin: '0 0 12px' }}>
-                        {__('Op vestiging-pagina\'s worden automatisch voorlichtingen voor die vestiging getoond. Op andere pagina\'s worden alle aankomende voorlichtingen getoond.', textDomain)}
+                        {__('Op vestiging-pagina\'s worden automatisch voorlichtingen en evenementen voor die vestiging getoond. Op andere pagina\'s worden alle aankomende agenda-items getoond.', textDomain)}
                     </Notice>
                 )}
 
@@ -117,8 +117,8 @@ registerBlockType(blockName, {
                     EmptyResponsePlaceholder={() => (
                         <Placeholder
                             icon="calendar-alt"
-                            label={__('Voorlichtingen', textDomain)}
-                            instructions={__('Er zijn geen aankomende voorlichtingen gevonden.', textDomain)}
+                            label={__('Agenda', textDomain)}
+                            instructions={__('Er zijn geen aankomende agenda-items gevonden.', textDomain)}
                         />
                     )}
                 />

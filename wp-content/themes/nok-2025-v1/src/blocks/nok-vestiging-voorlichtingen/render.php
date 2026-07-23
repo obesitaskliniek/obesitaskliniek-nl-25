@@ -9,15 +9,20 @@
  * @return string Rendered HTML output
  */
 
-use NOK2025\V1\Helpers;
+use NOK2025\V1\Agenda;
 use NOK2025\V1\PageParts\TemplateRenderer;
 
 return function( array $attributes ): string {
 	$vestiging_id  = (int) ( $attributes['vestigingId'] ?? 0 );
 	$limit         = (int) ( $attributes['limit'] ?? 6 );
-	$title         = $attributes['title'] ?? 'Voorlichtingen';
+	$title         = (string) ( $attributes['title'] ?? __( 'Agenda', THEME_TEXT_DOMAIN ) );
 	$show_all_link = (bool) ( $attributes['showAllLink'] ?? true );
 	$city          = null;
+
+	// Migrate the former default while preserving genuinely custom titles.
+	if ( $title === 'Voorlichtingen' ) {
+		$title = __( 'Agenda', THEME_TEXT_DOMAIN );
+	}
 
 	// Context resolution: determine which city to filter by
 	if ( $vestiging_id > 0 ) {
@@ -32,9 +37,9 @@ return function( array $attributes ): string {
 	}
 	// Otherwise $city stays null → all locations
 
-	$voorlichtingen = Helpers::get_upcoming_voorlichtingen( $limit, $city );
+	$agenda_items = Agenda::get_upcoming_items( $limit, $city );
 
-	if ( empty( $voorlichtingen ) ) {
+	if ( empty( $agenda_items ) ) {
 		return '';
 	}
 
@@ -51,9 +56,9 @@ return function( array $attributes ): string {
 		'background_color' => $attributes['backgroundColor'] ?? '',
 		'text_color'       => $attributes['textColor'] ?? '',
 	], [
-		'voorlichtingen' => $voorlichtingen,
-		'all_url'        => $all_url,
-		'show_all_link'  => $show_all_link,
-		'city'           => $city,
+		'agenda_items'  => $agenda_items,
+		'all_url'       => $all_url,
+		'show_all_link' => $show_all_link,
+		'city'          => $city,
 	] );
 };
