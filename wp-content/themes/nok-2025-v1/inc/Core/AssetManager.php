@@ -50,7 +50,30 @@ class AssetManager {
 	public function register_hooks(): void {
 		add_action( 'wp_enqueue_scripts', [ $this, 'frontend_assets' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_assets' ] );
+		add_action( 'enqueue_block_assets', [ $this, 'block_editor_assets' ] );
 		add_action( 'admin_head', [ $this, 'custom_editor_inline_styles' ] );
+	}
+
+	/**
+	 * Load shared NOK styles through the block asset pipeline.
+	 *
+	 * WordPress loads assets from this hook both around and inside the block
+	 * editor iframe. Enqueuing the stylesheet as a regular admin asset causes
+	 * WordPress 7 to copy it into the iframe through its compatibility layer.
+	 *
+	 * @return void
+	 */
+	public function block_editor_assets(): void {
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		$screen = get_current_screen();
+		if ( ! $screen || ! $screen->is_block_editor() ) {
+			return;
+		}
+
+		$this->enqueue_backend_style();
 	}
 
 	/**
@@ -143,22 +166,17 @@ class AssetManager {
 	 * // - PagePartDesignSettings localization
 	 */
 	public function admin_assets( $hook ): void {
-		$dev_mode = is_user_logged_in();
+		$screen = get_current_screen();
 
-		// Import admin-specific CSS
-		wp_register_style(
-			'nok-backend-css',
-			$this->resolve_asset_url( '/assets/css/nok-backend-css.css', $dev_mode ),
-			[],
-			$this->get_asset_version( '/assets/css/nok-backend-css.css', $dev_mode )
-		);
-		wp_enqueue_style( 'nok-backend-css' );
+		// Block editor screens receive this stylesheet via enqueue_block_assets,
+		// which loads it both around and inside the editor iframe.
+		if ( ! $screen || ! $screen->is_block_editor() ) {
+			$this->enqueue_backend_style();
+		}
 
 		if ( ! in_array( $hook, [ 'post.php', 'post-new.php' ] ) ) {
 			return;
 		}
-
-		$screen = get_current_screen();
 
 		// Load preview assets for page_part posts
 		if ( $screen->post_type === 'page_part' ) {
@@ -321,6 +339,35 @@ class AssetManager {
 				);
 			}
 		}
+	}
+
+	/**
+	 * Register and enqueue the shared backend stylesheet.
+	 *
+	 * @return void
+	 */
+	private function enqueue_backend_style(): void {
+		$dev_mode = is_user_logged_in();
+
+		wp_enqueue_style(
+			'nok-backend-css',
+			$this->resolve_asset_url( '/assets/css/nok-backend-css.css', $dev_mode ),
+			[],
+			$this->get_asset_version( '/assets/css/nok-backend-css.css', $dev_mode )
+		);
+
+		$font_url = get_stylesheet_directory_uri() . '/assets/fonts';
+		$css      = sprintf(
+			'@font-face{font-family:"Inter";src:url("%1$s/inter/InterVariable.woff2") format("woff2-variations");font-style:normal;font-weight:100 900;font-display:swap}'
+			. '@font-face{font-family:"Realist";src:url("%1$s/realist-new/Realist-Regular.woff2") format("woff2"),url("%1$s/realist-new/Realist-Regular.woff") format("woff");font-style:normal;font-weight:400;font-display:swap}'
+			. '@font-face{font-family:"Realist";src:url("%1$s/realist-new/Realist-Medium.woff2") format("woff2"),url("%1$s/realist-new/Realist-Medium.woff") format("woff");font-style:normal;font-weight:500;font-display:swap}'
+			. '@font-face{font-family:"Realist";src:url("%1$s/realist-new/Realist-Bold.woff2") format("woff2"),url("%1$s/realist-new/Realist-Bold.woff") format("woff");font-style:normal;font-weight:700;font-display:swap}'
+			. '.editor-styles-wrapper{font-family:"Inter",Arial,Helvetica,sans-serif}'
+			. '.editor-styles-wrapper h1,.editor-styles-wrapper h2,.editor-styles-wrapper h3,.editor-styles-wrapper h4,.editor-styles-wrapper h5,.editor-styles-wrapper h6{font-family:"Realist",Arial,Helvetica,sans-serif}',
+			esc_url( $font_url )
+		);
+
+		wp_add_inline_style( 'nok-backend-css', $css );
 	}
 
 	/**
