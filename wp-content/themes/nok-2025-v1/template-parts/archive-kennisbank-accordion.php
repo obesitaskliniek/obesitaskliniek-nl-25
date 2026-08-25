@@ -108,7 +108,7 @@ if ( $current_term_has_children ) {
 	$pill_categories = $child_categories;
 	$all_url         = get_term_link( $current_term );
 	$all_is_active   = true;
-} else {
+} elseif ( $current_term->parent > 0 ) {
 	$pill_categories = get_terms( [
 		'taxonomy'   => 'kennisbank_categories',
 		'hide_empty' => true,
@@ -118,6 +118,16 @@ if ( $current_term_has_children ) {
 	] );
 	$parent_term     = get_term( $current_term->parent, 'kennisbank_categories' );
 	$all_url         = get_term_link( $parent_term );
+	$all_is_active   = false;
+} else {
+	$pill_categories = get_terms( [
+		'taxonomy'   => 'kennisbank_categories',
+		'hide_empty' => true,
+		'orderby'    => 'count',
+		'order'      => 'DESC',
+		'parent'     => 0,
+	] );
+	$all_url         = get_post_type_archive_link( 'kennisbank' );
 	$all_is_active   = false;
 }
 ?>
@@ -322,5 +332,5 @@ if ( $current_term_has_children ) {
 	</div>
 </nok-section>
 
-<?php1
+<?php
 get_footer();
